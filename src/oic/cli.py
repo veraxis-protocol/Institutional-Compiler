@@ -3,8 +3,15 @@
 Subcommands
 -----------
 ``oic validate-schema``   validate JSON Schema documents, offline
-``oic verify-manifest``   verify integrity manifests, read-only
+``oic verify-bootstrap``  verify the historical bootstrap baseline from Git objects
+``oic verify-manifest``   verify current-tree integrity manifests, read-only
 ``oic doctor``            report environment and gate state
+
+Bootstrap verification is separate on purpose. ``BOOTSTRAP_MANIFEST.json`` is immutable
+historical evidence about the bootstrap commit, not a policy freezing every path it lists
+(ADR-012), so it is verified against the Git object tree at that commit rather than
+against the working tree. ``verify-manifest`` handles the manifests that *do* describe the
+present tree.
 
 Exit codes
 ----------
@@ -44,10 +51,16 @@ from pathlib import Path
 from typing import Any, Final, TextIO
 
 from oic import __version__
+from oic.baseline import (
+    BOOTSTRAP_COMMIT,
+    BaselineReport,
+    BaselineStatus,
+    BlobStatus,
+    verify_bootstrap_baseline,
+)
 from oic.doctor import DoctorReport, run_doctor
 from oic.errors import ErrorCategory, OICError
 from oic.manifests import (
-    KNOWN_MANIFESTS,
     EntryStatus,
     ManifestKind,
     ManifestReport,
@@ -124,6 +137,34 @@ def _command_validate_schema(args: argparse.Namespace, stream: TextIO) -> ExitCo
 
 
 # ---------------------------------------------------------------------------
+# verify-bootstrap
+# ---------------------------------------------------------------------------
+
+
+def _render_baseline_report(report: BaselineReport, stream: TextIO) -> None:
+    stream.write(f"Bootstrap baseline: {report.ref}\n")
+    stream.write(f"  resolved commit: {report.resolved_commit}\n")
+    for entry in report.entries:
+        if entry.status is not BlobStatus.PASS:
+            stream.write(f"{entry.render()}\n")
+    passed = report.count(BlobStatus.PASS)
+    stream.write(f"  {passed}/{len(report.entries)} artifacts match the recorded bytes\n")
+    for note in report.notes:
+        stream.write(f"  note: {note}\n")
+    stream.write(f"  RESULT: {report.status.value}\n")
+
+
+def _command_verify_bootstrap(args: argparse.Namespace, stream: TextIO) -> ExitCode:
+    root = _resolve_root(args.repo_root)
+    report = verify_bootstrap_baseline(root, args.ref)
+    if args.format == "json":
+        _dump_json(report.to_json(), stream)
+    else:
+        _render_baseline_report(report, stream)
+    return ExitCode.PASS if report.status is BaselineStatus.PASS else ExitCode.FAIL
+
+
+# ---------------------------------------------------------------------------
 # verify-manifest
 # ---------------------------------------------------------------------------
 
@@ -156,27 +197,37 @@ def _manifest_exit_code(status: VerificationStatus, *, allow_incomplete: bool) -
 def _command_verify_manifest(args: argparse.Namespace, stream: TextIO) -> ExitCode:
     root = _resolve_root(args.repo_root)
 
+    baseline: BaselineReport | None = None
     if args.all:
+        # The bootstrap component of --all is historical baseline verification, read from
+        # the Git object tree at the pinned commit (ADR-012). The other two components
+        # describe the present tree and keep their current-tree behaviour.
+        baseline = verify_bootstrap_baseline(root, args.ref)
         reports = verify_all(root)
     elif args.manifest is not None:
         kind = ManifestKind(args.kind) if args.kind else None
         reports = (verify_manifest(args.manifest.resolve(), root, kind),)
     else:
-        default_relpath, default_kind = KNOWN_MANIFESTS[0]
-        reports = (verify_manifest(root / default_relpath, root, default_kind),)
+        baseline = verify_bootstrap_baseline(root, args.ref)
+        reports = ()
 
     overall = worst_status(reports)
+    if baseline is not None and baseline.status is BaselineStatus.FAIL:
+        overall = VerificationStatus.FAIL
 
     if args.format == "json":
-        _dump_json(
-            {
-                "manifests": [report.to_json() for report in reports],
-                "status": overall.value,
-            },
-            stream,
-        )
+        payload: dict[str, Any] = {
+            "manifests": [report.to_json() for report in reports],
+            "status": overall.value,
+        }
+        if baseline is not None:
+            payload["bootstrap_baseline"] = baseline.to_json()
+        _dump_json(payload, stream)
     else:
         stream.write("Manifest verification\n")
+        if baseline is not None:
+            stream.write("\n")
+            _render_baseline_report(baseline, stream)
         for report in reports:
             _render_manifest_report(report, stream)
         stream.write(f"\nOVERALL: {overall.value}\n")
@@ -293,12 +344,33 @@ def build_parser() -> argparse.ArgumentParser:
     )
     schema.set_defaults(handler=_command_validate_schema)
 
+    bootstrap = subparsers.add_parser(
+        "verify-bootstrap",
+        help="verify the historical bootstrap baseline from the Git object database",
+        description=(
+            "Verify that the bootstrap commit still contains exactly the bytes recorded "
+            "in BOOTSTRAP_MANIFEST.json. The manifest and every artifact it lists are "
+            "read from the pinned commit through the local Git object database; the "
+            "working tree is neither read nor modified, and no network access occurs. "
+            "A file changed in a later commit does not affect this result (ADR-012)."
+        ),
+    )
+    bootstrap.add_argument(
+        "--ref",
+        default=BOOTSTRAP_COMMIT,
+        metavar="COMMIT",
+        help=f"local commit or tag to verify (default: {BOOTSTRAP_COMMIT})",
+    )
+    bootstrap.set_defaults(handler=_command_verify_bootstrap)
+
     manifest = subparsers.add_parser(
         "verify-manifest",
-        help="verify repository integrity manifests (read-only)",
+        help="verify current-tree integrity manifests (read-only)",
         description=(
             "Verify recorded digests against the files on disk. Reports PASS, FAIL, and "
-            "INCOMPLETE distinctly. Never writes to a manifest and never fetches a URL."
+            "INCOMPLETE distinctly. Never writes to a manifest and never fetches a URL. "
+            "With no arguments, and with --all, the bootstrap component is verified as a "
+            "historical baseline rather than against the working tree (ADR-012)."
         ),
     )
     manifest.add_argument(
@@ -306,7 +378,16 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=None,
         metavar="PATH",
-        help=f"local manifest to verify (default: {KNOWN_MANIFESTS[0][0]})",
+        help=(
+            "local current-tree manifest to verify. BOOTSTRAP_MANIFEST.json is not "
+            "accepted here; use 'oic verify-bootstrap'."
+        ),
+    )
+    manifest.add_argument(
+        "--ref",
+        default=BOOTSTRAP_COMMIT,
+        metavar="COMMIT",
+        help=f"baseline commit for the bootstrap component (default: {BOOTSTRAP_COMMIT})",
     )
     manifest.add_argument(
         "--kind",

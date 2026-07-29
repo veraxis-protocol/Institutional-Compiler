@@ -129,13 +129,60 @@ def test_validate_schema_json_output_is_deterministic(
 # ---------------------------------------------------------------------------
 
 
-def test_verify_manifest_defaults_to_the_bootstrap_manifest(
+def test_verify_manifest_defaults_to_the_bootstrap_baseline(
     capsys: pytest.CaptureFixture[str], repo_root: Path
 ) -> None:
     code, out, _ = run(capsys, "--repo-root", str(repo_root), "verify-manifest")
     assert code == ExitCode.PASS
-    assert "BOOTSTRAP_MANIFEST.json" in out
+    assert "Bootstrap baseline" in out
     assert "RESULT: PASS" in out
+
+
+def test_verify_bootstrap_passes_on_the_current_checkout(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    code, out, _ = run(capsys, "--repo-root", str(repo_root), "verify-bootstrap")
+    assert code == ExitCode.PASS
+    assert "8b06b8a7f1a319a0b5ceeea6857eefa30b9eb081" in out
+    assert "the working tree was neither read nor modified" in out
+
+
+def test_verify_bootstrap_rejects_an_unknown_ref(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    code, _, err = run(capsys, "--repo-root", str(repo_root), "verify-bootstrap", "--ref", "0" * 40)
+    assert code == ExitCode.USAGE
+    assert "could not be resolved" in err
+
+
+def test_verify_bootstrap_json_output_is_deterministic(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    args = ("--repo-root", str(repo_root), "--format", "json", "verify-bootstrap")
+    first_code, first_out, _ = run(capsys, *args)
+    second_code, second_out, _ = run(capsys, *args)
+    assert first_code == second_code == ExitCode.PASS
+    assert first_out == second_out
+    payload = json.loads(first_out)
+    assert payload["status"] == "PASS"
+    assert payload["resolved_commit"] == "8b06b8a7f1a319a0b5ceeea6857eefa30b9eb081"
+    assert str(repo_root) not in first_out
+
+
+def test_explicit_bootstrap_manifest_path_is_refused(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    """Comparing the historical manifest to the working tree must be refused (ADR-012)."""
+    code, _, err = run(
+        capsys,
+        "--repo-root",
+        str(repo_root),
+        "verify-manifest",
+        "--manifest",
+        str(repo_root / "BOOTSTRAP_MANIFEST.json"),
+    )
+    assert code == ExitCode.USAGE
+    assert "verify-bootstrap" in err
 
 
 def test_verify_manifest_all_reports_incomplete_with_exit_code_3(
@@ -168,13 +215,13 @@ def test_allow_incomplete_downgrades_to_zero_but_still_reports(
 def test_verify_manifest_fails_on_a_tampered_file(
     capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
-    (tmp_path / "payload.txt").write_bytes(b"tampered")
-    manifest = tmp_path / "BOOTSTRAP_MANIFEST.json"
-    manifest.write_text(
-        json.dumps({"files": [{"path": "payload.txt", "sha256": "0" * 64}]}),
-        encoding="utf-8",
+    (tmp_path / "BOOTSTRAP_MANIFEST.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "doc.pdf").write_bytes(b"tampered")
+    sums = tmp_path / "SHA256SUMS"
+    sums.write_text(f"{'0' * 64}  doc.pdf\n", encoding="utf-8")
+    code, out, _ = run(
+        capsys, "--repo-root", str(tmp_path), "verify-manifest", "--manifest", str(sums)
     )
-    code, out, _ = run(capsys, "--repo-root", str(tmp_path), "verify-manifest")
     assert code == ExitCode.FAIL
     assert "HASH_MISMATCH" in out
 
@@ -237,7 +284,9 @@ def test_verify_manifest_json_output_is_deterministic(
     payload = json.loads(first_out)
     assert payload["status"] == "INCOMPLETE"
     kinds = [manifest["kind"] for manifest in payload["manifests"]]
-    assert kinds == ["bootstrap", "sha256sums", "source-manifest"]
+    assert kinds == ["sha256sums", "source-manifest"]
+    # The bootstrap component of --all is the historical baseline, reported separately.
+    assert payload["bootstrap_baseline"]["status"] == "PASS"
     for manifest in payload["manifests"]:
         paths = [entry["path"] for entry in manifest["entries"]]
         assert paths == sorted(paths)
@@ -345,6 +394,6 @@ def test_no_semantic_subcommands_exist() -> None:
         choices = action.choices
         if isinstance(choices, dict):
             commands.update(choices)
-    assert commands == {"validate-schema", "verify-manifest", "doctor"}
+    assert commands == {"validate-schema", "verify-bootstrap", "verify-manifest", "doctor"}
     forbidden = {"compile", "admit", "extract", "ingest", "generate-rego", "evaluate", "envelope"}
     assert forbidden.isdisjoint(commands)

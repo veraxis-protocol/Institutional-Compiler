@@ -1,7 +1,14 @@
-"""Contract tests over this repository's own integrity manifests.
+"""Contract tests over this repository's own integrity artifacts.
 
-A failure here means a bootstrap-controlled artifact changed. That is a governance
-event requiring authorization, not a test to relax.
+Two different questions live here, and conflating them was the original defect:
+
+* the **historical baseline** - does the bootstrap commit still hold the bytes its
+  manifest recorded? Verified from the Git object database, never the working tree.
+* the **current-tree manifests** - do `docs/tdd/SHA256SUMS` and the preflight corpus
+  manifest match the files on disk now?
+
+A failure in the first is a governance event. A failure in the second means a present
+artifact drifted. See ADR-012.
 """
 
 from __future__ import annotations
@@ -11,13 +18,14 @@ from pathlib import Path
 
 import pytest
 
+from oic.baseline import BaselineStatus, BlobStatus, verify_bootstrap_baseline
+from oic.errors import ConfigurationError
 from oic.hashing import hash_file
 from oic.manifests import (
-    EntryStatus,
     ManifestKind,
     VerificationStatus,
     verify_all,
-    verify_bootstrap_manifest,
+    verify_manifest,
     verify_sha256sums,
     verify_source_manifest,
 )
@@ -54,11 +62,28 @@ def test_bootstrap_manifest_declares_the_same_tdd_digest(repo_root: Path) -> Non
     assert document["governing_tdd_sha256"] == GOVERNING_TDD_SHA256
 
 
-def test_bootstrap_manifest_verifies(repo_root: Path) -> None:
-    report = verify_bootstrap_manifest(repo_root / BOOTSTRAP_MANIFEST_RELPATH, repo_root)
-    failures = [entry.render() for entry in report.entries if entry.status is not EntryStatus.PASS]
+def test_bootstrap_baseline_verifies(repo_root: Path) -> None:
+    """The bootstrap commit still holds exactly the recorded bytes.
+
+    Verified against the Git object tree at the pinned commit, not the working tree.
+    A later change to a Class C artifact does not affect this (ADR-012); the detailed
+    properties of that model live in ``test_baseline.py``.
+    """
+    report = verify_bootstrap_baseline(repo_root)
+    failures = [entry.render() for entry in report.entries if entry.status is not BlobStatus.PASS]
     assert failures == []
-    assert report.status is VerificationStatus.PASS
+    assert report.status is BaselineStatus.PASS
+
+
+def test_bootstrap_manifest_is_not_verified_against_the_working_tree(repo_root: Path) -> None:
+    """Asking for a working-tree bootstrap check must be refused, not answered.
+
+    Comparing the historical manifest to the present tree is the error that produced a
+    false integrity alarm on PR #2. The CLI directs the operator to `verify-bootstrap`.
+    """
+    with pytest.raises(ConfigurationError) as excinfo:
+        verify_manifest(repo_root / BOOTSTRAP_MANIFEST_RELPATH, repo_root)
+    assert "verify-bootstrap" in str(excinfo.value)
 
 
 def test_bootstrap_manifest_covers_the_expected_file_count(repo_root: Path) -> None:
@@ -78,9 +103,10 @@ def test_preflight_source_manifest_is_reported_incomplete(repo_root: Path) -> No
     assert any("not corpus-ready" in note for note in report.notes)
 
 
-def test_verify_all_reports_expected_statuses(repo_root: Path) -> None:
+def test_verify_all_covers_only_current_tree_manifests(repo_root: Path) -> None:
+    """`verify_all` describes the present tree; the bootstrap baseline is separate."""
     reports = {report.kind: report for report in verify_all(repo_root)}
-    assert reports[ManifestKind.BOOTSTRAP].status is VerificationStatus.PASS
+    assert set(reports) == {ManifestKind.SHA256SUMS, ManifestKind.SOURCE_MANIFEST}
     assert reports[ManifestKind.SHA256SUMS].status is VerificationStatus.PASS
     assert reports[ManifestKind.SOURCE_MANIFEST].status is VerificationStatus.INCOMPLETE
 
