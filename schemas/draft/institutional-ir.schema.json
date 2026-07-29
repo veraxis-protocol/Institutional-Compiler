@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/draft/institutional-ir.schema.json",
+  "title": "InstitutionalIR",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ir_id",
+    "schema_version",
+    "nodes",
+    "edges",
+    "admission_records"
+  ],
+  "properties": {
+    "ir_id": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "edge_id",
+          "from",
+          "to",
+          "type"
+        ],
+        "properties": {
+          "edge_id": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "admission_records": {
+      "type": "array",
+      "items": {
+        "$ref": "admission-record.schema.json"
+      }
+    },
+    "source_hashes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

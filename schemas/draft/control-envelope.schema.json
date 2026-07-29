@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/draft/control-envelope.schema.json",
+  "title": "OpenControlEnvelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "envelope_id",
+    "schema_version",
+    "semantic_version",
+    "control_id",
+    "decision_mode",
+    "actor",
+    "action",
+    "conditions",
+    "on_unknown",
+    "source_anchors",
+    "admission_ids"
+  ],
+  "properties": {
+    "envelope_id": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "semantic_version": {
+      "type": "string"
+    },
+    "control_id": {
+      "type": "string"
+    },
+    "actor": {
+      "type": "object"
+    },
+    "action": {
+      "type": "object"
+    },
+    "resource": {
+      "type": "object"
+    },
+    "authority_chain": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "evidence_requirements": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "decision_mode": {
+      "enum": [
+        "automatic",
+        "human_judgment",
+        "evidence_only",
+        "escalation_only",
+        "advisory",
+        "non_automatable"
+      ]
+    },
+    "on_unknown": {
+      "enum": [
+        "cannot",
+        "escalate",
+        "deny"
+      ]
+    },
+    "effective_from": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "effective_until": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "revocation_sources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_anchors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "source-anchor.schema.json"
+      }
+    },
+    "admission_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "compiler_version": {
+      "type": "string"
+    },
+    "test_suite_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

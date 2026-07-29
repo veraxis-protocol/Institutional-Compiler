@@ -1,0 +1,29 @@
+{
+  "status": "proposed_preflight_targets_not_measured",
+  "metrics": [
+    {
+      "id": "M-SOURCE-SUPPORT",
+      "name": "source_supported_executable_fields",
+      "classification": "preregistered_safety_gate",
+      "target": 0.99
+    },
+    {
+      "id": "M-UNSUPPORTED",
+      "name": "unsupported_executable_field_rate",
+      "classification": "preregistered_safety_gate",
+      "target_max": 0.01
+    },
+    {
+      "id": "M-UNKNOWN-FALSE",
+      "name": "unknown_to_false_conversions",
+      "classification": "release_gate",
+      "target": 0
+    },
+    {
+      "id": "M-BEHAVIOR",
+      "name": "behavioral_conformance_admitted_deterministic_controls",
+      "classification": "preregistered_target",
+      "target": 0.95
+    }
+  ]
+}

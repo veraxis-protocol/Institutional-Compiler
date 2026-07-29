@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/draft/candidate-normative-unit.schema.json",
+  "title": "CandidateNormativeUnit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "unit_id",
+    "unit_type",
+    "interpretation_state",
+    "epistemic_state",
+    "source_anchors"
+  ],
+  "properties": {
+    "unit_id": {
+      "type": "string"
+    },
+    "unit_type": {
+      "enum": [
+        "definition",
+        "mandate",
+        "delegation",
+        "obligation",
+        "prohibition",
+        "permission",
+        "power",
+        "condition",
+        "exception",
+        "evidence_duty",
+        "review_duty",
+        "escalation",
+        "remedy",
+        "temporal_trigger",
+        "discretion",
+        "advisory"
+      ]
+    },
+    "actor": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "action": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "object": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_requirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "interpretation_state": {
+      "enum": [
+        "extracted",
+        "inferred",
+        "reviewed",
+        "admitted",
+        "rejected"
+      ]
+    },
+    "epistemic_state": {
+      "enum": [
+        "confirmed",
+        "uncertain",
+        "contested",
+        "unknown"
+      ]
+    },
+    "lifecycle_state": {
+      "enum": [
+        "proposed",
+        "active",
+        "suspended",
+        "expired",
+        "superseded",
+        "revoked"
+      ]
+    },
+    "confidence": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "source_anchors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "source-anchor.schema.json"
+      }
+    }
+  }
+}
