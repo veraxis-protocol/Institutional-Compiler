@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from oic.errors import ManifestError
-from oic.hashing import hash_bytes
+from oic.errors import ConfigurationError, ManifestEntryMissingError, ManifestError
+from oic.hashing import hash_bytes, hash_file
 from oic.manifests import (
     EntryStatus,
     ManifestKind,
@@ -154,6 +154,112 @@ def test_wrong_governing_tdd_digest_fails(workspace: Path) -> None:
     manifest = _write_bootstrap(workspace, [], governing_tdd_sha256=ABC_DIGEST)
     report = verify_bootstrap_manifest(manifest, workspace)
     assert report.status is VerificationStatus.FAIL
+
+
+def test_read_failure_becomes_unreadable_not_a_crash(
+    workspace: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """`hash_file` wraps read errors in ConfigurationError, not OSError.
+
+    Catching OSError alone never fired, so a permission failure escaped as an unhandled
+    exception and destroyed the whole report. Monkeypatched rather than chmod-based, so
+    the test behaves identically on every platform and as every user, including root.
+    """
+    manifest = _write_bootstrap(workspace, [{"path": "payload.txt", "sha256": ABC_DIGEST}])
+
+    def _unreadable(*args: object, **kwargs: object) -> str:
+        del args, kwargs
+        raise ConfigurationError("could not read file for hashing", detail="payload.txt")
+
+    monkeypatch.setattr("oic.manifests.hash_file", _unreadable)
+    report = verify_bootstrap_manifest(manifest, workspace)
+    assert report.entries[0].status is EntryStatus.UNREADABLE
+    assert report.status is VerificationStatus.FAIL
+
+
+def test_stat_failure_becomes_unreadable(workspace: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A stat failure must not be reported as a size mismatch.
+
+    Reporting a mismatch would state a measurement that was never taken.
+    """
+    manifest = _write_bootstrap(
+        workspace, [{"path": "payload.txt", "sha256": ABC_DIGEST, "bytes": 3}]
+    )
+    real_stat = Path.stat
+
+    def _stat(self: Path, *args: object, **kwargs: object) -> object:
+        if self.name == "payload.txt":
+            raise PermissionError("stat denied")
+        return real_stat(self, *args, **kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(Path, "stat", _stat)
+    report = verify_bootstrap_manifest(manifest, workspace)
+    entry = next(e for e in report.entries if e.path == "payload.txt")
+    assert entry.status is EntryStatus.UNREADABLE
+    assert report.count(EntryStatus.SIZE_MISMATCH) == 0
+
+
+def test_one_unreadable_entry_does_not_abort_the_rest(
+    workspace: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A single unreadable file must not suppress the verdict on every other entry."""
+    for name in ("a.txt", "b.txt", "c.txt"):
+        (workspace / name).write_bytes(b"abc")
+    manifest = _write_bootstrap(
+        workspace,
+        [{"path": name, "sha256": ABC_DIGEST} for name in ("a.txt", "b.txt", "c.txt")],
+    )
+    real_hash = hash_file
+
+    def _selective(path: Path, **kwargs: object) -> str:
+        if path.name == "b.txt":
+            raise ConfigurationError("could not read file for hashing", detail="b.txt")
+        return real_hash(path)
+
+    monkeypatch.setattr("oic.manifests.hash_file", _selective)
+    report = verify_bootstrap_manifest(manifest, workspace)
+    by_path = {entry.path: entry.status for entry in report.entries}
+    assert by_path["a.txt"] is EntryStatus.PASS
+    assert by_path["b.txt"] is EntryStatus.UNREADABLE
+    assert by_path["c.txt"] is EntryStatus.PASS
+    assert len(report.entries) == 3
+
+
+def test_unreadable_report_never_leaks_file_content(
+    workspace: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The read error's cause is preserved on the exception, never printed."""
+    secret = workspace / "secret.txt"
+    secret.write_text("TOP-SECRET-PAYLOAD", encoding="utf-8")
+    manifest = _write_bootstrap(workspace, [{"path": "secret.txt", "sha256": ABC_DIGEST}])
+
+    def _unreadable(*args: object, **kwargs: object) -> str:
+        del args, kwargs
+        error = ConfigurationError("could not read file for hashing", detail="secret.txt")
+        raise error from PermissionError("TOP-SECRET-PAYLOAD in the OS message")
+
+    monkeypatch.setattr("oic.manifests.hash_file", _unreadable)
+    report = verify_bootstrap_manifest(manifest, workspace)
+    rendered = "\n".join(entry.render() for entry in report.entries)
+    assert "TOP-SECRET-PAYLOAD" not in rendered
+    assert "TOP-SECRET-PAYLOAD" not in json.dumps(report.to_json())
+    assert report.entries[0].status is EntryStatus.UNREADABLE
+    # The type is reported so an operator can act; the message is not.
+    assert "PermissionError" in (report.entries[0].detail or "")
+
+
+def test_file_deleted_mid_verification_is_reported_missing(
+    workspace: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    manifest = _write_bootstrap(workspace, [{"path": "payload.txt", "sha256": ABC_DIGEST}])
+
+    def _vanished(*args: object, **kwargs: object) -> str:
+        del args, kwargs
+        raise ManifestEntryMissingError("file not found", detail="payload.txt")
+
+    monkeypatch.setattr("oic.manifests.hash_file", _vanished)
+    report = verify_bootstrap_manifest(manifest, workspace)
+    assert report.entries[0].status is EntryStatus.MISSING_FILE
 
 
 def test_manifest_is_never_mutated(workspace: Path) -> None:

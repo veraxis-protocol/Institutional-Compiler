@@ -36,17 +36,18 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
+from stat import S_ISREG
 from typing import Any, Final
 
 from oic.errors import (
     ConfigurationError,
+    ManifestEntryMissingError,
     ManifestError,
     UnsafeManifestPathError,
     UnsupportedHashAlgorithmError,
 )
 from oic.hashing import hash_file, normalise_digest
 from oic.paths import (
-    BOOTSTRAP_MANIFEST_RELPATH,
     SOURCE_MANIFEST_RELPATH,
     TDD_PDF_RELPATH,
     TDD_SHA256SUMS_RELPATH,
@@ -233,35 +234,62 @@ def _check_file(
             detail=str(exc),
         )
 
-    if not target.exists():
+    # One guarded stat answers existence, regular-file-ness, and size together.
+    # `Path.exists()` and `Path.is_file()` swallow only "not found"-shaped errors and
+    # re-raise the rest, so calling them unguarded lets a permission error escape and
+    # destroy the whole report instead of marking one entry unreadable.
+    try:
+        stat_result = target.stat()
+    except FileNotFoundError:
         return EntryResult(
             path=raw_path,
             status=EntryStatus.MISSING_FILE,
             detail="file named by manifest is not present",
         )
-    if not target.is_file():
+    except NotADirectoryError:
+        return EntryResult(
+            path=raw_path,
+            status=EntryStatus.MISSING_FILE,
+            detail="a parent path component is not a directory",
+        )
+    except OSError as exc:
+        return EntryResult(
+            path=raw_path,
+            status=EntryStatus.UNREADABLE,
+            detail=f"could not stat file: {type(exc).__name__}",
+        )
+
+    if not S_ISREG(stat_result.st_mode):
         return EntryResult(
             path=raw_path,
             status=EntryStatus.UNREADABLE,
             detail="manifest entry is not a regular file",
         )
 
-    if expected_bytes is not None:
-        actual_bytes = target.stat().st_size
-        if actual_bytes != expected_bytes:
-            return EntryResult(
-                path=raw_path,
-                status=EntryStatus.SIZE_MISMATCH,
-                detail=f"expected {expected_bytes} bytes, found {actual_bytes}",
-            )
+    if expected_bytes is not None and stat_result.st_size != expected_bytes:
+        return EntryResult(
+            path=raw_path,
+            status=EntryStatus.SIZE_MISMATCH,
+            detail=f"expected {expected_bytes} bytes, found {stat_result.st_size}",
+        )
 
     try:
         actual_hex = hash_file(target)
-    except OSError as exc:
+    except ManifestEntryMissingError:
+        # Deleted between the existence check and the read.
+        return EntryResult(
+            path=raw_path,
+            status=EntryStatus.MISSING_FILE,
+            detail="file disappeared while the manifest was being verified",
+        )
+    except (ConfigurationError, OSError) as exc:
+        # hash_file wraps read failures in ConfigurationError, so catching OSError alone
+        # would never fire. The cause is preserved on the exception; only its type is
+        # reported, because a read error must not leak file content.
         return EntryResult(
             path=raw_path,
             status=EntryStatus.UNREADABLE,
-            detail=type(exc).__name__,
+            detail=f"could not read file: {type(exc.__cause__ or exc).__name__}",
         )
 
     if actual_hex != expected_hex:
@@ -274,12 +302,27 @@ def _check_file(
 
 
 # ---------------------------------------------------------------------------
-# BOOTSTRAP_MANIFEST.json
+# Bootstrap-shaped manifests
 # ---------------------------------------------------------------------------
 
 
 def verify_bootstrap_manifest(manifest_path: Path, root: Path) -> ManifestReport:
-    """Verify every file recorded in the bootstrap manifest, plus the TDD digest."""
+    """Verify a bootstrap-shaped manifest against a working tree.
+
+    .. warning::
+
+       **Do not use this on the repository's real** ``BOOTSTRAP_MANIFEST.json``.
+
+       That manifest is immutable historical evidence about the bootstrap commit, not a
+       policy freezing every path it lists (ADR-012). Comparing it against the current
+       working tree makes every listed path permanently immutable and raises a false
+       integrity alarm the first time a Class C artifact legitimately changes. Use
+       :func:`oic.baseline.verify_bootstrap_baseline`, which reads the manifest and every
+       listed blob from the pinned commit.
+
+       This function remains for verifying *synthetic* manifests against a tree in tests,
+       where the manifest and the tree are meant to describe the same moment.
+    """
     display = relative_to_root(root, manifest_path)
     document = _read_json(manifest_path, display)
 
@@ -486,9 +529,12 @@ def verify_source_manifest(manifest_path: Path, root: Path) -> ManifestReport:
 # Dispatch
 # ---------------------------------------------------------------------------
 
-#: Manifests verified by ``oic verify-manifest --all``, in report order.
+#: Current-tree manifests verified by ``verify_all``, in report order.
+#:
+#: ``BOOTSTRAP_MANIFEST.json`` is deliberately absent. It describes the bootstrap commit,
+#: not the present tree, so it is verified by :func:`oic.baseline.verify_bootstrap_baseline`
+#: and surfaced through ``oic verify-bootstrap`` (ADR-012).
 KNOWN_MANIFESTS: Final[tuple[tuple[str, ManifestKind], ...]] = (
-    (BOOTSTRAP_MANIFEST_RELPATH, ManifestKind.BOOTSTRAP),
     (TDD_SHA256SUMS_RELPATH, ManifestKind.SHA256SUMS),
     (SOURCE_MANIFEST_RELPATH, ManifestKind.SOURCE_MANIFEST),
 )
@@ -526,7 +572,13 @@ def verify_manifest(
         )
     resolved_kind = kind if kind is not None else detect_manifest_kind(manifest_path)
     if resolved_kind is ManifestKind.BOOTSTRAP:
-        return verify_bootstrap_manifest(manifest_path, root)
+        raise ConfigurationError(
+            "the bootstrap manifest is not verified against the working tree",
+            detail=(
+                "BOOTSTRAP_MANIFEST.json is historical evidence about the bootstrap "
+                "commit (ADR-012); run 'oic verify-bootstrap' instead"
+            ),
+        )
     if resolved_kind is ManifestKind.SHA256SUMS:
         return verify_sha256sums(manifest_path, root)
     return verify_source_manifest(manifest_path, root)
