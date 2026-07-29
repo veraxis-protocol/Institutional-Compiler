@@ -1,11 +1,19 @@
 # Final product and design authority
+/README.md                                  @veraxis-protocol
 /STATUS.md                                  @veraxis-protocol
 /CLAIMS.md                                  @veraxis-protocol
 /LIMITATIONS.md                             @veraxis-protocol
 /GOVERNANCE.md                              @veraxis-protocol
 /OWNERS.md                                  @veraxis-protocol
+/DEPENDENCIES.md                            @veraxis-protocol
 /docs/requirements/                         @veraxis-protocol
-/schemas/draft/                             @veraxis-protocol
+/docs/contracts/                            @veraxis-protocol
+/docs/decisions/                            @veraxis-protocol
+/docs/reviews/                              @veraxis-protocol
+/adr/                                       @veraxis-protocol
+/work-orders/                               @veraxis-protocol
+/benchmarks/preflight/                      @veraxis-protocol
+/schemas/                                   @veraxis-protocol
 
 # Joint ZTL boundary
 /adapters/ztl/                              @veraxis-protocol @inventor1975
@@ -19,3 +27,5 @@
 /.github/                                   @veraxis-protocol
 /docker/                                    @veraxis-protocol
 /requirements/                              @veraxis-protocol
+/scripts/                                   @veraxis-protocol
+/sbom/                                      @veraxis-protocol
