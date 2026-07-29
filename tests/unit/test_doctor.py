@@ -162,8 +162,10 @@ def test_reports_required_local_tools(report: DoctorReport, tool: str) -> None:
 
 @pytest.mark.parametrize("service", ["postgres", "minio", "opa"])
 def test_reports_infrastructure_profiles(report: DoctorReport, service: str) -> None:
-    names = {check.name for check in report.infrastructure}
-    assert f"{service} profile" in names
+    check = next(c for c in report.infrastructure if c.name == f"{service} profile")
+    assert check.status == Configured.CONFIGURED.value
+    assert check.note is not None
+    assert "not started by this command" in check.note
 
 
 def test_never_starts_infrastructure(report: DoctorReport) -> None:
