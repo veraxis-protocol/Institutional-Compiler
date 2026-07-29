@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/draft/authority-record.schema.json",
+  "title": "AuthorityRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "authority_id",
+    "source_id",
+    "issuer",
+    "source_type",
+    "binding_strength",
+    "status"
+  ],
+  "properties": {
+    "authority_id": {
+      "type": "string"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "issuer": {
+      "type": "string"
+    },
+    "issuer_role": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_type": {
+      "enum": [
+        "law",
+        "regulation",
+        "contract",
+        "enterprise_policy",
+        "procedure",
+        "manual",
+        "matrix",
+        "guidance",
+        "template",
+        "prior_decision",
+        "local_practice",
+        "other"
+      ]
+    },
+    "authority_basis": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "jurisdiction": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "organizational_scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "subject_scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "effective_from": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "effective_until": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "binding_strength": {
+      "enum": [
+        "binding",
+        "conditionally_binding",
+        "advisory",
+        "evidentiary",
+        "unknown"
+      ]
+    },
+    "status": {
+      "enum": [
+        "proposed",
+        "admitted",
+        "active",
+        "suspended",
+        "expired",
+        "superseded",
+        "revoked",
+        "contested"
+      ]
+    },
+    "review_owner": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_anchors": {
+      "type": "array",
+      "items": {
+        "$ref": "source-anchor.schema.json"
+      }
+    }
+  }
+}

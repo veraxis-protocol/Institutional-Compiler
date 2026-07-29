@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/draft/source-node.schema.json",
+  "title": "SourceNode",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "node_id",
+    "source_id",
+    "node_type",
+    "text",
+    "content_hash"
+  ],
+  "properties": {
+    "node_id": {
+      "type": "string"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "parent_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "node_type": {
+      "enum": [
+        "document",
+        "section",
+        "clause",
+        "definition",
+        "table",
+        "row",
+        "cell",
+        "footnote",
+        "annex",
+        "heading",
+        "list_item"
+      ]
+    },
+    "text": {
+      "type": "string"
+    },
+    "page": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1
+    },
+    "bbox": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "number"
+      },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

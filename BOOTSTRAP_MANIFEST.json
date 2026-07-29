@@ -1,0 +1,258 @@
+{
+  "artifact": "OIC bootstrap governance and contract scaffold",
+  "version": "0.1.0-prealpha",
+  "created_at": "2026-07-29T00:00:00-04:00",
+  "governing_tdd_sha256": "2a4d802130d577e4fb8fee731174ae0f2172ef2d617e3b99f068545d2b9fbf77",
+  "files": [
+    {
+      "path": ".github/ISSUE_TEMPLATE/config.yml",
+      "sha256": "e71bea835ed1158881306294d96968f125b0b0c5eff66cd94df559336bd0b210",
+      "bytes": 45
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE/pull_request_template.md",
+      "sha256": "b43a9b840e2843550b8bcebf2c853bf99b6db5eca4896ebfeb4030a779202090",
+      "bytes": 459
+    },
+    {
+      "path": "CLAIMS.md",
+      "sha256": "fbe138e38d35e403287eb934a6558268c427d36bd13254c19f176ff386b8e51f",
+      "bytes": 1492
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "de4cafff738fecaffff10894e331cdd73b4c0691f206c202a99541e5aa733193",
+      "bytes": 583
+    },
+    {
+      "path": "DEPENDENCIES.md",
+      "sha256": "c4b894b4c39bcba234ef600dbc30fdce1caa4315aa2f759673ee811b4a880a9e",
+      "bytes": 1686
+    },
+    {
+      "path": "GOVERNANCE.md",
+      "sha256": "e7346051753eb86e7c11ef3b3b908dd7eb8c95c4c91dbc53c63bb3bfb62b16b8",
+      "bytes": 473
+    },
+    {
+      "path": "LIMITATIONS.md",
+      "sha256": "75d19e4b354dee3fbca83c7363e651577fe2967e8c386eaf6432911718d3af20",
+      "bytes": 954
+    },
+    {
+      "path": "OWNERS.md",
+      "sha256": "b8c8187cacbc04198feb5e51c9e96984f2806ab0184e310296df02b1a330899b",
+      "bytes": 1248
+    },
+    {
+      "path": "README.md",
+      "sha256": "75edf309a02e72374cf166c006075157ea6bea0c6d336da1766925b32456c127",
+      "bytes": 1287
+    },
+    {
+      "path": "ROADMAP.md",
+      "sha256": "c4fef2993bdef778563976ced80887bbbf8e3e4a06538f4f9729742337a66015",
+      "bytes": 1120
+    },
+    {
+      "path": "SECURITY.md",
+      "sha256": "c34de2903e6b83ad721c168466f4163bc13a0764482f3f46300de0319c7ef989",
+      "bytes": 462
+    },
+    {
+      "path": "STATUS.md",
+      "sha256": "4a6894ca72ae8d2efcf48b3d25f8aca3bc1e2e86b6aa6aa5b38af31a52c7fde8",
+      "bytes": 1404
+    },
+    {
+      "path": "VERSIONING.md",
+      "sha256": "59bd7d72c8e7486fc86fcbae1755b910683fdac04409aebe00939c16c0b016ae",
+      "bytes": 406
+    },
+    {
+      "path": "adapters/docling/README.md",
+      "sha256": "c80b0c51a11598b1f0b39d0d79012d0756e915eac7eedfa23a492f4f09e682ea",
+      "bytes": 83
+    },
+    {
+      "path": "adapters/opa/README.md",
+      "sha256": "724b924aaf8927666be2a982ec7ade14ac1b6f725316fa2461ddb8f87c800a7b",
+      "bytes": 56
+    },
+    {
+      "path": "adapters/veip/README.md",
+      "sha256": "e8591bd9255d44e58bae14f3d70b2fcd3ac0543fcadf594a9cc145e3f853233a",
+      "bytes": 63
+    },
+    {
+      "path": "adapters/ztl/README.md",
+      "sha256": "e5bccb26328db680358a28b67aaa78ebd032c1f2ea90d1ad1e50ceffb815fc8f",
+      "bytes": 75
+    },
+    {
+      "path": "adr/ADR-000.md",
+      "sha256": "e23908b36ac960ebcf5e5b5263e8cd23d7f7ad844d2b740892c0a4c74ff6bf8e",
+      "bytes": 318
+    },
+    {
+      "path": "adr/ADR-001.md",
+      "sha256": "a129c019ec9f3d927fc49be3eebe21d49841cfcfe008a7cb05abebd1d9f81dff",
+      "bytes": 314
+    },
+    {
+      "path": "adr/ADR-002.md",
+      "sha256": "aa34b589aaa7393b28cad07ed75e077ed2189b3ef6a1f00db6e98c74f920fe0d",
+      "bytes": 292
+    },
+    {
+      "path": "adr/ADR-003.md",
+      "sha256": "6ffab04e1fc4d1212548d5b4a79b85baebb2d313cffede335c3a12774efacb0f",
+      "bytes": 332
+    },
+    {
+      "path": "adr/ADR-004.md",
+      "sha256": "973affcff45d5b50332e197f6b3583b1dbb5788bcbe1fff1b55de47b441f1af3",
+      "bytes": 266
+    },
+    {
+      "path": "adr/ADR-009.md",
+      "sha256": "fb8fda55485bbd59009731f2d829c3063e60daaebf7e1d82e3c4caea9c8a34f5",
+      "bytes": 403
+    },
+    {
+      "path": "adr/ADR-010.md",
+      "sha256": "8b7f843a808c1d678079450279eb37e85b9208d2b1dfa0deacc044f19c4bf0f8",
+      "bytes": 315
+    },
+    {
+      "path": "benchmarks/preflight/METRICS.json",
+      "sha256": "a960ad032b15dc31d4f5c029be5c7508cccb2db122fb5d6a31849a823910bac8",
+      "bytes": 746
+    },
+    {
+      "path": "benchmarks/preflight/README.md",
+      "sha256": "e39f14762ddd50bbccc8b354a25a9c51ad272b9d6297f68f10b8d00e86667829",
+      "bytes": 618
+    },
+    {
+      "path": "benchmarks/preflight/SOURCE_MANIFEST.csv",
+      "sha256": "c3ea6162cbeb9a5814f543ec23a02fecacad72053d90258162687ad3f48a2db2",
+      "bytes": 165
+    },
+    {
+      "path": "compiler/README.md",
+      "sha256": "1473d7aafd6aeedd3facbe0c859e4a5c3559041b6b6707d570b41f8519cb146e",
+      "bytes": 81
+    },
+    {
+      "path": "docs/architecture/LAB_RESTRICTIONS.md",
+      "sha256": "675e5176287ec98dc18b7e6a6e899cd31d4fa1549cdf9b03f2206ab40dda582d",
+      "bytes": 521
+    },
+    {
+      "path": "docs/requirements/INVARIANTS.md",
+      "sha256": "40313f14a93ad98822b199a6fe0ec6766c699f47318c4c710d3424c3a6a5b1bb",
+      "bytes": 1541
+    },
+    {
+      "path": "docs/requirements/REQUIREMENTS.md",
+      "sha256": "647a73560610cf3abe1f77a522850bd501b9847287816df85a5a773cb6604cb1",
+      "bytes": 1256
+    },
+    {
+      "path": "docs/tdd/SHA256SUMS",
+      "sha256": "c5fcbca744042be390a3e0580f80b7d729602e0b9bede25b0b4a88c243725b64",
+      "bytes": 87
+    },
+    {
+      "path": "docs/tdd/TDD-OIC-001-v1.1.pdf",
+      "sha256": "2a4d802130d577e4fb8fee731174ae0f2172ef2d617e3b99f068545d2b9fbf77",
+      "bytes": 2620217
+    },
+    {
+      "path": "examples/procurement-complex/README.md",
+      "sha256": "fb1135db9468e130acb4b771506099951456e05be7d3f685e36932fd0ab365b7",
+      "bytes": 398
+    },
+    {
+      "path": "platform/README.md",
+      "sha256": "3870d49876a816cbbf9a7b0c55214061019318a7a1b9aa764b946e633aadac20",
+      "bytes": 73
+    },
+    {
+      "path": "schemas/draft/admission-record.schema.json",
+      "sha256": "d040c4c86794268e26d9dd833ecd3a40347b724fbd73fb3accb3df355065f748",
+      "bytes": 1622
+    },
+    {
+      "path": "schemas/draft/authority-record.schema.json",
+      "sha256": "f981ef4203d58c8c117566998cec03ecce669edf87b5967fa5bebd654af74d41",
+      "bytes": 2132
+    },
+    {
+      "path": "schemas/draft/candidate-normative-unit.schema.json",
+      "sha256": "cc45ea691919f79dd29a86c3ab440ca78170add0055ef69a5e6d1de99c3b30c4",
+      "bytes": 2236
+    },
+    {
+      "path": "schemas/draft/control-envelope.schema.json",
+      "sha256": "6e9c3ac495da0775cf9453c57ebabf7f7e4b47a44d3a667adca40543cc6f1c28",
+      "bytes": 2320
+    },
+    {
+      "path": "schemas/draft/institutional-ir.schema.json",
+      "sha256": "d080e614212a1f8b285b558578ee0ee5927b33b534c16ee6dddae4598c7e986c",
+      "bytes": 1276
+    },
+    {
+      "path": "schemas/draft/runtime-evaluation.schema.json",
+      "sha256": "93ef95709370866fcb1d634a36c0f9c0f048f6584d991471d255adb408827767",
+      "bytes": 1335
+    },
+    {
+      "path": "schemas/draft/source-anchor.schema.json",
+      "sha256": "44e9a9892bb6f60534e98272d44e97f23028d9efbdca8c4ed038beb2dc1b5a36",
+      "bytes": 835
+    },
+    {
+      "path": "schemas/draft/source-document.schema.json",
+      "sha256": "865f128e687e9bbd46ae8fbcc807ed5610a2064703ac5961bf738cba03fa9a50",
+      "bytes": 1008
+    },
+    {
+      "path": "schemas/draft/source-node.schema.json",
+      "sha256": "bc79f3e1f1449ef2f0570f6458371f621c0e6930ff71892738f5c765a35e80f2",
+      "bytes": 1291
+    },
+    {
+      "path": "tests/README.md",
+      "sha256": "b5993c19dddc36e55db591710b732cb33e3debdc836c0c37408e2366f539b923",
+      "bytes": 72
+    },
+    {
+      "path": "ui/README.md",
+      "sha256": "032ba59d7b39fa918789876aa006bc8ebbcd4347aa012a78d4ef3a9abe1217d5",
+      "bytes": 41
+    },
+    {
+      "path": "work-orders/ARKADIY-DECISION-001.md",
+      "sha256": "f006c7133edd0278a9835e8771e935057b7166de5147bfec68219779896862ab",
+      "bytes": 684
+    },
+    {
+      "path": "work-orders/CLAUDE-FABLE5-WO-001.md",
+      "sha256": "fbcf83a281c50a7d47d625f3acaf9f3050efff5e7d5125852b8f1d9307bb6900",
+      "bytes": 1342
+    },
+    {
+      "path": "work-orders/OIC-WO-001.md",
+      "sha256": "bf0a645db637b161411d4f3059568ed79a2bcb62e6915ce22a73885b100b0d57",
+      "bytes": 1094
+    },
+    {
+      "path": "work-orders/ZTL-VITALIY-WO-001.md",
+      "sha256": "35ec22bfffc6b9b83ecb864a7af5cf5391ea814ebd4fd54104920ce082dd13f2",
+      "bytes": 1755
+    }
+  ]
+}

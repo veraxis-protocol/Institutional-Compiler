@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/draft/source-document.schema.json",
+  "title": "SourceDocument",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source_id",
+    "content_hash",
+    "media_type",
+    "ingested_at",
+    "nodes"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "media_type": {
+      "type": "string"
+    },
+    "original_filename": {
+      "type": "string"
+    },
+    "ingested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "declared_metadata": {
+      "type": "object"
+    },
+    "verification_status": {
+      "enum": [
+        "unverified",
+        "verified",
+        "rejected"
+      ]
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "source-node.schema.json"
+      }
+    }
+  }
+}

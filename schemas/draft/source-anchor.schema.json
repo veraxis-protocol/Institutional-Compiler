@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/draft/source-anchor.schema.json",
+  "title": "SourceAnchor",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "anchor_id",
+    "source_id",
+    "node_id",
+    "content_hash"
+  ],
+  "properties": {
+    "anchor_id": {
+      "type": "string"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "quote": {
+      "type": "string"
+    },
+    "page": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bbox": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "number"
+      }
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

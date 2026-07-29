@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/draft/runtime-evaluation.schema.json",
+  "title": "RuntimeEvaluation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evaluation_id",
+    "verdict",
+    "control_id",
+    "control_version",
+    "evaluated_at",
+    "reason_codes"
+  ],
+  "properties": {
+    "evaluation_id": {
+      "type": "string"
+    },
+    "verdict": {
+      "enum": [
+        "ALLOW",
+        "DENY",
+        "CANNOT"
+      ]
+    },
+    "control_id": {
+      "type": "string"
+    },
+    "control_version": {
+      "type": "string"
+    },
+    "evaluated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "missing_inputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_anchors": {
+      "type": "array",
+      "items": {
+        "$ref": "source-anchor.schema.json"
+      }
+    },
+    "warrant_artifact_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidence_pack_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "input_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}
