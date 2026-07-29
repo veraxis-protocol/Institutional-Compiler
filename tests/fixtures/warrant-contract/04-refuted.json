@@ -1,16 +1,16 @@
 {
-  "case_id": "01-earned-hereditary-current",
-  "classification_row": 25,
+  "case_id": "04-refuted",
+  "classification_row": 21,
   "control_overlay": null,
-  "description": "Grounded outright. EARNED is the only disposition that maps to ESTABLISHED, and this is the only ALLOW that needs no control policy to permit it.",
+  "description": "The only kind of BLOCK that is a negative finding about the admitted grounds.",
   "expected": {
     "decision_basis": "SUBSTANTIVE",
-    "epistemic_status": "ESTABLISHED",
-    "execution_disposition": "ALLOW",
+    "epistemic_status": "REFUTED",
+    "execution_disposition": "BLOCK",
     "missing_ground_anchors": [],
     "missing_ground_ids": [],
     "reason_codes": [
-      "OIC-D-0001"
+      "OIC-W-0013"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
@@ -19,21 +19,21 @@
       "control_version": "1.0.0",
       "decision_basis": "SUBSTANTIVE",
       "envelope_id": "env:proc-001",
-      "epistemic_status": "ESTABLISHED",
+      "epistemic_status": "REFUTED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:01",
-      "execution_disposition": "ALLOW",
-      "input_hash": "sha256:96f6c855b7d55a083760addb5c3af39ee0de3a87f70a107e0d1bbf520ad0f2c7",
+      "evaluation_id": "eval:04",
+      "execution_disposition": "BLOCK",
+      "input_hash": "sha256:522bd829bde5ebd517bacbadd422dd469af08ee47db87978502a51a0240b889c",
       "missing_ground_anchors": [],
       "missing_ground_ids": [],
       "on_unknown_applied": null,
       "reason_codes": [
-        "OIC-D-0001"
+        "OIC-W-0013"
       ],
-      "replay_reference": "replay:01-earned-hereditary-current@sha256:96f6c855b7d55a083760addb5c3af39ee0de3a87f70a107e0d1bbf520ad0f2c7",
+      "replay_reference": "replay:04-refuted@sha256:522bd829bde5ebd517bacbadd422dd469af08ee47db87978502a51a0240b889c",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
       "unverified_ground_policy_applied": null,
-      "warrant_artifact_id": "warrant:01",
+      "warrant_artifact_id": "warrant:04",
       "warrant_state": "USABLE",
       "warranty_grade_observed": "hereditary",
       "warranty_grade_required": "hereditary"
@@ -84,7 +84,7 @@
         "ground:registered",
         "ground:under_threshold"
       ],
-      "disposition": "EARNED",
+      "disposition": "REFUTED",
       "formula": "registered & under_threshold",
       "formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
       "generated_at": "2026-07-29T00:00:00Z",
@@ -94,7 +94,7 @@
         "sequence": 7
       },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
-      "input_hash": "sha256:5a137d500aa30807ab5bd54d4136e459e0d79e740b823a5aeef05530c2e2a941",
+      "input_hash": "sha256:25db148c5e975a6193250a04dc52eb882494ef59386d666c49078e92853acff3",
       "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
       "kernel_name": "ztl",
       "kernel_profile_id": "ztl-v0.1",
@@ -104,29 +104,29 @@
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:3f09d5f8af4ff64a3acbdde318d1a821506781587cd298b3d36dde52ed482603",
-      "raw_verdict": "T",
-      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:5a137d500aa30807ab5bd54d4136e459e0d79e740b823a5aeef05530c2e2a941)",
+      "output_hash": "sha256:42bbfb42a76788e3b07b529f45da5607c59e3ae07f533f87c8eb003fcf939885",
+      "raw_verdict": "F",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:25db148c5e975a6193250a04dc52eb882494ef59386d666c49078e92853acff3)",
       "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
         "anchor:a1"
       ],
       "time_binding": {
-        "attestation_hash": "sha256:3b7546bf71cbeff1d84b52bc420291524e6c3d850feade9318babc5b7e054934",
+        "attestation_hash": "sha256:681fc409bd02a53c784c0953b68995fb984a22858cd450038f8fbaa0c0cf1a2d",
         "reference": "tsa:veraxis-dev",
         "source": "attested_timestamp"
       },
       "unverified_ground_ids": [],
       "valid_from": "2026-07-01T00:00:00Z",
       "valid_until": "2026-12-31T23:59:59Z",
-      "warrant_artifact_id": "warrant:01",
+      "warrant_artifact_id": "warrant:04",
       "warranty_grade": "hereditary"
     },
     "ztl_result": {
-      "disposition": "EARNED",
+      "disposition": "REFUTED",
       "grade": "hereditary",
-      "raw_verdict": "T",
+      "raw_verdict": "F",
       "unverified": []
     }
   },

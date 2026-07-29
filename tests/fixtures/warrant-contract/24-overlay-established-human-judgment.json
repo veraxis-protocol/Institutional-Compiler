@@ -1,43 +1,44 @@
 {
-  "case_id": "14-epoch-mismatch",
-  "description": "Warrant computed at a sequence that no longer exists WITHIN ITS SCOPE. Epochs compare only within scope_id under the same authority_id.",
+  "case_id": "24-overlay-established-human-judgment",
+  "classification_row": 25,
+  "control_overlay": "O-1",
+  "description": "A perfect warrant, escalated because the institution reserved the decision. ESTABLISHED is PRESERVED: the overlay changes what the runtime did, not what the grounds establish.",
   "expected": {
-    "decision_basis": "PROCEDURAL",
-    "epistemic_status": "UNRESOLVED",
-    "execution_disposition": "BLOCK",
+    "decision_basis": "CONTROL_REQUIREMENT",
+    "epistemic_status": "ESTABLISHED",
+    "execution_disposition": "ESCALATE",
     "missing_ground_anchors": [],
     "missing_ground_ids": [],
     "reason_codes": [
-      "OIC-D-0004",
-      "OIC-W-0008"
+      "OIC-D-0002"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
       "authority_version": "auth-v2",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
-      "decision_basis": "PROCEDURAL",
+      "decision_basis": "CONTROL_REQUIREMENT",
       "envelope_id": "env:proc-001",
-      "epistemic_status": "UNRESOLVED",
+      "epistemic_status": "ESTABLISHED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:14",
-      "execution_disposition": "BLOCK",
-      "input_hash": "sha256:0b152f47f3fc9f7c59d7e329dbce4ab76d5782ae1d309b81e73dbde7a4c440ab",
+      "evaluation_id": "eval:24",
+      "execution_disposition": "ESCALATE",
+      "input_hash": "sha256:8ad502c3b89de32db7ebacf832f53e0197e9c2f7e6d278c6bafc54d87ef39da9",
       "missing_ground_anchors": [],
       "missing_ground_ids": [],
-      "on_unknown_applied": "deny",
+      "on_unknown_applied": null,
       "reason_codes": [
-        "OIC-D-0004",
-        "OIC-W-0008"
+        "OIC-D-0002"
       ],
-      "replay_reference": "replay:14-epoch-mismatch@sha256:0b152f47f3fc9f7c59d7e329dbce4ab76d5782ae1d309b81e73dbde7a4c440ab",
+      "replay_reference": "replay:24-overlay-established-human-judgment@sha256:8ad502c3b89de32db7ebacf832f53e0197e9c2f7e6d278c6bafc54d87ef39da9",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
-      "warrant_artifact_id": "warrant:14",
-      "warrant_state": "MISBOUND",
+      "unverified_ground_policy_applied": null,
+      "warrant_artifact_id": "warrant:24",
+      "warrant_state": "USABLE",
       "warranty_grade_observed": "hereditary",
       "warranty_grade_required": "hereditary"
     },
-    "warrant_state": "MISBOUND"
+    "warrant_state": "USABLE"
   },
   "input": {
     "envelope": {
@@ -46,14 +47,15 @@
       "bound_kernel_profile_id": "ztl-v0.1",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
-      "decision_mode": "automatic",
+      "decision_mode": "human_judgment",
       "envelope_id": "env:proc-001",
       "on_unknown": "deny",
       "warrant_requirement": {
         "kernel_profile_id": "ztl-v0.1",
         "minimum_warranty_grade": "hereditary",
         "mode": "required",
-        "on_insufficient_grade": "escalate"
+        "on_insufficient_grade": "escalate",
+        "unverified_ground_policy": "forbid"
       }
     },
     "runtime_context": {
@@ -89,10 +91,10 @@
       "ground_epoch": {
         "authority_id": "authority:proc-registry",
         "scope_id": "scope:proc-grounds",
-        "sequence": 5
+        "sequence": 7
       },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
-      "input_hash": "sha256:5fa0bde1d140d98166b8f5debff1a7f13980585e1a342fa42815e89ce9456ea1",
+      "input_hash": "sha256:16457b5491c306eb528875348a2fe765d626ddf0962967be22f949645f2bf575",
       "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
       "kernel_name": "ztl",
       "kernel_profile_id": "ztl-v0.1",
@@ -102,23 +104,23 @@
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:47d773970dfa022c62b8dbf2e2a0344e494a5c65a5b2b66bfe1169b2de96948e",
+      "output_hash": "sha256:21f6d2c4d985357449c0b527497ec75770a5edabaa7ea59e608c11702127bb3e",
       "raw_verdict": "T",
-      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:5fa0bde1d140d98166b8f5debff1a7f13980585e1a342fa42815e89ce9456ea1, ground_set_hash=sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926)",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:16457b5491c306eb528875348a2fe765d626ddf0962967be22f949645f2bf575)",
       "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
         "anchor:a1"
       ],
       "time_binding": {
-        "attestation_hash": "sha256:870dc242027bf1de280cbbbf08581d4887891e8ab029086b6ff765b1a1562465",
+        "attestation_hash": "sha256:933787e624ed22fa510540ffaa685386b359b3fa2076ba3ca355e8a9cca8baac",
         "reference": "tsa:veraxis-dev",
         "source": "attested_timestamp"
       },
       "unverified_ground_ids": [],
       "valid_from": "2026-07-01T00:00:00Z",
       "valid_until": "2026-12-31T23:59:59Z",
-      "warrant_artifact_id": "warrant:14",
+      "warrant_artifact_id": "warrant:24",
       "warranty_grade": "hereditary"
     },
     "ztl_result": {
@@ -128,7 +130,6 @@
       "unverified": []
     }
   },
-  "mapping_row": 10,
   "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }

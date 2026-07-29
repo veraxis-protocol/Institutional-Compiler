@@ -1,43 +1,76 @@
 {
-  "case_id": "18-warrant-not-yet-valid",
-  "description": "valid_from is in the future under the declared time_binding. A warrant that is not yet in force is as unusable as an expired one, and for the same reason.",
+  "case_id": "05-open-raw-f",
+  "classification_row": 22,
+  "control_overlay": null,
+  "description": "THE MEASURED TRAP. judge('p & q', {p:T, q:Z}) returns raw verdict F with disposition OPEN. Reading raw_verdict records 'established false' for something merely unverified. on_unknown is deny, so the block is real but PRECAUTIONARY, never SUBSTANTIVE.",
   "expected": {
-    "decision_basis": "PROCEDURAL",
+    "decision_basis": "PRECAUTIONARY",
     "epistemic_status": "UNRESOLVED",
     "execution_disposition": "BLOCK",
-    "missing_ground_anchors": [],
-    "missing_ground_ids": [],
+    "missing_ground_anchors": [
+      {
+        "admitted_unit_id": "cnu:threshold",
+        "expected_evidence_type": "registry_extract",
+        "ground_id": "ground:under_threshold",
+        "source_id": "src:proc-manual-2026",
+        "source_node_id": "node:cl-4.2.1",
+        "span": {
+          "end": 188,
+          "start": 120
+        }
+      }
+    ],
+    "missing_ground_ids": [
+      "ground:under_threshold"
+    ],
     "reason_codes": [
       "OIC-D-0004",
-      "OIC-W-0021"
+      "OIC-W-0012",
+      "OIC-W-0015"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
       "authority_version": "auth-v2",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
-      "decision_basis": "PROCEDURAL",
+      "decision_basis": "PRECAUTIONARY",
       "envelope_id": "env:proc-001",
       "epistemic_status": "UNRESOLVED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:18",
+      "evaluation_id": "eval:05",
       "execution_disposition": "BLOCK",
-      "input_hash": "sha256:c33050dd8120c1f6ab5760325192ed3ebba1777d445d85b1a4834ae00551678d",
-      "missing_ground_anchors": [],
-      "missing_ground_ids": [],
+      "input_hash": "sha256:e21b08b85152dbd7cb25599ede00a915c3872e61998cb1e003a8bfbdd703327c",
+      "missing_ground_anchors": [
+        {
+          "admitted_unit_id": "cnu:threshold",
+          "expected_evidence_type": "registry_extract",
+          "ground_id": "ground:under_threshold",
+          "source_id": "src:proc-manual-2026",
+          "source_node_id": "node:cl-4.2.1",
+          "span": {
+            "end": 188,
+            "start": 120
+          }
+        }
+      ],
+      "missing_ground_ids": [
+        "ground:under_threshold"
+      ],
       "on_unknown_applied": "deny",
       "reason_codes": [
         "OIC-D-0004",
-        "OIC-W-0021"
+        "OIC-W-0012",
+        "OIC-W-0015"
       ],
-      "replay_reference": "replay:18-warrant-not-yet-valid@sha256:c33050dd8120c1f6ab5760325192ed3ebba1777d445d85b1a4834ae00551678d",
+      "replay_reference": "replay:05-open-raw-f@sha256:e21b08b85152dbd7cb25599ede00a915c3872e61998cb1e003a8bfbdd703327c",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
-      "warrant_artifact_id": "warrant:18",
-      "warrant_state": "NOT_YET_VALID",
-      "warranty_grade_observed": "hereditary",
+      "unverified_ground_policy_applied": null,
+      "warrant_artifact_id": "warrant:05",
+      "warrant_state": "USABLE",
+      "warranty_grade_observed": "until-verification",
       "warranty_grade_required": "hereditary"
     },
-    "warrant_state": "NOT_YET_VALID"
+    "warrant_state": "USABLE"
   },
   "input": {
     "envelope": {
@@ -53,7 +86,8 @@
         "kernel_profile_id": "ztl-v0.1",
         "minimum_warranty_grade": "hereditary",
         "mode": "required",
-        "on_insufficient_grade": "escalate"
+        "on_insufficient_grade": "escalate",
+        "unverified_ground_policy": "forbid"
       }
     },
     "runtime_context": {
@@ -82,7 +116,7 @@
         "ground:registered",
         "ground:under_threshold"
       ],
-      "disposition": "EARNED",
+      "disposition": "OPEN",
       "formula": "registered & under_threshold",
       "formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
       "generated_at": "2026-07-29T00:00:00Z",
@@ -92,7 +126,7 @@
         "sequence": 7
       },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
-      "input_hash": "sha256:74c0f6830c5b6a6ee1faa9c429ed5f9f2be1a0882e45ad8f8b867a8ae3a1b13e",
+      "input_hash": "sha256:06ffb6e59c5cb3cd7e01b05a22ccd5b76f9285a957da0558f19896437d3aa67e",
       "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
       "kernel_name": "ztl",
       "kernel_profile_id": "ztl-v0.1",
@@ -102,33 +136,36 @@
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:294ca64c27777d9ac40c1dd52fee4f3a0ccc11ff2ccaa29c63606c71f6524ad1",
-      "raw_verdict": "T",
-      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:74c0f6830c5b6a6ee1faa9c429ed5f9f2be1a0882e45ad8f8b867a8ae3a1b13e, ground_set_hash=sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926)",
+      "output_hash": "sha256:a9fc9df5bc0571cdc43aa80e568c8dedfbad2434ed1d76789afae1e2dcb97e8e",
+      "raw_verdict": "F",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:06ffb6e59c5cb3cd7e01b05a22ccd5b76f9285a957da0558f19896437d3aa67e)",
       "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
         "anchor:a1"
       ],
       "time_binding": {
-        "attestation_hash": "sha256:c0e83978ad77ab5e548e0aa1eb4e302d8946e30ddbbb0a69b8daaea2d4cc269f",
+        "attestation_hash": "sha256:d3cddeacaaff2dc12cefb54b0dc8aa3e27801c6cf875731fc5a2ca93f9f26266",
         "reference": "tsa:veraxis-dev",
         "source": "attested_timestamp"
       },
-      "unverified_ground_ids": [],
-      "valid_from": "2026-09-01T00:00:00Z",
-      "valid_until": "2027-01-01T00:00:00Z",
-      "warrant_artifact_id": "warrant:18",
-      "warranty_grade": "hereditary"
+      "unverified_ground_ids": [
+        "ground:under_threshold"
+      ],
+      "valid_from": "2026-07-01T00:00:00Z",
+      "valid_until": "2026-12-31T23:59:59Z",
+      "warrant_artifact_id": "warrant:05",
+      "warranty_grade": "until-verification"
     },
     "ztl_result": {
-      "disposition": "EARNED",
-      "grade": "hereditary",
-      "raw_verdict": "T",
-      "unverified": []
+      "disposition": "OPEN",
+      "grade": "until-verification",
+      "raw_verdict": "F",
+      "unverified": [
+        "ground:under_threshold"
+      ]
     }
   },
-  "mapping_row": 7,
   "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }

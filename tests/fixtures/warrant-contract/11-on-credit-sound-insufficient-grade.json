@@ -1,69 +1,48 @@
 {
-  "case_id": "09-on-credit-sound-permitted",
-  "description": "ALLOW while grounds remain unverified. ON CREDIT + sound never lies about the present marking, and this control EXPLICITLY tolerates a non-monotone warrant. The missing grounds are still surfaced -- that is the whole point of W-5.",
+  "case_id": "11-on-credit-sound-insufficient-grade",
+  "classification_row": 26,
+  "control_overlay": "O-3",
+  "description": "The grade gate fires before the unverified-ground policy is even reached: the control requires hereditary and observed only sound.",
   "expected": {
-    "decision_basis": "SUBSTANTIVE",
-    "epistemic_status": "ESTABLISHED",
-    "execution_disposition": "ALLOW",
-    "missing_ground_anchors": [
-      {
-        "admitted_unit_id": "cnu:threshold",
-        "expected_evidence_type": "registry_extract",
-        "ground_id": "ground:under_threshold",
-        "source_id": "src:proc-manual-2026",
-        "source_node_id": "node:cl-4.2.1",
-        "span": {
-          "end": 188,
-          "start": 120
-        }
-      }
-    ],
+    "decision_basis": "CONTROL_REQUIREMENT",
+    "epistemic_status": "CONDITIONALLY_SUPPORTED",
+    "execution_disposition": "ESCALATE",
+    "missing_ground_anchors": [],
     "missing_ground_ids": [
       "ground:under_threshold"
     ],
     "reason_codes": [
-      "OIC-D-0001",
-      "OIC-W-0015"
+      "OIC-W-0015",
+      "OIC-W-0016"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
       "authority_version": "auth-v2",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
-      "decision_basis": "SUBSTANTIVE",
+      "decision_basis": "CONTROL_REQUIREMENT",
       "envelope_id": "env:proc-001",
-      "epistemic_status": "ESTABLISHED",
+      "epistemic_status": "CONDITIONALLY_SUPPORTED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:09",
-      "execution_disposition": "ALLOW",
-      "input_hash": "sha256:64a441d75ea57f959b60397b3028b1138e24878d4662ae4ab7ce0ec4f92e209a",
-      "missing_ground_anchors": [
-        {
-          "admitted_unit_id": "cnu:threshold",
-          "expected_evidence_type": "registry_extract",
-          "ground_id": "ground:under_threshold",
-          "source_id": "src:proc-manual-2026",
-          "source_node_id": "node:cl-4.2.1",
-          "span": {
-            "end": 188,
-            "start": 120
-          }
-        }
-      ],
+      "evaluation_id": "eval:11",
+      "execution_disposition": "ESCALATE",
+      "input_hash": "sha256:900fb688d6a6d62158f1add3f70b979bace11a628b1bbbcbf5ab53463ae95cc1",
+      "missing_ground_anchors": [],
       "missing_ground_ids": [
         "ground:under_threshold"
       ],
       "on_unknown_applied": null,
       "reason_codes": [
-        "OIC-D-0001",
-        "OIC-W-0015"
+        "OIC-W-0015",
+        "OIC-W-0016"
       ],
-      "replay_reference": "replay:09-on-credit-sound-permitted@sha256:64a441d75ea57f959b60397b3028b1138e24878d4662ae4ab7ce0ec4f92e209a",
+      "replay_reference": "replay:11-on-credit-sound-insufficient-grade@sha256:900fb688d6a6d62158f1add3f70b979bace11a628b1bbbcbf5ab53463ae95cc1",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
-      "warrant_artifact_id": "warrant:09",
+      "unverified_ground_policy_applied": null,
+      "warrant_artifact_id": "warrant:11",
       "warrant_state": "USABLE",
       "warranty_grade_observed": "sound",
-      "warranty_grade_required": "sound"
+      "warranty_grade_required": "hereditary"
     },
     "warrant_state": "USABLE"
   },
@@ -79,9 +58,10 @@
       "on_unknown": "deny",
       "warrant_requirement": {
         "kernel_profile_id": "ztl-v0.1",
-        "minimum_warranty_grade": "sound",
+        "minimum_warranty_grade": "hereditary",
         "mode": "required",
-        "on_insufficient_grade": "escalate"
+        "on_insufficient_grade": "escalate",
+        "unverified_ground_policy": "allow_with_disclosure"
       }
     },
     "runtime_context": {
@@ -120,7 +100,7 @@
         "sequence": 7
       },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
-      "input_hash": "sha256:2bf878c388bf2ad6de09902cb048e913c4d77793283cf4f07056899b0804f26a",
+      "input_hash": "sha256:9b3645a1e04acb4af898d7e07970fba0a09e041b839b1de23e0631bf68d6439b",
       "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
       "kernel_name": "ztl",
       "kernel_profile_id": "ztl-v0.1",
@@ -130,16 +110,16 @@
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:a0d9603ac0a1a62d670d6d59ad46e2ba0ad19044cf4a98b23f4ecdfb512b4b34",
+      "output_hash": "sha256:d8e0b2b123ebf7d5350ba2cd1aea9dbdea0658c3375f90e60a6e290fdbbbf304",
       "raw_verdict": "T",
-      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:2bf878c388bf2ad6de09902cb048e913c4d77793283cf4f07056899b0804f26a, ground_set_hash=sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926)",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:9b3645a1e04acb4af898d7e07970fba0a09e041b839b1de23e0631bf68d6439b)",
       "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
         "anchor:a1"
       ],
       "time_binding": {
-        "attestation_hash": "sha256:94109f408520a43a0a24170e4dfec4e861353a03e9e225d4d219010d9105c8e1",
+        "attestation_hash": "sha256:d90422fde3f516f310f5922eb37b462dd61fd0e366643d277bfb0d2c82b38428",
         "reference": "tsa:veraxis-dev",
         "source": "attested_timestamp"
       },
@@ -148,7 +128,7 @@
       ],
       "valid_from": "2026-07-01T00:00:00Z",
       "valid_until": "2026-12-31T23:59:59Z",
-      "warrant_artifact_id": "warrant:09",
+      "warrant_artifact_id": "warrant:11",
       "warranty_grade": "sound"
     },
     "ztl_result": {
@@ -160,7 +140,6 @@
       ]
     }
   },
-  "mapping_row": 26,
   "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }

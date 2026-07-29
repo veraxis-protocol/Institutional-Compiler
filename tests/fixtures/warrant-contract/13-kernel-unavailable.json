@@ -1,5 +1,7 @@
 {
-  "case_id": "10-kernel-unavailable",
+  "case_id": "13-kernel-unavailable",
+  "classification_row": 1,
+  "control_overlay": null,
   "description": "No warrant can be produced. A warrant is never fabricated.",
   "expected": {
     "decision_basis": "PROCEDURAL",
@@ -20,9 +22,9 @@
       "envelope_id": "env:proc-001",
       "epistemic_status": "UNRESOLVED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:10",
+      "evaluation_id": "eval:13",
       "execution_disposition": "BLOCK",
-      "input_hash": "sha256:8a7a4212bdc8488ee83d1972caa0c757b92e835d717adde8c736dc09a069343d",
+      "input_hash": "sha256:67dfe4e82fe42b2d3e950203a8966268277ef97d2e93bd7515e2d063144d323d",
       "missing_ground_anchors": [],
       "missing_ground_ids": [],
       "on_unknown_applied": "deny",
@@ -30,8 +32,9 @@
         "OIC-D-0004",
         "OIC-W-0002"
       ],
-      "replay_reference": "replay:10-kernel-unavailable@sha256:8a7a4212bdc8488ee83d1972caa0c757b92e835d717adde8c736dc09a069343d",
+      "replay_reference": "replay:13-kernel-unavailable@sha256:67dfe4e82fe42b2d3e950203a8966268277ef97d2e93bd7515e2d063144d323d",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
+      "unverified_ground_policy_applied": null,
       "warrant_artifact_id": null,
       "warrant_state": "ABSENT",
       "warranty_grade_observed": null,
@@ -53,7 +56,8 @@
         "kernel_profile_id": "ztl-v0.1",
         "minimum_warranty_grade": "hereditary",
         "mode": "required",
-        "on_insufficient_grade": "escalate"
+        "on_insufficient_grade": "escalate",
+        "unverified_ground_policy": "forbid"
       }
     },
     "runtime_context": {
@@ -75,7 +79,6 @@
     "warrant_artifact": null,
     "ztl_result": null
   },
-  "mapping_row": 1,
   "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }

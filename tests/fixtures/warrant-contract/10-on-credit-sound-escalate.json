@@ -1,17 +1,19 @@
 {
-  "case_id": "20-on-credit-until-verification",
-  "description": "Rides an unverified atom that can flip. Below every sane minimum grade, so the control requirement blocks. Still ESTABLISHED in the present marking, and still not an ALLOW.",
+  "case_id": "10-on-credit-sound-escalate",
+  "classification_row": 26,
+  "control_overlay": "O-7",
+  "description": "Routed to a human rather than refused outright.",
   "expected": {
     "decision_basis": "CONTROL_REQUIREMENT",
-    "epistemic_status": "ESTABLISHED",
-    "execution_disposition": "BLOCK",
+    "epistemic_status": "CONDITIONALLY_SUPPORTED",
+    "execution_disposition": "ESCALATE",
     "missing_ground_anchors": [],
     "missing_ground_ids": [
-      "ground:registered"
+      "ground:under_threshold"
     ],
     "reason_codes": [
-      "OIC-W-0015",
-      "OIC-W-0016"
+      "OIC-D-0006",
+      "OIC-W-0015"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
@@ -20,25 +22,26 @@
       "control_version": "1.0.0",
       "decision_basis": "CONTROL_REQUIREMENT",
       "envelope_id": "env:proc-001",
-      "epistemic_status": "ESTABLISHED",
+      "epistemic_status": "CONDITIONALLY_SUPPORTED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:20",
-      "execution_disposition": "BLOCK",
-      "input_hash": "sha256:3d2b8daaf951e235e360d429b2b08e9119ad2c5b1ec148c584791da574a01a84",
+      "evaluation_id": "eval:10",
+      "execution_disposition": "ESCALATE",
+      "input_hash": "sha256:8a7a4212bdc8488ee83d1972caa0c757b92e835d717adde8c736dc09a069343d",
       "missing_ground_anchors": [],
       "missing_ground_ids": [
-        "ground:registered"
+        "ground:under_threshold"
       ],
       "on_unknown_applied": null,
       "reason_codes": [
-        "OIC-W-0015",
-        "OIC-W-0016"
+        "OIC-D-0006",
+        "OIC-W-0015"
       ],
-      "replay_reference": "replay:20-on-credit-until-verification@sha256:3d2b8daaf951e235e360d429b2b08e9119ad2c5b1ec148c584791da574a01a84",
+      "replay_reference": "replay:10-on-credit-sound-escalate@sha256:8a7a4212bdc8488ee83d1972caa0c757b92e835d717adde8c736dc09a069343d",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
-      "warrant_artifact_id": "warrant:20",
+      "unverified_ground_policy_applied": "escalate",
+      "warrant_artifact_id": "warrant:10",
       "warrant_state": "USABLE",
-      "warranty_grade_observed": "until-verification",
+      "warranty_grade_observed": "sound",
       "warranty_grade_required": "sound"
     },
     "warrant_state": "USABLE"
@@ -57,7 +60,8 @@
         "kernel_profile_id": "ztl-v0.1",
         "minimum_warranty_grade": "sound",
         "mode": "required",
-        "on_insufficient_grade": "block"
+        "on_insufficient_grade": "escalate",
+        "unverified_ground_policy": "escalate"
       }
     },
     "runtime_context": {
@@ -96,7 +100,7 @@
         "sequence": 7
       },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
-      "input_hash": "sha256:b18c288c15435a4791a58231d4a7088ee03aa9faa78373255e8e40f65fccc819",
+      "input_hash": "sha256:bf4bbeeabfd6e86351021bf0df803926acee2283c8c886b742e1e7dad782cd40",
       "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
       "kernel_name": "ztl",
       "kernel_profile_id": "ztl-v0.1",
@@ -106,37 +110,36 @@
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:4ba6fb3991061f3b09bd3b09d9b4b59b05a7a3a37a06a5c8f2c7d8c27cf8a607",
+      "output_hash": "sha256:aa5338cdc46b8c1eb650eea63a298bd9f8c122e79f8d0d8df6f67288d00fbc2c",
       "raw_verdict": "T",
-      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:b18c288c15435a4791a58231d4a7088ee03aa9faa78373255e8e40f65fccc819, ground_set_hash=sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926)",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:bf4bbeeabfd6e86351021bf0df803926acee2283c8c886b742e1e7dad782cd40)",
       "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
         "anchor:a1"
       ],
       "time_binding": {
-        "attestation_hash": "sha256:ff26fc4929882d9c7f01726d739bc81250b54ed489c46ae366b84ea62a8b0903",
+        "attestation_hash": "sha256:7c1072e03ddff6db577ca87df57e7eaad1386745de548242f043d59d23725549",
         "reference": "tsa:veraxis-dev",
         "source": "attested_timestamp"
       },
       "unverified_ground_ids": [
-        "ground:registered"
+        "ground:under_threshold"
       ],
       "valid_from": "2026-07-01T00:00:00Z",
       "valid_until": "2026-12-31T23:59:59Z",
-      "warrant_artifact_id": "warrant:20",
-      "warranty_grade": "until-verification"
+      "warrant_artifact_id": "warrant:10",
+      "warranty_grade": "sound"
     },
     "ztl_result": {
       "disposition": "ON CREDIT",
-      "grade": "until-verification",
+      "grade": "sound",
       "raw_verdict": "T",
       "unverified": [
-        "ground:registered"
+        "ground:under_threshold"
       ]
     }
   },
-  "mapping_row": 28,
   "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }

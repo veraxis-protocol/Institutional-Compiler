@@ -1,10 +1,12 @@
 {
-  "case_id": "19-on-credit-sound-insufficient-grade",
-  "description": "The REACHABLE grade-based CONTROL_REQUIREMENT case. The grounds establish the claim in the present marking, and the control requires hereditary. ESTABLISHED is preserved: the escalation is a control policy, not a defect and not uncertainty.",
+  "case_id": "08-on-credit-sound-allow-with-disclosure",
+  "classification_row": 26,
+  "control_overlay": "O-5",
+  "description": "The ONLY conditional ALLOW. ON CREDIT + sound never lies about the present marking, the control explicitly permits acting on unverified grounds, and the missing grounds are preserved on the record. CONDITIONALLY_SUPPORTED, never ESTABLISHED: permission to act on conditional support is an admitted control decision, not a stronger epistemic claim.",
   "expected": {
     "decision_basis": "CONTROL_REQUIREMENT",
-    "epistemic_status": "ESTABLISHED",
-    "execution_disposition": "ESCALATE",
+    "epistemic_status": "CONDITIONALLY_SUPPORTED",
+    "execution_disposition": "ALLOW",
     "missing_ground_anchors": [
       {
         "admitted_unit_id": "cnu:threshold",
@@ -22,8 +24,8 @@
       "ground:under_threshold"
     ],
     "reason_codes": [
-      "OIC-W-0015",
-      "OIC-W-0016"
+      "OIC-D-0005",
+      "OIC-W-0015"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
@@ -32,11 +34,11 @@
       "control_version": "1.0.0",
       "decision_basis": "CONTROL_REQUIREMENT",
       "envelope_id": "env:proc-001",
-      "epistemic_status": "ESTABLISHED",
+      "epistemic_status": "CONDITIONALLY_SUPPORTED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:19",
-      "execution_disposition": "ESCALATE",
-      "input_hash": "sha256:cdae07feee02366f1091a50d99cd89310e6c7722e44448685f110a58ca442919",
+      "evaluation_id": "eval:08",
+      "execution_disposition": "ALLOW",
+      "input_hash": "sha256:3d46015a7180f070e3d6878d183da51a6f7e49f0d7cb9405ca0e462432876dd1",
       "missing_ground_anchors": [
         {
           "admitted_unit_id": "cnu:threshold",
@@ -55,15 +57,16 @@
       ],
       "on_unknown_applied": null,
       "reason_codes": [
-        "OIC-W-0015",
-        "OIC-W-0016"
+        "OIC-D-0005",
+        "OIC-W-0015"
       ],
-      "replay_reference": "replay:19-on-credit-sound-insufficient-grade@sha256:cdae07feee02366f1091a50d99cd89310e6c7722e44448685f110a58ca442919",
+      "replay_reference": "replay:08-on-credit-sound-allow-with-disclosure@sha256:3d46015a7180f070e3d6878d183da51a6f7e49f0d7cb9405ca0e462432876dd1",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
-      "warrant_artifact_id": "warrant:19",
+      "unverified_ground_policy_applied": "allow_with_disclosure",
+      "warrant_artifact_id": "warrant:08",
       "warrant_state": "USABLE",
       "warranty_grade_observed": "sound",
-      "warranty_grade_required": "hereditary"
+      "warranty_grade_required": "sound"
     },
     "warrant_state": "USABLE"
   },
@@ -79,9 +82,10 @@
       "on_unknown": "deny",
       "warrant_requirement": {
         "kernel_profile_id": "ztl-v0.1",
-        "minimum_warranty_grade": "hereditary",
+        "minimum_warranty_grade": "sound",
         "mode": "required",
-        "on_insufficient_grade": "escalate"
+        "on_insufficient_grade": "escalate",
+        "unverified_ground_policy": "allow_with_disclosure"
       }
     },
     "runtime_context": {
@@ -120,7 +124,7 @@
         "sequence": 7
       },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
-      "input_hash": "sha256:006fe0e24f3e695060754788f330d50ff9100290cb95e6855ef2c9b04197e747",
+      "input_hash": "sha256:0208ff408693533788284eaa8a63155f5de9758af3f422180c9cc2a3a21ba42d",
       "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
       "kernel_name": "ztl",
       "kernel_profile_id": "ztl-v0.1",
@@ -130,16 +134,16 @@
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:9276e8d577986f5d9122ff3927663c3e0676b56d5446ee2878856350e0677c59",
+      "output_hash": "sha256:417daf4ab1ce92b43c09a8f38a5cd33a7292490536ff21499efc8f0b1311396b",
       "raw_verdict": "T",
-      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:006fe0e24f3e695060754788f330d50ff9100290cb95e6855ef2c9b04197e747, ground_set_hash=sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926)",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:0208ff408693533788284eaa8a63155f5de9758af3f422180c9cc2a3a21ba42d)",
       "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
         "anchor:a1"
       ],
       "time_binding": {
-        "attestation_hash": "sha256:18a6aac4ec21f3e96b71948a1559915c17c1dc52138deead621774ce67458888",
+        "attestation_hash": "sha256:b7a8566e50563d9b822dd5d864ada1abbabab150f9e1bd4c4294a06becad9404",
         "reference": "tsa:veraxis-dev",
         "source": "attested_timestamp"
       },
@@ -148,7 +152,7 @@
       ],
       "valid_from": "2026-07-01T00:00:00Z",
       "valid_until": "2026-12-31T23:59:59Z",
-      "warrant_artifact_id": "warrant:19",
+      "warrant_artifact_id": "warrant:08",
       "warranty_grade": "sound"
     },
     "ztl_result": {
@@ -160,7 +164,6 @@
       ]
     }
   },
-  "mapping_row": 27,
   "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }

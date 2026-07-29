@@ -1,41 +1,48 @@
 {
-  "case_id": "15-contradiction",
-  "description": "Grounds are mutually inconsistent: a finding about the ground set, not a refutation of the proposition. CONTRADICTED, never REFUTED, even though the kernel said REFUTED.",
+  "case_id": "15-ground-expired",
+  "classification_row": 8,
+  "control_overlay": null,
+  "description": "Anti-tick: a dependency ground was withdrawn. About the grounds, so PRECAUTIONARY.",
   "expected": {
-    "decision_basis": "SUBSTANTIVE",
-    "epistemic_status": "CONTRADICTED",
-    "execution_disposition": "BLOCK",
+    "decision_basis": "PRECAUTIONARY",
+    "epistemic_status": "UNRESOLVED",
+    "execution_disposition": "ESCALATE",
     "missing_ground_anchors": [],
-    "missing_ground_ids": [],
+    "missing_ground_ids": [
+      "ground:registered"
+    ],
     "reason_codes": [
-      "OIC-W-0014"
+      "OIC-W-0020"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
       "authority_version": "auth-v2",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
-      "decision_basis": "SUBSTANTIVE",
+      "decision_basis": "PRECAUTIONARY",
       "envelope_id": "env:proc-001",
-      "epistemic_status": "CONTRADICTED",
+      "epistemic_status": "UNRESOLVED",
       "evaluated_at": "2026-08-01T12:00:00Z",
       "evaluation_id": "eval:15",
-      "execution_disposition": "BLOCK",
+      "execution_disposition": "ESCALATE",
       "input_hash": "sha256:2861e3fd93defa43ffefcb9bcb2b48d239cd798b9b7c0ae092b641d960a6ab9d",
       "missing_ground_anchors": [],
-      "missing_ground_ids": [],
-      "on_unknown_applied": null,
-      "reason_codes": [
-        "OIC-W-0014"
+      "missing_ground_ids": [
+        "ground:registered"
       ],
-      "replay_reference": "replay:15-contradiction@sha256:2861e3fd93defa43ffefcb9bcb2b48d239cd798b9b7c0ae092b641d960a6ab9d",
+      "on_unknown_applied": "escalate",
+      "reason_codes": [
+        "OIC-W-0020"
+      ],
+      "replay_reference": "replay:15-ground-expired@sha256:2861e3fd93defa43ffefcb9bcb2b48d239cd798b9b7c0ae092b641d960a6ab9d",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
+      "unverified_ground_policy_applied": null,
       "warrant_artifact_id": "warrant:15",
-      "warrant_state": "USABLE",
+      "warrant_state": "REVOKED",
       "warranty_grade_observed": "hereditary",
       "warranty_grade_required": "hereditary"
     },
-    "warrant_state": "USABLE"
+    "warrant_state": "REVOKED"
   },
   "input": {
     "envelope": {
@@ -46,18 +53,19 @@
       "control_version": "1.0.0",
       "decision_mode": "automatic",
       "envelope_id": "env:proc-001",
-      "on_unknown": "deny",
+      "on_unknown": "escalate",
       "warrant_requirement": {
         "kernel_profile_id": "ztl-v0.1",
         "minimum_warranty_grade": "hereditary",
         "mode": "required",
-        "on_insufficient_grade": "escalate"
+        "on_insufficient_grade": "escalate",
+        "unverified_ground_policy": "forbid"
       }
     },
     "runtime_context": {
       "admission_version": "adm-v3",
       "authority_version": "auth-v2",
-      "contradiction_detected": true,
+      "contradiction_detected": false,
       "current_ground_epoch": {
         "authority_id": "authority:proc-registry",
         "scope_id": "scope:proc-grounds",
@@ -65,7 +73,9 @@
       },
       "current_ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "expired_ground_ids": [],
+      "expired_ground_ids": [
+        "ground:registered"
+      ],
       "kernel_available": true,
       "revoked_ground_ids": [],
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4"
@@ -80,7 +90,7 @@
         "ground:registered",
         "ground:under_threshold"
       ],
-      "disposition": "REFUTED",
+      "disposition": "EARNED",
       "formula": "registered & under_threshold",
       "formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
       "generated_at": "2026-07-29T00:00:00Z",
@@ -101,8 +111,8 @@
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
       "output_hash": "sha256:bc65f19b1018bf236f0a124fdcf01f7d0457fff3f89be0adedc878a4bbe83ba5",
-      "raw_verdict": "F",
-      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:b03eddd31986146b8f28dd7f9296b386abdbdc7339662b45f2787a549bfa2429, ground_set_hash=sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926)",
+      "raw_verdict": "T",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:b03eddd31986146b8f28dd7f9296b386abdbdc7339662b45f2787a549bfa2429)",
       "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
@@ -120,13 +130,12 @@
       "warranty_grade": "hereditary"
     },
     "ztl_result": {
-      "disposition": "REFUTED",
+      "disposition": "EARNED",
       "grade": "hereditary",
-      "raw_verdict": "F",
+      "raw_verdict": "T",
       "unverified": []
     }
   },
-  "mapping_row": 20,
   "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }

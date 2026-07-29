@@ -1,14 +1,19 @@
 {
-  "case_id": "21-decision-mode-human-judgment",
-  "description": "A perfect warrant, escalated anyway because the control is not automatable. Not a procedural defect and not epistemic uncertainty: the logic is settled and the institution reserved the decision.",
+  "case_id": "09-on-credit-sound-forbid",
+  "classification_row": 26,
+  "control_overlay": "O-6",
+  "description": "Same logic, opposite policy. The control refuses to act on a result that rides an unverified link. The epistemic status is unchanged by that refusal.",
   "expected": {
     "decision_basis": "CONTROL_REQUIREMENT",
-    "epistemic_status": "ESTABLISHED",
-    "execution_disposition": "ESCALATE",
+    "epistemic_status": "CONDITIONALLY_SUPPORTED",
+    "execution_disposition": "BLOCK",
     "missing_ground_anchors": [],
-    "missing_ground_ids": [],
+    "missing_ground_ids": [
+      "ground:under_threshold"
+    ],
     "reason_codes": [
-      "OIC-D-0002"
+      "OIC-D-0006",
+      "OIC-W-0015"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
@@ -17,23 +22,27 @@
       "control_version": "1.0.0",
       "decision_basis": "CONTROL_REQUIREMENT",
       "envelope_id": "env:proc-001",
-      "epistemic_status": "ESTABLISHED",
+      "epistemic_status": "CONDITIONALLY_SUPPORTED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:21",
-      "execution_disposition": "ESCALATE",
-      "input_hash": "sha256:b2041445ce9e7939a5ab681c8673c716dcdc8e5315d6aec49f6cf07a3f449a86",
+      "evaluation_id": "eval:09",
+      "execution_disposition": "BLOCK",
+      "input_hash": "sha256:64a441d75ea57f959b60397b3028b1138e24878d4662ae4ab7ce0ec4f92e209a",
       "missing_ground_anchors": [],
-      "missing_ground_ids": [],
+      "missing_ground_ids": [
+        "ground:under_threshold"
+      ],
       "on_unknown_applied": null,
       "reason_codes": [
-        "OIC-D-0002"
+        "OIC-D-0006",
+        "OIC-W-0015"
       ],
-      "replay_reference": "replay:21-decision-mode-human-judgment@sha256:b2041445ce9e7939a5ab681c8673c716dcdc8e5315d6aec49f6cf07a3f449a86",
+      "replay_reference": "replay:09-on-credit-sound-forbid@sha256:64a441d75ea57f959b60397b3028b1138e24878d4662ae4ab7ce0ec4f92e209a",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
-      "warrant_artifact_id": "warrant:21",
+      "unverified_ground_policy_applied": "forbid",
+      "warrant_artifact_id": "warrant:09",
       "warrant_state": "USABLE",
-      "warranty_grade_observed": "hereditary",
-      "warranty_grade_required": "hereditary"
+      "warranty_grade_observed": "sound",
+      "warranty_grade_required": "sound"
     },
     "warrant_state": "USABLE"
   },
@@ -44,14 +53,15 @@
       "bound_kernel_profile_id": "ztl-v0.1",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
-      "decision_mode": "human_judgment",
+      "decision_mode": "automatic",
       "envelope_id": "env:proc-001",
       "on_unknown": "deny",
       "warrant_requirement": {
         "kernel_profile_id": "ztl-v0.1",
-        "minimum_warranty_grade": "hereditary",
+        "minimum_warranty_grade": "sound",
         "mode": "required",
-        "on_insufficient_grade": "escalate"
+        "on_insufficient_grade": "escalate",
+        "unverified_ground_policy": "forbid"
       }
     },
     "runtime_context": {
@@ -80,7 +90,7 @@
         "ground:registered",
         "ground:under_threshold"
       ],
-      "disposition": "EARNED",
+      "disposition": "ON CREDIT",
       "formula": "registered & under_threshold",
       "formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
       "generated_at": "2026-07-29T00:00:00Z",
@@ -90,7 +100,7 @@
         "sequence": 7
       },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
-      "input_hash": "sha256:aa99a3330f94622c45a3479ffa261dc5759231ae1dad0f4cb8eb782c1e8047b3",
+      "input_hash": "sha256:2bf878c388bf2ad6de09902cb048e913c4d77793283cf4f07056899b0804f26a",
       "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
       "kernel_name": "ztl",
       "kernel_profile_id": "ztl-v0.1",
@@ -100,33 +110,36 @@
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:50e157c360f5c359a8a778ce46927468686e3f297cbbdf88f2143bb3482f6da3",
+      "output_hash": "sha256:a0d9603ac0a1a62d670d6d59ad46e2ba0ad19044cf4a98b23f4ecdfb512b4b34",
       "raw_verdict": "T",
-      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:aa99a3330f94622c45a3479ffa261dc5759231ae1dad0f4cb8eb782c1e8047b3, ground_set_hash=sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926)",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:2bf878c388bf2ad6de09902cb048e913c4d77793283cf4f07056899b0804f26a)",
       "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
         "anchor:a1"
       ],
       "time_binding": {
-        "attestation_hash": "sha256:af4eb01e8aa314f475ee3d396d913ad749927fc95d14b7837835fa951431e75e",
+        "attestation_hash": "sha256:94109f408520a43a0a24170e4dfec4e861353a03e9e225d4d219010d9105c8e1",
         "reference": "tsa:veraxis-dev",
         "source": "attested_timestamp"
       },
-      "unverified_ground_ids": [],
+      "unverified_ground_ids": [
+        "ground:under_threshold"
+      ],
       "valid_from": "2026-07-01T00:00:00Z",
       "valid_until": "2026-12-31T23:59:59Z",
-      "warrant_artifact_id": "warrant:21",
-      "warranty_grade": "hereditary"
+      "warrant_artifact_id": "warrant:09",
+      "warranty_grade": "sound"
     },
     "ztl_result": {
-      "disposition": "EARNED",
-      "grade": "hereditary",
+      "disposition": "ON CREDIT",
+      "grade": "sound",
       "raw_verdict": "T",
-      "unverified": []
+      "unverified": [
+        "ground:under_threshold"
+      ]
     }
   },
-  "mapping_row": 32,
   "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }

@@ -1,47 +1,46 @@
 {
-  "case_id": "13-ground-revoked",
-  "description": "Revocation in force on a dependency ground. I-13.",
+  "case_id": "17-epoch-mismatch",
+  "classification_row": 10,
+  "control_overlay": null,
+  "description": "Sequence no longer current WITHIN ITS SCOPE and authority.",
   "expected": {
-    "decision_basis": "PRECAUTIONARY",
+    "decision_basis": "PROCEDURAL",
     "epistemic_status": "UNRESOLVED",
     "execution_disposition": "BLOCK",
     "missing_ground_anchors": [],
-    "missing_ground_ids": [
-      "ground:registered"
-    ],
+    "missing_ground_ids": [],
     "reason_codes": [
       "OIC-D-0004",
-      "OIC-W-0007"
+      "OIC-W-0008"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
       "authority_version": "auth-v2",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
-      "decision_basis": "PRECAUTIONARY",
+      "decision_basis": "PROCEDURAL",
       "envelope_id": "env:proc-001",
       "epistemic_status": "UNRESOLVED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:13",
+      "evaluation_id": "eval:17",
       "execution_disposition": "BLOCK",
-      "input_hash": "sha256:67dfe4e82fe42b2d3e950203a8966268277ef97d2e93bd7515e2d063144d323d",
+      "input_hash": "sha256:1ef0e9af6f78f36142529dd8e5c3b521792bea8e7799886766a62e62a71814ac",
       "missing_ground_anchors": [],
-      "missing_ground_ids": [
-        "ground:registered"
-      ],
+      "missing_ground_ids": [],
       "on_unknown_applied": "deny",
       "reason_codes": [
         "OIC-D-0004",
-        "OIC-W-0007"
+        "OIC-W-0008"
       ],
-      "replay_reference": "replay:13-ground-revoked@sha256:67dfe4e82fe42b2d3e950203a8966268277ef97d2e93bd7515e2d063144d323d",
+      "replay_reference": "replay:17-epoch-mismatch@sha256:1ef0e9af6f78f36142529dd8e5c3b521792bea8e7799886766a62e62a71814ac",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
-      "warrant_artifact_id": "warrant:13",
-      "warrant_state": "REVOKED",
+      "unverified_ground_policy_applied": null,
+      "warrant_artifact_id": "warrant:17",
+      "warrant_state": "MISBOUND",
       "warranty_grade_observed": "hereditary",
       "warranty_grade_required": "hereditary"
     },
-    "warrant_state": "REVOKED"
+    "warrant_state": "MISBOUND"
   },
   "input": {
     "envelope": {
@@ -57,7 +56,8 @@
         "kernel_profile_id": "ztl-v0.1",
         "minimum_warranty_grade": "hereditary",
         "mode": "required",
-        "on_insufficient_grade": "escalate"
+        "on_insufficient_grade": "escalate",
+        "unverified_ground_policy": "forbid"
       }
     },
     "runtime_context": {
@@ -73,9 +73,7 @@
       "evaluated_at": "2026-08-01T12:00:00Z",
       "expired_ground_ids": [],
       "kernel_available": true,
-      "revoked_ground_ids": [
-        "ground:registered"
-      ],
+      "revoked_ground_ids": [],
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4"
     },
     "warrant_artifact": {
@@ -95,10 +93,10 @@
       "ground_epoch": {
         "authority_id": "authority:proc-registry",
         "scope_id": "scope:proc-grounds",
-        "sequence": 7
+        "sequence": 5
       },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
-      "input_hash": "sha256:f252af95e761153c2cdd281689646d2c4223a65e77f8d138ba5b40f9f895bd15",
+      "input_hash": "sha256:66e46f423e8056e5de95123662648f51878dbae2758b1c254277eec02cce7e4f",
       "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
       "kernel_name": "ztl",
       "kernel_profile_id": "ztl-v0.1",
@@ -108,25 +106,23 @@
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:12ce3754e3b20d40058b9334bc6dda34b20410f84e5a8fc6c06030549837845b",
+      "output_hash": "sha256:8a2162b59c440e606e3b7e16d22dc9c261a7c8a4e06b011570cddfdf9ccc174a",
       "raw_verdict": "T",
-      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:f252af95e761153c2cdd281689646d2c4223a65e77f8d138ba5b40f9f895bd15, ground_set_hash=sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926)",
-      "revocation_references": [
-        "rev:reg-2026-08"
-      ],
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:66e46f423e8056e5de95123662648f51878dbae2758b1c254277eec02cce7e4f)",
+      "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
         "anchor:a1"
       ],
       "time_binding": {
-        "attestation_hash": "sha256:25171da1f49b196467bf8bc5e7a1d03f856dd3dd5516b16c81bca0785d16af84",
+        "attestation_hash": "sha256:69053c45a60a2aa99849cabf5a58991fd4f74e8c051888c7aa48c495d0d0a3bf",
         "reference": "tsa:veraxis-dev",
         "source": "attested_timestamp"
       },
       "unverified_ground_ids": [],
       "valid_from": "2026-07-01T00:00:00Z",
       "valid_until": "2026-12-31T23:59:59Z",
-      "warrant_artifact_id": "warrant:13",
+      "warrant_artifact_id": "warrant:17",
       "warranty_grade": "hereditary"
     },
     "ztl_result": {
@@ -136,7 +132,6 @@
       "unverified": []
     }
   },
-  "mapping_row": 9,
   "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }
