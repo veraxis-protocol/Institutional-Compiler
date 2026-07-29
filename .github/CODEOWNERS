@@ -1,0 +1,21 @@
+# Final product and design authority
+/STATUS.md                                  @veraxis-protocol
+/CLAIMS.md                                  @veraxis-protocol
+/LIMITATIONS.md                             @veraxis-protocol
+/GOVERNANCE.md                              @veraxis-protocol
+/OWNERS.md                                  @veraxis-protocol
+/docs/requirements/                         @veraxis-protocol
+/schemas/draft/                             @veraxis-protocol
+
+# Joint ZTL boundary
+/adapters/ztl/                              @veraxis-protocol @inventor1975
+
+# VEIP boundary
+/adapters/veip/                             @veraxis-protocol
+
+# Reference implementation and operations
+/src/                                       @veraxis-protocol
+/tests/                                     @veraxis-protocol
+/.github/                                   @veraxis-protocol
+/docker/                                    @veraxis-protocol
+/requirements/                              @veraxis-protocol
