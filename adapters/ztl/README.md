@@ -19,7 +19,7 @@ It is a copy for local reading; the canonical, pinnable source is upstream.
 | Fixtures (SHA-256) | `717853cf2a84ede0cb0472192d2e4fac4303acf29775f0d41d972e15c3652f93` |
 | Dependency closure (SHA-256) | `efe05b396cdb4a8731f51b5cc927a8fc998e01a789a2a6dff5657e5a2b5971a5` |
 
-The tag is annotated, **not GPG-signed**.
+Two tags point at the same commit: `veraxis-ztl-input-v0.1` (annotated, already pinned downstream — deliberately not re-signed) and `veraxis-ztl-input-v0.1.1-signed` (GPG-signed provenance).
 
 ## Interface (pinned surface)
 
@@ -49,9 +49,9 @@ institutional admission, or decide ALLOW/DENY on its own. Those are OIC's planes
 | Item | State |
 |---|---|
 | Independent Tier-1 reproduction | **OPEN** — cannot be closed by the ZTL side |
-| GPG signature on the release tag | **OPEN** |
+| Signed release provenance | **CLOSED 2026-07-29** — tag `veraxis-ztl-input-v0.1.1-signed` on the same commit; key `F170414D…EC28313A` |
 | Joint ZTL↔Envelope mapping conformance test | PROPOSED (dossier §6.3) |
-| ZTL↔OIC time-model alignment | PROPOSED (dossier §6.4) |
+| ZTL↔OIC time-model alignment | **PROPOSAL SUBMITTED** — `TIME-MAPPING-PROPOSAL.md` |
 | `MissingGround` granularity vs review docket | QUESTION for OIC |
 
 No statement in this directory asserts that ZTL has been independently reviewed or reproduced.
