@@ -1,0 +1,42 @@
+{
+  "case_id": "monotone-refinement",
+  "cross_check": {
+    "note": "zverify.grade expects 'M' for a mark. Passing 'Z' returns a wrong grade SILENTLY. judge() accepts 'Z' and converts internally; prefer judge().",
+    "zverify_grade_if_Z_passed_by_mistake": "hereditary",
+    "zverify_grade_with_M_dialect": "hereditary"
+  },
+  "fixture_sha256": "86a9a87c302ef02d391fa2217038ab9d86f09f796ffbd23b3d8b59569fde547d",
+  "input": {
+    "formula": "p & q",
+    "marking": {
+      "p": "T",
+      "q": "T"
+    }
+  },
+  "kernel": {
+    "entry": "ztljudge.judge",
+    "source": "live run"
+  },
+  "note": "the same formula as open-with-raw-f after one tick (q: Z -> T): a tick is the arrival of ground",
+  "raw_output": {
+    "disposition": "EARNED",
+    "formula": "(p \u2227 q)",
+    "grade": "hereditary",
+    "unverified": [],
+    "verdict": "T",
+    "why": "grounded outright"
+  },
+  "recomputation": {
+    "depends_on": [
+      "p",
+      "q"
+    ],
+    "deterministic": true,
+    "recompute_when": [
+      "formula change",
+      "epoch change",
+      "expiry of any ground atom"
+    ]
+  },
+  "status": "REACHABLE"
+}

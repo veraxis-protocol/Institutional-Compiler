@@ -1,0 +1,40 @@
+{
+  "case_id": "open-with-raw-z",
+  "cross_check": {
+    "note": "zverify.grade expects 'M' for a mark. Passing 'Z' returns a wrong grade SILENTLY. judge() accepts 'Z' and converts internally; prefer judge().",
+    "zverify_grade_if_Z_passed_by_mistake": "hereditary",
+    "zverify_grade_with_M_dialect": "until-verification"
+  },
+  "fixture_sha256": "9e1f77eab253fcdd75a7d269d257867b1d3348cf5b3ec5f1d756f159766daef4",
+  "input": {
+    "formula": "p",
+    "marking": {
+      "p": "Z"
+    }
+  },
+  "kernel": {
+    "entry": "ztljudge.judge",
+    "source": "live run"
+  },
+  "note": "bare unverified atom: Z survives only here; any operator collapses it",
+  "raw_output": {
+    "disposition": "OPEN",
+    "formula": "p",
+    "grade": "until-verification",
+    "unverified": [
+      "p"
+    ],
+    "verdict": "Z",
+    "why": "not established \u2014 verify ['p'] (it could still turn either way)"
+  },
+  "recomputation": {
+    "depends_on": [
+      "p"
+    ],
+    "deterministic": true,
+    "recompute_when": [
+      "any atom in unverified is verified or expires"
+    ]
+  },
+  "status": "REACHABLE"
+}
