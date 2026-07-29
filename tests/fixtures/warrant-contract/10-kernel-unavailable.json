@@ -1,0 +1,69 @@
+{
+  "case_id": "10-kernel-unavailable",
+  "description": "No warrant can be produced. Compilation may continue in review-only mode; anything requiring a warrant is blocked. A warrant is never fabricated.",
+  "expected": {
+    "decision_basis": "PROCEDURAL",
+    "epistemic_status": "UNRESOLVED",
+    "execution_disposition": "BLOCK",
+    "missing_ground_anchors": [],
+    "missing_ground_ids": [],
+    "reason_codes": [
+      "OIC-D-0004",
+      "OIC-W-0002"
+    ],
+    "runtime_decision": {
+      "admission_version": "adm-v3",
+      "authority_version": "auth-v2",
+      "control_id": "ctl:proc-approval",
+      "control_version": "1.0.0",
+      "decision_basis": "PROCEDURAL",
+      "envelope_id": "env:proc-001",
+      "epistemic_status": "UNRESOLVED",
+      "evaluated_at": "2026-08-01T12:00:00Z",
+      "evaluation_id": "eval:10",
+      "execution_disposition": "BLOCK",
+      "input_hash": "sha256:8a7a4212bdc8488ee83d1972caa0c757b92e835d717adde8c736dc09a069343d",
+      "missing_ground_anchors": [],
+      "missing_ground_ids": [],
+      "on_unknown_applied": "deny",
+      "reason_codes": [
+        "OIC-D-0004",
+        "OIC-W-0002"
+      ],
+      "replay_reference": "replay:10",
+      "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
+      "warrant_artifact_id": null,
+      "warrant_state": "ABSENT",
+      "warranty_grade_observed": null,
+      "warranty_grade_required": "hereditary"
+    },
+    "warrant_state": "ABSENT"
+  },
+  "input": {
+    "envelope": {
+      "bound_formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
+      "control_id": "ctl:proc-approval",
+      "control_version": "1.0.0",
+      "decision_mode": "automatic",
+      "envelope_id": "env:proc-001",
+      "minimum_warranty_grade": "hereditary",
+      "on_unknown": "deny"
+    },
+    "runtime_context": {
+      "admission_version": "adm-v3",
+      "authority_version": "auth-v2",
+      "contradiction_detected": false,
+      "current_ground_epoch": 7,
+      "current_ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
+      "evaluated_at": "2026-08-01T12:00:00Z",
+      "expired_ground_ids": [],
+      "kernel_available": false,
+      "revoked_ground_ids": [],
+      "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4"
+    },
+    "warrant_artifact": null,
+    "ztl_result": null
+  },
+  "mapping_row": 11,
+  "status": "PROPOSED - conformance fixture, not admitted"
+}

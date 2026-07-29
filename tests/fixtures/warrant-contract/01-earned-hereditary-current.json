@@ -1,0 +1,109 @@
+{
+  "case_id": "01-earned-hereditary-current",
+  "description": "Everything passes. The only fixture that reaches ALLOW with no missing grounds.",
+  "expected": {
+    "decision_basis": "SUBSTANTIVE",
+    "epistemic_status": "ESTABLISHED",
+    "execution_disposition": "ALLOW",
+    "missing_ground_anchors": [],
+    "missing_ground_ids": [],
+    "reason_codes": [
+      "OIC-D-0001"
+    ],
+    "runtime_decision": {
+      "admission_version": "adm-v3",
+      "authority_version": "auth-v2",
+      "control_id": "ctl:proc-approval",
+      "control_version": "1.0.0",
+      "decision_basis": "SUBSTANTIVE",
+      "envelope_id": "env:proc-001",
+      "epistemic_status": "ESTABLISHED",
+      "evaluated_at": "2026-08-01T12:00:00Z",
+      "evaluation_id": "eval:01",
+      "execution_disposition": "ALLOW",
+      "input_hash": "sha256:96f6c855b7d55a083760addb5c3af39ee0de3a87f70a107e0d1bbf520ad0f2c7",
+      "missing_ground_anchors": [],
+      "missing_ground_ids": [],
+      "on_unknown_applied": null,
+      "reason_codes": [
+        "OIC-D-0001"
+      ],
+      "replay_reference": "replay:01",
+      "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
+      "warrant_artifact_id": "warrant:01",
+      "warrant_state": "USABLE",
+      "warranty_grade_observed": "hereditary",
+      "warranty_grade_required": "hereditary"
+    },
+    "warrant_state": "USABLE"
+  },
+  "input": {
+    "envelope": {
+      "bound_formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
+      "control_id": "ctl:proc-approval",
+      "control_version": "1.0.0",
+      "decision_mode": "automatic",
+      "envelope_id": "env:proc-001",
+      "minimum_warranty_grade": "hereditary",
+      "on_unknown": "deny"
+    },
+    "runtime_context": {
+      "admission_version": "adm-v3",
+      "authority_version": "auth-v2",
+      "contradiction_detected": false,
+      "current_ground_epoch": 7,
+      "current_ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
+      "evaluated_at": "2026-08-01T12:00:00Z",
+      "expired_ground_ids": [],
+      "kernel_available": true,
+      "revoked_ground_ids": [],
+      "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4"
+    },
+    "warrant_artifact": {
+      "admission_ids": [
+        "adm:001"
+      ],
+      "claim_id": "claim:procurement-approval",
+      "dependency_ids": [
+        "ground:registered",
+        "ground:under_threshold"
+      ],
+      "disposition": "EARNED",
+      "formula": "registered & under_threshold",
+      "formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "ground_epoch": 7,
+      "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
+      "input_hash": "sha256:5a137d500aa30807ab5bd54d4136e459e0d79e740b823a5aeef05530c2e2a941",
+      "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
+      "kernel_name": "ztl",
+      "kernel_version": "veraxis-ztl-input-v0.1",
+      "limitations": [
+        "Establishes propositional structure over supplied grounds only.",
+        "Does not establish source authenticity, institutional authority, or admission.",
+        "Does not decide ALLOW, BLOCK, or ESCALATE."
+      ],
+      "output_hash": "sha256:3f09d5f8af4ff64a3acbdde318d1a821506781587cd298b3d36dde52ed482603",
+      "raw_verdict": "T",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:5a137d500aa30807ab5bd54d4136e459e0d79e740b823a5aeef05530c2e2a941, ground_set_hash=sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926)",
+      "revocation_references": [],
+      "schema_version": "0.1.0",
+      "source_anchor_ids": [
+        "anchor:a1"
+      ],
+      "unverified_ground_ids": [],
+      "valid_from": "2026-07-01T00:00:00Z",
+      "valid_until": "2026-12-31T23:59:59Z",
+      "warrant_artifact_id": "warrant:01",
+      "warranty_grade": "hereditary"
+    },
+    "ztl_result": {
+      "disposition": "EARNED",
+      "grade": "hereditary",
+      "raw_verdict": "T",
+      "unverified": []
+    }
+  },
+  "mapping_row": 1,
+  "status": "PROPOSED - conformance fixture, not admitted"
+}

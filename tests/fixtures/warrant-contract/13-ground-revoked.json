@@ -1,0 +1,119 @@
+{
+  "case_id": "13-ground-revoked",
+  "description": "Revocation in force on a dependency ground. I-13: revoked authority cannot yield a current allow.",
+  "expected": {
+    "decision_basis": "PRECAUTIONARY",
+    "epistemic_status": "UNRESOLVED",
+    "execution_disposition": "BLOCK",
+    "missing_ground_anchors": [],
+    "missing_ground_ids": [
+      "ground:registered"
+    ],
+    "reason_codes": [
+      "OIC-D-0004",
+      "OIC-W-0007"
+    ],
+    "runtime_decision": {
+      "admission_version": "adm-v3",
+      "authority_version": "auth-v2",
+      "control_id": "ctl:proc-approval",
+      "control_version": "1.0.0",
+      "decision_basis": "PRECAUTIONARY",
+      "envelope_id": "env:proc-001",
+      "epistemic_status": "UNRESOLVED",
+      "evaluated_at": "2026-08-01T12:00:00Z",
+      "evaluation_id": "eval:13",
+      "execution_disposition": "BLOCK",
+      "input_hash": "sha256:67dfe4e82fe42b2d3e950203a8966268277ef97d2e93bd7515e2d063144d323d",
+      "missing_ground_anchors": [],
+      "missing_ground_ids": [
+        "ground:registered"
+      ],
+      "on_unknown_applied": "deny",
+      "reason_codes": [
+        "OIC-D-0004",
+        "OIC-W-0007"
+      ],
+      "replay_reference": "replay:13",
+      "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
+      "warrant_artifact_id": "warrant:13",
+      "warrant_state": "REVOKED",
+      "warranty_grade_observed": "hereditary",
+      "warranty_grade_required": "hereditary"
+    },
+    "warrant_state": "REVOKED"
+  },
+  "input": {
+    "envelope": {
+      "bound_formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
+      "control_id": "ctl:proc-approval",
+      "control_version": "1.0.0",
+      "decision_mode": "automatic",
+      "envelope_id": "env:proc-001",
+      "minimum_warranty_grade": "hereditary",
+      "on_unknown": "deny"
+    },
+    "runtime_context": {
+      "admission_version": "adm-v3",
+      "authority_version": "auth-v2",
+      "contradiction_detected": false,
+      "current_ground_epoch": 7,
+      "current_ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
+      "evaluated_at": "2026-08-01T12:00:00Z",
+      "expired_ground_ids": [],
+      "kernel_available": true,
+      "revoked_ground_ids": [
+        "ground:registered"
+      ],
+      "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4"
+    },
+    "warrant_artifact": {
+      "admission_ids": [
+        "adm:001"
+      ],
+      "claim_id": "claim:procurement-approval",
+      "dependency_ids": [
+        "ground:registered",
+        "ground:under_threshold"
+      ],
+      "disposition": "EARNED",
+      "formula": "registered & under_threshold",
+      "formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "ground_epoch": 7,
+      "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
+      "input_hash": "sha256:f252af95e761153c2cdd281689646d2c4223a65e77f8d138ba5b40f9f895bd15",
+      "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
+      "kernel_name": "ztl",
+      "kernel_version": "veraxis-ztl-input-v0.1",
+      "limitations": [
+        "Establishes propositional structure over supplied grounds only.",
+        "Does not establish source authenticity, institutional authority, or admission.",
+        "Does not decide ALLOW, BLOCK, or ESCALATE."
+      ],
+      "output_hash": "sha256:12ce3754e3b20d40058b9334bc6dda34b20410f84e5a8fc6c06030549837845b",
+      "raw_verdict": "T",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:f252af95e761153c2cdd281689646d2c4223a65e77f8d138ba5b40f9f895bd15, ground_set_hash=sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926)",
+      "revocation_references": [
+        "rev:reg-2026-08"
+      ],
+      "schema_version": "0.1.0",
+      "source_anchor_ids": [
+        "anchor:a1"
+      ],
+      "unverified_ground_ids": [],
+      "valid_from": "2026-07-01T00:00:00Z",
+      "valid_until": "2026-12-31T23:59:59Z",
+      "warrant_artifact_id": "warrant:13",
+      "warranty_grade": "hereditary"
+    },
+    "ztl_result": {
+      "disposition": "EARNED",
+      "grade": "hereditary",
+      "raw_verdict": "T",
+      "unverified": []
+    }
+  },
+  "mapping_row": 18,
+  "status": "PROPOSED - conformance fixture, not admitted"
+}
