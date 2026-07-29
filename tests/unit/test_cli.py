@@ -1,0 +1,350 @@
+"""Tests for the ``oic`` CLI shell: exit codes and deterministic output."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import pytest
+
+from oic.cli import ExitCode, main
+
+SOURCE_MANIFEST_HEADER = (
+    "source_id,title,issuer,source_type,official_url_or_origin,license_or_public_basis,"
+    "acquired_at,sha256,effective_from,effective_until,supersedes,confidentiality,notes"
+)
+
+
+def run(capsys: pytest.CaptureFixture[str], *argv: str) -> tuple[int, str, str]:
+    """Invoke the CLI and return ``(exit_code, stdout, stderr)``."""
+    code = main(list(argv))
+    captured = capsys.readouterr()
+    return code, captured.out, captured.err
+
+
+# ---------------------------------------------------------------------------
+# Exit code contract
+# ---------------------------------------------------------------------------
+
+
+def test_exit_code_values_are_the_documented_contract() -> None:
+    assert (ExitCode.PASS, ExitCode.FAIL, ExitCode.USAGE, ExitCode.INCOMPLETE) == (0, 1, 2, 3)
+
+
+# ---------------------------------------------------------------------------
+# validate-schema
+# ---------------------------------------------------------------------------
+
+
+def test_validate_schema_succeeds_on_the_governing_set(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    code, out, _ = run(capsys, "--repo-root", str(repo_root), "validate-schema")
+    assert code == ExitCode.PASS
+    assert "9/9 schemas valid" in out
+    assert "PASS" in out
+
+
+def test_validate_schema_accepts_an_explicit_directory(
+    capsys: pytest.CaptureFixture[str], repo_root: Path, fixtures_dir: Path
+) -> None:
+    code, out, _ = run(
+        capsys,
+        "--repo-root",
+        str(repo_root),
+        "validate-schema",
+        "--schema-dir",
+        str(fixtures_dir / "schemas" / "valid"),
+    )
+    assert code == ExitCode.PASS
+    assert "2/2 schemas valid" in out
+
+
+def test_validate_schema_fails_on_a_broken_schema(
+    capsys: pytest.CaptureFixture[str], repo_root: Path, fixtures_dir: Path
+) -> None:
+    code, out, _ = run(
+        capsys,
+        "--repo-root",
+        str(repo_root),
+        "validate-schema",
+        "--schema-dir",
+        str(fixtures_dir / "schemas" / "invalid-metaschema"),
+    )
+    assert code == ExitCode.FAIL
+    assert "INVALID_METASCHEMA" in out
+
+
+def test_validate_schema_blocks_a_remote_reference(
+    capsys: pytest.CaptureFixture[str], repo_root: Path, fixtures_dir: Path
+) -> None:
+    code, out, _ = run(
+        capsys,
+        "--repo-root",
+        str(repo_root),
+        "validate-schema",
+        "--schema-dir",
+        str(fixtures_dir / "schemas" / "remote-ref"),
+    )
+    assert code == ExitCode.FAIL
+    assert "EXTERNAL_REF_BLOCKED" in out
+
+
+def test_validate_schema_missing_directory_is_a_usage_error(
+    capsys: pytest.CaptureFixture[str], repo_root: Path, tmp_path: Path
+) -> None:
+    code, _, err = run(
+        capsys,
+        "--repo-root",
+        str(repo_root),
+        "validate-schema",
+        "--schema-dir",
+        str(tmp_path / "absent"),
+    )
+    assert code == ExitCode.USAGE
+    assert "OIC-1002" in err
+
+
+def test_validate_schema_json_output_is_deterministic(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    args = ("--repo-root", str(repo_root), "--format", "json", "validate-schema")
+    first_code, first_out, _ = run(capsys, *args)
+    second_code, second_out, _ = run(capsys, *args)
+    assert first_code == second_code == ExitCode.PASS
+    assert first_out == second_out
+
+    payload = json.loads(first_out)
+    assert payload["status"] == "PASS"
+    assert payload["schema_count"] == 9
+    assert [result["schema_path"] for result in payload["results"]] == sorted(
+        result["schema_path"] for result in payload["results"]
+    )
+    # Deterministic means no absolute paths and no timestamps leaked into the output.
+    assert str(repo_root) not in first_out
+
+
+# ---------------------------------------------------------------------------
+# verify-manifest
+# ---------------------------------------------------------------------------
+
+
+def test_verify_manifest_defaults_to_the_bootstrap_manifest(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    code, out, _ = run(capsys, "--repo-root", str(repo_root), "verify-manifest")
+    assert code == ExitCode.PASS
+    assert "BOOTSTRAP_MANIFEST.json" in out
+    assert "RESULT: PASS" in out
+
+
+def test_verify_manifest_all_reports_incomplete_with_exit_code_3(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    """The preflight corpus manifest is header-only, so --all is INCOMPLETE, not PASS."""
+    code, out, _ = run(capsys, "--repo-root", str(repo_root), "verify-manifest", "--all")
+    assert code == ExitCode.INCOMPLETE
+    assert code != ExitCode.PASS
+    assert code != ExitCode.FAIL
+    assert "OVERALL: INCOMPLETE" in out
+    assert "INCOMPLETE is not a pass" in out
+
+
+def test_allow_incomplete_downgrades_to_zero_but_still_reports(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    code, out, _ = run(
+        capsys,
+        "--repo-root",
+        str(repo_root),
+        "verify-manifest",
+        "--all",
+        "--allow-incomplete",
+    )
+    assert code == ExitCode.PASS
+    assert "OVERALL: INCOMPLETE" in out
+
+
+def test_verify_manifest_fails_on_a_tampered_file(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    (tmp_path / "payload.txt").write_bytes(b"tampered")
+    manifest = tmp_path / "BOOTSTRAP_MANIFEST.json"
+    manifest.write_text(
+        json.dumps({"files": [{"path": "payload.txt", "sha256": "0" * 64}]}),
+        encoding="utf-8",
+    )
+    code, out, _ = run(capsys, "--repo-root", str(tmp_path), "verify-manifest")
+    assert code == ExitCode.FAIL
+    assert "HASH_MISMATCH" in out
+
+
+def test_verify_manifest_accepts_an_explicit_path_and_kind(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    code, out, _ = run(
+        capsys,
+        "--repo-root",
+        str(repo_root),
+        "verify-manifest",
+        "--manifest",
+        str(repo_root / "docs" / "tdd" / "SHA256SUMS"),
+        "--kind",
+        "sha256sums",
+    )
+    assert code == ExitCode.PASS
+    assert "SHA256SUMS" in out
+
+
+def test_verify_manifest_incomplete_for_a_header_only_source_manifest(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    (tmp_path / "BOOTSTRAP_MANIFEST.json").write_text("{}", encoding="utf-8")
+    manifest = tmp_path / "SOURCE_MANIFEST.csv"
+    manifest.write_text(SOURCE_MANIFEST_HEADER + "\n", encoding="utf-8")
+    code, out, _ = run(
+        capsys, "--repo-root", str(tmp_path), "verify-manifest", "--manifest", str(manifest)
+    )
+    assert code == ExitCode.INCOMPLETE
+    assert "not corpus-ready" in out
+
+
+def test_verify_manifest_missing_file_is_a_usage_error(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    (tmp_path / "BOOTSTRAP_MANIFEST.json").write_text("{}", encoding="utf-8")
+    code, _, err = run(
+        capsys,
+        "--repo-root",
+        str(tmp_path),
+        "verify-manifest",
+        "--manifest",
+        str(tmp_path / "SHA256SUMS"),
+    )
+    assert code == ExitCode.USAGE
+    assert "OIC-1003" in err
+
+
+def test_verify_manifest_json_output_is_deterministic(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    args = ("--repo-root", str(repo_root), "--format", "json", "verify-manifest", "--all")
+    first_code, first_out, _ = run(capsys, *args)
+    second_code, second_out, _ = run(capsys, *args)
+    assert first_code == second_code == ExitCode.INCOMPLETE
+    assert first_out == second_out
+
+    payload = json.loads(first_out)
+    assert payload["status"] == "INCOMPLETE"
+    kinds = [manifest["kind"] for manifest in payload["manifests"]]
+    assert kinds == ["bootstrap", "sha256sums", "source-manifest"]
+    for manifest in payload["manifests"]:
+        paths = [entry["path"] for entry in manifest["entries"]]
+        assert paths == sorted(paths)
+    assert str(repo_root) not in first_out
+
+
+def test_json_manifest_output_never_reports_an_empty_corpus_as_pass(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    _, out, _ = run(
+        capsys, "--repo-root", str(repo_root), "--format", "json", "verify-manifest", "--all"
+    )
+    payload = json.loads(out)
+    source = next(m for m in payload["manifests"] if m["kind"] == "source-manifest")
+    assert source["status"] == "INCOMPLETE"
+    assert source["entry_count"] == 0
+    assert source["summary"]["PASS"] == 0
+
+
+# ---------------------------------------------------------------------------
+# doctor
+# ---------------------------------------------------------------------------
+
+
+def test_doctor_exits_zero_and_reports_the_gate(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    code, out, _ = run(capsys, "--repo-root", str(repo_root), "doctor")
+    assert code == ExitCode.PASS
+    assert "semantic implementation gate" in out
+    assert "BLOCKED" in out
+
+
+def test_doctor_text_output_marks_ztl_and_veip_provisional(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    _, out, _ = run(capsys, "--repo-root", str(repo_root), "doctor")
+    for boundary in ("ZTL", "VEIP"):
+        assert boundary in out
+    assert out.count("PROVISIONAL / NOT CONFIGURED") == 2
+
+
+def test_doctor_text_output_never_claims_production_readiness(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    _, out, _ = run(capsys, "--repo-root", str(repo_root), "doctor")
+    lowered = out.lower()
+    assert "not production ready" in lowered
+    assert lowered.count("production ready") == lowered.count("not production ready")
+    for phrase in ("enterprise-ready", "enterprise ready", "outperforms", "guarantees"):
+        assert phrase not in lowered
+
+
+def test_doctor_json_output_parses(capsys: pytest.CaptureFixture[str], repo_root: Path) -> None:
+    code, out, _ = run(capsys, "--repo-root", str(repo_root), "--format", "json", "doctor")
+    assert code == ExitCode.PASS
+    payload = json.loads(out)
+    assert {boundary["name"] for boundary in payload["boundaries"]} == {"ZTL", "VEIP"}
+    gate = next(c for c in payload["gates"] if c["name"] == "semantic implementation gate")
+    assert gate["status"] == "BLOCKED"
+
+
+# ---------------------------------------------------------------------------
+# Parser
+# ---------------------------------------------------------------------------
+
+
+def test_no_subcommand_is_a_usage_error() -> None:
+    with pytest.raises(SystemExit) as excinfo:
+        main([])
+    assert excinfo.value.code == ExitCode.USAGE
+
+
+def test_unknown_subcommand_is_a_usage_error() -> None:
+    with pytest.raises(SystemExit) as excinfo:
+        main(["nonsense"])
+    assert excinfo.value.code == ExitCode.USAGE
+
+
+def test_version_flag(capsys: pytest.CaptureFixture[str]) -> None:
+    with pytest.raises(SystemExit) as excinfo:
+        main(["--version"])
+    assert excinfo.value.code == 0
+    assert "oic" in capsys.readouterr().out
+
+
+def test_help_text_disclaims_semantic_function(capsys: pytest.CaptureFixture[str]) -> None:
+    with pytest.raises(SystemExit):
+        main(["--help"])
+    out = capsys.readouterr().out
+    assert "no document interpretation" in out
+    assert "admission" in out
+
+
+def test_no_semantic_subcommands_exist() -> None:
+    """The CLI must expose infrastructure verbs only while the gate is BLOCKED."""
+    from oic.cli import build_parser
+
+    parser = build_parser()
+    subparsers = [
+        action for action in parser._actions if hasattr(action, "choices") and action.choices
+    ]
+    commands: set[str] = set()
+    for action in subparsers:
+        choices = action.choices
+        if isinstance(choices, dict):
+            commands.update(choices)
+    assert commands == {"validate-schema", "verify-manifest", "doctor"}
+    forbidden = {"compile", "admit", "extract", "ingest", "generate-rego", "evaluate", "envelope"}
+    assert forbidden.isdisjoint(commands)

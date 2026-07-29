@@ -41,7 +41,7 @@ def _disable_network() -> Iterator[None]:
         yield
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def repo_root() -> Path:
     """The real repository root, for contract tests over governing artifacts."""
     return REPO_ROOT
