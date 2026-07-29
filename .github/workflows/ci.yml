@@ -1,0 +1,276 @@
+name: CI
+
+# Verification only. This workflow never writes to the repository, never publishes,
+# never deploys, never releases, and requires no secrets. Every action is pinned to an
+# immutable commit SHA rather than a floating tag, so a compromised or retagged action
+# release cannot silently change what runs here.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Least privilege: read-only for every job. No job may push a commit, open a PR, publish
+# a package, or comment. A job that needs more than this needs review, not a wider token.
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.12"
+  # Deterministic test and build behaviour.
+  PYTHONHASHSEED: "0"
+  PYTHONDONTWRITEBYTECODE: "1"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  SOURCE_DATE_EPOCH: "1000000000"
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # 1. Bootstrap integrity
+  # ---------------------------------------------------------------------------
+  bootstrap-integrity:
+    name: bootstrap-integrity
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --require-hashes -r requirements/dev.txt
+          python -m pip install --no-deps --no-build-isolation -e .
+
+      - name: Verify the governing TDD digest
+        # Fails if TDD-OIC-001 v1.1 changes. The expected value is fixed by the
+        # governing design document and is duplicated here on purpose: if the
+        # repository's own manifests were altered, this literal still fails.
+        run: |
+          set -euo pipefail
+          expected="2a4d802130d577e4fb8fee731174ae0f2172ef2d617e3b99f068545d2b9fbf77"
+          actual="$(sha256sum docs/tdd/TDD-OIC-001-v1.1.pdf | cut -d' ' -f1)"
+          echo "expected: ${expected}"
+          echo "actual:   ${actual}"
+          if [ "${expected}" != "${actual}" ]; then
+            echo "::error::TDD-OIC-001 v1.1 digest changed. This is a governance event."
+            exit 1
+          fi
+
+      - name: Verify bootstrap-controlled artifacts
+        # Every file recorded in BOOTSTRAP_MANIFEST.json must match its digest. A change
+        # to a bootstrap-controlled artifact fails here until the manifest is updated
+        # under the authorization recorded in GOVERNANCE.md.
+        run: python -m oic.cli verify-manifest --manifest BOOTSTRAP_MANIFEST.json
+
+      - name: Verify all manifests (reports corpus manifest as INCOMPLETE)
+        # `--all` exits 3 because the preflight corpus manifest holds only its header.
+        # That is the expected state today. This step asserts the exact code, so both a
+        # regression to FAIL and a premature jump to PASS are caught.
+        run: |
+          set +e
+          python -m oic.cli verify-manifest --all --format json > manifest-report.json
+          code=$?
+          set -e
+          cat manifest-report.json
+          echo "exit code: ${code}"
+          if [ "${code}" -ne 3 ]; then
+            echo "::error::expected exit 3 (INCOMPLETE); got ${code}"
+            exit 1
+          fi
+
+      - name: Upload manifest report
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: manifest-report
+          path: manifest-report.json
+          if-no-files-found: warn
+
+  # ---------------------------------------------------------------------------
+  # 2. Schema validation
+  # ---------------------------------------------------------------------------
+  schema-validation:
+    name: schema-validation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --require-hashes -r requirements/dev.txt
+          python -m pip install --no-deps --no-build-isolation -e .
+
+      - name: Validate draft schemas
+        # Resolution is local only. No schema is fetched over the network; a $ref
+        # written with a remote scheme that no local schema satisfies fails the job.
+        run: |
+          python -m oic.cli validate-schema
+          python -m oic.cli --format json validate-schema > schema-report.json
+
+      - name: Upload schema report
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: schema-report
+          path: schema-report.json
+          if-no-files-found: warn
+
+  # ---------------------------------------------------------------------------
+  # 3. Lint
+  # ---------------------------------------------------------------------------
+  lint:
+    name: lint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install locked dependencies
+        run: python -m pip install --require-hashes -r requirements/dev.txt
+
+      - name: Ruff check
+        run: ruff check --output-format=github .
+
+      - name: Ruff format check
+        run: ruff format --check --diff .
+
+      - name: Credential pattern scan
+        # Deliberately narrow. See docs/operations/CI.md for what this does and does not
+        # detect; it is a coarse tripwire, not a secret-scanning product.
+        run: bash scripts/scan_forbidden_patterns.sh
+
+  # ---------------------------------------------------------------------------
+  # 4. Typecheck
+  # ---------------------------------------------------------------------------
+  typecheck:
+    name: typecheck
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --require-hashes -r requirements/dev.txt
+          python -m pip install --no-deps --no-build-isolation -e .
+
+      - name: mypy (strict)
+        run: mypy
+
+  # ---------------------------------------------------------------------------
+  # 5. Test
+  # ---------------------------------------------------------------------------
+  test:
+    name: test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --require-hashes -r requirements/dev.txt
+          python -m pip install --no-deps --no-build-isolation -e .
+
+      - name: Run tests with coverage
+        # The suite disables outbound sockets for its whole session, so a test that
+        # attempts a network call fails rather than silently succeeding.
+        run: |
+          pytest \
+            --junitxml=junit.xml \
+            --cov=oic \
+            --cov-report=term-missing \
+            --cov-report=xml:coverage.xml
+
+      - name: Upload test and coverage artifacts
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: test-results
+          path: |
+            junit.xml
+            coverage.xml
+          if-no-files-found: warn
+
+  # ---------------------------------------------------------------------------
+  # 6. SBOM
+  # ---------------------------------------------------------------------------
+  sbom:
+    name: sbom
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --require-hashes -r requirements/dev.txt
+          python -m pip install --no-deps --no-build-isolation -e .
+
+      - name: Generate SBOM and license inventory
+        # Generated from the installed, hash-verified environment, so the SBOM cannot
+        # drift from requirements/dev.txt. Nothing is uploaded to a third party.
+        run: bash scripts/generate_sbom.sh
+
+      - name: Upload SBOM
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: sbom
+          path: |
+            sbom/oic-python.cdx.json
+            sbom/DEPENDENCY_INVENTORY.md
+            sbom/LICENSES.json
+          if-no-files-found: error
