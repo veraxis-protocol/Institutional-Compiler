@@ -61,12 +61,15 @@ sbom_path.write_text(
 PY
 
 echo "==> License inventory"
+# --with-license-file is deliberately omitted. pip-licenses misidentifies a compiled
+# module as the license file for at least one dependency, embedding binary content and
+# the generating machine's absolute paths into the output. That is both junk data and a
+# path leak in a committed artifact. The declared license name is what the inventory
+# needs; full license texts belong in a licensing review, which is pending counsel.
 pip-licenses \
   --format=json \
   --with-authors \
   --with-urls \
-  --with-license-file \
-  --no-license-path \
   --output-file "${out_dir}/LICENSES.json"
 
 echo "==> Dependency inventory"
