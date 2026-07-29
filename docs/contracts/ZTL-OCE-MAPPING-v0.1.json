@@ -1,0 +1,611 @@
+{
+  "artifact": "ZTL to Open Control Envelope mapping",
+  "authority_values": {
+    "MEASURED": "Reproduced against the pinned ZTL kernel; fixture in adapters/ztl/fixtures/interface-freeze-v0.1/.",
+    "OIC-DEFENSIVE": "An OIC-side condition, not a kernel output. Not a claim about ZTL.",
+    "PENDING-ZTL": "Awaiting measured evidence from the ZTL side.",
+    "ZTL-CONFIRMED": "ZTL states the combination is not reachable; retained as a defensive fail-closed row."
+  },
+  "canonical": true,
+  "kernel_profile_id": "ztl-v0.1",
+  "note": "This JSON is the canonical mapping artifact. docs/contracts/ZTL-OCE-MAPPING-v0.1.md is generated from it and verified against it by tests/contract/test_warrant_contract.py.",
+  "precedence": {
+    "1": "kernel or artifact unusable - the claim was never validly evaluated",
+    "2": "artifact misbound, stale, or grounds withdrawn - evaluated against a different world",
+    "3": "contradiction",
+    "4": "disposition",
+    "5": "disposition and warranty grade",
+    "6": "control policy override (decision_mode)"
+  },
+  "rows": [
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "A warrant is never fabricated; compilation may continue review-only.",
+      "oic_condition": "kernel unavailable",
+      "precedence": 1,
+      "primary_reason_code": "OIC-W-0002",
+      "reachability": "REACHABLE",
+      "row_id": 1,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "",
+      "oic_condition": "warrant absent",
+      "precedence": 1,
+      "primary_reason_code": "OIC-W-0001",
+      "reachability": "REACHABLE",
+      "row_id": 2,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "",
+      "oic_condition": "warrant malformed",
+      "precedence": 1,
+      "primary_reason_code": "OIC-W-0003",
+      "reachability": "REACHABLE",
+      "row_id": 3,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "",
+      "oic_condition": "warrant hash unverifiable",
+      "precedence": 1,
+      "primary_reason_code": "OIC-W-0004",
+      "reachability": "REACHABLE",
+      "row_id": 4,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "ground_set_hash moved under the warrant.",
+      "oic_condition": "warrant stale",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0005",
+      "reachability": "REACHABLE",
+      "row_id": 5,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "",
+      "oic_condition": "warrant expired",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0006",
+      "reachability": "REACHABLE",
+      "row_id": 6,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "valid_from is in the future under the declared time_binding.",
+      "oic_condition": "warrant not yet valid",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0021",
+      "reachability": "REACHABLE",
+      "row_id": 7,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PRECAUTIONARY",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "Anti-tick: about the grounds, so precautionary.",
+      "oic_condition": "ground expired",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0020",
+      "reachability": "REACHABLE",
+      "row_id": 8,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PRECAUTIONARY",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "I-13.",
+      "oic_condition": "ground revoked",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0007",
+      "reachability": "REACHABLE",
+      "row_id": 9,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "Compared within scope_id only.",
+      "oic_condition": "epoch mismatch",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0008",
+      "reachability": "REACHABLE",
+      "row_id": 10,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "",
+      "oic_condition": "source-version mismatch",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0009",
+      "reachability": "REACHABLE",
+      "row_id": 11,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "I-02.",
+      "oic_condition": "admission-version mismatch",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0010",
+      "reachability": "REACHABLE",
+      "row_id": 12,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "Byte comparison after profile match.",
+      "oic_condition": "formula mismatch",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0011",
+      "reachability": "REACHABLE",
+      "row_id": 13,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "Hashes from different profiles are never compared.",
+      "oic_condition": "kernel or canonicalization profile mismatch",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0023",
+      "reachability": "REACHABLE",
+      "row_id": 14,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "",
+      "oic_condition": "source anchors missing",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0018",
+      "reachability": "REACHABLE",
+      "row_id": 15,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "",
+      "oic_condition": "admission IDs missing",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0019",
+      "reachability": "REACHABLE",
+      "row_id": 16,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "unsupported",
+      "note": "",
+      "oic_condition": "warranty grade not in the known ladder",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0017",
+      "reachability": "REACHABLE",
+      "row_id": 17,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "Catch-all for combinations the profile does not define.",
+      "oic_condition": "unsupported disposition/grade/verdict combination",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0022",
+      "reachability": "REACHABLE",
+      "row_id": 18,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "v0.1 does not specify an ALLOW path for warrant-free controls; routed to escalation pending specification. Never a waiver of authority, admission, evidence or version checks.",
+      "oic_condition": "warrant_requirement mode not_required or not_applicable",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0024",
+      "reachability": "REACHABLE",
+      "row_id": 19,
+      "unverified": "any"
+    },
+    {
+      "authority": "MEASURED",
+      "decision_basis": "SUBSTANTIVE",
+      "disposition": "any",
+      "epistemic_status": "CONTRADICTED",
+      "execution_disposition_choices": [
+        "BLOCK"
+      ],
+      "grade": "any",
+      "note": "Finding about the ground set, not a refutation of the proposition.",
+      "oic_condition": "contradictory grounds",
+      "precedence": 3,
+      "primary_reason_code": "OIC-W-0014",
+      "reachability": "REACHABLE",
+      "row_id": 20,
+      "unverified": "any"
+    },
+    {
+      "authority": "MEASURED",
+      "decision_basis": "SUBSTANTIVE",
+      "disposition": "REFUTED",
+      "epistemic_status": "REFUTED",
+      "execution_disposition_choices": [
+        "BLOCK"
+      ],
+      "grade": "hereditary",
+      "note": "Measured: REFUTED is always hereditary, raw verdict F.",
+      "oic_condition": "warrant usable",
+      "precedence": 4,
+      "primary_reason_code": "OIC-W-0013",
+      "reachability": "REACHABLE",
+      "row_id": 21,
+      "unverified": "any"
+    },
+    {
+      "authority": "MEASURED",
+      "decision_basis": "PRECAUTIONARY",
+      "disposition": "OPEN",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "until-verification",
+      "note": "THE measured trap: judge('p & q', {p:T, q:Z}).",
+      "oic_condition": "raw verdict F",
+      "precedence": 4,
+      "primary_reason_code": "OIC-W-0012",
+      "reachability": "REACHABLE",
+      "row_id": 22,
+      "unverified": "non-empty"
+    },
+    {
+      "authority": "MEASURED",
+      "decision_basis": "PRECAUTIONARY",
+      "disposition": "OPEN",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "until-verification",
+      "note": "",
+      "oic_condition": "raw verdict Z",
+      "precedence": 4,
+      "primary_reason_code": "OIC-W-0012",
+      "reachability": "REACHABLE",
+      "row_id": 23,
+      "unverified": "non-empty"
+    },
+    {
+      "authority": "ZTL-CONFIRMED",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "OPEN",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "ZTL exhaustive search found no counterexample: OPEN never carries raw T. Retained as a defensive fail-closed row; no envelope rule may depend on this state.",
+      "oic_condition": "raw verdict T",
+      "precedence": 4,
+      "primary_reason_code": "OIC-W-0022",
+      "reachability": "NOT_REACHABLE",
+      "row_id": 24,
+      "unverified": "any"
+    },
+    {
+      "authority": "MEASURED",
+      "decision_basis": "SUBSTANTIVE",
+      "disposition": "EARNED",
+      "epistemic_status": "ESTABLISHED",
+      "execution_disposition_choices": [
+        "ALLOW"
+      ],
+      "grade": "hereditary",
+      "note": "Grounded outright; the only clean ALLOW under ztl-v0.1.",
+      "oic_condition": "all checks pass, grade sufficient",
+      "precedence": 5,
+      "primary_reason_code": "OIC-D-0001",
+      "reachability": "REACHABLE",
+      "row_id": 25,
+      "unverified": "empty"
+    },
+    {
+      "authority": "MEASURED",
+      "decision_basis": "SUBSTANTIVE",
+      "disposition": "ON CREDIT",
+      "epistemic_status": "ESTABLISHED",
+      "execution_disposition_choices": [
+        "ALLOW"
+      ],
+      "grade": "sound",
+      "note": "Never lies about the present marking. ALLOW only where the control explicitly tolerates a non-monotone warrant.",
+      "oic_condition": "grade permitted by warrant_requirement",
+      "precedence": 5,
+      "primary_reason_code": "OIC-D-0001",
+      "reachability": "REACHABLE",
+      "row_id": 26,
+      "unverified": "non-empty"
+    },
+    {
+      "authority": "MEASURED",
+      "decision_basis": "CONTROL_REQUIREMENT",
+      "disposition": "ON CREDIT",
+      "epistemic_status": "ESTABLISHED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "sound",
+      "note": "The grounds did establish the claim; the control declined to act on that grade.",
+      "oic_condition": "grade below warrant_requirement minimum",
+      "precedence": 5,
+      "primary_reason_code": "OIC-W-0016",
+      "reachability": "REACHABLE",
+      "row_id": 27,
+      "unverified": "non-empty"
+    },
+    {
+      "authority": "MEASURED",
+      "decision_basis": "CONTROL_REQUIREMENT",
+      "disposition": "ON CREDIT",
+      "epistemic_status": "ESTABLISHED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "until-verification",
+      "note": "Rides an unverified atom that can flip. Below every sane minimum grade.",
+      "oic_condition": "any",
+      "precedence": 5,
+      "primary_reason_code": "OIC-W-0016",
+      "reachability": "REACHABLE",
+      "row_id": 28,
+      "unverified": "non-empty"
+    },
+    {
+      "authority": "ZTL-CONFIRMED",
+      "decision_basis": "SUBSTANTIVE",
+      "disposition": "EARNED",
+      "epistemic_status": "ESTABLISHED",
+      "execution_disposition_choices": [
+        "ALLOW"
+      ],
+      "grade": "sound",
+      "note": "ZTL: EARNED requires hereditary by construction; a T that is only sound is ON CREDIT. Retained for a substitute kernel (dossier section 14).",
+      "oic_condition": "grade permitted by warrant_requirement",
+      "precedence": 5,
+      "primary_reason_code": "OIC-D-0001",
+      "reachability": "NOT_REACHABLE",
+      "row_id": 29,
+      "unverified": "any"
+    },
+    {
+      "authority": "ZTL-CONFIRMED",
+      "decision_basis": "CONTROL_REQUIREMENT",
+      "disposition": "EARNED",
+      "epistemic_status": "ESTABLISHED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "sound",
+      "note": "Same: retained for a substitute kernel.",
+      "oic_condition": "grade below warrant_requirement minimum",
+      "precedence": 5,
+      "primary_reason_code": "OIC-W-0016",
+      "reachability": "NOT_REACHABLE",
+      "row_id": 30,
+      "unverified": "any"
+    },
+    {
+      "authority": "ZTL-CONFIRMED",
+      "decision_basis": "PROCEDURAL",
+      "disposition": "EARNED",
+      "epistemic_status": "UNRESOLVED",
+      "execution_disposition_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "grade": "until-verification",
+      "note": "ZTL confirms not reachable. Not labelled DISPOSITION_OPEN because the disposition is not OPEN.",
+      "oic_condition": "any",
+      "precedence": 5,
+      "primary_reason_code": "OIC-W-0022",
+      "reachability": "NOT_REACHABLE",
+      "row_id": 31,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "CONTROL_REQUIREMENT",
+      "disposition": "any",
+      "epistemic_status": "ESTABLISHED",
+      "execution_disposition_choices": [
+        "ESCALATE"
+      ],
+      "grade": "any",
+      "note": "Overrides toward caution without invalidating the warrant.",
+      "oic_condition": "decision_mode human_judgment, escalation_only or non_automatable",
+      "precedence": 6,
+      "primary_reason_code": "OIC-D-0002",
+      "reachability": "REACHABLE",
+      "row_id": 32,
+      "unverified": "any"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "decision_basis": "CONTROL_REQUIREMENT",
+      "disposition": "any",
+      "epistemic_status": "ESTABLISHED",
+      "execution_disposition_choices": [
+        "ADVISORY"
+      ],
+      "grade": "any",
+      "note": "Recorded; does not gate the action.",
+      "oic_condition": "decision_mode advisory or evidence_only",
+      "precedence": 6,
+      "primary_reason_code": "OIC-D-0003",
+      "reachability": "REACHABLE",
+      "row_id": 33,
+      "unverified": "any"
+    }
+  ],
+  "status": "PROPOSED - not admitted",
+  "version": "0.1.0"
+}
