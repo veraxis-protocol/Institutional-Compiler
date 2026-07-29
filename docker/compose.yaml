@@ -108,9 +108,22 @@ services:
       - "127.0.0.1:${OPA_PORT:-8181}:8181"
       - "127.0.0.1:${OPA_DIAGNOSTIC_PORT:-8282}:8282"
     healthcheck:
-      # The OPA image is distroless, so the health probe runs OPA's own binary against
-      # the diagnostic address rather than curl or wget.
-      test: ["CMD", "/opa", "eval", "--fail", "--format=values", "true"]
+      # The image is distroless, so there is no curl, wget, or shell. The probe uses
+      # OPA's own binary and Rego's http.send to make a real request to the diagnostic
+      # health endpoint.
+      #
+      # `opa eval "true"` would be useless here: it evaluates in-process and reports
+      # healthy even when the server failed to bind its port. This query is UNDEFINED
+      # unless the endpoint actually answers 200, and `--fail` exits non-zero on an
+      # undefined result. `raise_error: false` turns a refused connection into a value
+      # without a status_code, which is also undefined, so a down server fails too.
+      test:
+        - "CMD"
+        - "/opa"
+        - "eval"
+        - "--fail"
+        - "--format=values"
+        - 'http.send({"method": "get", "url": "http://127.0.0.1:8282/health", "raise_error": false}).status_code == 200'
       interval: 10s
       timeout: 5s
       retries: 10

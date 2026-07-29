@@ -1,9 +1,13 @@
 """Contract tests over the local infrastructure compose shell.
 
-Docker was not available in the environment that produced this work order, so
-``docker compose config`` could not be run. These structural assertions are what stands
-in for it: they check the properties that would otherwise be verified only by reading the
-file, and they will keep holding once someone does run Docker.
+These are structural assertions over the compose file: digest pinning, loopback binding,
+absence of default credentials, and boundary discipline. They are cheap and run
+everywhere, including where Docker is unavailable.
+
+They are not a substitute for running the stack. The ``compose-validation`` CI job does
+that: it resolves the configuration, pulls every pinned digest, starts all three
+services, waits for their healthchecks to pass, and tears the stack down. Between them,
+the structure is asserted here and the behaviour is asserted there.
 """
 
 from __future__ import annotations
@@ -59,6 +63,31 @@ def test_every_service_has_a_healthcheck(compose: dict[Any, Any]) -> None:
         assert healthcheck["test"]
         assert "interval" in healthcheck
         assert "retries" in healthcheck
+
+
+def test_healthchecks_probe_real_service_availability(compose: dict[Any, Any]) -> None:
+    """A healthcheck must test that the service answers, not merely that a binary runs.
+
+    The OPA check was originally `opa eval true`, which evaluates in-process and reports
+    healthy even when the server failed to bind its port. A check that cannot fail when
+    the service is down is worse than no check, because CI would report it green.
+    """
+    checks = {name: " ".join(s["healthcheck"]["test"]) for name, s in compose["services"].items()}
+
+    # PostgreSQL: pg_isready connects to the server and reports acceptance.
+    assert "pg_isready" in checks["postgres"]
+
+    # MinIO: `mc ready local` queries the server's readiness endpoint.
+    assert "mc ready" in checks["minio"]
+
+    # OPA: a real HTTP request to the diagnostic health endpoint.
+    opa = checks["opa"]
+    assert "http.send" in opa, "OPA healthcheck does not make an HTTP request"
+    assert "/health" in opa
+    assert "status_code == 200" in opa
+    assert "--fail" in opa, "without --fail an undefined result would still exit 0"
+    assert "raise_error" in opa, "a refused connection must not abort with an error"
+    assert opa.split() != ["CMD", "/opa", "eval", "--fail", "--format=values", "true"]
 
 
 def test_every_published_port_binds_to_loopback(compose: dict[Any, Any]) -> None:
@@ -172,10 +201,17 @@ def test_images_doc_records_every_pinned_digest(repo_root: Path, compose: dict[A
         assert digest in images_doc, digest
 
 
-def test_images_doc_states_pins_were_not_run(repo_root: Path) -> None:
-    """The verification limitation must be recorded, not glossed over."""
-    images_doc = (repo_root / "docker" / "IMAGES.md").read_text(encoding="utf-8")
-    # Collapse markdown emphasis and hard-wrapped lines before matching prose.
-    plain = " ".join(images_doc.replace("*", "").split())
-    assert "have not been pulled or run" in plain
-    assert "docker compose config" in plain
+def test_docs_state_where_compose_evidence_comes_from(repo_root: Path) -> None:
+    """Both docs must say CI supplies the executable evidence, and be honest about scope.
+
+    Structural tests alone were previously the only evidence; that limitation had to be
+    stated. Now that `compose-validation` runs the stack, the docs must say so without
+    implying the authoring environment proved anything it did not.
+    """
+    for relname in ("IMAGES.md", "README.md"):
+        plain = " ".join(
+            (repo_root / "docker" / relname).read_text("utf-8").replace("*", "").split()
+        )
+        assert "compose-validation" in plain, relname
+        assert "CI supplies the executable evidence" in plain, relname
+        assert "Docker is not available in the environment that authors" in plain, relname

@@ -51,6 +51,7 @@ jobs:
         run: |
           python -m pip install --require-hashes -r requirements/dev.txt
           python -m pip install --no-deps --no-build-isolation -e .
+          python -m pip check
 
       - name: Verify the governing TDD digest
         # Fails if TDD-OIC-001 v1.1 changes. The expected value is fixed by the
@@ -67,11 +68,15 @@ jobs:
             exit 1
           fi
 
-      - name: Verify bootstrap-controlled artifacts
-        # Every file recorded in BOOTSTRAP_MANIFEST.json must match its digest. A change
-        # to a bootstrap-controlled artifact fails here until the manifest is updated
-        # under the authorization recorded in GOVERNANCE.md.
-        run: python -m oic.cli verify-manifest --manifest BOOTSTRAP_MANIFEST.json
+      - name: Verify the historical bootstrap baseline
+        # Reads BOOTSTRAP_MANIFEST.json and every artifact it lists from the pinned
+        # bootstrap commit, through the local Git object database. The working tree is
+        # not consulted, so a legitimate later change to a Class C artifact does not fail
+        # here (ADR-012). The manifest is historical evidence and is never rewritten to
+        # make a later tree match.
+        run: |
+          python -m oic.cli verify-bootstrap
+          python -m oic.cli --format json verify-bootstrap > bootstrap-baseline.json
 
       - name: Verify all manifests (reports corpus manifest as INCOMPLETE)
         # `--all` exits 3 because the preflight corpus manifest holds only its header.
@@ -94,7 +99,9 @@ jobs:
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: manifest-report
-          path: manifest-report.json
+          path: |
+            manifest-report.json
+            bootstrap-baseline.json
           if-no-files-found: warn
 
   # ---------------------------------------------------------------------------
@@ -119,6 +126,7 @@ jobs:
         run: |
           python -m pip install --require-hashes -r requirements/dev.txt
           python -m pip install --no-deps --no-build-isolation -e .
+          python -m pip check
 
       - name: Validate draft schemas
         # Resolution is local only. No schema is fetched over the network; a $ref
@@ -154,7 +162,9 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install locked dependencies
-        run: python -m pip install --require-hashes -r requirements/dev.txt
+        run: |
+          python -m pip install --require-hashes -r requirements/dev.txt
+          python -m pip check
 
       - name: Ruff check
         run: ruff check --output-format=github .
@@ -189,6 +199,7 @@ jobs:
         run: |
           python -m pip install --require-hashes -r requirements/dev.txt
           python -m pip install --no-deps --no-build-isolation -e .
+          python -m pip check
 
       - name: mypy (strict)
         run: mypy
@@ -215,6 +226,7 @@ jobs:
         run: |
           python -m pip install --require-hashes -r requirements/dev.txt
           python -m pip install --no-deps --no-build-isolation -e .
+          python -m pip check
 
       - name: Run tests with coverage
         # The suite disables outbound sockets for its whole session, so a test that
@@ -258,11 +270,19 @@ jobs:
         run: |
           python -m pip install --require-hashes -r requirements/dev.txt
           python -m pip install --no-deps --no-build-isolation -e .
+          python -m pip check
 
       - name: Generate SBOM and license inventory
         # Generated from the installed, hash-verified environment, so the SBOM cannot
         # drift from requirements/dev.txt. Nothing is uploaded to a third party.
         run: bash scripts/generate_sbom.sh
+
+      - name: Build a wheel and smoke-install it
+        # Proves the wheel's metadata is self-consistent, that the package imports from
+        # an installed location rather than the source tree, that the console script is
+        # wired up, and that the locked runtime set alone is sufficient. The wheel is
+        # built into a temporary directory and discarded; nothing is published.
+        run: bash scripts/wheel_smoke_test.sh
 
       - name: Upload SBOM
         if: always()
@@ -274,3 +294,100 @@ jobs:
             sbom/DEPENDENCY_INVENTORY.md
             sbom/LICENSES.json
           if-no-files-found: error
+
+  # ---------------------------------------------------------------------------
+  # 7. Compose validation
+  # ---------------------------------------------------------------------------
+  compose-validation:
+    name: compose-validation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - name: Record Docker and Compose versions
+        run: |
+          docker --version
+          docker compose version
+
+      - name: Validate the compose configuration
+        # `.env.example` is used directly as a temporary development environment file.
+        # It contains only CHANGEME placeholders; no repository secret is involved.
+        run: |
+          docker compose \
+            --env-file docker/.env.example \
+            -f docker/compose.yaml \
+            config
+
+      - name: Pull the digest-pinned images
+        # Proves every digest in docker/compose.yaml actually resolves and is fetchable.
+        run: |
+          docker compose \
+            --env-file docker/.env.example \
+            -f docker/compose.yaml \
+            pull
+
+      - name: Start PostgreSQL, MinIO, and OPA
+        run: |
+          docker compose \
+            --env-file docker/.env.example \
+            -f docker/compose.yaml \
+            up -d
+
+      - name: Wait for every service to become healthy
+        # Bounded wait. Compose reports a service healthy only once its own healthcheck
+        # succeeds, so this asserts the checks genuinely pass rather than that the
+        # containers merely started.
+        run: |
+          set -euo pipefail
+          services="postgres minio opa"
+          deadline=$(( SECONDS + 180 ))
+          while [ "${SECONDS}" -lt "${deadline}" ]; do
+            unhealthy=""
+            for service in ${services}; do
+              cid="$(docker compose --env-file docker/.env.example -f docker/compose.yaml ps -q "${service}")"
+              if [ -z "${cid}" ]; then
+                unhealthy="${unhealthy} ${service}(no-container)"
+                continue
+              fi
+              state="$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}no-healthcheck{{end}}' "${cid}")"
+              if [ "${state}" != "healthy" ]; then
+                unhealthy="${unhealthy} ${service}(${state})"
+              fi
+            done
+            if [ -z "${unhealthy}" ]; then
+              echo "all services healthy after $(( SECONDS ))s"
+              exit 0
+            fi
+            echo "waiting on:${unhealthy}"
+            sleep 5
+          done
+          echo "::error::services did not become healthy within the timeout:${unhealthy}"
+          exit 1
+
+      - name: Show service status
+        if: always()
+        run: |
+          docker compose \
+            --env-file docker/.env.example \
+            -f docker/compose.yaml \
+            ps
+
+      - name: Show service logs on failure
+        if: failure()
+        run: |
+          docker compose \
+            --env-file docker/.env.example \
+            -f docker/compose.yaml \
+            logs --no-color --tail=200
+
+      - name: Tear down and remove volumes
+        if: always()
+        run: |
+          docker compose \
+            --env-file docker/.env.example \
+            -f docker/compose.yaml \
+            down -v --remove-orphans
