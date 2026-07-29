@@ -31,6 +31,12 @@ authorized acquisition step.
 
 **Recommend the Canada federal pack for the seven-day experimental slice.**
 
+The recommended 305-page acquisition candidate is not the benchmark working
+set. The owner-selected seven-day working set will be limited to 30–60
+print-equivalent pages or equivalent anchored source nodes, while complete
+source artifacts may be acquired separately where required for provenance and
+context.
+
 The recommendation follows the required order of criteria:
 
 1. The Open Government Licence — Canada provides the clearest pack-wide reuse
