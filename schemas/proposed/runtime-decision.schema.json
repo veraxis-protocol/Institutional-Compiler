@@ -26,11 +26,19 @@
     "admission_version",
     "source_version_set_hash",
     "input_hash",
-    "evaluated_at"
+    "evaluated_at",
+    "unverified_ground_policy_applied"
   ],
   "$defs": {
-    "sha256_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
-    "identifier": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "sha256_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
     "reason_code": {
       "type": "string",
       "pattern": "^OIC-[WD]-[0-9]{4}$",
@@ -38,38 +46,69 @@
     },
     "control_policy_reason_code": {
       "$comment": "Reason codes that justify a CONTROL_REQUIREMENT basis.",
-      "enum": ["OIC-W-0016", "OIC-D-0002", "OIC-D-0003"]
+      "enum": [
+        "OIC-W-0016",
+        "OIC-D-0002",
+        "OIC-D-0003",
+        "OIC-D-0005",
+        "OIC-D-0006"
+      ]
     }
   },
   "properties": {
-    "evaluation_id": { "$ref": "#/$defs/identifier" },
-    "envelope_id": { "$ref": "#/$defs/identifier" },
-    "control_id": { "$ref": "#/$defs/identifier" },
-    "control_version": { "$ref": "#/$defs/identifier" },
-
+    "evaluation_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "envelope_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "control_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "control_version": {
+      "$ref": "#/$defs/identifier"
+    },
     "epistemic_status": {
-      "enum": ["ESTABLISHED", "REFUTED", "UNRESOLVED", "CONTRADICTED"],
-      "description": "What the admitted grounds establish about the claim. ESTABLISHED: the grounds establish it, with durability carried by warranty_grade_observed rather than by this field. REFUTED: the grounds establish its negation. UNRESOLVED: the grounds do not settle it, or it was never validly evaluated. CONTRADICTED: the admitted ground set is inconsistent, which is a finding about the grounds rather than a refutation of the proposition. UNRESOLVED is NOT a weak REFUTED; conflating them is the failure this field exists to prevent (I-03)."
+      "enum": [
+        "ESTABLISHED",
+        "CONDITIONALLY_SUPPORTED",
+        "REFUTED",
+        "UNRESOLVED",
+        "CONTRADICTED"
+      ],
+      "description": "What the admitted grounds establish about the claim. ESTABLISHED: the grounds establish it independently of any unresolved ground, under the profile's hereditary contract. CONDITIONALLY_SUPPORTED: the current admitted marking supports the claim, but the positive result depends on one or more unverified grounds and is not invariant under admissible refinement. REFUTED: the grounds establish its negation. UNRESOLVED: the grounds do not settle it, or it was never validly evaluated. CONTRADICTED: the admitted ground set is inconsistent, which is a finding about the grounds rather than a refutation of the proposition. ON CREDIT MUST NEVER serialise as ESTABLISHED: that would authorise action on an unverified link. Nor may it collapse to UNRESOLVED merely because grounds are unverified, which would discard a real positive result."
     },
     "execution_disposition": {
-      "enum": ["ALLOW", "BLOCK", "ESCALATE", "ADVISORY"],
+      "enum": [
+        "ALLOW",
+        "BLOCK",
+        "ESCALATE",
+        "ADVISORY"
+      ],
       "description": "What the runtime did. Independent of epistemic_status: a BLOCK may accompany UNRESOLVED (fail closed) or REFUTED (grounds establish the negation), and those are not the same event."
     },
     "decision_basis": {
-      "enum": ["SUBSTANTIVE", "PRECAUTIONARY", "PROCEDURAL", "CONTROL_REQUIREMENT"],
+      "enum": [
+        "SUBSTANTIVE",
+        "PRECAUTIONARY",
+        "PROCEDURAL",
+        "CONTROL_REQUIREMENT"
+      ],
       "description": "Why the runtime did it. SUBSTANTIVE: the admitted grounds determine a positive, negative, or contradictory epistemic result. PRECAUTIONARY: the grounds remain unresolved and the runtime fails closed. PROCEDURAL: the claim could not be validly evaluated because an artifact, binding, version, availability, or integrity precondition failed. CONTROL_REQUIREMENT: the claim WAS validly evaluated, but the admitted control requires a particular assurance grade, human role, escalation path, or non-automatic decision mode. Only SUBSTANTIVE is a finding about the world; PRECAUTIONARY, PROCEDURAL and CONTROL_REQUIREMENT are never findings that the proposition is false."
     },
-
     "reason_codes": {
       "type": "array",
-      "items": { "$ref": "#/$defs/reason_code" },
+      "items": {
+        "$ref": "#/$defs/reason_code"
+      },
       "minItems": 1,
       "description": "Sorted lexicographically, deterministic. At least one is always present, including on ALLOW."
     },
-
     "missing_ground_ids": {
       "type": "array",
-      "items": { "$ref": "#/$defs/identifier" },
+      "items": {
+        "$ref": "#/$defs/identifier"
+      },
       "description": "Level 1: stable proposition or atom identifiers as emitted by the kernel. Present whenever the kernel reported unverified grounds, INCLUDING when the outcome is ALLOW."
     },
     "missing_ground_anchors": {
@@ -78,27 +117,62 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["ground_id"],
+        "required": [
+          "ground_id"
+        ],
         "properties": {
-          "ground_id": { "$ref": "#/$defs/identifier" },
-          "source_id": { "type": ["string", "null"] },
-          "source_node_id": { "type": ["string", "null"] },
+          "ground_id": {
+            "$ref": "#/$defs/identifier"
+          },
+          "source_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_node_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "span": {
-            "type": ["object", "null"],
+            "type": [
+              "object",
+              "null"
+            ],
             "additionalProperties": false,
             "properties": {
-              "start": { "type": "integer", "minimum": 0 },
-              "end": { "type": "integer", "minimum": 0 }
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 0
+              }
             }
           },
-          "admitted_unit_id": { "type": ["string", "null"] },
-          "expected_evidence_type": { "type": ["string", "null"] }
+          "admitted_unit_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "expected_evidence_type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
         }
       }
     },
-
     "warrant_artifact_id": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "The warrant this decision rests on, or null when no usable warrant existed. Null with ALLOW is forbidden by the constraints below."
     },
     "warrant_state": {
@@ -117,20 +191,43 @@
       ],
       "description": "Why the warrant was or was not usable. MISBOUND covers epoch, formula, profile, source-version, and admission-version mismatch: the artifact is well formed but describes a different world, a different proposition, or a different kernel's semantics. NOT_REQUIRED applies only when the control's warrant_requirement.mode is not_required or not_applicable, and never waives authority, admission, evidence, or version checks."
     },
-
     "warranty_grade_observed": {
-      "type": ["string", "null"],
-      "enum": ["hereditary", "sound", "until-verification", null],
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "hereditary",
+        "sound",
+        "until-verification",
+        null
+      ],
       "description": "Grade the warrant actually carried. Null only when no warrant was evaluated."
     },
     "warranty_grade_required": {
-      "type": ["string", "null"],
-      "enum": ["hereditary", "sound", "until-verification", null],
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "hereditary",
+        "sound",
+        "until-verification",
+        null
+      ],
       "description": "Minimum grade the control's warrant_requirement declares. Null only when warrant_requirement.mode is not_required or not_applicable. There is no default: an absent requirement is a contract error, not a permissive one."
     },
     "on_unknown_applied": {
-      "type": ["string", "null"],
-      "enum": ["cannot", "escalate", "deny", null],
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "cannot",
+        "escalate",
+        "deny",
+        null
+      ],
       "description": "The envelope's on_unknown policy, set ONLY when it was the reason for the outcome, otherwise null. `deny` means an operational fail-closed block and is never evidence that the proposition is false; the constraints below forbid pairing it with SUBSTANTIVE or ALLOW."
     },
     "replay_reference": {
@@ -138,71 +235,259 @@
       "minLength": 1,
       "description": "How to replay this decision to its exact control, admission, sources, warrant, inputs, and versions (I-15). REQUIRED and non-empty on EVERY decision including failures: an evaluation that blocked because no warrant existed must still be replayable, or the failure cannot be audited."
     },
-
-    "authority_version": { "$ref": "#/$defs/identifier" },
-    "admission_version": { "$ref": "#/$defs/identifier" },
-    "source_version_set_hash": { "$ref": "#/$defs/sha256_digest" },
-    "input_hash": { "$ref": "#/$defs/sha256_digest" },
-    "evaluated_at": { "type": "string", "format": "date-time" }
+    "authority_version": {
+      "$ref": "#/$defs/identifier"
+    },
+    "admission_version": {
+      "$ref": "#/$defs/identifier"
+    },
+    "source_version_set_hash": {
+      "$ref": "#/$defs/sha256_digest"
+    },
+    "input_hash": {
+      "$ref": "#/$defs/sha256_digest"
+    },
+    "evaluated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "unverified_ground_policy_applied": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "forbid",
+        "escalate",
+        "allow_with_disclosure",
+        null
+      ],
+      "description": "The control's unverified_ground_policy, recorded when it determined the outcome, otherwise null. Permission to act on conditional support is an admitted control decision, not a stronger epistemic claim, so the policy that granted it stays on the record."
+    }
   },
   "allOf": [
     {
-      "$comment": "Rule 1. ALLOW requires ESTABLISHED, SUBSTANTIVE, a USABLE warrant, a non-null warrant id, and no on_unknown fallback.",
+      "$comment": "Rule 1. ALLOW has exactly two positive shapes. Route A: the EARNED/hereditary route, ESTABLISHED + SUBSTANTIVE. Route B: the ON CREDIT/sound route, CONDITIONALLY_SUPPORTED + CONTROL_REQUIREMENT with allow_with_disclosure, OIC-D-0005, and non-empty missing grounds. Both require a USABLE warrant, a non-null warrant id, and no on_unknown fallback.",
       "if": {
-        "properties": { "execution_disposition": { "const": "ALLOW" } },
-        "required": ["execution_disposition"]
+        "properties": {
+          "execution_disposition": {
+            "const": "ALLOW"
+          }
+        },
+        "required": [
+          "execution_disposition"
+        ]
       },
       "then": {
         "properties": {
-          "epistemic_status": { "const": "ESTABLISHED" },
-          "decision_basis": { "const": "SUBSTANTIVE" },
-          "warrant_state": { "const": "USABLE" },
-          "warrant_artifact_id": { "type": "string", "minLength": 1 },
-          "on_unknown_applied": { "type": "null" }
-        }
+          "warrant_state": {
+            "const": "USABLE"
+          },
+          "warrant_artifact_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "on_unknown_applied": {
+            "type": "null"
+          }
+        },
+        "oneOf": [
+          {
+            "$comment": "Route A - EARNED / hereditary.",
+            "properties": {
+              "epistemic_status": {
+                "const": "ESTABLISHED"
+              },
+              "decision_basis": {
+                "const": "SUBSTANTIVE"
+              },
+              "warranty_grade_observed": {
+                "const": "hereditary"
+              }
+            },
+            "required": [
+              "epistemic_status",
+              "decision_basis"
+            ]
+          },
+          {
+            "$comment": "Route B - ON CREDIT / sound, accepted by explicit control policy.",
+            "properties": {
+              "epistemic_status": {
+                "const": "CONDITIONALLY_SUPPORTED"
+              },
+              "decision_basis": {
+                "const": "CONTROL_REQUIREMENT"
+              },
+              "warranty_grade_observed": {
+                "const": "sound"
+              },
+              "unverified_ground_policy_applied": {
+                "const": "allow_with_disclosure"
+              },
+              "missing_ground_ids": {
+                "type": "array",
+                "minItems": 1
+              },
+              "reason_codes": {
+                "type": "array",
+                "contains": {
+                  "const": "OIC-D-0005"
+                }
+              }
+            },
+            "required": [
+              "epistemic_status",
+              "decision_basis",
+              "unverified_ground_policy_applied"
+            ]
+          }
+        ]
       }
     },
     {
       "$comment": "Rule 2. UNRESOLVED can neither ALLOW nor claim a substantive finding.",
       "if": {
-        "properties": { "epistemic_status": { "const": "UNRESOLVED" } },
-        "required": ["epistemic_status"]
+        "properties": {
+          "epistemic_status": {
+            "const": "UNRESOLVED"
+          }
+        },
+        "required": [
+          "epistemic_status"
+        ]
       },
       "then": {
         "properties": {
-          "execution_disposition": { "enum": ["BLOCK", "ESCALATE", "ADVISORY"] },
-          "decision_basis": { "enum": ["PRECAUTIONARY", "PROCEDURAL", "CONTROL_REQUIREMENT"] }
+          "execution_disposition": {
+            "enum": [
+              "BLOCK",
+              "ESCALATE",
+              "ADVISORY"
+            ]
+          },
+          "decision_basis": {
+            "enum": [
+              "PRECAUTIONARY",
+              "PROCEDURAL",
+              "CONTROL_REQUIREMENT"
+            ]
+          }
         }
       }
     },
     {
-      "$comment": "Rule 3. REFUTED blocks, substantively.",
+      "$comment": "Rule 3. CONDITIONALLY_SUPPORTED: never substantive, never without missing grounds, never with an on_unknown fallback, and never ALLOW on the weakest grade. v0.1 does not model risk, reversibility, compensation, or recovery controls sufficient to permit automatic consequential ALLOW on until-verification.",
       "if": {
-        "properties": { "epistemic_status": { "const": "REFUTED" } },
-        "required": ["epistemic_status"]
+        "properties": {
+          "epistemic_status": {
+            "const": "CONDITIONALLY_SUPPORTED"
+          }
+        },
+        "required": [
+          "epistemic_status"
+        ]
       },
       "then": {
         "properties": {
-          "execution_disposition": { "const": "BLOCK" },
-          "decision_basis": { "const": "SUBSTANTIVE" }
+          "decision_basis": {
+            "enum": [
+              "PRECAUTIONARY",
+              "CONTROL_REQUIREMENT"
+            ]
+          },
+          "missing_ground_ids": {
+            "type": "array",
+            "minItems": 1
+          },
+          "on_unknown_applied": {
+            "type": "null"
+          },
+          "warranty_grade_observed": {
+            "enum": [
+              "sound",
+              "until-verification"
+            ]
+          }
+        },
+        "not": {
+          "properties": {
+            "execution_disposition": {
+              "const": "ALLOW"
+            },
+            "warranty_grade_observed": {
+              "const": "until-verification"
+            }
+          },
+          "required": [
+            "execution_disposition",
+            "warranty_grade_observed"
+          ]
         }
       }
     },
     {
-      "$comment": "Rule 4. CONTRADICTED blocks, substantively. A finding about the ground set, not a refutation of the proposition.",
+      "$comment": "Rule 4. REFUTED never permits the action. It blocks substantively, or is redirected by a control overlay which preserves the epistemic status.",
       "if": {
-        "properties": { "epistemic_status": { "const": "CONTRADICTED" } },
-        "required": ["epistemic_status"]
+        "properties": {
+          "epistemic_status": {
+            "const": "REFUTED"
+          }
+        },
+        "required": [
+          "epistemic_status"
+        ]
       },
       "then": {
         "properties": {
-          "execution_disposition": { "const": "BLOCK" },
-          "decision_basis": { "const": "SUBSTANTIVE" }
+          "execution_disposition": {
+            "enum": [
+              "BLOCK",
+              "ESCALATE",
+              "ADVISORY"
+            ]
+          },
+          "decision_basis": {
+            "enum": [
+              "SUBSTANTIVE",
+              "CONTROL_REQUIREMENT"
+            ]
+          }
         }
       }
     },
     {
-      "$comment": "Rule 5. Any non-USABLE warrant state cannot ALLOW.",
+      "$comment": "Rule 5. CONTRADICTED behaves like REFUTED for execution: a finding about the ground set, never a permission.",
+      "if": {
+        "properties": {
+          "epistemic_status": {
+            "const": "CONTRADICTED"
+          }
+        },
+        "required": [
+          "epistemic_status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution_disposition": {
+            "enum": [
+              "BLOCK",
+              "ESCALATE",
+              "ADVISORY"
+            ]
+          },
+          "decision_basis": {
+            "enum": [
+              "SUBSTANTIVE",
+              "CONTROL_REQUIREMENT"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Rule 6. Any non-USABLE warrant state cannot ALLOW.",
       "if": {
         "properties": {
           "warrant_state": {
@@ -220,37 +505,96 @@
             ]
           }
         },
-        "required": ["warrant_state"]
-      },
-      "then": {
-        "properties": { "execution_disposition": { "enum": ["BLOCK", "ESCALATE", "ADVISORY"] } }
-      }
-    },
-    {
-      "$comment": "Rule 6. A non-null on_unknown fallback cannot ALLOW and cannot be substantive.",
-      "if": {
-        "properties": { "on_unknown_applied": { "type": "string" } },
-        "required": ["on_unknown_applied"]
+        "required": [
+          "warrant_state"
+        ]
       },
       "then": {
         "properties": {
-          "execution_disposition": { "enum": ["BLOCK", "ESCALATE", "ADVISORY"] },
-          "decision_basis": { "enum": ["PRECAUTIONARY", "PROCEDURAL", "CONTROL_REQUIREMENT"] }
+          "execution_disposition": {
+            "enum": [
+              "BLOCK",
+              "ESCALATE",
+              "ADVISORY"
+            ]
+          }
         }
       }
     },
     {
-      "$comment": "Rule 7. CONTROL_REQUIREMENT must carry a control-policy reason code, and never silently rewrites the epistemic status: the claim was validly evaluated, so ESTABLISHED stays ESTABLISHED.",
+      "$comment": "Rule 7. A non-null on_unknown fallback cannot ALLOW and cannot be substantive.",
       "if": {
-        "properties": { "decision_basis": { "const": "CONTROL_REQUIREMENT" } },
-        "required": ["decision_basis"]
+        "properties": {
+          "on_unknown_applied": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "on_unknown_applied"
+        ]
       },
       "then": {
         "properties": {
-          "execution_disposition": { "enum": ["BLOCK", "ESCALATE", "ADVISORY"] },
+          "execution_disposition": {
+            "enum": [
+              "BLOCK",
+              "ESCALATE",
+              "ADVISORY"
+            ]
+          },
+          "decision_basis": {
+            "enum": [
+              "PRECAUTIONARY",
+              "PROCEDURAL",
+              "CONTROL_REQUIREMENT"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Rule 8. CONTROL_REQUIREMENT must carry a control-policy reason code. It never rewrites the epistemic status; a control overlay changes what the runtime did, not what the grounds establish.",
+      "if": {
+        "properties": {
+          "decision_basis": {
+            "const": "CONTROL_REQUIREMENT"
+          }
+        },
+        "required": [
+          "decision_basis"
+        ]
+      },
+      "then": {
+        "properties": {
           "reason_codes": {
             "type": "array",
-            "contains": { "$ref": "#/$defs/control_policy_reason_code" }
+            "contains": {
+              "$ref": "#/$defs/control_policy_reason_code"
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Rule 9. allow_with_disclosure is only meaningful for conditional support.",
+      "if": {
+        "properties": {
+          "unverified_ground_policy_applied": {
+            "const": "allow_with_disclosure"
+          }
+        },
+        "required": [
+          "unverified_ground_policy_applied"
+        ]
+      },
+      "then": {
+        "properties": {
+          "epistemic_status": {
+            "const": "CONDITIONALLY_SUPPORTED"
+          },
+          "missing_ground_ids": {
+            "type": "array",
+            "minItems": 1
           }
         }
       }

@@ -75,7 +75,46 @@ Row 28 is deliberately not a failure. A non-empty `unverified` list is **recorde
 outcome including `ALLOW`**, and never downgrades an otherwise sound result on its own.
 What it must never do is disappear.
 
-## 3. The four dimensions of `decision_basis`
+## 3. Epistemic status
+
+Five values. The distinction the fifth one carries is the reason this section exists.
+
+| Value | Meaning |
+|---|---|
+| `ESTABLISHED` | The grounds establish the claim **independently of any unresolved ground**, under the profile's hereditary contract. |
+| `CONDITIONALLY_SUPPORTED` | The current admitted marking supports the claim, but the positive result **depends on one or more unverified grounds** and is not invariant under admissible refinement. |
+| `REFUTED` | The grounds establish its negation. |
+| `UNRESOLVED` | The grounds do not settle it, or it was never validly evaluated. |
+| `CONTRADICTED` | The admitted ground set is inconsistent — a finding about the grounds, not a refutation of the proposition. |
+
+Mapping from the `ztl-v0.1` profile:
+
+| Disposition | Epistemic status |
+|---|---|
+| `EARNED` | `ESTABLISHED` |
+| `ON CREDIT` | `CONDITIONALLY_SUPPORTED` |
+| `OPEN` | `UNRESOLVED` |
+| `REFUTED` | `REFUTED` |
+| contradictory grounds | `CONTRADICTED` |
+
+**`ESTABLISHED` is reserved** for positive results independent of unresolved grounds under
+the profile's hereditary contract. **`CONDITIONALLY_SUPPORTED` preserves a current positive
+result that depends on unverified grounds.**
+
+`ON CREDIT` must never serialise as `ESTABLISHED` — that authorises action on an unverified
+link, which is the precise failure a zero-trust warrant exists to expose. Nor may it
+collapse to `UNRESOLVED` merely because grounds are unverified: the verdict genuinely *is*
+`T`, and under `sound` it never lies about the present marking. Discarding that would
+over-block.
+
+**Permission to act on conditional support is an admitted control decision, not a stronger
+epistemic claim.** The control grants it through `unverified_ground_policy`; the epistemic
+status does not change when it does. Downstream VEIP records **must preserve** the
+conditional status, the missing grounds, the observed grade, and the applied policy — a
+consumer that stores only `ALLOW` has destroyed the only evidence that the permission was
+conditional.
+
+## 4. The four dimensions of `decision_basis`
 
 | Value | Meaning |
 |---|---|
@@ -102,7 +141,7 @@ would send an engineer to fix a pipeline that is not broken; recording it as
 `CONTROL_REQUIREMENT` **never rewrites `epistemic_status`**. An escalated `ESTABLISHED`
 stays `ESTABLISHED`.
 
-## 4. The ALLOW gate
+## 5. The ALLOW gate
 
 `execution_disposition = ALLOW` requires **all eight** of ADR-013 W-4, in order:
 
@@ -120,7 +159,7 @@ stays `ESTABLISHED`.
 Step 8 is not implemented by this contract and is not implementable by the kernel. It is
 named so that no reader mistakes a warrant for a permission.
 
-## 5. Formula hash comparison
+## 6. Formula hash comparison
 
 A control stores a **bound formula hash**. A warrant carries `formula_hash`. The runtime
 compares them, and the comparison rule is exact:
@@ -138,7 +177,7 @@ canonicalization profiles. Two kernels can hash the same formula to different va
 mean the same thing, or to the same value and mean different things; without the profile
 identifiers the comparison is meaningless in both directions.
 
-## 6. Warrant requirement
+## 7. Warrant requirement
 
 A control declares its warrant requirement as a structured object, schema
 [`warrant-requirement.schema.json`](../../schemas/proposed/warrant-requirement.schema.json):
@@ -147,10 +186,48 @@ A control declares its warrant requirement as a structured object, schema
 {
   "mode": "required",
   "kernel_profile_id": "ztl-v0.1",
-  "minimum_warranty_grade": "hereditary",
-  "on_insufficient_grade": "escalate"
+  "minimum_warranty_grade": "sound",
+  "on_insufficient_grade": "escalate",
+  "unverified_ground_policy": "allow_with_disclosure"
 }
 ```
+
+### `unverified_ground_policy`
+
+`forbid` | `escalate` | `allow_with_disclosure`, required and non-null when
+`mode: required`.
+
+**A minimum warranty grade alone is not sufficient authorisation to act on unverified
+grounds.** The grade says how durable the result is; this field says whether the
+institution accepts a result that rides an unverified link. They are different questions
+and a control must answer both. A control that declares `minimum_warranty_grade: sound`
+has said "a non-monotone warrant is acceptable" — it has *not* said "proceed while a ground
+is still unverified".
+
+`ON CREDIT` + `sound` may produce `ALLOW` only when **all** of these hold:
+
+1. warrant is `USABLE`;
+2. `epistemic_status = CONDITIONALLY_SUPPORTED`;
+3. observed grade is `sound`;
+4. the required grade permits `sound`;
+5. `unverified_ground_policy = allow_with_disclosure`;
+6. `missing_ground_ids` is non-empty **and preserved on the record**;
+7. authority, admission, evidence, version, profile, and time checks pass;
+8. `decision_mode` permits automatic execution.
+
+The result is `execution_disposition: ALLOW` with `decision_basis: CONTROL_REQUIREMENT` and
+`OIC-D-0005`. It is never `SUBSTANTIVE`: the grounds did not establish the claim outright,
+the control chose to accept a conditional result.
+
+### `ON CREDIT` + `until-verification`
+
+Never an automatic `ALLOW` in v0.1, reason-coded `OIC-W-0025`.
+
+**v0.1 does not model sufficient risk, reversibility, compensation, or recovery controls to
+permit automatic consequential `ALLOW` on `ON CREDIT` + `until-verification`.** The verdict
+rides an atom that can flip, and the contract has no way to express what happens to an
+action already taken when it does. Until those controls exist, the honest answer is to
+block or escalate.
 
 Rules:
 
@@ -171,7 +248,7 @@ deliberate rather than an oversight: specifying it would mean defining how autho
 admission, and evidence alone authorise an action, which is a larger question than this
 contract. Recorded as open question 10.
 
-## 7. `on_unknown` and `decision_mode`
+## 8. `on_unknown` and `decision_mode`
 
 `on_unknown` selects BLOCK-versus-ESCALATE when the epistemic status is not `ESTABLISHED`:
 
@@ -195,7 +272,7 @@ non-null `on_unknown_applied` cannot pair with `ALLOW` or `SUBSTANTIVE`.
 | `human_judgment`, `escalation_only`, `non_automatable` | `ESCALATE` even when `ESTABLISHED` | `CONTROL_REQUIREMENT` (`OIC-D-0002`) |
 | `advisory`, `evidence_only` | `ADVISORY`; recorded, does not gate | `CONTROL_REQUIREMENT` (`OIC-D-0003`) |
 
-## 8. Missing grounds
+## 9. Missing grounds
 
 Two levels, per ADR-013 §2.5.
 
@@ -222,7 +299,7 @@ missing grounds, and a reviewer UI must not render it as "nothing missing".
 different source clause, the kernel cannot detect it and will report a verdict for a
 different question under the old name.
 
-## 9. Reason code registry
+## 10. Reason code registry
 
 Stable and machine-readable. Adding a code is a minor version; changing a code's meaning is
 a breaking change.
@@ -255,6 +332,7 @@ a breaking change.
 | `OIC-W-0022` | `UNSUPPORTED_RESULT_COMBINATION` | `PROCEDURAL` |
 | `OIC-W-0023` | `PROFILE_MISMATCH` | `PROCEDURAL` |
 | `OIC-W-0024` | `WARRANT_REQUIREMENT_NOT_APPLICABLE` | `PROCEDURAL` |
+| `OIC-W-0025` | `CONDITIONAL_SUPPORT_UNSTABLE` | `PRECAUTIONARY` |
 
 ### Decision conditions — `OIC-D-nnnn`
 
@@ -264,15 +342,17 @@ a breaking change.
 | `OIC-D-0002` | `DECISION_MODE_NON_AUTOMATABLE` | `CONTROL_REQUIREMENT` |
 | `OIC-D-0003` | `DECISION_MODE_ADVISORY` | `CONTROL_REQUIREMENT` |
 | `OIC-D-0004` | `FAIL_CLOSED_ON_UNKNOWN` | `PRECAUTIONARY` / `PROCEDURAL` |
+| `OIC-D-0005` | `CONDITIONAL_SUPPORT_ACCEPTED` | `CONTROL_REQUIREMENT` |
+| `OIC-D-0006` | `CONDITIONAL_SUPPORT_NOT_ACCEPTED` | `CONTROL_REQUIREMENT` |
 
 > **`OIC-W-0013` and `OIC-W-0014` are the only substantive BLOCK reason codes.
 > `OIC-D-0001` is the substantive positive-decision code.**
 
-`OIC-W-0016`, `OIC-D-0002`, and `OIC-D-0003` are the **control-policy** codes: a decision
-with basis `CONTROL_REQUIREMENT` must carry at least one of them, and the schema enforces
-it.
+`OIC-W-0016`, `OIC-D-0002`, `OIC-D-0003`, `OIC-D-0005`, and `OIC-D-0006` are the
+**control-policy** codes: a decision with basis `CONTROL_REQUIREMENT` must carry at least
+one of them, and the schema enforces it.
 
-## 10. Determinism
+## 11. Determinism
 
 - Field ordering in serialised JSON is by sorted key.
 - `reason_codes` are sorted lexicographically. Position carries no meaning: the code that
@@ -288,7 +368,7 @@ it.
   An evaluation that blocked because no warrant existed must still be replayable, or the
   failure cannot be audited.
 
-## 11. Unresolved questions, routed to named authorities
+## 12. Unresolved questions, routed to named authorities
 
 | # | Question | Routed to | State |
 |---|---|---|---|
@@ -304,7 +384,7 @@ it.
 | 10 | What is the `ALLOW` path for `not_required` / `not_applicable` controls? | GPT-5.6 Thinking → Arkadiy Miteiko | **new**, open |
 | 11 | Does the VEIP handoff need fields beyond `RuntimeDecision`? | Arkadiy Miteiko | **ANSWERED** — no; see ADR-013 §9.3 |
 
-## 12. Boundaries
+## 13. Boundaries
 
 **ZTL ends with** logical disposition, warranty grade, formula and dependency information,
 verified and unverified grounds, epoch and freshness information, recomputation evidence.
@@ -316,7 +396,7 @@ the first VEIP artifact.
 
 ZTL must not create a VEIP lifecycle record. VEIP must not reinterpret the ZTL formula.
 
-## 13. Standing
+## 14. Standing
 
 Proposed under OIC-WO-002. Not admitted. No ZTL or VEIP code exists, is imported, or is
 called. No policy document is parsed, no Institutional IR is constructed, no Open Control
