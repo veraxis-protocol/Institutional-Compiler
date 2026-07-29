@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oic.test/fixtures/valid/child.schema.json",
+  "title": "Child",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "content_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "content_hash"
+  ]
+}

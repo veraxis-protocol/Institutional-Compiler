@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oic.test/fixtures/duplicate-id/shared.schema.json",
+  "title": "Duplicate",
+  "type": "object"
+}

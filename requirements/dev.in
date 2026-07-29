@@ -12,6 +12,7 @@ pytest-cov>=6.0,<7
 # Static analysis
 mypy>=1.13,<2
 ruff>=0.8,<0.13
+types-jsonschema>=4.23,<5
 
 # Hooks
 pre-commit>=4.0,<5
