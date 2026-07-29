@@ -15,6 +15,16 @@ without a reader mistaking a proposal for something admitted.
 |---|---|---|
 | `warrant-artifact.schema.json` | Recomputable record of what a logic kernel established over supplied grounds | nothing; new |
 | `runtime-decision.schema.json` | Separates epistemic status, execution disposition, and decision basis | `schemas/draft/runtime-evaluation.schema.json` |
+| `warrant-requirement.schema.json` | Declares whether a control requires a warrant, under which kernel profile, at which minimum grade | nothing; would extend `control-envelope.schema.json` |
+
+## The constraints are the contract
+
+`runtime-decision.schema.json` and `warrant-requirement.schema.json` carry `if`/`then`
+constraints rather than leaving the rules to prose. A decision that pairs `ALLOW` with
+`UNRESOLVED`, or `on_unknown_applied: "deny"` with `SUBSTANTIVE`, is **invalid**, not
+merely discouraged. `warrant-artifact.schema.json` encodes the *measured* ZTL v0.1
+reachability the same way: `EARNED` implies `hereditary` with no unverified grounds,
+`ON CREDIT` implies at least one, and `OPEN` never carries raw verdict `T`.
 
 Governing decision: [ADR-013](../../adr/ADR-013.md).
 Contract: [`docs/contracts/WARRANT-CONTRACT-v0.1.md`](../../docs/contracts/WARRANT-CONTRACT-v0.1.md).
@@ -37,4 +47,6 @@ oic validate-schema --schema-dir schemas/proposed
 ```
 
 The `test` CI job covers them too, so a malformed proposal fails the build rather than
-waiting for someone to run the command by hand.
+waiting for someone to run the command by hand. Negative tests in
+`tests/contract/test_warrant_contract.py` assert that every prohibited field combination is
+actually rejected — a constraint nobody tests is a comment.
