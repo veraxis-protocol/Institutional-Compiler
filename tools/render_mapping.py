@@ -26,52 +26,87 @@ MAPPING_MD = Path("docs/contracts/ZTL-OCE-MAPPING-v0.1.md")
 START = "<!-- MAPPING-TABLE-START -->"
 END = "<!-- MAPPING-TABLE-END -->"
 
-COLUMNS = (
+CLASSIFICATION_COLUMNS = (
     "#",
     "Disposition",
     "Grade",
     "Unverified",
     "OIC condition",
     "Prec",
+    "Warrant state",
     "Epistemic",
-    "Execution",
+    "Base execution",
     "Basis",
     "Reason",
     "Reachability",
     "Authority",
 )
 
+OVERLAY_COLUMNS = (
+    "ID",
+    "Trigger",
+    "Epistemic effect",
+    "Execution",
+    "Basis",
+    "Policy reason",
+)
+
+
+def _table(columns: tuple[str, ...], rows: list[list[str]]) -> str:
+    lines = [
+        "| " + " | ".join(columns) + " |",
+        "|" + "|".join(["---"] * len(columns)) + "|",
+    ]
+    lines.extend("| " + " | ".join(row) + " |" for row in rows)
+    return "\n".join(lines)
+
 
 def render_table(document: dict[str, object]) -> str:
-    rows = document["rows"]
-    if not isinstance(rows, list):
-        raise TypeError("mapping document has no 'rows' array")
-    lines = [
-        "| " + " | ".join(COLUMNS) + " |",
-        "|" + "|".join(["---"] * len(COLUMNS)) + "|",
+    """Render both tables: classification rows, then control overlays."""
+    classification = document["classification_rows"]
+    overlays = document["control_overlays"]
+    if not isinstance(classification, list) or not isinstance(overlays, list):
+        raise TypeError("mapping document is missing classification_rows or control_overlays")
+
+    classification_rows = [
+        [
+            str(row["row_id"]),
+            str(row["disposition"]),
+            str(row["grade"]),
+            str(row["unverified"]),
+            str(row["oic_condition"]),
+            str(row["precedence"]),
+            str(row["warrant_state"]),
+            str(row["epistemic_status"]),
+            " / ".join(row["base_execution_choices"]),
+            str(row["decision_basis"]),
+            str(row["primary_reason_code"]),
+            str(row["reachability"]),
+            str(row["authority"]),
+        ]
+        for row in sorted(classification, key=lambda item: int(item["row_id"]))
     ]
-    for row in sorted(rows, key=lambda item: int(item["row_id"])):
-        lines.append(
-            "| "
-            + " | ".join(
-                (
-                    str(row["row_id"]),
-                    str(row["disposition"]),
-                    str(row["grade"]),
-                    str(row["unverified"]),
-                    str(row["oic_condition"]),
-                    str(row["precedence"]),
-                    str(row["epistemic_status"]),
-                    " / ".join(row["execution_disposition_choices"]),
-                    str(row["decision_basis"]),
-                    str(row["primary_reason_code"]),
-                    str(row["reachability"]),
-                    str(row["authority"]),
-                )
-            )
-            + " |"
-        )
-    return "\n".join(lines)
+    overlay_rows = [
+        [
+            str(row["overlay_id"]),
+            str(row["trigger"]),
+            str(row["epistemic_effect"]),
+            str(row["execution_disposition"]),
+            str(row["decision_basis"]),
+            str(row["policy_reason_code"]),
+        ]
+        for row in sorted(overlays, key=lambda item: str(item["overlay_id"]))
+    ]
+
+    return (
+        "### Classification rows\n\n"
+        + _table(CLASSIFICATION_COLUMNS, classification_rows)
+        + "\n\n### Control overlays\n\n"
+        + _table(OVERLAY_COLUMNS, overlay_rows)
+        + "\n\nAn overlay may change execution disposition, decision basis, and policy "
+        "reason codes. It may **never** change the epistemic status, which is why every "
+        "overlay declares `epistemic_effect = PRESERVE`."
+    )
 
 
 def rendered_markdown(root: Path) -> str:

@@ -56,41 +56,53 @@ wins** — see precedence below.
 
 <!-- MAPPING-TABLE-START -->
 
-| # | Disposition | Grade | Unverified | OIC condition | Prec | Epistemic | Execution | Basis | Reason | Reachability | Authority |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | any | any | any | kernel unavailable | 1 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0002 | REACHABLE | OIC-DEFENSIVE |
-| 2 | any | any | any | warrant absent | 1 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0001 | REACHABLE | OIC-DEFENSIVE |
-| 3 | any | any | any | warrant malformed | 1 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0003 | REACHABLE | OIC-DEFENSIVE |
-| 4 | any | any | any | warrant hash unverifiable | 1 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0004 | REACHABLE | OIC-DEFENSIVE |
-| 5 | any | any | any | warrant stale | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0005 | REACHABLE | OIC-DEFENSIVE |
-| 6 | any | any | any | warrant expired | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0006 | REACHABLE | OIC-DEFENSIVE |
-| 7 | any | any | any | warrant not yet valid | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0021 | REACHABLE | OIC-DEFENSIVE |
-| 8 | any | any | any | ground expired | 2 | UNRESOLVED | BLOCK / ESCALATE | PRECAUTIONARY | OIC-W-0020 | REACHABLE | OIC-DEFENSIVE |
-| 9 | any | any | any | ground revoked | 2 | UNRESOLVED | BLOCK / ESCALATE | PRECAUTIONARY | OIC-W-0007 | REACHABLE | OIC-DEFENSIVE |
-| 10 | any | any | any | epoch mismatch | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0008 | REACHABLE | OIC-DEFENSIVE |
-| 11 | any | any | any | source-version mismatch | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0009 | REACHABLE | OIC-DEFENSIVE |
-| 12 | any | any | any | admission-version mismatch | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0010 | REACHABLE | OIC-DEFENSIVE |
-| 13 | any | any | any | formula mismatch | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0011 | REACHABLE | OIC-DEFENSIVE |
-| 14 | any | any | any | kernel or canonicalization profile mismatch | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0023 | REACHABLE | OIC-DEFENSIVE |
-| 15 | any | any | any | source anchors missing | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0018 | REACHABLE | OIC-DEFENSIVE |
-| 16 | any | any | any | admission IDs missing | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0019 | REACHABLE | OIC-DEFENSIVE |
-| 17 | any | unsupported | any | warranty grade not in the known ladder | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0017 | REACHABLE | OIC-DEFENSIVE |
-| 18 | any | any | any | unsupported disposition/grade/verdict combination | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0022 | REACHABLE | OIC-DEFENSIVE |
-| 19 | any | any | any | warrant_requirement mode not_required or not_applicable | 2 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0024 | REACHABLE | OIC-DEFENSIVE |
-| 20 | any | any | any | contradictory grounds | 3 | CONTRADICTED | BLOCK | SUBSTANTIVE | OIC-W-0014 | REACHABLE | MEASURED |
-| 21 | REFUTED | hereditary | any | warrant usable | 4 | REFUTED | BLOCK | SUBSTANTIVE | OIC-W-0013 | REACHABLE | MEASURED |
-| 22 | OPEN | until-verification | non-empty | raw verdict F | 4 | UNRESOLVED | BLOCK / ESCALATE | PRECAUTIONARY | OIC-W-0012 | REACHABLE | MEASURED |
-| 23 | OPEN | until-verification | non-empty | raw verdict Z | 4 | UNRESOLVED | BLOCK / ESCALATE | PRECAUTIONARY | OIC-W-0012 | REACHABLE | MEASURED |
-| 24 | OPEN | any | any | raw verdict T | 4 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0022 | NOT_REACHABLE | ZTL-CONFIRMED |
-| 25 | EARNED | hereditary | empty | all checks pass, grade sufficient | 5 | ESTABLISHED | ALLOW | SUBSTANTIVE | OIC-D-0001 | REACHABLE | MEASURED |
-| 26 | ON CREDIT | sound | non-empty | grade permitted by warrant_requirement | 5 | ESTABLISHED | ALLOW | SUBSTANTIVE | OIC-D-0001 | REACHABLE | MEASURED |
-| 27 | ON CREDIT | sound | non-empty | grade below warrant_requirement minimum | 5 | ESTABLISHED | BLOCK / ESCALATE | CONTROL_REQUIREMENT | OIC-W-0016 | REACHABLE | MEASURED |
-| 28 | ON CREDIT | until-verification | non-empty | any | 5 | ESTABLISHED | BLOCK / ESCALATE | CONTROL_REQUIREMENT | OIC-W-0016 | REACHABLE | MEASURED |
-| 29 | EARNED | sound | any | grade permitted by warrant_requirement | 5 | ESTABLISHED | ALLOW | SUBSTANTIVE | OIC-D-0001 | NOT_REACHABLE | ZTL-CONFIRMED |
-| 30 | EARNED | sound | any | grade below warrant_requirement minimum | 5 | ESTABLISHED | BLOCK / ESCALATE | CONTROL_REQUIREMENT | OIC-W-0016 | NOT_REACHABLE | ZTL-CONFIRMED |
-| 31 | EARNED | until-verification | any | any | 5 | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0022 | NOT_REACHABLE | ZTL-CONFIRMED |
-| 32 | any | any | any | decision_mode human_judgment, escalation_only or non_automatable | 6 | ESTABLISHED | ESCALATE | CONTROL_REQUIREMENT | OIC-D-0002 | REACHABLE | OIC-DEFENSIVE |
-| 33 | any | any | any | decision_mode advisory or evidence_only | 6 | ESTABLISHED | ADVISORY | CONTROL_REQUIREMENT | OIC-D-0003 | REACHABLE | OIC-DEFENSIVE |
+### Classification rows
+
+| # | Disposition | Grade | Unverified | OIC condition | Prec | Warrant state | Epistemic | Base execution | Basis | Reason | Reachability | Authority |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | any | any | any | kernel unavailable | 1 | ABSENT | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0002 | REACHABLE | OIC-DEFENSIVE |
+| 2 | any | any | any | warrant absent | 1 | ABSENT | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0001 | REACHABLE | OIC-DEFENSIVE |
+| 3 | any | any | any | warrant malformed | 1 | MALFORMED | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0003 | REACHABLE | OIC-DEFENSIVE |
+| 4 | any | any | any | warrant hash unverifiable | 1 | UNVERIFIABLE | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0004 | REACHABLE | OIC-DEFENSIVE |
+| 5 | any | any | any | warrant stale | 2 | STALE | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0005 | REACHABLE | OIC-DEFENSIVE |
+| 6 | any | any | any | warrant expired | 2 | EXPIRED | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0006 | REACHABLE | OIC-DEFENSIVE |
+| 7 | any | any | any | warrant not yet valid | 2 | NOT_YET_VALID | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0021 | REACHABLE | OIC-DEFENSIVE |
+| 8 | any | any | any | ground expired | 2 | REVOKED | UNRESOLVED | BLOCK / ESCALATE | PRECAUTIONARY | OIC-W-0020 | REACHABLE | OIC-DEFENSIVE |
+| 9 | any | any | any | ground revoked | 2 | REVOKED | UNRESOLVED | BLOCK / ESCALATE | PRECAUTIONARY | OIC-W-0007 | REACHABLE | OIC-DEFENSIVE |
+| 10 | any | any | any | epoch mismatch within scope | 2 | MISBOUND | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0008 | REACHABLE | OIC-DEFENSIVE |
+| 11 | any | any | any | source-version mismatch | 2 | MISBOUND | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0009 | REACHABLE | OIC-DEFENSIVE |
+| 12 | any | any | any | admission-version mismatch | 2 | MISBOUND | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0010 | REACHABLE | OIC-DEFENSIVE |
+| 13 | any | any | any | formula mismatch | 2 | MISBOUND | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0011 | REACHABLE | OIC-DEFENSIVE |
+| 14 | any | any | any | kernel or canonicalization profile mismatch | 2 | MISBOUND | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0023 | REACHABLE | OIC-DEFENSIVE |
+| 15 | any | any | any | source anchors missing | 2 | MISBOUND | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0018 | REACHABLE | OIC-DEFENSIVE |
+| 16 | any | any | any | admission IDs missing | 2 | MISBOUND | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0019 | REACHABLE | OIC-DEFENSIVE |
+| 17 | any | unsupported | any | warranty grade not in the profile ladder | 2 | UNSUPPORTED_GRADE | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0017 | REACHABLE | OIC-DEFENSIVE |
+| 18 | any | any | any | disposition/grade/verdict combination not in the profile | 2 | UNSUPPORTED_GRADE | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0022 | REACHABLE | OIC-DEFENSIVE |
+| 19 | any | any | any | warrant_requirement mode not_required or not_applicable | 2 | NOT_REQUIRED | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0024 | REACHABLE | OIC-DEFENSIVE |
+| 20 | any | any | any | contradictory grounds | 3 | USABLE | CONTRADICTED | BLOCK | SUBSTANTIVE | OIC-W-0014 | REACHABLE | MEASURED |
+| 21 | REFUTED | hereditary | any | warrant usable | 4 | USABLE | REFUTED | BLOCK | SUBSTANTIVE | OIC-W-0013 | REACHABLE | MEASURED |
+| 22 | OPEN | until-verification | non-empty | raw verdict F | 4 | USABLE | UNRESOLVED | BLOCK / ESCALATE | PRECAUTIONARY | OIC-W-0012 | REACHABLE | MEASURED |
+| 23 | OPEN | until-verification | non-empty | raw verdict Z | 4 | USABLE | UNRESOLVED | BLOCK / ESCALATE | PRECAUTIONARY | OIC-W-0012 | REACHABLE | MEASURED |
+| 24 | OPEN | any | any | raw verdict T | 4 | UNSUPPORTED_GRADE | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0022 | NOT_REACHABLE | ZTL-CONFIRMED |
+| 25 | EARNED | hereditary | empty | all checks pass | 5 | USABLE | ESTABLISHED | ALLOW | SUBSTANTIVE | OIC-D-0001 | REACHABLE | MEASURED |
+| 26 | ON CREDIT | sound | non-empty | grade permits sound | 5 | USABLE | CONDITIONALLY_SUPPORTED | ALLOW / BLOCK / ESCALATE | CONTROL_REQUIREMENT | OIC-W-0015 | REACHABLE | MEASURED |
+| 27 | ON CREDIT | until-verification | non-empty | any | 5 | USABLE | CONDITIONALLY_SUPPORTED | BLOCK / ESCALATE | PRECAUTIONARY | OIC-W-0025 | REACHABLE | MEASURED |
+| 28 | EARNED | sound | any | any | 5 | UNSUPPORTED_GRADE | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0022 | NOT_REACHABLE | ZTL-CONFIRMED |
+| 29 | EARNED | until-verification | any | any | 5 | UNSUPPORTED_GRADE | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0022 | NOT_REACHABLE | ZTL-CONFIRMED |
+
+### Control overlays
+
+| ID | Trigger | Epistemic effect | Execution | Basis | Policy reason |
+|---|---|---|---|---|---|
+| O-1 | decision_mode in {human_judgment, escalation_only, non_automatable} | PRESERVE | ESCALATE | CONTROL_REQUIREMENT | OIC-D-0002 |
+| O-2 | decision_mode in {advisory, evidence_only} | PRESERVE | ADVISORY | CONTROL_REQUIREMENT | OIC-D-0003 |
+| O-3 | warranty_grade_observed below warrant_requirement.minimum_warranty_grade, on_insufficient_grade = escalate | PRESERVE | ESCALATE | CONTROL_REQUIREMENT | OIC-W-0016 |
+| O-4 | warranty_grade_observed below warrant_requirement.minimum_warranty_grade, on_insufficient_grade = block | PRESERVE | BLOCK | CONTROL_REQUIREMENT | OIC-W-0016 |
+| O-5 | epistemic_status = CONDITIONALLY_SUPPORTED, grade sufficient, unverified_ground_policy = allow_with_disclosure | PRESERVE | ALLOW | CONTROL_REQUIREMENT | OIC-D-0005 |
+| O-6 | epistemic_status = CONDITIONALLY_SUPPORTED, unverified_ground_policy = forbid | PRESERVE | BLOCK | CONTROL_REQUIREMENT | OIC-D-0006 |
+| O-7 | epistemic_status = CONDITIONALLY_SUPPORTED, unverified_ground_policy = escalate | PRESERVE | ESCALATE | CONTROL_REQUIREMENT | OIC-D-0006 |
+
+An overlay may change execution disposition, decision basis, and policy reason codes. It may **never** change the epistemic status, which is why every overlay declares `epistemic_effect = PRESERVE`.
 
 <!-- MAPPING-TABLE-END -->
 

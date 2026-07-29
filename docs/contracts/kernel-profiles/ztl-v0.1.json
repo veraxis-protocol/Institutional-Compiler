@@ -1,0 +1,183 @@
+{
+  "$comment": "PROPOSED, NOT ADMITTED. A frozen description of one logic kernel's interface and vocabulary. Dispositions, grades, and digests are NOT portable between kernels, so every WarrantArtifact declares the kernel_profile_id it was produced under and OIC never compares artifacts across profiles. Nothing in this file imports, executes, or calls ZTL.",
+  "canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
+  "commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
+  "conformance_fixture_set": {
+    "index_sha256": "b6e007bd47fd64b030391d90b17dda99ee12310aa0cce48bb0fdd0f74118dca5",
+    "location": "adapters/ztl/fixtures/interface-freeze-v0.1/",
+    "not_reachable": 3,
+    "provenance": "Published by the ZTL side under ZTL-OIC-WO-002; reproduced against the pinned commit by its author (Tier 3). Independent Tier-1 reproduction remains OPEN.",
+    "reachable": 12,
+    "total": 15
+  },
+  "disposition_values": [
+    {
+      "grades": [
+        "hereditary"
+      ],
+      "maps_to_epistemic_status": "ESTABLISHED",
+      "meaning": "Grounded outright. The verdict cannot move under any further verification, and unverified atoms are irrelevant.",
+      "raw_verdicts": [
+        "T"
+      ],
+      "unverified": "empty",
+      "value": "EARNED"
+    },
+    {
+      "grades": [
+        "hereditary"
+      ],
+      "maps_to_epistemic_status": "REFUTED",
+      "meaning": "False regardless of the marks.",
+      "raw_verdicts": [
+        "F"
+      ],
+      "unverified": "any",
+      "value": "REFUTED"
+    },
+    {
+      "grades": [
+        "sound",
+        "until-verification"
+      ],
+      "maps_to_epistemic_status": "CONDITIONALLY_SUPPORTED",
+      "meaning": "True only while an unverified atom holds. The verdict rides that atom and can die when it resolves. Omitted from ZTL dossier v0.1; added after measurement.",
+      "raw_verdicts": [
+        "T"
+      ],
+      "unverified": "non-empty",
+      "value": "ON CREDIT"
+    },
+    {
+      "grades": [
+        "until-verification"
+      ],
+      "maps_to_epistemic_status": "UNRESOLVED",
+      "meaning": "Not established; a mark actually matters. Never carries raw verdict T.",
+      "raw_verdicts": [
+        "F",
+        "Z"
+      ],
+      "unverified": "non-empty",
+      "value": "OPEN"
+    }
+  ],
+  "entrypoint": "ztljudge.judge",
+  "formula_digest_algorithm": "sha384",
+  "known_interface_hazards": [
+    {
+      "consequence": "A caller that grades through zverify.grade with the judge() alphabet receives `hereditary` where the correct grade is `until-verification`. That is a silent upgrade of a conditional result to the strongest warranty, which would let OIC treat ON CREDIT as EARNED and authorise action on an unverified link.",
+      "evidence": "adapters/ztl/fixtures/interface-freeze-v0.1/nonempty-unverified.json, field cross_check",
+      "hazard_id": "ZTL-H-001",
+      "mitigation": "OIC consumes judge() only. zverify.grade is a prohibited entrypoint under this profile.",
+      "severity": "critical",
+      "summary": "zverify.grade expects 'M' for a mark while judge() accepts 'Z'. Passing 'Z' directly to grade returns a wrong grade SILENTLY."
+    },
+    {
+      "consequence": "An adapter reading raw_verdict instead of disposition records 'established false' for something merely unverified, violating I-03.",
+      "evidence": "adapters/ztl/fixtures/interface-freeze-v0.1/open-with-raw-f.json",
+      "hazard_id": "ZTL-H-002",
+      "mitigation": "disposition is the only field that may drive a decision. raw_verdict is recorded for replay and is inert.",
+      "severity": "critical",
+      "summary": "raw_verdict can be 'F' while disposition is 'OPEN' (measured: judge(\"p & q\", {p:T, q:Z}))."
+    },
+    {
+      "consequence": "The kernel reports a verdict for a different question under the old name, undetectably.",
+      "evidence": "adapters/ztl/proposals/EPOCH-EXPIRY-REVOCATION-v0.1.md section 1.2",
+      "hazard_id": "ZTL-H-003",
+      "mitigation": "Atom identity is the caller's responsibility. OIC binds ground identifiers to source anchors and admission records outside the kernel.",
+      "severity": "high",
+      "summary": "Atom identifiers are supplied by the caller and echoed verbatim. Re-pointing an identifier at a different source clause is invisible to the kernel."
+    },
+    {
+      "consequence": "A mapping written against the three-value list silently misclassifies ON CREDIT, most likely as EARNED.",
+      "evidence": "adapters/ztl/MAPPING-REVIEW-v0.1.md section 3",
+      "hazard_id": "ZTL-H-004",
+      "mitigation": "disposition_values above is the frozen list of four. An unknown disposition is OIC-W-0022.",
+      "severity": "critical",
+      "summary": "ZTL dossier v0.1 documented three dispositions; the kernel has four."
+    },
+    {
+      "consequence": "`hereditary` treated as 'settled forever' would skip revalidation that the grade never promised.",
+      "evidence": "adapters/ztl/ZTL-DOSSIER-v0.1.md section 12",
+      "hazard_id": "ZTL-H-005",
+      "mitigation": "ADR-013 W-4 conditions 3 to 8 revalidate epoch, expiry, revocation, versions, and profiles independently of the grade.",
+      "severity": "high",
+      "summary": "`hereditary` is absorbing under monotone refinement ONLY. It does not waive re-checking on expiry, revocation, correction, source invalidation, schema change, formula change, semantic-version change, or admissibility change."
+    }
+  ],
+  "lean_toolchain": "leanprover/lean4:v4.29.1",
+  "license": "MIT",
+  "marking_alphabet": [
+    "T",
+    "F",
+    "Z"
+  ],
+  "not_reachable_combinations": [
+    {
+      "combination": "EARNED + sound",
+      "evidence": "adapters/ztl/fixtures/interface-freeze-v0.1/earned-sound.json",
+      "reason": "EARNED requires grade hereditary by construction. A T verdict that is only sound is classified ON CREDIT."
+    },
+    {
+      "combination": "EARNED + until-verification",
+      "evidence": "adapters/ztl/fixtures/interface-freeze-v0.1/earned-until-verification.json",
+      "reason": "Same: a non-hereditary T is ON CREDIT."
+    },
+    {
+      "combination": "OPEN + raw verdict T",
+      "evidence": "adapters/ztl/fixtures/interface-freeze-v0.1/open-with-raw-t.json",
+      "reason": "OPEN never carries raw T. Exhaustive search over the formula pool found no counterexample."
+    }
+  ],
+  "presentational_fields": [
+    {
+      "field": "why",
+      "rule": "Human-readable justification. Do not parse. May change without a profile version bump."
+    }
+  ],
+  "profile_id": "ztl-v0.1",
+  "prohibited_entrypoints": [
+    {
+      "entrypoint": "zverify.grade",
+      "hazard_id": "ZTL-H-001",
+      "reason": "Different marking dialect ('M' rather than 'Z'). Silently returns an incorrect warranty grade when called with the judge() alphabet."
+    }
+  ],
+  "raw_verdict_values": [
+    "T",
+    "F",
+    "Z"
+  ],
+  "repository": "https://github.com/inventor1975/ZTL",
+  "signed_tag": {
+    "gpg_key_fingerprint": "F170414DDBB78F231929121175B13F5AEC28313A",
+    "limitations": "The key is new, unattested by any third party, and held without a passphrase on a workstation. It is not a hardware-backed identity and must not be described as one.",
+    "name": "veraxis-ztl-input-v0.1.1-signed",
+    "signs_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602"
+  },
+  "status": "PROPOSED - frozen interface description, not admitted",
+  "unsigned_tag": "veraxis-ztl-input-v0.1",
+  "warranty_grade_values": [
+    {
+      "implies": [
+        "sound"
+      ],
+      "meaning": "Invariant under every admissible monotone refinement of the same formula and marking.",
+      "rank": 2,
+      "value": "hereditary"
+    },
+    {
+      "implies": [],
+      "meaning": "Never lies about the present marking, but may stall under refinement.",
+      "rank": 1,
+      "value": "sound"
+    },
+    {
+      "implies": [],
+      "meaning": "Holds only in the present marking; not yet settled.",
+      "rank": 0,
+      "value": "until-verification"
+    }
+  ]
+}
