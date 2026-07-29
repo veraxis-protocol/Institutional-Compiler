@@ -24,3 +24,6 @@ junit.xml
 # Local environment files. `.env.example` is checked in; a real `.env` is not.
 .env
 .env.local
+
+# macOS finder metadata
+.DS_Store
