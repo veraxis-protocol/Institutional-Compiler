@@ -1,6 +1,6 @@
 {
   "case_id": "15-contradiction",
-  "description": "Grounds are mutually inconsistent. That is a finding about the grounds, not about the claim -- CONTRADICTED, never REFUTED.",
+  "description": "Grounds are mutually inconsistent: a finding about the ground set, not a refutation of the proposition. CONTRADICTED, never REFUTED, even though the kernel said REFUTED.",
   "expected": {
     "decision_basis": "SUBSTANTIVE",
     "epistemic_status": "CONTRADICTED",
@@ -28,30 +28,41 @@
       "reason_codes": [
         "OIC-W-0014"
       ],
-      "replay_reference": "replay:15",
+      "replay_reference": "replay:15-contradiction@sha256:2861e3fd93defa43ffefcb9bcb2b48d239cd798b9b7c0ae092b641d960a6ab9d",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
       "warrant_artifact_id": "warrant:15",
       "warrant_state": "USABLE",
-      "warranty_grade_observed": "sound",
+      "warranty_grade_observed": "hereditary",
       "warranty_grade_required": "hereditary"
     },
     "warrant_state": "USABLE"
   },
   "input": {
     "envelope": {
+      "bound_canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
       "bound_formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
+      "bound_kernel_profile_id": "ztl-v0.1",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
       "decision_mode": "automatic",
       "envelope_id": "env:proc-001",
-      "minimum_warranty_grade": "hereditary",
-      "on_unknown": "deny"
+      "on_unknown": "deny",
+      "warrant_requirement": {
+        "kernel_profile_id": "ztl-v0.1",
+        "minimum_warranty_grade": "hereditary",
+        "mode": "required",
+        "on_insufficient_grade": "escalate"
+      }
     },
     "runtime_context": {
       "admission_version": "adm-v3",
       "authority_version": "auth-v2",
       "contradiction_detected": true,
-      "current_ground_epoch": 7,
+      "current_ground_epoch": {
+        "authority_id": "authority:proc-registry",
+        "scope_id": "scope:proc-grounds",
+        "sequence": 7
+      },
       "current_ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
       "evaluated_at": "2026-08-01T12:00:00Z",
       "expired_ground_ids": [],
@@ -63,6 +74,7 @@
       "admission_ids": [
         "adm:001"
       ],
+      "canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
       "claim_id": "claim:procurement-approval",
       "dependency_ids": [
         "ground:registered",
@@ -72,11 +84,16 @@
       "formula": "registered & under_threshold",
       "formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
       "generated_at": "2026-07-29T00:00:00Z",
-      "ground_epoch": 7,
+      "ground_epoch": {
+        "authority_id": "authority:proc-registry",
+        "scope_id": "scope:proc-grounds",
+        "sequence": 7
+      },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
       "input_hash": "sha256:b03eddd31986146b8f28dd7f9296b386abdbdc7339662b45f2787a549bfa2429",
       "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
       "kernel_name": "ztl",
+      "kernel_profile_id": "ztl-v0.1",
       "kernel_version": "veraxis-ztl-input-v0.1",
       "limitations": [
         "Establishes propositional structure over supplied grounds only.",
@@ -91,19 +108,25 @@
       "source_anchor_ids": [
         "anchor:a1"
       ],
+      "time_binding": {
+        "attestation_hash": "sha256:463df729a3a338d6078e17491b06b2f020a798fbd9c53914cca45fa71197aebe",
+        "reference": "tsa:veraxis-dev",
+        "source": "attested_timestamp"
+      },
       "unverified_ground_ids": [],
       "valid_from": "2026-07-01T00:00:00Z",
       "valid_until": "2026-12-31T23:59:59Z",
       "warrant_artifact_id": "warrant:15",
-      "warranty_grade": "sound"
+      "warranty_grade": "hereditary"
     },
     "ztl_result": {
       "disposition": "REFUTED",
-      "grade": "sound",
+      "grade": "hereditary",
       "raw_verdict": "F",
       "unverified": []
     }
   },
-  "mapping_row": 10,
+  "mapping_row": 20,
+  "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }

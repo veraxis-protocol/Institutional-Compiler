@@ -38,25 +38,54 @@ expected.runtime_decision  validates against schemas/proposed/runtime-decision.s
 
 ## The cases
 
-| # | Case | Row | What it pins |
-|---|---|---|---|
-| 01 | `earned-hereditary-current` | 1 | The only clean ALLOW |
-| 02 | `earned-sound-permitted-grade` | 3 | Envelope tolerates a non-monotone warrant |
-| 03 | `earned-sound-insufficient-grade` | 4 | ESTABLISHED but escalated on policy, not doubt |
-| 04 | `earned-until-verification` | 5 | Present-marking-only establishes nothing durable |
-| 05 | `refuted` | 6 | The only BLOCK that is a finding |
-| 06 | `open-raw-f` | 8 | **The measured case** — see below |
-| 07 | `open-raw-t` | 7 | A favourable raw marking still establishes nothing |
-| 08 | `open-raw-z` | 9 | Bare Z on an atom |
-| 09 | `unverified-ground` | 2 | ALLOW while missing grounds are still surfaced |
-| 10 | `kernel-unavailable` | 11 | Never fabricate a warrant |
-| 11 | `warrant-stale` | 15 | A good disposition does not rescue a stale artifact |
-| 12 | `ground-expired` | 17 | Anti-tick, PRECAUTIONARY |
-| 13 | `ground-revoked` | 18 | I-13 |
-| 14 | `epoch-mismatch` | 19 | Bound to an epoch that no longer exists |
-| 15 | `contradiction` | 10 | CONTRADICTED, never REFUTED |
-| 16 | `source-version-mismatch` | 20 | I-07 |
-| 17 | `admission-version-mismatch` | 21 | I-02 |
+Twenty-four cases. `Reach` is measured reachability against the pinned ZTL v0.1 kernel.
+
+| # | Case | Row | Reach | What it pins |
+|---|---|---|---|---|
+| 01 | `earned-hereditary-current` | 25 | ✅ | The only clean ALLOW |
+| 02 | `earned-sound-permitted-grade` | 29 | ❌ | Defensive; a substitute kernel only |
+| 03 | `earned-sound-insufficient-grade` | 30 | ❌ | Defensive; CONTROL_REQUIREMENT shape |
+| 04 | `earned-until-verification` | 31 | ❌ | `OIC-W-0022`, not `DISPOSITION_OPEN` |
+| 05 | `refuted` | 21 | ✅ | The only BLOCK that is a negative finding |
+| 06 | `open-raw-f` | 22 | ✅ | **The measured trap** — see below |
+| 07 | `open-raw-t` | 24 | ❌ | OPEN never carries raw `T` |
+| 08 | `open-raw-z` | 23 | ✅ | Bare `Z` mark |
+| 09 | `on-credit-sound-permitted` | 26 | ✅ | ALLOW while grounds are still missing |
+| 10 | `kernel-unavailable` | 1 | ✅ | Never fabricate a warrant |
+| 11 | `warrant-stale` | 5 | ✅ | A good disposition does not rescue a stale artifact |
+| 12 | `ground-expired` | 8 | ✅ | Anti-tick, PRECAUTIONARY |
+| 13 | `ground-revoked` | 9 | ✅ | I-13 |
+| 14 | `epoch-mismatch` | 10 | ✅ | Compared **within one scope and authority** |
+| 15 | `contradiction` | 20 | ✅ | CONTRADICTED, never REFUTED |
+| 16 | `source-version-mismatch` | 11 | ✅ | I-07 |
+| 17 | `admission-version-mismatch` | 12 | ✅ | I-02 |
+| 18 | `warrant-not-yet-valid` | 7 | ✅ | Not-yet-in-force is as unusable as expired |
+| 19 | `on-credit-sound-insufficient-grade` | 27 | ✅ | **Reachable CONTROL_REQUIREMENT** on grade |
+| 20 | `on-credit-until-verification` | 28 | ✅ | Rides an atom that can flip |
+| 21 | `decision-mode-human-judgment` | 32 | ✅ | Perfect warrant, escalated by policy |
+| 22 | `decision-mode-advisory` | 33 | ✅ | Recorded, does not gate |
+| 23 | `profile-mismatch` | 14 | ✅ | Hashes from different profiles are never compared |
+| 24 | `warrant-not-required` | 19 | ✅ | No ALLOW path specified in v0.1 |
+
+## NOT_REACHABLE fixtures are load-bearing
+
+Four cases describe combinations the pinned kernel **cannot** produce. They are not dead
+weight: `test_warrant_validity_matches_declared_reachability` asserts their warrants
+**fail** `warrant-artifact.schema.json`, because that schema encodes the measured
+reachability as `if`/`then` constraints. If ZTL later emits one of these, the fixture
+starts passing schema validation and the test fails — which is exactly the notification
+you want.
+
+They also specify what an adapter must do if it ever meets one: fail closed with
+`OIC-W-0022`, never fall through.
+
+## The `ON CREDIT` correction
+
+ZTL dossier v0.1 listed three dispositions. There are four. `ON CREDIT` is a `T` verdict
+that holds **only while an unverified atom holds** and can die when that atom resolves.
+The original fixture set had no such case and instead assumed `EARNED` could carry
+unverified grounds — measurement showed it cannot. Cases 09, 19, and 20 replace that
+assumption with the real thing.
 
 ## Fixture 06 is the one that matters most
 

@@ -1,15 +1,14 @@
 {
-  "case_id": "10-kernel-unavailable",
-  "description": "No warrant can be produced. A warrant is never fabricated.",
+  "case_id": "24-warrant-not-required",
+  "description": "The control declares no warrant requirement. v0.1 deliberately does NOT specify an ALLOW path for warrant-free controls, so this escalates pending specification. not_required is never a waiver of authority, admission, evidence or version checks.",
   "expected": {
     "decision_basis": "PROCEDURAL",
     "epistemic_status": "UNRESOLVED",
-    "execution_disposition": "BLOCK",
+    "execution_disposition": "ESCALATE",
     "missing_ground_anchors": [],
     "missing_ground_ids": [],
     "reason_codes": [
-      "OIC-D-0004",
-      "OIC-W-0002"
+      "OIC-W-0024"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
@@ -20,24 +19,23 @@
       "envelope_id": "env:proc-001",
       "epistemic_status": "UNRESOLVED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:10",
-      "execution_disposition": "BLOCK",
-      "input_hash": "sha256:8a7a4212bdc8488ee83d1972caa0c757b92e835d717adde8c736dc09a069343d",
+      "evaluation_id": "eval:24",
+      "execution_disposition": "ESCALATE",
+      "input_hash": "sha256:8ad502c3b89de32db7ebacf832f53e0197e9c2f7e6d278c6bafc54d87ef39da9",
       "missing_ground_anchors": [],
       "missing_ground_ids": [],
-      "on_unknown_applied": "deny",
+      "on_unknown_applied": "escalate",
       "reason_codes": [
-        "OIC-D-0004",
-        "OIC-W-0002"
+        "OIC-W-0024"
       ],
-      "replay_reference": "replay:10-kernel-unavailable@sha256:8a7a4212bdc8488ee83d1972caa0c757b92e835d717adde8c736dc09a069343d",
+      "replay_reference": "replay:24-warrant-not-required@sha256:8ad502c3b89de32db7ebacf832f53e0197e9c2f7e6d278c6bafc54d87ef39da9",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
       "warrant_artifact_id": null,
-      "warrant_state": "ABSENT",
+      "warrant_state": "NOT_REQUIRED",
       "warranty_grade_observed": null,
-      "warranty_grade_required": "hereditary"
+      "warranty_grade_required": null
     },
-    "warrant_state": "ABSENT"
+    "warrant_state": "NOT_REQUIRED"
   },
   "input": {
     "envelope": {
@@ -48,12 +46,12 @@
       "control_version": "1.0.0",
       "decision_mode": "automatic",
       "envelope_id": "env:proc-001",
-      "on_unknown": "deny",
+      "on_unknown": "escalate",
       "warrant_requirement": {
-        "kernel_profile_id": "ztl-v0.1",
-        "minimum_warranty_grade": "hereditary",
-        "mode": "required",
-        "on_insufficient_grade": "escalate"
+        "kernel_profile_id": null,
+        "minimum_warranty_grade": null,
+        "mode": "not_applicable",
+        "on_insufficient_grade": null
       }
     },
     "runtime_context": {
@@ -68,14 +66,14 @@
       "current_ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
       "evaluated_at": "2026-08-01T12:00:00Z",
       "expired_ground_ids": [],
-      "kernel_available": false,
+      "kernel_available": true,
       "revoked_ground_ids": [],
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4"
     },
     "warrant_artifact": null,
     "ztl_result": null
   },
-  "mapping_row": 1,
+  "mapping_row": 19,
   "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }

@@ -1,87 +1,70 @@
 {
-  "case_id": "09-unverified-ground",
-  "description": "ALLOW while grounds remain unverified. `hereditary` is invariant under every refinement of the outstanding atom, so the logic is settled -- but the missing ground is still surfaced. Reachability of this row needs ZTL confirmation (WARRANT-CONTRACT section 9, question 1).",
+  "case_id": "23-profile-mismatch",
+  "description": "The warrant is well formed and EARNED, but was produced under a different kernel profile. Dispositions and grades are not portable between kernels, so the two formula hashes are never compared and the warrant is MISBOUND.",
   "expected": {
-    "decision_basis": "SUBSTANTIVE",
-    "epistemic_status": "ESTABLISHED",
-    "execution_disposition": "ALLOW",
-    "missing_ground_anchors": [
-      {
-        "admitted_unit_id": "cnu:threshold",
-        "expected_evidence_type": "registry_extract",
-        "ground_id": "ground:under_threshold",
-        "source_id": "src:proc-manual-2026",
-        "source_node_id": "node:cl-4.2.1",
-        "span": {
-          "end": 188,
-          "start": 120
-        }
-      }
-    ],
-    "missing_ground_ids": [
-      "ground:under_threshold"
-    ],
+    "decision_basis": "PROCEDURAL",
+    "epistemic_status": "UNRESOLVED",
+    "execution_disposition": "BLOCK",
+    "missing_ground_anchors": [],
+    "missing_ground_ids": [],
     "reason_codes": [
-      "OIC-D-0001",
-      "OIC-W-0015"
+      "OIC-D-0004",
+      "OIC-W-0023"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
       "authority_version": "auth-v2",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
-      "decision_basis": "SUBSTANTIVE",
+      "decision_basis": "PROCEDURAL",
       "envelope_id": "env:proc-001",
-      "epistemic_status": "ESTABLISHED",
+      "epistemic_status": "UNRESOLVED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:09",
-      "execution_disposition": "ALLOW",
-      "input_hash": "sha256:64a441d75ea57f959b60397b3028b1138e24878d4662ae4ab7ce0ec4f92e209a",
-      "missing_ground_anchors": [
-        {
-          "admitted_unit_id": "cnu:threshold",
-          "expected_evidence_type": "registry_extract",
-          "ground_id": "ground:under_threshold",
-          "source_id": "src:proc-manual-2026",
-          "source_node_id": "node:cl-4.2.1",
-          "span": {
-            "end": 188,
-            "start": 120
-          }
-        }
-      ],
-      "missing_ground_ids": [
-        "ground:under_threshold"
-      ],
-      "on_unknown_applied": null,
+      "evaluation_id": "eval:23",
+      "execution_disposition": "BLOCK",
+      "input_hash": "sha256:b5691d24fd5b10c25ef43b46b5e8858d8dd714d7bd24716adeb6e1a96d8fb61d",
+      "missing_ground_anchors": [],
+      "missing_ground_ids": [],
+      "on_unknown_applied": "deny",
       "reason_codes": [
-        "OIC-D-0001",
-        "OIC-W-0015"
+        "OIC-D-0004",
+        "OIC-W-0023"
       ],
-      "replay_reference": "replay:09",
+      "replay_reference": "replay:23-profile-mismatch@sha256:b5691d24fd5b10c25ef43b46b5e8858d8dd714d7bd24716adeb6e1a96d8fb61d",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
-      "warrant_artifact_id": "warrant:09",
-      "warrant_state": "USABLE",
+      "warrant_artifact_id": "warrant:23",
+      "warrant_state": "MISBOUND",
       "warranty_grade_observed": "hereditary",
       "warranty_grade_required": "hereditary"
     },
-    "warrant_state": "USABLE"
+    "warrant_state": "MISBOUND"
   },
   "input": {
     "envelope": {
+      "bound_canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
       "bound_formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
+      "bound_kernel_profile_id": "ztl-v0.1",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
       "decision_mode": "automatic",
       "envelope_id": "env:proc-001",
-      "minimum_warranty_grade": "hereditary",
-      "on_unknown": "deny"
+      "on_unknown": "deny",
+      "warrant_requirement": {
+        "kernel_profile_id": "ztl-v0.1",
+        "minimum_warranty_grade": "hereditary",
+        "mode": "required",
+        "on_insufficient_grade": "escalate"
+      }
     },
     "runtime_context": {
       "admission_version": "adm-v3",
       "authority_version": "auth-v2",
       "contradiction_detected": false,
-      "current_ground_epoch": 7,
+      "current_ground_epoch": {
+        "authority_id": "authority:proc-registry",
+        "scope_id": "scope:proc-grounds",
+        "sequence": 7
+      },
       "current_ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
       "evaluated_at": "2026-08-01T12:00:00Z",
       "expired_ground_ids": [],
@@ -93,51 +76,59 @@
       "admission_ids": [
         "adm:001"
       ],
+      "canonicalization_profile_id": "substitute-jcs-sha256-v2",
       "claim_id": "claim:procurement-approval",
       "dependency_ids": [
         "ground:registered",
         "ground:under_threshold"
       ],
       "disposition": "EARNED",
-      "formula": "registered | under_threshold",
+      "formula": "registered & under_threshold",
       "formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
       "generated_at": "2026-07-29T00:00:00Z",
-      "ground_epoch": 7,
+      "ground_epoch": {
+        "authority_id": "authority:proc-registry",
+        "scope_id": "scope:proc-grounds",
+        "sequence": 7
+      },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
-      "input_hash": "sha256:2bf878c388bf2ad6de09902cb048e913c4d77793283cf4f07056899b0804f26a",
+      "input_hash": "sha256:d9b278d06cdeb5a52bd9033e92acbefea33fc82714a3471fd28010dade9a0ed8",
       "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
       "kernel_name": "ztl",
+      "kernel_profile_id": "substitute-kernel-v2",
       "kernel_version": "veraxis-ztl-input-v0.1",
       "limitations": [
         "Establishes propositional structure over supplied grounds only.",
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:a0d9603ac0a1a62d670d6d59ad46e2ba0ad19044cf4a98b23f4ecdfb512b4b34",
+      "output_hash": "sha256:7a4a69fa29c966c4c7ed63ba119c885b2f907e1041e162c299aedc838200901b",
       "raw_verdict": "T",
-      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:2bf878c388bf2ad6de09902cb048e913c4d77793283cf4f07056899b0804f26a, ground_set_hash=sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926)",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:d9b278d06cdeb5a52bd9033e92acbefea33fc82714a3471fd28010dade9a0ed8, ground_set_hash=sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926)",
       "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
         "anchor:a1"
       ],
-      "unverified_ground_ids": [
-        "ground:under_threshold"
-      ],
+      "time_binding": {
+        "attestation_hash": "sha256:02a129b25ffede9d6f2962cfea8c5ddc9d070588111f195830046d395322def9",
+        "reference": "tsa:veraxis-dev",
+        "source": "attested_timestamp"
+      },
+      "unverified_ground_ids": [],
       "valid_from": "2026-07-01T00:00:00Z",
       "valid_until": "2026-12-31T23:59:59Z",
-      "warrant_artifact_id": "warrant:09",
+      "warrant_artifact_id": "warrant:23",
       "warranty_grade": "hereditary"
     },
     "ztl_result": {
       "disposition": "EARNED",
       "grade": "hereditary",
       "raw_verdict": "T",
-      "unverified": [
-        "ground:under_threshold"
-      ]
+      "unverified": []
     }
   },
-  "mapping_row": 2,
+  "mapping_row": 14,
+  "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }
