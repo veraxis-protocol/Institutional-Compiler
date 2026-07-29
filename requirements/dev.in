@@ -8,6 +8,12 @@
 # Test
 pytest>=8.3,<9
 pytest-cov>=6.0,<7
+# Imported directly by tests/contract/test_dependency_metadata.py to compare declared
+# requirement ranges against installed versions. Declared rather than relied on as a
+# transitive of pip-tools.
+packaging>=24.0,<26
+# Imported directly by the CI and compose contract tests to parse YAML.
+PyYAML>=6.0,<7
 
 # Static analysis
 mypy>=1.13,<2
@@ -19,6 +25,9 @@ pre-commit>=4.0,<5
 
 # Dependency locking (pinned so the lock is reproducible by the same tool)
 pip-tools>=7.4,<8
+
+# Wheel building for the smoke test in scripts/wheel_smoke_test.sh
+build>=1.2,<2
 
 # Supply chain: SBOM and license inventory
 cyclonedx-bom>=6.0,<8

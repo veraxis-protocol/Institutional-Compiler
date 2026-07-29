@@ -1132,7 +1132,7 @@
       "version": "0.17.6"
     },
     {
-      "bom-ref": "packaging==26.2",
+      "bom-ref": "packaging==25.0",
       "description": "Core utilities for Python packages",
       "externalReferences": [
         {
@@ -1148,14 +1148,22 @@
       ],
       "licenses": [
         {
-          "acknowledgement": "declared",
-          "expression": "Apache-2.0 OR BSD-2-Clause"
+          "license": {
+            "acknowledgement": "declared",
+            "name": "License :: OSI Approved :: Apache Software License"
+          }
+        },
+        {
+          "license": {
+            "acknowledgement": "declared",
+            "name": "License :: OSI Approved :: BSD License"
+          }
         }
       ],
       "name": "packaging",
-      "purl": "pkg:pypi/packaging@26.2",
+      "purl": "pkg:pypi/packaging@25.0",
       "type": "library",
-      "version": "26.2"
+      "version": "25.0"
     },
     {
       "bom-ref": "pathspec==1.1.1",
@@ -2347,7 +2355,7 @@
     },
     {
       "dependsOn": [
-        "packaging==26.2",
+        "packaging==25.0",
         "pyproject_hooks==1.2.0",
         "virtualenv==21.7.0"
       ],
@@ -2370,7 +2378,7 @@
         "chardet==5.2.0",
         "cyclonedx-python-lib==11.11.0",
         "packageurl-python==0.17.6",
-        "packaging==26.2",
+        "packaging==25.0",
         "pip-requirements-parser==32.0.1"
       ],
       "ref": "cyclonedx-bom==7.3.1"
@@ -2495,7 +2503,7 @@
       "ref": "packageurl-python==0.17.6"
     },
     {
-      "ref": "packaging==26.2"
+      "ref": "packaging==25.0"
     },
     {
       "dependsOn": [
@@ -2517,7 +2525,7 @@
     },
     {
       "dependsOn": [
-        "packaging==26.2",
+        "packaging==25.0",
         "pyparsing==3.3.2",
         "pytest==8.4.2"
       ],
@@ -2594,7 +2602,7 @@
         "Pygments==2.20.0",
         "attrs==26.1.0",
         "iniconfig==2.3.0",
-        "packaging==26.2",
+        "packaging==25.0",
         "pluggy==1.6.0",
         "setuptools==83.0.0"
       ],
@@ -2655,7 +2663,7 @@
         "build==1.5.0",
         "filelock==3.32.0",
         "mypy==1.20.2",
-        "packaging==26.2",
+        "packaging==25.0",
         "pip==26.1.2",
         "pyproject_hooks==1.2.0",
         "pytest-cov==6.3.0",
@@ -2708,7 +2716,7 @@
     },
     {
       "dependsOn": [
-        "packaging==26.2"
+        "packaging==25.0"
       ],
       "ref": "wheel==0.47.0"
     }

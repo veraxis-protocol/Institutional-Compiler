@@ -49,7 +49,7 @@ determination has been made.
 | `oic` | `0.1.0a0` | UNKNOWN |
 | `oic` | `0.1.0a0` | UNKNOWN |
 | `packageurl-python` | `0.17.6` | MIT License |
-| `packaging` | `26.2` | Apache-2.0 OR BSD-2-Clause |
+| `packaging` | `25.0` | Apache Software License; BSD License |
 | `pathspec` | `1.1.1` | Mozilla Public License 2.0 (MPL 2.0) |
 | `pip-requirements-parser` | `32.0.1` | MIT |
 | `pip-tools` | `7.6.0` | BSD License |
@@ -84,14 +84,18 @@ determination has been made.
 
 ```
 requirements/runtime.in:jsonschema>=4.23,<5
+requirements/runtime.in:referencing>=0.37,<0.38
 requirements/dev.in:-r runtime.in
 requirements/dev.in:pytest>=8.3,<9
 requirements/dev.in:pytest-cov>=6.0,<7
+requirements/dev.in:packaging>=24.0,<26
+requirements/dev.in:PyYAML>=6.0,<7
 requirements/dev.in:mypy>=1.13,<2
 requirements/dev.in:ruff>=0.8,<0.13
 requirements/dev.in:types-jsonschema>=4.23,<5
 requirements/dev.in:pre-commit>=4.0,<5
 requirements/dev.in:pip-tools>=7.4,<8
+requirements/dev.in:build>=1.2,<2
 requirements/dev.in:cyclonedx-bom>=6.0,<8
 requirements/dev.in:pip-licenses>=5.0,<6
 ```

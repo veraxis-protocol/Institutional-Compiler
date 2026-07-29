@@ -232,10 +232,10 @@
   },
   {
     "Author": "Donald Stufft <donald@stufft.io>",
-    "License": "Apache-2.0 OR BSD-2-Clause",
+    "License": "Apache Software License; BSD License",
     "Name": "packaging",
     "URL": "https://github.com/pypa/packaging",
-    "Version": "26.2"
+    "Version": "25.0"
   },
   {
     "Author": "\"Caleb P. Burns\" <cpburnz@gmail.com>",
