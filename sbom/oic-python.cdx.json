@@ -1,4 +1,6 @@
 {
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
   "components": [
     {
       "bom-ref": "PyYAML==6.0.3",
@@ -1099,7 +1101,7 @@
         {
           "comment": "PackageSource: Local",
           "type": "distribution",
-          "url": "file:///Users/arkadiymiteiko/Downloads/open-institutional-compiler"
+          "url": "file://."
         }
       ],
       "name": "oic",
@@ -2828,8 +2830,6 @@
       ]
     }
   },
-  "version": 1,
-  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
-  "bomFormat": "CycloneDX",
-  "specVersion": "1.6"
+  "specVersion": "1.6",
+  "version": 1
 }

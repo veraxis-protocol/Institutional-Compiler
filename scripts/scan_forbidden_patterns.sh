@@ -52,7 +52,14 @@ report() {
     hits="$(git grep -n -I -E -e "${pattern}" -- . "${EXCLUDES[@]}" 2>/dev/null)"
   fi
 
-  hits="$(printf '%s\n' "${hits}" | grep -v 'pragma: allowlist secret' | grep -v '^$')"
+  # Drop reviewed false positives and documented placeholders. `.env.example` must stay
+  # readable, so a value that is obviously a placeholder is not a finding.
+  hits="$(
+    printf '%s\n' "${hits}" \
+      | grep -v 'pragma: allowlist secret' \
+      | grep -v -i -E '[:=][[:space:]]*.?(CHANGEME|PLACEHOLDER|REPLACE_ME|<[a-z_-]+>|xxxx)' \
+      | grep -v '^$'
+  )"
 
   if [ -n "${hits}" ]; then
     echo "::error::forbidden pattern detected (${label})"

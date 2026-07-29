@@ -31,6 +31,35 @@ cyclonedx-py environment \
   --output-file "${out_dir}/oic-python.cdx.json" \
   "$(command -v python)"
 
+# cyclonedx records the pyproject location as an absolute `file://` URL, which both
+# leaks the generating machine's directory layout and makes the SBOM differ between a
+# developer's checkout and CI. Rewrite it to a repository-relative form so the output is
+# byte-identical everywhere.
+python - "${repo_root}" "${out_dir}/oic-python.cdx.json" <<'PY'
+import json
+import pathlib
+import sys
+
+repo_root, sbom_path = sys.argv[1], pathlib.Path(sys.argv[2])
+absolute = f"file://{repo_root}"
+
+
+def normalise(node: object) -> object:
+    if isinstance(node, dict):
+        return {key: normalise(value) for key, value in node.items()}
+    if isinstance(node, list):
+        return [normalise(item) for item in node]
+    if isinstance(node, str) and node.startswith(absolute):
+        return "file://." + node[len(absolute) :]
+    return node
+
+
+document = json.loads(sbom_path.read_text(encoding="utf-8"))
+sbom_path.write_text(
+    json.dumps(normalise(document), indent=2, sort_keys=True) + "\n", encoding="utf-8"
+)
+PY
+
 echo "==> License inventory"
 pip-licenses \
   --format=json \

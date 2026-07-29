@@ -61,6 +61,10 @@ select = [
   "S101",  # asserts are the point of a test suite
   "ARG001",  # pytest fixtures are injected by name
   "ARG002",
+  # Tests exercise the shell scripts by running them. Every argv is a fixed literal
+  # built in-test, never operator input, so the untrusted-input concern does not apply.
+  "S603",
+  "S607",
 ]
 
 [tool.ruff.lint.flake8-tidy-imports]
