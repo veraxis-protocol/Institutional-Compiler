@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/proposed/runtime-decision.schema.json",
+  "title": "RuntimeDecision",
+  "description": "PROPOSED, NOT ADMITTED. Separates what the grounds establish (epistemic_status) from what the runtime did (execution_disposition) and why it did it (decision_basis). The existing schemas/draft/runtime-evaluation.schema.json collapses all three into a single `verdict` field; that collapse is the defect this schema exists to correct. See adr/ADR-013.md. schemas/draft is NOT modified by this proposal.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evaluation_id",
+    "envelope_id",
+    "control_id",
+    "control_version",
+    "epistemic_status",
+    "execution_disposition",
+    "decision_basis",
+    "reason_codes",
+    "missing_ground_ids",
+    "missing_ground_anchors",
+    "warrant_artifact_id",
+    "authority_version",
+    "admission_version",
+    "source_version_set_hash",
+    "input_hash",
+    "evaluated_at"
+  ],
+  "$defs": {
+    "sha256_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "reason_code": {
+      "type": "string",
+      "pattern": "^OIC-[WD]-[0-9]{4}$",
+      "description": "Stable machine-readable reason. Registry in docs/contracts/WARRANT-CONTRACT-v0.1.md."
+    }
+  },
+  "properties": {
+    "evaluation_id": { "$ref": "#/$defs/identifier" },
+    "envelope_id": { "$ref": "#/$defs/identifier" },
+    "control_id": { "$ref": "#/$defs/identifier" },
+    "control_version": { "$ref": "#/$defs/identifier" },
+
+    "epistemic_status": {
+      "enum": ["ESTABLISHED", "REFUTED", "UNRESOLVED", "CONTRADICTED"],
+      "description": "What the admitted grounds establish about the claim. ESTABLISHED: grounds establish it. REFUTED: grounds establish its negation. UNRESOLVED: grounds do not settle it, or could not be evaluated. CONTRADICTED: grounds are mutually inconsistent. UNRESOLVED is NOT a weak form of REFUTED; conflating them is the failure this field exists to prevent (I-03)."
+    },
+    "execution_disposition": {
+      "enum": ["ALLOW", "BLOCK", "ESCALATE", "ADVISORY"],
+      "description": "What the runtime did. Independent of epistemic_status: a BLOCK may accompany UNRESOLVED (fail closed) or REFUTED (grounds establish the negation), and those two are not the same event."
+    },
+    "decision_basis": {
+      "enum": ["SUBSTANTIVE", "PRECAUTIONARY", "PROCEDURAL"],
+      "description": "Why the runtime did it. SUBSTANTIVE: the grounds themselves determine the outcome. PRECAUTIONARY: the epistemic state is unresolved and the system fails closed. PROCEDURAL: an artifact, binding, or availability precondition failed, so the claim was never evaluated. A precautionary or procedural BLOCK MUST NOT be serialised, reported, or reused as an established negative fact or a grounded prohibition."
+    },
+
+    "reason_codes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reason_code" },
+      "minItems": 1,
+      "description": "Ordered, deterministic. At least one is always present, including on ALLOW."
+    },
+
+    "missing_ground_ids": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/identifier" },
+      "description": "Level 1: stable proposition or atom identifiers needed for computation, as emitted by the kernel. Present whenever the kernel reported unverified grounds, INCLUDING when the outcome is ALLOW."
+    },
+    "missing_ground_anchors": {
+      "type": "array",
+      "description": "Level 2: human-review references connecting each missing proposition to its source and admission context. Enrichment is the OIC adapter's job, not the kernel's; the kernel is never asked to interpret source documents. May be empty when enrichment has not run, which is not the same as there being no missing grounds.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ground_id"],
+        "properties": {
+          "ground_id": { "$ref": "#/$defs/identifier" },
+          "source_id": { "type": ["string", "null"] },
+          "source_node_id": { "type": ["string", "null"] },
+          "span": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "properties": {
+              "start": { "type": "integer", "minimum": 0 },
+              "end": { "type": "integer", "minimum": 0 }
+            }
+          },
+          "admitted_unit_id": { "type": ["string", "null"] },
+          "expected_evidence_type": { "type": ["string", "null"] }
+        }
+      }
+    },
+
+    "warrant_artifact_id": {
+      "type": ["string", "null"],
+      "description": "The warrant this decision rests on, or null when no usable warrant existed. Null with execution_disposition ALLOW is a contract violation."
+    },
+    "warrant_state": {
+      "enum": [
+        "USABLE",
+        "ABSENT",
+        "MALFORMED",
+        "UNVERIFIABLE",
+        "STALE",
+        "EXPIRED",
+        "NOT_YET_VALID",
+        "REVOKED",
+        "MISBOUND",
+        "UNSUPPORTED_GRADE"
+      ],
+      "description": "Why the warrant was or was not usable. MISBOUND covers epoch, formula, source-version, and admission-version mismatch: the artifact is well formed but describes a different world or a different proposition."
+    },
+
+    "authority_version": { "$ref": "#/$defs/identifier" },
+    "admission_version": { "$ref": "#/$defs/identifier" },
+    "source_version_set_hash": { "$ref": "#/$defs/sha256_digest" },
+    "input_hash": { "$ref": "#/$defs/sha256_digest" },
+    "evaluated_at": { "type": "string", "format": "date-time" },
+
+    "warranty_grade_observed": {
+      "type": ["string", "null"],
+      "enum": ["hereditary", "sound", "until-verification", null]
+    },
+    "warranty_grade_required": {
+      "type": ["string", "null"],
+      "enum": ["hereditary", "sound", "until-verification", null],
+      "description": "Minimum grade the envelope requires. schemas/draft/control-envelope.schema.json has no such field today; adding one is a proposed migration, recorded in ADR-013 and not applied here."
+    },
+    "on_unknown_applied": {
+      "type": ["string", "null"],
+      "enum": ["cannot", "escalate", "deny", null],
+      "description": "The envelope's declared on_unknown policy, when it was the reason for the outcome. `deny` here means an operational fail-closed block ONLY. It is never evidence that the proposition is false, and decision_basis must not be SUBSTANTIVE when this field is set."
+    },
+    "replay_reference": {
+      "type": ["string", "null"],
+      "description": "How to replay this decision to its exact control, admission, sources, warrant, inputs, and versions (I-15)."
+    }
+  }
+}

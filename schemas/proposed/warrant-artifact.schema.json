@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/proposed/warrant-artifact.schema.json",
+  "title": "WarrantArtifact",
+  "description": "PROPOSED, NOT ADMITTED. A recomputable record of what a logic kernel established over a supplied ground set. It records logic only: it does not assert source authenticity, institutional authority, admission, or an execution decision. A warrant is an input to a runtime decision, never the decision itself. See adr/ADR-013.md and docs/contracts/WARRANT-CONTRACT-v0.1.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "warrant_artifact_id",
+    "schema_version",
+    "claim_id",
+    "formula",
+    "formula_hash",
+    "disposition",
+    "warranty_grade",
+    "unverified_ground_ids",
+    "dependency_ids",
+    "ground_epoch",
+    "ground_set_hash",
+    "source_anchor_ids",
+    "admission_ids",
+    "kernel_name",
+    "kernel_version",
+    "kernel_commit",
+    "input_hash",
+    "output_hash",
+    "generated_at",
+    "valid_from",
+    "valid_until",
+    "revocation_references",
+    "recomputation_reference",
+    "limitations"
+  ],
+  "$defs": {
+    "sha256_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "Canonical OIC digest form."
+    },
+    "kernel_digest": {
+      "type": "string",
+      "pattern": "^sha(256:[0-9a-f]{64}|384:[0-9a-f]{96})$",
+      "description": "A digest emitted by the logic kernel. ZTL v0.1 canonicalises with an RFC 8785 (JCS) float-free subset and digests with SHA-384, so sha384 is permitted here even though OIC's own artifact hashing is SHA-256 only in v0.1. OIC records this value; it does not recompute it."
+    },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    }
+  },
+  "properties": {
+    "warrant_artifact_id": {
+      "$ref": "#/$defs/identifier",
+      "description": "Stable identifier for this warrant artifact."
+    },
+    "schema_version": {
+      "type": "string",
+      "description": "Version of this proposed schema the artifact was produced against."
+    },
+    "claim_id": {
+      "$ref": "#/$defs/identifier",
+      "description": "Identifier of the admitted proposition the warrant is about. Binds the warrant to a claim, not to a document."
+    },
+    "formula": {
+      "type": "string",
+      "description": "The propositional formula the kernel evaluated, as the kernel rendered it. Recorded verbatim for replay; OIC does not parse it."
+    },
+    "formula_hash": {
+      "$ref": "#/$defs/kernel_digest",
+      "description": "Kernel digest over the canonicalised formula and its atoms. A runtime decision must confirm this matches the formula bound to the control; a mismatch means the warrant is about a different proposition."
+    },
+    "disposition": {
+      "enum": ["EARNED", "REFUTED", "OPEN"],
+      "description": "The kernel's primary operational signal. OPEN means the grounds do not settle the claim. OPEN MUST NEVER be read as falsity: see ADR-013 and the raw-verdict warning below."
+    },
+    "raw_verdict": {
+      "enum": ["T", "F", "Z"],
+      "description": "The kernel's internal truth marking. RECORDED FOR REPLAY ONLY. It MUST NOT drive any OIC decision. ZTL can return raw_verdict 'F' together with disposition 'OPEN' (measured: judge(\"p & q\", {p:T, q:Z})). An adapter reading this field alone converts 'not yet established' into 'established false', violating invariant I-03."
+    },
+    "warranty_grade": {
+      "enum": ["hereditary", "sound", "until-verification"],
+      "description": "How durable the result is under further verification. 'hereditary' is invariant under every admissible monotone refinement of the same formula and marking; 'sound' never lies but may stall; 'until-verification' holds only in the present marking. hereditary implies sound. This is half of the result, not optional metadata."
+    },
+    "unverified_ground_ids": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/identifier" },
+      "description": "Atom or proposition identifiers the kernel could not verify. Always surfaced as missing_ground_ids on the runtime decision, including when the outcome is ALLOW."
+    },
+    "dependency_ids": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/identifier" },
+      "description": "Ground identifiers the conclusion depends on. Used for revocation and expiry propagation."
+    },
+    "ground_epoch": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotone counter of the ground set this warrant was computed against. A tick is the arrival of ground; an anti-tick is ground withdrawn. A decision evaluated at a different epoch cannot reuse this warrant without recomputation."
+    },
+    "ground_set_hash": {
+      "$ref": "#/$defs/sha256_digest",
+      "description": "Digest of the exact ground set supplied to the kernel. Detects staleness that an epoch counter alone would miss."
+    },
+    "source_anchor_ids": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/identifier" },
+      "description": "Source anchors for the grounds. Supplied to the kernel by OIC; the kernel does not read documents."
+    },
+    "admission_ids": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/identifier" },
+      "description": "Admission records that made these grounds usable. Logic over unadmitted grounds is not a warrant for anything (I-02)."
+    },
+    "kernel_name": { "$ref": "#/$defs/identifier" },
+    "kernel_version": { "$ref": "#/$defs/identifier" },
+    "kernel_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "Immutable commit of the kernel that produced this artifact."
+    },
+    "input_hash": {
+      "$ref": "#/$defs/sha256_digest",
+      "description": "Digest of the exact kernel input, for replay."
+    },
+    "output_hash": {
+      "$ref": "#/$defs/sha256_digest",
+      "description": "Digest of the exact kernel output, for replay."
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "valid_from": { "type": "string", "format": "date-time" },
+    "valid_until": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Explicit scoped expiry. Null means no time-based expiry was declared, which is NOT the same as 'never expires': revocation and epoch change still invalidate. Unrestricted expiry trivialises warranties, so expiry is scoped rather than global."
+    },
+    "revocation_references": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/identifier" },
+      "description": "Revocation records that would invalidate this warrant if present and in force."
+    },
+    "recomputation_reference": {
+      "type": "string",
+      "minLength": 1,
+      "description": "How to recompute this warrant deterministically: pinned kernel, input hash, and ground set. Required so a warrant is evidence rather than an assertion."
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "What this warrant does NOT establish. Required and non-empty on purpose: a warrant with no stated ceiling invites over-reading."
+    }
+  }
+}
