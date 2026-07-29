@@ -24,12 +24,13 @@ have to re-verify them by reading the YAML on every change.
 
 | Job | What it does | Fails when |
 |---|---|---|
-| `bootstrap-integrity` | Checks the governing TDD digest, the bootstrap manifest, and all three manifests | TDD digest changed; a bootstrap-controlled file changed; `--all` did not exit exactly `3` |
+| `bootstrap-integrity` | Checks the governing TDD digest against the working tree, then verifies the historical bootstrap baseline from Git objects, then all current-tree manifests | TDD digest changed; the bootstrap commit no longer holds its recorded bytes; `--all` did not exit exactly `3` |
 | `schema-validation` | `oic validate-schema`, text and JSON | Any of the nine schemas is not valid Draft 2020-12, or a reference does not resolve locally |
 | `lint` | `ruff check`, `ruff format --check`, credential scan | Any lint or format violation, or a credential pattern hit |
 | `typecheck` | `mypy` in strict mode | Any type error |
 | `test` | `pytest` with coverage | Any test failure |
-| `sbom` | CycloneDX SBOM, license inventory, dependency inventory | Generation fails |
+| `sbom` | CycloneDX SBOM, license inventory, dependency inventory, wheel smoke install | Generation fails; the wheel does not build, import, or run |
+| `compose-validation` | Resolves the compose config, pulls every pinned digest, starts PostgreSQL/MinIO/OPA, waits for healthchecks, tears down | Config does not resolve; an image does not pull; a service does not become healthy |
 
 ### Artifacts
 
@@ -55,22 +56,34 @@ That duplication is deliberate. If someone rewrote both `BOOTSTRAP_MANIFEST.json
 to each other would still pass. This literal would not. A failure here is a governance
 event, not a build problem: do not update the literal to make CI green.
 
-## Changing a bootstrap-controlled file
+## Changing a repository artifact
 
-Every file recorded in `BOOTSTRAP_MANIFEST.json` has its digest verified on every run.
-Editing one — including `README.md`, `STATUS.md`, `CLAIMS.md`, or any of the nine
-schemas — fails `bootstrap-integrity` until the manifest is updated to match.
+[ADR-012](../../adr/ADR-012.md) defines three artifact classes; which one a file belongs
+to determines what changing it requires.
 
-**No approved amendment mechanism currently exists in this repository.** Updating the
-manifest to accommodate an edit would silently defeat the control it implements. Until an
-authorized mechanism is defined, treat a `bootstrap-integrity` failure as evidence that a
-controlled artifact changed and needs authorization under `GOVERNANCE.md`, not as a check
-to work around.
+**Class A — immutable historical baseline.** The bootstrap commit, its manifest, and the
+TDD PDF and digest. These never change. `bootstrap-integrity` verifies the baseline from
+the Git object database at the pinned commit, so it is unaffected by any later commit.
 
-This is why `CLAUDE-FABLE5-WO-001` left `STATUS.md` and `README.md` untouched: no gate row
-in `STATUS.md` objectively changed state under this work order, so no edit was warranted,
-and making one would have required an unauthorized manifest amendment. Defining that
-mechanism needs architecture-lead adjudication.
+**Class B — governed mutable contracts.** Requirements, invariants, the draft schemas,
+`STATUS.md`, `DEPENDENCIES.md`, `CLAIMS.md`, `LIMITATIONS.md`, `GOVERNANCE.md`, and the
+ownership and interface contracts. These change only through an explicit pull request
+with identified owner review, a stated reason, compatibility impact, tests, and an ADR
+where material. **This protection is procedural, not machine-checked.** A
+governed-current-state digest registry may be introduced under a separate work order; it
+is deliberately not invented here.
+
+**Class C — operational mutable artifacts.** Adapter READMEs, implementation code, tests,
+operator documentation, CI, and dependency and infrastructure files. Ordinary pull-request
+review.
+
+`BOOTSTRAP_MANIFEST.json` is **never** rewritten to make a later working tree match.
+Being listed in it means a path existed with certain bytes at the bootstrap commit — not
+that the path is frozen forever. `adapters/ztl/README.md` is Class C; its change in PR #2
+is a legitimate later repository change and does not affect the baseline.
+
+`STATUS.md` remains controlling for release status and the semantic implementation gate.
+No verification tool, CI job, dossier, or commit message moves that status.
 
 ## Credential pattern scan
 
@@ -101,14 +114,20 @@ describe it as secret scanning in any external material.
 
 ```bash
 oic validate-schema
+oic verify-bootstrap               # historical baseline, expected exit 0
 oic verify-manifest --all          # expected exit 3
+python -m pip check
 ruff check .
 ruff format --check .
 mypy
 pytest --cov=oic --cov-report=term-missing
 bash scripts/scan_forbidden_patterns.sh
 bash scripts/generate_sbom.sh
+bash scripts/wheel_smoke_test.sh
 ```
+
+`compose-validation` needs Docker and has no local shortcut; run the commands in
+[`docker/README.md`](../../docker/README.md) if you have Docker available.
 
 Or install the git hooks, which run lint, format, types, and manifest verification before
 each commit:

@@ -125,10 +125,33 @@ def test_operator_guide_states_ztl_and_veip_are_provisional(documents: dict[str,
     assert "no adapter, container, or call exists" in text
 
 
-def test_operator_guide_records_the_docker_verification_gap(documents: dict[str, str]) -> None:
+def test_operator_guide_states_where_compose_evidence_comes_from(
+    documents: dict[str, str],
+) -> None:
+    """Compose is exercised by CI, and the guide must say so rather than imply local proof."""
     text = documents["docs/operations/FOUNDATION.md"]
-    assert "docker compose was not executed" in text
-    assert "never pulled or run" in text
+    assert "compose-validation" in text
+    assert "docker is unavailable in the authoring environment" in text
+    assert "ci provides the executable evidence" in text
+
+
+def test_operator_guide_records_the_bootstrap_baseline_model(
+    documents: dict[str, str],
+) -> None:
+    """The corrected model must be documented, not just implemented."""
+    text = documents["docs/operations/FOUNDATION.md"]
+    plain = text.replace("*", "")
+    assert "immutable historical evidence about the bootstrap commit" in plain
+    assert "neither read nor modified" in plain
+    assert "adr-012" in plain
+    assert "never rewritten to make a later working tree match" in plain
+
+
+def test_operator_guide_records_the_class_b_gap(documents: dict[str, str]) -> None:
+    """The procedural-only protection of governed contracts must be stated plainly."""
+    text = documents["docs/operations/FOUNDATION.md"]
+    assert "protected procedurally, not mechanically" in text
+    assert "deferred to a separate work order" in text
 
 
 def test_operator_guide_records_the_incomplete_corpus_result(documents: dict[str, str]) -> None:
@@ -163,16 +186,22 @@ def test_no_license_file_was_added(repo_root: Path) -> None:
     assert "License ::" not in pyproject
 
 
-def test_no_bootstrap_controlled_document_was_modified(repo_root: Path) -> None:
-    """The claims-bearing governing documents must be byte-identical to the bootstrap.
+def test_claims_bearing_documents_are_unchanged_by_this_work_order(repo_root: Path) -> None:
+    """The Class B claims documents must be byte-identical to their bootstrap versions.
 
-    `verify-manifest` already proves this for every recorded file; this test names the
-    claims-bearing ones explicitly so the intent is visible where claims are discussed.
+    ADR-012 protects Class B artifacts procedurally rather than by digest registry, so
+    this test states the specific obligation for the documents that carry claims: this
+    work order does not touch them. Compared against the blob at the bootstrap commit,
+    not against a manifest, because the manifest describes that commit rather than now.
     """
-    from oic.manifests import EntryStatus, verify_bootstrap_manifest
+    import subprocess
 
-    report = verify_bootstrap_manifest(repo_root / "BOOTSTRAP_MANIFEST.json", repo_root)
-    by_path = {entry.path: entry for entry in report.entries}
+    from oic.baseline import BOOTSTRAP_COMMIT
+
     for relpath in ("CLAIMS.md", "LIMITATIONS.md", "STATUS.md", "README.md", "OWNERS.md"):
-        assert relpath in by_path, relpath
-        assert by_path[relpath].status is EntryStatus.PASS, relpath
+        committed = subprocess.run(
+            ["git", "-C", str(repo_root), "cat-file", "blob", f"{BOOTSTRAP_COMMIT}:{relpath}"],
+            capture_output=True,
+            check=True,
+        ).stdout
+        assert (repo_root / relpath).read_bytes() == committed, relpath

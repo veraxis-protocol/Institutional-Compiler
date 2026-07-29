@@ -48,9 +48,10 @@ float". A floating tag is not a pin.
 
 ## Verification status of these pins
 
-The digests were resolved from the registry and are recorded here. **They have not been
-pulled or run**, because Docker was not available in the environment that produced this
-work order. `docker compose config` and `docker compose up` were therefore not executed
-locally; the compose file was validated by YAML parse and structural assertions only
-(see `tests/contract/test_compose_shell.py`). The first reviewer with Docker available
-should run the start and health commands in `docker/README.md` and record the result.
+The `compose-validation` CI job pulls every digest in this table on each run, then starts
+the services and waits for their healthchecks. A digest that no longer resolves, or an
+image that no longer starts, fails the build.
+
+Docker is not available in the environment that authors these changes, so local evidence
+is limited to structural assertions in `tests/contract/test_compose_shell.py`. CI supplies
+the executable evidence.

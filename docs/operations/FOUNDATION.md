@@ -59,8 +59,11 @@ Run all of these from the repository root with the virtualenv active.
 | Command | Verifies | Passing exit code |
 |---|---|---|
 | `oic validate-schema` | All nine draft schemas are valid Draft 2020-12, offline | `0` |
-| `oic verify-manifest` | `BOOTSTRAP_MANIFEST.json` digests match the working tree | `0` |
-| `oic verify-manifest --all` | All three manifests | **`3`** — see below |
+| `oic verify-bootstrap` | The bootstrap commit still holds its recorded bytes | `0` |
+| `oic verify-manifest` | Same as `verify-bootstrap` | `0` |
+| `oic verify-manifest --all` | Bootstrap baseline plus both current-tree manifests | **`3`** — see below |
+| `python -m pip check` | Declared metadata matches the installed environment | `0` |
+| `bash scripts/wheel_smoke_test.sh` | Wheel builds, imports, and runs when installed | `0` |
 | `oic doctor` | Environment, tool availability, gate state | `0` |
 | `ruff check .` | Lint | `0` |
 | `ruff format --check .` | Formatting | `0` |
@@ -108,14 +111,39 @@ Deterministic machine-readable output:
 oic --format json validate-schema
 ```
 
-### Verify manifests
+### Verify the bootstrap baseline
 
 ```bash
-oic verify-manifest                    # bootstrap manifest (default)
-oic verify-manifest --all              # all three manifests
+oic verify-bootstrap
+oic verify-bootstrap --ref <commit-or-tag>
+oic --format json verify-bootstrap
+```
+
+`BOOTSTRAP_MANIFEST.json` is **immutable historical evidence about the bootstrap commit**,
+not a policy freezing every path it lists. Both the manifest and every artifact it names
+are read from that commit through the local Git object database; the working tree is
+neither read nor modified, and nothing touches the network.
+
+This matters in practice. `adapters/ztl/README.md` is recorded in the manifest and was
+legitimately rewritten later by PR #2. That change **must not** fail bootstrap
+verification, and it does not, because the baseline is a statement about the past. See
+[ADR-012](../../adr/ADR-012.md) for the artifact classes and the amendment rules.
+
+The manifest is never rewritten to make a later working tree match. Doing so would
+destroy the only record of what the bootstrap contained.
+
+### Verify current-tree manifests
+
+```bash
+oic verify-manifest                    # bootstrap baseline (default)
+oic verify-manifest --all              # baseline + SHA256SUMS + corpus manifest
 oic verify-manifest --manifest docs/tdd/SHA256SUMS
 oic --format json verify-manifest --all
 ```
+
+Passing `--manifest BOOTSTRAP_MANIFEST.json` is refused with a pointer to
+`verify-bootstrap`: comparing a historical manifest against the present tree is precisely
+the error ADR-012 corrects.
 
 Verification is strictly read-only. No manifest is rewritten, re-sorted, or repaired, and
 no origin URL is ever fetched. Paths that are absolute, drive-qualified, contain `..`,
@@ -242,10 +270,11 @@ enforcement artifact (none exists to produce).
 - **Preflight corpus provenance is OPEN.** `SOURCE_MANIFEST.csv` has no rows.
 - **ZTL and VEIP are PROVISIONAL / NOT CONFIGURED.** Their interfaces are unfrozen
   (ADR-009, ADR-010) and no adapter, container, or call exists.
-- **Docker Compose was not executed.** Docker was unavailable in the environment that
-  produced this work order. Image digests were resolved from the registry API but the
-  images were never pulled or run, and `docker compose config` was not executed. The
-  compose file was validated by YAML parse and structural contract tests only.
+- **Docker Compose is validated by CI, not locally here.** The `compose-validation` job
+  resolves the configuration, pulls every digest-pinned image, starts all three services,
+  waits for their healthchecks, and tears the stack down. Docker is unavailable in the
+  authoring environment, so the local evidence remains structural contract tests; CI
+  provides the executable evidence.
 - **The credential scan is a coarse tripwire.** It does not scan git history, encoded
   values, or binaries. Passing it is not evidence that the repository contains no secrets.
 - **No license-compatibility determination has been made.** The repository carries no
@@ -253,6 +282,11 @@ enforcement artifact (none exists to produce).
 - **Verification means byte integrity only.** A digest match proves two byte sequences are
   identical. It establishes no source authority, institutional validity, or semantic
   equivalence.
+- **Class B contracts are protected procedurally, not mechanically.** ADR-012 defines
+  requirements, invariants, schemas, `STATUS.md`, `CLAIMS.md`, and the other governed
+  contracts as Class B. They change only through reviewed pull requests; there is no
+  machine-checked registry of their current expected digests. A governed-current-state
+  registry is deliberately deferred to a separate work order.
 - **Coverage is not a quality claim.** Infrastructure modules are covered at roughly 95%
   because the behaviour under test is small and deterministic. No test exists solely to
   raise that number, and the number says nothing about correctness of anything unbuilt.

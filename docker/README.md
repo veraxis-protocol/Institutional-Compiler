@@ -101,8 +101,19 @@ re-resolve a digest, and how to update a pin.
 
 ## Verification status
 
-These images have **not** been pulled or run by the work order that added this file:
-Docker was unavailable in that environment. `docker compose config` and `docker compose
-up` were not executed. The compose file was validated by YAML parse and structural
-assertions only (`tests/contract/test_compose_shell.py`). A reviewer with Docker should
-run the start and health commands above and record the outcome.
+The `compose-validation` CI job exercises this file on every run: it resolves the
+configuration, pulls all three digest-pinned images, starts the services, waits for every
+healthcheck to report healthy within a bounded timeout, prints `docker compose ps`, and
+tears the stack down with `down -v --remove-orphans`. Service logs are printed on failure.
+
+Docker is not available in the environment that authors these changes, so local evidence
+is limited to the structural assertions in `tests/contract/test_compose_shell.py`. CI
+supplies the executable evidence.
+
+### A note on the OPA healthcheck
+
+OPA's check makes a real HTTP request to its diagnostic `/health` endpoint using OPA's own
+binary and Rego's `http.send` — the image is distroless, so there is no curl, wget, or
+shell available. An earlier version ran `opa eval true`, which evaluates in-process and
+would have reported healthy even if the server had failed to bind its port. A healthcheck
+that cannot fail when the service is down is worse than none, because CI reports it green.
