@@ -62,17 +62,21 @@ def _scan(workspace: Path, script: Path, files: dict[str, str]) -> subprocess.Co
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize(
-    ("label", "content"),
-    [
-        ("aws", "AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE\n"),
-        ("github", "token: ghp_abcdefghijklmnopqrstuvwxyz0123456789AB\n"),
-        ("stripe", "key = sk_live_abcdefghijklmnop0123\n"),
-        ("google", "GOOGLE=AIzaSyA1234567890abcdefghijklmnopqrstuvw\n"),
-        ("private key", "-----BEGIN RSA PRIVATE KEY-----\nabc\n"),
-        ("assignment", 'password = "correcthorsebatterystaple42"\n'),
-    ],
+# Synthetic values only: the AWS entry is Amazon's own published example key id, and the
+# rest are structurally valid but meaningless strings. None authenticates against
+# anything. Each carries the allowlist pragma because it must trip the scan when written
+# into a temporary repository, while this file itself is also scanned in CI.
+PLANTED_CREDENTIALS: tuple[tuple[str, str], ...] = (
+    ("aws", "AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE\n"),  # pragma: allowlist secret
+    ("github", "tok: ghp_abcdefghijklmnopqrstuvwxyz0123456789AB\n"),  # pragma: allowlist secret
+    ("stripe", "key = sk_live_abcdefghijklmnop0123\n"),  # pragma: allowlist secret
+    ("google", "G=AIzaSyA1234567890abcdefghijklmnopqrstuvw\n"),  # pragma: allowlist secret
+    ("private key", "-----BEGIN RSA PRIVATE KEY-----\nabc\n"),  # pragma: allowlist secret
+    ("assignment", 'password = "correcthorsebatterystaple42"\n'),  # pragma: allowlist secret
 )
+
+
+@pytest.mark.parametrize(("label", "content"), PLANTED_CREDENTIALS)
 def test_scan_detects_planted_credentials(
     tmp_path: Path, script: Path, label: str, content: str
 ) -> None:
