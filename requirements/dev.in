@@ -1,0 +1,24 @@
+# Development dependencies. Superset of runtime.in.
+#
+# Regenerate the lock with:
+#   pip-compile --generate-hashes --output-file=requirements/dev.txt requirements/dev.in
+
+-r runtime.in
+
+# Test
+pytest>=8.3,<9
+pytest-cov>=6.0,<7
+
+# Static analysis
+mypy>=1.13,<2
+ruff>=0.8,<0.13
+
+# Hooks
+pre-commit>=4.0,<5
+
+# Dependency locking (pinned so the lock is reproducible by the same tool)
+pip-tools>=7.4,<8
+
+# Supply chain: SBOM and license inventory
+cyclonedx-bom>=6.0,<8
+pip-licenses>=5.0,<6

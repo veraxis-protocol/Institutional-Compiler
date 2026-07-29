@@ -1,0 +1,47 @@
+# Pre-commit hooks for the non-semantic foundation.
+# Hook repositories are pinned to immutable tags; `pre-commit autoupdate` must be
+# accompanied by a review of the resulting revision change.
+minimum_pre_commit_version: "4.0.0"
+default_language_version:
+  python: python3.12
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=512"]
+        # The governing TDD PDF is bootstrap-controlled and exceeds the limit by design.
+        exclude: ^docs/tdd/TDD-OIC-001-v1\.1\.pdf$
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: end-of-file-fixer
+        exclude: ^(docs/tdd/SHA256SUMS|benchmarks/preflight/SOURCE_MANIFEST\.csv)$
+      - id: trailing-whitespace
+        exclude: ^(docs/tdd/SHA256SUMS|benchmarks/preflight/SOURCE_MANIFEST\.csv)$
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.5
+    hooks:
+      - id: ruff
+        args: ["--fix", "--exit-non-zero-on-fix"]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy (strict)
+        entry: mypy
+        language: system
+        types: [python]
+        pass_filenames: false
+      - id: bootstrap-integrity
+        name: bootstrap manifest integrity
+        entry: python -m oic.cli verify-manifest --all
+        language: system
+        pass_filenames: false

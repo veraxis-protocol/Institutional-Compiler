@@ -1,0 +1,125 @@
+[build-system]
+requires = ["setuptools>=77.0.0"]
+build-backend = "setuptools.build_meta"
+
+# NOTE ON LICENSING
+# No `license` field, no license classifier, and no LICENSE file are declared.
+# Repository licensing remains pending counsel review (see OWNERS.md).
+# Do not add a license here without written authorization.
+
+[project]
+name = "oic"
+version = "0.1.0a0"
+description = "Open Institutional Compiler - non-semantic infrastructure foundation"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "jsonschema>=4.23,<5",
+  "referencing>=0.35,<0.37",
+]
+
+[project.scripts]
+oic = "oic.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+oic = ["py.typed"]
+
+# --------------------------------------------------------------------------
+# Ruff
+# --------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+  "A",    # builtin shadowing
+  "ANN",  # annotations
+  "ARG",  # unused arguments
+  "B",    # bugbear
+  "C4",   # comprehensions
+  "E",    # pycodestyle errors
+  "F",    # pyflakes
+  "I",    # import sorting
+  "N",    # naming
+  "PTH",  # prefer pathlib
+  "RET",  # return discipline
+  "RUF",  # ruff-specific
+  "S",    # bandit / security
+  "SIM",  # simplify
+  "TID",  # tidy imports
+  "UP",   # pyupgrade
+  "W",    # pycodestyle warnings
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+  "S101",  # asserts are the point of a test suite
+  "ARG001",  # pytest fixtures are injected by name
+  "ARG002",
+]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.format]
+quote-style = "double"
+
+# --------------------------------------------------------------------------
+# mypy (strict)
+# --------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+files = ["src", "tests"]
+strict = true
+warn_unreachable = true
+warn_unused_configs = true
+disallow_any_unimported = true
+disallow_any_decorated = true
+disallow_any_explicit = false
+no_implicit_reexport = true
+show_error_codes = true
+pretty = false
+
+# --------------------------------------------------------------------------
+# pytest
+# --------------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = [
+  "--strict-markers",
+  "--strict-config",
+  "-ra",
+  "--import-mode=importlib",
+]
+xfail_strict = true
+filterwarnings = ["error"]
+markers = [
+  "contract: verifies a governing repository contract (schemas, manifests, claims)",
+]
+
+# --------------------------------------------------------------------------
+# coverage
+# --------------------------------------------------------------------------
+[tool.coverage.run]
+branch = true
+source = ["oic"]
+parallel = false
+
+[tool.coverage.paths]
+source = ["src/oic", "*/site-packages/oic"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+precision = 1
+exclude_lines = [
+  "pragma: no cover",
+  "if TYPE_CHECKING:",
+  "raise NotImplementedError",
+]

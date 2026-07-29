@@ -1,0 +1,9 @@
+# Runtime dependencies for the non-semantic foundation.
+#
+# Deliberately excluded at this work order: FastAPI, any database driver, any
+# LLM or model-provider SDK, Docling, ZTL, VEIP, and any Rego generator.
+#
+# Regenerate the lock with:
+#   pip-compile --generate-hashes --output-file=requirements/runtime.txt requirements/runtime.in
+
+jsonschema>=4.23,<5
