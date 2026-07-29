@@ -1,0 +1,13 @@
+# Default: let git normalise text in the repository, but never guess for the
+# artifacts whose bytes are under verification.
+* text=auto
+
+# Byte-exact artifacts. These are recorded in BOOTSTRAP_MANIFEST.json or asserted
+# by the hashing tests; git must not rewrite their line endings on checkout.
+docs/tdd/SHA256SUMS -text
+docs/tdd/TDD-OIC-001-v1.1.pdf binary
+benchmarks/preflight/SOURCE_MANIFEST.csv -text
+tests/fixtures/** -text
+
+# Lockfiles are generated; keep diffs verbatim.
+requirements/*.txt -text

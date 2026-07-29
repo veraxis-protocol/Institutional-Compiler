@@ -26,3 +26,9 @@ trim_trailing_whitespace = unset
 [benchmarks/preflight/SOURCE_MANIFEST.csv]
 insert_final_newline = unset
 trim_trailing_whitespace = unset
+
+# Hashing and manifest fixtures assert exact byte content, including line endings.
+[tests/fixtures/**]
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+end_of_line = unset

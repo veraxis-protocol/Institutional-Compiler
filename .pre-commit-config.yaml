@@ -5,23 +5,31 @@ minimum_pre_commit_version: "4.0.0"
 default_language_version:
   python: python3.12
 
+# Byte-exact artifacts. A formatting hook must never rewrite these: the bootstrap
+# manifest records their digests, and the hashing fixtures exist precisely to prove
+# that no newline normalisation occurs anywhere in the pipeline.
+exclude: |
+  (?x)^(
+    docs/tdd/SHA256SUMS|
+    docs/tdd/TDD-OIC-001-v1\.1\.pdf|
+    benchmarks/preflight/SOURCE_MANIFEST\.csv|
+    tests/fixtures/hashing/.*|
+    tests/fixtures/manifests/.*
+  )$
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
       - id: check-added-large-files
         args: ["--maxkb=512"]
-        # The governing TDD PDF is bootstrap-controlled and exceeds the limit by design.
-        exclude: ^docs/tdd/TDD-OIC-001-v1\.1\.pdf$
       - id: check-json
       - id: check-toml
       - id: check-yaml
       - id: check-merge-conflict
       - id: detect-private-key
       - id: end-of-file-fixer
-        exclude: ^(docs/tdd/SHA256SUMS|benchmarks/preflight/SOURCE_MANIFEST\.csv)$
       - id: trailing-whitespace
-        exclude: ^(docs/tdd/SHA256SUMS|benchmarks/preflight/SOURCE_MANIFEST\.csv)$
       - id: mixed-line-ending
         args: ["--fix=lf"]
 
@@ -40,8 +48,9 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
-      - id: bootstrap-integrity
-        name: bootstrap manifest integrity
+      - id: verify-manifest
+        name: verify bootstrap and TDD manifests
         entry: python -m oic.cli verify-manifest --all
         language: system
         pass_filenames: false
+        always_run: true
