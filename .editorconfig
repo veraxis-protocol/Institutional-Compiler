@@ -1,0 +1,34 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+[*.py]
+indent_size = 4
+max_line_length = 100
+
+[*.md]
+trim_trailing_whitespace = false
+
+[Makefile]
+indent_style = tab
+
+# Bootstrap-controlled byte-exact artifacts: never reformat.
+[docs/tdd/SHA256SUMS]
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+
+[benchmarks/preflight/SOURCE_MANIFEST.csv]
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+
+# Hashing and manifest fixtures assert exact byte content, including line endings.
+[tests/fixtures/**]
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+end_of_line = unset

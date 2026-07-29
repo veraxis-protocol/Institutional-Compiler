@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oic.test/fixtures/unresolved-local-ref/dangling.schema.json",
+  "title": "Dangling",
+  "type": "object",
+  "properties": {
+    "missing": {
+      "$ref": "no-such-file.schema.json"
+    }
+  }
+}

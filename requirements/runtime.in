@@ -1,0 +1,14 @@
+# Runtime dependencies for the non-semantic foundation.
+#
+# Deliberately excluded at this work order: FastAPI, any database driver, any
+# LLM or model-provider SDK, Docling, ZTL, VEIP, and any Rego generator.
+#
+# Regenerate the lock with:
+#   pip-compile --generate-hashes --output-file=requirements/runtime.txt requirements/runtime.in
+
+jsonschema>=4.23,<5
+
+# Imported directly by oic.schemas for offline $ref resolution. Declared explicitly
+# rather than relied on as a jsonschema transitive. Must match the range in
+# pyproject.toml; `pip check` fails the build if they drift apart.
+referencing>=0.37,<0.38

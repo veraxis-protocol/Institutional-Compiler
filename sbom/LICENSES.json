@@ -1,0 +1,429 @@
+[
+  {
+    "Author": "Kirill Simonov",
+    "License": "MIT License",
+    "Name": "PyYAML",
+    "URL": "https://pyyaml.org/",
+    "Version": "6.0.3"
+  },
+  {
+    "Author": "Georg Brandl <georg@python.org>",
+    "License": "BSD-2-Clause",
+    "Name": "Pygments",
+    "URL": "https://pygments.org",
+    "Version": "2.20.0"
+  },
+  {
+    "Author": "Chris Smith <crsmithdev@gmail.com>",
+    "License": "Apache Software License",
+    "Name": "arrow",
+    "URL": "https://github.com/arrow-py/arrow",
+    "Version": "1.4.0"
+  },
+  {
+    "Author": "Hynek Schlawack <hs@ox.cx>",
+    "License": "MIT",
+    "Name": "attrs",
+    "URL": "https://www.attrs.org/en/stable/changelog.html",
+    "Version": "26.1.0"
+  },
+  {
+    "Author": "Sebastian Kraemer",
+    "License": "BSD-2-Clause",
+    "Name": "boolean.py",
+    "URL": "https://github.com/bastikr/boolean.py",
+    "Version": "5.0"
+  },
+  {
+    "Author": "Filipe La\u00edns <lains@riseup.net>, Bern\u00e1t G\u00e1bor <gaborjbernat@gmail.com>, layday <layday@protonmail.com>, Henry Schreiner <henryschreineriii@gmail.com>",
+    "License": "MIT",
+    "Name": "build",
+    "URL": "https://build.pypa.io",
+    "Version": "1.5.0"
+  },
+  {
+    "Author": "Anthony Sottile",
+    "License": "MIT",
+    "Name": "cfgv",
+    "URL": "https://github.com/asottile/cfgv",
+    "Version": "3.5.0"
+  },
+  {
+    "Author": "Mark Pilgrim",
+    "License": "GNU Lesser General Public License v2 or later (LGPLv2+)",
+    "Name": "chardet",
+    "URL": "https://github.com/chardet/chardet",
+    "Version": "5.2.0"
+  },
+  {
+    "Author": "UNKNOWN",
+    "License": "BSD-3-Clause",
+    "Name": "click",
+    "URL": "https://github.com/pallets/click/",
+    "Version": "8.4.2"
+  },
+  {
+    "Author": "Ned Batchelder and 261 others",
+    "License": "Apache-2.0",
+    "Name": "coverage",
+    "URL": "https://github.com/coveragepy/coveragepy",
+    "Version": "7.15.2"
+  },
+  {
+    "Author": "Jan Kowalleck",
+    "License": "Apache Software License",
+    "Name": "cyclonedx-bom",
+    "URL": "https://github.com/CycloneDX/cyclonedx-python/#readme",
+    "Version": "7.3.1"
+  },
+  {
+    "Author": "Paul Horton",
+    "License": "Apache Software License",
+    "Name": "cyclonedx-python-lib",
+    "URL": "https://github.com/CycloneDX/cyclonedx-python-lib/#readme",
+    "Version": "11.11.0"
+  },
+  {
+    "Author": "Christian Heimes",
+    "License": "Python Software Foundation License",
+    "Name": "defusedxml",
+    "URL": "https://github.com/tiran/defusedxml",
+    "Version": "0.7.1"
+  },
+  {
+    "Author": "Vinay Sajip",
+    "License": "Python Software Foundation License",
+    "Name": "distlib",
+    "URL": "https://github.com/pypa/distlib",
+    "Version": "0.4.3"
+  },
+  {
+    "Author": "UNKNOWN",
+    "License": "MIT",
+    "Name": "filelock",
+    "URL": "https://github.com/tox-dev/py-filelock",
+    "Version": "3.32.0"
+  },
+  {
+    "Author": "ypcrts",
+    "License": "Mozilla Public License 2.0 (MPL 2.0)",
+    "Name": "fqdn",
+    "URL": "https://github.com/ypcrts/fqdn",
+    "Version": "1.5.1"
+  },
+  {
+    "Author": "Chris Kuehl",
+    "License": "MIT",
+    "Name": "identify",
+    "URL": "https://github.com/pre-commit/identify",
+    "Version": "2.6.19"
+  },
+  {
+    "Author": "Kim Davies <kim+pypi@gumleaf.org>",
+    "License": "BSD-3-Clause",
+    "Name": "idna",
+    "URL": "https://github.com/kjd/idna",
+    "Version": "3.18"
+  },
+  {
+    "Author": "Ronny Pfannschmidt <opensource@ronnypfannschmidt.de>, Holger Krekel <holger.krekel@gmail.com>",
+    "License": "MIT",
+    "Name": "iniconfig",
+    "URL": "https://github.com/pytest-dev/iniconfig",
+    "Version": "2.3.0"
+  },
+  {
+    "Author": "V\u00edctor Mu\u00f1oz",
+    "License": "ISC License (ISCL)",
+    "Name": "isoduration",
+    "URL": "https://github.com/bolsote/isoduration",
+    "Version": "20.11.0"
+  },
+  {
+    "Author": "Stefan K\u00f6gl",
+    "License": "BSD License",
+    "Name": "jsonpointer",
+    "URL": "https://github.com/stefankoegl/python-json-pointer",
+    "Version": "3.1.1"
+  },
+  {
+    "Author": "Julian Berman <Julian+jsonschema@GrayVines.com>",
+    "License": "MIT",
+    "Name": "jsonschema",
+    "URL": "https://github.com/python-jsonschema/jsonschema",
+    "Version": "4.26.0"
+  },
+  {
+    "Author": "Julian Berman <Julian+jsonschema-specifications@GrayVines.com>",
+    "License": "MIT",
+    "Name": "jsonschema-specifications",
+    "URL": "https://github.com/python-jsonschema/jsonschema-specifications",
+    "Version": "2025.9.1"
+  },
+  {
+    "Author": "Erez Shinan <erezshin@gmail.com>",
+    "License": "MIT License",
+    "Name": "lark",
+    "URL": "https://github.com/lark-parser/lark",
+    "Version": "1.3.1"
+  },
+  {
+    "Author": "Jukka Lehtosalo <jukka.lehtosalo@iki.fi>, Ivan Levkivskyi <levkivskyi@gmail.com>",
+    "License": "MIT",
+    "Name": "librt",
+    "URL": "https://github.com/mypyc/librt",
+    "Version": "0.13.0"
+  },
+  {
+    "Author": "nexB. Inc. and others",
+    "License": "Apache-2.0",
+    "Name": "license-expression",
+    "URL": "https://github.com/aboutcode-org/license-expression",
+    "Version": "30.4.4"
+  },
+  {
+    "Author": "lxml dev team",
+    "License": "BSD-3-Clause",
+    "Name": "lxml",
+    "URL": "https://lxml.de/",
+    "Version": "6.1.1"
+  },
+  {
+    "Author": "Jukka Lehtosalo <jukka.lehtosalo@iki.fi>",
+    "License": "MIT",
+    "Name": "mypy",
+    "URL": "https://www.mypy-lang.org/",
+    "Version": "1.20.2"
+  },
+  {
+    "Author": "The mypy developers <jukka.lehtosalo@iki.fi>",
+    "License": "MIT",
+    "Name": "mypy_extensions",
+    "URL": "https://github.com/python/mypy_extensions",
+    "Version": "1.1.0"
+  },
+  {
+    "Author": "Eugene Kalinin",
+    "License": "BSD License",
+    "Name": "nodeenv",
+    "URL": "https://github.com/ekalinin/nodeenv",
+    "Version": "1.10.0"
+  },
+  {
+    "Author": "UNKNOWN",
+    "License": "UNKNOWN",
+    "Name": "oic",
+    "URL": "UNKNOWN",
+    "Version": "0.1.0a0"
+  },
+  {
+    "Author": "UNKNOWN",
+    "License": "UNKNOWN",
+    "Name": "oic",
+    "URL": "UNKNOWN",
+    "Version": "0.1.0a0"
+  },
+  {
+    "Author": "the purl authors",
+    "License": "MIT License",
+    "Name": "packageurl-python",
+    "URL": "https://github.com/package-url/packageurl-python",
+    "Version": "0.17.6"
+  },
+  {
+    "Author": "Donald Stufft <donald@stufft.io>",
+    "License": "Apache Software License; BSD License",
+    "Name": "packaging",
+    "URL": "https://github.com/pypa/packaging",
+    "Version": "25.0"
+  },
+  {
+    "Author": "\"Caleb P. Burns\" <cpburnz@gmail.com>",
+    "License": "Mozilla Public License 2.0 (MPL 2.0)",
+    "Name": "pathspec",
+    "URL": "https://python-path-specification.readthedocs.io/en/latest/index.html",
+    "Version": "1.1.1"
+  },
+  {
+    "Author": "The pip authors, nexB. Inc. and others",
+    "License": "MIT",
+    "Name": "pip-requirements-parser",
+    "URL": "https://github.com/nexB/pip-requirements-parser",
+    "Version": "32.0.1"
+  },
+  {
+    "Author": "Vincent Driessen <me@nvie.com>",
+    "License": "BSD License",
+    "Name": "pip-tools",
+    "URL": "https://github.com/jazzband/pip-tools/",
+    "Version": "7.6.0"
+  },
+  {
+    "Author": "UNKNOWN",
+    "License": "MIT",
+    "Name": "platformdirs",
+    "URL": "https://github.com/tox-dev/platformdirs",
+    "Version": "4.11.0"
+  },
+  {
+    "Author": "Holger Krekel <holger@merlinux.eu>",
+    "License": "MIT License",
+    "Name": "pluggy",
+    "URL": "UNKNOWN",
+    "Version": "1.6.0"
+  },
+  {
+    "Author": "Anthony Sottile",
+    "License": "MIT",
+    "Name": "pre_commit",
+    "URL": "https://github.com/pre-commit/pre-commit",
+    "Version": "4.6.1"
+  },
+  {
+    "Author": "Paul Horton",
+    "License": "Apache Software License",
+    "Name": "py-serializable",
+    "URL": "https://github.com/madpah/serializable#readme",
+    "Version": "2.1.0"
+  },
+  {
+    "Author": "Paul McGuire <ptmcg.gm+pyparsing@gmail.com>",
+    "License": "MIT",
+    "Name": "pyparsing",
+    "URL": "https://github.com/pyparsing/pyparsing/",
+    "Version": "3.3.2"
+  },
+  {
+    "Author": "Thomas Kluyver <thomas@kluyver.me.uk>",
+    "License": "MIT License",
+    "Name": "pyproject_hooks",
+    "URL": "https://github.com/pypa/pyproject-hooks",
+    "Version": "1.2.0"
+  },
+  {
+    "Author": "Holger Krekel, Bruno Oliveira, Ronny Pfannschmidt, Floris Bruynooghe, Brianna Laugher, Florian Bruhin, Others (See AUTHORS)",
+    "License": "MIT License",
+    "Name": "pytest",
+    "URL": "https://docs.pytest.org/en/latest/",
+    "Version": "8.4.2"
+  },
+  {
+    "Author": "Marc Schlaich",
+    "License": "MIT",
+    "Name": "pytest-cov",
+    "URL": "https://github.com/pytest-dev/pytest-cov",
+    "Version": "6.3.0"
+  },
+  {
+    "Author": "Gustavo Niemeyer",
+    "License": "Apache Software License; BSD License",
+    "Name": "python-dateutil",
+    "URL": "https://github.com/dateutil/dateutil",
+    "Version": "2.9.0.post0"
+  },
+  {
+    "Author": "UNKNOWN",
+    "License": "MIT License",
+    "Name": "python-discovery",
+    "URL": "https://github.com/tox-dev/python-discovery",
+    "Version": "1.5.0"
+  },
+  {
+    "Author": "Julian Berman <Julian+referencing@GrayVines.com>",
+    "License": "MIT",
+    "Name": "referencing",
+    "URL": "https://github.com/python-jsonschema/referencing",
+    "Version": "0.37.0"
+  },
+  {
+    "Author": "Nicolas Aimetti",
+    "License": "MIT License",
+    "Name": "rfc3339-validator",
+    "URL": "https://github.com/naimetti/rfc3339-validator",
+    "Version": "0.1.4"
+  },
+  {
+    "Author": "Nicolas Aimetti",
+    "License": "MIT License",
+    "Name": "rfc3986-validator",
+    "URL": "https://github.com/naimetti/rfc3986-validator",
+    "Version": "0.1.1"
+  },
+  {
+    "Author": "Jan Kowalleck",
+    "License": "MIT",
+    "Name": "rfc3987-syntax",
+    "URL": "https://github.com/willynilly/rfc3987-syntax",
+    "Version": "1.1.0"
+  },
+  {
+    "Author": "Julian Berman <Julian+rpds@GrayVines.com>",
+    "License": "MIT",
+    "Name": "rpds-py",
+    "URL": "https://github.com/crate-py/rpds",
+    "Version": "2026.6.3"
+  },
+  {
+    "Author": "\"Astral Software Inc.\" <hey@astral.sh>",
+    "License": "MIT License",
+    "Name": "ruff",
+    "URL": "https://docs.astral.sh/ruff",
+    "Version": "0.12.12"
+  },
+  {
+    "Author": "Benjamin Peterson",
+    "License": "MIT License",
+    "Name": "six",
+    "URL": "https://github.com/benjaminp/six",
+    "Version": "1.17.0"
+  },
+  {
+    "Author": "Grant Jenks",
+    "License": "Apache Software License",
+    "Name": "sortedcontainers",
+    "URL": "http://www.grantjenks.com/docs/sortedcontainers/",
+    "Version": "2.4.0"
+  },
+  {
+    "Author": "UNKNOWN",
+    "License": "Apache-2.0",
+    "Name": "types-jsonschema",
+    "URL": "https://github.com/python/typeshed",
+    "Version": "4.26.0.20260518"
+  },
+  {
+    "Author": "\"Guido van Rossum, Jukka Lehtosalo, \u0141ukasz Langa, Michael Lee\" <levkivskyi@gmail.com>",
+    "License": "PSF-2.0",
+    "Name": "typing_extensions",
+    "URL": "https://github.com/python/typing_extensions",
+    "Version": "4.16.0"
+  },
+  {
+    "Author": "Python Software Foundation",
+    "License": "Apache-2.0",
+    "Name": "tzdata",
+    "URL": "https://github.com/python/tzdata",
+    "Version": "2026.3"
+  },
+  {
+    "Author": "Peter Linss <pypi@linss.com>",
+    "License": "MIT License",
+    "Name": "uri-template",
+    "URL": "https://gitlab.linss.com/open-source/python/uri-template",
+    "Version": "1.3.0"
+  },
+  {
+    "Author": "UNKNOWN",
+    "License": "MIT",
+    "Name": "virtualenv",
+    "URL": "https://github.com/pypa/virtualenv",
+    "Version": "21.7.0"
+  },
+  {
+    "Author": "James Bennett",
+    "License": "BSD License",
+    "Name": "webcolors",
+    "URL": "https://webcolors.readthedocs.io",
+    "Version": "25.10.0"
+  }
+]

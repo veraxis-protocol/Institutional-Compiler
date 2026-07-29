@@ -1,0 +1,29 @@
+# Python build and cache artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+
+# Tool caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Coverage output
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+junit.xml
+
+# Local environment files. `.env.example` is checked in; a real `.env` is not.
+.env
+.env.local
+
+# macOS finder metadata
+.DS_Store

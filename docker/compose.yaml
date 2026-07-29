@@ -1,0 +1,138 @@
+# Local infrastructure shell for the Open Institutional Compiler.
+#
+# SCOPE
+# -----
+# This file starts infrastructure only: PostgreSQL, MinIO, and OPA. It deliberately
+# contains:
+#
+#   * no application container -- there is no semantic implementation to run;
+#   * no ZTL or VEIP container -- both interfaces are provisional and unfrozen
+#     (ADR-009, ADR-010), and starting a container against an unfrozen interface would
+#     imply an integration that does not exist;
+#   * no policy documents, no bundle, and no data -- OPA starts empty and evaluates
+#     nothing;
+#   * no migrations and no schema -- PostgreSQL starts with an empty database.
+#
+# Starting these services does not enable any compiler behaviour. The semantic
+# implementation gate is BLOCKED (STATUS.md).
+#
+# IMAGE PINNING
+# -------------
+# Every image is pinned by digest as well as tag. The tag is kept for readability; the
+# digest is what Docker actually resolves, so a retagged or replaced upstream image
+# cannot silently change what runs here. Digests were resolved from the Docker Hub
+# registry API; see docker/IMAGES.md for how to re-resolve and verify them.
+#
+# NETWORK EXPOSURE
+# ----------------
+# Every published port binds to 127.0.0.1. No service is reachable from another host on
+# the network by default. Do not change these to 0.0.0.0 to "make it work" from another
+# machine without a security review.
+#
+# CREDENTIALS
+# -----------
+# Development credentials come from `.env`, which you create by copying `.env.example`.
+# No real `.env` is checked in. The example values are development-only and are not
+# suitable for any shared, staging, or production environment.
+
+name: oic-infra
+
+services:
+  # ---------------------------------------------------------------------------
+  # PostgreSQL 17 -- reference persistence (DEPENDENCIES.md)
+  # Starts with an empty database. No migrations, no schema, no application data.
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:17.6-alpine3.22@sha256:ef257d85f76e48da1c64832459b59fcaba1a4dac97bf5d7450c77753542eee94
+    restart: "no"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in .env}
+      # Deterministic initialisation across developer machines.
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  # ---------------------------------------------------------------------------
+  # MinIO -- S3-compatible object storage for future artifact storage.
+  # No bucket is created and nothing is written by this file.
+  # ---------------------------------------------------------------------------
+  minio:
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z@sha256:a1ea29fa28355559ef137d71fc570e508a214ec84ff8083e39bc5428980b015e
+    restart: "no"
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?set MINIO_ROOT_USER in .env}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?set MINIO_ROOT_PASSWORD in .env}
+      # No usage telemetry.
+      MINIO_UPDATE: "off"
+    ports:
+      - "127.0.0.1:${MINIO_API_PORT:-9000}:9000"
+      - "127.0.0.1:${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  # ---------------------------------------------------------------------------
+  # OPA -- first executable target (ADR-004).
+  #
+  # Starts with NO bundle, NO policy, and NO data. It is a running engine with nothing
+  # loaded. This repository generates no Rego and evaluates no control; a policy is
+  # mounted here only after the semantic gate opens and an authorized work order says so.
+  # ---------------------------------------------------------------------------
+  opa:
+    image: openpolicyagent/opa:1.4.2@sha256:35a093d9ae828373cf88f68ecaa8189ab26287468074a3b78f0601d9c8b7a4f5
+    restart: "no"
+    command:
+      - "run"
+      - "--server"
+      - "--addr=0.0.0.0:8181"
+      - "--diagnostic-addr=0.0.0.0:8282"
+      - "--log-level=info"
+      - "--set=decision_logs.console=false"
+    ports:
+      - "127.0.0.1:${OPA_PORT:-8181}:8181"
+      - "127.0.0.1:${OPA_DIAGNOSTIC_PORT:-8282}:8282"
+    healthcheck:
+      # The image is distroless, so there is no curl, wget, or shell. The probe uses
+      # OPA's own binary and Rego's http.send to make a real request to the diagnostic
+      # health endpoint.
+      #
+      # `opa eval "true"` would be useless here: it evaluates in-process and reports
+      # healthy even when the server failed to bind its port. This query is UNDEFINED
+      # unless the endpoint actually answers 200, and `--fail` exits non-zero on an
+      # undefined result. `raise_error: false` turns a refused connection into a value
+      # without a status_code, which is also undefined, so a down server fails too.
+      test:
+        - "CMD"
+        - "/opa"
+        - "eval"
+        - "--fail"
+        - "--format=values"
+        - 'http.send({"method": "get", "url": "http://127.0.0.1:8282/health", "raise_error": false}).status_code == 200'
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+# Named volumes. Removing them destroys their contents irreversibly; see
+# docker/README.md for the data-loss behaviour of `down -v`.
+volumes:
+  postgres-data:
+    name: oic-postgres-data
+  minio-data:
+    name: oic-minio-data

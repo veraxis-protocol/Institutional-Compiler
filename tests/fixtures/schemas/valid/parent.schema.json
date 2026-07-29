@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oic.test/fixtures/valid/parent.schema.json",
+  "title": "Parent",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "child.schema.json"
+      }
+    }
+  },
+  "required": [
+    "children"
+  ]
+}
