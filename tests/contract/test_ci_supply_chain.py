@@ -138,6 +138,33 @@ def test_bootstrap_job_verifies_the_historical_baseline(workflow_text: str) -> N
     assert "verify-manifest --manifest BOOTSTRAP_MANIFEST.json" not in workflow_text
 
 
+def test_jobs_needing_the_bootstrap_commit_fetch_full_history(workflow: dict[Any, Any]) -> None:
+    """Baseline verification reads Git objects, so a shallow clone silently breaks it.
+
+    actions/checkout defaults to fetch-depth 1, which omits the bootstrap commit
+    entirely. Both jobs that touch the baseline must ask for full history.
+    """
+    for name in ("bootstrap-integrity", "test"):
+        checkout = next(
+            step
+            for step in workflow["jobs"][name]["steps"]
+            if "actions/checkout" in step.get("uses", "")
+        )
+        assert checkout.get("with", {}).get("fetch-depth") == 0, name
+
+
+def test_cli_invocations_in_ci_place_global_flags_before_the_subcommand(
+    workflow_text: str,
+) -> None:
+    """`--format` after the subcommand once exited 2 with "unrecognized arguments".
+
+    The CLI now accepts either order, but CI keeps the canonical form so the workflow
+    stays readable and does not depend on that tolerance.
+    """
+    bad = re.findall(r"oic\.cli\s+\S+.*?--format", workflow_text)
+    assert bad == [], f"global flag placed after a subcommand: {bad}"
+
+
 def test_every_locked_install_is_followed_by_pip_check(workflow_text: str) -> None:
     """Declared metadata and the installed environment must be proven consistent.
 

@@ -316,10 +316,32 @@ def build_parser() -> argparse.ArgumentParser:
         help="output format; 'json' is deterministic and sorted (default: text)",
     )
 
+    # The same global options are accepted after the subcommand as well, so both
+    # `oic --format json verify-manifest --all` and `oic verify-manifest --all --format json`
+    # work. argparse is strict about ordering by default, and the surprise cost a CI run:
+    # the second form exited 2 with "unrecognized arguments" while looking correct.
+    # SUPPRESS is essential here - without it, the subparser's own default would overwrite
+    # a value the operator supplied before the subcommand.
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument(
+        "--repo-root",
+        type=Path,
+        default=argparse.SUPPRESS,
+        metavar="DIR",
+        help=argparse.SUPPRESS,
+    )
+    common.add_argument(
+        "--format",
+        choices=("text", "json"),
+        default=argparse.SUPPRESS,
+        help=argparse.SUPPRESS,
+    )
+
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     schema = subparsers.add_parser(
         "validate-schema",
+        parents=[common],
         help="validate JSON Schema Draft 2020-12 documents offline",
         description=(
             "Validate every *.schema.json under a local directory against the Draft "
@@ -346,6 +368,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     bootstrap = subparsers.add_parser(
         "verify-bootstrap",
+        parents=[common],
         help="verify the historical bootstrap baseline from the Git object database",
         description=(
             "Verify that the bootstrap commit still contains exactly the bytes recorded "
@@ -365,6 +388,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     manifest = subparsers.add_parser(
         "verify-manifest",
+        parents=[common],
         help="verify current-tree integrity manifests (read-only)",
         description=(
             "Verify recorded digests against the files on disk. Reports PASS, FAIL, and "
@@ -409,6 +433,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     doctor = subparsers.add_parser(
         "doctor",
+        parents=[common],
         help="report environment, infrastructure profiles, and gate state",
         description=(
             "Report the local environment and the current governance gates. Reads only: "

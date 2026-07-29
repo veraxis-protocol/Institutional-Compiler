@@ -84,7 +84,7 @@ jobs:
         # regression to FAIL and a premature jump to PASS are caught.
         run: |
           set +e
-          python -m oic.cli verify-manifest --all --format json > manifest-report.json
+          python -m oic.cli --format json verify-manifest --all > manifest-report.json
           code=$?
           set -e
           cat manifest-report.json
@@ -216,6 +216,10 @@ jobs:
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
+          # Full history: the baseline contract tests read blobs from the bootstrap
+          # commit through the Git object database. The default shallow clone does not
+          # contain it, and the tests fail with "is the commit present in this clone?".
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
