@@ -1,0 +1,12 @@
+OIC-WO-003 Phase 1 conformance run — 2026-07-30T16:03:57Z
+kernel: https://github.com/inventor1975/ZTL @ 56e1ff0510c62b04dbd85bbe08b7a6deacbf276b (veraxis-ztl-input-v0.2-signed)
+command: python3 adapters/ztl/fixtures/interface-freeze-v0.2/verify_fixtures.py --ztl <clean checkout at the pin>
+
+
+fixtures reproduced : 13
+not-reachable (skip): 3
+mismatches          : 0
+hash problems       : 0
+
+CONFORMANCE: PASS — this kernel reproduces every reachable fixture.
+exit code: 0

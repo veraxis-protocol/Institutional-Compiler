@@ -1,0 +1,116 @@
+{
+  "cases": [
+    {
+      "case_id": "earned-hereditary",
+      "disposition": "EARNED",
+      "grade": "hereditary",
+      "status": "REACHABLE",
+      "verdict": "T"
+    },
+    {
+      "case_id": "refuted",
+      "disposition": "REFUTED",
+      "grade": "hereditary",
+      "status": "REACHABLE",
+      "verdict": "F"
+    },
+    {
+      "case_id": "refuted-despite-marks",
+      "disposition": "REFUTED",
+      "grade": "hereditary",
+      "status": "REACHABLE",
+      "verdict": "F"
+    },
+    {
+      "case_id": "on-credit-sound",
+      "disposition": "ON CREDIT",
+      "grade": "sound",
+      "status": "REACHABLE",
+      "verdict": "T"
+    },
+    {
+      "case_id": "on-credit-until-verification",
+      "disposition": "ON CREDIT",
+      "grade": "until-verification",
+      "status": "REACHABLE",
+      "verdict": "T"
+    },
+    {
+      "case_id": "open-with-raw-f",
+      "disposition": "OPEN",
+      "grade": "until-verification",
+      "status": "REACHABLE",
+      "verdict": "F"
+    },
+    {
+      "case_id": "open-with-raw-z",
+      "disposition": "OPEN",
+      "grade": "until-verification",
+      "status": "REACHABLE",
+      "verdict": "Z"
+    },
+    {
+      "case_id": "open-negated-mark",
+      "disposition": "OPEN",
+      "grade": "until-verification",
+      "status": "REACHABLE",
+      "verdict": "F"
+    },
+    {
+      "case_id": "nonempty-unverified",
+      "disposition": "OPEN",
+      "grade": "until-verification",
+      "status": "REACHABLE",
+      "verdict": "F"
+    },
+    {
+      "case_id": "monotone-refinement",
+      "disposition": "EARNED",
+      "grade": "hereditary",
+      "status": "REACHABLE",
+      "verdict": "T"
+    },
+    {
+      "case_id": "contradiction",
+      "disposition": "REFUTED",
+      "grade": "hereditary",
+      "status": "REACHABLE",
+      "verdict": "F"
+    },
+    {
+      "case_id": "greedy-collapse",
+      "disposition": "OPEN",
+      "grade": "until-verification",
+      "status": "REACHABLE",
+      "verdict": "F"
+    },
+    {
+      "case_id": "earned-hereditary-nonempty-unverified",
+      "disposition": "EARNED",
+      "grade": "hereditary",
+      "status": "REACHABLE",
+      "verdict": "T"
+    },
+    {
+      "case_id": "earned-sound",
+      "status": "NOT_REACHABLE"
+    },
+    {
+      "case_id": "earned-until-verification",
+      "status": "NOT_REACHABLE"
+    },
+    {
+      "case_id": "open-with-raw-t",
+      "status": "NOT_REACHABLE"
+    }
+  ],
+  "generated_by": "veraxis/oic_fixtures.py (cases preserved from v0.1 byte-for-byte) + veraxis/oic_fixture_wo003.py (ZTL repo)",
+  "kernel_entry": "ztljudge.judge",
+  "kernel_pin": {
+    "commit": "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b",
+    "repository": "https://github.com/inventor1975/ZTL",
+    "signed_tag": "veraxis-ztl-input-v0.2-signed"
+  },
+  "not_reachable": 3,
+  "reachable": 13
+}

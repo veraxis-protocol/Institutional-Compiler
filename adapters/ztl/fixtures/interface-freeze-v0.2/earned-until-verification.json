@@ -1,0 +1,8 @@
+{
+  "case_id": "earned-until-verification",
+  "fixture_sha256": "1257e564157820088c40b06c14c4343832dd03f78dec520ef7da63d2e15342fa",
+  "input": null,
+  "raw_output": null,
+  "reason": "Same reason: a non-hereditary T is ON CREDIT. See on-credit-until-verification.",
+  "status": "NOT_REACHABLE"
+}

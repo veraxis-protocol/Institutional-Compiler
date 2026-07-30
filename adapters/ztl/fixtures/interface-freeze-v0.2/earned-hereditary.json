@@ -1,0 +1,40 @@
+{
+  "case_id": "earned-hereditary",
+  "cross_check": {
+    "note": "zverify.grade expects 'M' for a mark. Passing 'Z' returns a wrong grade SILENTLY. judge() accepts 'Z' and converts internally; prefer judge().",
+    "zverify_grade_if_Z_passed_by_mistake": "hereditary",
+    "zverify_grade_with_M_dialect": "hereditary"
+  },
+  "fixture_sha256": "02952bcc9f8830e684a8f3b8f501826bcc495f343a0380c2b0306996c2023a51",
+  "input": {
+    "formula": "p",
+    "marking": {
+      "p": "T"
+    }
+  },
+  "kernel": {
+    "entry": "ztljudge.judge",
+    "source": "live run"
+  },
+  "note": "grounded outright: the verdict cannot move under any further verification",
+  "raw_output": {
+    "disposition": "EARNED",
+    "formula": "p",
+    "grade": "hereditary",
+    "unverified": [],
+    "verdict": "T",
+    "why": "grounded outright"
+  },
+  "recomputation": {
+    "depends_on": [
+      "p"
+    ],
+    "deterministic": true,
+    "recompute_when": [
+      "formula change",
+      "epoch change",
+      "expiry of any ground atom"
+    ]
+  },
+  "status": "REACHABLE"
+}

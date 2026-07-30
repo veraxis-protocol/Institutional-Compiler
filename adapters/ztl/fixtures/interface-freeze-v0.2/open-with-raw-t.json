@@ -1,0 +1,8 @@
+{
+  "case_id": "open-with-raw-t",
+  "fixture_sha256": "cc005996f46eb8a885864749234aec841e1da503f0a50802e98738a0343b3876",
+  "input": null,
+  "raw_output": null,
+  "reason": "OPEN never carries raw verdict T. A T verdict is either EARNED (hereditary) or ON CREDIT (not hereditary). Exhaustive search over the pool found no counterexample; if OIC needs this state it does not exist and no envelope rule should depend on it.",
+  "status": "NOT_REACHABLE"
+}
