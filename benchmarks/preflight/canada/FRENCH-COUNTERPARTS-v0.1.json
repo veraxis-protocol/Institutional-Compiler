@@ -1,0 +1,17 @@
+{
+  "status": "PROPOSED_INCOMPLETE",
+  "language_policy": "English working set; French counterparts recorded for provenance. Bilingual semantic equivalence is not tested.",
+  "counterparts": [
+    {"source_id": "CA-1", "official_french_url": "https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32692", "status": "CONFIRMED_OFFICIAL_URL"},
+    {"source_id": "CA-2", "official_french_url": "https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32692&p=A&section=procedure", "status": "CONFIRMED_OFFICIAL_URL"},
+    {"source_id": "CA-3", "official_french_url": "https://lois-laws.justice.gc.ca/fra/reglements/DORS-87-402/index.html", "status": "CONFIRMED_OFFICIAL_URL"},
+    {"source_id": "CA-4", "official_french_url": "https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32692&p=F&section=procedure", "status": "CONFIRMED_OFFICIAL_URL"},
+    {"source_id": "CA-5-APPROVALS", "official_french_url": null, "absence_reason": "Exact official final URL not deterministically confirmed", "status": "UNRESOLVED"},
+    {"source_id": "CA-5-DELEGATION", "official_french_url": null, "absence_reason": "Exact official final URL not deterministically confirmed", "status": "UNRESOLVED"},
+    {"source_id": "CA-5-SIGNING", "official_french_url": null, "absence_reason": "Exact official final URL not deterministically confirmed", "status": "UNRESOLVED"},
+    {"source_id": "CA-5-LIMITS", "official_french_url": null, "absence_reason": "Exact official final URL not deterministically confirmed", "status": "UNRESOLVED"},
+    {"source_id": "CA-6-ARCHIVE", "official_french_url": "https://achatscanada.canada.ca/fr/guide-des-approvisionnements", "status": "CONFIRMED_OFFICIAL_URL"},
+    {"source_id": "CA-6-CH6", "official_french_url": null, "absence_reason": "Official French link exists, but exact final URL not deterministically confirmed", "status": "UNRESOLVED"},
+    {"source_id": "CA-6-GLOSSARY", "official_french_url": null, "absence_reason": "Official French link exists, but exact final URL not deterministically confirmed", "status": "UNRESOLVED"}
+  ]
+}

@@ -25,5 +25,9 @@ junit.xml
 .env
 .env.local
 
+# Canada procurement preflight: local-only downloads and metadata receipts.
+.local/canada-preflight-quarantine/
+.local/canada-preflight-receipts/
+
 # macOS finder metadata
 .DS_Store

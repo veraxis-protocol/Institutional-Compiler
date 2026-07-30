@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/oic/canada-preflight/receipt-v0.1.schema.json",
+  "title": "Canada acquisition preflight receipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "actual_byte_length",
+    "content_length_header",
+    "content_type",
+    "downloaded",
+    "etag",
+    "final_url",
+    "http_status",
+    "last_modified",
+    "redirect_chain",
+    "requested_url",
+    "retrieval_utc",
+    "sha256",
+    "source_id"
+  ],
+  "properties": {
+    "actual_byte_length": {
+      "type": ["integer", "null"],
+      "minimum": 0
+    },
+    "content_length_header": {
+      "type": ["integer", "null"],
+      "minimum": 0
+    },
+    "content_type": {
+      "enum": ["application/pdf", "application/xml", "text/html", "text/xml"]
+    },
+    "downloaded": {
+      "type": "boolean"
+    },
+    "etag": {
+      "type": ["string", "null"]
+    },
+    "final_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "http_status": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 599
+    },
+    "last_modified": {
+      "type": ["string", "null"]
+    },
+    "redirect_chain": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://"
+      }
+    },
+    "requested_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "retrieval_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^CA-[1-7](?:-[A-Z0-9]+)?$"
+    }
+  }
+}
