@@ -11,6 +11,8 @@ import io
 import json
 import subprocess
 import urllib.request
+from collections.abc import Callable, Mapping, Sequence
+from datetime import UTC, datetime
 from pathlib import Path
 from types import ModuleType
 from typing import Any, Protocol, cast
@@ -108,16 +110,155 @@ class AcquisitionModule(Protocol):
     ALLOWED_DOMAINS: frozenset[str]
     DEFAULT_QUARANTINE_DIR: Path
     DEFAULT_RECEIPT_DIR: Path
+    MAX_DOWNLOAD_BYTES: int
     AcquisitionError: type[RuntimeError]
     AllowlistRedirectHandler: type[urllib.request.HTTPRedirectHandler]
 
     def build_parser(self) -> argparse.ArgumentParser: ...
 
+    def acquire_one(
+        self,
+        source: Mapping[str, Any],
+        *,
+        download: bool,
+        receipt_path: Path,
+        quarantine_path: Path,
+        expected_digest: str | None,
+        opener: object | None = None,
+        clock: Callable[[], datetime] = ...,
+        quarantine_writer: Callable[
+            [Readable, Path, int | None, str | None], tuple[int, str]
+        ] = ...,
+        receipt_writer: Callable[[Path, bytes], None] = ...,
+    ) -> dict[str, object]: ...
+
+    def atomic_write_bytes(self, path: Path, data: bytes) -> None: ...
+
     def canonical_json_bytes(self, value: object) -> bytes: ...
+
+    def expected_digests(self, items: Sequence[str], *, download: bool) -> dict[str, str]: ...
+
+    def make_receipt(
+        self,
+        *,
+        source_id: str,
+        requested_url: str,
+        final_url: str,
+        redirects: Sequence[str],
+        status: int,
+        headers: Mapping[str, str],
+        content_type: str,
+        downloaded: bool,
+        actual_byte_length: int | None,
+        digest: str | None,
+        retrieved_at: str,
+    ) -> dict[str, object]: ...
 
     def source_by_id(self, source_id: str, sources: list[dict[str, Any]]) -> dict[str, Any]: ...
 
+    def source_paths(
+        self,
+        sources: Sequence[Mapping[str, Any]],
+        receipt_dir: Path,
+        quarantine_dir: Path,
+    ) -> dict[str, tuple[Path, Path]]: ...
+
+    def stream_to_quarantine(
+        self,
+        response: io.BytesIO,
+        target: Path,
+        content_length: int | None,
+        expected_digest: str | None,
+        *,
+        max_bytes: int,
+    ) -> tuple[int, str]: ...
+
+    def validate_selection(
+        self,
+        source_ids: Sequence[str],
+        sources: Sequence[Mapping[str, Any]],
+        expected: Mapping[str, str],
+    ) -> list[Mapping[str, Any]]: ...
+
     def validate_content_type(self, actual: str | None, expected: str) -> str: ...
+
+
+class FakeResponse(io.BytesIO):
+    """Small context-managed response that records body-read attempts."""
+
+    def __init__(
+        self,
+        payload: bytes,
+        *,
+        url: str = "https://www.tbs-sct.canada.ca/example",
+        headers: Mapping[str, str] | None = None,
+    ) -> None:
+        super().__init__(payload)
+        self.status = 200
+        self.headers = dict(headers or {"Content-Type": "text/html"})
+        self._url = url
+        self.read_calls = 0
+
+    def __enter__(self) -> FakeResponse:
+        return self
+
+    def __exit__(self, *args: object) -> None:
+        self.close()
+
+    def geturl(self) -> str:
+        return self._url
+
+    def read(self, size: int | None = -1) -> bytes:
+        self.read_calls += 1
+        return super().read(size)
+
+
+class FakeOpener:
+    def __init__(self, response: FakeResponse) -> None:
+        self.response = response
+
+    def open(self, request: urllib.request.Request, timeout: int) -> FakeResponse:
+        del request, timeout
+        return self.response
+
+
+class Readable(Protocol):
+    def read(self, size: int | None = -1) -> bytes: ...
+
+
+def _source() -> dict[str, object]:
+    return {
+        "source_id": "CA-1",
+        "official_english_url": "https://www.tbs-sct.canada.ca/example",
+        "expected_content_type": "text/html",
+    }
+
+
+def _fixed_clock() -> datetime:
+    return datetime(2026, 7, 30, 16, 0, tzinfo=UTC)
+
+
+def _sample_receipt(
+    acquisition: AcquisitionModule,
+    *,
+    redirects: Sequence[str] = (),
+    downloaded: bool = False,
+    actual_byte_length: int | None = None,
+    digest: str | None = None,
+) -> dict[str, object]:
+    return acquisition.make_receipt(
+        source_id="CA-1",
+        requested_url="https://www.tbs-sct.canada.ca/start",
+        final_url="https://www.tbs-sct.canada.ca/final",
+        redirects=redirects,
+        status=200,
+        headers={"Content-Type": "text/html"},
+        content_type="text/html",
+        downloaded=downloaded,
+        actual_byte_length=actual_byte_length,
+        digest=digest,
+        retrieved_at="2026-07-30T16:00:00Z",
+    )
 
 
 def _sha256(path: Path) -> str:
@@ -266,11 +407,60 @@ def test_unexpected_redirect_fails_closed(acquisition: AcquisitionModule) -> Non
         )
 
 
-def test_receipts_serialize_deterministically(acquisition: AcquisitionModule) -> None:
-    value_a = {"z": ["b", "a"], "a": {"d": 2, "c": 1}}
-    value_b = {"a": {"c": 1, "d": 2}, "z": ["a", "b"]}
+def test_object_key_order_does_not_change_canonical_bytes(
+    acquisition: AcquisitionModule,
+) -> None:
+    value_a = {"z": [1, 2], "a": {"d": 2, "c": 1}}
+    value_b = {"a": {"c": 1, "d": 2}, "z": [1, 2]}
     assert acquisition.canonical_json_bytes(value_a) == acquisition.canonical_json_bytes(value_b)
-    assert acquisition.canonical_json_bytes(value_a).endswith(b"\n")
+
+
+def test_array_order_changes_canonical_bytes(acquisition: AcquisitionModule) -> None:
+    assert acquisition.canonical_json_bytes(["b", "a"]) != acquisition.canonical_json_bytes(
+        ["a", "b"]
+    )
+
+
+def test_redirect_handler_preserves_multiple_hops(acquisition: AcquisitionModule) -> None:
+    handler = acquisition.AllowlistRedirectHandler()
+    request = urllib.request.Request("https://www.tbs-sct.canada.ca/start")
+    hops = [
+        "https://www.tbs-sct.canada.ca/intermediate",
+        "https://canadabuys.canada.ca/final",
+    ]
+    for hop in hops:
+        handler.redirect_request(
+            request,
+            io.BytesIO(),
+            302,
+            "Found",
+            http.client.HTTPMessage(),
+            hop,
+        )
+    assert cast(Any, handler).chain == hops
+
+
+def test_receipt_redirect_order_changes_canonical_bytes(
+    acquisition: AcquisitionModule,
+) -> None:
+    first = _sample_receipt(acquisition, redirects=["https://a.invalid", "https://b.invalid"])
+    second = _sample_receipt(acquisition, redirects=["https://b.invalid", "https://a.invalid"])
+    assert acquisition.canonical_json_bytes(first) != acquisition.canonical_json_bytes(second)
+
+
+def test_repeated_receipt_serialization_is_byte_identical(
+    acquisition: AcquisitionModule,
+) -> None:
+    receipt = _sample_receipt(
+        acquisition,
+        redirects=[
+            "https://www.tbs-sct.canada.ca/one",
+            "https://canadabuys.canada.ca/two",
+        ],
+    )
+    first = acquisition.canonical_json_bytes(receipt)
+    assert first == acquisition.canonical_json_bytes(receipt)
+    assert first.endswith(b"\n")
 
 
 def test_sample_receipt_validates_against_schema(repo_root: Path) -> None:
@@ -293,6 +483,264 @@ def test_sample_receipt_validates_against_schema(repo_root: Path) -> None:
     jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(
         sample
     )
+
+
+@pytest.mark.parametrize(
+    ("updates", "message"),
+    [
+        ({"downloaded": False, "sha256": "a" * 64}, "not of type 'null'"),
+        (
+            {"downloaded": True, "actual_byte_length": 1, "sha256": None},
+            "is not of type 'string'",
+        ),
+        ({"downloaded": True, "actual_byte_length": None, "sha256": "a" * 64}, "integer"),
+        (
+            {"downloaded": False, "actual_byte_length": 1, "sha256": None},
+            "not of type 'null'",
+        ),
+    ],
+)
+def test_receipt_cross_field_invariants(
+    repo_root: Path, updates: dict[str, object], message: str
+) -> None:
+    schema = json.loads((repo_root / RECEIPT_SCHEMA_RELPATH).read_text(encoding="utf-8"))
+    receipt: dict[str, object] = {
+        "actual_byte_length": None,
+        "content_length_header": None,
+        "content_type": "text/html",
+        "downloaded": False,
+        "etag": None,
+        "final_url": "https://www.tbs-sct.canada.ca/final",
+        "http_status": 200,
+        "last_modified": None,
+        "redirect_chain": [],
+        "requested_url": "https://www.tbs-sct.canada.ca/start",
+        "retrieval_utc": "2026-07-30T16:00:00Z",
+        "sha256": None,
+        "source_id": "CA-1",
+    }
+    receipt.update(updates)
+    with pytest.raises(jsonschema.ValidationError, match=message):
+        jsonschema.Draft202012Validator(schema).validate(receipt)
+
+
+def test_max_download_size_is_64_mib(acquisition: AcquisitionModule) -> None:
+    assert acquisition.MAX_DOWNLOAD_BYTES == 64 * 1024 * 1024
+
+
+def test_declared_content_length_above_limit_fails_before_read(
+    acquisition: AcquisitionModule, tmp_path: Path
+) -> None:
+    response = FakeResponse(b"body")
+    target = tmp_path / "source.source"
+    with pytest.raises(acquisition.AcquisitionError, match="Content-Length"):
+        acquisition.stream_to_quarantine(
+            response,
+            target,
+            9,
+            None,
+            max_bytes=8,
+        )
+    assert response.read_calls == 0
+    assert not target.exists()
+
+
+def test_streamed_overflow_without_content_length_cleans_partial_file(
+    acquisition: AcquisitionModule, tmp_path: Path
+) -> None:
+    target = tmp_path / "source.source"
+    with pytest.raises(acquisition.AcquisitionError, match="maximum"):
+        acquisition.stream_to_quarantine(
+            io.BytesIO(b"123456789"),
+            target,
+            None,
+            None,
+            max_bytes=8,
+        )
+    assert not target.exists()
+    assert not list(tmp_path.glob("*.part"))
+    assert not list(tmp_path.glob(".*.part"))
+
+
+def test_exact_download_limit_succeeds(acquisition: AcquisitionModule, tmp_path: Path) -> None:
+    payload = b"12345678"
+    target = tmp_path / "source.source"
+    length, digest = acquisition.stream_to_quarantine(
+        io.BytesIO(payload),
+        target,
+        None,
+        None,
+        max_bytes=len(payload),
+    )
+    assert length == len(payload)
+    assert digest == hashlib.sha256(payload).hexdigest()
+    assert target.read_bytes() == payload
+
+
+def test_existing_different_quarantine_artifact_fails_closed(
+    acquisition: AcquisitionModule, tmp_path: Path
+) -> None:
+    target = tmp_path / "source.source"
+    target.write_bytes(b"old")
+    with pytest.raises(acquisition.AcquisitionError, match="overwrite prohibited"):
+        acquisition.stream_to_quarantine(
+            io.BytesIO(b"new"),
+            target,
+            3,
+            None,
+            max_bytes=8,
+        )
+    assert target.read_bytes() == b"old"
+    assert not list(tmp_path.glob(".*.part"))
+
+
+def test_existing_identical_quarantine_artifact_is_reused(
+    acquisition: AcquisitionModule, tmp_path: Path
+) -> None:
+    payload = b"same"
+    target = tmp_path / "source.source"
+    target.write_bytes(payload)
+    length, digest = acquisition.stream_to_quarantine(
+        io.BytesIO(payload),
+        target,
+        len(payload),
+        hashlib.sha256(payload).hexdigest(),
+        max_bytes=8,
+    )
+    assert (length, digest) == (len(payload), hashlib.sha256(payload).hexdigest())
+    assert target.read_bytes() == payload
+    assert not list(tmp_path.glob(".*.part"))
+
+
+def test_metadata_only_does_not_read_body_and_uses_injected_clock(
+    acquisition: AcquisitionModule, tmp_path: Path
+) -> None:
+    response = FakeResponse(b"must-not-be-read")
+    receipt_path = tmp_path / "receipt.json"
+    quarantine_path = tmp_path / "source.source"
+    receipt = acquisition.acquire_one(
+        _source(),
+        download=False,
+        receipt_path=receipt_path,
+        quarantine_path=quarantine_path,
+        expected_digest=None,
+        opener=FakeOpener(response),
+        clock=_fixed_clock,
+    )
+    assert response.read_calls == 0
+    assert receipt["retrieval_utc"] == "2026-07-30T16:00:00Z"
+    assert receipt["downloaded"] is False
+    assert receipt_path.exists()
+    assert not quarantine_path.exists()
+
+
+def test_quarantine_write_failure_leaves_no_receipt_or_part(
+    acquisition: AcquisitionModule, tmp_path: Path
+) -> None:
+    receipt_path = tmp_path / "receipt.json"
+    quarantine_path = tmp_path / "source.source"
+
+    def fail_quarantine(
+        response: Readable,
+        target: Path,
+        content_length: int | None,
+        expected_digest: str | None,
+    ) -> tuple[int, str]:
+        del response, target, content_length, expected_digest
+        raise OSError("injected quarantine failure")
+
+    with pytest.raises(OSError, match="injected"):
+        acquisition.acquire_one(
+            _source(),
+            download=True,
+            receipt_path=receipt_path,
+            quarantine_path=quarantine_path,
+            expected_digest=None,
+            opener=FakeOpener(FakeResponse(b"payload")),
+            clock=_fixed_clock,
+            quarantine_writer=fail_quarantine,
+        )
+    assert not receipt_path.exists()
+    assert not quarantine_path.exists()
+    assert not list(tmp_path.glob(".*.part"))
+
+
+def test_receipt_write_failure_creates_no_false_successful_receipt(
+    acquisition: AcquisitionModule, tmp_path: Path
+) -> None:
+    receipt_path = tmp_path / "receipt.json"
+    quarantine_path = tmp_path / "source.source"
+
+    def fail_receipt(path: Path, data: bytes) -> None:
+        del path, data
+        raise OSError("injected receipt failure")
+
+    with pytest.raises(OSError, match="injected"):
+        acquisition.acquire_one(
+            _source(),
+            download=True,
+            receipt_path=receipt_path,
+            quarantine_path=quarantine_path,
+            expected_digest=None,
+            opener=FakeOpener(FakeResponse(b"payload")),
+            clock=_fixed_clock,
+            receipt_writer=fail_receipt,
+        )
+    assert quarantine_path.read_bytes() == b"payload"
+    assert not receipt_path.exists()
+    assert not list(tmp_path.glob(".*.part"))
+
+
+def test_atomic_receipt_failure_cleans_part_file(
+    acquisition: AcquisitionModule, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "receipt.json"
+
+    def fail_replace(source: Path, destination: Path) -> Path:
+        del source, destination
+        raise OSError("injected replace failure")
+
+    monkeypatch.setattr(Path, "replace", fail_replace)
+    with pytest.raises(OSError, match="injected"):
+        acquisition.atomic_write_bytes(target, b"{}")
+    assert not target.exists()
+    assert not list(tmp_path.glob(".*.part"))
+
+
+def test_duplicate_source_ids_fail_closed(
+    acquisition: AcquisitionModule, registry: dict[str, Any]
+) -> None:
+    with pytest.raises(acquisition.AcquisitionError, match="duplicate source IDs"):
+        acquisition.validate_selection(["CA-1", "CA-1"], registry["sources"], {})
+
+
+def test_digest_for_unselected_source_fails_closed(
+    acquisition: AcquisitionModule, registry: dict[str, Any]
+) -> None:
+    with pytest.raises(acquisition.AcquisitionError, match="unselected"):
+        acquisition.validate_selection(["CA-1"], registry["sources"], {"CA-2": "a" * 64})
+
+
+def test_digest_for_unknown_source_fails_closed(
+    acquisition: AcquisitionModule, registry: dict[str, Any]
+) -> None:
+    with pytest.raises(acquisition.AcquisitionError, match="unknown source"):
+        acquisition.validate_selection(["CA-1"], registry["sources"], {"CA-UNKNOWN": "a" * 64})
+
+
+def test_multiple_operations_targeting_same_final_path_fail_closed(
+    acquisition: AcquisitionModule, tmp_path: Path
+) -> None:
+    duplicate_sources = [
+        {"source_id": "CA-1", "expected_content_type": "text/html"},
+        {"source_id": "CA-1", "expected_content_type": "text/html"},
+    ]
+    with pytest.raises(acquisition.AcquisitionError, match="multiple operations"):
+        acquisition.source_paths(
+            duplicate_sources,
+            tmp_path / "receipts",
+            tmp_path / "quarantine",
+        )
 
 
 def test_local_output_directories_are_gitignored(repo_root: Path) -> None:

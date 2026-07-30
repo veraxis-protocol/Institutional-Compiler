@@ -1,6 +1,7 @@
 {
   "registry_status": "PROPOSED_PRE_ACQUISITION",
   "retrieval_facts_status": "UNOBSERVED",
+  "research_metadata_notice": "Non-null publication, modification, or amendment information in this proposed registry is preliminary research metadata. It is not an HTTP retrieval fact and must be independently confirmed during acquisition freeze.",
   "sources": [
     {
       "source_id": "CA-1",

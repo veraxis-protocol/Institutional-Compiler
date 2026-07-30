@@ -4,6 +4,7 @@
   "title": "Canada acquisition preflight receipt v0.1",
   "type": "object",
   "additionalProperties": false,
+  "description": "A local acquisition receipt. retrieval_utc is the UTC time at which accepted response metadata was observed; it is not a server publication time or trusted timestamp.",
   "required": [
     "actual_byte_length",
     "content_length_header",
@@ -65,7 +66,8 @@
     },
     "retrieval_utc": {
       "type": "string",
-      "format": "date-time"
+      "format": "date-time",
+      "description": "UTC time at which accepted response status, final URL, headers, and content type were observed."
     },
     "sha256": {
       "type": ["string", "null"],
@@ -75,5 +77,49 @@
       "type": "string",
       "pattern": "^CA-[1-7](?:-[A-Z0-9]+)?$"
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "downloaded": {
+            "const": false
+          }
+        },
+        "required": ["downloaded"]
+      },
+      "then": {
+        "properties": {
+          "actual_byte_length": {
+            "type": "null"
+          },
+          "sha256": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "downloaded": {
+            "const": true
+          }
+        },
+        "required": ["downloaded"]
+      },
+      "then": {
+        "properties": {
+          "actual_byte_length": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    }
+  ]
 }

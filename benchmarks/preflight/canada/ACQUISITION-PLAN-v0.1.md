@@ -63,8 +63,19 @@ fact is synthesized.
 Each receipt records the requested and final URLs, redirect chain, UTC
 retrieval timestamp, response status, media type, ETag, Last-Modified,
 Content-Length, actual byte length, and SHA-256 where bytes are downloaded.
-Receipts use UTF-8 canonical JSON with sorted keys, compact separators, and a
-deterministic source-ID execution order.
+Receipts use UTF-8 canonical JSON with sorted object keys, compact separators,
+and a deterministic source-ID execution order. Canonical JSON sorts object
+keys but preserves array order. Ordered provenance such as redirect chains is
+never reordered.
+
+`retrieval_utc` is the UTC time at which the accepted response status, final
+URL, headers, and content type were observed. It is not the server’s
+publication time or a trusted timestamp.
+
+Download mode rejects a declared or streamed body larger than 64 MiB. Bytes
+and receipts are written through flushed temporary files and atomic
+replacement. A successful downloaded receipt is written only after its
+quarantine artifact is committed.
 
 ## Explicit non-goals
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Deterministic, fail-closed acquisition helper for the Canada preflight.
 
-The default mode records response metadata only. Source bytes are written only
-when ``--download`` is explicitly supplied, and only beneath the gitignored
-local quarantine directory. This utility does not interpret or extract content.
+The default mode records response metadata only. Source bytes are streamed to
+an atomic local quarantine file only when ``--download`` is explicit. This
+utility does not interpret or extract content.
 """
 
 from __future__ import annotations
@@ -12,19 +12,26 @@ import argparse
 import hashlib
 import http.client
 import json
+import os
+import re
 import sys
+import tempfile
 import urllib.error
 import urllib.request
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import IO, Any, cast
+from typing import IO, Any, Protocol, cast
 from urllib.parse import urlparse
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_REGISTRY = REPO_ROOT / "benchmarks/preflight/canada/SOURCE-REGISTRY-PROPOSED-v0.1.json"
 DEFAULT_RECEIPT_DIR = REPO_ROOT / ".local/canada-preflight-receipts"
 DEFAULT_QUARANTINE_DIR = REPO_ROOT / ".local/canada-preflight-quarantine"
+
+MAX_DOWNLOAD_BYTES = 64 * 1024 * 1024
+DOWNLOAD_CHUNK_BYTES = 64 * 1024
+SAFE_SOURCE_ID = re.compile(r"^[A-Z0-9-]+$")
 
 ALLOWED_DOMAINS = frozenset(
     {
@@ -49,23 +56,41 @@ class AcquisitionError(RuntimeError):
     """Raised when an acquisition control fails closed."""
 
 
+class Readable(Protocol):
+    """A bounded-reader surface shared by urllib responses and tests."""
+
+    def read(self, size: int | None = -1) -> bytes: ...
+
+
+class ResponseLike(Readable, Protocol):
+    """Minimum urllib response surface used by the acquisition path."""
+
+    status: int
+    headers: Mapping[str, str]
+
+    def __enter__(self) -> ResponseLike: ...
+
+    def __exit__(self, *args: object) -> None: ...
+
+    def geturl(self) -> str: ...
+
+
+class OpenerLike(Protocol):
+    """Minimum opener surface, permitting offline test doubles."""
+
+    def open(self, request: urllib.request.Request, timeout: int) -> ResponseLike: ...
+
+
+ReceiptWriter = Callable[[Path, bytes], None]
+QuarantineWriter = Callable[[Readable, Path, int | None, str | None], tuple[int, str]]
+Clock = Callable[[], datetime]
+
+
 def canonical_json_bytes(value: object) -> bytes:
-    """Return canonical UTF-8 JSON with stable key and array ordering."""
-    normalized = _normalize(value)
+    """Return canonical UTF-8 JSON while preserving every array's order."""
     return (
-        json.dumps(normalized, ensure_ascii=False, separators=(",", ":"), sort_keys=True) + "\n"
+        json.dumps(value, ensure_ascii=False, separators=(",", ":"), sort_keys=True) + "\n"
     ).encode()
-
-
-def _normalize(value: object) -> object:
-    if isinstance(value, dict):
-        return {str(key): _normalize(item) for key, item in value.items()}
-    if isinstance(value, list):
-        normalized = [_normalize(item) for item in value]
-        if all(isinstance(item, str) for item in normalized):
-            return sorted(cast(list[str], normalized))
-        return normalized
-    return value
 
 
 def load_registry(path: Path = DEFAULT_REGISTRY) -> list[dict[str, Any]]:
@@ -124,7 +149,7 @@ def validate_output_dir(path: Path, expected: Path) -> Path:
 
 
 class AllowlistRedirectHandler(urllib.request.HTTPRedirectHandler):
-    """Reject redirect targets outside the exact official-domain allowlist."""
+    """Reject external redirects and preserve the exact observed redirect order."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -154,7 +179,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--download",
         action="store_true",
-        help="explicitly write response bytes to the local quarantine directory",
+        help="explicitly stream response bytes to the local quarantine directory",
     )
     parser.add_argument(
         "--expected-sha256",
@@ -166,7 +191,8 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _expected_digests(items: Sequence[str], *, download: bool) -> dict[str, str]:
+def expected_digests(items: Sequence[str], *, download: bool) -> dict[str, str]:
+    """Parse explicit digest expectations without accepting duplicates."""
     if items and not download:
         raise AcquisitionError("--expected-sha256 requires --download")
     result: dict[str, str] = {}
@@ -184,12 +210,152 @@ def _expected_digests(items: Sequence[str], *, download: bool) -> dict[str, str]
     return result
 
 
+def validate_selection(
+    source_ids: Sequence[str],
+    sources: Sequence[Mapping[str, Any]],
+    expected: Mapping[str, str],
+) -> list[Mapping[str, Any]]:
+    """Reject duplicate IDs and digest expectations outside the exact selection."""
+    if len(source_ids) != len(set(source_ids)):
+        raise AcquisitionError("duplicate source IDs are prohibited")
+    known = {str(source["source_id"]) for source in sources}
+    unknown_expectations = set(expected) - known
+    if unknown_expectations:
+        raise AcquisitionError(
+            f"expected digest names unknown source: {sorted(unknown_expectations)[0]}"
+        )
+    unselected_expectations = set(expected) - set(source_ids)
+    if unselected_expectations:
+        raise AcquisitionError(
+            f"expected digest names unselected source: {sorted(unselected_expectations)[0]}"
+        )
+    return [source_by_id(source_id, sources) for source_id in source_ids]
+
+
+def source_paths(
+    sources: Sequence[Mapping[str, Any]],
+    receipt_dir: Path,
+    quarantine_dir: Path,
+) -> dict[str, tuple[Path, Path]]:
+    """Resolve unique, traversal-safe final paths for every selected source."""
+    result: dict[str, tuple[Path, Path]] = {}
+    final_paths: set[Path] = set()
+    for source in sources:
+        source_id = str(source["source_id"])
+        if not SAFE_SOURCE_ID.fullmatch(source_id):
+            raise AcquisitionError(f"unsafe source ID: {source_id}")
+        content_type = str(source["expected_content_type"])
+        suffix = ".pdf" if content_type == "application/pdf" else ".source"
+        receipt_path = receipt_dir / f"{source_id}.receipt.json"
+        quarantine_path = quarantine_dir / f"{source_id}{suffix}"
+        for path in (receipt_path, quarantine_path):
+            if path in final_paths:
+                raise AcquisitionError(f"multiple operations target final path: {path}")
+            final_paths.add(path)
+        result[source_id] = (receipt_path, quarantine_path)
+    return result
+
+
 def _header(headers: Mapping[str, str], name: str) -> str | None:
     value = headers.get(name)
     return value if value else None
 
 
-def _receipt(
+def _content_length(headers: Mapping[str, str]) -> int | None:
+    value = _header(headers, "Content-Length")
+    if value is None:
+        return None
+    try:
+        length = int(value)
+    except ValueError as error:
+        raise AcquisitionError("invalid Content-Length") from error
+    if length < 0:
+        raise AcquisitionError("negative Content-Length")
+    return length
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        while chunk := stream.read(DOWNLOAD_CHUNK_BYTES):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def atomic_write_bytes(path: Path, data: bytes) -> None:
+    """Flush, close, and atomically replace one final file."""
+    part_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="wb",
+            dir=path.parent,
+            prefix=f".{path.name}.",
+            suffix=".part",
+            delete=False,
+        ) as stream:
+            part_path = Path(stream.name)
+            stream.write(data)
+            stream.flush()
+            os.fsync(stream.fileno())
+        part_path.replace(path)
+    finally:
+        if part_path is not None:
+            part_path.unlink(missing_ok=True)
+
+
+def stream_to_quarantine(
+    response: Readable,
+    target: Path,
+    content_length: int | None,
+    expected_digest: str | None,
+    *,
+    max_bytes: int = MAX_DOWNLOAD_BYTES,
+) -> tuple[int, str]:
+    """Stream bounded bytes to a temporary file and atomically commit or reuse."""
+    if content_length is not None and content_length > max_bytes:
+        raise AcquisitionError(
+            f"Content-Length {content_length} exceeds maximum download size {max_bytes}"
+        )
+
+    part_path: Path | None = None
+    actual_length = 0
+    digest = hashlib.sha256()
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="wb",
+            dir=target.parent,
+            prefix=f".{target.name}.",
+            suffix=".part",
+            delete=False,
+        ) as stream:
+            part_path = Path(stream.name)
+            while chunk := response.read(DOWNLOAD_CHUNK_BYTES):
+                actual_length += len(chunk)
+                if actual_length > max_bytes:
+                    raise AcquisitionError(f"download exceeds maximum size {max_bytes}")
+                digest.update(chunk)
+                stream.write(chunk)
+            stream.flush()
+            os.fsync(stream.fileno())
+
+        actual_digest = digest.hexdigest()
+        if expected_digest is not None and actual_digest != expected_digest:
+            raise AcquisitionError("SHA-256 mismatch")
+        if target.exists():
+            if _sha256_file(target) != actual_digest:
+                raise AcquisitionError("existing quarantine artifact differs; overwrite prohibited")
+            part_path.unlink()
+            part_path = None
+            return actual_length, actual_digest
+        part_path.replace(target)
+        part_path = None
+        return actual_length, actual_digest
+    finally:
+        if part_path is not None:
+            part_path.unlink(missing_ok=True)
+
+
+def make_receipt(
     *,
     source_id: str,
     requested_url: str,
@@ -198,15 +364,16 @@ def _receipt(
     status: int,
     headers: Mapping[str, str],
     content_type: str,
-    downloaded: bytes | None,
+    downloaded: bool,
+    actual_byte_length: int | None,
+    digest: str | None,
     retrieved_at: str,
 ) -> dict[str, object]:
-    supplied_length = _header(headers, "Content-Length")
     return {
-        "actual_byte_length": len(downloaded) if downloaded is not None else None,
-        "content_length_header": int(supplied_length) if supplied_length is not None else None,
+        "actual_byte_length": actual_byte_length,
+        "content_length_header": _content_length(headers),
         "content_type": content_type,
-        "downloaded": downloaded is not None,
+        "downloaded": downloaded,
         "etag": _header(headers, "ETag"),
         "final_url": final_url,
         "http_status": status,
@@ -214,35 +381,43 @@ def _receipt(
         "redirect_chain": list(redirects),
         "requested_url": requested_url,
         "retrieval_utc": retrieved_at,
-        "sha256": hashlib.sha256(downloaded).hexdigest() if downloaded is not None else None,
+        "sha256": digest,
         "source_id": source_id,
     }
+
+
+def utc_now() -> datetime:
+    """Return the current UTC observation time."""
+    return datetime.now(UTC)
 
 
 def acquire_one(
     source: Mapping[str, Any],
     *,
     download: bool,
-    receipt_dir: Path,
-    quarantine_dir: Path,
+    receipt_path: Path,
+    quarantine_path: Path,
     expected_digest: str | None,
+    opener: OpenerLike | None = None,
+    clock: Clock = utc_now,
+    quarantine_writer: QuarantineWriter = stream_to_quarantine,
+    receipt_writer: ReceiptWriter = atomic_write_bytes,
 ) -> dict[str, object]:
-    """Acquire metadata and optionally quarantine bytes for one explicit source."""
+    """Acquire metadata and optionally quarantine bounded bytes for one source."""
     source_id = str(source["source_id"])
     requested_url = str(source["official_english_url"])
     validate_url(requested_url)
     expected_type = str(source["expected_content_type"])
 
     redirect_handler = AllowlistRedirectHandler()
-    opener = urllib.request.build_opener(redirect_handler)
+    selected_opener = opener or cast(OpenerLike, urllib.request.build_opener(redirect_handler))
     request = urllib.request.Request(  # noqa: S310 - URL is HTTPS/domain validated above.
         requested_url,
         method="GET",
         headers={"User-Agent": "OIC-Canada-Preflight/0.1 (+metadata-and-rights-research)"},
     )
-    retrieved_at = datetime.now(UTC).isoformat().replace("+00:00", "Z")
     try:
-        with opener.open(request, timeout=30) as response:
+        with selected_opener.open(request, timeout=30) as response:
             final_url = response.geturl()
             validate_url(final_url)
             status = int(response.status)
@@ -252,11 +427,27 @@ def acquire_one(
             content_type = validate_content_type(
                 response.headers.get("Content-Type"), expected_type
             )
-            payload = response.read() if download else None
+            supplied_length = _content_length(headers)
+            if download and supplied_length is not None and supplied_length > MAX_DOWNLOAD_BYTES:
+                raise AcquisitionError(
+                    f"Content-Length {supplied_length} exceeds maximum download size "
+                    f"{MAX_DOWNLOAD_BYTES}"
+                )
+
+            observed_at = clock().astimezone(UTC).isoformat().replace("+00:00", "Z")
+            actual_length: int | None = None
+            digest: str | None = None
+            if download:
+                actual_length, digest = quarantine_writer(
+                    response,
+                    quarantine_path,
+                    supplied_length,
+                    expected_digest,
+                )
     except (urllib.error.URLError, TimeoutError) as error:
         raise AcquisitionError(f"{source_id}: retrieval failed: {error}") from error
 
-    receipt = _receipt(
+    receipt = make_receipt(
         source_id=source_id,
         requested_url=requested_url,
         final_url=final_url,
@@ -264,17 +455,12 @@ def acquire_one(
         status=status,
         headers=headers,
         content_type=content_type,
-        downloaded=payload,
-        retrieved_at=retrieved_at,
+        downloaded=download,
+        actual_byte_length=actual_length,
+        digest=digest,
+        retrieved_at=observed_at,
     )
-    if expected_digest is not None and receipt["sha256"] != expected_digest:
-        raise AcquisitionError(f"{source_id}: SHA-256 mismatch")
-
-    receipt_path = receipt_dir / f"{source_id}.receipt.json"
-    receipt_path.write_bytes(canonical_json_bytes(receipt))
-    if payload is not None:
-        suffix = ".pdf" if content_type == "application/pdf" else ".source"
-        (quarantine_dir / f"{source_id}{suffix}").write_bytes(payload)
+    receipt_writer(receipt_path, canonical_json_bytes(receipt))
     return receipt
 
 
@@ -284,20 +470,22 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         sources = load_registry(args.registry)
-        expected = _expected_digests(args.expected_sha256, download=args.download)
+        expected = expected_digests(args.expected_sha256, download=args.download)
         receipt_dir = validate_output_dir(args.receipt_dir, DEFAULT_RECEIPT_DIR)
         quarantine_dir = validate_output_dir(args.quarantine_dir, DEFAULT_QUARANTINE_DIR)
-        selected = [source_by_id(source_id, sources) for source_id in args.source_ids]
+        selected = validate_selection(args.source_ids, sources, expected)
+        paths = source_paths(selected, receipt_dir, quarantine_dir)
         for source in sorted(selected, key=lambda item: str(item["source_id"])):
             source_id = str(source["source_id"])
+            receipt_path, quarantine_path = paths[source_id]
             acquire_one(
                 source,
                 download=args.download,
-                receipt_dir=receipt_dir,
-                quarantine_dir=quarantine_dir,
+                receipt_path=receipt_path,
+                quarantine_path=quarantine_path,
                 expected_digest=expected.get(source_id),
             )
-    except (AcquisitionError, KeyError, ValueError) as error:
+    except (AcquisitionError, KeyError, OSError, ValueError) as error:
         print(f"acquisition failed closed: {error}", file=sys.stderr)
         return 2
     return 0
