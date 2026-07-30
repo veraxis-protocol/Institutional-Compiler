@@ -538,3 +538,40 @@ All 28 classifications of Deliverable D stand under the v0.2 pin (the kernel byt
 A conditional ALLOW rides exactly its `missing_ground_ids`. From the kernel boundary, the ground state of a subscribed atom can change only by: verification (`ground_verified`, the tick), expiry (`ground_expired`, the anti-tick), authoritative correction (`ground_corrected` — the expire+verify composite), authoritative revocation (`ground_revoked`), or a change of the epoch scope the grounds live in (`relevant_epoch_changed`). These are the only state transitions the logical-time model (E24/E25) admits; a formula change is a different warrant, not a trigger, and stipulation events concern the solver's self-referential systems, which the warrant path does not evaluate. We searched for a transition by which a conditional ALLOW could outlive its support without firing one of the five triggers and found none. The canonical set and its fixed order are **complete for the present anti-tick model**.
 
 *This is provisional dependency evidence. Independent Tier-1 reproduction remains OPEN, and the OIC semantic implementation gate remains BLOCKED.*
+
+## WO-004C addendum — exact correction specification for the two open items
+
+Both corrections live in **PR #16's artifact** `docs/contracts/kernel-profiles/ztl-v0.1.json`
+(profile SHA under review `3fdd19970fcacaa53bdfb22b016b75865dd3b71e8c5f82d88a698b77818e07ce`).
+Neither text is copied into any PR #18 evidence file, and the census numbers the first note
+cites are independently confirmed by PR #18's own re-run against the v0.2 pin — therefore
+**neither item blocks the merge of PR #18**; both must be corrected in PR #16 before its own
+merge.
+
+**B-1 — census provenance note.**
+- Artifact/path: `docs/contracts/kernel-profiles/ztl-v0.1.json`, field
+  `conformance_fixture_set.census.note`.
+- Current text: `"A census over a stated pool, not a proof of coverage. Run against the
+  superseded commit e819dec7e89d2dc67d6371e1eedb8e7aae854602; the census's own findings
+  (EARNED with non-empty unverified, dependency over-approximation) are independently
+  confirmed by the reachable interface-freeze-v0.2 fixtures, so the pin correction does not
+  weaken them."`
+- Required replacement: `"A census over a stated pool, not a proof of coverage. Originally
+  run against the author's working tree (the census artifact records no kernel commit);
+  re-verified 2026-07-30 against the v0.2 pin 56e1ff0510c62b04dbd85bbe08b7a6deacbf276b with
+  identical results (61/294 EARNED non-empty; 138 refinements, 0 moved; 25/294 REFUTED
+  non-empty; 38/180 pair-withdrawal). The findings are independently confirmed by the
+  reachable interface-freeze-v0.2 fixtures."`
+- Why: the current sentence asserts a run that is impossible as stated —
+  `kernel_census.py` imports `ztljudge`, which does not exist at `e819dec7` (measured,
+  exit 2) — and the census artifact declares no commit to support it.
+- Severity: **minor** (provenance wording; every number in the note is measured-true).
+
+**B-2 — missing `version` key.**
+- Artifact/path: `docs/contracts/kernel-profiles/ztl-v0.1.json`, top level.
+- Current value: no `version` key exists (`profile_id: ztl-v0.1` is the only carrier).
+- Required replacement: add `"version": "0.1.0"` — or amend the governing order text to
+  name `profile_id` as the sole version carrier.
+- Why: WO-004C section B instructs the reviewer to confirm "version remains 0.1.0", which
+  is currently unconfirmable against the artifact.
+- Severity: **editorial**.
