@@ -235,7 +235,7 @@ def acquire_one(
 
     redirect_handler = AllowlistRedirectHandler()
     opener = urllib.request.build_opener(redirect_handler)
-    request = urllib.request.Request(
+    request = urllib.request.Request(  # noqa: S310 - URL is HTTPS/domain validated above.
         requested_url,
         method="GET",
         headers={"User-Agent": "OIC-Canada-Preflight/0.1 (+metadata-and-rights-research)"},
@@ -249,7 +249,9 @@ def acquire_one(
             if status != 200:
                 raise AcquisitionError(f"{source_id}: HTTP {status}")
             headers = dict(response.headers.items())
-            content_type = validate_content_type(response.headers.get("Content-Type"), expected_type)
+            content_type = validate_content_type(
+                response.headers.get("Content-Type"), expected_type
+            )
             payload = response.read() if download else None
     except (urllib.error.URLError, TimeoutError) as error:
         raise AcquisitionError(f"{source_id}: retrieval failed: {error}") from error

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import ast
 import hashlib
 import http.client
@@ -30,17 +31,33 @@ EXPECTED_SOURCE_MANIFEST_SHA256 = (
     "c3ea6162cbeb9a5814f543ec23a02fecacad72053d90258162687ad3f48a2db2"
 )
 EXPECTED_SCHEMA_SHA256 = {
-    "admission-record.schema.json": "d040c4c86794268e26d9dd833ecd3a40347b724fbd73fb3accb3df355065f748",
-    "authority-record.schema.json": "f981ef4203d58c8c117566998cec03ecce669edf87b5967fa5bebd654af74d41",
+    "admission-record.schema.json": (
+        "d040c4c86794268e26d9dd833ecd3a40347b724fbd73fb3accb3df355065f748"
+    ),
+    "authority-record.schema.json": (
+        "f981ef4203d58c8c117566998cec03ecce669edf87b5967fa5bebd654af74d41"
+    ),
     "candidate-normative-unit.schema.json": (
         "cc45ea691919f79dd29a86c3ab440ca78170add0055ef69a5e6d1de99c3b30c4"
     ),
-    "control-envelope.schema.json": "6e9c3ac495da0775cf9453c57ebabf7f7e4b47a44d3a667adca40543cc6f1c28",
-    "institutional-ir.schema.json": "d080e614212a1f8b285b558578ee0ee5927b33b534c16ee6dddae4598c7e986c",
-    "runtime-evaluation.schema.json": "93ef95709370866fcb1d634a36c0f9c0f048f6584d991471d255adb408827767",
-    "source-anchor.schema.json": "44e9a9892bb6f60534e98272d44e97f23028d9efbdca8c4ed038beb2dc1b5a36",
-    "source-document.schema.json": "865f128e687e9bbd46ae8fbcc807ed5610a2064703ac5961bf738cba03fa9a50",
-    "source-node.schema.json": "bc79f3e1f1449ef2f0570f6458371f621c0e6930ff71892738f5c765a35e80f2",
+    "control-envelope.schema.json": (
+        "6e9c3ac495da0775cf9453c57ebabf7f7e4b47a44d3a667adca40543cc6f1c28"
+    ),
+    "institutional-ir.schema.json": (
+        "d080e614212a1f8b285b558578ee0ee5927b33b534c16ee6dddae4598c7e986c"
+    ),
+    "runtime-evaluation.schema.json": (
+        "93ef95709370866fcb1d634a36c0f9c0f048f6584d991471d255adb408827767"
+    ),
+    "source-anchor.schema.json": (
+        "44e9a9892bb6f60534e98272d44e97f23028d9efbdca8c4ed038beb2dc1b5a36"
+    ),
+    "source-document.schema.json": (
+        "865f128e687e9bbd46ae8fbcc807ed5610a2064703ac5961bf738cba03fa9a50"
+    ),
+    "source-node.schema.json": (
+        "bc79f3e1f1449ef2f0570f6458371f621c0e6930ff71892738f5c765a35e80f2"
+    ),
 }
 
 REQUIRED_REGISTRY_FIELDS = {
@@ -98,7 +115,7 @@ class AcquisitionModule(Protocol):
     AcquisitionError: type[RuntimeError]
     AllowlistRedirectHandler: type[urllib.request.HTTPRedirectHandler]
 
-    def build_parser(self) -> Any: ...
+    def build_parser(self) -> argparse.ArgumentParser: ...
 
     def canonical_json_bytes(self, value: object) -> bytes: ...
 
@@ -306,7 +323,9 @@ def test_no_source_bytes_are_tracked(repo_root: Path) -> None:
         text=True,
     ).stdout.splitlines()
     prohibited_suffixes = {".doc", ".docx", ".html", ".pdf", ".xml"}
-    canada_paths = [Path(path) for path in tracked if path.startswith("benchmarks/preflight/canada/")]
+    canada_paths = [
+        Path(path) for path in tracked if path.startswith("benchmarks/preflight/canada/")
+    ]
     assert not any(path.suffix.lower() in prohibited_suffixes for path in canada_paths)
     assert not any(path.startswith(".local/") for path in tracked)
 
