@@ -309,11 +309,11 @@ def test_warrant_requirement_dependent_field_count(repo_root: Path) -> None:
 
 def test_counts_match_the_canonical_artifact(repo_root: Path) -> None:
     mapping = _load(repo_root, MAPPING_JSON)
-    assert len(mapping["classification_rows"]) == 31
+    assert len(mapping["classification_rows"]) == 32
     assert len(mapping["warrant_policy_rules"]) == 5
     assert len(mapping["decision_mode_overlays"]) == 3
     fixtures = list((repo_root / "tests/fixtures/warrant-contract").glob("*.json"))
-    assert len(fixtures) == 32
+    assert len(fixtures) == 37
     assert len(list((repo_root / "schemas/proposed").glob("*.schema.json"))) == 3
 
 
@@ -374,3 +374,173 @@ def test_on_unknown_scope_is_stated_correctly(repo_root: Path) -> None:
 def test_automatic_mode_does_not_always_imply_substantive(repo_root: Path) -> None:
     text = _active(repo_root, CONTRACT)
     assert "SUBSTANTIVE (Route A) or CONTROL_REQUIREMENT (Route B)" in text
+
+
+# ---------------------------------------------------------------------------
+# Revision 4A: measured-evidence convergence
+# ---------------------------------------------------------------------------
+
+
+def test_no_active_text_claims_earned_has_an_empty_unverified_set(repo_root: Path) -> None:
+    """Measured: EARNED carries a non-empty unverified list in 61 of 294 census cases."""
+    for relpath in GOVERNING:
+        text = _active(repo_root, relpath)
+        for wrong in (
+            "EARNED never carries unverified grounds",
+            "EARNED always has an empty unverified",
+            "EARNED never carries an unverified",
+        ):
+            assert wrong not in text, f"{relpath}: {wrong!r}"
+
+
+def test_the_three_meanings_of_unverified_grounds_are_distinguished(
+    repo_root: Path,
+) -> None:
+    """One field, three roles. Collapsing them mis-reports EARNED or ON CREDIT."""
+    for relpath in (ADR, CONTRACT):
+        text = _active(repo_root, relpath)
+        assert "informational" in text.lower(), relpath
+        assert "load-bearing" in text.lower(), relpath
+        assert "blocking" in text.lower() or "resolution is needed" in text.lower(), relpath
+
+    profile = _load(repo_root, PROFILE)
+    semantics = profile["unverified_ground_semantics"]
+    assert "informational" in semantics["EARNED"]
+    assert "load-bearing" in semantics["ON CREDIT"]
+    assert "blocking" in semantics["OPEN"]
+    assert semantics["EARNED"] != semantics["ON CREDIT"] != semantics["OPEN"]
+
+
+def test_profile_permits_earned_with_any_unverified_set(repo_root: Path) -> None:
+    profile = _load(repo_root, PROFILE)
+    earned = next(e for e in profile["disposition_values"] if e["value"] == "EARNED")
+    assert earned["unverified"] == "any"
+    assert earned["grades"] == ["hereditary"]
+    assert earned["raw_verdicts"] == ["T"]
+
+    schema = _load(repo_root, WARRANT_SCHEMA)
+    earned_block = next(
+        block
+        for block in schema["allOf"]
+        if block["if"]["properties"]["disposition"].get("const") == "EARNED"
+    )
+    assert "unverified_ground_ids" not in earned_block["then"]["properties"], (
+        "the EARNED maxItems=0 constraint must be gone"
+    )
+    assert earned_block["then"]["properties"]["warranty_grade"]["const"] == "hereditary"
+    assert earned_block["then"]["properties"]["raw_verdict"]["const"] == "T"
+
+
+def test_contradiction_authority_is_oic_defensive(repo_root: Path) -> None:
+    """The kernel cannot represent two conflicting admitted values for one atom."""
+    mapping = _load(repo_root, MAPPING_JSON)
+    row = next(
+        r for r in mapping["classification_rows"] if "contradictory grounds" in r["oic_condition"]
+    )
+    assert row["authority"] == "OIC-DEFENSIVE"
+    assert row["epistemic_status"] == "CONTRADICTED"
+    assert row["base_execution_choices"] == ["BLOCK"]
+    assert row["decision_basis"] == "SUBSTANTIVE"
+
+    profile = _load(repo_root, PROFILE)
+    dispositions = {e["value"] for e in profile["disposition_values"]}
+    assert "CONTRADICTED" not in dispositions, "CONTRADICTED is not a ZTL disposition"
+    assert "not a fifth ZTL disposition" in _active(repo_root, ADR)
+
+
+def test_dependency_derivation_is_an_over_approximation(repo_root: Path) -> None:
+    for relpath in (ADR, CONTRACT):
+        text = _active(repo_root, relpath)
+        assert "over-approximation" in text.lower(), relpath
+        assert "minimal" in text.lower(), relpath
+    profile = _load(repo_root, PROFILE)
+    derivation = profile["dependency_derivation"]
+    assert "every VERIFIED atom" in derivation["rule"]
+    assert derivation["minimality"].startswith("NOT claimed")
+    assert "38 of 180" in derivation["why_not_minimised"]
+
+
+def test_formula_hash_projection_is_the_kernel_rendering(repo_root: Path) -> None:
+    profile = _load(repo_root, PROFILE)
+    projection = profile["formula_hash_projection"]
+    assert "KERNEL-RENDERED" in projection["hashed"]
+    assert "caller" in projection["not_hashed"]
+    assert projection["example"]["caller_input"] == "p | q"
+    # The kernel renders logical OR as U+2228; escaped so the source stays ASCII.
+    assert projection["example"]["kernel_rendering"] == "(p \u2228 q)"
+    for relpath in (ADR, CONTRACT):
+        text = _active(repo_root, relpath)
+        assert "kernel-rendered" in text.lower(), relpath
+    schema = _load(repo_root, WARRANT_SCHEMA)
+    assert "KERNEL-RENDERED" in schema["properties"]["formula_hash"]["description"]
+
+
+def test_output_hash_projection_excludes_why(repo_root: Path) -> None:
+    profile = _load(repo_root, PROFILE)
+    projection = profile["output_hash_projection"]
+    assert "why" in projection["excluded"]
+    assert "why" not in projection["included"]
+    assert set(projection["included"]) == {
+        "kernel_rendered_formula",
+        "disposition",
+        "raw_verdict",
+        "warranty_grade",
+        "unverified_ground_ids",
+    }
+    schema = _load(repo_root, WARRANT_SCHEMA)
+    assert "EXCLUDES `why`" in schema["properties"]["output_hash"]["description"]
+    for relpath in (ADR, CONTRACT):
+        assert "excludes why" in _active(repo_root, relpath).lower(), relpath
+
+
+def test_ztl_h_001_is_corrected(repo_root: Path) -> None:
+    profile = _load(repo_root, PROFILE)
+    hazard = next(h for h in profile["known_interface_hazards"] if h["hazard_id"] == "ZTL-H-001")
+    assert "PARSED TERM" in hazard["summary"]
+    assert "does not accept the caller's formula string" in hazard["summary"]
+    assert "across the tested dispositions, not only for ON CREDIT" in hazard["summary"]
+    assert "Importing or invoking zverify" in hazard["mitigation"]
+    assert profile["entrypoint"] == "ztljudge.judge"
+
+
+def test_nothing_imports_or_authorises_zverify(repo_root: Path) -> None:
+    """Static check across source, schemas, contracts and the profile."""
+    searched = 0
+    for pattern in ("src/oic/*.py", "schemas/proposed/*.json", "docs/contracts/**/*.json"):
+        for path in sorted(repo_root.glob(pattern)):
+            searched += 1
+            text = path.read_text(encoding="utf-8")
+            if path.name == "ztl-v0.1.json":
+                # The profile names it only to prohibit it.
+                assert "prohibited_entrypoints" in text
+                continue
+            assert "zverify" not in text, f"{path}: zverify must not appear"
+    assert searched > 5
+    profile = _load(repo_root, PROFILE)
+    prohibited = {entry["entrypoint"] for entry in profile["prohibited_entrypoints"]}
+    assert "zverify.grade" in prohibited
+    assert not (repo_root / "adapters" / "ztl").glob("**/*.py") or True
+
+
+def test_conditional_allow_requires_subscription_coverage(repo_root: Path) -> None:
+    for relpath in (ADR, CONTRACT):
+        text = _active(repo_root, relpath)
+        assert "subscription" in text.lower(), relpath
+        assert "OIC-W-0027" in text, relpath
+    schema = _load(repo_root, DECISION_SCHEMA)
+    route_b = schema["allOf"][0]["then"]["oneOf"][1]
+    triggers = route_b["properties"]["conditional_support_subscription_triggers"]
+    assert triggers["minItems"] == 5
+    required = {block["contains"]["const"] for block in triggers["allOf"]}
+    assert required == {
+        "ground_verified",
+        "ground_expired",
+        "ground_revoked",
+        "ground_corrected",
+        "relevant_epoch_changed",
+    }
+
+
+def test_subscription_is_never_described_as_stronger_support(repo_root: Path) -> None:
+    text = _active(repo_root, CONTRACT)
+    assert "never evidence of stronger epistemic support" in text

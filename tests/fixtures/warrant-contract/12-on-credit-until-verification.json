@@ -19,6 +19,9 @@
       "admission_version": "adm-v3",
       "applied_control_overlay_ids": [],
       "authority_version": "auth-v2",
+      "conditional_support_subscription_ground_ids": [],
+      "conditional_support_subscription_reference": null,
+      "conditional_support_subscription_triggers": [],
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
       "decision_basis": "PRECAUTIONARY",
@@ -89,7 +92,6 @@
       "canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
       "claim_id": "claim:procurement-approval",
       "dependency_ids": [
-        "ground:registered",
         "ground:under_threshold"
       ],
       "disposition": "ON CREDIT",

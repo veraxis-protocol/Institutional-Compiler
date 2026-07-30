@@ -35,6 +35,17 @@
         "WP-3"
       ],
       "authority_version": "auth-v2",
+      "conditional_support_subscription_ground_ids": [
+        "ground:under_threshold"
+      ],
+      "conditional_support_subscription_reference": "sub:proc-approval-08",
+      "conditional_support_subscription_triggers": [
+        "ground_corrected",
+        "ground_expired",
+        "ground_revoked",
+        "ground_verified",
+        "relevant_epoch_changed"
+      ],
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
       "decision_basis": "CONTROL_REQUIREMENT",
@@ -117,8 +128,7 @@
       "canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
       "claim_id": "claim:procurement-approval",
       "dependency_ids": [
-        "ground:registered",
-        "ground:under_threshold"
+        "ground:registered"
       ],
       "disposition": "ON CREDIT",
       "formula": "registered & under_threshold",

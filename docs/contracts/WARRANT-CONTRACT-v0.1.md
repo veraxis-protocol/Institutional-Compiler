@@ -59,10 +59,10 @@ anything about the world.
 | 18 | Grade vocabulary unknown | `UNSUPPORTED_GRADE` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0017` |
 | 19 | Result combination violates the profile | `UNSUPPORTED_RESULT` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0022` |
 | 20 | Explicit `not_required` / `not_applicable` | `NOT_REQUIRED` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0024` |
-| 21 | Contradictory grounds | `USABLE` | `CONTRADICTED` | BLOCK | `SUBSTANTIVE` | `OIC-W-0014` |
+| 21 | Contradictory grounds (OIC-plane, not a ZTL disposition) | `USABLE` | `CONTRADICTED` | BLOCK | `SUBSTANTIVE` | `OIC-W-0014` |
 | 22 | `REFUTED` disposition | `USABLE` | `REFUTED` | BLOCK | `SUBSTANTIVE` | `OIC-W-0013` |
 | 23 | `OPEN`, any raw verdict | `USABLE` | `UNRESOLVED` | BLOCK / ESCALATE | `PRECAUTIONARY` | `OIC-W-0012` |
-| 24 | `EARNED` + `hereditary` | `USABLE` | `ESTABLISHED` | ALLOW¹ | `SUBSTANTIVE` | `OIC-D-0001` |
+| 24 | `EARNED` + `hereditary` (unverified list may be non-empty) | `USABLE` | `ESTABLISHED` | ALLOW¹ | `SUBSTANTIVE` | `OIC-D-0001` |
 | 25 | `ON CREDIT` + `sound` + `allow_with_disclosure` | `USABLE` | `CONDITIONALLY_SUPPORTED` | ALLOW¹ | `CONTROL_REQUIREMENT` | `OIC-D-0005` |
 | 26 | `ON CREDIT` + `sound` + `forbid` | `USABLE` | `CONDITIONALLY_SUPPORTED` | BLOCK | `CONTROL_REQUIREMENT` | `OIC-D-0006` |
 | 27 | `ON CREDIT` + `sound` + `escalate` | `USABLE` | `CONDITIONALLY_SUPPORTED` | ESCALATE | `CONTROL_REQUIREMENT` | `OIC-D-0006` |
@@ -70,7 +70,8 @@ anything about the world.
 | 29 | Grade below the control's minimum | `USABLE` | **preserved** | BLOCK / ESCALATE | `CONTROL_REQUIREMENT` | `OIC-W-0016` |
 | 30 | `decision_mode` reserves the decision | `USABLE` | **preserved** | ESCALATE | `CONTROL_REQUIREMENT` | `OIC-D-0002` |
 | 31 | `decision_mode` advisory / evidence-only | `USABLE` | **preserved** | ADVISORY | `CONTROL_REQUIREMENT` | `OIC-D-0003` |
-| 32 | Non-empty `unverified` list | unchanged | unchanged | unchanged | unchanged | `OIC-W-0015` added |
+| 32 | Conditional ALLOW without a complete subscription | `USABLE` | `CONDITIONALLY_SUPPORTED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0027` |
+| 33 | Non-empty `unverified` list | unchanged | unchanged | unchanged | unchanged | `OIC-W-0015` added |
 
 Rows 29 to 31 say **preserved** rather than naming a status, and that is the point. Grade
 insufficiency and decision-mode overlays are stages 2 and 3 of evaluation; they change what
@@ -174,7 +175,7 @@ Then exactly one of:
 |---|---|
 | `epistemic_status` | `ESTABLISHED` |
 | observed grade | `hereditary` |
-| `missing_ground_ids` | empty |
+| `missing_ground_ids` | any — informational when present, always preserved |
 | `unverified_ground_policy_applied` | `null` |
 | `decision_basis` | `SUBSTANTIVE` |
 | reason codes | `OIC-D-0001` |
@@ -190,6 +191,7 @@ Then exactly one of:
 | `missing_ground_ids` | non-empty, preserved on the record |
 | `decision_basis` | `CONTROL_REQUIREMENT` |
 | reason codes | `OIC-D-0005` **and** `OIC-W-0015` |
+| subscription | non-null reference, coverage equal to `missing_ground_ids`, all five triggers |
 
 Step 8 is not implemented by this contract and is not implementable by the kernel. It is
 named so that no reader mistakes a warrant for a permission.
@@ -339,6 +341,22 @@ Two levels, per ADR-013 §2.5.
 ]
 ```
 
+### The three meanings of an unverified ground
+
+Whenever the kernel reports unverified grounds, OIC preserves them. Under `ztl-v0.1`:
+
+| Disposition | Meaning of its unverified list |
+|---|---|
+| `EARNED` | **Informational** — irrelevant to this conclusion because the result is `hereditary` |
+| `REFUTED` | **Informational** — the refutation holds regardless |
+| `ON CREDIT` | **Load-bearing** — the current positive result depends on them |
+| `OPEN` | **Blocking** — their resolution is needed |
+
+Measured: `EARNED` carries a non-empty list in **61 of 294** census cases, and 138
+refinements over those atoms moved the verdict **0** times. One field, three roles; a
+contract that collapses them will either understate an `EARNED` result or overstate an
+`ON CREDIT` one.
+
 Level 1 comes from the kernel, verbatim. Level 2 is enriched by the OIC adapter when
 authorised. **The kernel is never asked to interpret source documents.** An empty
 `missing_ground_anchors` means enrichment has not run — it does not mean there are no
@@ -383,6 +401,7 @@ a breaking change.
 | `OIC-W-0024` | `WARRANT_REQUIREMENT_NOT_APPLICABLE` | `PROCEDURAL` |
 | `OIC-W-0025` | `CONDITIONAL_SUPPORT_UNSTABLE` | `PRECAUTIONARY` |
 | `OIC-W-0026` | `WARRANT_REQUIREMENT_MISSING_OR_INVALID` | `PROCEDURAL` |
+| `OIC-W-0027` | `CONDITIONAL_SUPPORT_SUBSCRIPTION_MISSING_OR_INCOMPLETE` | `PROCEDURAL` |
 
 ### Decision conditions — `OIC-D-nnnn`
 
@@ -401,6 +420,72 @@ a breaking change.
 `OIC-W-0016`, `OIC-D-0002`, `OIC-D-0003`, `OIC-D-0005`, and `OIC-D-0006` are the
 **control-policy** codes: a decision with basis `CONTROL_REQUIREMENT` must carry at least
 one of them, and the schema enforces it.
+
+## 10a. Conditional-support subscription
+
+`ON CREDIT` + `sound` may reach `ALLOW` only when the unresolved grounds are bound to a
+deterministic recomputation subscription:
+
+| Field | Requirement for a conditional ALLOW |
+|---|---|
+| `conditional_support_subscription_reference` | non-null, non-empty |
+| `conditional_support_subscription_ground_ids` | equal to `missing_ground_ids` |
+| `conditional_support_subscription_triggers` | all five, unique, deterministic order |
+
+Triggers: `ground_verified`, `ground_expired`, `ground_revoked`, `ground_corrected`,
+`relevant_epoch_changed`. Each can falsify the result, so omitting any one leaves a path by
+which the `ALLOW` silently outlives its grounds.
+
+On every other route the reference is null. **A subscription is plumbing and is never
+evidence of stronger epistemic support** — it does not upgrade `CONDITIONALLY_SUPPORTED`
+toward `ESTABLISHED`, and no consumer may read it that way. Missing or incomplete is
+`OIC-W-0027` and cannot `ALLOW`.
+
+The exact VEIP subscription carrier is **deferred**. `RuntimeDecision` preserves only the
+binding and the evidence the later VEIP contract will need.
+
+## 10b. Dependency derivation
+
+`dependency_ids` is **every verified atom** (marked `T` or `F`) appearing in the
+kernel-evaluated formula. `unverified_ground_ids` is exactly the atoms marked `Z`. The two
+are disjoint by construction, and together they cover the formula's atoms under the exact
+evaluated marking.
+
+**Minimality is not claimed, deliberately.** Measured: in 38 of 180 census cases with two or
+more verified grounds, withdrawing a *pair* moves the disposition although neither member
+does alone.
+
+```
+(p | q) & r     {p:T, q:T, r:T}   ->  EARNED / hereditary
+  withdraw p alone  ->  EARNED    (q still carries the disjunction)
+  withdraw q alone  ->  EARNED    (p still carries it)
+  withdraw p and q  ->  OPEN / until-verification
+```
+
+A set minimised by single-ground probing omits both `p` and `q`. A revocation of both then
+propagates to nothing, and a warrant claiming `ESTABLISHED` outlives the grounds that
+established it. The over-approximation fails safe; minimisation fails open.
+
+## 10c. Hash projections
+
+**`formula_hash`** is computed over the **kernel-rendered** formula returned by
+`ztljudge.judge`, under the declared canonicalization profile. It is **not** computed over
+the caller's original string.
+
+| | |
+|---|---|
+| Caller input | `p \| q` |
+| Kernel rendering | `(p ∨ q)` |
+| Hashed | `(p ∨ q)` |
+
+Hashing the caller's string would give two callers who wrote the same formula differently
+two different hashes for the same evaluated proposition.
+
+**`output_hash`** covers the semantic output projection: kernel-rendered formula,
+disposition, raw verdict, warranty grade, unverified identifiers — serialised as a JSON
+object with sorted keys and no whitespace. It **excludes `why`**, which is presentational
+and may change without a profile version bump, and `marking`, which is input and already
+covered by `input_hash`.
 
 ## 11. Determinism
 
@@ -422,17 +507,19 @@ one of them, and the schema enforces it.
 
 | # | Question | Routed to | State |
 |---|---|---|---|
-| 1 | Is `EARNED` + `hereditary` + non-empty `unverified` reachable? | Vitaliy Reznik | **ANSWERED** — no; `EARNED` never carries unverified grounds |
+| 1 | Is `EARNED` + non-empty `unverified` reachable? | Vitaliy Reznik | **ANSWERED — yes.** Measured in 61 of 294 census cases. An earlier answer of "no" was wrong and is corrected here |
 | 2 | Can the kernel emit `EARNED` + `until-verification`? | Vitaliy Reznik | **ANSWERED** — no; `NOT_REACHABLE` |
 | 3 | Can `OPEN` carry raw verdict `T`? | Vitaliy Reznik | **ANSWERED** — no; exhaustive search found no counterexample |
 | 4 | Do the two levels of missing-ground representation match reviewer needs? | Vitaliy Reznik + Arkadiy Miteiko | open |
-| 5 | Do the `ON CREDIT` rows (26–28) match kernel behaviour? | Vitaliy Reznik | **new**, open |
+| 5 | Do the `ON CREDIT` classification rows (28, 29) and the policy rules `WP-3`–`WP-5` match kernel behaviour? | Vitaliy Reznik | open |
 | 6 | What epistemic status does `ON CREDIT` carry? | GPT-5.6 Thinking | **ANSWERED** — `CONDITIONALLY_SUPPORTED`; never `ESTABLISHED`, never collapsed to `UNRESOLVED` |
 | 7 | Should `control-envelope.schema.json` carry `warrant_requirement`? | GPT-5.6 Thinking → Arkadiy Miteiko | open |
-| 8 | Should the envelope gain `on_missing`, `on_conflict`, `on_error`? | GPT-5.6 Thinking | **new**, open |
+| 8 | Should the envelope gain `on_missing`, `on_conflict`, `on_error`? | GPT-5.6 Thinking | open |
 | 9 | Which authority may scope expiry, and over which grounds? | Arkadiy Miteiko | **ANSWERED** — see ADR-013 §9.2 |
-| 10 | What is the `ALLOW` path for `not_required` / `not_applicable` controls? | GPT-5.6 Thinking → Arkadiy Miteiko | **new**, open |
+| 10 | What is the `ALLOW` path for `not_required` / `not_applicable` controls? | GPT-5.6 Thinking → Arkadiy Miteiko | open |
 | 11 | Does the VEIP handoff need fields beyond `RuntimeDecision`? | Arkadiy Miteiko | **ANSWERED** — yes. `RuntimeDecision` alone is **not** the complete handoff: it must be bound to the pre-existing `ActionProposal`, the envelope, the warrant where applicable, the evaluation input, and the authority and admission versions. See ADR-013 §9.3 |
+| 12 | Who carries the conditional-support subscription, and with what delivery guarantee? | Arkadiy Miteiko (interim VEIP owner) | **new**, open — `RuntimeDecision` preserves the binding only |
+| 13 | Is the census pool adequate, given it is 22 formulas over three atoms and joint dependency was probed to pairs only? | Vitaliy Reznik | **new**, open |
 
 ## 13. Boundaries
 

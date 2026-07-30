@@ -21,6 +21,9 @@
         "DM-3"
       ],
       "authority_version": "auth-v2",
+      "conditional_support_subscription_ground_ids": [],
+      "conditional_support_subscription_reference": null,
+      "conditional_support_subscription_triggers": [],
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
       "decision_basis": "CONTROL_REQUIREMENT",

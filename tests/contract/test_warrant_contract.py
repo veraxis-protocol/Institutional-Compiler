@@ -71,6 +71,11 @@ EXPECTED_CASES = (
     "30-compose-refuted-advisory",
     "31-compose-contradicted-human-judgment",
     "32-compose-conditional-advisory",
+    "33-earned-hereditary-with-unverified",
+    "34-subscription-missing-reference",
+    "35-subscription-missing-ground-coverage",
+    "36-subscription-missing-trigger",
+    "37-subscription-ground-set-mismatch",
 )
 
 #: The only reason codes that may accompany a SUBSTANTIVE *block*.
@@ -312,7 +317,7 @@ def test_markdown_contains_all_three_stage_tables(repo_root: Path) -> None:
 
 
 def test_every_classification_row_is_well_formed(rows: dict[int, dict[str, Any]]) -> None:
-    assert set(rows) == set(range(1, 32))
+    assert set(rows) == set(range(1, 33))
     for number, row in rows.items():
         assert row["epistemic_status"] in EPISTEMIC, number
         assert row["decision_basis"] in BASES, number
@@ -505,11 +510,14 @@ def test_measured_rows_reflect_the_ztl_evidence(rows: dict[int, dict[str, Any]])
 
 def test_on_credit_rows_are_conditionally_supported(rows: dict[int, dict[str, Any]]) -> None:
     on_credit = {n: r for n, r in rows.items() if r["disposition"] == "ON CREDIT"}
-    assert set(on_credit) == {28, 29}
+    assert set(on_credit) == {28, 29, 32}
     for number, row in on_credit.items():
-        assert row["authority"] == "MEASURED", number
         assert row["epistemic_status"] == "CONDITIONALLY_SUPPORTED", number
         assert row["unverified"] == "non-empty", number
+    # 28 and 29 are kernel behaviour; 32 is an OIC-side binding precondition.
+    assert rows[28]["authority"] == rows[29]["authority"] == "MEASURED"
+    assert rows[32]["authority"] == "OIC-DEFENSIVE"
+    assert rows[32]["primary_reason_code"] == "OIC-W-0027"
     # Only the `sound` row may ever reach ALLOW, and only via an overlay.
     assert "ALLOW" in rows[28]["base_execution_choices"]
     assert "ALLOW" not in rows[29]["base_execution_choices"]
@@ -1574,10 +1582,10 @@ def test_profile_prohibits_zverify_grade(profile: dict[str, Any]) -> None:
     assert "zverify.grade" in prohibited
     hazards = {h["hazard_id"]: h for h in profile["known_interface_hazards"]}
     hazard = hazards["ZTL-H-001"]
-    assert "expects 'M' for a mark" in hazard["summary"]
-    assert "SILENTLY" in hazard["summary"]
+    assert "PARSED TERM" in hazard["summary"]
+    assert "does not accept the caller's formula string" in hazard["summary"]
     assert hazard["severity"] == "critical"
-    assert "judge()" in hazard["mitigation"]
+    assert "ztljudge.judge" in hazard["mitigation"]
 
 
 def test_profile_lists_all_four_dispositions_with_their_epistemic_mapping(
@@ -1594,7 +1602,7 @@ def test_profile_lists_all_four_dispositions_with_their_epistemic_mapping(
     }
     earned = next(e for e in profile["disposition_values"] if e["value"] == "EARNED")
     assert earned["grades"] == ["hereditary"]
-    assert earned["unverified"] == "empty"
+    assert earned["unverified"] == "any"
     on_credit = next(e for e in profile["disposition_values"] if e["value"] == "ON CREDIT")
     assert on_credit["unverified"] == "non-empty"
     assert "hereditary" not in on_credit["grades"]
@@ -1648,3 +1656,207 @@ def test_profile_does_not_execute_ztl(repo_root: Path) -> None:
     """A frozen description, not an integration."""
     profile_dir = repo_root / "docs" / "contracts" / "kernel-profiles"
     assert list(profile_dir.glob("**/*.py")) == []
+
+
+# ---------------------------------------------------------------------------
+# Revision 4A: measured convergence
+# ---------------------------------------------------------------------------
+
+
+def test_earned_may_carry_unverified_grounds(fixtures: dict[str, dict[str, Any]]) -> None:
+    """The measured correction: p | q with {p:T, q:Z} is EARNED with unverified ['q'].
+
+    A hereditary result cannot move under any refinement of those atoms, so the status is
+    ESTABLISHED and the ALLOW stands -- while the grounds are still preserved.
+    """
+    fixture = fixtures["33-earned-hereditary-with-unverified"]
+    ztl = fixture["input"]["ztl_result"]
+    assert ztl["disposition"] == "EARNED"
+    assert ztl["grade"] == "hereditary"
+    assert ztl["raw_verdict"] == "T"
+    assert ztl["unverified"] == ["q"]
+
+    decision = fixture["expected"]["runtime_decision"]
+    assert decision["epistemic_status"] == "ESTABLISHED"
+    assert decision["execution_disposition"] == "ALLOW"
+    assert decision["decision_basis"] == "SUBSTANTIVE"
+    assert "OIC-D-0001" in decision["reason_codes"]
+    assert decision["missing_ground_ids"] == ["q"], "the informational ground must survive"
+    assert "OIC-W-0015" in decision["reason_codes"]
+    assert decision["conditional_support_subscription_reference"] is None
+
+
+def test_established_allow_does_not_require_empty_missing_grounds(
+    repo_root: Path,
+) -> None:
+    """Mutation guard: reinstating maxItems=0 on Route A must break the measured case."""
+    schema = json.loads((repo_root / PROPOSED / "runtime-decision.schema.json").read_text("utf-8"))
+    route_a = schema["allOf"][0]["then"]["oneOf"][0]
+    assert "missing_ground_ids" not in route_a["properties"], (
+        "Route A must not constrain missing_ground_ids; 61 of 294 EARNED cases are non-empty"
+    )
+
+
+def test_dependency_ids_and_unverified_are_disjoint(
+    fixtures: dict[str, dict[str, Any]],
+) -> None:
+    """D: disjoint by construction, and the unverified set is exactly the Z atoms."""
+    checked = 0
+    for case, fixture in fixtures.items():
+        warrant = fixture["input"]["warrant_artifact"]
+        if warrant is None:
+            continue
+        checked += 1
+        dependencies = set(warrant["dependency_ids"])
+        unverified = set(warrant["unverified_ground_ids"])
+        assert not dependencies & unverified, f"{case}: overlap {sorted(dependencies & unverified)}"
+        assert unverified == set(fixture["input"]["ztl_result"]["unverified"]), case
+    assert checked >= 25
+
+
+# ---------------------------------------------------------------------------
+# E: conditional-support subscription
+# ---------------------------------------------------------------------------
+
+TRIGGERS = frozenset(
+    {
+        "ground_verified",
+        "ground_expired",
+        "ground_revoked",
+        "ground_corrected",
+        "relevant_epoch_changed",
+    }
+)
+
+
+def test_conditional_allow_carries_a_complete_subscription(
+    fixtures: dict[str, dict[str, Any]],
+) -> None:
+    allowing = [
+        case
+        for case, f in fixtures.items()
+        if f["expected"]["epistemic_status"] == "CONDITIONALLY_SUPPORTED"
+        and f["expected"]["execution_disposition"] == "ALLOW"
+    ]
+    assert allowing == ["08-on-credit-sound-allow-with-disclosure"]
+    decision = fixtures[allowing[0]]["expected"]["runtime_decision"]
+    reference = decision["conditional_support_subscription_reference"]
+    assert isinstance(reference, str) and reference.strip()
+    assert decision["conditional_support_subscription_ground_ids"] == decision["missing_ground_ids"]
+    assert set(decision["conditional_support_subscription_triggers"]) == TRIGGERS
+    assert len(decision["conditional_support_subscription_triggers"]) == len(TRIGGERS)
+
+
+SUBSCRIPTION_DEFECTS = (
+    "34-subscription-missing-reference",
+    "35-subscription-missing-ground-coverage",
+    "36-subscription-missing-trigger",
+    "37-subscription-ground-set-mismatch",
+)
+
+
+@pytest.mark.parametrize("case", SUBSCRIPTION_DEFECTS)
+def test_incomplete_subscription_cannot_allow(repo_root: Path, case: str) -> None:
+    decision = _fixture(repo_root, case)["expected"]["runtime_decision"]
+    assert decision["execution_disposition"] != "ALLOW", case
+    assert decision["epistemic_status"] == "CONDITIONALLY_SUPPORTED", case
+    assert decision["decision_basis"] == "PROCEDURAL", case
+    assert "OIC-W-0027" in decision["reason_codes"], case
+
+
+def test_each_subscription_defect_is_a_distinct_shape(
+    fixtures: dict[str, dict[str, Any]],
+) -> None:
+    """Four different ways to be incomplete, each actually different."""
+    missing_ref = fixtures["34-subscription-missing-reference"]["expected"]["runtime_decision"]
+    assert missing_ref["conditional_support_subscription_reference"] is None
+
+    coverage = fixtures["35-subscription-missing-ground-coverage"]["expected"]["runtime_decision"]
+    assert coverage["conditional_support_subscription_reference"]
+    assert set(coverage["conditional_support_subscription_ground_ids"]) < set(
+        coverage["missing_ground_ids"]
+    ), "must be a strict subset"
+
+    trigger = fixtures["36-subscription-missing-trigger"]["expected"]["runtime_decision"]
+    assert set(trigger["conditional_support_subscription_triggers"]) < TRIGGERS
+    assert "ground_revoked" not in trigger["conditional_support_subscription_triggers"]
+
+    mismatch = fixtures["37-subscription-ground-set-mismatch"]["expected"]["runtime_decision"]
+    covered = set(mismatch["conditional_support_subscription_ground_ids"])
+    needed = set(mismatch["missing_ground_ids"])
+    assert covered != needed
+    assert covered - needed, "covers a ground that is not missing"
+
+
+@pytest.mark.parametrize(
+    ("label", "override"),
+    [
+        (
+            "conditional_allow_without_subscription_reference",
+            {"conditional_support_subscription_reference": None},
+        ),
+        (
+            "conditional_allow_with_empty_subscription_reference",
+            {"conditional_support_subscription_reference": ""},
+        ),
+        (
+            "conditional_allow_missing_a_trigger",
+            {
+                "conditional_support_subscription_triggers": [
+                    "ground_verified",
+                    "ground_expired",
+                    "ground_revoked",
+                    "ground_corrected",
+                ]
+            },
+        ),
+        (
+            "conditional_allow_with_duplicate_trigger",
+            {
+                "conditional_support_subscription_triggers": [
+                    "ground_verified",
+                    "ground_verified",
+                    "ground_expired",
+                    "ground_revoked",
+                    "ground_corrected",
+                    "relevant_epoch_changed",
+                ]
+            },
+        ),
+        (
+            "conditional_allow_with_empty_subscription_grounds",
+            {"conditional_support_subscription_ground_ids": []},
+        ),
+        (
+            "subscription_on_an_established_decision",
+            {
+                "epistemic_status": "ESTABLISHED",
+                "conditional_support_subscription_reference": "sub:x",
+            },
+        ),
+    ],
+)
+def test_prohibited_subscription_shapes_are_schema_invalid(
+    repo_root: Path, label: str, override: dict[str, object]
+) -> None:
+    decision = dict(
+        _fixture(repo_root, "08-on-credit-sound-allow-with-disclosure")["expected"][
+            "runtime_decision"
+        ]
+    )
+    decision.update(override)
+    errors = list(_validator(repo_root, "runtime-decision").iter_errors(decision))
+    assert errors, f"{label} should be rejected by the schema"
+
+
+def test_subscription_fields_are_required(repo_root: Path) -> None:
+    for field in (
+        "conditional_support_subscription_reference",
+        "conditional_support_subscription_ground_ids",
+        "conditional_support_subscription_triggers",
+    ):
+        decision = dict(
+            _fixture(repo_root, "01-earned-hereditary-current")["expected"]["runtime_decision"]
+        )
+        del decision[field]
+        assert list(_validator(repo_root, "runtime-decision").iter_errors(decision)), field
