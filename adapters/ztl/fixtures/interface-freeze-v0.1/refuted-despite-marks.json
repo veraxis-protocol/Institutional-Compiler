@@ -1,0 +1,42 @@
+{
+  "case_id": "refuted-despite-marks",
+  "cross_check": {
+    "note": "zverify.grade expects 'M' for a mark. Passing 'Z' returns a wrong grade SILENTLY. judge() accepts 'Z' and converts internally; prefer judge().",
+    "zverify_grade_if_Z_passed_by_mistake": "hereditary",
+    "zverify_grade_with_M_dialect": "hereditary"
+  },
+  "fixture_sha256": "94a215a2b610a69ffd71662ef4e7f415ad80af04283890de6049ada7e6710afc",
+  "input": {
+    "formula": "p & q",
+    "marking": {
+      "p": "F",
+      "q": "Z"
+    }
+  },
+  "kernel": {
+    "entry": "ztljudge.judge",
+    "source": "live run"
+  },
+  "note": "false regardless of the unverified atom \u2014 marks do not matter here",
+  "raw_output": {
+    "disposition": "REFUTED",
+    "formula": "(p \u2227 q)",
+    "grade": "hereditary",
+    "unverified": [
+      "q"
+    ],
+    "verdict": "F",
+    "why": "false regardless of the unverified ['q']"
+  },
+  "recomputation": {
+    "depends_on": [
+      "p",
+      "q"
+    ],
+    "deterministic": true,
+    "recompute_when": [
+      "any atom in unverified is verified or expires"
+    ]
+  },
+  "status": "REACHABLE"
+}

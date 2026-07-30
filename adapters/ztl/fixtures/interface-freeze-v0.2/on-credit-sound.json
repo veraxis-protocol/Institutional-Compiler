@@ -1,0 +1,43 @@
+{
+  "case_id": "on-credit-sound",
+  "cross_check": {
+    "note": "zverify.grade expects 'M' for a mark. Passing 'Z' returns a wrong grade SILENTLY. judge() accepts 'Z' and converts internally; prefer judge().",
+    "zverify_grade_if_Z_passed_by_mistake": "hereditary",
+    "zverify_grade_with_M_dialect": "sound"
+  },
+  "fixture_sha256": "24d035a8fe5d2bde9d02c605155fc7e89f601c9e628f549a92fa69fb09ccb547",
+  "input": {
+    "formula": "(~p) -> (q -> q)",
+    "marking": {
+      "p": "Z",
+      "q": "Z"
+    }
+  },
+  "kernel": {
+    "entry": "ztljudge.judge",
+    "source": "live run"
+  },
+  "note": "TRUE ON CREDIT, sound: never lies about the present marking, but may stall under refinement. This is the E12 cell.",
+  "raw_output": {
+    "disposition": "ON CREDIT",
+    "formula": "(\u00acp \u2192 (q \u2192 q))",
+    "grade": "sound",
+    "unverified": [
+      "p",
+      "q"
+    ],
+    "verdict": "T",
+    "why": "true only on credit \u2014 rides the unverified ['p', 'q']; if one flips, the claim can die"
+  },
+  "recomputation": {
+    "depends_on": [
+      "p",
+      "q"
+    ],
+    "deterministic": true,
+    "recompute_when": [
+      "any atom in unverified is verified or expires"
+    ]
+  },
+  "status": "REACHABLE"
+}

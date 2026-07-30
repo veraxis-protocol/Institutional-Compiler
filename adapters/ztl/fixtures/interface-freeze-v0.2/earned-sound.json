@@ -1,0 +1,8 @@
+{
+  "case_id": "earned-sound",
+  "fixture_sha256": "c129411fd85d4ad1c800bdd71416a61f4951b9c061d1e3c15a76cfc970c9c6c8",
+  "input": null,
+  "raw_output": null,
+  "reason": "EARNED requires grade `hereditary` by construction. A verdict T that is only `sound` is classified ON CREDIT, not EARNED \u2014 see fixture on-credit-sound. Searched exhaustively over the formula pool.",
+  "status": "NOT_REACHABLE"
+}

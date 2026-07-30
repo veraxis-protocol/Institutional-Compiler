@@ -1,0 +1,45 @@
+{
+  "case_id": "nonempty-unverified",
+  "cross_check": {
+    "note": "zverify.grade expects 'M' for a mark. Passing 'Z' returns a wrong grade SILENTLY. judge() accepts 'Z' and converts internally; prefer judge().",
+    "zverify_grade_if_Z_passed_by_mistake": "hereditary",
+    "zverify_grade_with_M_dialect": "until-verification"
+  },
+  "fixture_sha256": "e84f7015cd3fdca7a6de9e2859a9a09e1bb9f9504cc99a8e6a3249d0d01b4abe",
+  "input": {
+    "formula": "p & (q | r)",
+    "marking": {
+      "p": "T",
+      "q": "Z",
+      "r": "Z"
+    }
+  },
+  "kernel": {
+    "entry": "ztljudge.judge",
+    "source": "live run"
+  },
+  "note": "the unverified list names the exact blocking atoms for missing_inputs",
+  "raw_output": {
+    "disposition": "OPEN",
+    "formula": "(p \u2227 (q \u2228 r))",
+    "grade": "until-verification",
+    "unverified": [
+      "q",
+      "r"
+    ],
+    "verdict": "F",
+    "why": "not established \u2014 verify ['q', 'r'] (it could still turn either way)"
+  },
+  "recomputation": {
+    "depends_on": [
+      "p",
+      "q",
+      "r"
+    ],
+    "deterministic": true,
+    "recompute_when": [
+      "any atom in unverified is verified or expires"
+    ]
+  },
+  "status": "REACHABLE"
+}

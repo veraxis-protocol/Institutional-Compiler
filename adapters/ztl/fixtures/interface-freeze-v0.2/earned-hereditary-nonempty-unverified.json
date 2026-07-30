@@ -1,0 +1,59 @@
+{
+  "case_id": "earned-hereditary-nonempty-unverified",
+  "cross_check": {
+    "note": "zverify.grade expects 'M' for a mark. Passing 'Z' returns a wrong grade SILENTLY. judge() accepts 'Z' and converts internally; prefer judge().",
+    "zverify_grade_if_Z_passed_by_mistake": "hereditary",
+    "zverify_grade_with_M_dialect": "hereditary"
+  },
+  "fixture_sha256": "e1941d1b2c49f0e10b59123d4fc9f76831cbc1af33b56eff0d5324f3f6606b3d",
+  "input": {
+    "formula": "p | q",
+    "marking": {
+      "p": "T",
+      "q": "Z"
+    }
+  },
+  "input_sha256": "830158aff7dc4bd1556e50f02eb78f8feaece66ac8a50e61662e10ce03cff89f",
+  "kernel": {
+    "entry": "ztljudge.judge",
+    "pinned_commit": "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b",
+    "repository": "https://github.com/inventor1975/ZTL",
+    "signed_tag": "veraxis-ztl-input-v0.2-signed",
+    "source": "live run"
+  },
+  "note": "EARNED + hereditary with a NON-EMPTY unverified list. The atom q is INFORMATIONAL for this conclusion: the verdict is carried entirely by p, and the kernel's own why-string states that the unverified do not matter. Kernel census: 61 of 294 cases behave this way. A mapping that keys EARNED on `unverified: empty` misroutes all of them to a procedural block.",
+  "oic_derivation": {
+    "dependency_ids": [
+      "p"
+    ],
+    "disjoint_from_unverified": true,
+    "rule": "dependency_ids = every VERIFIED atom (T or F) in the evaluated formula; over-approximation, no minimality claim (kernel-profile ztl-v0.1)"
+  },
+  "projections": {
+    "definition": "tests/contract/semantic_conformance.py (SC-WA-002)",
+    "formula_hash": "sha384:b77102bbe9a930a25e9c5faf24f9f1effe7c0a3eff7564c294c977ab135f4ac3b0c7f3b26b1be0d99b8cbb37b619aaa0",
+    "output_hash": "sha256:20657bd34724324103a24d5e66e3c504563e8a3f67cb126347377d5470ba7bf3"
+  },
+  "raw_output": {
+    "disposition": "EARNED",
+    "formula": "(p \u2228 q)",
+    "grade": "hereditary",
+    "unverified": [
+      "q"
+    ],
+    "verdict": "T",
+    "why": "grounded; the unverified ['q'] do not matter"
+  },
+  "recomputation": {
+    "command": "git clone https://github.com/inventor1975/ZTL.git ztl-conformance && cd ztl-conformance && git checkout 56e1ff0510c62b04dbd85bbe08b7a6deacbf276b && python3 -c \"import json, ztljudge; print(json.dumps(ztljudge.judge('p | q', {'p': 'T', 'q': 'Z'}), sort_keys=True))\"",
+    "depends_on": [
+      "p",
+      "q"
+    ],
+    "deterministic": true,
+    "recompute_when": [
+      "any atom in unverified is verified or expires"
+    ]
+  },
+  "status": "REACHABLE"
+}

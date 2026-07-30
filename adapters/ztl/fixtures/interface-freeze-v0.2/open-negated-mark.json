@@ -1,0 +1,40 @@
+{
+  "case_id": "open-negated-mark",
+  "cross_check": {
+    "note": "zverify.grade expects 'M' for a mark. Passing 'Z' returns a wrong grade SILENTLY. judge() accepts 'Z' and converts internally; prefer judge().",
+    "zverify_grade_if_Z_passed_by_mistake": "hereditary",
+    "zverify_grade_with_M_dialect": "until-verification"
+  },
+  "fixture_sha256": "93f8fe425ab521ed11f03f3174583cbbe951ec5560e165d19f813cf4be07b3ae",
+  "input": {
+    "formula": "~p",
+    "marking": {
+      "p": "Z"
+    }
+  },
+  "kernel": {
+    "entry": "ztljudge.judge",
+    "source": "live run"
+  },
+  "note": "negation of a mark: raw F, disposition OPEN \u2014 nothing is established",
+  "raw_output": {
+    "disposition": "OPEN",
+    "formula": "\u00acp",
+    "grade": "until-verification",
+    "unverified": [
+      "p"
+    ],
+    "verdict": "F",
+    "why": "not established \u2014 verify ['p'] (it could still turn either way)"
+  },
+  "recomputation": {
+    "depends_on": [
+      "p"
+    ],
+    "deterministic": true,
+    "recompute_when": [
+      "any atom in unverified is verified or expires"
+    ]
+  },
+  "status": "REACHABLE"
+}
