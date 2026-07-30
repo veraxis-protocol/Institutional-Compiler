@@ -641,7 +641,16 @@ def test_the_superseded_pin_appears_nowhere_active(repo_root: Path) -> None:
         "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
         "veraxis-ztl-input-v0.1.1-signed",
     )
-    correction_markers = ("not recomputable", "superseded", "corrected", "Superseded", "Corrected")
+    correction_markers = (
+        "not recomputable",
+        "superseded",
+        "corrected",
+        "Superseded",
+        "Corrected",
+        "physically impossible",
+        "never ran against",
+        "predates ztljudge.judge",
+    )
 
     for relpath in GOVERNING:
         text = _active(repo_root, relpath)

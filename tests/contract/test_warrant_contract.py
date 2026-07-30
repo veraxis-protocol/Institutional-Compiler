@@ -1258,13 +1258,47 @@ def test_veip_handoff_binding_set_is_stated(repo_root: Path) -> None:
     assert "deferred to OIC-GC-004" in text
 
 
+#: Scripts checked in by PR #18 as the ZTL side's OWN reproduction/verification evidence.
+#: They are not an OIC adapter, are not part of this work order, and are not imported or
+#: called from anywhere OIC-side. Naming them explicitly means an unnamed .py file appearing
+#: under adapters/ztl or adapters/veip -- an actual adapter implementation -- still fails.
+_ZTL_EVIDENCE_SCRIPTS = frozenset(
+    {
+        "adapters/ztl/evidence/kernel_census.py",
+        "adapters/ztl/fixtures/interface-freeze-v0.1/verify_fixtures.py",
+        "adapters/ztl/fixtures/interface-freeze-v0.2/verify_fixtures.py",
+    }
+)
+
+
 def test_no_ztl_or_veip_code_exists_or_is_imported(repo_root: Path) -> None:
     for module in sorted((repo_root / "src" / "oic").glob("*.py")):
         text = module.read_text(encoding="utf-8").lower()
         for forbidden in ("import ztl", "from ztl", "import veip", "from veip"):
             assert forbidden not in text, f"{module.name}: {forbidden}"
+
     for directory in ("ztl", "veip"):
-        assert list((repo_root / "adapters" / directory).glob("**/*.py")) == []
+        found = {
+            path.relative_to(repo_root).as_posix()
+            for path in (repo_root / "adapters" / directory).glob("**/*.py")
+        }
+        unexpected = found - _ZTL_EVIDENCE_SCRIPTS
+        assert unexpected == set(), (
+            f"unexpected .py under adapters/{directory}, not part of the named ZTL "
+            f"evidence scripts: {sorted(unexpected)}"
+        )
+
+    # The evidence scripts are the ZTL side's own reproduction tooling: never imported or
+    # called from OIC runtime code or from the semantic-conformance validator. (This test
+    # file itself legitimately names them as data above, so it is excluded here.)
+    for path in sorted((repo_root / "src" / "oic").glob("*.py")):
+        text = path.read_text(encoding="utf-8")
+        assert "kernel_census" not in text, path
+        assert "verify_fixtures" not in text, path
+    validator = repo_root / "tests" / "contract" / "semantic_conformance.py"
+    validator_text = validator.read_text(encoding="utf-8")
+    assert "kernel_census" not in validator_text
+    assert "verify_fixtures" not in validator_text
 
 
 def test_this_work_order_added_no_source_module(repo_root: Path) -> None:

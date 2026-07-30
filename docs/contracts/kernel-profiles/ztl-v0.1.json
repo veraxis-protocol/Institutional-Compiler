@@ -7,7 +7,7 @@
       "cases": 294,
       "cells_observed": 8,
       "location": "adapters/ztl/evidence/KERNEL-CENSUS-v0.1.json",
-      "note": "A census over a stated pool, not a proof of coverage. Run against the superseded commit e819dec7e89d2dc67d6371e1eedb8e7aae854602; the census's own findings (EARNED with non-empty unverified, dependency over-approximation) are independently confirmed by the reachable interface-freeze-v0.2 fixtures, so the pin correction does not weaken them.",
+      "note": "A census over a stated pool, not a proof of complete semantic coverage. Originally run against the author's working tree; the census artifact does not record the originating commit. Re-verified on 2026-07-30 against signed v0.2 pin 56e1ff0510c62b04dbd85bbe08b7a6deacbf276b with identical results: 61/294 EARNED with non-empty unverified; 138 refinements with zero disposition movements; 25/294 REFUTED with non-empty unverified; 38/180 joint-withdrawal dependency cases. It never ran against e819dec7e89d2dc67d6371e1eedb8e7aae854602; that commit predates ztljudge.judge, so a run against it would have been physically impossible.",
       "pool_formulas": 22
     },
     "index_sha256": "ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145",
@@ -227,6 +227,7 @@
     "REFUTED": "informational - irrelevant, the refutation holds regardless",
     "note": "One field, three meanings. A contract that does not distinguish them will get one wrong. All three are preserved on the decision record regardless."
   },
+  "version": "0.1.0",
   "warranty_grade_values": [
     {
       "implies": [
