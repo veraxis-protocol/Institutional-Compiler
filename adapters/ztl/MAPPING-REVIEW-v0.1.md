@@ -11,7 +11,7 @@ for PR #18.
 | PR #16 head | `9623cd43363eaa3d105f263d6c3dc8999755db9d` |
 | Canonical mapping `docs/contracts/ZTL-OCE-MAPPING-v0.1.json` | sha256 `296788601b1a6d12f258da245641be64fc65434f7e7c8946e8193b2233bb3c5e` |
 | Kernel profile `docs/contracts/kernel-profiles/ztl-v0.1.json` | sha256 `d8e515e76635cace04f2538f537addf0fd14de27ae4b883ae3ec57c3e5ced34a` |
-| Kernel | `ztljudge.judge`, commit `e819dec7e89d2dc67d6371e1eedb8e7aae854602` |
+| Kernel | `ztljudge.judge`; original WO-002 header cited commit `e819dec7…` — corrected: that commit predates the entrypoint (measured, WO-003); the operative pin is `veraxis-ztl-input-v0.2-signed` = `56e1ff0510c62b04dbd85bbe08b7a6deacbf276b` |
 | Measurement backing this review | [`evidence/KERNEL-CENSUS-v0.1.md`](evidence/KERNEL-CENSUS-v0.1.md), 294 cases |
 
 **Result: 26 ACCEPT, 2 ACCEPT WITH QUALIFICATION, 1 REJECT, 0 CANNOT DETERMINE.**
@@ -491,3 +491,50 @@ in `CONFORMANCE-v0.1.md` §1–2 (v0.1 is preserved unchanged; the correction li
 
 *This is provisional dependency evidence. Independent Tier-1 reproduction remains OPEN, and
 the OIC semantic implementation gate remains BLOCKED.*
+
+---
+
+# WO-004C Track C — final exact-head cross-review of Revision 4B
+
+**Reviewed head:** `cdca530ce11374bb9a37423ba076afc133dc1b70` (verified unmoved at review time; PR #16 DRAFT, unmerged).
+**Mapping SHA-256, independently recomputed:** `84b336191457707c19f11a08288e7b0570de21dd8b66d9a04456c507c0d96078` — **matches the supplied value.**
+**Kernel-profile SHA-256, independently recomputed:** `3fdd19970fcacaa53bdfb22b016b75865dd3b71e8c5f82d88a698b77818e07ce` — **matches the supplied value.**
+**Fixture-set index SHA-256:** `ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145` (unchanged; verified on disk at PR #18 head).
+
+## Verdict totals
+
+| Artifact | ACCEPT | QUALIFY | REJECT | CANNOT DETERMINE |
+|---|---|---|---|---|
+| 32 classification rows | **32** | 0 | 0 | 0 |
+| 5 warrant-policy rules | **5** | 0 | 0 | 0 |
+| 8 semantic-conformance rules | **8** | 0 | 0 | 0 |
+| Kernel profile | — | **1 (two minor items, below)** | 0 | 0 |
+| 28 warrant-artifact fields (re-review, §F) | **28** (5 NATIVE, 7 DERIVABLE, 16 OIC-ENRICHED; 0 UNSUPPORTED, 0 REQUIRES ZTL CHANGE) | — | — | — |
+
+## B. Profile and provenance — confirmed, with two minor qualifications
+
+Confirmed exactly: repository `https://github.com/inventor1975/ZTL`; signed tag `veraxis-ztl-input-v0.2-signed` (with an honest limitations note on the key); commit `56e1ff0510c62b04dbd85bbe08b7a6deacbf276b`; entrypoint `ztljudge.judge`; fixture set `interface-freeze-v0.2/`; index SHA `ffadd653…`; counts 13/3/16; `profile_id: ztl-v0.1` retained for a proposed, unadmitted profile; every remaining `e819dec7` mention is historical/corrective ("superseded", "predates ztljudge.judge") — **no active claim states the entrypoint existed at `e819dec7`**; interface-freeze-v0.1 remains byte-preserved (INDEX sha `b6e007bd…` verified on disk); PR #16 body states "PR #16 must not merge before PR #18."
+
+**Qualification B-1 (minor).** The profile's census note reads "Run against the superseded commit `e819dec7…`". The census artifact (`KERNEL-CENSUS-v0.1.json`) declares **no kernel commit at all**, and the claim is impossible as stated: `kernel_census.py` imports `ztljudge`, which does not exist at `e819dec7` (measured — exit 2). The truthful statement: the census was run against the author's working tree (kernel content identical to the v0.2 pin), and was **re-run against the v0.2 pin on 2026-07-30 with identical numbers** (61/294 EARNED non-empty; 138 refinements, 0 moved; 25/294 REFUTED non-empty; 38/180 pair-withdrawal). Required correction: replace "Run against the superseded commit e819dec7…" with "Re-verified against the v0.2 pin `56e1ff0…`; originally run against the author's working tree, whose census-relevant kernel content is identical." Severity: minor (provenance wording; the numbers themselves are confirmed).
+
+**Qualification B-2 (minor).** The order asks to confirm "version remains 0.1.0"; the profile has **no `version` key** (only `profile_id: ztl-v0.1`). Either add `"version": "0.1.0"` or treat `profile_id` as the sole version carrier. Severity: editorial.
+
+## C/D/E. The two prior objections are closed, and verified closed
+
+- **WP-3 (prior REJECT → ACCEPT).** The trigger now carries every ordered conjunct verbatim: matched row = 28, `epistemic_status = CONDITIONALLY_SUPPORTED`, `warranty_grade_observed = sound`, grade sufficient, `unverified_ground_policy = allow_with_disclosure`. Row 29 (`ON CREDIT`/`until-verification`) is PRECAUTIONARY, `OIC-W-0025`, `stage_2_applies = false`, execution BLOCK/ESCALATE only — it cannot reach WP-3, so a declared minimum of `until-verification` no longer authorizes a conditional ALLOW on an observed `until-verification` grade. WP-1/2 (order 1) precede the unverified-ground policy (order 2); WP-4/5 scopes unchanged.
+- **SC-RD-006 (new) — ACCEPT.** Requires observed sound + row 28 + WP-3 in `applied_control_overlay_ids` + `OIC-D-0005` and `OIC-W-0015` retained + SC-RD-001/002 independently passing + absence of `OIC-W-0025` on any decision reaching ALLOW. The runtime-decision schema adds the structural proxy (`applied_control_overlay_ids` contains `WP-3`; grade const `sound`) with an honest comment that row-binding itself is beyond JSON Schema.
+- **SC-WA-001 — ACCEPT.** Now states, verbatim to our measured edges: partition over the evaluated formula's atom set, not the caller's marking; marking-only atoms in neither array; unmarked formula atoms default to Z and land in `unverified_ground_ids`; uniqueness, disjointness, union equality; no minimality claim.
+- **SC-WA-002 — ACCEPT.** Both projections match the kernel and our independent recomputation (`sha384:` over the kernel-rendered formula; `sha256:` over the five-field projection, sorted keys, compact separators, no ASCII escaping; `why` and `marking` excluded).
+- **Rows 9/10 (prior qualification → ACCEPT).** The notes now state the coarse-state design explicitly: `REVOKED` is the coarse unusability state; `OIC-W-0020` (expiry) vs `OIC-W-0007` (revocation) plus the trigger vocabulary remain authoritative for the distinction.
+- **Rows 30/31 — ACCEPT.** `EARNED`+`sound` and `EARNED`+`until-verification` remain NOT_REACHABLE; supported by the v0.2 NOT_REACHABLE fixtures (exhaustive-search reasons recorded).
+- **Authority labels.** Every MEASURED row maps to a reachable v0.2 fixture; every ZTL-CONFIRMED row maps to a NOT_REACHABLE fixture or the measured disposition vocabulary (`DISPOSITIONS = (EARNED, ON CREDIT, OPEN, REFUTED)` — no CONTRADICTED). Confirmed.
+
+## F. Warrant-field feasibility, re-reviewed against the corrected pin
+
+All 28 classifications of Deliverable D stand under the v0.2 pin (the kernel bytes at `56e1ff0` are the same kernel the fields were measured against; the pin correction changes provenance, not behavior). Specifically re-confirmed: `formula_hash` DERIVABLE (recomputed today, SC-WA-002 definition); `dependency_ids` DERIVABLE with the over-approximation constraint (38/180 measured); `ground_set_hash` DERIVABLE (digest over the echoed marking); `input_hash` DERIVABLE; `output_hash` DERIVABLE (recomputed); `recomputation_reference` DERIVABLE — and now actually executable, since the v0.2 pin contains the entrypoint (the v0.1 pin did not); `ground_epoch`, `source_anchor_ids`, `admission_ids`, `generated_at`, `time_binding`, `valid_from`, `valid_until`, `revocation_references` OIC-ENRICHED (the kernel originates no epoch, clock, source, admission, or institutional time — consistent with the corrected PR #14 boundary memo). Nothing UNSUPPORTED; nothing REQUIRES ZTL CHANGE.
+
+## G. Subscription and trigger completeness — CONFIRMED from the ZTL boundary
+
+A conditional ALLOW rides exactly its `missing_ground_ids`. From the kernel boundary, the ground state of a subscribed atom can change only by: verification (`ground_verified`, the tick), expiry (`ground_expired`, the anti-tick), authoritative correction (`ground_corrected` — the expire+verify composite), authoritative revocation (`ground_revoked`), or a change of the epoch scope the grounds live in (`relevant_epoch_changed`). These are the only state transitions the logical-time model (E24/E25) admits; a formula change is a different warrant, not a trigger, and stipulation events concern the solver's self-referential systems, which the warrant path does not evaluate. We searched for a transition by which a conditional ALLOW could outlive its support without firing one of the five triggers and found none. The canonical set and its fixed order are **complete for the present anti-tick model**.
+
+*This is provisional dependency evidence. Independent Tier-1 reproduction remains OPEN, and the OIC semantic implementation gate remains BLOCKED.*

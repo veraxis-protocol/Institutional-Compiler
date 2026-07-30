@@ -26,7 +26,9 @@ ZTL adapter zone. **Provisional project-controlled dependency** (TDD-OIC-001 v1.
 | Item | Value |
 |---|---|
 | Repository | `github.com/inventor1975/ZTL` |
-| Signed tag | `veraxis-ztl-input-v0.1.1-signed` |
+| **Current signed tag (v0.2, WO-003)** | **`veraxis-ztl-input-v0.2-signed`** |
+| **Current commit (v0.2)** | **`56e1ff0510c62b04dbd85bbe08b7a6deacbf276b`** |
+| Signed tag (v0.1, historical — predates `ztljudge.judge`; see CONFORMANCE-v0.2.md §1) | `veraxis-ztl-input-v0.1.1-signed` |
 | Annotated tag (original, unchanged) | `veraxis-ztl-input-v0.1` |
 | Commit both point at | `e819dec7e89d2dc67d6371e1eedb8e7aae854602` |
 | Lean toolchain | `leanprover/lean4:v4.29.1` |

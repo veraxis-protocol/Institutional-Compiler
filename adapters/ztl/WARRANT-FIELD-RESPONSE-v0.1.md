@@ -11,7 +11,7 @@ for PR #18.
 | PR #16 head | `9623cd43363eaa3d105f263d6c3dc8999755db9d` |
 | `schemas/proposed/warrant-artifact.schema.json` | 28 properties, all required |
 | Kernel profile `docs/contracts/kernel-profiles/ztl-v0.1.json` | sha256 `d8e515e76635cace04f2538f537addf0fd14de27ae4b883ae3ec57c3e5ced34a` |
-| Kernel | `ztljudge.judge`, commit `e819dec7e89d2dc67d6371e1eedb8e7aae854602` |
+| Kernel | `ztljudge.judge`; original WO-002 header cited commit `e819dec7…` — corrected: the operative pin is `veraxis-ztl-input-v0.2-signed` = `56e1ff0510c62b04dbd85bbe08b7a6deacbf276b` (WO-003 measurement: the old pin predates the entrypoint) |
 
 ---
 
@@ -52,7 +52,7 @@ never sees it. `UNSUPPORTED` = outside the boundary. `REQUIRES ZTL CHANGE` = a n
 | 16 | `admission_ids` | **OIC-ENRICHED** | admission is OIC's plane |
 | 17 | `kernel_name` | **OIC-ENRICHED** | adapter constant |
 | 18 | `kernel_version` | **OIC-ENRICHED** | adapter constant |
-| 19 | `kernel_commit` | **OIC-ENRICHED** | adapter constant, pinned `e819dec…` |
+| 19 | `kernel_commit` | **OIC-ENRICHED** | adapter constant, pinned `56e1ff0…` (v0.2; the former `e819dec…` pin is superseded — WO-003) |
 | 20 | `input_hash` | **DERIVABLE** | digest over formula + marking |
 | 21 | `output_hash` | **DERIVABLE** | digest over the six non-presentational output fields; see §4.4 |
 | 22 | `generated_at` | **OIC-ENRICHED** | the kernel has no clock |
@@ -103,7 +103,7 @@ WARRANT-CONTRACT §5 would do it.
 The profile correctly says dispositions and grades are not portable between kernels. Then the
 identifier must be bound to `kernel_commit`, not merely declared alongside it: `ztl-v0.1`
 naming a *different* commit is a different semantics under the same label. The profile already
-records `commit: e819dec…`; the adapter must verify the two agree rather than trust the label.
+records the pinned commit (`56e1ff0…` under the v0.2 correction); the adapter must verify the two agree rather than trust the label.
 
 ### 4.2 `formula_hash` is derivable today, and the profile must pin *what* is hashed
 
