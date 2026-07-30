@@ -88,6 +88,41 @@
       "official_domain": "laws-lois.justice.gc.ca",
       "source_format": "HTML_INDEX_FOR_XML_OR_PDF_SELECTION",
       "expected_content_type": "text/html",
+      "canonical_artifact": {
+        "authority_identity": "Government Contracts Regulations (SOR/87-402; DORS/87-402)",
+        "format": "XML",
+        "hashing_role": "CANONICAL_IF_LATER_ACQUISITION_AUTHORIZED",
+        "english_url": "https://laws-lois.justice.gc.ca/eng/XML/SOR-87-402.xml",
+        "french_url": "https://laws-lois.justice.gc.ca/fra/XML/DORS-87-402.xml",
+        "observed_content_type": "text/xml",
+        "language_renderings_are_separate_authorities": false
+      },
+      "alternate_official_renderings": [
+        {
+          "format": "PDF",
+          "language": "BILINGUAL",
+          "role": "SECONDARY_HUMAN_REVIEW_ONLY",
+          "url": "https://laws-lois.justice.gc.ca/PDF/SOR-87-402.pdf",
+          "observed_content_type": "application/pdf"
+        }
+      ],
+      "version_metadata_sources": [
+        {
+          "role": "CURRENT_CONSOLIDATION_INDEX",
+          "language": "English",
+          "url": "https://laws-lois.justice.gc.ca/eng/regulations/sor-87-402/"
+        },
+        {
+          "role": "CURRENT_CONSOLIDATION_INDEX",
+          "language": "French",
+          "url": "https://laws-lois.justice.gc.ca/fra/reglements/DORS-87-402/"
+        },
+        {
+          "role": "POINT_IN_TIME_VERSION_HISTORY",
+          "language": "English",
+          "url": "https://laws-lois.justice.gc.ca/eng/regulations/sor-87-402/PITIndex.html"
+        }
+      ],
       "publication_date": null,
       "modification_date": "2026-06-05",
       "effective_from": null,
@@ -110,9 +145,9 @@
       "Last_Modified": null,
       "byte_length": null,
       "sha256": null,
-      "proposed_working_set_sections": ["complete current consolidated XML or PDF", "point-in-time metadata"],
+      "proposed_working_set_sections": ["complete current consolidated XML as canonical artifact", "bilingual PDF as secondary human-review rendering", "current index and point-in-time metadata"],
       "estimated_print_equivalent_pages": 18,
-      "unresolved_questions": ["Owner must select XML or PDF before acquisition", "Exact selected artifact URL and content type", "Legal status of the selected consolidation rendering"]
+      "unresolved_questions": ["Source-level rights and exclusions for exact later-acquired XML bytes", "Bilingual semantic equivalence is outside the experiment"]
     },
     {
       "source_id": "CA-4",
@@ -157,8 +192,8 @@
       "title": "Buyer’s Guide — Approvals and authorities",
       "issuer": "Public Services and Procurement Canada",
       "official_english_url": "https://canadabuys.canada.ca/en/buyer-s-portal/buyer-s-guide/approve/approvals-and-authorities",
-      "official_french_url": null,
-      "french_url_absence_reason": "Official French page is linked by the service, but its exact final URL was not deterministically confirmed",
+      "official_french_url": "https://achatscanada.canada.ca/fr/portail-de-l-acheteur/guide-de-l-acheteur/approuver/approbations-et-pouvoirs",
+      "french_url_absence_reason": null,
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
@@ -186,7 +221,7 @@
       "sha256": null,
       "proposed_working_set_sections": ["page-level authority and approval overview"],
       "estimated_print_equivalent_pages": 2,
-      "unresolved_questions": ["Exact French counterpart URL", "Page modification date", "Source-level licence notice and exclusions"]
+      "unresolved_questions": ["Bilingual semantic equivalence not tested", "Source-level licence notice and exclusions"]
     },
     {
       "source_id": "CA-5-DELEGATION",
@@ -194,8 +229,8 @@
       "title": "Buyer’s Guide — Delegation of authority guidelines",
       "issuer": "Public Services and Procurement Canada",
       "official_english_url": "https://canadabuys.canada.ca/en/buyer-s-portal/buyer-s-guide/approve/approvals-and-authorities/delegation-authority-guidelines",
-      "official_french_url": null,
-      "french_url_absence_reason": "Official French page is linked by the service, but its exact final URL was not deterministically confirmed",
+      "official_french_url": "https://achatscanada.canada.ca/fr/portail-de-l-acheteur/guide-de-l-acheteur/approuver/approbations-et-pouvoirs/lignes-directrices-sur-la-delegation-de-pouvoirs",
+      "french_url_absence_reason": null,
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
@@ -223,7 +258,7 @@
       "sha256": null,
       "proposed_working_set_sections": ["delegation evidence boundary", "missing individual delegation warning"],
       "estimated_print_equivalent_pages": 2,
-      "unresolved_questions": ["Exact French counterpart URL", "Page modification date", "Scope of intranet-only individual delegation instruments"]
+      "unresolved_questions": ["Bilingual semantic equivalence not tested", "Scope of intranet-only individual delegation instruments"]
     },
     {
       "source_id": "CA-5-SIGNING",
@@ -231,8 +266,8 @@
       "title": "Buyer’s Guide — Approval authorities and additional signing authorities",
       "issuer": "Public Services and Procurement Canada",
       "official_english_url": "https://canadabuys.canada.ca/en/buyer-s-portal/buyer-s-guide/approve/approvals-and-authorities/approval-authorities-and-additional-signing-authorities-support-acquisitions-program-clients-programs-only-other-canadian-commercial-corporation",
-      "official_french_url": null,
-      "french_url_absence_reason": "Official French page is linked by the service, but its exact final URL was not deterministically confirmed",
+      "official_french_url": "https://achatscanada.canada.ca/fr/portail-de-l-acheteur/guide-de-l-acheteur/approuver/approbations-et-pouvoirs/pouvoirs-d-approbation-et-pouvoirs-de-signature-supplementaires-l-appui-des-programmes-des-clients-du-programme-d-approvisionnement-uniquement",
+      "french_url_absence_reason": null,
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
@@ -260,7 +295,7 @@
       "sha256": null,
       "proposed_working_set_sections": ["selected signing-authority distinctions"],
       "estimated_print_equivalent_pages": 2,
-      "unresolved_questions": ["Exact French counterpart URL", "Page modification date", "Applicability boundaries for the selected page"]
+      "unresolved_questions": ["Bilingual semantic equivalence not tested", "Applicability boundaries for the selected page"]
     },
     {
       "source_id": "CA-5-LIMITS",
@@ -268,8 +303,8 @@
       "title": "Buyer’s Guide — Contracting limits including exceptional authorities",
       "issuer": "Public Services and Procurement Canada",
       "official_english_url": "https://canadabuys.canada.ca/en/buyer-s-portal/buyer-s-guide/approve/approvals-and-authorities/contracting-limits-including-exceptional-authorities",
-      "official_french_url": null,
-      "french_url_absence_reason": "Official French page is linked by the service, but its exact final URL was not deterministically confirmed",
+      "official_french_url": "https://achatscanada.canada.ca/fr/portail-de-l-acheteur/guide-de-l-acheteur/approuver/approbations-et-pouvoirs/limites-contractuelles-y-compris-les-pouvoirs-exceptionnels",
+      "french_url_absence_reason": null,
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
@@ -297,7 +332,7 @@
       "sha256": null,
       "proposed_working_set_sections": ["selected public contracting-limit tables", "exceptional-authority conditions"],
       "estimated_print_equivalent_pages": 2,
-      "unresolved_questions": ["Exact French counterpart URL", "Page modification date", "Public tables do not prove individual officer delegation"]
+      "unresolved_questions": ["Bilingual semantic equivalence not tested", "Public tables do not prove individual officer delegation"]
     },
     {
       "source_id": "CA-6-ARCHIVE",
@@ -342,8 +377,8 @@
       "title": "Archived: Chapter 6 — Approvals and authorities",
       "issuer": "Public Services and Procurement Canada",
       "official_english_url": "https://canadabuys.canada.ca/en/supply-manual/chapter-6",
-      "official_french_url": null,
-      "french_url_absence_reason": "Official French chapter link exists, but its exact final URL was not deterministically confirmed",
+      "official_french_url": "https://achatscanada.canada.ca/fr/guide-des-approvisionnements/chapitre-6",
+      "french_url_absence_reason": null,
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
@@ -369,9 +404,9 @@
       "Last_Modified": null,
       "byte_length": null,
       "sha256": null,
-      "proposed_working_set_sections": ["6.1 general approval framework", "selected 6.5 approval-document nodes", "selected 6.20 amendment-approval nodes"],
-      "estimated_print_equivalent_pages": 8,
-      "unresolved_questions": ["Exact French counterpart URL", "Final section/node enumeration", "Section-specific effective dates", "Historical applicability boundaries"]
+      "proposed_working_set_sections": ["6.1 general approval framework", "6.5 approval-document framework", "6.5.5.5 resubmission", "6.5.5.10 contract summary", "6.5.20 contract amendment", "6.20 approval and signing authorities"],
+      "estimated_print_equivalent_pages": 9,
+      "unresolved_questions": ["Bilingual semantic equivalence not tested", "Historical applicability boundaries"]
     },
     {
       "source_id": "CA-6-GLOSSARY",
@@ -379,8 +414,8 @@
       "title": "Archived: Supply Manual glossary",
       "issuer": "Public Services and Procurement Canada",
       "official_english_url": "https://canadabuys.canada.ca/en/supply-manual/glossary",
-      "official_french_url": null,
-      "french_url_absence_reason": "Official French glossary link exists, but its exact final URL was not deterministically confirmed",
+      "official_french_url": "https://achatscanada.canada.ca/fr/guide-des-approvisionnements/glossaire",
+      "french_url_absence_reason": null,
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
@@ -406,9 +441,10 @@
       "Last_Modified": null,
       "byte_length": null,
       "sha256": null,
-      "proposed_working_set_sections": ["directly referenced glossary entries only; final list unresolved"],
-      "estimated_print_equivalent_pages": 2,
-      "unresolved_questions": ["Exact French counterpart URL", "Final glossary-entry enumeration depends on selected Chapter 6 nodes"]
+      "proposed_working_set_sections": [],
+      "selected_glossary_entries": [],
+      "estimated_print_equivalent_pages": 0,
+      "unresolved_questions": ["No direct glossary reference was evidenced from the selected Chapter 6 nodes", "Bilingual semantic equivalence not tested"]
     }
   ],
   "excluded_by_default": [

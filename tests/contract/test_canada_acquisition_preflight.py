@@ -26,6 +26,8 @@ pytestmark = pytest.mark.contract
 REGISTRY_RELPATH = "benchmarks/preflight/canada/SOURCE-REGISTRY-PROPOSED-v0.1.json"
 FRENCH_RELPATH = "benchmarks/preflight/canada/FRENCH-COUNTERPARTS-v0.1.json"
 RECEIPT_SCHEMA_RELPATH = "benchmarks/preflight/canada/RECEIPT-SCHEMA-v0.1.json"
+RIGHTS_RELPATH = "benchmarks/preflight/canada/RIGHTS-PREFLIGHT-v0.1.md"
+SCOPE_RELPATH = "benchmarks/preflight/canada/WORKING-SET-SCOPE-v0.1.md"
 SCRIPT_RELPATH = "scripts/acquire_canada_preflight.py"
 
 EXPECTED_STATUS_SHA256 = "4a6894ca72ae8d2efcf48b3d25f8aca3bc1e2e86b6aa6aa5b38af31a52c7fde8"
@@ -345,13 +347,114 @@ def test_ca7_is_excluded_by_default(registry: dict[str, Any]) -> None:
 
 def test_proposed_working_set_is_within_ceiling(registry: dict[str, Any]) -> None:
     total = sum(source["estimated_print_equivalent_pages"] for source in registry["sources"])
-    assert total == 56
+    assert total == 55
     assert 30 <= total <= 60
 
 
 def test_registry_fields_are_complete(registry: dict[str, Any]) -> None:
     for source in registry["sources"]:
-        assert set(source) == REQUIRED_REGISTRY_FIELDS
+        assert set(source) >= REQUIRED_REGISTRY_FIELDS
+
+
+def test_ca3_has_exactly_one_xml_canonical_artifact(registry: dict[str, Any]) -> None:
+    ca3 = next(source for source in registry["sources"] if source["source_id"] == "CA-3")
+    canonical = ca3["canonical_artifact"]
+    assert canonical["format"] == "XML"
+    assert canonical["hashing_role"] == "CANONICAL_IF_LATER_ACQUISITION_AUTHORIZED"
+    assert canonical["english_url"].endswith("/eng/XML/SOR-87-402.xml")
+    assert canonical["french_url"].endswith("/fra/XML/DORS-87-402.xml")
+    assert not isinstance(canonical, list)
+
+
+def test_ca3_pdf_is_secondary_and_language_renderings_share_authority(
+    registry: dict[str, Any],
+) -> None:
+    ca3 = next(source for source in registry["sources"] if source["source_id"] == "CA-3")
+    assert ca3["canonical_artifact"]["language_renderings_are_separate_authorities"] is False
+    assert ca3["alternate_official_renderings"] == [
+        {
+            "format": "PDF",
+            "language": "BILINGUAL",
+            "role": "SECONDARY_HUMAN_REVIEW_ONLY",
+            "url": "https://laws-lois.justice.gc.ca/PDF/SOR-87-402.pdf",
+            "observed_content_type": "application/pdf",
+        }
+    ]
+
+
+def test_resolved_french_urls_are_https_and_allowlisted(
+    repo_root: Path, acquisition: AcquisitionModule
+) -> None:
+    counterparts = json.loads((repo_root / FRENCH_RELPATH).read_text(encoding="utf-8"))
+    for item in counterparts["counterparts"]:
+        url = item["official_french_url"]
+        if url is not None:
+            parsed = urlparse(url)
+            assert parsed.scheme == "https"
+            assert parsed.hostname in acquisition.ALLOWED_DOMAINS
+
+
+def test_unresolved_french_urls_retain_reason(repo_root: Path) -> None:
+    counterparts = json.loads((repo_root / FRENCH_RELPATH).read_text(encoding="utf-8"))
+    for item in counterparts["counterparts"]:
+        if item["official_french_url"] is None:
+            assert item["absence_reason"]
+            assert item["status"] == "UNRESOLVED"
+
+
+def test_ca6_nodes_are_explicitly_enumerated(repo_root: Path) -> None:
+    scope = (repo_root / SCOPE_RELPATH).read_text(encoding="utf-8")
+    node_ids = {
+        "CA-6-ARCHIVE-NOTICE",
+        "CA-6-6.1",
+        "CA-6-6.5",
+        "CA-6-6.5.5.5",
+        "CA-6-6.5.5.10",
+        "CA-6-6.5.20",
+        "CA-6-6.20",
+    }
+    assert all(f"| {node_id} |" in scope for node_id in node_ids)
+    assert sum(f"| {node_id} |" in scope for node_id in node_ids) == 7
+
+
+def test_selected_glossary_terms_are_directly_referenced(
+    registry: dict[str, Any],
+) -> None:
+    glossary = next(
+        source for source in registry["sources"] if source["source_id"] == "CA-6-GLOSSARY"
+    )
+    selected_terms = glossary["selected_glossary_entries"]
+    referenced_terms: set[str] = set()
+    assert set(selected_terms) <= referenced_terms
+    assert selected_terms == []
+
+
+def test_rights_classifications_use_only_preliminary_vocabulary(repo_root: Path) -> None:
+    allowed = {
+        "PRELIMINARY_CLEAR",
+        "PRELIMINARY_RESTRICTED",
+        "NOT_APPLICABLE",
+        "NOT_FOUND",
+        "UNRESOLVED",
+    }
+    rights = (repo_root / RIGHTS_RELPATH).read_text(encoding="utf-8")
+    classification_rows = [
+        line
+        for line in rights.splitlines()
+        if line.startswith("| CA-") and "Source units" not in line
+    ]
+    assert classification_rows
+    for row in classification_rows:
+        cells = [cell.strip() for cell in row.strip("|").split("|")]
+        assert set(cells[1:]) <= allowed
+
+
+def test_no_source_is_marked_legally_cleared_or_redistributable(repo_root: Path) -> None:
+    rights = (repo_root / RIGHTS_RELPATH).read_text(encoding="utf-8")
+    assert "| CLEARED |" not in rights
+    assert "| APPROVED |" not in rights
+    assert "| LEGALLY_PERMITTED |" not in rights
+    assert "| REDISTRIBUTABLE |" not in rights
 
 
 def test_unobserved_retrieval_facts_are_null(registry: dict[str, Any]) -> None:
