@@ -1,8 +1,8 @@
 {
+  "applied_control_overlay_ids": [],
   "case_id": "22-profile-mismatch",
-  "classification_row": 14,
-  "control_overlay": null,
-  "description": "Well formed and EARNED, but produced under a different kernel profile. Dispositions, grades and digests are not portable, so the hashes are never compared.",
+  "classification_row": 15,
+  "description": "Produced under a different kernel profile, so the hashes are never compared.",
   "expected": {
     "decision_basis": "PROCEDURAL",
     "epistemic_status": "UNRESOLVED",
@@ -15,6 +15,7 @@
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
+      "applied_control_overlay_ids": [],
       "authority_version": "auth-v2",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
@@ -36,6 +37,7 @@
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
       "unverified_ground_policy_applied": null,
       "warrant_artifact_id": "warrant:22",
+      "warrant_requirement_mode": "required",
       "warrant_state": "MISBOUND",
       "warranty_grade_observed": "hereditary",
       "warranty_grade_required": "hereditary"

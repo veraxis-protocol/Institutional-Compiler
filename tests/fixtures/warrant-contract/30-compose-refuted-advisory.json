@@ -1,72 +1,50 @@
 {
-  "case_id": "28-overlay-conditional-support-advisory",
-  "classification_row": 26,
-  "control_overlay": "O-2",
-  "description": "CONDITIONALLY_SUPPORTED + advisory stays conditionally supported. The overlay cannot promote it to ESTABLISHED, and the missing grounds survive.",
+  "applied_control_overlay_ids": [
+    "DM-3"
+  ],
+  "case_id": "30-compose-refuted-advisory",
+  "classification_row": 23,
+  "description": "COMPOSITION EXAMPLE 3. REFUTED + advisory. The substantive refutation reason OIC-W-0013 remains present; under the old flat mapping this recorded an established positive.",
   "expected": {
     "decision_basis": "CONTROL_REQUIREMENT",
-    "epistemic_status": "CONDITIONALLY_SUPPORTED",
+    "epistemic_status": "REFUTED",
     "execution_disposition": "ADVISORY",
-    "missing_ground_anchors": [
-      {
-        "admitted_unit_id": "cnu:threshold",
-        "expected_evidence_type": "registry_extract",
-        "ground_id": "ground:under_threshold",
-        "source_id": "src:proc-manual-2026",
-        "source_node_id": "node:cl-4.2.1",
-        "span": {
-          "end": 188,
-          "start": 120
-        }
-      }
-    ],
-    "missing_ground_ids": [
-      "ground:under_threshold"
-    ],
+    "missing_ground_anchors": [],
+    "missing_ground_ids": [],
     "reason_codes": [
       "OIC-D-0003",
-      "OIC-W-0015"
+      "OIC-W-0013"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
+      "applied_control_overlay_ids": [
+        "DM-3"
+      ],
       "authority_version": "auth-v2",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
       "decision_basis": "CONTROL_REQUIREMENT",
       "envelope_id": "env:proc-001",
-      "epistemic_status": "CONDITIONALLY_SUPPORTED",
+      "epistemic_status": "REFUTED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:28",
+      "evaluation_id": "eval:30",
       "execution_disposition": "ADVISORY",
-      "input_hash": "sha256:0b0df566cab7ed608e0ab568f6dd5d64438c9ef2d3154efbeb29c7e8d9de8424",
-      "missing_ground_anchors": [
-        {
-          "admitted_unit_id": "cnu:threshold",
-          "expected_evidence_type": "registry_extract",
-          "ground_id": "ground:under_threshold",
-          "source_id": "src:proc-manual-2026",
-          "source_node_id": "node:cl-4.2.1",
-          "span": {
-            "end": 188,
-            "start": 120
-          }
-        }
-      ],
-      "missing_ground_ids": [
-        "ground:under_threshold"
-      ],
+      "input_hash": "sha256:cefbd3704fc5428d75d0f94011ce706ccf2ac3601303211dc4b93724acdf7b9d",
+      "missing_ground_anchors": [],
+      "missing_ground_ids": [],
       "on_unknown_applied": null,
       "reason_codes": [
         "OIC-D-0003",
-        "OIC-W-0015"
+        "OIC-W-0013"
       ],
-      "replay_reference": "replay:28-overlay-conditional-support-advisory@sha256:0b0df566cab7ed608e0ab568f6dd5d64438c9ef2d3154efbeb29c7e8d9de8424",
+      "replay_reference": "replay:30-compose-refuted-advisory@sha256:cefbd3704fc5428d75d0f94011ce706ccf2ac3601303211dc4b93724acdf7b9d",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
       "unverified_ground_policy_applied": null,
-      "warrant_artifact_id": "warrant:28",
+      "warrant_artifact_id": "warrant:30",
+      "warrant_requirement_mode": "required",
       "warrant_state": "USABLE",
-      "warranty_grade_observed": "sound",
-      "warranty_grade_required": "sound"
+      "warranty_grade_observed": "hereditary",
+      "warranty_grade_required": "hereditary"
     },
     "warrant_state": "USABLE"
   },
@@ -82,10 +60,10 @@
       "on_unknown": "deny",
       "warrant_requirement": {
         "kernel_profile_id": "ztl-v0.1",
-        "minimum_warranty_grade": "sound",
+        "minimum_warranty_grade": "hereditary",
         "mode": "required",
         "on_insufficient_grade": "escalate",
-        "unverified_ground_policy": "allow_with_disclosure"
+        "unverified_ground_policy": "forbid"
       }
     },
     "runtime_context": {
@@ -114,7 +92,7 @@
         "ground:registered",
         "ground:under_threshold"
       ],
-      "disposition": "ON CREDIT",
+      "disposition": "REFUTED",
       "formula": "registered & under_threshold",
       "formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
       "generated_at": "2026-07-29T00:00:00Z",
@@ -124,7 +102,7 @@
         "sequence": 7
       },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
-      "input_hash": "sha256:7122d5e08ff67c04b45e25dd2ddb6f5358a8b7eb19be80005ef9a2289d3d64f5",
+      "input_hash": "sha256:753ad9b380d7b591aaa99c2ddac2e80359c639e8108f16bff59b58005be6a887",
       "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
       "kernel_name": "ztl",
       "kernel_profile_id": "ztl-v0.1",
@@ -134,34 +112,30 @@
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:96d69921121d8a75f3c6d018c841f92c8bd8dbdadb6addb6928efec97c28cc10",
-      "raw_verdict": "T",
-      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:7122d5e08ff67c04b45e25dd2ddb6f5358a8b7eb19be80005ef9a2289d3d64f5)",
+      "output_hash": "sha256:2d8e1544e7442baf796ac2d767bb10027dfec16c88544564b3b320790e0d58f7",
+      "raw_verdict": "F",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:753ad9b380d7b591aaa99c2ddac2e80359c639e8108f16bff59b58005be6a887)",
       "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
         "anchor:a1"
       ],
       "time_binding": {
-        "attestation_hash": "sha256:b9fa26cc2471069958bafd904aa5758767745f4d290b68fb99ff871ac59101ba",
+        "attestation_hash": "sha256:7a01e5fc09bc6142c8dc05dda95f61e172210560966fd26578b65424e1718bf8",
         "reference": "tsa:veraxis-dev",
         "source": "attested_timestamp"
       },
-      "unverified_ground_ids": [
-        "ground:under_threshold"
-      ],
+      "unverified_ground_ids": [],
       "valid_from": "2026-07-01T00:00:00Z",
       "valid_until": "2026-12-31T23:59:59Z",
-      "warrant_artifact_id": "warrant:28",
-      "warranty_grade": "sound"
+      "warrant_artifact_id": "warrant:30",
+      "warranty_grade": "hereditary"
     },
     "ztl_result": {
-      "disposition": "ON CREDIT",
-      "grade": "sound",
-      "raw_verdict": "T",
-      "unverified": [
-        "ground:under_threshold"
-      ]
+      "disposition": "REFUTED",
+      "grade": "hereditary",
+      "raw_verdict": "F",
+      "unverified": []
     }
   },
   "reachability": "REACHABLE",

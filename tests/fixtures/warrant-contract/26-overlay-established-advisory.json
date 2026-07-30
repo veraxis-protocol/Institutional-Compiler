@@ -1,50 +1,52 @@
 {
-  "case_id": "06-open-raw-t-not-reachable",
-  "classification_row": 24,
-  "control_overlay": null,
-  "description": "ZTL exhaustive search found no counterexample: OPEN never carries raw T. Defensive fail-closed row; no envelope rule may depend on this state.",
+  "applied_control_overlay_ids": [
+    "DM-3"
+  ],
+  "case_id": "26-overlay-established-advisory",
+  "classification_row": 27,
+  "description": "Recorded, does not gate.",
   "expected": {
-    "decision_basis": "PROCEDURAL",
-    "epistemic_status": "UNRESOLVED",
-    "execution_disposition": "ESCALATE",
+    "decision_basis": "CONTROL_REQUIREMENT",
+    "epistemic_status": "ESTABLISHED",
+    "execution_disposition": "ADVISORY",
     "missing_ground_anchors": [],
-    "missing_ground_ids": [
-      "ground:registered"
-    ],
+    "missing_ground_ids": [],
     "reason_codes": [
-      "OIC-W-0015",
-      "OIC-W-0022"
+      "OIC-D-0001",
+      "OIC-D-0003"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
+      "applied_control_overlay_ids": [
+        "DM-3"
+      ],
       "authority_version": "auth-v2",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
-      "decision_basis": "PROCEDURAL",
+      "decision_basis": "CONTROL_REQUIREMENT",
       "envelope_id": "env:proc-001",
-      "epistemic_status": "UNRESOLVED",
+      "epistemic_status": "ESTABLISHED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:06",
-      "execution_disposition": "ESCALATE",
-      "input_hash": "sha256:6c64f10ebb2305c5c5ed9db20d50fd95803d30a1d75e3b53ea24e12178bc6493",
+      "evaluation_id": "eval:26",
+      "execution_disposition": "ADVISORY",
+      "input_hash": "sha256:6d332a3f176bbbfd023842a84c91b1e09f256507d3137c40de852e8a3f21837b",
       "missing_ground_anchors": [],
-      "missing_ground_ids": [
-        "ground:registered"
-      ],
-      "on_unknown_applied": "escalate",
+      "missing_ground_ids": [],
+      "on_unknown_applied": null,
       "reason_codes": [
-        "OIC-W-0015",
-        "OIC-W-0022"
+        "OIC-D-0001",
+        "OIC-D-0003"
       ],
-      "replay_reference": "replay:06-open-raw-t-not-reachable@sha256:6c64f10ebb2305c5c5ed9db20d50fd95803d30a1d75e3b53ea24e12178bc6493",
+      "replay_reference": "replay:26-overlay-established-advisory@sha256:6d332a3f176bbbfd023842a84c91b1e09f256507d3137c40de852e8a3f21837b",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
       "unverified_ground_policy_applied": null,
-      "warrant_artifact_id": "warrant:06",
-      "warrant_state": "UNSUPPORTED_GRADE",
-      "warranty_grade_observed": "until-verification",
+      "warrant_artifact_id": "warrant:26",
+      "warrant_requirement_mode": "required",
+      "warrant_state": "USABLE",
+      "warranty_grade_observed": "hereditary",
       "warranty_grade_required": "hereditary"
     },
-    "warrant_state": "UNSUPPORTED_GRADE"
+    "warrant_state": "USABLE"
   },
   "input": {
     "envelope": {
@@ -53,9 +55,9 @@
       "bound_kernel_profile_id": "ztl-v0.1",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
-      "decision_mode": "automatic",
+      "decision_mode": "advisory",
       "envelope_id": "env:proc-001",
-      "on_unknown": "escalate",
+      "on_unknown": "deny",
       "warrant_requirement": {
         "kernel_profile_id": "ztl-v0.1",
         "minimum_warranty_grade": "hereditary",
@@ -90,7 +92,7 @@
         "ground:registered",
         "ground:under_threshold"
       ],
-      "disposition": "OPEN",
+      "disposition": "EARNED",
       "formula": "registered & under_threshold",
       "formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
       "generated_at": "2026-07-29T00:00:00Z",
@@ -100,7 +102,7 @@
         "sequence": 7
       },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
-      "input_hash": "sha256:2f7cd473a40180bf913dddde0f3c50d58125a177967012c38bed50f54573b85b",
+      "input_hash": "sha256:e6d1d98ce57cd5c8c56bffbf4ddc20a60785bdc96f506033f528f07bd907588b",
       "kernel_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
       "kernel_name": "ztl",
       "kernel_profile_id": "ztl-v0.1",
@@ -110,36 +112,32 @@
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:194eaa3a5cc519c125bff8ffe73512d199c93a2fc9ca2a74a01160d70921d7e5",
+      "output_hash": "sha256:24834b30c3576be3684165765b9c9e58395a6fa6a504bde1b5c94bd4b37681f6",
       "raw_verdict": "T",
-      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:2f7cd473a40180bf913dddde0f3c50d58125a177967012c38bed50f54573b85b)",
+      "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:e6d1d98ce57cd5c8c56bffbf4ddc20a60785bdc96f506033f528f07bd907588b)",
       "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
         "anchor:a1"
       ],
       "time_binding": {
-        "attestation_hash": "sha256:25cad9f8d4fb403e42f6b1b9b9e1c7690db007deec8ecc88f76f8e799e1f970a",
+        "attestation_hash": "sha256:4a41bae260536b9ad8f4dd3efa4507834c12971824db9457eeacb1608872246e",
         "reference": "tsa:veraxis-dev",
         "source": "attested_timestamp"
       },
-      "unverified_ground_ids": [
-        "ground:registered"
-      ],
+      "unverified_ground_ids": [],
       "valid_from": "2026-07-01T00:00:00Z",
       "valid_until": "2026-12-31T23:59:59Z",
-      "warrant_artifact_id": "warrant:06",
-      "warranty_grade": "until-verification"
+      "warrant_artifact_id": "warrant:26",
+      "warranty_grade": "hereditary"
     },
     "ztl_result": {
-      "disposition": "OPEN",
-      "grade": "until-verification",
+      "disposition": "EARNED",
+      "grade": "hereditary",
       "raw_verdict": "T",
-      "unverified": [
-        "ground:registered"
-      ]
+      "unverified": []
     }
   },
-  "reachability": "NOT_REACHABLE",
+  "reachability": "REACHABLE",
   "status": "PROPOSED - conformance fixture, not admitted"
 }

@@ -1,8 +1,8 @@
 {
   "applied_control_overlay_ids": [],
-  "case_id": "13-kernel-unavailable",
-  "classification_row": 1,
-  "description": "No warrant can be produced; one is never fabricated.",
+  "case_id": "24-warrant-requirement-missing",
+  "classification_row": 5,
+  "description": "The control contract itself is absent. A procedural contract error, coded OIC-W-0026 and recorded with a null mode -- NOT conflated with an explicit not_required.",
   "expected": {
     "decision_basis": "PROCEDURAL",
     "epistemic_status": "UNRESOLVED",
@@ -11,7 +11,7 @@
     "missing_ground_ids": [],
     "reason_codes": [
       "OIC-D-0004",
-      "OIC-W-0002"
+      "OIC-W-0026"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
@@ -23,26 +23,26 @@
       "envelope_id": "env:proc-001",
       "epistemic_status": "UNRESOLVED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:13",
+      "evaluation_id": "eval:24",
       "execution_disposition": "BLOCK",
-      "input_hash": "sha256:67dfe4e82fe42b2d3e950203a8966268277ef97d2e93bd7515e2d063144d323d",
+      "input_hash": "sha256:8ad502c3b89de32db7ebacf832f53e0197e9c2f7e6d278c6bafc54d87ef39da9",
       "missing_ground_anchors": [],
       "missing_ground_ids": [],
       "on_unknown_applied": "deny",
       "reason_codes": [
         "OIC-D-0004",
-        "OIC-W-0002"
+        "OIC-W-0026"
       ],
-      "replay_reference": "replay:13-kernel-unavailable@sha256:67dfe4e82fe42b2d3e950203a8966268277ef97d2e93bd7515e2d063144d323d",
+      "replay_reference": "replay:24-warrant-requirement-missing@sha256:8ad502c3b89de32db7ebacf832f53e0197e9c2f7e6d278c6bafc54d87ef39da9",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
       "unverified_ground_policy_applied": null,
       "warrant_artifact_id": null,
-      "warrant_requirement_mode": "required",
-      "warrant_state": "ABSENT",
+      "warrant_requirement_mode": null,
+      "warrant_state": "MALFORMED",
       "warranty_grade_observed": null,
-      "warranty_grade_required": "hereditary"
+      "warranty_grade_required": null
     },
-    "warrant_state": "ABSENT"
+    "warrant_state": "MALFORMED"
   },
   "input": {
     "envelope": {
@@ -54,13 +54,7 @@
       "decision_mode": "automatic",
       "envelope_id": "env:proc-001",
       "on_unknown": "deny",
-      "warrant_requirement": {
-        "kernel_profile_id": "ztl-v0.1",
-        "minimum_warranty_grade": "hereditary",
-        "mode": "required",
-        "on_insufficient_grade": "escalate",
-        "unverified_ground_policy": "forbid"
-      }
+      "warrant_requirement": null
     },
     "runtime_context": {
       "admission_version": "adm-v3",
@@ -74,7 +68,7 @@
       "current_ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
       "evaluated_at": "2026-08-01T12:00:00Z",
       "expired_ground_ids": [],
-      "kernel_available": false,
+      "kernel_available": true,
       "revoked_ground_ids": [],
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4"
     },

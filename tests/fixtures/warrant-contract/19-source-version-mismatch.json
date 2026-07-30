@@ -1,7 +1,7 @@
 {
+  "applied_control_overlay_ids": [],
   "case_id": "19-source-version-mismatch",
-  "classification_row": 11,
-  "control_overlay": null,
+  "classification_row": 12,
   "description": "I-07.",
   "expected": {
     "decision_basis": "PROCEDURAL",
@@ -15,6 +15,7 @@
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
+      "applied_control_overlay_ids": [],
       "authority_version": "auth-v2",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
@@ -36,6 +37,7 @@
       "source_version_set_hash": "sha256:132d83b3554c80fdd64e7bce54fa6327fd42ee4bcdc2e6f2a37b4afda4d5bbb9",
       "unverified_ground_policy_applied": null,
       "warrant_artifact_id": "warrant:19",
+      "warrant_requirement_mode": "required",
       "warrant_state": "MISBOUND",
       "warranty_grade_observed": "hereditary",
       "warranty_grade_required": "hereditary"

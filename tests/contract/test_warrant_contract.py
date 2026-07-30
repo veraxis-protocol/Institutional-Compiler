@@ -40,16 +40,16 @@ PROPOSED = "schemas/proposed"
 
 EXPECTED_CASES = (
     "01-earned-hereditary-current",
-    "02-earned-sound-not-reachable",
-    "03-earned-until-verification-not-reachable",
+    "02-earned-sound-unsupported-result",
+    "03-earned-until-verification-unsupported-result",
     "04-refuted",
     "05-open-raw-f",
-    "06-open-raw-t-not-reachable",
+    "06-open-raw-t-unsupported-result",
     "07-open-raw-z",
     "08-on-credit-sound-allow-with-disclosure",
     "09-on-credit-sound-forbid",
     "10-on-credit-sound-escalate",
-    "11-on-credit-sound-insufficient-grade",
+    "11-on-credit-insufficient-grade-escalate",
     "12-on-credit-until-verification",
     "13-kernel-unavailable",
     "14-warrant-stale",
@@ -61,13 +61,16 @@ EXPECTED_CASES = (
     "20-admission-version-mismatch",
     "21-warrant-not-yet-valid",
     "22-profile-mismatch",
-    "23-warrant-not-required",
-    "24-overlay-established-human-judgment",
-    "25-overlay-established-advisory",
-    "26-overlay-refuted-human-judgment",
+    "23-warrant-explicitly-not-applicable",
+    "24-warrant-requirement-missing",
+    "25-overlay-established-human-judgment",
+    "26-overlay-established-advisory",
     "27-overlay-unresolved-advisory",
-    "28-overlay-conditional-support-advisory",
-    "29-overlay-contradicted-human-judgment",
+    "28-compose-conditional-insufficient-grade-then-human-judgment",
+    "29-compose-conditional-accepted-then-human-judgment",
+    "30-compose-refuted-advisory",
+    "31-compose-contradicted-human-judgment",
+    "32-compose-conditional-advisory",
 )
 
 #: The only reason codes that may accompany a SUBSTANTIVE *block*.
@@ -119,7 +122,10 @@ def _rows(repo_root: Path) -> Any:  # noqa: ANN401 - JSON is dynamic
 
 def _overlays(repo_root: Path) -> Any:  # noqa: ANN401 - JSON is dynamic
     document = json.loads((repo_root / MAPPING_JSON).read_text(encoding="utf-8"))
-    return {row["overlay_id"]: row for row in document["control_overlays"]}
+    return {
+        **{r["rule_id"]: r for r in document["warrant_policy_rules"]},
+        **{o["overlay_id"]: o for o in document["decision_mode_overlays"]},
+    }
 
 
 def _validator(repo_root: Path, name: str) -> Draft202012Validator:
@@ -151,7 +157,10 @@ def rows(mapping: dict[str, Any]) -> dict[int, dict[str, Any]]:
 
 @pytest.fixture(scope="module")
 def overlays(mapping: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    return {row["overlay_id"]: row for row in mapping["control_overlays"]}
+    return {
+        **{r["rule_id"]: r for r in mapping["warrant_policy_rules"]},
+        **{o["overlay_id"]: o for o in mapping["decision_mode_overlays"]},
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -219,6 +228,12 @@ def test_warrant_requirement_validates(repo_root: Path, case: str) -> None:
     if envelope is None:
         return
     requirement = envelope["warrant_requirement"]
+    if requirement is None:
+        # A deliberately missing control contract: OIC-W-0026, mode recorded as null.
+        decision = _fixture(repo_root, case)["expected"]["runtime_decision"]
+        assert decision["warrant_requirement_mode"] is None, case
+        assert "OIC-W-0026" in decision["reason_codes"], case
+        return
     errors = sorted(_validator(repo_root, "warrant-requirement").iter_errors(requirement), key=str)
     assert errors == [], [error.message for error in errors]
 
@@ -259,10 +274,13 @@ def test_json_mapping_is_declared_canonical(mapping: dict[str, Any]) -> None:
 def test_mapping_is_compositional(mapping: dict[str, Any]) -> None:
     """Two tables, not one. A flat table let an overlay assert an epistemic status."""
     assert "rows" not in mapping, "the flat rows array must be gone"
+    assert "control_overlays" not in mapping, "overlays are now split into two stages"
     assert mapping["classification_rows"]
-    assert mapping["control_overlays"]
-    composition = mapping["composition"]
-    assert "MUST NOT rewrite epistemic_status" in composition["control_overlays"]
+    assert mapping["warrant_policy_rules"]
+    assert mapping["decision_mode_overlays"]
+    stages = mapping["evaluation_stages"]
+    assert set(stages) >= {"1_classification", "2_warrant_policy", "3_decision_mode"}
+    assert any("preserves the epistemic status" in i for i in stages["invariants"])
 
 
 def test_disposition_to_epistemic_mapping_is_declared(mapping: dict[str, Any]) -> None:
@@ -285,15 +303,16 @@ def test_markdown_table_is_generated_from_the_json(repo_root: Path) -> None:
     assert (repo_root / MAPPING_MD).read_text(encoding="utf-8") == rendered_markdown(repo_root)
 
 
-def test_markdown_contains_both_tables(repo_root: Path) -> None:
+def test_markdown_contains_all_three_stage_tables(repo_root: Path) -> None:
     text = (repo_root / MAPPING_MD).read_text(encoding="utf-8")
-    assert "### Classification rows" in text
-    assert "### Control overlays" in text
+    assert "### Stage 1 - classification" in text
+    assert "### Stage 2 - warrant policy" in text
+    assert "### Stage 3 - decision mode" in text
     assert "PRESERVE" in text
 
 
 def test_every_classification_row_is_well_formed(rows: dict[int, dict[str, Any]]) -> None:
-    assert set(rows) == set(range(1, 30))
+    assert set(rows) == set(range(1, 32))
     for number, row in rows.items():
         assert row["epistemic_status"] in EPISTEMIC, number
         assert row["decision_basis"] in BASES, number
@@ -314,10 +333,13 @@ def test_every_overlay_preserves_epistemic_status(
     overlays: dict[str, dict[str, Any]],
 ) -> None:
     """The structural guarantee: an overlay changes what was done, not what is true."""
-    assert len(overlays) == 7
+    assert len(overlays) == 8
     for identifier, overlay in overlays.items():
         assert overlay["epistemic_effect"] == "PRESERVE", identifier
         assert "epistemic_status" not in overlay, identifier
+        if overlay.get("identity"):
+            assert overlay["execution_disposition"] == "PRESERVE", identifier
+            continue
         assert overlay["decision_basis"] == "CONTROL_REQUIREMENT", identifier
         assert overlay["policy_reason_code"] in CONTROL_POLICY_CODES, identifier
         assert overlay["execution_disposition"] in {"ALLOW", "BLOCK", "ESCALATE", "ADVISORY"}
@@ -325,59 +347,157 @@ def test_every_overlay_preserves_epistemic_status(
 
 def test_only_one_overlay_can_allow(overlays: dict[str, dict[str, Any]]) -> None:
     allowing = [k for k, v in overlays.items() if v["execution_disposition"] == "ALLOW"]
-    assert allowing == ["O-5"]
-    assert overlays["O-5"]["policy_reason_code"] == "OIC-D-0005"
-    assert "allow_with_disclosure" in overlays["O-5"]["trigger"]
+    assert allowing == ["WP-3"]
+    assert overlays["WP-3"]["policy_reason_code"] == "OIC-D-0005"
+    assert "allow_with_disclosure" in overlays["WP-3"]["trigger"]
 
 
 @pytest.mark.parametrize("case", EXPECTED_CASES)
 def test_fixture_matches_its_classification_row(repo_root: Path, case: str) -> None:
+    """Stage 1 always fixes the epistemic status and the warrant state."""
     fixture = _fixture(repo_root, case)
     row = _rows(repo_root)[fixture["classification_row"]]
     expected = fixture["expected"]
-
-    # The classification always fixes the epistemic status and the warrant state.
     assert expected["epistemic_status"] == row["epistemic_status"], case
     assert expected["warrant_state"] == row["warrant_state"], case
     assert fixture["reachability"] == row["reachability"], case
 
-    overlay_id = fixture["control_overlay"]
-    if overlay_id is None:
-        # No overlay: the row's own basis, execution, and reason apply.
+
+@pytest.mark.parametrize("case", EXPECTED_CASES)
+def test_fixture_execution_follows_the_last_applied_stage(repo_root: Path, case: str) -> None:
+    """With no overlay the row decides; otherwise the last applied rule decides."""
+    fixture = _fixture(repo_root, case)
+    expected = fixture["expected"]
+    applied = fixture["applied_control_overlay_ids"]
+
+    if not applied:
+        row = _rows(repo_root)[fixture["classification_row"]]
         assert expected["decision_basis"] == row["decision_basis"], case
         assert expected["execution_disposition"] in row["base_execution_choices"], case
         assert row["primary_reason_code"] in expected["reason_codes"], case
-    else:
-        overlay = _overlays(repo_root)[overlay_id]
-        assert expected["execution_disposition"] == overlay["execution_disposition"], case
-        assert expected["decision_basis"] == overlay["decision_basis"], case
-        assert overlay["policy_reason_code"] in expected["reason_codes"], case
+        return
+
+    overlays = _overlays(repo_root)
+    last = overlays[applied[-1]]
+    assert expected["execution_disposition"] == last["execution_disposition"], case
+    assert expected["decision_basis"] == "CONTROL_REQUIREMENT", case
 
 
 @pytest.mark.parametrize("case", EXPECTED_CASES)
-def test_overlay_never_changes_the_row_epistemic_status(repo_root: Path, case: str) -> None:
-    """Applying an overlay must leave the classification's epistemic status untouched."""
+def test_applied_overlay_ids_are_ordered_unique_and_known(repo_root: Path, case: str) -> None:
+    """Warrant-policy rules before decision-mode overlays; no duplicates; DM-1 never."""
     fixture = _fixture(repo_root, case)
-    if fixture["control_overlay"] is None:
+    applied = fixture["applied_control_overlay_ids"]
+    assert applied == fixture["expected"]["runtime_decision"]["applied_control_overlay_ids"]
+    assert len(applied) == len(set(applied)), case
+    assert "DM-1" not in applied, f"{case}: the identity overlay is never recorded"
+    overlays = _overlays(repo_root)
+    for identifier in applied:
+        assert identifier in overlays, f"{case}: {identifier}"
+    stages = ["WP" if identifier.startswith("WP") else "DM" for identifier in applied]
+    assert stages == sorted(stages, key=lambda s: 0 if s == "WP" else 1), (
+        f"{case}: stage 2 rules must precede stage 3 overlays"
+    )
+    assert len([s for s in stages if s == "DM"]) <= 1, f"{case}: at most one decision-mode overlay"
+
+
+@pytest.mark.parametrize("case", EXPECTED_CASES)
+def test_every_applied_rule_keeps_its_reason_code(repo_root: Path, case: str) -> None:
+    """A later stage may change the execution; it may not erase why an earlier one fired."""
+    fixture = _fixture(repo_root, case)
+    overlays = _overlays(repo_root)
+    codes = set(fixture["expected"]["reason_codes"])
+    for identifier in fixture["applied_control_overlay_ids"]:
+        expected_code = overlays[identifier]["policy_reason_code"]
+        assert expected_code in codes, f"{case}: {identifier} lost {expected_code}"
+
+
+@pytest.mark.parametrize("case", EXPECTED_CASES)
+def test_no_stage_changes_the_epistemic_status(repo_root: Path, case: str) -> None:
+    fixture = _fixture(repo_root, case)
+    if not fixture["applied_control_overlay_ids"]:
         return
     row = _rows(repo_root)[fixture["classification_row"]]
     assert fixture["expected"]["epistemic_status"] == row["epistemic_status"], case
 
 
-def test_overlays_cover_every_epistemic_status(
+def test_warrant_policy_rules_are_ordered(mapping: dict[str, Any]) -> None:
+    """Grade sufficiency (order 1) is evaluated before the unverified-ground policy (2)."""
+    rules = {rule["rule_id"]: rule for rule in mapping["warrant_policy_rules"]}
+    assert {r["order"] for r in rules.values()} == {1, 2}
+    assert all(rules[i]["order"] == 1 for i in ("WP-1", "WP-2"))
+    assert all(rules[i]["order"] == 2 for i in ("WP-3", "WP-4", "WP-5"))
+    assert (
+        "OIC-W-0016" == rules["WP-1"]["policy_reason_code"] == rules["WP-2"]["policy_reason_code"]
+    )
+
+
+def test_grade_check_precedes_the_unverified_ground_policy(
     fixtures: dict[str, dict[str, Any]],
 ) -> None:
-    """An overlay must be demonstrated over each status, not only the convenient one."""
-    covered = {
-        f["expected"]["epistemic_status"]
-        for f in fixtures.values()
-        if f["control_overlay"] in {"O-1", "O-2"}
-    }
-    assert covered == EPISTEMIC, sorted(EPISTEMIC - covered)
+    """Fixture 11 declares allow_with_disclosure yet never reaches it."""
+    fixture = fixtures["11-on-credit-insufficient-grade-escalate"]
+    requirement = fixture["input"]["envelope"]["warrant_requirement"]
+    assert requirement["unverified_ground_policy"] == "allow_with_disclosure"
+    assert fixture["applied_control_overlay_ids"] == ["WP-1"]
+    assert fixture["expected"]["execution_disposition"] == "ESCALATE"
+    assert "OIC-W-0016" in fixture["expected"]["reason_codes"]
+    assert "OIC-D-0005" not in fixture["expected"]["reason_codes"]
+    assert fixture["expected"]["runtime_decision"]["unverified_ground_policy_applied"] is None
+
+
+COMPOSITION_EXAMPLES = (
+    (
+        "28-compose-conditional-insufficient-grade-then-human-judgment",
+        "CONDITIONALLY_SUPPORTED",
+        "ESCALATE",
+        ["WP-2", "DM-2"],
+        {"OIC-W-0016", "OIC-D-0002"},
+    ),
+    (
+        "29-compose-conditional-accepted-then-human-judgment",
+        "CONDITIONALLY_SUPPORTED",
+        "ESCALATE",
+        ["WP-3", "DM-2"],
+        {"OIC-D-0005", "OIC-D-0002"},
+    ),
+    ("30-compose-refuted-advisory", "REFUTED", "ADVISORY", ["DM-3"], {"OIC-W-0013", "OIC-D-0003"}),
+    (
+        "31-compose-contradicted-human-judgment",
+        "CONTRADICTED",
+        "ESCALATE",
+        ["DM-2"],
+        {"OIC-W-0014", "OIC-D-0002"},
+    ),
+)
+
+
+@pytest.mark.parametrize(
+    ("case", "status", "execution", "applied", "codes"),
+    COMPOSITION_EXAMPLES,
+    ids=[example[0] for example in COMPOSITION_EXAMPLES],
+)
+def test_mandated_composition_examples(
+    repo_root: Path,
+    case: str,
+    status: str,
+    execution: str,
+    applied: list[str],
+    codes: set[str],
+) -> None:
+    """The four compositions the architecture review named, checked end to end."""
+    decision = _fixture(repo_root, case)["expected"]["runtime_decision"]
+    assert decision["epistemic_status"] == status
+    assert decision["execution_disposition"] == execution
+    assert decision["decision_basis"] == "CONTROL_REQUIREMENT"
+    assert decision["applied_control_overlay_ids"] == applied
+    assert codes <= set(decision["reason_codes"]), (
+        f"{case}: lineage lost, expected {sorted(codes)} in {decision['reason_codes']}"
+    )
 
 
 def test_measured_rows_reflect_the_ztl_evidence(rows: dict[int, dict[str, Any]]) -> None:
-    for number in (24, 28, 29):
+    for number in (26, 30, 31):
         assert rows[number]["reachability"] == "NOT_REACHABLE", number
         assert rows[number]["authority"] == "ZTL-CONFIRMED", number
     assert not [n for n, r in rows.items() if r["authority"] == "PENDING-ZTL"]
@@ -385,16 +505,16 @@ def test_measured_rows_reflect_the_ztl_evidence(rows: dict[int, dict[str, Any]])
 
 def test_on_credit_rows_are_conditionally_supported(rows: dict[int, dict[str, Any]]) -> None:
     on_credit = {n: r for n, r in rows.items() if r["disposition"] == "ON CREDIT"}
-    assert set(on_credit) == {26, 27}
+    assert set(on_credit) == {28, 29}
     for number, row in on_credit.items():
         assert row["authority"] == "MEASURED", number
         assert row["epistemic_status"] == "CONDITIONALLY_SUPPORTED", number
         assert row["unverified"] == "non-empty", number
     # Only the `sound` row may ever reach ALLOW, and only via an overlay.
-    assert "ALLOW" in rows[26]["base_execution_choices"]
-    assert "ALLOW" not in rows[27]["base_execution_choices"]
-    assert rows[27]["primary_reason_code"] == "OIC-W-0025"
-    assert rows[27]["decision_basis"] == "PRECAUTIONARY"
+    assert "ALLOW" in rows[28]["base_execution_choices"]
+    assert "ALLOW" not in rows[29]["base_execution_choices"]
+    assert rows[29]["primary_reason_code"] == "OIC-W-0025"
+    assert rows[29]["decision_basis"] == "PRECAUTIONARY"
 
 
 def test_earned_is_the_only_disposition_mapping_to_established(
@@ -588,40 +708,33 @@ def test_control_requirement_is_not_a_defect_or_uncertainty(
 def test_insufficient_grade_is_a_control_requirement(
     fixtures: dict[str, dict[str, Any]],
 ) -> None:
+    """An insufficient grade never permits, and when it decides it is a control matter."""
     checked = 0
     for case, fixture in fixtures.items():
         decision = fixture["expected"]["runtime_decision"]
-        observed, required = (
-            decision["warranty_grade_observed"],
-            decision["warranty_grade_required"],
-        )
+        observed = decision["warranty_grade_observed"]
+        required = decision["warranty_grade_required"]
         if observed is None or required is None:
             continue
         if GRADE_ORDER[observed] >= GRADE_ORDER[required]:
             continue
-        # An insufficient grade can never permit the action, whatever else is true.
+        # Whatever else is true, an insufficient grade cannot permit the action.
         assert decision["execution_disposition"] != "ALLOW", case
-        # The grade gate only decides the outcome once the claim is ESTABLISHED and the
-        # warrant is usable. An UNRESOLVED result is already blocked for its own reason.
-        if decision["epistemic_status"] not in {"ESTABLISHED", "CONDITIONALLY_SUPPORTED"}:
-            continue
-        if decision["warrant_state"] != "USABLE":
-            continue
-        # A classification whose own basis already decides -- ON CREDIT +
-        # until-verification is PRECAUTIONARY because the result is unstable, not because
-        # the grade fell short -- is not the grade gate's case.
-        if fixture["control_overlay"] not in {"O-3", "O-4"}:
+        # The grade rules are WP-1 and WP-2. A classification whose own basis already
+        # decides -- ON CREDIT + until-verification is PRECAUTIONARY because the result is
+        # unstable, not because the grade fell short -- is not the grade gate's case.
+        if not set(fixture["applied_control_overlay_ids"]) & {"WP-1", "WP-2"}:
             continue
         checked += 1
         assert decision["decision_basis"] == "CONTROL_REQUIREMENT", case
         assert "OIC-W-0016" in decision["reason_codes"], case
-    assert checked >= 1
+    assert checked >= 2
 
 
 def test_human_judgment_escalates_a_perfect_warrant(
     fixtures: dict[str, dict[str, Any]],
 ) -> None:
-    fixture = fixtures["24-overlay-established-human-judgment"]
+    fixture = fixtures["25-overlay-established-human-judgment"]
     assert fixture["input"]["envelope"]["decision_mode"] == "human_judgment"
     decision = fixture["expected"]["runtime_decision"]
     assert decision["epistemic_status"] == "ESTABLISHED"
@@ -632,7 +745,7 @@ def test_human_judgment_escalates_a_perfect_warrant(
 
 
 def test_advisory_records_without_gating(fixtures: dict[str, dict[str, Any]]) -> None:
-    decision = fixtures["25-overlay-established-advisory"]["expected"]["runtime_decision"]
+    decision = fixtures["26-overlay-established-advisory"]["expected"]["runtime_decision"]
     assert decision["execution_disposition"] == "ADVISORY"
     assert decision["decision_basis"] == "CONTROL_REQUIREMENT"
     assert "OIC-D-0003" in decision["reason_codes"]
@@ -702,7 +815,7 @@ def test_warrant_requirement_conditional_fields(repo_root: Path) -> None:
 def test_not_required_never_waives_other_checks(repo_root: Path) -> None:
     text = (repo_root / PROPOSED / "warrant-requirement.schema.json").read_text("utf-8")
     assert "NOT permission to skip authority, admission, evidence, or version checks" in text
-    fixture = _fixture(repo_root, "23-warrant-not-required")
+    fixture = _fixture(repo_root, "23-warrant-explicitly-not-applicable")
     assert fixture["expected"]["execution_disposition"] != "ALLOW"
     assert fixture["expected"]["warrant_state"] == "NOT_REQUIRED"
 
@@ -953,17 +1066,17 @@ def test_not_yet_valid_is_mapped_and_fixtured(
     assert fixture["expected"]["warrant_state"] == "NOT_YET_VALID"
     assert fixture["expected"]["decision_basis"] == "PROCEDURAL"
     assert "OIC-W-0021" in fixture["expected"]["reason_codes"]
-    assert rows[7]["primary_reason_code"] == "OIC-W-0021"
+    assert rows[8]["primary_reason_code"] == "OIC-W-0021"
 
 
 def test_unsupported_result_combination_code_is_used(
     fixtures: dict[str, dict[str, Any]], rows: dict[int, dict[str, Any]]
 ) -> None:
     """Row 31 must NOT be labelled DISPOSITION_OPEN: its disposition is not OPEN."""
-    assert rows[29]["disposition"] == "EARNED"
-    assert rows[29]["primary_reason_code"] == "OIC-W-0022"
-    assert rows[29]["decision_basis"] == "PROCEDURAL"
-    fixture = fixtures["03-earned-until-verification-not-reachable"]
+    assert rows[31]["disposition"] == "EARNED"
+    assert rows[31]["primary_reason_code"] == "OIC-W-0022"
+    assert rows[31]["decision_basis"] == "PROCEDURAL"
+    fixture = fixtures["03-earned-until-verification-unsupported-result"]
     assert "OIC-W-0022" in fixture["expected"]["reason_codes"]
     assert "OIC-W-0012" not in fixture["expected"]["reason_codes"]
 
@@ -1011,11 +1124,17 @@ def test_registry_mapping_and_fixtures_agree_on_basis(
             )
 
     for identifier, overlay in _overlays(repo_root).items():
-        declared = registry[overlay["policy_reason_code"]]
+        code = overlay["policy_reason_code"]
+        if code is None:
+            assert overlay.get("identity"), (
+                f"{identifier}: only the identity overlay may omit a code"
+            )
+            continue
+        declared = registry[code]
         assert declared == "CONTROL_REQUIREMENT", f"overlay {identifier}: registry says {declared}"
 
     for case, fixture in fixtures.items():
-        if fixture["control_overlay"] is not None:
+        if fixture["applied_control_overlay_ids"]:
             # An overlay supplies its own basis and policy code; the row's base reason no
             # longer determines the outcome.
             continue

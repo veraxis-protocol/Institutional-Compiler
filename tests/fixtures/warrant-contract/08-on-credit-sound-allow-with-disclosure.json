@@ -1,8 +1,10 @@
 {
+  "applied_control_overlay_ids": [
+    "WP-3"
+  ],
   "case_id": "08-on-credit-sound-allow-with-disclosure",
-  "classification_row": 26,
-  "control_overlay": "O-5",
-  "description": "The ONLY conditional ALLOW. ON CREDIT + sound never lies about the present marking, the control explicitly permits acting on unverified grounds, and the missing grounds are preserved on the record. CONDITIONALLY_SUPPORTED, never ESTABLISHED: permission to act on conditional support is an admitted control decision, not a stronger epistemic claim.",
+  "classification_row": 28,
+  "description": "Route B, the only conditional ALLOW. Disposition and grade are identical to fixtures 09 and 10; only the policy differs. CONDITIONALLY_SUPPORTED, never ESTABLISHED.",
   "expected": {
     "decision_basis": "CONTROL_REQUIREMENT",
     "epistemic_status": "CONDITIONALLY_SUPPORTED",
@@ -29,6 +31,9 @@
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
+      "applied_control_overlay_ids": [
+        "WP-3"
+      ],
       "authority_version": "auth-v2",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
@@ -64,6 +69,7 @@
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
       "unverified_ground_policy_applied": "allow_with_disclosure",
       "warrant_artifact_id": "warrant:08",
+      "warrant_requirement_mode": "required",
       "warrant_state": "USABLE",
       "warranty_grade_observed": "sound",
       "warranty_grade_required": "sound"

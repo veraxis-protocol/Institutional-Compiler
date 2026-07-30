@@ -1,8 +1,8 @@
 {
+  "applied_control_overlay_ids": [],
   "case_id": "21-warrant-not-yet-valid",
-  "classification_row": 7,
-  "control_overlay": null,
-  "description": "valid_from is future under the declared time_binding. Not-yet-in-force is as unusable as expired, for the same reason.",
+  "classification_row": 8,
+  "description": "Not-yet-in-force is as unusable as expired.",
   "expected": {
     "decision_basis": "PROCEDURAL",
     "epistemic_status": "UNRESOLVED",
@@ -15,6 +15,7 @@
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
+      "applied_control_overlay_ids": [],
       "authority_version": "auth-v2",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
@@ -36,6 +37,7 @@
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
       "unverified_ground_policy_applied": null,
       "warrant_artifact_id": "warrant:21",
+      "warrant_requirement_mode": "required",
       "warrant_state": "NOT_YET_VALID",
       "warranty_grade_observed": "hereditary",
       "warranty_grade_required": "hereditary"
