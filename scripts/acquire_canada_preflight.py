@@ -50,6 +50,14 @@ ALLOWED_CONTENT_TYPES = frozenset(
         "text/xml",
     }
 )
+ALLOWED_TARGET_ROLES = frozenset(
+    {
+        "CANONICAL_ARTIFACT",
+        "CURRENT_SOURCE_UNIT",
+        "ARCHIVED_SOURCE_UNIT",
+        "METADATA_ONLY_SOURCE",
+    }
+)
 
 
 class AcquisitionError(RuntimeError):
@@ -102,8 +110,33 @@ def load_registry(path: Path = DEFAULT_REGISTRY) -> list[dict[str, Any]]:
     for value in raw["sources"]:
         if not isinstance(value, dict):
             raise AcquisitionError("every registry source must be an object")
+        acquisition_target(value)
         sources.append(value)
     return sources
+
+
+def acquisition_target(source: Mapping[str, Any]) -> tuple[str, str, str]:
+    """Resolve one explicit acquisition target without any legacy fallback."""
+    target = source.get("acquisition_target")
+    required = {"url", "expected_content_type", "role"}
+    if not isinstance(target, Mapping) or set(target) != required:
+        raise AcquisitionError(
+            "acquisition_target must contain exactly url, expected_content_type, and role"
+        )
+    url = target.get("url")
+    expected_type = target.get("expected_content_type")
+    role = target.get("role")
+    if not all(isinstance(value, str) and value for value in (url, expected_type, role)):
+        raise AcquisitionError("acquisition_target values must be non-empty strings")
+    url = cast(str, url)
+    expected_type = cast(str, expected_type)
+    role = cast(str, role)
+    validate_url(url)
+    if expected_type not in ALLOWED_CONTENT_TYPES:
+        raise AcquisitionError(f"unsupported acquisition target Content-Type: {expected_type}")
+    if role not in ALLOWED_TARGET_ROLES:
+        raise AcquisitionError(f"unsupported acquisition target role: {role}")
+    return url, expected_type, role
 
 
 def source_by_id(source_id: str, sources: Sequence[Mapping[str, Any]]) -> Mapping[str, Any]:
@@ -244,7 +277,7 @@ def source_paths(
         source_id = str(source["source_id"])
         if not SAFE_SOURCE_ID.fullmatch(source_id):
             raise AcquisitionError(f"unsafe source ID: {source_id}")
-        content_type = str(source["expected_content_type"])
+        _, content_type, _ = acquisition_target(source)
         suffix = ".pdf" if content_type == "application/pdf" else ".source"
         receipt_path = receipt_dir / f"{source_id}.receipt.json"
         quarantine_path = quarantine_dir / f"{source_id}{suffix}"
@@ -358,6 +391,9 @@ def stream_to_quarantine(
 def make_receipt(
     *,
     source_id: str,
+    acquisition_target_role: str,
+    acquisition_target_url: str,
+    registry_source_url: str,
     requested_url: str,
     final_url: str,
     redirects: Sequence[str],
@@ -370,6 +406,8 @@ def make_receipt(
     retrieved_at: str,
 ) -> dict[str, object]:
     return {
+        "acquisition_target_role": acquisition_target_role,
+        "acquisition_target_url": acquisition_target_url,
         "actual_byte_length": actual_byte_length,
         "content_length_header": _content_length(headers),
         "content_type": content_type,
@@ -379,6 +417,7 @@ def make_receipt(
         "http_status": status,
         "last_modified": _header(headers, "Last-Modified"),
         "redirect_chain": list(redirects),
+        "registry_source_url": registry_source_url,
         "requested_url": requested_url,
         "retrieval_utc": retrieved_at,
         "sha256": digest,
@@ -405,9 +444,9 @@ def acquire_one(
 ) -> dict[str, object]:
     """Acquire metadata and optionally quarantine bounded bytes for one source."""
     source_id = str(source["source_id"])
-    requested_url = str(source["official_english_url"])
-    validate_url(requested_url)
-    expected_type = str(source["expected_content_type"])
+    registry_source_url = str(source["official_english_url"])
+    validate_url(registry_source_url)
+    requested_url, expected_type, target_role = acquisition_target(source)
 
     redirect_handler = AllowlistRedirectHandler()
     selected_opener = opener or cast(OpenerLike, urllib.request.build_opener(redirect_handler))
@@ -449,6 +488,9 @@ def acquire_one(
 
     receipt = make_receipt(
         source_id=source_id,
+        acquisition_target_role=target_role,
+        acquisition_target_url=requested_url,
+        registry_source_url=registry_source_url,
         requested_url=requested_url,
         final_url=final_url,
         redirects=redirect_handler.chain,

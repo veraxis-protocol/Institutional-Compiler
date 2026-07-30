@@ -48,7 +48,7 @@ applicable to a transaction.
 
 | Question | Current evidence posture |
 |---|---|
-| Is the source publicly accessible? | Candidate official URLs are recorded; acquisition-time response evidence is absent. |
+| Is the source publicly accessible? | Metadata-only preflight HTTP observations are recorded for all selected source IDs. No source body was acquired, no acquisition freeze was performed, and no rendering-specific rights clearance follows from the HTTP observations. |
 | Is it institutionally authoritative? | Issuers and official domains are recorded; rendering-specific legal status remains open for CA-3. |
 | Is it currently effective? | Current/archive labels and observed dates are recorded separately; applicability is not inferred. |
 | Is reuse permitted? | Preliminary restricted basis: non-commercial reproduction conditions are visible in the governing notice; source-level exceptions remain unresolved. |

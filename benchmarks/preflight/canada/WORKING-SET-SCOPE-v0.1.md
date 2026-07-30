@@ -30,7 +30,7 @@ shown to remain within the 60-page ceiling and the owner approves the change.
 ## Coverage map
 
 - Authority and scope: CA-1.
-- Definitions: CA-1 and directly referenced CA-6 glossary entries.
+- Definitions: CA-1. No CA-6 glossary entry is included because no direct selected-node reference was evidenced.
 - Approval thresholds and tables: CA-2 and CA-5-LIMITS.
 - Delegation/approval evidence: CA-2, CA-5-DELEGATION, and CA-6-CH6.
 - Effective dates and amendment/supersession: CA-1, CA-3 point-in-time

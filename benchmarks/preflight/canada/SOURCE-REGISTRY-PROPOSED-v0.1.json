@@ -1,6 +1,8 @@
 {
   "registry_status": "PROPOSED_PRE_ACQUISITION",
-  "retrieval_facts_status": "UNOBSERVED",
+  "preflight_http_observation_status": "OBSERVED_METADATA_ONLY",
+  "acquisition_freeze_status": "NOT_PERFORMED",
+  "acquisition_freeze_field_notice": "These null fields are reserved for the later acquisition-freeze record. Preflight HTTP observations are recorded separately in PREFLIGHT-HTTP-OBSERVATIONS-v0.1.json.",
   "research_metadata_notice": "Non-null publication, modification, or amendment information in this proposed registry is preliminary research metadata. It is not an HTTP retrieval fact and must be independently confirmed during acquisition freeze.",
   "sources": [
     {
@@ -14,6 +16,11 @@
       "official_domain": "www.tbs-sct.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
+      "acquisition_target": {
+        "url": "https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32692",
+        "expected_content_type": "text/html",
+        "role": "CURRENT_SOURCE_UNIT"
+      },
       "publication_date": null,
       "modification_date": "2026-06-26",
       "effective_from": null,
@@ -51,6 +58,11 @@
       "official_domain": "www.tbs-sct.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
+      "acquisition_target": {
+        "url": "https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32692&p=A&section=procedure",
+        "expected_content_type": "text/html",
+        "role": "CURRENT_SOURCE_UNIT"
+      },
       "publication_date": null,
       "modification_date": "2026-06-26",
       "effective_from": null,
@@ -88,6 +100,11 @@
       "official_domain": "laws-lois.justice.gc.ca",
       "source_format": "HTML_INDEX_FOR_XML_OR_PDF_SELECTION",
       "expected_content_type": "text/html",
+      "acquisition_target": {
+        "url": "https://laws-lois.justice.gc.ca/eng/XML/SOR-87-402.xml",
+        "expected_content_type": "text/xml",
+        "role": "CANONICAL_ARTIFACT"
+      },
       "canonical_artifact": {
         "authority_identity": "Government Contracts Regulations (SOR/87-402; DORS/87-402)",
         "format": "XML",
@@ -160,6 +177,11 @@
       "official_domain": "www.tbs-sct.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
+      "acquisition_target": {
+        "url": "https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32692&p=F&section=procedure",
+        "expected_content_type": "text/html",
+        "role": "CURRENT_SOURCE_UNIT"
+      },
       "publication_date": null,
       "modification_date": "2026-06-26",
       "effective_from": null,
@@ -197,6 +219,11 @@
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
+      "acquisition_target": {
+        "url": "https://canadabuys.canada.ca/en/buyer-s-portal/buyer-s-guide/approve/approvals-and-authorities",
+        "expected_content_type": "text/html",
+        "role": "CURRENT_SOURCE_UNIT"
+      },
       "publication_date": null,
       "modification_date": null,
       "effective_from": null,
@@ -234,6 +261,11 @@
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
+      "acquisition_target": {
+        "url": "https://canadabuys.canada.ca/en/buyer-s-portal/buyer-s-guide/approve/approvals-and-authorities/delegation-authority-guidelines",
+        "expected_content_type": "text/html",
+        "role": "CURRENT_SOURCE_UNIT"
+      },
       "publication_date": null,
       "modification_date": null,
       "effective_from": null,
@@ -271,6 +303,11 @@
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
+      "acquisition_target": {
+        "url": "https://canadabuys.canada.ca/en/buyer-s-portal/buyer-s-guide/approve/approvals-and-authorities/approval-authorities-and-additional-signing-authorities-support-acquisitions-program-clients-programs-only-other-canadian-commercial-corporation",
+        "expected_content_type": "text/html",
+        "role": "CURRENT_SOURCE_UNIT"
+      },
       "publication_date": null,
       "modification_date": null,
       "effective_from": null,
@@ -308,6 +345,11 @@
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
+      "acquisition_target": {
+        "url": "https://canadabuys.canada.ca/en/buyer-s-portal/buyer-s-guide/approve/approvals-and-authorities/contracting-limits-including-exceptional-authorities",
+        "expected_content_type": "text/html",
+        "role": "CURRENT_SOURCE_UNIT"
+      },
       "publication_date": null,
       "modification_date": null,
       "effective_from": null,
@@ -345,6 +387,11 @@
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
+      "acquisition_target": {
+        "url": "https://canadabuys.canada.ca/en/supply-manual",
+        "expected_content_type": "text/html",
+        "role": "ARCHIVED_SOURCE_UNIT"
+      },
       "publication_date": null,
       "modification_date": "2026-04-15",
       "effective_from": null,
@@ -382,6 +429,11 @@
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
+      "acquisition_target": {
+        "url": "https://canadabuys.canada.ca/en/supply-manual/chapter-6",
+        "expected_content_type": "text/html",
+        "role": "ARCHIVED_SOURCE_UNIT"
+      },
       "publication_date": null,
       "modification_date": "2026-03-06",
       "effective_from": null,
@@ -419,6 +471,11 @@
       "official_domain": "canadabuys.canada.ca",
       "source_format": "HTML",
       "expected_content_type": "text/html",
+      "acquisition_target": {
+        "url": "https://canadabuys.canada.ca/en/supply-manual/glossary",
+        "expected_content_type": "text/html",
+        "role": "ARCHIVED_SOURCE_UNIT"
+      },
       "publication_date": null,
       "modification_date": "2026-03-06",
       "effective_from": null,

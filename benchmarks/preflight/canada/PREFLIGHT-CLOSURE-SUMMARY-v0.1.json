@@ -1,0 +1,24 @@
+{
+  "status": "PREFLIGHT_EVIDENCE_ONLY",
+  "source_unit_count": 11,
+  "working_set_print_equivalent_pages": 55,
+  "ca3_canonical_acquisition_target": "https://laws-lois.justice.gc.ca/eng/XML/SOR-87-402.xml",
+  "ca3_canonical_content_type": "text/xml",
+  "ca3_bilingual_pdf_role": "SECONDARY_HUMAN_REVIEW_ONLY",
+  "formerly_unresolved_french_urls_resolved": 6,
+  "unresolved_french_urls": 0,
+  "ca6_selected_node_count": 7,
+  "retained_glossary_entry_count": 0,
+  "metadata_only_observation_count": 11,
+  "source_bytes_acquired": false,
+  "rights_review_status": "PRELIMINARY_AND_INCOMPLETE",
+  "blocking_pull_request": 15,
+  "acquisition_freeze_performed": false,
+  "source_manifest_entry_created": false,
+  "semantic_implementation_gate": "BLOCKED",
+  "remaining_unresolved_scope": [
+    "source-level and rendering-specific rights confirmation",
+    "third-party, personal-information, insignia, logo, and trademark screening",
+    "exact-byte acquisition and freeze evidence"
+  ]
+}

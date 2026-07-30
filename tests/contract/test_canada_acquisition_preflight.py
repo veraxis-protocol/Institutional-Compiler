@@ -29,6 +29,9 @@ RECEIPT_SCHEMA_RELPATH = "benchmarks/preflight/canada/RECEIPT-SCHEMA-v0.1.json"
 RIGHTS_RELPATH = "benchmarks/preflight/canada/RIGHTS-PREFLIGHT-v0.1.md"
 SCOPE_RELPATH = "benchmarks/preflight/canada/WORKING-SET-SCOPE-v0.1.md"
 SCRIPT_RELPATH = "scripts/acquire_canada_preflight.py"
+OBSERVATIONS_RELPATH = "benchmarks/preflight/canada/PREFLIGHT-HTTP-OBSERVATIONS-v0.1.json"
+RESOLUTION_RELPATH = "benchmarks/preflight/canada/OFFICIAL-SOURCE-RESOLUTION-v0.1.md"
+CLOSURE_SUMMARY_RELPATH = "benchmarks/preflight/canada/PREFLIGHT-CLOSURE-SUMMARY-v0.1.json"
 
 EXPECTED_STATUS_SHA256 = "4a6894ca72ae8d2efcf48b3d25f8aca3bc1e2e86b6aa6aa5b38af31a52c7fde8"
 EXPECTED_SOURCE_MANIFEST_SHA256 = "c3ea6162cbeb9a5814f543ec23a02fecacad72053d90258162687ad3f48a2db2"
@@ -71,6 +74,7 @@ REQUIRED_REGISTRY_FIELDS = {
     "official_domain",
     "source_format",
     "expected_content_type",
+    "acquisition_target",
     "publication_date",
     "modification_date",
     "effective_from",
@@ -118,6 +122,8 @@ class AcquisitionModule(Protocol):
 
     def build_parser(self) -> argparse.ArgumentParser: ...
 
+    def acquisition_target(self, source: Mapping[str, Any]) -> tuple[str, str, str]: ...
+
     def acquire_one(
         self,
         source: Mapping[str, Any],
@@ -144,6 +150,9 @@ class AcquisitionModule(Protocol):
         self,
         *,
         source_id: str,
+        acquisition_target_role: str,
+        acquisition_target_url: str,
+        registry_source_url: str,
         requested_url: str,
         final_url: str,
         redirects: Sequence[str],
@@ -218,9 +227,11 @@ class FakeResponse(io.BytesIO):
 class FakeOpener:
     def __init__(self, response: FakeResponse) -> None:
         self.response = response
+        self.requested_url: str | None = None
 
     def open(self, request: urllib.request.Request, timeout: int) -> FakeResponse:
-        del request, timeout
+        del timeout
+        self.requested_url = request.full_url
         return self.response
 
 
@@ -233,6 +244,11 @@ def _source() -> dict[str, object]:
         "source_id": "CA-1",
         "official_english_url": "https://www.tbs-sct.canada.ca/example",
         "expected_content_type": "text/html",
+        "acquisition_target": {
+            "url": "https://www.tbs-sct.canada.ca/example",
+            "expected_content_type": "text/html",
+            "role": "CURRENT_SOURCE_UNIT",
+        },
     }
 
 
@@ -250,6 +266,9 @@ def _sample_receipt(
 ) -> dict[str, object]:
     return acquisition.make_receipt(
         source_id="CA-1",
+        acquisition_target_role="CURRENT_SOURCE_UNIT",
+        acquisition_target_url="https://www.tbs-sct.canada.ca/start",
+        registry_source_url="https://www.tbs-sct.canada.ca/start",
         requested_url="https://www.tbs-sct.canada.ca/start",
         final_url="https://www.tbs-sct.canada.ca/final",
         redirects=redirects,
@@ -356,6 +375,33 @@ def test_registry_fields_are_complete(registry: dict[str, Any]) -> None:
         assert set(source) >= REQUIRED_REGISTRY_FIELDS
 
 
+def test_all_eleven_sources_have_explicit_acquisition_targets(
+    registry: dict[str, Any], acquisition: AcquisitionModule
+) -> None:
+    assert len(registry["sources"]) == 11
+    assert {source["source_id"] for source in registry["sources"]} == {
+        "CA-1",
+        "CA-2",
+        "CA-3",
+        "CA-4",
+        "CA-5-APPROVALS",
+        "CA-5-DELEGATION",
+        "CA-5-LIMITS",
+        "CA-5-SIGNING",
+        "CA-6-ARCHIVE",
+        "CA-6-CH6",
+        "CA-6-GLOSSARY",
+    }
+    for source in registry["sources"]:
+        target = source["acquisition_target"]
+        assert set(target) == {"url", "expected_content_type", "role"}
+        assert acquisition.acquisition_target(source) == (
+            target["url"],
+            target["expected_content_type"],
+            target["role"],
+        )
+
+
 def test_ca3_has_exactly_one_xml_canonical_artifact(registry: dict[str, Any]) -> None:
     ca3 = next(source for source in registry["sources"] if source["source_id"] == "CA-3")
     canonical = ca3["canonical_artifact"]
@@ -364,6 +410,11 @@ def test_ca3_has_exactly_one_xml_canonical_artifact(registry: dict[str, Any]) ->
     assert canonical["english_url"].endswith("/eng/XML/SOR-87-402.xml")
     assert canonical["french_url"].endswith("/fra/XML/DORS-87-402.xml")
     assert not isinstance(canonical, list)
+    assert ca3["acquisition_target"] == {
+        "url": "https://laws-lois.justice.gc.ca/eng/XML/SOR-87-402.xml",
+        "expected_content_type": "text/xml",
+        "role": "CANONICAL_ARTIFACT",
+    }
 
 
 def test_ca3_pdf_is_secondary_and_language_renderings_share_authority(
@@ -380,6 +431,9 @@ def test_ca3_pdf_is_secondary_and_language_renderings_share_authority(
             "observed_content_type": "application/pdf",
         }
     ]
+    assert ca3["alternate_official_renderings"][0]["url"] != ca3["acquisition_target"]["url"]
+    all_target_urls = [source["acquisition_target"]["url"] for source in registry["sources"]]
+    assert all_target_urls.count(ca3["acquisition_target"]["url"]) == 1
 
 
 def test_resolved_french_urls_are_https_and_allowlisted(
@@ -400,6 +454,17 @@ def test_unresolved_french_urls_retain_reason(repo_root: Path) -> None:
         if item["official_french_url"] is None:
             assert item["absence_reason"]
             assert item["status"] == "UNRESOLVED"
+
+
+def test_all_french_counterpart_records_are_resolved(repo_root: Path) -> None:
+    counterparts = json.loads((repo_root / FRENCH_RELPATH).read_text(encoding="utf-8"))
+    assert len(counterparts["counterparts"]) == 11
+    resolved_statuses = {
+        "CONFIRMED_OFFICIAL_URL",
+        "CONFIRMED_OFFICIAL_LANGUAGE_LINK",
+    }
+    assert all(item["status"] in resolved_statuses for item in counterparts["counterparts"])
+    assert all(item["official_french_url"] for item in counterparts["counterparts"])
 
 
 def test_ca6_nodes_are_explicitly_enumerated(repo_root: Path) -> None:
@@ -457,7 +522,11 @@ def test_no_source_is_marked_legally_cleared_or_redistributable(repo_root: Path)
     assert "| REDISTRIBUTABLE |" not in rights
 
 
-def test_unobserved_retrieval_facts_are_null(registry: dict[str, Any]) -> None:
+def test_acquisition_freeze_fields_remain_null_despite_metadata_only_preflight_observations(
+    registry: dict[str, Any],
+) -> None:
+    assert registry["preflight_http_observation_status"] == "OBSERVED_METADATA_ONLY"
+    assert registry["acquisition_freeze_status"] == "NOT_PERFORMED"
     for source in registry["sources"]:
         assert source["retrieval_status"] == "NOT_RETRIEVED"
         for field in UNOBSERVED_RETRIEVAL_FIELDS:
@@ -468,6 +537,90 @@ def test_no_fabricated_timestamp_or_digest(registry: dict[str, Any]) -> None:
     serialized = json.dumps(registry)
     assert '"retrieval_timestamp": "20' not in serialized
     assert '"sha256": "' not in serialized
+
+
+def test_committed_observation_ledger_matches_registry(
+    repo_root: Path, registry: dict[str, Any]
+) -> None:
+    ledger = json.loads((repo_root / OBSERVATIONS_RELPATH).read_text(encoding="utf-8"))
+    observations = ledger["observations"]
+    assert ledger["observation_set_status"] == "METADATA_ONLY_PREFLIGHT_OBSERVATION"
+    assert ledger["source_count"] == len(observations) == 11
+    assert ledger["no_source_bytes_observed"] is True
+    assert ledger["acquisition_freeze_performed"] is False
+    assert ledger["source_registry_sha256"] == _sha256(repo_root / REGISTRY_RELPATH)
+    assert ledger["acquisition_script_sha256"] == _sha256(repo_root / SCRIPT_RELPATH)
+    assert {item["source_id"] for item in observations} == {
+        source["source_id"] for source in registry["sources"]
+    }
+    by_id = {source["source_id"]: source for source in registry["sources"]}
+    for item in observations:
+        source = by_id[item["source_id"]]
+        assert item["registry_source_url"] == source["official_english_url"]
+        assert item["acquisition_target_url"] == source["acquisition_target"]["url"]
+        assert item["downloaded"] is False
+        assert set(item).isdisjoint(
+            {"source_bytes", "body", "body_sha256", "sha256", "actual_byte_length"}
+        )
+
+
+def test_observation_ledger_can_be_regenerated_from_local_receipts_when_available(
+    repo_root: Path, registry: dict[str, Any]
+) -> None:
+    receipt_dir = repo_root / ".local/canada-preflight-receipts"
+    if not receipt_dir.exists():
+        pytest.skip("gitignored local receipts are intentionally unavailable in CI")
+    ledger = json.loads((repo_root / OBSERVATIONS_RELPATH).read_text(encoding="utf-8"))
+    observed = {item["source_id"]: item for item in ledger["observations"]}
+    by_id = {source["source_id"]: source for source in registry["sources"]}
+    receipt_paths = sorted(receipt_dir.glob("*.receipt.json"))
+    assert len(receipt_paths) == 11
+    for path in receipt_paths:
+        receipt = json.loads(path.read_text(encoding="utf-8"))
+        item = observed[receipt["source_id"]]
+        source = by_id[receipt["source_id"]]
+        expected = {
+            "source_id": receipt["source_id"],
+            "registry_source_url": source["official_english_url"],
+            "acquisition_target_url": source["acquisition_target"]["url"],
+            "requested_url": receipt["requested_url"],
+            "final_url": receipt["final_url"],
+            "redirect_chain": receipt["redirect_chain"],
+            "http_status": receipt["http_status"],
+            "content_type": receipt["content_type"],
+            "etag": receipt["etag"],
+            "last_modified": receipt["last_modified"],
+            "observation_utc": receipt["retrieval_utc"],
+            "downloaded": False,
+            "local_receipt_sha256": _sha256(path),
+        }
+        assert item == expected
+
+
+def test_closure_evidence_surfaces_are_consistent(
+    repo_root: Path, registry: dict[str, Any]
+) -> None:
+    summary = json.loads((repo_root / CLOSURE_SUMMARY_RELPATH).read_text(encoding="utf-8"))
+    ledger = json.loads((repo_root / OBSERVATIONS_RELPATH).read_text(encoding="utf-8"))
+    scope = (repo_root / SCOPE_RELPATH).read_text(encoding="utf-8")
+    resolution = (repo_root / RESOLUTION_RELPATH).read_text(encoding="utf-8")
+    rights = (repo_root / RIGHTS_RELPATH).read_text(encoding="utf-8")
+    assert summary["working_set_print_equivalent_pages"] == 55
+    assert sum(source["estimated_print_equivalent_pages"] for source in registry["sources"]) == 55
+    assert "**55**" in scope
+    assert "revised total is 55" in resolution
+    assert summary["ca6_selected_node_count"] == 7
+    assert "Seven proposed nodes" in resolution
+    assert summary["retained_glossary_entry_count"] == 0
+    assert "Selected glossary entries: **0**" in scope
+    assert "Therefore zero" in resolution
+    assert summary["metadata_only_observation_count"] == ledger["source_count"] == 11
+    assert summary["source_bytes_acquired"] is False
+    assert summary["acquisition_freeze_performed"] is False
+    assert summary["rights_review_status"] == "PRELIMINARY_AND_INCOMPLETE"
+    assert "no acquisition freeze was performed" in rights
+    assert summary["blocking_pull_request"] == 15
+    assert summary["semantic_implementation_gate"] == "BLOCKED"
 
 
 def test_script_defaults_to_metadata_only(acquisition: AcquisitionModule) -> None:
@@ -569,6 +722,8 @@ def test_repeated_receipt_serialization_is_byte_identical(
 def test_sample_receipt_validates_against_schema(repo_root: Path) -> None:
     schema = json.loads((repo_root / RECEIPT_SCHEMA_RELPATH).read_text(encoding="utf-8"))
     sample: dict[str, object] = {
+        "acquisition_target_role": "CURRENT_SOURCE_UNIT",
+        "acquisition_target_url": "https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32692",
         "actual_byte_length": None,
         "content_length_header": None,
         "content_type": "text/html",
@@ -578,6 +733,7 @@ def test_sample_receipt_validates_against_schema(repo_root: Path) -> None:
         "http_status": 200,
         "last_modified": None,
         "redirect_chain": [],
+        "registry_source_url": "https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32692",
         "requested_url": "https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32692",
         "retrieval_utc": "2026-07-30T12:00:00Z",
         "sha256": None,
@@ -608,6 +764,8 @@ def test_receipt_cross_field_invariants(
 ) -> None:
     schema = json.loads((repo_root / RECEIPT_SCHEMA_RELPATH).read_text(encoding="utf-8"))
     receipt: dict[str, object] = {
+        "acquisition_target_role": "CURRENT_SOURCE_UNIT",
+        "acquisition_target_url": "https://www.tbs-sct.canada.ca/start",
         "actual_byte_length": None,
         "content_length_header": None,
         "content_type": "text/html",
@@ -617,6 +775,7 @@ def test_receipt_cross_field_invariants(
         "http_status": 200,
         "last_modified": None,
         "redirect_chain": [],
+        "registry_source_url": "https://www.tbs-sct.canada.ca/start",
         "requested_url": "https://www.tbs-sct.canada.ca/start",
         "retrieval_utc": "2026-07-30T16:00:00Z",
         "sha256": None,
@@ -733,6 +892,9 @@ def test_metadata_only_does_not_read_body_and_uses_injected_clock(
     assert response.read_calls == 0
     assert receipt["retrieval_utc"] == "2026-07-30T16:00:00Z"
     assert receipt["downloaded"] is False
+    assert receipt["acquisition_target_role"] == "CURRENT_SOURCE_UNIT"
+    assert receipt["registry_source_url"] == _source()["official_english_url"]
+    assert receipt["acquisition_target_url"] == "https://www.tbs-sct.canada.ca/example"
     assert receipt_path.exists()
     assert not quarantine_path.exists()
 
@@ -835,8 +997,8 @@ def test_multiple_operations_targeting_same_final_path_fail_closed(
     acquisition: AcquisitionModule, tmp_path: Path
 ) -> None:
     duplicate_sources = [
-        {"source_id": "CA-1", "expected_content_type": "text/html"},
-        {"source_id": "CA-1", "expected_content_type": "text/html"},
+        {"source_id": "CA-1", "acquisition_target": _source()["acquisition_target"]},
+        {"source_id": "CA-1", "acquisition_target": _source()["acquisition_target"]},
     ]
     with pytest.raises(acquisition.AcquisitionError, match="multiple operations"):
         acquisition.source_paths(
@@ -844,6 +1006,58 @@ def test_multiple_operations_targeting_same_final_path_fail_closed(
             tmp_path / "receipts",
             tmp_path / "quarantine",
         )
+
+
+@pytest.mark.parametrize(
+    "target",
+    [
+        None,
+        {},
+        {"url": "https://www.tbs-sct.canada.ca/example"},
+        {
+            "url": "https://www.tbs-sct.canada.ca/example",
+            "expected_content_type": "text/html",
+            "role": "UNKNOWN",
+        },
+        {
+            "url": "https://example.com/source",
+            "expected_content_type": "text/html",
+            "role": "CURRENT_SOURCE_UNIT",
+        },
+    ],
+)
+def test_missing_or_malformed_acquisition_target_fails_closed(
+    acquisition: AcquisitionModule, target: object
+) -> None:
+    source = _source()
+    if target is None:
+        source.pop("acquisition_target")
+    else:
+        source["acquisition_target"] = target
+    with pytest.raises(acquisition.AcquisitionError):
+        acquisition.acquisition_target(source)
+
+
+def test_ca3_requests_xml_target_not_html_index(
+    acquisition: AcquisitionModule, registry: dict[str, Any], tmp_path: Path
+) -> None:
+    ca3 = next(source for source in registry["sources"] if source["source_id"] == "CA-3")
+    xml_url = "https://laws-lois.justice.gc.ca/eng/XML/SOR-87-402.xml"
+    opener = FakeOpener(
+        FakeResponse(b"not-read", url=xml_url, headers={"Content-Type": "text/xml"})
+    )
+    receipt = acquisition.acquire_one(
+        ca3,
+        download=False,
+        receipt_path=tmp_path / "CA-3.receipt.json",
+        quarantine_path=tmp_path / "CA-3.source",
+        expected_digest=None,
+        opener=opener,
+        clock=_fixed_clock,
+    )
+    assert opener.requested_url == xml_url
+    assert opener.requested_url != ca3["official_english_url"]
+    assert receipt["content_type"] == "text/xml"
 
 
 def test_local_output_directories_are_gitignored(repo_root: Path) -> None:
