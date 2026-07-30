@@ -4,7 +4,8 @@
       "decision_basis": "SUBSTANTIVE",
       "disposition_source": "EARNED",
       "epistemic_status": "ESTABLISHED",
-      "missing_grounds": "empty",
+      "missing_grounds": "any - informational when present",
+      "note": "Unverified grounds under EARNED are irrelevant to the conclusion and do not weaken it. They are still preserved in missing_ground_ids.",
       "observed_grade": "hereditary",
       "reason_codes": [
         "OIC-D-0001"
@@ -20,6 +21,7 @@
         "OIC-D-0005",
         "OIC-W-0015"
       ],
+      "subscription": "required: non-null reference, ground ids equal to missing_ground_ids, and all five triggers",
       "unverified_ground_policy": "allow_with_disclosure"
     }
   },
@@ -432,7 +434,7 @@
       "warrant_state": "NOT_REQUIRED"
     },
     {
-      "authority": "MEASURED",
+      "authority": "OIC-DEFENSIVE",
       "base_execution_choices": [
         "BLOCK"
       ],
@@ -440,7 +442,7 @@
       "disposition": "any",
       "epistemic_status": "CONTRADICTED",
       "grade": "any",
-      "note": "A finding about the ground set, not a refutation of the proposition.",
+      "note": "An OIC-PLANE condition, not a ZTL disposition. The ZTL marking model assigns one T/F/Z value per atom and cannot represent two conflicting admitted values for the same atom, so the kernel never reports this. Distinguish it from a contradictory FORMULA, which ZTL simply REFUTES. CONTRADICTED is not a fifth ZTL disposition.",
       "oic_condition": "contradictory grounds",
       "precedence": 3,
       "primary_reason_code": "OIC-W-0014",
@@ -533,13 +535,13 @@
       "disposition": "EARNED",
       "epistemic_status": "ESTABLISHED",
       "grade": "hereditary",
-      "note": "Grounded outright. The ONLY disposition mapping to ESTABLISHED.",
+      "note": "Grounded outright. The ONLY disposition mapping to ESTABLISHED. Its unverified list may be non-empty (61 of 294 measured cases) and is INFORMATIONAL: hereditary means those atoms cannot move this conclusion. They are preserved on the record and do not weaken the established status.",
       "oic_condition": "all checks pass",
       "precedence": 5,
       "primary_reason_code": "OIC-D-0001",
       "reachability": "REACHABLE",
       "row_id": 27,
-      "unverified": "empty",
+      "unverified": "any",
       "warrant_state": "USABLE"
     },
     {
@@ -618,6 +620,25 @@
       "row_id": 31,
       "unverified": "any",
       "warrant_state": "UNSUPPORTED_RESULT"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "base_execution_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "decision_basis": "PROCEDURAL",
+      "disposition": "ON CREDIT",
+      "epistemic_status": "CONDITIONALLY_SUPPORTED",
+      "grade": "any",
+      "note": "A binding precondition, not a doubt about the logic: the support is real, the plumbing that would notice it dying is absent. Coverage must equal missing_ground_ids exactly and carry all five triggers.",
+      "oic_condition": "conditional-support subscription missing or incomplete",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0027",
+      "reachability": "REACHABLE",
+      "row_id": 32,
+      "unverified": "non-empty",
+      "warrant_state": "USABLE"
     }
   ],
   "decision_mode_overlays": [
@@ -652,6 +673,11 @@
       "trigger": "decision_mode in {advisory, evidence_only}"
     }
   ],
+  "dependency_derivation": {
+    "evidence": "38 of 180 census cases have a pair whose joint withdrawal moves the disposition although neither member does alone",
+    "minimality": "not claimed; deliberate over-approximation",
+    "rule": "every verified atom (T or F) in the kernel-evaluated formula"
+  },
   "epistemic_status_mapping": {
     "EARNED": "ESTABLISHED",
     "ON CREDIT": "CONDITIONALLY_SUPPORTED",
@@ -709,6 +735,13 @@
     "5": "disposition and warranty grade"
   },
   "status": "PROPOSED - not admitted",
+  "unverified_ground_semantics": {
+    "EARNED": "informational - irrelevant because the result is hereditary",
+    "ON CREDIT": "load-bearing - the current positive result depends on them",
+    "OPEN": "blocking - their resolution is needed",
+    "REFUTED": "informational - the refutation holds regardless",
+    "rule": "Whenever the kernel reports unverified grounds, OIC preserves them."
+  },
   "version": "0.1.0",
   "warrant_policy_rules": [
     {

@@ -29,7 +29,10 @@
     "evaluated_at",
     "unverified_ground_policy_applied",
     "applied_control_overlay_ids",
-    "warrant_requirement_mode"
+    "warrant_requirement_mode",
+    "conditional_support_subscription_reference",
+    "conditional_support_subscription_ground_ids",
+    "conditional_support_subscription_triggers"
   ],
   "$defs": {
     "sha256_digest": {
@@ -60,6 +63,15 @@
       "type": "string",
       "pattern": "^(WP|DM)-[0-9]+$",
       "description": "A warrant-policy rule (WP-n) or decision-mode overlay (DM-n) identifier from the canonical mapping."
+    },
+    "subscription_trigger": {
+      "enum": [
+        "ground_corrected",
+        "ground_expired",
+        "ground_revoked",
+        "ground_verified",
+        "relevant_epoch_changed"
+      ]
     }
   },
   "properties": {
@@ -292,6 +304,30 @@
         null
       ],
       "description": "The mode the control declared. Null ONLY when the control contract itself was missing or invalid (OIC-W-0026), which is a procedural contract error. An explicit not_required or not_applicable is a declaration and is recorded as such - it is never conflated with an absent one."
+    },
+    "conditional_support_subscription_reference": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Binds the unresolved grounds of a conditional ALLOW to a deterministic recomputation subscription. Non-null and non-empty whenever CONDITIONALLY_SUPPORTED reaches ALLOW: acting on a result that rides an unverified link is only defensible if the system will be told when that link moves. Null on every other route. A subscription is plumbing, never evidence of stronger epistemic support. The VEIP carrier is deferred; this field preserves the binding for that later contract."
+    },
+    "conditional_support_subscription_ground_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/identifier"
+      },
+      "uniqueItems": true,
+      "description": "Grounds the subscription covers, in deterministic order. For a conditional ALLOW this must equal missing_ground_ids exactly: a subscription that covers only some of the load-bearing grounds leaves the rest able to move unnoticed."
+    },
+    "conditional_support_subscription_triggers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/subscription_trigger"
+      },
+      "uniqueItems": true,
+      "description": "Events that must trigger recomputation, in deterministic order. All five are required for a conditional ALLOW. Verification, expiry, revocation, correction and a relevant epoch change can each falsify the result, so omitting any one leaves a path by which the ALLOW silently outlives its grounds."
     }
   },
   "allOf": [
@@ -325,7 +361,7 @@
         },
         "oneOf": [
           {
-            "$comment": "Route A - EARNED / hereditary.",
+            "$comment": "Route A - EARNED / hereditary. missing_ground_ids may be NON-EMPTY: measured, 61 of 294 census cases carry unverified atoms that are irrelevant to a hereditary conclusion. They are preserved, and they do not weaken ESTABLISHED.",
             "properties": {
               "epistemic_status": {
                 "const": "ESTABLISHED"
@@ -336,9 +372,6 @@
               "warranty_grade_observed": {
                 "const": "hereditary"
               },
-              "missing_ground_ids": {
-                "maxItems": 0
-              },
               "unverified_ground_policy_applied": {
                 "type": "null"
               },
@@ -346,6 +379,9 @@
                 "contains": {
                   "const": "OIC-D-0001"
                 }
+              },
+              "conditional_support_subscription_reference": {
+                "type": "null"
               }
             },
             "required": [
@@ -390,12 +426,52 @@
                     }
                   }
                 ]
+              },
+              "conditional_support_subscription_reference": {
+                "type": "string",
+                "minLength": 1
+              },
+              "conditional_support_subscription_ground_ids": {
+                "minItems": 1
+              },
+              "conditional_support_subscription_triggers": {
+                "type": "array",
+                "minItems": 5,
+                "allOf": [
+                  {
+                    "contains": {
+                      "const": "ground_corrected"
+                    }
+                  },
+                  {
+                    "contains": {
+                      "const": "ground_expired"
+                    }
+                  },
+                  {
+                    "contains": {
+                      "const": "ground_revoked"
+                    }
+                  },
+                  {
+                    "contains": {
+                      "const": "ground_verified"
+                    }
+                  },
+                  {
+                    "contains": {
+                      "const": "relevant_epoch_changed"
+                    }
+                  }
+                ]
               }
             },
             "required": [
               "epistemic_status",
               "decision_basis",
-              "unverified_ground_policy_applied"
+              "unverified_ground_policy_applied",
+              "conditional_support_subscription_reference",
+              "conditional_support_subscription_triggers"
             ]
           }
         ]
@@ -452,6 +528,7 @@
           "decision_basis": {
             "enum": [
               "PRECAUTIONARY",
+              "PROCEDURAL",
               "CONTROL_REQUIREMENT"
             ]
           },
@@ -846,6 +923,29 @@
             "contains": {
               "const": "OIC-W-0024"
             }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Rule 15. A subscription reference is only meaningful for conditional support, and any subscription that exists must cover at least one ground.",
+      "if": {
+        "properties": {
+          "conditional_support_subscription_reference": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "conditional_support_subscription_reference"
+        ]
+      },
+      "then": {
+        "properties": {
+          "epistemic_status": {
+            "const": "CONDITIONALLY_SUPPORTED"
+          },
+          "conditional_support_subscription_ground_ids": {
+            "minItems": 1
           }
         }
       }

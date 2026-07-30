@@ -81,16 +81,17 @@ wins** — see precedence below.
 | 19 | any | any | any | disposition/grade/raw-verdict/unverified combination violates the frozen profile | 2 | UNSUPPORTED_RESULT | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0022 | REACHABLE | OIC-DEFENSIVE |
 | 20 | any | any | any | unknown disposition value | 2 | UNSUPPORTED_RESULT | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0022 | REACHABLE | OIC-DEFENSIVE |
 | 21 | any | any | any | warrant_requirement mode explicitly not_required or not_applicable | 2 | NOT_REQUIRED | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0024 | REACHABLE | OIC-DEFENSIVE |
-| 22 | any | any | any | contradictory grounds | 3 | USABLE | CONTRADICTED | BLOCK | SUBSTANTIVE | OIC-W-0014 | REACHABLE | MEASURED |
+| 22 | any | any | any | contradictory grounds | 3 | USABLE | CONTRADICTED | BLOCK | SUBSTANTIVE | OIC-W-0014 | REACHABLE | OIC-DEFENSIVE |
 | 23 | REFUTED | hereditary | any | warrant usable | 4 | USABLE | REFUTED | BLOCK | SUBSTANTIVE | OIC-W-0013 | REACHABLE | MEASURED |
 | 24 | OPEN | until-verification | non-empty | raw verdict F | 4 | USABLE | UNRESOLVED | BLOCK / ESCALATE | PRECAUTIONARY | OIC-W-0012 | REACHABLE | MEASURED |
 | 25 | OPEN | until-verification | non-empty | raw verdict Z | 4 | USABLE | UNRESOLVED | BLOCK / ESCALATE | PRECAUTIONARY | OIC-W-0012 | REACHABLE | MEASURED |
 | 26 | OPEN | any | any | raw verdict T | 4 | UNSUPPORTED_RESULT | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0022 | NOT_REACHABLE | ZTL-CONFIRMED |
-| 27 | EARNED | hereditary | empty | all checks pass | 5 | USABLE | ESTABLISHED | ALLOW | SUBSTANTIVE | OIC-D-0001 | REACHABLE | MEASURED |
+| 27 | EARNED | hereditary | any | all checks pass | 5 | USABLE | ESTABLISHED | ALLOW | SUBSTANTIVE | OIC-D-0001 | REACHABLE | MEASURED |
 | 28 | ON CREDIT | sound | non-empty | grade permits sound | 5 | USABLE | CONDITIONALLY_SUPPORTED | ALLOW / BLOCK / ESCALATE | CONTROL_REQUIREMENT | OIC-W-0015 | REACHABLE | MEASURED |
 | 29 | ON CREDIT | until-verification | non-empty | any | 5 | USABLE | CONDITIONALLY_SUPPORTED | BLOCK / ESCALATE | PRECAUTIONARY | OIC-W-0025 | REACHABLE | MEASURED |
 | 30 | EARNED | sound | any | any | 5 | UNSUPPORTED_RESULT | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0022 | NOT_REACHABLE | ZTL-CONFIRMED |
 | 31 | EARNED | until-verification | any | any | 5 | UNSUPPORTED_RESULT | UNRESOLVED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0022 | NOT_REACHABLE | ZTL-CONFIRMED |
+| 32 | ON CREDIT | any | non-empty | conditional-support subscription missing or incomplete | 2 | USABLE | CONDITIONALLY_SUPPORTED | BLOCK / ESCALATE | PROCEDURAL | OIC-W-0027 | REACHABLE | OIC-DEFENSIVE |
 
 ### Stage 2 - warrant policy
 
