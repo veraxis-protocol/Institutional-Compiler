@@ -46,16 +46,23 @@
       "pattern": "^sha(256:[0-9a-f]{64}|384:[0-9a-f]{96})$",
       "description": "A digest emitted by the logic kernel under a declared canonicalization profile. ZTL v0.1 canonicalises with an RFC 8785 (JCS) float-free subset and digests with SHA-384. OIC records this value and never recomputes it."
     },
-    "identifier": { "type": "string", "minLength": 1, "maxLength": 256 }
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    }
   },
   "properties": {
-    "warrant_artifact_id": { "$ref": "#/$defs/identifier" },
-    "schema_version": { "type": "string" },
+    "warrant_artifact_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "schema_version": {
+      "type": "string"
+    },
     "claim_id": {
       "$ref": "#/$defs/identifier",
       "description": "Identifier of the admitted proposition the warrant is about. Binds the warrant to a claim, not to a document."
     },
-
     "kernel_profile_id": {
       "$ref": "#/$defs/identifier",
       "description": "Identifies the kernel semantics AND the disposition/grade vocabulary this artifact was produced under, for example `ztl-v0.1`. Dispositions and grades are NOT portable between kernels. A warrant whose profile differs from the control's declared kernel_profile_id is MISBOUND and cannot ALLOW."
@@ -64,44 +71,61 @@
       "$ref": "#/$defs/identifier",
       "description": "Identifies how `formula` was canonicalised before hashing, for example `ztl-jcs-float-free-sha384-v0.1`. Two formula hashes are comparable ONLY when both this field and kernel_profile_id match the control's declared values. See docs/contracts/WARRANT-CONTRACT-v0.1.md section 5."
     },
-
     "formula": {
       "type": "string",
-      "description": "The propositional formula the kernel evaluated, as the kernel rendered it. Recorded verbatim for replay; OIC does not parse it."
+      "description": "The formula as the KERNEL rendered it, not as the caller wrote it. Recorded verbatim for replay; OIC does not parse it."
     },
     "formula_hash": {
       "$ref": "#/$defs/kernel_digest",
-      "description": "Kernel digest over the canonicalised formula and its atoms, produced under canonicalization_profile_id. Compared to the control's bound formula hash by exact byte equality, and only after both profile identifiers match."
+      "description": "Kernel digest over the KERNEL-RENDERED formula (for example `(p ∨ q)` for caller input `p | q`), produced under canonicalization_profile_id. Never computed over the caller's original string. Compared to the control's bound hash by exact byte equality, and only after both profile identifiers match."
     },
-
     "disposition": {
-      "enum": ["EARNED", "REFUTED", "ON CREDIT", "OPEN"],
-      "description": "The kernel's primary operational signal, and the only field that may drive an OIC decision. MEASURED semantics for the ztl-v0.1 profile: EARNED = grounded outright, always grade hereditary, unverified empty. REFUTED = false regardless of the marks, always hereditary. ON CREDIT = a T verdict true ONLY while an unverified atom holds, able to die when that atom resolves; grade sound or until-verification. OPEN = not established, a mark actually matters; grade until-verification. ON CREDIT was omitted from ZTL dossier v0.1 and added after measurement: a mapping written against a three-value list silently misclassifies it, most likely as EARNED, authorising action on an unverified link."
+      "enum": [
+        "EARNED",
+        "REFUTED",
+        "ON CREDIT",
+        "OPEN"
+      ],
+      "description": "The kernel's primary operational signal, and the only field that may drive an OIC decision. MEASURED semantics for ztl-v0.1 over a 294-case census: EARNED = grounded outright, hereditary, raw T, unverified list may be empty or non-empty and is INFORMATIONAL. REFUTED = false regardless of the marks, hereditary, raw F, unverified informational. ON CREDIT = a T verdict true only while an unverified atom holds; its unverified list is LOAD-BEARING. OPEN = not established; its unverified list is BLOCKING. ON CREDIT was omitted from ZTL dossier v0.1 and added after measurement."
     },
     "raw_verdict": {
-      "enum": ["T", "F", "Z"],
+      "enum": [
+        "T",
+        "F",
+        "Z"
+      ],
       "description": "The kernel's internal truth marking. REQUIRED for replay, and INERT: it MUST NOT drive any OIC decision. ZTL returns raw_verdict F together with disposition OPEN (measured: judge(\"p & q\", {p:T, q:Z})). An adapter reading this field instead of disposition converts 'not yet established' into 'established false', violating invariant I-03."
     },
     "warranty_grade": {
-      "enum": ["hereditary", "sound", "until-verification"],
+      "enum": [
+        "hereditary",
+        "sound",
+        "until-verification"
+      ],
       "description": "How durable the result is under further verification. hereditary is invariant under every admissible monotone refinement of the same formula and marking; sound never lies about the present marking but may stall; until-verification holds only in the present marking. hereditary implies sound. This is half of the result, not optional metadata."
     },
-
     "unverified_ground_ids": {
       "type": "array",
-      "items": { "$ref": "#/$defs/identifier" },
-      "description": "Atom or proposition identifiers the kernel could not verify, echoed verbatim from the caller's marking. Always surfaced as missing_ground_ids on the runtime decision, including when the outcome is ALLOW. Atom IDENTITY is the caller's responsibility: re-pointing an identifier at a different clause is undetectable by the kernel."
+      "items": {
+        "$ref": "#/$defs/identifier"
+      },
+      "description": "Formula atoms marked Z, echoed verbatim from the caller's marking. Always surfaced as missing_ground_ids on the runtime decision, including on ALLOW. The MEANING depends on the disposition: informational under EARNED and REFUTED, load-bearing under ON CREDIT, blocking under OPEN. Atom IDENTITY is the caller's responsibility."
     },
     "dependency_ids": {
       "type": "array",
-      "items": { "$ref": "#/$defs/identifier" },
-      "description": "Ground identifiers the conclusion depends on. Used for revocation and expiry propagation."
+      "items": {
+        "$ref": "#/$defs/identifier"
+      },
+      "description": "Every VERIFIED atom (marked T or F) appearing in the kernel-evaluated formula. Disjoint from unverified_ground_ids by construction. This is a deliberate OVER-APPROXIMATION and minimality is NOT claimed: measured, 38 of 180 census cases with two or more verified grounds have a PAIR whose joint withdrawal moves the disposition although neither member does alone, so a minimised set would let a revocation propagate to nothing and leave a stale warrant usable."
     },
-
     "ground_epoch": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["scope_id", "sequence", "authority_id"],
+      "required": [
+        "scope_id",
+        "sequence",
+        "authority_id"
+      ],
       "description": "Scoped epoch binding. An unscoped integer was insufficient: two ground sets under different authorities can share a sequence number and would compare equal. The kernel is stateless and has no epoch concept; it echoes an epoch supplied by OIC and can neither originate nor validate one.",
       "properties": {
         "scope_id": {
@@ -123,37 +147,58 @@
       "$ref": "#/$defs/sha256_digest",
       "description": "Digest of the exact ground set supplied to the kernel. Detects staleness an epoch counter alone would miss."
     },
-
     "source_anchor_ids": {
       "type": "array",
-      "items": { "$ref": "#/$defs/identifier" },
+      "items": {
+        "$ref": "#/$defs/identifier"
+      },
       "description": "Source anchors for the grounds. Supplied by OIC; the kernel never sees sources."
     },
     "admission_ids": {
       "type": "array",
-      "items": { "$ref": "#/$defs/identifier" },
+      "items": {
+        "$ref": "#/$defs/identifier"
+      },
       "description": "Admission records that made these grounds usable. Logic over unadmitted grounds is not a warrant for anything (I-02)."
     },
-
-    "kernel_name": { "$ref": "#/$defs/identifier" },
-    "kernel_version": { "$ref": "#/$defs/identifier" },
+    "kernel_name": {
+      "$ref": "#/$defs/identifier"
+    },
+    "kernel_version": {
+      "$ref": "#/$defs/identifier"
+    },
     "kernel_commit": {
       "type": "string",
       "pattern": "^[0-9a-f]{40}$",
       "description": "Immutable commit of the kernel that produced this artifact."
     },
-    "input_hash": { "$ref": "#/$defs/sha256_digest" },
-    "output_hash": { "$ref": "#/$defs/sha256_digest" },
-
-    "generated_at": { "type": "string", "format": "date-time" },
+    "input_hash": {
+      "$ref": "#/$defs/sha256_digest"
+    },
+    "output_hash": {
+      "$ref": "#/$defs/sha256_digest",
+      "description": "Digest of the semantic output projection: kernel-rendered formula, disposition, raw_verdict, warranty_grade, and unverified identifiers. EXCLUDES `why`, which is presentational and may change without a profile version bump, and `marking`, which is input and already covered by input_hash."
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
     "time_binding": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["source", "reference", "attestation_hash"],
+      "required": [
+        "source",
+        "reference",
+        "attestation_hash"
+      ],
       "description": "Identifies the clock or trusted time evidence against which valid_from and valid_until are evaluated. Required because a validity window with no declared clock is unverifiable: two parties can disagree about whether a warrant had expired and neither can be shown wrong. The kernel has NO clock; time is always OIC-supplied or externally attested.",
       "properties": {
         "source": {
-          "enum": ["oic_system_clock", "attested_timestamp", "external_time_authority"],
+          "enum": [
+            "oic_system_clock",
+            "attested_timestamp",
+            "external_time_authority"
+          ],
           "description": "oic_system_clock is the weakest and carries no non-repudiation. Recording which was used is what makes the evaluation replayable."
         },
         "reference": {
@@ -161,20 +206,31 @@
           "description": "Identifier of the clock, timestamp token, or time authority relied on."
         },
         "attestation_hash": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Digest of the time attestation where one exists. Null for an unattested system clock, which is a stated weakness rather than a hidden one."
         }
       }
     },
-    "valid_from": { "type": "string", "format": "date-time" },
+    "valid_from": {
+      "type": "string",
+      "format": "date-time"
+    },
     "valid_until": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "format": "date-time",
       "description": "Explicit scoped expiry. Null means no time-based expiry was declared, which is NOT 'never expires': revocation and epoch change still invalidate. Unrestricted expiry trivialises warranties, so expiry is scoped rather than global."
     },
     "revocation_references": {
       "type": "array",
-      "items": { "$ref": "#/$defs/identifier" },
+      "items": {
+        "$ref": "#/$defs/identifier"
+      },
       "description": "Revocation records that would invalidate this warrant if present and in force."
     },
     "recomputation_reference": {
@@ -184,58 +240,115 @@
     },
     "limitations": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "minItems": 1,
       "description": "What this warrant does NOT establish. Required and non-empty on purpose: a warrant with no stated ceiling invites over-reading."
     }
   },
   "allOf": [
     {
-      "$comment": "MEASURED for ztl-v0.1: EARNED is grounded outright. EARNED with grade sound or until-verification is NOT_REACHABLE, and EARNED never carries unverified grounds.",
-      "if": { "properties": { "disposition": { "const": "EARNED" } }, "required": ["disposition"] },
+      "$comment": "MEASURED for ztl-v0.1: EARNED is always hereditary with raw verdict T. Its unverified list may be EMPTY OR NON-EMPTY - 61 of 294 census cases are non-empty - and those atoms are informational, not load-bearing.",
+      "if": {
+        "properties": {
+          "disposition": {
+            "const": "EARNED"
+          }
+        },
+        "required": [
+          "disposition"
+        ]
+      },
       "then": {
         "properties": {
-          "warranty_grade": { "const": "hereditary" },
-          "raw_verdict": { "const": "T" },
-          "unverified_ground_ids": { "maxItems": 0 }
+          "warranty_grade": {
+            "const": "hereditary"
+          },
+          "raw_verdict": {
+            "const": "T"
+          }
         }
       }
     },
     {
       "$comment": "MEASURED for ztl-v0.1: ON CREDIT is a T verdict riding at least one unverified atom, and is never hereditary.",
       "if": {
-        "properties": { "disposition": { "const": "ON CREDIT" } },
-        "required": ["disposition"]
+        "properties": {
+          "disposition": {
+            "const": "ON CREDIT"
+          }
+        },
+        "required": [
+          "disposition"
+        ]
       },
       "then": {
         "properties": {
-          "warranty_grade": { "enum": ["sound", "until-verification"] },
-          "raw_verdict": { "const": "T" },
-          "unverified_ground_ids": { "minItems": 1 }
+          "warranty_grade": {
+            "enum": [
+              "sound",
+              "until-verification"
+            ]
+          },
+          "raw_verdict": {
+            "const": "T"
+          },
+          "unverified_ground_ids": {
+            "minItems": 1
+          }
         }
       }
     },
     {
       "$comment": "MEASURED for ztl-v0.1: OPEN never carries raw verdict T (exhaustive search found no counterexample), and always leaves at least one ground unverified.",
-      "if": { "properties": { "disposition": { "const": "OPEN" } }, "required": ["disposition"] },
+      "if": {
+        "properties": {
+          "disposition": {
+            "const": "OPEN"
+          }
+        },
+        "required": [
+          "disposition"
+        ]
+      },
       "then": {
         "properties": {
-          "raw_verdict": { "enum": ["F", "Z"] },
-          "warranty_grade": { "const": "until-verification" },
-          "unverified_ground_ids": { "minItems": 1 }
+          "raw_verdict": {
+            "enum": [
+              "F",
+              "Z"
+            ]
+          },
+          "warranty_grade": {
+            "const": "until-verification"
+          },
+          "unverified_ground_ids": {
+            "minItems": 1
+          }
         }
       }
     },
     {
-      "$comment": "MEASURED for ztl-v0.1: REFUTED is false regardless of the marks.",
+      "$comment": "MEASURED for ztl-v0.1: REFUTED is always hereditary with raw verdict F. Its unverified list may also be non-empty and is informational.",
       "if": {
-        "properties": { "disposition": { "const": "REFUTED" } },
-        "required": ["disposition"]
+        "properties": {
+          "disposition": {
+            "const": "REFUTED"
+          }
+        },
+        "required": [
+          "disposition"
+        ]
       },
       "then": {
         "properties": {
-          "warranty_grade": { "const": "hereditary" },
-          "raw_verdict": { "const": "F" }
+          "warranty_grade": {
+            "const": "hereditary"
+          },
+          "raw_verdict": {
+            "const": "F"
+          }
         }
       }
     }

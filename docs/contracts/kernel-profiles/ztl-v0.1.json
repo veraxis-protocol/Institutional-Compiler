@@ -3,6 +3,13 @@
   "canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
   "commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
   "conformance_fixture_set": {
+    "census": {
+      "cases": 294,
+      "cells_observed": 8,
+      "location": "adapters/ztl/evidence/KERNEL-CENSUS-v0.1.json",
+      "note": "A census over a stated pool, not a proof of coverage. The pinned fixture set and its index_sha256 are unchanged by it.",
+      "pool_formulas": 22
+    },
     "index_sha256": "b6e007bd47fd64b030391d90b17dda99ee12310aa0cce48bb0fdd0f74118dca5",
     "location": "adapters/ztl/fixtures/interface-freeze-v0.1/",
     "not_reachable": 3,
@@ -10,17 +17,24 @@
     "reachable": 12,
     "total": 15
   },
+  "dependency_derivation": {
+    "disjoint_from": "unverified_ground_ids, which are exactly the formula atoms marked Z",
+    "evidence": "adapters/ztl/evidence/KERNEL-CENSUS-v0.1.json, dependency_probe",
+    "minimality": "NOT claimed. This is a deliberate over-approximation.",
+    "rule": "dependency_ids = every VERIFIED atom (marked T or F) appearing in the kernel-evaluated formula.",
+    "why_not_minimised": "Redundant grounds become load-bearing only under JOINT withdrawal. Measured: in 38 of 180 census cases with two or more verified grounds, withdrawing a PAIR moves the disposition although neither member does alone. Example: (p | q) & r with {p:T, q:T, r:T} is EARNED; withdrawing p alone or q alone stays EARNED; withdrawing both yields OPEN. A set minimised by single-ground probing omits both, so a revocation of both propagates to nothing and a warrant claiming ESTABLISHED outlives the grounds that established it. Minimisation fails in the direction that matters: it leaves stale warrants usable."
+  },
   "disposition_values": [
     {
       "grades": [
         "hereditary"
       ],
       "maps_to_epistemic_status": "ESTABLISHED",
-      "meaning": "Grounded outright. The verdict cannot move under any further verification, and unverified atoms are irrelevant.",
+      "meaning": "Grounded outright. The verdict cannot move under any further verification. MEASURED: EARNED carries a non-empty unverified list in 61 of 294 census cases (example: p | q with {p:T, q:Z} returns unverified ['q']). Those atoms are INFORMATIONAL - nobody checked them and their value cannot matter. 138 refinements were tried over them and 0 moved the verdict.",
       "raw_verdicts": [
         "T"
       ],
-      "unverified": "empty",
+      "unverified": "any",
       "value": "EARNED"
     },
     {
@@ -28,7 +42,7 @@
         "hereditary"
       ],
       "maps_to_epistemic_status": "REFUTED",
-      "meaning": "False regardless of the marks.",
+      "meaning": "False regardless of the marks. Also carries a non-empty unverified list in 25 of 294 census cases; those atoms are informational for the same reason.",
       "raw_verdicts": [
         "F"
       ],
@@ -41,7 +55,7 @@
         "until-verification"
       ],
       "maps_to_epistemic_status": "CONDITIONALLY_SUPPORTED",
-      "meaning": "True only while an unverified atom holds. The verdict rides that atom and can die when it resolves. Omitted from ZTL dossier v0.1; added after measurement.",
+      "meaning": "True only while an unverified atom holds. The verdict rides those atoms and dies when one resolves the wrong way. Its unverified list is LOAD-BEARING, unlike EARNED's. Omitted from ZTL dossier v0.1; added after measurement.",
       "raw_verdicts": [
         "T"
       ],
@@ -53,7 +67,7 @@
         "until-verification"
       ],
       "maps_to_epistemic_status": "UNRESOLVED",
-      "meaning": "Not established; a mark actually matters. Never carries raw verdict T.",
+      "meaning": "Not established; a mark actually matters. Its unverified list names grounds whose resolution is NEEDED. Never carries raw verdict T.",
       "raw_verdicts": [
         "F",
         "Z"
@@ -64,14 +78,25 @@
   ],
   "entrypoint": "ztljudge.judge",
   "formula_digest_algorithm": "sha384",
+  "formula_hash_projection": {
+    "algorithm": "sha384 under canonicalization_profile_id",
+    "example": {
+      "caller_input": "p | q",
+      "hashed_representation": "(p ∨ q)",
+      "kernel_rendering": "(p ∨ q)"
+    },
+    "hashed": "the KERNEL-RENDERED formula returned by ztljudge.judge",
+    "not_hashed": "the caller's original formula string",
+    "note": "The kernel normalises: it inserts parentheses and rewrites ASCII operators to their logical symbols. Hashing the caller's string would make two callers who wrote the same formula differently produce different hashes for the same evaluated proposition, and would let a re-rendering change the hash silently."
+  },
   "known_interface_hazards": [
     {
-      "consequence": "A caller that grades through zverify.grade with the judge() alphabet receives `hereditary` where the correct grade is `until-verification`. That is a silent upgrade of a conditional result to the strongest warranty, which would let OIC treat ON CREDIT as EARNED and authorise action on an unverified link.",
+      "consequence": "A silent upgrade to the strongest warranty for results that are not hereditary, which would let OIC treat ON CREDIT as EARNED and authorise action on a load-bearing unverified link.",
       "evidence": "adapters/ztl/fixtures/interface-freeze-v0.1/nonempty-unverified.json, field cross_check",
       "hazard_id": "ZTL-H-001",
-      "mitigation": "OIC consumes judge() only. zverify.grade is a prohibited entrypoint under this profile.",
+      "mitigation": "OIC consumes ztljudge.judge only. Importing or invoking zverify in any form is prohibited for OIC, not merely discouraged.",
       "severity": "critical",
-      "summary": "zverify.grade expects 'M' for a mark while judge() accepts 'Z'. Passing 'Z' directly to grade returns a wrong grade SILENTLY."
+      "summary": "zverify.grade takes a PARSED TERM and a different marking dialect. It does not accept the caller's formula string directly. Grading through it instead of judge() returned `hereditary` across the tested dispositions, not only for ON CREDIT."
     },
     {
       "consequence": "An adapter reading raw_verdict instead of disposition records 'established false' for something merely unverified, violating I-03.",
@@ -130,6 +155,21 @@
       "reason": "OPEN never carries raw T. Exhaustive search over the formula pool found no counterexample."
     }
   ],
+  "output_hash_projection": {
+    "excluded": [
+      "why",
+      "marking"
+    ],
+    "included": [
+      "kernel_rendered_formula",
+      "disposition",
+      "raw_verdict",
+      "warranty_grade",
+      "unverified_ground_ids"
+    ],
+    "serialisation": "The included fields as a JSON object with sorted keys, no whitespace, unverified identifiers in the kernel's emitted order, digested with sha256 as an OIC-side artifact.",
+    "why_excluded": "`why` is presentational and may change without a profile version bump, so including it would make replay fail on a cosmetic edit. `marking` is the caller's input and is already covered by input_hash."
+  },
   "presentational_fields": [
     {
       "field": "why",
@@ -158,6 +198,13 @@
   },
   "status": "PROPOSED - frozen interface description, not admitted",
   "unsigned_tag": "veraxis-ztl-input-v0.1",
+  "unverified_ground_semantics": {
+    "EARNED": "informational - irrelevant to this conclusion because the result is hereditary",
+    "ON CREDIT": "load-bearing - the current positive result depends on them",
+    "OPEN": "blocking - their resolution is needed",
+    "REFUTED": "informational - irrelevant, the refutation holds regardless",
+    "note": "One field, three meanings. A contract that does not distinguish them will get one wrong. All three are preserved on the decision record regardless."
+  },
   "warranty_grade_values": [
     {
       "implies": [
