@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Conformance check: re-run every REACHABLE fixture against a ZTL kernel and
 compare field by field.
 
@@ -12,66 +11,68 @@ Usage:
 Exit code 0 = conformant. Non-zero = at least one mismatch, printed in full.
 No network access is performed or required.
 """
+
 import argparse
 import hashlib
 import json
-import os
 import sys
+from pathlib import Path
+from typing import Any
 
 FIELDS = ("verdict", "grade", "disposition", "unverified", "formula")
 
 
-def load(path):
-    with open(path) as fp:
+def load(path: Path) -> dict[str, Any]:
+    with path.open() as fp:
         return json.load(fp)
 
 
-def main():
+def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ztl", required=True, help="path to a ZTL checkout")
-    ap.add_argument("--dir", default=os.path.dirname(os.path.abspath(__file__)))
+    ap.add_argument("--dir", default=str(Path(__file__).resolve().parent))
     a = ap.parse_args()
 
+    here = Path(a.dir)
     sys.path.insert(0, a.ztl)
     try:
-        import ztljudge as K
+        import ztljudge as kernel
     except ImportError as e:
         print(f"FAIL: cannot import the kernel from {a.ztl}: {e}")
         return 2
 
-    files = sorted(f for f in os.listdir(a.dir)
-                   if f.endswith(".json") and f != "INDEX.json")
+    files = sorted(f.name for f in here.iterdir() if f.suffix == ".json" and f.name != "INDEX.json")
     checked = skipped = bad = 0
     hash_bad = 0
 
     # 1. integrity: the fixtures must match SHA256SUMS
-    sums_path = os.path.join(a.dir, "SHA256SUMS")
-    if os.path.exists(sums_path):
+    sums_path = here / "SHA256SUMS"
+    if sums_path.exists():
         want = {}
-        for line in open(sums_path):
+        for line in sums_path.read_text().splitlines():
             h, _, n = line.strip().partition("  ")
             want[n] = h
         for n, h in want.items():
-            p = os.path.join(a.dir, n)
-            if not os.path.exists(p):
+            p = here / n
+            if not p.exists():
                 print(f"HASH MISSING FILE: {n}")
                 hash_bad += 1
                 continue
-            got = hashlib.sha256(open(p, "rb").read()).hexdigest()
-            if got != h:
-                print(f"HASH MISMATCH: {n}\n  recorded {h}\n  actual   {got}")
+            got_hash = hashlib.sha256(p.read_bytes()).hexdigest()
+            if got_hash != h:
+                print(f"HASH MISMATCH: {n}\n  recorded {h}\n  actual   {got_hash}")
                 hash_bad += 1
     else:
         print("WARNING: SHA256SUMS absent — integrity not checked")
 
     # 2. semantics: the kernel must reproduce every reachable fixture
     for name in files:
-        fx = load(os.path.join(a.dir, name))
+        fx = load(here / name)
         if fx.get("status") != "REACHABLE":
             skipped += 1
             continue
         inp, exp = fx["input"], fx["raw_output"]
-        got = K.judge(inp["formula"], inp["marking"])
+        got = kernel.judge(inp["formula"], inp["marking"])
         diffs = [(f, exp[f], got[f]) for f in FIELDS if exp[f] != got[f]]
         if diffs:
             bad += 1

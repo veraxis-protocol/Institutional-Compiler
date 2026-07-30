@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Exhaustive census of the ZTL kernel's output space, and of what a warrant
 artifact's `dependency_ids` must contain.
 
@@ -21,11 +20,13 @@ Usage:
 Exit code 0 = census completed.  Non-zero = the kernel could not be loaded.
 No network access is performed or required.
 """
+
 import argparse
 import itertools
 import json
-import os
 import sys
+from pathlib import Path
+from typing import Any, Protocol
 
 # A pool chosen to exercise conjunction, disjunction, implication, negation,
 # redundant grounds, and tautological consequents.  It is not a proof of
@@ -58,18 +59,24 @@ POOL = (
 MARKS = ("T", "F", "Z")
 
 
-def atoms_of(formula):
+class Kernel(Protocol):
+    """The whole of what this census needs from a logic kernel: one call."""
+
+    def judge(self, formula: str, marking: dict[str, str]) -> dict[str, Any]: ...
+
+
+def atoms_of(formula: str) -> list[str]:
     return sorted({c for c in formula if c.isalpha()})
 
 
-def census(kernel):
+def census(kernel: Kernel) -> tuple[dict[tuple[str, ...], dict[str, Any]], int]:
     """Every reachable (disposition, grade, verdict, unverified-emptiness) cell."""
     cells = {}
     total = 0
     for formula in POOL:
         atoms = atoms_of(formula)
         for combo in itertools.product(MARKS, repeat=len(atoms)):
-            marking = dict(zip(atoms, combo))
+            marking = dict(zip(atoms, combo, strict=True))
             result = kernel.judge(formula, marking)
             total += 1
             key = (
@@ -89,7 +96,7 @@ def census(kernel):
     return cells, total
 
 
-def refinement_stability(kernel):
+def refinement_stability(kernel: Kernel) -> dict[str, Any]:
     """Does `hereditary` hold?  Refine every unverified atom every way and see
     whether the verdict of an EARNED result can be moved."""
     cases = 0
@@ -98,7 +105,7 @@ def refinement_stability(kernel):
     for formula in POOL:
         atoms = atoms_of(formula)
         for combo in itertools.product(MARKS, repeat=len(atoms)):
-            marking = dict(zip(atoms, combo))
+            marking = dict(zip(atoms, combo, strict=True))
             result = kernel.judge(formula, marking)
             if result["disposition"] != "EARNED" or not result["unverified"]:
                 continue
@@ -106,19 +113,27 @@ def refinement_stability(kernel):
             unverified = list(result["unverified"])
             for values in itertools.product("TF", repeat=len(unverified)):
                 refined = dict(marking)
-                refined.update(dict(zip(unverified, values)))
+                refined.update(dict(zip(unverified, values, strict=True)))
                 after = kernel.judge(formula, refined)
                 refinements += 1
                 if after["verdict"] != result["verdict"]:
                     moved.append(
-                        {"formula": formula, "from": marking, "to": refined,
-                         "verdict": after["verdict"]}
+                        {
+                            "formula": formula,
+                            "from": marking,
+                            "to": refined,
+                            "verdict": after["verdict"],
+                        }
                     )
-    return {"earned_with_unverified": cases, "refinements_tried": refinements,
-            "verdict_moved": len(moved), "counterexamples": moved[:5]}
+    return {
+        "earned_with_unverified": cases,
+        "refinements_tried": refinements,
+        "verdict_moved": len(moved),
+        "counterexamples": moved[:5],
+    }
 
 
-def dependency_probe(kernel):
+def dependency_probe(kernel: Kernel) -> dict[str, Any]:
     """A ground is load-bearing if withdrawing it moves the disposition.
 
     Withdrawal is the anti-tick: a verified atom (T or F) goes back to Z.
@@ -136,7 +151,7 @@ def dependency_probe(kernel):
     for formula in POOL:
         atoms = atoms_of(formula)
         for combo in itertools.product(MARKS, repeat=len(atoms)):
-            marking = dict(zip(atoms, combo))
+            marking = dict(zip(atoms, combo, strict=True))
             result = kernel.judge(formula, marking)
             verified = [a for a in atoms if marking[a] != "Z"]
             if len(verified) < 2:
@@ -174,7 +189,7 @@ def dependency_probe(kernel):
     }
 
 
-def main():
+def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ztl", required=True, help="path to a ZTL checkout")
     ap.add_argument("--json", default=None, help="write the machine-readable census here")
@@ -209,10 +224,14 @@ def main():
 
     print()
     print("dependency probing (anti-tick on verified grounds):")
-    print(f"  cases with >=2 verified grounds : "
-          f"{dependencies['cases_with_two_or_more_verified_grounds']}")
-    print(f"  pair moves it, neither alone    : "
-          f"{dependencies['cases_where_a_pair_moves_it_but_neither_member_does']}")
+    print(
+        f"  cases with >=2 verified grounds : "
+        f"{dependencies['cases_with_two_or_more_verified_grounds']}"
+    )
+    print(
+        f"  pair moves it, neither alone    : "
+        f"{dependencies['cases_where_a_pair_moves_it_but_neither_member_does']}"
+    )
 
     if args.json:
         payload = {
@@ -232,10 +251,10 @@ def main():
             "refinement_stability": stability,
             "dependency_probe": dependencies,
         }
-        with open(args.json, "w") as fp:
+        with Path(args.json).open("w") as fp:
             json.dump(payload, fp, indent=1, sort_keys=True)
             fp.write("\n")
-        print(f"\nwritten: {os.path.relpath(args.json)}")
+        print(f"\nwritten: {args.json}")
 
     return 0
 
