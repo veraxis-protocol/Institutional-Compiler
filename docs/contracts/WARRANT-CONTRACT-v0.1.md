@@ -43,30 +43,40 @@ anything about the world.
 | 2 | Kernel unavailable | `ABSENT` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0002` |
 | 3 | Malformed warrant | `MALFORMED` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0003` |
 | 4 | Unverifiable warrant hash | `UNVERIFIABLE` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0004` |
-| 5 | Stale warrant | `STALE` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0005` |
-| 6 | Expired warrant | `EXPIRED` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0006` |
-| 7 | Warrant not yet valid | `NOT_YET_VALID` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0021` |
-| 8 | Revoked ground | `REVOKED` | `UNRESOLVED` | BLOCK / ESCALATE | `PRECAUTIONARY` | `OIC-W-0007` |
-| 9 | Expired ground | `REVOKED` | `UNRESOLVED` | BLOCK / ESCALATE | `PRECAUTIONARY` | `OIC-W-0020` |
-| 10 | Epoch mismatch (within scope) | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0008` |
-| 11 | Source-version mismatch | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0009` |
-| 12 | Admission-version mismatch | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0010` |
-| 13 | Formula mismatch | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0011` |
-| 14 | Kernel/canonicalization profile mismatch | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0023` |
-| 15 | Missing source anchors | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0018` |
-| 16 | Missing admission IDs | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0019` |
-| 17 | Unsupported warranty grade | `UNSUPPORTED_GRADE` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0017` |
-| 18 | Unsupported result combination | `UNSUPPORTED_GRADE` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0022` |
-| 19 | No warrant requirement declared | `NOT_REQUIRED` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0024` |
-| 20 | Contradictory grounds | `USABLE` | `CONTRADICTED` | BLOCK | `SUBSTANTIVE` | `OIC-W-0014` |
-| 21 | `REFUTED` disposition | `USABLE` | `REFUTED` | BLOCK | `SUBSTANTIVE` | `OIC-W-0013` |
-| 22 | `OPEN` disposition, any raw verdict | `USABLE` | `UNRESOLVED` | BLOCK / ESCALATE | `PRECAUTIONARY` | `OIC-W-0012` |
-| 23 | `EARNED` + `hereditary` | `USABLE` | `ESTABLISHED` | ALLOW¹ | `SUBSTANTIVE` | `OIC-D-0001` |
-| 24 | `ON CREDIT` + grade permitted | `USABLE` | `ESTABLISHED` | ALLOW¹ | `SUBSTANTIVE` | `OIC-D-0001` |
-| 25 | Grade below the control's minimum | `USABLE` | `ESTABLISHED` | BLOCK / ESCALATE | `CONTROL_REQUIREMENT` | `OIC-W-0016` |
-| 26 | `decision_mode` reserves the decision | `USABLE` | `ESTABLISHED` | ESCALATE | `CONTROL_REQUIREMENT` | `OIC-D-0002` |
-| 27 | `decision_mode` advisory / evidence-only | `USABLE` | `ESTABLISHED` | ADVISORY | `CONTROL_REQUIREMENT` | `OIC-D-0003` |
-| 28 | Non-empty `unverified` list | unchanged | unchanged | unchanged | unchanged | `OIC-W-0015` added |
+| 5 | `warrant_requirement` missing or invalid | `MALFORMED` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0026` |
+| 6 | Stale warrant | `STALE` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0005` |
+| 7 | Expired warrant | `EXPIRED` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0006` |
+| 8 | Warrant not yet valid | `NOT_YET_VALID` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0021` |
+| 9 | Revoked ground | `REVOKED` | `UNRESOLVED` | BLOCK / ESCALATE | `PRECAUTIONARY` | `OIC-W-0007` |
+| 10 | Expired ground | `REVOKED` | `UNRESOLVED` | BLOCK / ESCALATE | `PRECAUTIONARY` | `OIC-W-0020` |
+| 11 | Epoch mismatch within scope | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0008` |
+| 12 | Source-version mismatch | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0009` |
+| 13 | Admission-version mismatch | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0010` |
+| 14 | Formula mismatch | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0011` |
+| 15 | Profile mismatch | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0023` |
+| 16 | Missing source anchors | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0018` |
+| 17 | Missing admission IDs | `MISBOUND` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0019` |
+| 18 | Grade vocabulary unknown | `UNSUPPORTED_GRADE` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0017` |
+| 19 | Result combination violates the profile | `UNSUPPORTED_RESULT` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0022` |
+| 20 | Explicit `not_required` / `not_applicable` | `NOT_REQUIRED` | `UNRESOLVED` | BLOCK / ESCALATE | `PROCEDURAL` | `OIC-W-0024` |
+| 21 | Contradictory grounds | `USABLE` | `CONTRADICTED` | BLOCK | `SUBSTANTIVE` | `OIC-W-0014` |
+| 22 | `REFUTED` disposition | `USABLE` | `REFUTED` | BLOCK | `SUBSTANTIVE` | `OIC-W-0013` |
+| 23 | `OPEN`, any raw verdict | `USABLE` | `UNRESOLVED` | BLOCK / ESCALATE | `PRECAUTIONARY` | `OIC-W-0012` |
+| 24 | `EARNED` + `hereditary` | `USABLE` | `ESTABLISHED` | ALLOW¹ | `SUBSTANTIVE` | `OIC-D-0001` |
+| 25 | `ON CREDIT` + `sound` + `allow_with_disclosure` | `USABLE` | `CONDITIONALLY_SUPPORTED` | ALLOW¹ | `CONTROL_REQUIREMENT` | `OIC-D-0005` |
+| 26 | `ON CREDIT` + `sound` + `forbid` | `USABLE` | `CONDITIONALLY_SUPPORTED` | BLOCK | `CONTROL_REQUIREMENT` | `OIC-D-0006` |
+| 27 | `ON CREDIT` + `sound` + `escalate` | `USABLE` | `CONDITIONALLY_SUPPORTED` | ESCALATE | `CONTROL_REQUIREMENT` | `OIC-D-0006` |
+| 28 | `ON CREDIT` + `until-verification` | `USABLE` | `CONDITIONALLY_SUPPORTED` | BLOCK / ESCALATE | `PRECAUTIONARY` | `OIC-W-0025` |
+| 29 | Grade below the control's minimum | `USABLE` | **preserved** | BLOCK / ESCALATE | `CONTROL_REQUIREMENT` | `OIC-W-0016` |
+| 30 | `decision_mode` reserves the decision | `USABLE` | **preserved** | ESCALATE | `CONTROL_REQUIREMENT` | `OIC-D-0002` |
+| 31 | `decision_mode` advisory / evidence-only | `USABLE` | **preserved** | ADVISORY | `CONTROL_REQUIREMENT` | `OIC-D-0003` |
+| 32 | Non-empty `unverified` list | unchanged | unchanged | unchanged | unchanged | `OIC-W-0015` added |
+
+Rows 29 to 31 say **preserved** rather than naming a status, and that is the point. Grade
+insufficiency and decision-mode overlays are stages 2 and 3 of evaluation; they change what
+the runtime did, never what the grounds establish. `REFUTED` + `human_judgment` is
+`REFUTED` / `ESCALATE`; `CONDITIONALLY_SUPPORTED` + `advisory` stays conditionally
+supported.
 
 ¹ `ALLOW` additionally requires **W-4** conditions 4–8 (authority, admission, evidence,
 versions). Rows 23–24 mean *the logic does not stand in the way*.
@@ -143,18 +153,43 @@ stays `ESTABLISHED`.
 
 ## 5. The ALLOW gate
 
-`execution_disposition = ALLOW` requires **all eight** of ADR-013 W-4, in order:
+`ALLOW` has exactly **two positive routes**. Both require every common condition:
 
 1. kernel available, pinned, version-matched → else `OIC-W-0002`
 2. warrant present, well-formed, hash-verified → else `OIC-W-0001` / `0003` / `0004`
-3. warrant fresh: epoch within scope, ground-set hash, `valid_from`/`valid_until` under the
+3. a valid `warrant_requirement` with `mode: required` → else `OIC-W-0026` / `OIC-W-0024`
+4. warrant fresh: epoch within scope, ground-set hash, `valid_from`/`valid_until` under the
    declared `time_binding` → else `OIC-W-0005` / `0006` / `0008` / `0021`
-4. no dependency ground expired or revoked → else `OIC-W-0020` / `0007`
-5. profiles match, then formula hash matches → else `OIC-W-0023` / `0011`
-6. source and admission versions match → else `OIC-W-0009` / `0010`
-7. `epistemic_status = ESTABLISHED` and grade ≥ the control's declared minimum → else
-   `OIC-W-0012` / `0013` / `0014` / `0016`
+5. no dependency ground expired or revoked → else `OIC-W-0020` / `0007`
+6. profiles match, then formula hash matches byte-for-byte → else `OIC-W-0023` / `0011`
+7. source and admission versions match → else `OIC-W-0009` / `0010`
 8. authority, admission, evidence, and version checks **outside** the kernel pass
+9. `decision_mode` permits automatic execution → else `OIC-D-0002` / `OIC-D-0003`
+
+Then exactly one of:
+
+**Route A — `EARNED` / `hereditary`**
+
+| Field | Value |
+|---|---|
+| `epistemic_status` | `ESTABLISHED` |
+| observed grade | `hereditary` |
+| `missing_ground_ids` | empty |
+| `unverified_ground_policy_applied` | `null` |
+| `decision_basis` | `SUBSTANTIVE` |
+| reason codes | `OIC-D-0001` |
+
+**Route B — `ON CREDIT` / `sound`**
+
+| Field | Value |
+|---|---|
+| `epistemic_status` | `CONDITIONALLY_SUPPORTED` |
+| observed grade | `sound` |
+| required grade | permits `sound` |
+| `unverified_ground_policy_applied` | `allow_with_disclosure` |
+| `missing_ground_ids` | non-empty, preserved on the record |
+| `decision_basis` | `CONTROL_REQUIREMENT` |
+| reason codes | `OIC-D-0005` **and** `OIC-W-0015` |
 
 Step 8 is not implemented by this contract and is not implementable by the kernel. It is
 named so that no reader mistakes a warrant for a permission.
@@ -232,9 +267,19 @@ block or escalate.
 Rules:
 
 - **No implicit or default mode.** A control that does not declare one is a contract
-  error, not a permissive case.
-- `mode: required` requires all three dependent fields to be non-null.
-- `mode: not_required` or `not_applicable` requires all three to be null.
+  error, not a permissive case — and a *different* condition from an explicit
+  non-requirement:
+
+  | Situation | `warrant_state` | `warrant_requirement_mode` | Reason |
+  |---|---|---|---|
+  | Object missing, or fails its schema | `MALFORMED` | `null` | `OIC-W-0026` |
+  | Explicit `not_required` or `not_applicable` | `NOT_REQUIRED` | the declared mode | `OIC-W-0024` |
+
+  An explicit declaration is a decision somebody made and is recorded as such. A missing
+  one is a defect. Reporting them identically would hide the defect behind a legitimate
+  configuration.
+- `mode: required` requires all **four** dependent fields to be non-null.
+- `mode: not_required` or `not_applicable` requires all **four** to be null.
 - **`not_required` is not permission to ignore authority, admission, evidence, or version
   checks.** Those are independent and are never waived by this object.
 - `not_applicable` means the control contains no logical-warrant requirement at all.
@@ -250,7 +295,11 @@ contract. Recorded as open question 10.
 
 ## 8. `on_unknown` and `decision_mode`
 
-`on_unknown` selects BLOCK-versus-ESCALATE when the epistemic status is not `ESTABLISHED`:
+`on_unknown` selects BLOCK-versus-ESCALATE on the **`UNRESOLVED` and failure paths only**.
+It does not apply to `CONDITIONALLY_SUPPORTED` — conditional support is resolved by
+`unverified_ground_policy` and `on_insufficient_grade` — and it does not apply to `REFUTED`
+or `CONTRADICTED`, which are findings rather than unknowns. The schema enforces this: a
+non-null `on_unknown_applied` requires `epistemic_status = UNRESOLVED`.
 
 | `on_unknown` | Execution | Basis | Note |
 |---|---|---|---|
@@ -268,7 +317,7 @@ non-null `on_unknown_applied` cannot pair with `ALLOW` or `SUBSTANTIVE`.
 
 | `decision_mode` | Effect | Basis |
 |---|---|---|
-| `automatic` | `ALLOW` permitted when the §4 gate passes | `SUBSTANTIVE` |
+| `automatic` | Preserves the stage-2 result, including **either** positive ALLOW route | `SUBSTANTIVE` (Route A) or `CONTROL_REQUIREMENT` (Route B) |
 | `human_judgment`, `escalation_only`, `non_automatable` | `ESCALATE` even when `ESTABLISHED` | `CONTROL_REQUIREMENT` (`OIC-D-0002`) |
 | `advisory`, `evidence_only` | `ADVISORY`; recorded, does not gate | `CONTROL_REQUIREMENT` (`OIC-D-0003`) |
 
@@ -333,6 +382,7 @@ a breaking change.
 | `OIC-W-0023` | `PROFILE_MISMATCH` | `PROCEDURAL` |
 | `OIC-W-0024` | `WARRANT_REQUIREMENT_NOT_APPLICABLE` | `PROCEDURAL` |
 | `OIC-W-0025` | `CONDITIONAL_SUPPORT_UNSTABLE` | `PRECAUTIONARY` |
+| `OIC-W-0026` | `WARRANT_REQUIREMENT_MISSING_OR_INVALID` | `PROCEDURAL` |
 
 ### Decision conditions — `OIC-D-nnnn`
 
@@ -377,12 +427,12 @@ one of them, and the schema enforces it.
 | 3 | Can `OPEN` carry raw verdict `T`? | Vitaliy Reznik | **ANSWERED** — no; exhaustive search found no counterexample |
 | 4 | Do the two levels of missing-ground representation match reviewer needs? | Vitaliy Reznik + Arkadiy Miteiko | open |
 | 5 | Do the `ON CREDIT` rows (26–28) match kernel behaviour? | Vitaliy Reznik | **new**, open |
-| 6 | Is `ESTABLISHED` the right epistemic status for `ON CREDIT`, given it can die? | GPT-5.6 Thinking + Vitaliy Reznik | **new**, open |
+| 6 | What epistemic status does `ON CREDIT` carry? | GPT-5.6 Thinking | **ANSWERED** — `CONDITIONALLY_SUPPORTED`; never `ESTABLISHED`, never collapsed to `UNRESOLVED` |
 | 7 | Should `control-envelope.schema.json` carry `warrant_requirement`? | GPT-5.6 Thinking → Arkadiy Miteiko | open |
 | 8 | Should the envelope gain `on_missing`, `on_conflict`, `on_error`? | GPT-5.6 Thinking | **new**, open |
 | 9 | Which authority may scope expiry, and over which grounds? | Arkadiy Miteiko | **ANSWERED** — see ADR-013 §9.2 |
 | 10 | What is the `ALLOW` path for `not_required` / `not_applicable` controls? | GPT-5.6 Thinking → Arkadiy Miteiko | **new**, open |
-| 11 | Does the VEIP handoff need fields beyond `RuntimeDecision`? | Arkadiy Miteiko | **ANSWERED** — no; see ADR-013 §9.3 |
+| 11 | Does the VEIP handoff need fields beyond `RuntimeDecision`? | Arkadiy Miteiko | **ANSWERED** — yes. `RuntimeDecision` alone is **not** the complete handoff: it must be bound to the pre-existing `ActionProposal`, the envelope, the warrant where applicable, the evaluation input, and the authority and admission versions. See ADR-013 §9.3 |
 
 ## 13. Boundaries
 
