@@ -1,4 +1,28 @@
 {
+  "allow_routes": {
+    "A": {
+      "decision_basis": "SUBSTANTIVE",
+      "disposition_source": "EARNED",
+      "epistemic_status": "ESTABLISHED",
+      "missing_grounds": "empty",
+      "observed_grade": "hereditary",
+      "reason_codes": [
+        "OIC-D-0001"
+      ]
+    },
+    "B": {
+      "decision_basis": "CONTROL_REQUIREMENT",
+      "disposition_source": "ON CREDIT",
+      "epistemic_status": "CONDITIONALLY_SUPPORTED",
+      "missing_grounds": "non-empty",
+      "observed_grade": "sound",
+      "reason_codes": [
+        "OIC-D-0005",
+        "OIC-W-0015"
+      ],
+      "unverified_ground_policy": "allow_with_disclosure"
+    }
+  },
   "artifact": "ZTL to Open Control Envelope mapping",
   "authority_values": {
     "MEASURED": "Reproduced against the pinned kernel; fixture in adapters/ztl/fixtures/interface-freeze-v0.1/.",
@@ -94,12 +118,31 @@
       "disposition": "any",
       "epistemic_status": "UNRESOLVED",
       "grade": "any",
+      "note": "A control contract error, NOT an explicit non-requirement. Distinct from row 21.",
+      "oic_condition": "warrant_requirement missing or invalid",
+      "precedence": 1,
+      "primary_reason_code": "OIC-W-0026",
+      "reachability": "REACHABLE",
+      "row_id": 5,
+      "unverified": "any",
+      "warrant_state": "MALFORMED"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "base_execution_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "grade": "any",
       "note": "ground_set_hash moved under the warrant.",
       "oic_condition": "warrant stale",
       "precedence": 2,
       "primary_reason_code": "OIC-W-0005",
       "reachability": "REACHABLE",
-      "row_id": 5,
+      "row_id": 6,
       "unverified": "any",
       "warrant_state": "STALE"
     },
@@ -118,7 +161,7 @@
       "precedence": 2,
       "primary_reason_code": "OIC-W-0006",
       "reachability": "REACHABLE",
-      "row_id": 6,
+      "row_id": 7,
       "unverified": "any",
       "warrant_state": "EXPIRED"
     },
@@ -137,7 +180,7 @@
       "precedence": 2,
       "primary_reason_code": "OIC-W-0021",
       "reachability": "REACHABLE",
-      "row_id": 7,
+      "row_id": 8,
       "unverified": "any",
       "warrant_state": "NOT_YET_VALID"
     },
@@ -156,7 +199,7 @@
       "precedence": 2,
       "primary_reason_code": "OIC-W-0020",
       "reachability": "REACHABLE",
-      "row_id": 8,
+      "row_id": 9,
       "unverified": "any",
       "warrant_state": "REVOKED"
     },
@@ -175,7 +218,7 @@
       "precedence": 2,
       "primary_reason_code": "OIC-W-0007",
       "reachability": "REACHABLE",
-      "row_id": 9,
+      "row_id": 10,
       "unverified": "any",
       "warrant_state": "REVOKED"
     },
@@ -194,7 +237,7 @@
       "precedence": 2,
       "primary_reason_code": "OIC-W-0008",
       "reachability": "REACHABLE",
-      "row_id": 10,
+      "row_id": 11,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -213,7 +256,7 @@
       "precedence": 2,
       "primary_reason_code": "OIC-W-0009",
       "reachability": "REACHABLE",
-      "row_id": 11,
+      "row_id": 12,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -232,7 +275,7 @@
       "precedence": 2,
       "primary_reason_code": "OIC-W-0010",
       "reachability": "REACHABLE",
-      "row_id": 12,
+      "row_id": 13,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -251,7 +294,7 @@
       "precedence": 2,
       "primary_reason_code": "OIC-W-0011",
       "reachability": "REACHABLE",
-      "row_id": 13,
+      "row_id": 14,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -270,7 +313,7 @@
       "precedence": 2,
       "primary_reason_code": "OIC-W-0023",
       "reachability": "REACHABLE",
-      "row_id": 14,
+      "row_id": 15,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -289,7 +332,7 @@
       "precedence": 2,
       "primary_reason_code": "OIC-W-0018",
       "reachability": "REACHABLE",
-      "row_id": 15,
+      "row_id": 16,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -308,7 +351,7 @@
       "precedence": 2,
       "primary_reason_code": "OIC-W-0019",
       "reachability": "REACHABLE",
-      "row_id": 16,
+      "row_id": 17,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -321,30 +364,11 @@
       "decision_basis": "PROCEDURAL",
       "disposition": "any",
       "epistemic_status": "UNRESOLVED",
-      "grade": "unsupported",
-      "note": "",
+      "grade": "unknown",
+      "note": "The grade VOCABULARY is unknown. Not a disposition defect.",
       "oic_condition": "warranty grade not in the profile ladder",
       "precedence": 2,
       "primary_reason_code": "OIC-W-0017",
-      "reachability": "REACHABLE",
-      "row_id": 17,
-      "unverified": "any",
-      "warrant_state": "UNSUPPORTED_GRADE"
-    },
-    {
-      "authority": "OIC-DEFENSIVE",
-      "base_execution_choices": [
-        "BLOCK",
-        "ESCALATE"
-      ],
-      "decision_basis": "PROCEDURAL",
-      "disposition": "any",
-      "epistemic_status": "UNRESOLVED",
-      "grade": "any",
-      "note": "",
-      "oic_condition": "disposition/grade/verdict combination not in the profile",
-      "precedence": 2,
-      "primary_reason_code": "OIC-W-0022",
       "reachability": "REACHABLE",
       "row_id": 18,
       "unverified": "any",
@@ -360,12 +384,50 @@
       "disposition": "any",
       "epistemic_status": "UNRESOLVED",
       "grade": "any",
-      "note": "v0.1 specifies no ALLOW path for warrant-free controls. Never a waiver of authority, admission, evidence or version checks.",
-      "oic_condition": "warrant_requirement mode not_required or not_applicable",
+      "note": "The vocabulary is known; the COMBINATION is not permitted. Never reported as a grade defect.",
+      "oic_condition": "disposition/grade/raw-verdict/unverified combination violates the frozen profile",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0022",
+      "reachability": "REACHABLE",
+      "row_id": 19,
+      "unverified": "any",
+      "warrant_state": "UNSUPPORTED_RESULT"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "base_execution_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "grade": "any",
+      "note": "",
+      "oic_condition": "unknown disposition value",
+      "precedence": 2,
+      "primary_reason_code": "OIC-W-0022",
+      "reachability": "REACHABLE",
+      "row_id": 20,
+      "unverified": "any",
+      "warrant_state": "UNSUPPORTED_RESULT"
+    },
+    {
+      "authority": "OIC-DEFENSIVE",
+      "base_execution_choices": [
+        "BLOCK",
+        "ESCALATE"
+      ],
+      "decision_basis": "PROCEDURAL",
+      "disposition": "any",
+      "epistemic_status": "UNRESOLVED",
+      "grade": "any",
+      "note": "An explicit declaration, not a missing one. v0.1 specifies no ALLOW path. Never a waiver of authority, admission, evidence or version checks.",
+      "oic_condition": "warrant_requirement mode explicitly not_required or not_applicable",
       "precedence": 2,
       "primary_reason_code": "OIC-W-0024",
       "reachability": "REACHABLE",
-      "row_id": 19,
+      "row_id": 21,
       "unverified": "any",
       "warrant_state": "NOT_REQUIRED"
     },
@@ -383,7 +445,7 @@
       "precedence": 3,
       "primary_reason_code": "OIC-W-0014",
       "reachability": "REACHABLE",
-      "row_id": 20,
+      "row_id": 22,
       "unverified": "any",
       "warrant_state": "USABLE"
     },
@@ -401,7 +463,7 @@
       "precedence": 4,
       "primary_reason_code": "OIC-W-0013",
       "reachability": "REACHABLE",
-      "row_id": 21,
+      "row_id": 23,
       "unverified": "any",
       "warrant_state": "USABLE"
     },
@@ -420,7 +482,7 @@
       "precedence": 4,
       "primary_reason_code": "OIC-W-0012",
       "reachability": "REACHABLE",
-      "row_id": 22,
+      "row_id": 24,
       "unverified": "non-empty",
       "warrant_state": "USABLE"
     },
@@ -439,7 +501,7 @@
       "precedence": 4,
       "primary_reason_code": "OIC-W-0012",
       "reachability": "REACHABLE",
-      "row_id": 23,
+      "row_id": 25,
       "unverified": "non-empty",
       "warrant_state": "USABLE"
     },
@@ -453,14 +515,14 @@
       "disposition": "OPEN",
       "epistemic_status": "UNRESOLVED",
       "grade": "any",
-      "note": "Exhaustive search found no counterexample. Defensive fail-closed row; no envelope rule may depend on this state.",
+      "note": "Exhaustive search found no counterexample. Defensive fail-closed row.",
       "oic_condition": "raw verdict T",
       "precedence": 4,
       "primary_reason_code": "OIC-W-0022",
       "reachability": "NOT_REACHABLE",
-      "row_id": 24,
+      "row_id": 26,
       "unverified": "any",
-      "warrant_state": "UNSUPPORTED_GRADE"
+      "warrant_state": "UNSUPPORTED_RESULT"
     },
     {
       "authority": "MEASURED",
@@ -471,12 +533,12 @@
       "disposition": "EARNED",
       "epistemic_status": "ESTABLISHED",
       "grade": "hereditary",
-      "note": "Grounded outright. The ONLY disposition that maps to ESTABLISHED.",
+      "note": "Grounded outright. The ONLY disposition mapping to ESTABLISHED.",
       "oic_condition": "all checks pass",
       "precedence": 5,
       "primary_reason_code": "OIC-D-0001",
       "reachability": "REACHABLE",
-      "row_id": 25,
+      "row_id": 27,
       "unverified": "empty",
       "warrant_state": "USABLE"
     },
@@ -491,12 +553,12 @@
       "disposition": "ON CREDIT",
       "epistemic_status": "CONDITIONALLY_SUPPORTED",
       "grade": "sound",
-      "note": "Execution is decided by the unverified_ground_policy overlay. Never ALLOW without allow_with_disclosure.",
+      "note": "Execution is resolved by stage 2. Never ALLOW without allow_with_disclosure.",
       "oic_condition": "grade permits sound",
       "precedence": 5,
       "primary_reason_code": "OIC-W-0015",
       "reachability": "REACHABLE",
-      "row_id": 26,
+      "row_id": 28,
       "unverified": "non-empty",
       "warrant_state": "USABLE"
     },
@@ -515,7 +577,7 @@
       "precedence": 5,
       "primary_reason_code": "OIC-W-0025",
       "reachability": "REACHABLE",
-      "row_id": 27,
+      "row_id": 29,
       "unverified": "non-empty",
       "warrant_state": "USABLE"
     },
@@ -529,14 +591,14 @@
       "disposition": "EARNED",
       "epistemic_status": "UNRESOLVED",
       "grade": "sound",
-      "note": "EARNED requires hereditary by construction; a sound T is ON CREDIT. Defensive row for a substitute kernel.",
+      "note": "EARNED requires hereditary by construction; a sound T is ON CREDIT. The grade vocabulary is known, so this is an unsupported RESULT, not an unsupported grade.",
       "oic_condition": "any",
       "precedence": 5,
       "primary_reason_code": "OIC-W-0022",
       "reachability": "NOT_REACHABLE",
-      "row_id": 28,
+      "row_id": 30,
       "unverified": "any",
-      "warrant_state": "UNSUPPORTED_GRADE"
+      "warrant_state": "UNSUPPORTED_RESULT"
     },
     {
       "authority": "ZTL-CONFIRMED",
@@ -553,24 +615,29 @@
       "precedence": 5,
       "primary_reason_code": "OIC-W-0022",
       "reachability": "NOT_REACHABLE",
-      "row_id": 29,
+      "row_id": 31,
       "unverified": "any",
-      "warrant_state": "UNSUPPORTED_GRADE"
+      "warrant_state": "UNSUPPORTED_RESULT"
     }
   ],
-  "composition": {
-    "classification_rows": "Determine warrant_state, epistemic_status, the base execution constraints, and the base reason code.",
-    "control_overlays": "May change execution_disposition, decision_basis, and policy reason codes. They MUST NOT rewrite epistemic_status; every overlay declares epistemic_effect = PRESERVE.",
-    "rule": "A decision is one classification row, optionally modified by one control overlay.",
-    "why": "A flat table let a decision_mode row assert an epistemic status of its own, so 'a human decides this' could silently claim the grounds were established. Separating the two makes that impossible to express."
-  },
-  "control_overlays": [
+  "decision_mode_overlays": [
+    {
+      "decision_basis": null,
+      "epistemic_effect": "PRESERVE",
+      "execution_disposition": "PRESERVE",
+      "identity": true,
+      "note": "The identity overlay. It preserves whatever stage 2 produced, including either positive ALLOW route, and is never recorded in applied_control_overlay_ids.",
+      "overlay_id": "DM-1",
+      "policy_reason_code": null,
+      "trigger": "decision_mode = automatic"
+    },
     {
       "decision_basis": "CONTROL_REQUIREMENT",
       "epistemic_effect": "PRESERVE",
       "execution_disposition": "ESCALATE",
-      "note": "The institution reserved the decision. Applies whatever the classification: REFUTED + human_judgment stays REFUTED.",
-      "overlay_id": "O-1",
+      "identity": false,
+      "note": "Final ESCALATE. Applies to every epistemic status without altering it: REFUTED + human_judgment stays REFUTED.",
+      "overlay_id": "DM-2",
       "policy_reason_code": "OIC-D-0002",
       "trigger": "decision_mode in {human_judgment, escalation_only, non_automatable}"
     },
@@ -578,55 +645,11 @@
       "decision_basis": "CONTROL_REQUIREMENT",
       "epistemic_effect": "PRESERVE",
       "execution_disposition": "ADVISORY",
-      "note": "Recorded; does not gate. Applies to every epistemic status without altering it.",
-      "overlay_id": "O-2",
+      "identity": false,
+      "note": "Final ADVISORY. Records without gating; the prior stage's reason codes are retained.",
+      "overlay_id": "DM-3",
       "policy_reason_code": "OIC-D-0003",
       "trigger": "decision_mode in {advisory, evidence_only}"
-    },
-    {
-      "decision_basis": "CONTROL_REQUIREMENT",
-      "epistemic_effect": "PRESERVE",
-      "execution_disposition": "ESCALATE",
-      "note": "The grounds did support the claim; the control declined to act on that grade.",
-      "overlay_id": "O-3",
-      "policy_reason_code": "OIC-W-0016",
-      "trigger": "warranty_grade_observed below warrant_requirement.minimum_warranty_grade, on_insufficient_grade = escalate"
-    },
-    {
-      "decision_basis": "CONTROL_REQUIREMENT",
-      "epistemic_effect": "PRESERVE",
-      "execution_disposition": "BLOCK",
-      "note": "Same, blocking variant.",
-      "overlay_id": "O-4",
-      "policy_reason_code": "OIC-W-0016",
-      "trigger": "warranty_grade_observed below warrant_requirement.minimum_warranty_grade, on_insufficient_grade = block"
-    },
-    {
-      "decision_basis": "CONTROL_REQUIREMENT",
-      "epistemic_effect": "PRESERVE",
-      "execution_disposition": "ALLOW",
-      "note": "The ONLY overlay that can produce ALLOW. Requires grade sound, non-empty missing grounds preserved on the record, and every W-4 check outside the kernel to pass.",
-      "overlay_id": "O-5",
-      "policy_reason_code": "OIC-D-0005",
-      "trigger": "epistemic_status = CONDITIONALLY_SUPPORTED, grade sufficient, unverified_ground_policy = allow_with_disclosure"
-    },
-    {
-      "decision_basis": "CONTROL_REQUIREMENT",
-      "epistemic_effect": "PRESERVE",
-      "execution_disposition": "BLOCK",
-      "note": "The control refuses to act on a result that rides an unverified link.",
-      "overlay_id": "O-6",
-      "policy_reason_code": "OIC-D-0006",
-      "trigger": "epistemic_status = CONDITIONALLY_SUPPORTED, unverified_ground_policy = forbid"
-    },
-    {
-      "decision_basis": "CONTROL_REQUIREMENT",
-      "epistemic_effect": "PRESERVE",
-      "execution_disposition": "ESCALATE",
-      "note": "Routed to a human rather than refused outright.",
-      "overlay_id": "O-7",
-      "policy_reason_code": "OIC-D-0006",
-      "trigger": "epistemic_status = CONDITIONALLY_SUPPORTED, unverified_ground_policy = escalate"
     }
   ],
   "epistemic_status_mapping": {
@@ -636,16 +659,107 @@
     "REFUTED": "REFUTED",
     "contradictory grounds": "CONTRADICTED"
   },
+  "evaluation_stages": {
+    "1_classification": {
+      "artifact": "classification_rows",
+      "determines": [
+        "warrant_state",
+        "epistemic_status",
+        "base execution constraints",
+        "base reason code"
+      ],
+      "note": "Precedence within this stage runs 1 to 5; the most restrictive match wins."
+    },
+    "2_warrant_policy": {
+      "artifact": "warrant_policy_rules",
+      "determines": [
+        "execution_disposition",
+        "decision_basis",
+        "policy reason code"
+      ],
+      "note": "Grade sufficiency is evaluated first. A control that will not accept the grade never reaches the unverified-ground question.",
+      "order": [
+        "grade sufficiency (order 1)",
+        "unverified-ground policy (order 2)"
+      ]
+    },
+    "3_decision_mode": {
+      "artifact": "decision_mode_overlays",
+      "determines": [
+        "final execution_disposition",
+        "decision_basis",
+        "policy reason code"
+      ],
+      "note": "Applied last. automatic is the identity and preserves the stage-2 result."
+    },
+    "invariants": [
+      "Every stage preserves the epistemic status fixed by stage 1. No later stage may change it.",
+      "Every matched policy reason code is RETAINED even when a later stage changes the final execution disposition.",
+      "applied_control_overlay_ids records the stage-2 and stage-3 identifiers that changed the outcome, in deterministic order, without duplicates. The identity overlay DM-1 is never recorded."
+    ]
+  },
   "kernel_profile_id": "ztl-v0.1",
   "kernel_profile_ref": "docs/contracts/kernel-profiles/ztl-v0.1.json",
   "note": "This JSON is the canonical mapping artifact. docs/contracts/ZTL-OCE-MAPPING-v0.1.md is generated from it by tools/render_mapping.py and verified against it by tests/contract/test_warrant_contract.py.",
   "precedence": {
-    "1": "kernel or artifact unusable - the claim was never validly evaluated",
-    "2": "artifact misbound, stale, or grounds withdrawn - evaluated against a different world",
+    "1": "kernel, artifact, or control contract unusable - the claim was never validly evaluated",
+    "2": "artifact misbound, stale, unsupported, or grounds withdrawn",
     "3": "contradiction",
     "4": "disposition",
     "5": "disposition and warranty grade"
   },
   "status": "PROPOSED - not admitted",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "warrant_policy_rules": [
+    {
+      "decision_basis": "CONTROL_REQUIREMENT",
+      "epistemic_effect": "PRESERVE",
+      "execution_disposition": "ESCALATE",
+      "note": "Grade sufficiency is evaluated BEFORE the unverified-ground policy: a control that will not accept the grade never reaches the question of unverified grounds.",
+      "order": 1,
+      "policy_reason_code": "OIC-W-0016",
+      "rule_id": "WP-1",
+      "trigger": "warranty_grade_observed below warrant_requirement.minimum_warranty_grade, on_insufficient_grade = escalate"
+    },
+    {
+      "decision_basis": "CONTROL_REQUIREMENT",
+      "epistemic_effect": "PRESERVE",
+      "execution_disposition": "BLOCK",
+      "note": "Same, blocking variant.",
+      "order": 1,
+      "policy_reason_code": "OIC-W-0016",
+      "rule_id": "WP-2",
+      "trigger": "warranty_grade_observed below warrant_requirement.minimum_warranty_grade, on_insufficient_grade = block"
+    },
+    {
+      "decision_basis": "CONTROL_REQUIREMENT",
+      "epistemic_effect": "PRESERVE",
+      "execution_disposition": "ALLOW",
+      "note": "The only rule in any stage that can produce ALLOW for conditional support. Requires grade sound and non-empty missing grounds preserved on the record.",
+      "order": 2,
+      "policy_reason_code": "OIC-D-0005",
+      "rule_id": "WP-3",
+      "trigger": "epistemic_status = CONDITIONALLY_SUPPORTED, grade sufficient, unverified_ground_policy = allow_with_disclosure"
+    },
+    {
+      "decision_basis": "CONTROL_REQUIREMENT",
+      "epistemic_effect": "PRESERVE",
+      "execution_disposition": "BLOCK",
+      "note": "The control refuses to act on a result that rides an unverified link.",
+      "order": 2,
+      "policy_reason_code": "OIC-D-0006",
+      "rule_id": "WP-4",
+      "trigger": "epistemic_status = CONDITIONALLY_SUPPORTED, grade sufficient, unverified_ground_policy = forbid"
+    },
+    {
+      "decision_basis": "CONTROL_REQUIREMENT",
+      "epistemic_effect": "PRESERVE",
+      "execution_disposition": "ESCALATE",
+      "note": "Routed to a human rather than refused.",
+      "order": 2,
+      "policy_reason_code": "OIC-D-0006",
+      "rule_id": "WP-5",
+      "trigger": "epistemic_status = CONDITIONALLY_SUPPORTED, grade sufficient, unverified_ground_policy = escalate"
+    }
+  ]
 }

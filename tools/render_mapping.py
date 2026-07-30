@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from typing import Any
 
 MAPPING_JSON = Path("docs/contracts/ZTL-OCE-MAPPING-v0.1.json")
 MAPPING_MD = Path("docs/contracts/ZTL-OCE-MAPPING-v0.1.md")
@@ -42,7 +43,17 @@ CLASSIFICATION_COLUMNS = (
     "Authority",
 )
 
-OVERLAY_COLUMNS = (
+WARRANT_POLICY_COLUMNS = (
+    "ID",
+    "Order",
+    "Trigger",
+    "Epistemic effect",
+    "Execution",
+    "Basis",
+    "Policy reason",
+)
+
+DECISION_MODE_COLUMNS = (
     "ID",
     "Trigger",
     "Epistemic effect",
@@ -61,12 +72,17 @@ def _table(columns: tuple[str, ...], rows: list[list[str]]) -> str:
     return "\n".join(lines)
 
 
-def render_table(document: dict[str, object]) -> str:
-    """Render both tables: classification rows, then control overlays."""
-    classification = document["classification_rows"]
-    overlays = document["control_overlays"]
-    if not isinstance(classification, list) or not isinstance(overlays, list):
-        raise TypeError("mapping document is missing classification_rows or control_overlays")
+def render_table(document: dict[str, Any]) -> str:
+    """Render all three stages: classification, warrant policy, decision mode."""
+    sections: dict[str, list[dict[str, Any]]] = {}
+    for name in ("classification_rows", "warrant_policy_rules", "decision_mode_overlays"):
+        value = document[name]
+        if not isinstance(value, list):
+            raise TypeError(f"mapping document is missing {name}")
+        sections[name] = value
+    classification = sections["classification_rows"]
+    policy = sections["warrant_policy_rules"]
+    modes = sections["decision_mode_overlays"]
 
     classification_rows = [
         [
@@ -86,31 +102,50 @@ def render_table(document: dict[str, object]) -> str:
         ]
         for row in sorted(classification, key=lambda item: int(item["row_id"]))
     ]
-    overlay_rows = [
+    policy_rows = [
         [
-            str(row["overlay_id"]),
+            str(row["rule_id"]),
+            str(row["order"]),
             str(row["trigger"]),
             str(row["epistemic_effect"]),
             str(row["execution_disposition"]),
             str(row["decision_basis"]),
             str(row["policy_reason_code"]),
         ]
-        for row in sorted(overlays, key=lambda item: str(item["overlay_id"]))
+        for row in sorted(policy, key=lambda item: (int(item["order"]), str(item["rule_id"])))
+    ]
+    mode_rows = [
+        [
+            str(row["overlay_id"]),
+            str(row["trigger"]),
+            str(row["epistemic_effect"]),
+            str(row["execution_disposition"]),
+            str(row["decision_basis"] or "-"),
+            str(row["policy_reason_code"] or "-"),
+        ]
+        for row in sorted(modes, key=lambda item: str(item["overlay_id"]))
     ]
 
     return (
-        "### Classification rows\n\n"
+        "### Stage 1 - classification\n\n"
         + _table(CLASSIFICATION_COLUMNS, classification_rows)
-        + "\n\n### Control overlays\n\n"
-        + _table(OVERLAY_COLUMNS, overlay_rows)
-        + "\n\nAn overlay may change execution disposition, decision basis, and policy "
-        "reason codes. It may **never** change the epistemic status, which is why every "
-        "overlay declares `epistemic_effect = PRESERVE`."
+        + "\n\n### Stage 2 - warrant policy\n\n"
+        + "Applied in `Order`: grade sufficiency first, then the unverified-ground policy.\n\n"
+        + _table(WARRANT_POLICY_COLUMNS, policy_rows)
+        + "\n\n### Stage 3 - decision mode\n\n"
+        + "Applied last. `DM-1` is the identity and is never recorded in "
+        "`applied_control_overlay_ids`.\n\n"
+        + _table(DECISION_MODE_COLUMNS, mode_rows)
+        + "\n\nStages 2 and 3 may change the execution disposition, the decision basis, and "
+        "the policy reason codes. Neither may change the epistemic status fixed by stage 1, "
+        "which is why every rule and overlay declares `epistemic_effect = PRESERVE`. Every "
+        "matched policy reason code is **retained** even when a later stage changes the "
+        "final execution disposition."
     )
 
 
 def rendered_markdown(root: Path) -> str:
-    document = json.loads((root / MAPPING_JSON).read_text(encoding="utf-8"))
+    document: dict[str, Any] = json.loads((root / MAPPING_JSON).read_text(encoding="utf-8"))
     text = (root / MAPPING_MD).read_text(encoding="utf-8")
     head, _, rest = text.partition(START)
     _, _, tail = rest.partition(END)
