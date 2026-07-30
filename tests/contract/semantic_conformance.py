@@ -10,8 +10,8 @@ Why it is separate from the schemas
 JSON Schema enforces structure, enums, nullability, local conditionals, and cross-field
 constraints it can represent. It cannot express equality between two sibling arrays,
 canonical ordering, binding across artifacts, or anything derived from the evaluated
-marking. Those six rules live here. **A record passing the schema but failing one of these
-is invalid**; structural validation alone is not conformance.
+marking. Those eight rules live here. **A record passing the schema but failing one of
+these is invalid**; structural validation alone is not conformance.
 
 What SC-WA-002 does
 -------------------
@@ -36,12 +36,16 @@ from typing import Any
 
 __all__ = [
     "CANONICAL_TRIGGERS",
+    "CONDITIONAL_ALLOW_ROW",
     "Finding",
     "check_runtime_decision",
     "check_warrant_artifact",
     "expected_formula_hash",
     "expected_output_hash",
 ]
+
+#: The only classification row a conditional ALLOW may be derived from.
+CONDITIONAL_ALLOW_ROW = 28
 
 #: Declared canonical order. Not merely "these five" — this order.
 CANONICAL_TRIGGERS: tuple[str, ...] = (
@@ -110,8 +114,9 @@ def check_runtime_decision(
     *,
     expected_reason_codes: frozenset[str] | None = None,
     expected_applied_overlay_ids: list[str] | None = None,
+    expected_classification_row: int | None = None,
 ) -> list[Finding]:
-    """Apply SC-RD-001 to SC-RD-005.
+    """Apply SC-RD-001 to SC-RD-006.
 
     ``expected_reason_codes`` supplies the completeness half of SC-RD-004: the codes the
     mapping says this decision's matched stages must contribute -- the classification row's
@@ -121,12 +126,57 @@ def check_runtime_decision(
     ``expected_applied_overlay_ids`` supplies SC-RD-005: the overlays derivable from the
     envelope and kernel result. When given, the recorded list must equal it exactly,
     including order.
+
+    ``expected_classification_row`` supplies the row half of SC-RD-006: a conditional ALLOW
+    must have been classified as row 28 (ON CREDIT + sound), never row 29 (ON CREDIT +
+    until-verification). Omit it to check only the grade, overlay, and reason-code halves.
     """
     findings: list[Finding] = []
     conditional_allow = (
         decision.get("epistemic_status") == "CONDITIONALLY_SUPPORTED"
         and decision.get("execution_disposition") == "ALLOW"
     )
+
+    # --- SC-RD-006 conditional-ALLOW grade and provenance ---
+    # ON CREDIT + until-verification (row 29) must never reach ALLOW, even for a control
+    # that declares until-verification as its own minimum grade -- "sufficient relative to
+    # the requirement" is not the same question as "observed grade is sound".
+    if conditional_allow:
+        observed = decision.get("warranty_grade_observed")
+        if observed != "sound":
+            findings.append(
+                Finding(
+                    "SC-RD-006",
+                    f"conditional ALLOW observed grade is {observed!r}, must be 'sound'",
+                )
+            )
+        applied = decision.get("applied_control_overlay_ids") or ()
+        if "WP-3" not in applied:
+            findings.append(
+                Finding("SC-RD-006", f"conditional ALLOW did not record WP-3: {applied!r}")
+            )
+        codes = decision.get("reason_codes") or ()
+        for required_code in ("OIC-D-0005", "OIC-W-0015"):
+            if required_code not in codes:
+                findings.append(
+                    Finding("SC-RD-006", f"conditional ALLOW is missing {required_code}")
+                )
+        if "OIC-W-0025" in codes:
+            findings.append(
+                Finding(
+                    "SC-RD-006",
+                    "conditional ALLOW carries OIC-W-0025 (instability); that code marks "
+                    "row 29 (until-verification), which can never ALLOW",
+                )
+            )
+        if expected_classification_row is not None and expected_classification_row != 28:
+            findings.append(
+                Finding(
+                    "SC-RD-006",
+                    f"conditional ALLOW classified from row {expected_classification_row}, "
+                    "must be row 28",
+                )
+            )
 
     # --- SC-RD-001 subscription ground coverage ---
     if conditional_allow:
@@ -203,11 +253,23 @@ def check_warrant_artifact(
     *,
     marking: dict[str, str] | None = None,
     rendered_formula: str | None = None,
+    formula_atoms: frozenset[str] | None = None,
 ) -> list[Finding]:
     """Apply SC-WA-001 and SC-WA-002.
 
-    ``marking`` is the kernel-echoed atom map, which is the only ground truth for the
-    partition: OIC does not parse the formula.
+    ``marking`` is the kernel-echoed atom map. The partition SC-WA-001 checks is over the
+    **evaluated formula's atom set**, not over the marking as such -- the two coincide in
+    every fixture here, but they are not the same thing by definition, and ``formula_atoms``
+    lets a test assert the difference directly:
+
+    * an atom present in ``marking`` but absent from ``formula_atoms`` belongs in
+      **neither** array (the kernel was told about it; the formula never used it);
+    * an atom present in ``formula_atoms`` but absent from ``marking`` **defaults to Z**
+      and belongs in ``unverified_ground_ids`` (the formula needs it; nobody supplied it).
+
+    When ``formula_atoms`` is omitted, ``marking`` is treated as the atom set directly,
+    which is the common case where every fixture's marking already covers exactly the
+    formula's atoms.
     """
     findings: list[Finding] = []
     if warrant.get("kernel_profile_id") != _ZTL_PROFILE:
@@ -228,8 +290,9 @@ def check_warrant_artifact(
             )
         )
     if marking is not None:
-        verified_atoms = {atom for atom, value in marking.items() if value in {"T", "F"}}
-        unverified_atoms = {atom for atom, value in marking.items() if value == "Z"}
+        domain = formula_atoms if formula_atoms is not None else frozenset(marking)
+        verified_atoms = {atom for atom in domain if marking.get(atom, "Z") in {"T", "F"}}
+        unverified_atoms = domain - verified_atoms
         if set(dependencies) != verified_atoms:
             findings.append(
                 Finding(
@@ -246,13 +309,23 @@ def check_warrant_artifact(
                     f"{sorted(unverified_atoms)}",
                 )
             )
-        uncovered = set(marking) - set(dependencies) - set(unverified)
+        uncovered = domain - set(dependencies) - set(unverified)
         if uncovered:
             findings.append(
                 Finding(
                     "SC-WA-001",
                     f"formula atoms in neither array: {sorted(uncovered)}; such a ground "
                     "cannot trigger recomputation and cannot be revoked",
+                )
+            )
+        extraneous = (set(dependencies) | set(unverified)) - domain
+        if extraneous:
+            findings.append(
+                Finding(
+                    "SC-WA-001",
+                    f"identifiers not in the evaluated formula's atom set: {sorted(extraneous)}; "
+                    "an atom present in the marking but absent from the formula belongs in "
+                    "neither array",
                 )
             )
 

@@ -33,6 +33,10 @@ try:
 finally:
     sys.path.pop(0)
 
+ROW_28_CASE = "08-on-credit-sound-allow-with-disclosure"
+ROW_29_CASE = "12-on-credit-until-verification"
+ROW_29_DECLARED_MINIMUM_CASE = "38-on-credit-until-verification-declared-minimum"
+
 pytestmark = pytest.mark.contract
 
 FIXTURE_DIR = "tests/fixtures/warrant-contract"
@@ -81,9 +85,11 @@ def test_all_rules_are_declared(rules: dict[str, dict[str, Any]]) -> None:
         "SC-RD-003",
         "SC-RD-004",
         "SC-RD-005",
+        "SC-RD-006",
         "SC-WA-001",
         "SC-WA-002",
     }
+    assert len(rules) == 8
     for rule_id, rule in rules.items():
         assert rule["name"], rule_id
         assert rule["requirement"], rule_id
@@ -200,6 +206,7 @@ def test_every_fixture_decision_conforms(
             fixture["expected"]["runtime_decision"],
             expected_reason_codes=_expected_codes(repo_root, fixture),
             expected_applied_overlay_ids=_derive_overlays(repo_root, fixture),
+            expected_classification_row=fixture["classification_row"],
         )
         failures.extend(f"{case}: {finding}" for finding in findings)
     assert failures == []
@@ -657,3 +664,158 @@ def test_reject_incomplete_overlay_lineage(
     findings = check_runtime_decision(decision, expected_applied_overlay_ids=derived)
     assert findings, label
     assert any(f.rule_id in {"SC-RD-003", "SC-RD-005"} for f in findings), label
+
+
+# ---------------------------------------------------------------------------
+# B (CLOSE-003): WP-3 self-containment, SC-RD-006
+# ---------------------------------------------------------------------------
+
+
+def test_measured_counterexample_never_allows(repo_root: Path) -> None:
+    """A control declaring until-verification as its OWN minimum must still block.
+
+    Grade sufficiency alone would call until-verification "sufficient" against that
+    declared minimum. WP-3 is scoped to row 28 by construction, and row 29 never declares
+    stage_2_applies, so WP-3 is unreachable regardless of what the control accepts.
+    """
+    fixture = _fixture(repo_root, ROW_29_DECLARED_MINIMUM_CASE)
+    envelope = fixture["input"]["envelope"]
+    assert envelope["warrant_requirement"]["minimum_warranty_grade"] == "until-verification"
+    assert fixture["input"]["ztl_result"]["grade"] == "until-verification"
+
+    decision = fixture["expected"]["runtime_decision"]
+    assert decision["epistemic_status"] == "CONDITIONALLY_SUPPORTED"
+    assert decision["execution_disposition"] != "ALLOW"
+    assert decision["decision_basis"] == "PRECAUTIONARY"
+    assert "OIC-W-0025" in decision["reason_codes"]
+    assert "WP-3" not in fixture["applied_control_overlay_ids"]
+    assert "OIC-D-0005" not in decision["reason_codes"]
+
+    findings = check_runtime_decision(
+        decision,
+        expected_reason_codes=_expected_codes(repo_root, fixture),
+        expected_applied_overlay_ids=_derive_overlays(repo_root, fixture),
+        expected_classification_row=fixture["classification_row"],
+    )
+    assert findings == []
+
+
+def test_reject_conditional_allow_with_until_verification(repo_root: Path) -> None:
+    """SC-RD-006: the observed grade must be sound, whatever the control's declared floor."""
+    decision = dict(_fixture(repo_root, ROW_28_CASE)["expected"]["runtime_decision"])
+    assert check_runtime_decision(decision, expected_classification_row=28) == []
+
+    decision["warranty_grade_observed"] = "until-verification"
+    findings = check_runtime_decision(decision, expected_classification_row=28)
+    assert any(f.rule_id == "SC-RD-006" for f in findings)
+
+
+def test_reject_conditional_allow_without_wp3(repo_root: Path) -> None:
+    decision = dict(_fixture(repo_root, ROW_28_CASE)["expected"]["runtime_decision"])
+    decision["applied_control_overlay_ids"] = []
+    findings = check_runtime_decision(decision, expected_classification_row=28)
+    assert any(f.rule_id == "SC-RD-006" for f in findings)
+
+
+def test_reject_wp3_recorded_for_row_29(repo_root: Path) -> None:
+    """Even if a decision claims WP-3, the row it was classified from must be 28."""
+    fixture = _fixture(repo_root, ROW_29_CASE)
+    decision = fixture["expected"]["runtime_decision"]
+    # This decision is not a conditional ALLOW in the first place, so force one to isolate
+    # the row check: SC-RD-006's row assertion must fire independent of the other checks.
+    decision["execution_disposition"] = "ALLOW"
+    decision["warranty_grade_observed"] = "sound"
+    decision["applied_control_overlay_ids"] = ["WP-3"]
+    decision["reason_codes"] = sorted({*decision["reason_codes"], "OIC-D-0005", "OIC-W-0015"})
+    findings = check_runtime_decision(
+        decision, expected_classification_row=fixture["classification_row"]
+    )
+    assert fixture["classification_row"] == 29
+    assert any(f.rule_id == "SC-RD-006" and "row 29" in f.detail for f in findings)
+
+
+def test_reject_conditional_allow_carrying_oic_w_0025(repo_root: Path) -> None:
+    """OIC-W-0025 marks instability (row 29). It must never coexist with a conditional ALLOW."""
+    decision = dict(_fixture(repo_root, ROW_28_CASE)["expected"]["runtime_decision"])
+    assert check_runtime_decision(decision) == [], "baseline must conform"
+
+    decision["reason_codes"] = sorted({*decision["reason_codes"], "OIC-W-0025"})
+    findings = check_runtime_decision(decision)
+    assert any(f.rule_id == "SC-RD-006" and "OIC-W-0025" in f.detail for f in findings)
+
+    row_28 = next(r for r in _mapping(repo_root)["classification_rows"] if r["row_id"] == 28)
+    row_29 = next(r for r in _mapping(repo_root)["classification_rows"] if r["row_id"] == 29)
+    assert row_28["primary_reason_code"] != "OIC-W-0025"
+    assert row_29["primary_reason_code"] == "OIC-W-0025"
+
+
+def test_wp3_is_scoped_to_row_28_in_the_mapping(repo_root: Path) -> None:
+    document = _mapping(repo_root)
+    wp3 = next(r for r in document["warrant_policy_rules"] if r["rule_id"] == "WP-3")
+    assert "row = 28" in wp3["trigger"] or "row=28" in wp3["trigger"].replace(" ", "")
+    rows = {r["row_id"]: r for r in document["classification_rows"]}
+    assert rows[28]["stage_2_applies"] is True
+    assert rows[29]["stage_2_applies"] is False
+
+
+def test_sc_rd_006_is_declared(rules: dict[str, dict[str, Any]]) -> None:
+    rule = rules["SC-RD-006"]
+    assert "sound" in rule["requirement"]
+    assert "row" in rule["requirement"].lower()
+    assert "OIC-D-0005" in rule["requirement"]
+    assert "OIC-W-0015" in rule["requirement"]
+
+
+# ---------------------------------------------------------------------------
+# C (CLOSE-003): SC-WA-001 edge cases -- partition over the formula, not the marking
+# ---------------------------------------------------------------------------
+
+
+def test_atom_in_marking_but_not_formula_belongs_to_neither_array(repo_root: Path) -> None:
+    """The caller told the kernel about an atom the formula never uses."""
+    warrant = dict(
+        _fixture(repo_root, "33-earned-hereditary-with-unverified")["input"]["warrant_artifact"]
+    )
+    marking = {"p": "T", "q": "Z", "r": "T"}  # r is in the marking, not in the formula
+    formula_atoms = frozenset({"p", "q"})
+
+    # Correct: r appears in neither array.
+    assert warrant["dependency_ids"] == ["p"]
+    assert warrant["unverified_ground_ids"] == ["q"]
+    findings = check_warrant_artifact(warrant, marking=marking, formula_atoms=formula_atoms)
+    assert findings == []
+
+    # Incorrect: r leaks into dependency_ids.
+    warrant["dependency_ids"] = ["p", "r"]
+    findings = check_warrant_artifact(warrant, marking=marking, formula_atoms=formula_atoms)
+    assert any(
+        f.rule_id == "SC-WA-001" and "not in the evaluated formula" in f.detail for f in findings
+    )
+
+
+def test_atom_in_formula_but_absent_from_marking_defaults_to_unverified(
+    repo_root: Path,
+) -> None:
+    """A formula atom nobody supplied a value for is treated exactly like a Z mark."""
+    warrant = dict(
+        _fixture(repo_root, "33-earned-hereditary-with-unverified")["input"]["warrant_artifact"]
+    )
+    marking = {"p": "T"}  # q never appears in the marking at all
+    formula_atoms = frozenset({"p", "q"})
+
+    # Correct: q defaults to unverified even though it is absent from marking.
+    assert warrant["dependency_ids"] == ["p"]
+    assert warrant["unverified_ground_ids"] == ["q"]
+    findings = check_warrant_artifact(warrant, marking=marking, formula_atoms=formula_atoms)
+    assert findings == []
+
+    # Incorrect: treating the absent atom as covered by neither array.
+    warrant["unverified_ground_ids"] = []
+    findings = check_warrant_artifact(warrant, marking=marking, formula_atoms=formula_atoms)
+    assert any(f.rule_id == "SC-WA-001" and "neither array" in f.detail for f in findings)
+
+
+def test_sc_wa_001_wording_covers_both_edge_cases(rules: dict[str, dict[str, Any]]) -> None:
+    requirement = rules["SC-WA-001"]["requirement"]
+    assert "absent from the formula belongs to neither array" in requirement
+    assert "absent from the marking defaults to Z" in requirement

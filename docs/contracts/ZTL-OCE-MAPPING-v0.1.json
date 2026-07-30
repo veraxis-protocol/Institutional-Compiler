@@ -204,7 +204,7 @@
       "disposition": "any",
       "epistemic_status": "UNRESOLVED",
       "grade": "any",
-      "note": "Anti-tick: about the grounds.",
+      "note": "Anti-tick: about the grounds. warrant_state = REVOKED is the coarse unusability state for withdrawn ground support. OIC-W-0020 preserves expiry and OIC-W-0007 preserves revocation; the reason code and trigger remain authoritative for the distinction, and no new warrant_state value is introduced to duplicate it.",
       "oic_condition": "ground expired",
       "precedence": 2,
       "primary_reason_code": "OIC-W-0020",
@@ -224,7 +224,7 @@
       "disposition": "any",
       "epistemic_status": "UNRESOLVED",
       "grade": "any",
-      "note": "I-13.",
+      "note": "I-13. warrant_state = REVOKED is the coarse unusability state for withdrawn ground support. OIC-W-0020 preserves expiry and OIC-W-0007 preserves revocation; the reason code and trigger remain authoritative for the distinction, and no new warrant_state value is introduced to duplicate it.",
       "oic_condition": "ground revoked",
       "precedence": 2,
       "primary_reason_code": "OIC-W-0007",
@@ -813,7 +813,7 @@
         "applies_to": "WarrantArtifact produced under kernel_profile_id ztl-v0.1",
         "name": "GROUND_PARTITION",
         "not_expressible_in_json_schema": "a partition derived from the evaluated marking",
-        "requirement": "dependency_ids are exactly the formula atoms marked T or F; unverified_ground_ids are exactly the atoms marked Z; the two arrays are disjoint; their union equals the evaluated formula's atom set. Neither claims minimality.",
+        "requirement": "dependency_ids are exactly the formula atoms marked T or F; unverified_ground_ids are exactly the atoms marked Z; the two arrays are disjoint; their union equals the EVALUATED FORMULA's atom set. The partition is over the formula's atom set, not over the caller's marking: an atom present in the marking but absent from the formula belongs to neither array, and an atom present in the formula but absent from the marking defaults to Z and belongs in unverified_ground_ids. Neither array claims minimality.",
         "rule_id": "SC-WA-001",
         "why": "An atom in neither array is a ground nobody is tracking: it cannot trigger recomputation and cannot be revoked. Minimisation is separately unsound -- 38 of 180 census cases have a pair whose joint withdrawal moves the disposition although neither member does alone."
       },
@@ -832,6 +832,14 @@
         "requirement": "applied_control_overlay_ids must equal, exactly and in order, the overlays derivable from the envelope and kernel result: the applicable stage-2 WP rule where the classification row declares stage_2_applies, then the applicable non-identity stage-3 DM overlay.",
         "rule_id": "SC-RD-005",
         "why": "An omitted overlay makes the lineage under-report which stage produced the outcome; an extra one claims a rule fired that did not. Both are invisible to a schema, which can only see that the array is well formed."
+      },
+      {
+        "applies_to": "RuntimeDecision where epistemic_status = CONDITIONALLY_SUPPORTED and execution_disposition = ALLOW",
+        "name": "CONDITIONAL_ALLOW_GRADE",
+        "not_expressible_in_json_schema": "binding a value constraint to a specific classification row",
+        "requirement": "warranty_grade_observed must equal sound; the matched classification row must be 28; WP-3 must appear in applied_control_overlay_ids; OIC-D-0005 and OIC-W-0015 must both be retained in reason_codes; and every subscription requirement (SC-RD-001, SC-RD-002) must independently pass. OIC-W-0025 (the instability code for row 29) must never appear on a decision reaching this ALLOW.",
+        "rule_id": "SC-RD-006",
+        "why": "ON CREDIT + until-verification (row 29) must never reach ALLOW. Grade alone is not sufficient to express this restriction in a schema, because 'sufficient' is relative to the control's declared minimum and until-verification remains a valid vocabulary value that a control could, in principle, declare as its minimum. The restriction is that a conditional ALLOW additionally requires the OBSERVED grade to be sound, not merely sufficient relative to the requirement, and that the classification came from row 28."
       }
     ]
   },
@@ -874,11 +882,11 @@
       "decision_basis": "CONTROL_REQUIREMENT",
       "epistemic_effect": "PRESERVE",
       "execution_disposition": "ALLOW",
-      "note": "The only rule in any stage that can produce ALLOW for conditional support. Requires grade sound and non-empty missing grounds preserved on the record.",
+      "note": "Self-contained: WP-3 is scoped to row 28 by construction. Row 29 (ON CREDIT + until-verification) never reaches WP-3, because it is resolved at stage 1 and does not declare stage_2_applies. This is stated explicitly rather than left as an inference from the row's own stage_2_applies flag, so a reader of WP-3 alone sees the restriction without cross-referencing the classification table.",
       "order": 2,
       "policy_reason_code": "OIC-D-0005",
       "rule_id": "WP-3",
-      "trigger": "epistemic_status = CONDITIONALLY_SUPPORTED, grade sufficient, unverified_ground_policy = allow_with_disclosure"
+      "trigger": "matched classification row = 28, epistemic_status = CONDITIONALLY_SUPPORTED, warranty_grade_observed = sound, grade sufficient, unverified_ground_policy = allow_with_disclosure"
     },
     {
       "decision_basis": "CONTROL_REQUIREMENT",

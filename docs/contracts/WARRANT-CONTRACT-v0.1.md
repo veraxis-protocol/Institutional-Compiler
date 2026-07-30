@@ -495,9 +495,11 @@ covered by `input_hash`.
 | **Semantic** | `semantic_conformance_rules` in the canonical mapping | equality, canonical ordering, cross-artifact binding, formula- and marking-derived invariants |
 
 **A record that passes JSON Schema but fails semantic conformance is invalid.** Passing the
-schema alone is not conformance. Six rules are declared — `SC-RD-001` to `SC-RD-004` on the
-decision, `SC-WA-001` and `SC-WA-002` on the warrant — each recording what it requires, why,
-and which construct JSON Schema lacks.
+schema alone is not conformance. Eight rules are declared — `SC-RD-001` to `SC-RD-006` on
+the decision, `SC-WA-001` and `SC-WA-002` on the warrant — each recording what it requires,
+why, and which construct JSON Schema lacks. `SC-RD-006` is the WP-3 self-containment rule:
+a conditional `ALLOW` must have an observed grade of `sound`, must be classified from row
+28 (never row 29), must carry `WP-3`, and must never carry `OIC-W-0025`.
 
 The rules are executable: `tests/contract/semantic_conformance.py` is a **test-only**
 validator, deliberately outside `src/oic`, so a rule cannot quietly become a comment.
@@ -558,20 +560,40 @@ is still in **draft** PR #18 and is not yet on `main`. Merging this first would 
 contract citing a branch that could still change or be abandoned — the mapping would claim
 measurement it could not point at.
 
-After PR #18 creates `interface-freeze-v0.2` and merges, this PR must:
+### Pin correction
+
+The previous proposed pin was not recomputable because the declared entrypoint did not
+exist at that commit. The corrected proposed profile is reproduced against the signed v0.2
+dependency pin.
+
+| | Superseded | Corrected |
+|---|---|---|
+| Commit | `e819dec7e89d2dc67d6371e1eedb8e7aae854602` | `56e1ff0510c62b04dbd85bbe08b7a6deacbf276b` |
+| Signed tag | `veraxis-ztl-input-v0.1.1-signed` | `veraxis-ztl-input-v0.2-signed` |
+| Fixture set | `interface-freeze-v0.1/` | `interface-freeze-v0.2/` |
+| Fixture counts | 12 reachable, 3 not-reachable, 15 total | 13 reachable, 3 not-reachable, 16 total |
+| `index_sha256` | `b6e007bd47fd64b030391d90b17dda99ee12310aa0cce48bb0fdd0f74118dca5` | `ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145` |
+
+`interface-freeze-v0.1` is **not edited**. It remains immutable historical evidence with a
+documented lineage hole — the commit it cited predated `ztljudge.judge`, so no fixture
+claiming reproduction against it under that entrypoint was actually recomputable at that
+pin. This correction updates the **proposed** `ztl-v0.1` profile's evidence pin only.
+`kernel_profile_id` remains `ztl-v0.1`; no admitted v0.2 semantic profile is created.
+
+The new commit's fixture set additionally reproduces `EARNED` + non-empty `unverified` as a
+**pinned, reachable** fixture (`earned-hereditary-nonempty-unverified.json`), rather than
+leaving it as census-only corroboration. That question from the prior revision is therefore
+resolved by the pin correction itself, not left open.
+
+### Remaining merge-order steps
+
+Because the current evidence is PR #18's **draft** head rather than its merged state, this
+PR still must, once PR #18 merges:
 
 1. rebase onto the merged `main`;
-2. update the conformance fixture-set **path**, **counts**, and **`index_sha256`** to the
-   v0.2 set;
-3. re-verify **every** `MEASURED` authority label against the checked-in evidence rather
-   than against a draft branch;
-4. re-point the census reference at its merged path.
-
-The current pin is `interface-freeze-v0.1`, `index_sha256`
-`b6e007bd47fd64b030391d90b17dda99ee12310aa0cce48bb0fdd0f74118dca5`, **unchanged** by this
-revision. Whether the `EARNED` + non-empty-`unverified` case should become a pinned fixture
-requires a fixture-set version bump and a re-pin; PR #18 §4.4 records that as the OIC side's
-call, and it is left open rather than taken.
+2. re-verify **every** `MEASURED` authority label against the checked-in evidence, in case
+   anything moved between the current evidence head and the merge;
+3. re-point the census and fixture references at their merged paths if either changed.
 
 ## 14. Standing
 

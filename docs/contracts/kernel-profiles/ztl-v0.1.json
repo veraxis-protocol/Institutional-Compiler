@@ -1,21 +1,21 @@
 {
   "$comment": "PROPOSED, NOT ADMITTED. A frozen description of one logic kernel's interface and vocabulary. Dispositions, grades, and digests are NOT portable between kernels, so every WarrantArtifact declares the kernel_profile_id it was produced under and OIC never compares artifacts across profiles. Nothing in this file imports, executes, or calls ZTL.",
   "canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
-  "commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
+  "commit": "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b",
   "conformance_fixture_set": {
     "census": {
       "cases": 294,
       "cells_observed": 8,
       "location": "adapters/ztl/evidence/KERNEL-CENSUS-v0.1.json",
-      "note": "A census over a stated pool, not a proof of coverage. The pinned fixture set and its index_sha256 are unchanged by it.",
+      "note": "A census over a stated pool, not a proof of coverage. Run against the superseded commit e819dec7e89d2dc67d6371e1eedb8e7aae854602; the census's own findings (EARNED with non-empty unverified, dependency over-approximation) are independently confirmed by the reachable interface-freeze-v0.2 fixtures, so the pin correction does not weaken them.",
       "pool_formulas": 22
     },
-    "index_sha256": "b6e007bd47fd64b030391d90b17dda99ee12310aa0cce48bb0fdd0f74118dca5",
-    "location": "adapters/ztl/fixtures/interface-freeze-v0.1/",
+    "index_sha256": "ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145",
+    "location": "adapters/ztl/fixtures/interface-freeze-v0.2/",
     "not_reachable": 3,
-    "provenance": "Published by the ZTL side under ZTL-OIC-WO-002; reproduced against the pinned commit by its author (Tier 3). Independent Tier-1 reproduction remains OPEN.",
-    "reachable": 12,
-    "total": 15
+    "provenance": "Published by the ZTL side under ZTL-OIC-WO-002/OIC-WO-003, reproduced against the pinned v0.2 commit by its author (Tier 3). Independent Tier-1 reproduction remains OPEN.",
+    "reachable": 13,
+    "total": 16
   },
   "dependency_derivation": {
     "disjoint_from": "unverified_ground_ids, which are exactly the formula atoms marked Z",
@@ -26,6 +26,9 @@
   },
   "disposition_values": [
     {
+      "evidence": [
+        "adapters/ztl/fixtures/interface-freeze-v0.2/earned-hereditary-nonempty-unverified.json"
+      ],
       "grades": [
         "hereditary"
       ],
@@ -78,12 +81,12 @@
   ],
   "entrypoint": "ztljudge.judge",
   "evidence_dependency_notice": {
-    "current_pin": "interface-freeze-v0.1, index_sha256 b6e007bd47fd64b030391d90b17dda99ee12310aa0cce48bb0fdd0f74118dca5. Unchanged by revision 4A; whether the EARNED + non-empty case becomes a pinned fixture is an owner decision, not ours to take underneath a PR under review.",
+    "current_pin": "interface-freeze-v0.2, index_sha256 ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145 (13 reachable, 3 not-reachable, 16 total), reproduced against the signed commit 56e1ff0510c62b04dbd85bbe08b7a6deacbf276b (veraxis-ztl-input-v0.2-signed). This is PR #18's current DRAFT evidence head, not its merged state.",
     "merge_order": "PR #16 must not merge before PR #18.",
     "on_pr18_merge": [
       "PR #16 rebases onto the merged main.",
-      "conformance_fixture_set.location, .total/.reachable/.not_reachable and .index_sha256 are updated to the interface-freeze-v0.2 set.",
-      "Every MEASURED authority label in the canonical mapping is re-verified against the checked-in evidence rather than against a draft branch.",
+      "Every MEASURED authority label in the canonical mapping is re-verified against the checked-in evidence, in case anything moved between the current evidence head and the merge.",
+      "conformance_fixture_set.location, counts and index_sha256 are re-pointed at the merged path if the evidence changed further before merge.",
       "The census reference is re-pointed at its merged path."
     ],
     "statement": "Every field in this profile references evidence that is still in DRAFT pull request #18 and is NOT yet on main.",
@@ -153,17 +156,17 @@
   "not_reachable_combinations": [
     {
       "combination": "EARNED + sound",
-      "evidence": "adapters/ztl/fixtures/interface-freeze-v0.1/earned-sound.json",
+      "evidence": "adapters/ztl/fixtures/interface-freeze-v0.2/earned-sound.json",
       "reason": "EARNED requires grade hereditary by construction. A T verdict that is only sound is classified ON CREDIT."
     },
     {
       "combination": "EARNED + until-verification",
-      "evidence": "adapters/ztl/fixtures/interface-freeze-v0.1/earned-until-verification.json",
+      "evidence": "adapters/ztl/fixtures/interface-freeze-v0.2/earned-until-verification.json",
       "reason": "Same: a non-hereditary T is ON CREDIT."
     },
     {
       "combination": "OPEN + raw verdict T",
-      "evidence": "adapters/ztl/fixtures/interface-freeze-v0.1/open-with-raw-t.json",
+      "evidence": "adapters/ztl/fixtures/interface-freeze-v0.2/open-with-raw-t.json",
       "reason": "OPEN never carries raw T. Exhaustive search over the formula pool found no counterexample."
     }
   ],
@@ -181,6 +184,13 @@
     ],
     "serialisation": "The included fields as a JSON object with sorted keys, no whitespace, unverified identifiers in the kernel's emitted order, digested with sha256 as an OIC-side artifact.",
     "why_excluded": "`why` is presentational and may change without a profile version bump, so including it would make replay fail on a cosmetic edit. `marking` is the caller's input and is already covered by input_hash."
+  },
+  "pin_correction_notice": {
+    "note": "This corrects the proposed profile's evidence pin. It does not create an admitted v0.2 semantic profile: profile_id remains ztl-v0.1 and the profile version remains 0.1.0. The v0.2 label in the corrected tag and fixture-set names refers to the ZTL side's own dependency-pin versioning, not to a new OIC profile.",
+    "reason": "Measured evidence in PR #18 shows commit e819dec7e89d2dc67d6371e1eedb8e7aae854602 predates ztljudge.judge, so no fixture claiming reproduction against it as the declared entrypoint was actually recomputable at that pin.",
+    "statement": "The previous proposed pin was not recomputable because the declared entrypoint did not exist at that commit. The corrected proposed profile is reproduced against the signed v0.2 dependency pin.",
+    "superseded_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
+    "superseded_tag": "veraxis-ztl-input-v0.1.1-signed"
   },
   "presentational_fields": [
     {
@@ -205,8 +215,8 @@
   "signed_tag": {
     "gpg_key_fingerprint": "F170414DDBB78F231929121175B13F5AEC28313A",
     "limitations": "The key is new, unattested by any third party, and held without a passphrase on a workstation. It is not a hardware-backed identity and must not be described as one.",
-    "name": "veraxis-ztl-input-v0.1.1-signed",
-    "signs_commit": "e819dec7e89d2dc67d6371e1eedb8e7aae854602"
+    "name": "veraxis-ztl-input-v0.2-signed",
+    "signs_commit": "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b"
   },
   "status": "PROPOSED - frozen interface description, not admitted",
   "unsigned_tag": "veraxis-ztl-input-v0.1",

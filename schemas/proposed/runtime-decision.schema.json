@@ -390,7 +390,7 @@
             ]
           },
           {
-            "$comment": "Route B - ON CREDIT / sound, accepted by explicit control policy.",
+            "$comment": "Route B - ON CREDIT / sound, accepted by explicit control policy. SEMANTIC RULE SC-RD-006 additionally requires the matched classification row to be 28 (ON CREDIT + sound) rather than 29 (ON CREDIT + until-verification), which JSON Schema cannot see directly; the structural proxy here is that WP-3 must be recorded and warranty_grade_observed must be sound, since row 29 never declares stage_2_applies and can never carry WP-3.",
             "properties": {
               "epistemic_status": {
                 "const": "CONDITIONALLY_SUPPORTED"
@@ -464,6 +464,12 @@
                     }
                   }
                 ]
+              },
+              "applied_control_overlay_ids": {
+                "type": "array",
+                "contains": {
+                  "const": "WP-3"
+                }
               }
             },
             "required": [
@@ -471,7 +477,8 @@
               "decision_basis",
               "unverified_ground_policy_applied",
               "conditional_support_subscription_reference",
-              "conditional_support_subscription_triggers"
+              "conditional_support_subscription_triggers",
+              "applied_control_overlay_ids"
             ]
           }
         ]

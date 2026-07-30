@@ -1,18 +1,19 @@
 {
   "applied_control_overlay_ids": [],
-  "case_id": "15-ground-expired",
-  "classification_row": 9,
-  "description": "Anti-tick: about the grounds, so PRECAUTIONARY.",
+  "case_id": "38-on-credit-until-verification-declared-minimum",
+  "classification_row": 29,
+  "description": "MEASURED COUNTEREXAMPLE for WP-3 self-containment. The control declares minimum_warranty_grade = until-verification -- its own floor -- so a grade-sufficiency reading alone would call until-verification 'sufficient' and let WP-3 fire. WP-3 is scoped to classification row 28 by construction and row 29 never declares stage_2_applies, so WP-3 is never reached regardless of what the control declares as sufficient. Must remain CONDITIONALLY_SUPPORTED / BLOCK or ESCALATE / PRECAUTIONARY / OIC-W-0025, with no WP-3 and no OIC-D-0005.",
   "expected": {
     "decision_basis": "PRECAUTIONARY",
-    "epistemic_status": "UNRESOLVED",
-    "execution_disposition": "ESCALATE",
+    "epistemic_status": "CONDITIONALLY_SUPPORTED",
+    "execution_disposition": "BLOCK",
     "missing_ground_anchors": [],
     "missing_ground_ids": [
-      "ground:registered"
+      "ground:under_threshold"
     ],
     "reason_codes": [
-      "OIC-W-0020"
+      "OIC-W-0015",
+      "OIC-W-0025"
     ],
     "runtime_decision": {
       "admission_version": "adm-v3",
@@ -25,29 +26,30 @@
       "control_version": "1.0.0",
       "decision_basis": "PRECAUTIONARY",
       "envelope_id": "env:proc-001",
-      "epistemic_status": "UNRESOLVED",
+      "epistemic_status": "CONDITIONALLY_SUPPORTED",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "evaluation_id": "eval:15",
-      "execution_disposition": "ESCALATE",
-      "input_hash": "sha256:2861e3fd93defa43ffefcb9bcb2b48d239cd798b9b7c0ae092b641d960a6ab9d",
+      "evaluation_id": "eval:38",
+      "execution_disposition": "BLOCK",
+      "input_hash": "sha256:0bb0fdc0c0b63f3ec0e8956731165973372a3efcaa2064f5bc6b5d880a8e9bdc",
       "missing_ground_anchors": [],
       "missing_ground_ids": [
-        "ground:registered"
+        "ground:under_threshold"
       ],
-      "on_unknown_applied": "escalate",
+      "on_unknown_applied": null,
       "reason_codes": [
-        "OIC-W-0020"
+        "OIC-W-0015",
+        "OIC-W-0025"
       ],
-      "replay_reference": "replay:15-ground-expired@sha256:2861e3fd93defa43ffefcb9bcb2b48d239cd798b9b7c0ae092b641d960a6ab9d",
+      "replay_reference": "replay:38-on-credit-until-verification-declared-minimum@sha256:0bb0fdc0c0b63f3ec0e8956731165973372a3efcaa2064f5bc6b5d880a8e9bdc",
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
       "unverified_ground_policy_applied": null,
-      "warrant_artifact_id": "warrant:15",
+      "warrant_artifact_id": "warrant:38",
       "warrant_requirement_mode": "required",
-      "warrant_state": "REVOKED",
-      "warranty_grade_observed": "hereditary",
-      "warranty_grade_required": "hereditary"
+      "warrant_state": "USABLE",
+      "warranty_grade_observed": "until-verification",
+      "warranty_grade_required": "until-verification"
     },
-    "warrant_state": "REVOKED"
+    "warrant_state": "USABLE"
   },
   "input": {
     "envelope": {
@@ -58,13 +60,13 @@
       "control_version": "1.0.0",
       "decision_mode": "automatic",
       "envelope_id": "env:proc-001",
-      "on_unknown": "escalate",
+      "on_unknown": "deny",
       "warrant_requirement": {
         "kernel_profile_id": "ztl-v0.1",
-        "minimum_warranty_grade": "hereditary",
+        "minimum_warranty_grade": "until-verification",
         "mode": "required",
         "on_insufficient_grade": "escalate",
-        "unverified_ground_policy": "forbid"
+        "unverified_ground_policy": "allow_with_disclosure"
       }
     },
     "runtime_context": {
@@ -78,9 +80,7 @@
       },
       "current_ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
       "evaluated_at": "2026-08-01T12:00:00Z",
-      "expired_ground_ids": [
-        "ground:registered"
-      ],
+      "expired_ground_ids": [],
       "kernel_available": true,
       "revoked_ground_ids": [],
       "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4"
@@ -92,10 +92,9 @@
       "canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
       "claim_id": "claim:procurement-approval",
       "dependency_ids": [
-        "ground:registered",
-        "ground:under_threshold"
+        "ground:registered"
       ],
-      "disposition": "EARNED",
+      "disposition": "ON CREDIT",
       "formula": "(ground:registered ∧ ground:under_threshold)",
       "formula_hash": "sha384:c5fd0cf3318ec40056117c73d3e5dc4a3e8afa7b26f90905c916db73fd618f63f3667c8d7ea9a3125f19cb3614535868",
       "generated_at": "2026-07-29T00:00:00Z",
@@ -105,7 +104,7 @@
         "sequence": 7
       },
       "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
-      "input_hash": "sha256:b03eddd31986146b8f28dd7f9296b386abdbdc7339662b45f2787a549bfa2429",
+      "input_hash": "sha256:705bbe4b278758c6eca23c9f10326fd19ba2da47a4c8b6fcd24df877dc55347b",
       "kernel_commit": "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b",
       "kernel_name": "ztl",
       "kernel_profile_id": "ztl-v0.1",
@@ -115,34 +114,38 @@
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:d7b8fa73e35118dc04f893c9970e0a9b1d0286437e5995ff1e2278654207fbc3",
+      "output_hash": "sha256:2befeffb48c2bbe062c5f7368f27603f9cd96c61a05a5bbccc920e83ae8d655a",
       "raw_verdict": "T",
-      "recomputation_reference": "ztl@56e1ff0510c62b04dbd85bbe08b7a6deacbf276b judge(input_hash=sha256:b03eddd31986146b8f28dd7f9296b386abdbdc7339662b45f2787a549bfa2429)",
+      "recomputation_reference": "ztl@56e1ff0510c62b04dbd85bbe08b7a6deacbf276b judge(input_hash=sha256:705bbe4b278758c6eca23c9f10326fd19ba2da47a4c8b6fcd24df877dc55347b)",
       "revocation_references": [],
       "schema_version": "0.1.0",
       "source_anchor_ids": [
         "anchor:a1"
       ],
       "time_binding": {
-        "attestation_hash": "sha256:463df729a3a338d6078e17491b06b2f020a798fbd9c53914cca45fa71197aebe",
+        "attestation_hash": "sha256:aad74318df71c57f860e5a132faf2b440b6cf62f91f0d76cd8f5d97282d18686",
         "reference": "tsa:veraxis-dev",
         "source": "attested_timestamp"
       },
-      "unverified_ground_ids": [],
+      "unverified_ground_ids": [
+        "ground:under_threshold"
+      ],
       "valid_from": "2026-07-01T00:00:00Z",
       "valid_until": "2026-12-31T23:59:59Z",
-      "warrant_artifact_id": "warrant:15",
-      "warranty_grade": "hereditary"
+      "warrant_artifact_id": "warrant:38",
+      "warranty_grade": "until-verification"
     },
     "ztl_result": {
-      "disposition": "EARNED",
-      "grade": "hereditary",
+      "disposition": "ON CREDIT",
+      "grade": "until-verification",
       "marking": {
         "ground:registered": "T",
-        "ground:under_threshold": "T"
+        "ground:under_threshold": "Z"
       },
       "raw_verdict": "T",
-      "unverified": []
+      "unverified": [
+        "ground:under_threshold"
+      ]
     }
   },
   "reachability": "REACHABLE",

@@ -76,6 +76,7 @@ EXPECTED_CASES = (
     "35-subscription-missing-ground-coverage",
     "36-subscription-missing-trigger",
     "37-subscription-ground-set-mismatch",
+    "38-on-credit-until-verification-declared-minimum",
 )
 
 #: The only reason codes that may accompany a SUBSTANTIVE *block*.
@@ -1571,7 +1572,7 @@ def test_profile_pins_the_measured_interface(profile: dict[str, Any]) -> None:
     assert profile["entrypoint"] == "ztljudge.judge"
     assert profile["marking_alphabet"] == ["T", "F", "Z"]
     assert profile["raw_verdict_values"] == ["T", "F", "Z"]
-    assert profile["commit"] == "e819dec7e89d2dc67d6371e1eedb8e7aae854602"
+    assert profile["commit"] == "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b"
     assert profile["formula_digest_algorithm"] == "sha384"
     assert profile["canonicalization_profile_id"] == "ztl-jcs-float-free-sha384-v0.1"
 

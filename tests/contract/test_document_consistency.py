@@ -313,7 +313,7 @@ def test_counts_match_the_canonical_artifact(repo_root: Path) -> None:
     assert len(mapping["warrant_policy_rules"]) == 5
     assert len(mapping["decision_mode_overlays"]) == 3
     fixtures = list((repo_root / "tests/fixtures/warrant-contract").glob("*.json"))
-    assert len(fixtures) == 37
+    assert len(fixtures) == 38
     assert len(list((repo_root / "schemas/proposed").glob("*.schema.json"))) == 3
 
 
@@ -563,7 +563,16 @@ def test_active_documents_declare_two_validation_layers(repo_root: Path) -> None
 def test_semantic_rules_are_rendered_into_the_markdown(repo_root: Path) -> None:
     text = (repo_root / MAPPING_MD).read_text(encoding="utf-8")
     assert "### Semantic conformance rules" in text
-    for rule_id in ("SC-RD-001", "SC-RD-002", "SC-RD-003", "SC-RD-004", "SC-WA-001", "SC-WA-002"):
+    for rule_id in (
+        "SC-RD-001",
+        "SC-RD-002",
+        "SC-RD-003",
+        "SC-RD-004",
+        "SC-RD-005",
+        "SC-RD-006",
+        "SC-WA-001",
+        "SC-WA-002",
+    ):
         assert rule_id in text, rule_id
 
 
@@ -593,11 +602,113 @@ def test_pr18_dependency_is_recorded(repo_root: Path) -> None:
     assert "PR #16 must not merge before PR #18" in adr
 
 
-def test_pinned_fixture_index_is_unchanged(repo_root: Path) -> None:
-    """Revision 4A must not re-pin the ZTL fixture set; that is an owner decision."""
+def test_pinned_fixture_index_is_the_corrected_v02_pin(repo_root: Path) -> None:
+    """CLOSE-003: the v0.1 pin was not recomputable and is corrected to v0.2.
+
+    Superseding this pin was directed by an explicit disposition (OIC-WO-002-CLOSE-003),
+    unlike the CLOSE-002 revision, which was directed NOT to re-pin. The two tests differ
+    in what they assert for exactly that reason: this one enforces the corrected pin,
+    the superseded-pin test below enforces that the old one no longer appears anywhere
+    active.
+    """
     profile = _load(repo_root, PROFILE)
+    fixture_set = profile["conformance_fixture_set"]
     assert (
-        profile["conformance_fixture_set"]["index_sha256"]
-        == "b6e007bd47fd64b030391d90b17dda99ee12310aa0cce48bb0fdd0f74118dca5"
+        fixture_set["index_sha256"]
+        == "ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145"
     )
-    assert profile["conformance_fixture_set"]["location"].endswith("interface-freeze-v0.1/")
+    assert fixture_set["location"].endswith("interface-freeze-v0.2/")
+    assert fixture_set["reachable"] == 13
+    assert fixture_set["not_reachable"] == 3
+    assert fixture_set["total"] == 16
+    assert profile["commit"] == "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b"
+    assert profile["signed_tag"]["name"] == "veraxis-ztl-input-v0.2-signed"
+    assert profile["signed_tag"]["signs_commit"] == profile["commit"]
+
+
+def test_the_superseded_pin_appears_nowhere_active(repo_root: Path) -> None:
+    """The old commit and tag must not survive as a live claim of the current pin.
+
+    In flowing prose (the ADR and the contract), each may appear naming itself as the
+    thing being corrected -- exactly once, and only inside a sentence that also says so.
+    In the structured JSON profile, the same fact may legitimately be recorded in several
+    explicitly-named fields (`pin_correction_notice.superseded_commit`, `.reason`, a
+    census note), because the field name itself supplies the framing a prose sentence
+    would otherwise need to. Either way, every occurrence must carry correction framing
+    somewhere nearby; none may stand as a bare, current-looking claim.
+    """
+    superseded = (
+        "e819dec7e89d2dc67d6371e1eedb8e7aae854602",
+        "veraxis-ztl-input-v0.1.1-signed",
+    )
+    correction_markers = ("not recomputable", "superseded", "corrected", "Superseded", "Corrected")
+
+    for relpath in GOVERNING:
+        text = _active(repo_root, relpath)
+        for token in superseded:
+            occurrences = text.count(token)
+            assert occurrences <= 1, f"{relpath}: {token!r} appears {occurrences} times"
+            if occurrences == 1:
+                window = text[max(0, text.index(token) - 200) : text.index(token) + 200]
+                assert any(marker in window for marker in correction_markers), (
+                    f"{relpath}: {token!r} appears without correction framing"
+                )
+
+    profile_text = (repo_root / PROFILE).read_text(encoding="utf-8")
+    for token in superseded:
+        start = 0
+        found_any = False
+        while (index := profile_text.find(token, start)) != -1:
+            found_any = True
+            window = profile_text[max(0, index - 250) : index + 250]
+            assert any(marker in window for marker in correction_markers), (
+                f"{PROFILE}: {token!r} at offset {index} appears without correction framing"
+            )
+            start = index + 1
+        assert found_any or token not in profile_text
+
+    profile = _load(repo_root, PROFILE)
+    assert profile["commit"] not in superseded
+    assert (
+        profile["conformance_fixture_set"]["location"]
+        != "adapters/ztl/fixtures/interface-freeze-v0.1/"
+    )
+    # The superseded pin is legitimately NAMED once, in the correction notice itself, as
+    # the thing being corrected -- that is not a claim it is current.
+    notice = profile["pin_correction_notice"]
+    assert notice["superseded_commit"] == "e819dec7e89d2dc67d6371e1eedb8e7aae854602"
+    assert notice["statement"] == (
+        "The previous proposed pin was not recomputable because the declared entrypoint "
+        "did not exist at that commit. The corrected proposed profile is reproduced "
+        "against the signed v0.2 dependency pin."
+    )
+
+
+def test_no_active_document_claims_seven_semantic_rules(repo_root: Path) -> None:
+    for relpath in (*GOVERNING,):
+        text = _active(repo_root, relpath)
+        for phrase in ("Six rules are declared", "six machine-readable conformance rules"):
+            assert phrase not in text, f"{relpath}: {phrase!r}"
+
+
+def test_no_active_document_claims_grade_sufficiency_alone_permits_conditional_allow(
+    repo_root: Path,
+) -> None:
+    """WP-3's old trigger read 'grade sufficient'; that phrase alone is no longer enough."""
+    contract = _active(repo_root, CONTRACT)
+    adr = _active(repo_root, ADR)
+    # The corrected requirement must be stated: sound specifically, row 28 specifically.
+    assert "observed grade" in adr.lower()
+    assert "row 28" in adr
+    assert "warranty_grade_observed must equal sound" in contract or "sound" in contract
+    mapping = _load(repo_root, MAPPING_JSON)
+    wp3 = next(r for r in mapping["warrant_policy_rules"] if r["rule_id"] == "WP-3")
+    assert "matched classification row = 28" in wp3["trigger"]
+    assert "warranty_grade_observed = sound" in wp3["trigger"]
+
+
+def test_wp3_and_sc_rd_006_are_recorded_in_the_adr(repo_root: Path) -> None:
+    adr = _active(repo_root, ADR)
+    assert "WP-3 is scoped to classification row 28" in adr
+    assert "SC-RD-006" in adr
+    assert "OIC-W-0025" in adr
