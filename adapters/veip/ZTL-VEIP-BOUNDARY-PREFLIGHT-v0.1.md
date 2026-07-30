@@ -14,7 +14,9 @@ ZTL ends with:
 - formula;
 - dependencies;
 - missing grounds;
-- epoch and freshness;
+- caller-supplied epoch identifiers and freshness inputs, echoed or
+  referenced by ZTL for OIC-side evaluation; ZTL originates no epoch,
+  clock, freshness authority, or institutional time authority;
 - recomputation evidence.
 
 The ZTL result remains evidence about a logical/warranty boundary. This memo does not permit a raw
@@ -55,7 +57,7 @@ Before owner attestation, the following must remain explicit and unresolved:
 
 | Concern | ZTL side | VEIP side | Status |
 |---|---|---|---|
-| Logical disposition and warranty | Produces disposition, grade, formula, dependencies, missing grounds, epoch/freshness, recomputation evidence | Consumes only through an owner-attested contract | Proposed |
+| Logical disposition and warranty | Produces disposition, grade, formula, dependencies, missing grounds, and recomputation evidence; may echo caller-supplied epoch identifiers but originates no epoch, clock, freshness authority, or institutional time. | Consumes only through an owner-attested contract | Proposed |
 | Admitted-control binding | Does not establish OIC admission | Binds a proposed action to an already admitted control | Proposed; OIC admission contract not defined here |
 | Runtime disposition | Does not execute consequential action | Classifies runtime execution under the attested VEIP contract | Proposed; no current OIC authorization |
 | Execution and record | No execution ownership | Executes only after authorized disposition and records evidence | Proposed; current Evidence Pack is not attested as sufficient |
