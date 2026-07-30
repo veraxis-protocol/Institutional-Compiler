@@ -1,0 +1,240 @@
+{
+ "cases": 294,
+ "cells": [
+  {
+   "count": 68,
+   "disposition": "EARNED",
+   "example": {
+    "formula": "p",
+    "marking": {
+     "p": "T"
+    },
+    "unverified": []
+   },
+   "grade": "hereditary",
+   "raw_verdict": "T",
+   "unverified": "empty"
+  },
+  {
+   "count": 61,
+   "disposition": "EARNED",
+   "example": {
+    "formula": "p | q",
+    "marking": {
+     "p": "T",
+     "q": "Z"
+    },
+    "unverified": [
+     "q"
+    ]
+   },
+   "grade": "hereditary",
+   "raw_verdict": "T",
+   "unverified": "non-empty"
+  },
+  {
+   "count": 1,
+   "disposition": "ON CREDIT",
+   "example": {
+    "formula": "(~p) -> (q -> q)",
+    "marking": {
+     "p": "Z",
+     "q": "Z"
+    },
+    "unverified": [
+     "p",
+     "q"
+    ]
+   },
+   "grade": "sound",
+   "raw_verdict": "T",
+   "unverified": "non-empty"
+  },
+  {
+   "count": 6,
+   "disposition": "ON CREDIT",
+   "example": {
+    "formula": "~(p & q)",
+    "marking": {
+     "p": "T",
+     "q": "Z"
+    },
+    "unverified": [
+     "q"
+    ]
+   },
+   "grade": "until-verification",
+   "raw_verdict": "T",
+   "unverified": "non-empty"
+  },
+  {
+   "count": 94,
+   "disposition": "OPEN",
+   "example": {
+    "formula": "~p",
+    "marking": {
+     "p": "Z"
+    },
+    "unverified": [
+     "p"
+    ]
+   },
+   "grade": "until-verification",
+   "raw_verdict": "F",
+   "unverified": "non-empty"
+  },
+  {
+   "count": 1,
+   "disposition": "OPEN",
+   "example": {
+    "formula": "p",
+    "marking": {
+     "p": "Z"
+    },
+    "unverified": [
+     "p"
+    ]
+   },
+   "grade": "until-verification",
+   "raw_verdict": "Z",
+   "unverified": "non-empty"
+  },
+  {
+   "count": 38,
+   "disposition": "REFUTED",
+   "example": {
+    "formula": "p",
+    "marking": {
+     "p": "F"
+    },
+    "unverified": []
+   },
+   "grade": "hereditary",
+   "raw_verdict": "F",
+   "unverified": "empty"
+  },
+  {
+   "count": 25,
+   "disposition": "REFUTED",
+   "example": {
+    "formula": "p & q",
+    "marking": {
+     "p": "F",
+     "q": "Z"
+    },
+    "unverified": [
+     "q"
+    ]
+   },
+   "grade": "hereditary",
+   "raw_verdict": "F",
+   "unverified": "non-empty"
+  }
+ ],
+ "dependency_probe": {
+  "cases_where_a_pair_moves_it_but_neither_member_does": 38,
+  "cases_with_two_or_more_verified_grounds": 180,
+  "examples": [
+   {
+    "disposition": "REFUTED",
+    "disposition_after": "OPEN",
+    "formula": "p & q",
+    "marking": {
+     "p": "F",
+     "q": "F"
+    },
+    "neither_alone_moves_it": true,
+    "withdrawn": [
+     "p",
+     "q"
+    ]
+   },
+   {
+    "disposition": "EARNED",
+    "disposition_after": "OPEN",
+    "formula": "p | q",
+    "marking": {
+     "p": "T",
+     "q": "T"
+    },
+    "neither_alone_moves_it": true,
+    "withdrawn": [
+     "p",
+     "q"
+    ]
+   },
+   {
+    "disposition": "EARNED",
+    "disposition_after": "OPEN",
+    "formula": "p -> q",
+    "marking": {
+     "p": "F",
+     "q": "T"
+    },
+    "neither_alone_moves_it": true,
+    "withdrawn": [
+     "p",
+     "q"
+    ]
+   },
+   {
+    "disposition": "EARNED",
+    "disposition_after": "ON CREDIT",
+    "formula": "~(p & q)",
+    "marking": {
+     "p": "F",
+     "q": "F"
+    },
+    "neither_alone_moves_it": true,
+    "withdrawn": [
+     "p",
+     "q"
+    ]
+   },
+   {
+    "disposition": "REFUTED",
+    "disposition_after": "ON CREDIT",
+    "formula": "~(p | q)",
+    "marking": {
+     "p": "T",
+     "q": "T"
+    },
+    "neither_alone_moves_it": true,
+    "withdrawn": [
+     "p",
+     "q"
+    ]
+   }
+  ]
+ },
+ "pool": [
+  "p",
+  "~p",
+  "p & q",
+  "p | q",
+  "p -> q",
+  "~(p & q)",
+  "~(p | q)",
+  "p | ~p",
+  "p & ~p",
+  "~p | q",
+  "(p | q) & r",
+  "(p & q) | r",
+  "p | (q & r)",
+  "p & (q | r)",
+  "(p | q) | r",
+  "p -> (q | r)",
+  "(p -> q) & (q -> r)",
+  "p & (q | ~q)",
+  "(~p) -> (q -> q)",
+  "p -> (q -> p)",
+  "(p -> q) | (q -> p)",
+  "~~p -> p"
+ ],
+ "refinement_stability": {
+  "counterexamples": [],
+  "earned_with_unverified": 61,
+  "refinements_tried": 138,
+  "verdict_moved": 0
+ }
+}

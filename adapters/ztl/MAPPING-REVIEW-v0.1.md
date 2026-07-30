@@ -1,65 +1,369 @@
 # Mapping review — v0.1
 
-**Work order:** ZTL-OIC-WO-002, Deliverable E.
-**Status: AWAITING INPUT.** `docs/contracts/ZTL-OCE-MAPPING-v0.1.md` does not exist in the repository.
+**Work order:** ZTL-OIC-WO-002, Deliverable E; completed under the ZTL-OIC cross-review order
+for PR #18.
+**Status: COMPLETE** — 29 classification rows and 7 control overlays reviewed, one by one.
+
+**Reviewed against:**
+
+| | |
+|---|---|
+| PR #16 head | `9623cd43363eaa3d105f263d6c3dc8999755db9d` |
+| Canonical mapping `docs/contracts/ZTL-OCE-MAPPING-v0.1.json` | sha256 `296788601b1a6d12f258da245641be64fc65434f7e7c8946e8193b2233bb3c5e` |
+| Kernel profile `docs/contracts/kernel-profiles/ztl-v0.1.json` | sha256 `d8e515e76635cace04f2538f537addf0fd14de27ae4b883ae3ec57c3e5ced34a` |
+| Kernel | `ztljudge.judge`, commit `e819dec7e89d2dc67d6371e1eedb8e7aae854602` |
+| Measurement backing this review | [`evidence/KERNEL-CENSUS-v0.1.md`](evidence/KERNEL-CENSUS-v0.1.md), 294 cases |
+
+**Result: 26 ACCEPT, 2 ACCEPT WITH QUALIFICATION, 1 REJECT, 0 CANNOT DETERMINE.**
+
+This mapping is a substantial piece of work and most of it is right for reasons that are hard
+to get right. The precedence design — *the good news must not win* — is correct and is the
+part that would have been easiest to get wrong. Two objections follow, both measured, both
+with counterexamples and corrected rows.
 
 ---
 
-## 1. Why this deliverable is not complete
+## 1. Row-by-row
 
-The work order asks us to review **every row** of `docs/contracts/ZTL-OCE-MAPPING-v0.1.md` and answer ACCEPT / ACCEPT WITH QUALIFICATION / REJECT / CANNOT DETERMINE per row.
+### Rows 1–19 — OIC-side conditions
 
-That file is not in `main` at `141ec2b`, nor in any open PR (#13, #14, #15). There are no rows to review. We will not review a mapping we wrote ourselves and call the result an independent check — the dossier's §6.3 table is **our proposal**, not OIC's contract, and marking our own proposal ACCEPT would be circular.
+| Rows | Verdict |
+|---|---|
+| 1–4 (kernel unavailable, warrant absent / malformed / hash unverifiable) | **ACCEPT** |
+| 5–7 (stale, expired, not yet valid) | **ACCEPT** |
+| 8–9 (ground expired, ground revoked) | **ACCEPT** |
+| 10–16 (epoch, source-version, admission-version, formula, profile, anchors, admission IDs) | **ACCEPT** |
+| 17–18 (grade outside the ladder; combination outside the profile) | **ACCEPT** |
+| 19 (`warrant_requirement` mode `not_required` / `not_applicable`) | **ACCEPT** |
 
-**When the mapping document lands, this file will be completed row by row.** For every non-accept we will supply, as required: the exact semantic objection, a counterexample, the expected ZTL result, and a proposed corrected mapping.
+None of these is a ZTL conclusion and none is presented as one: every one carries
+`authority: OIC-DEFENSIVE`. That labelling is the thing we were asked to check, and it is
+correct throughout.
 
-## 2. The required invariant — confirmed in advance
+Three observations, none an objection:
 
-> *"OPEN remains unresolved regardless of the raw verdict field."*
+- **Rows 5–9 outrank the disposition (precedence 2 over 4–5), and that is right in both
+  directions.** A `REFUTED` warrant that is stale becomes `UNRESOLVED`, not `REFUTED`. It is
+  tempting to keep a refutation across an epoch boundary on the grounds that bad news is safe.
+  It is not safe: `hereditary` is invariant under monotone refinement *within one epoch and
+  formula*, which is exactly what our own
+  [`proposals/EPOCH-EXPIRY-REVOCATION-v0.1.md`](proposals/EPOCH-EXPIRY-REVOCATION-v0.1.md)
+  states. A refutation evaluated against grounds that have since been withdrawn is a claim
+  about a world that no longer exists. Downgrading it to `UNRESOLVED` is correct.
+- **Row 19 escalates rather than allowing.** A control that requires no warrant gets
+  `ESCALATE` pending specification. Conservative, deliberate, explained in the fixture, and
+  fails in the safe direction. Not ours to object to.
+- **Rows 15–16 (anchors and admission IDs missing) are `MISBOUND`, not a ZTL condition.**
+  Correct: the kernel never sees a source or an admission, so their absence cannot be a
+  logical result. Assigning them to the artifact-binding tier is the right home.
 
-**Confirmed, and it is measurable.** Two fixtures make the point concrete:
+### Row 20 — contradictory grounds — **ACCEPT WITH QUALIFICATION**
 
-| Fixture | Input | Raw `verdict` | `disposition` |
-|---|---|---|---|
-| `open-with-raw-f` | `p & q`, `{p:T, q:Z}` | **F** | **OPEN** |
-| `open-with-raw-z` | `p`, `{p:Z}` | Z | OPEN |
+The behaviour is right: `BLOCK`, `SUBSTANTIVE`, precedence 3 above the disposition tiers.
 
-A mapping that keys on `verdict` classifies the first row as established falsity. That is wrong, it breaks OIC invariant I-04, and it will not surface in ordinary testing until a genuinely undetermined case reaches production. **Key on `disposition`.**
+**The qualification is the `authority` label.** Row 20 is marked `MEASURED`, and
+`epistemic_status_mapping` lists
 
-The corresponding NOT_REACHABLE fixture completes the picture: `open-with-raw-t` **does not exist** — OPEN never carries a raw T. No mapping row should be written against that state.
+```json
+"contradictory grounds": "CONTRADICTED"
+```
 
-## 3. Correction that must land in the mapping before it is reviewed
+alongside the four kernel dispositions. That reads as though `CONTRADICTED` is something the
+kernel emits. It is not. Measured:
 
-Our own dossier v0.1 gave OIC an **incomplete list of dispositions**. It named EARNED / REFUTED / OPEN. The kernel has **four**:
+```
+p & ~p   {p:T}   ->  REFUTED / hereditary / F
+p & ~p   {p:F}   ->  REFUTED / hereditary / F
+p & ~p   {p:Z}   ->  REFUTED / hereditary / F
+```
 
-| disposition | grade | verdict | meaning |
-|---|---|---|---|
-| `EARNED` | hereditary | T | grounded outright; unverified atoms are irrelevant |
-| `REFUTED` | hereditary | F | false regardless of the marks |
-| **`ON CREDIT`** | sound **or** until-verification | T | **true only while an unverified atom holds** — it can die when that atom resolves |
-| `OPEN` | until-verification | F or Z | not established; a mark actually matters |
+A contradictory *formula* is simply `REFUTED`. And a contradictory *ground set* — two admitted
+sources asserting opposite things about the same atom — cannot even be expressed to the
+kernel: a marking maps each atom to exactly one of `T`/`F`/`Z`. There is no input that makes
+the kernel say "these grounds conflict".
 
-`ON CREDIT` was missing, and it is the one that matters most for an enforcement contract. Mapped as EARNED it would authorise action on an unverified link — precisely what a zero-trust warrant exists to prevent. Mapped as OPEN it would over-block: the verdict *is* T, and under `sound` it never lies about the present marking.
+`CONTRADICTED` is therefore a genuine and useful OIC-plane distinction — it separates "the
+institution holds two incompatible admitted grounds" from "the logic refutes the claim", and
+those deserve different handling. It is just not a ZTL output.
 
-**Our proposed handling, offered as a starting row rather than a conclusion:**
+**Corrected row 20:** `authority` → `OIC-DEFENSIVE`. And in `epistemic_status_mapping`,
+separate the four kernel dispositions from the OIC-side status, so no reader concludes the
+kernel has five outputs:
 
-| ZTL disposition + grade | Proposed OIC behavior | Reason |
+```json
+"epistemic_status_mapping": {
+  "EARNED": "ESTABLISHED",
+  "ON CREDIT": "CONDITIONALLY_SUPPORTED",
+  "OPEN": "UNRESOLVED",
+  "REFUTED": "REFUTED"
+},
+"oic_side_epistemic_status": {
+  "contradictory grounds": "CONTRADICTED"
+}
+```
+
+### Rows 21–24 — **ACCEPT**
+
+| Row | Verdict | Measured |
 |---|---|---|
-| `EARNED` + hereditary | supports ALLOW (authority and evidence still OIC's to check) | cannot move under further verification |
-| `ON CREDIT` + sound | ALLOW **only** where the envelope explicitly tolerates a non-monotone warrant; otherwise ESCALATE, carrying `unverified` | never lies about the present marking, but may stall |
-| `ON CREDIT` + until-verification | **ESCALATE**, not ALLOW | rides an unverified atom that can flip |
-| `REFUTED` | supports DENY | grounds establish falsity |
-| `OPEN` (any raw verdict) | `on_unknown` → ESCALATE / CANNOT, **never** DENY | absence of verification is not falsity |
-| `unverified` non-empty | populate `missing_inputs` | names the exact blocking grounds |
+| 21 `REFUTED` + `hereditary` + `unverified: any` | **ACCEPT** | `REFUTED` is always `hereditary` (63 cases), and **does** occur with a non-empty `unverified` list (25 cases). `any` is correct. |
+| 22 `OPEN` + `until-verification` + non-empty, raw `F` | **ACCEPT** | 94 cases. The trap case, correctly keyed on `disposition` and not on `raw_verdict`. |
+| 23 `OPEN` + `until-verification` + non-empty, raw `Z` | **ACCEPT** | 1 case (`p`, `{p:Z}`). |
+| 24 `OPEN` + raw `T`, `NOT_REACHABLE` | **ACCEPT** | Confirmed: no `OPEN` result carries raw `T` in 294 cases, and none in the exhaustive search behind `CONFORMANCE-v0.1.md §8.1`. Retaining it as a defensive fail-closed row is the right call. |
 
-Fixtures for every row above are in `fixtures/interface-freeze-v0.1/`.
+Row 21 deserves a note, because it is the row that exposes the objection below: **`REFUTED` was
+given `unverified: any` and it is correct.** The same reasoning applies unchanged to `EARNED`.
 
-## 4. What we will need in the mapping document to review it properly
+### Row 25 — `EARNED` + `hereditary` + `unverified: empty` — **REJECT**
 
-1. The **OIC-side semantics** of `on_missing`, `on_unknown`, `on_conflict`, `on_error` — precisely enough that a row can be judged wrong, not merely unfamiliar.
-2. Whether the envelope distinguishes **ESCALATE** from **CANNOT**. Our `OPEN` collapses into whichever OIC chooses; if both exist, we need the rule for choosing.
-3. Whether a row may depend on `grade`. If the envelope cannot carry the warranty grade, several rows above are not expressible and we would rather narrow them than pretend.
+This is the one substantive objection.
+
+**The claim.** Row 25 requires `unverified = empty`. The kernel profile says the same
+(`disposition_values` → `EARNED` → `"unverified": "empty"`), the schema's `disposition`
+description says the same ("EARNED = grounded outright, always grade hereditary, unverified
+empty"), and `test_warrant_contract.py:1477` asserts it.
+
+**The counterexample.**
+
+```
+judge("p | q", {p: "T", q: "Z"})
+
+  disposition : EARNED
+  grade       : hereditary
+  verdict     : T
+  unverified  : ['q']
+  why         : "grounded; the unverified ['q'] do not matter"
+```
+
+`q` was never verified. The conclusion does not need it — `p` grounds the disjunction outright.
+The kernel's own explanation says so in as many words.
+
+**How often.** 61 of 294 measured cases — 21% of the space, and the second-largest cell in the
+census. It is not an edge case: it is the ordinary shape of a control satisfiable by any one of
+several alternative grounds, where the alternatives were never checked because they did not
+need to be.
+
+**That the result is genuinely established, measured:** over those 61 cases, every unverified
+atom was refined to `T` and to `F` in every combination — **138 refinements, 0 moved the
+verdict.** That is what `hereditary` asserts, and it holds.
+
+**What breaks today.** `unverified` is part of every row's match key. An `EARNED` result with a
+non-empty list matches no disposition row: row 25 demands `empty`, rows 28–29 demand a grade
+`EARNED` never has. It falls to row 18 — *combination not in the profile* — at precedence 2,
+which outranks the disposition tiers anyway. Outcome: `UNSUPPORTED_GRADE` → `UNRESOLVED` →
+`BLOCK / ESCALATE`.
+
+So a fully grounded, hereditarily warranted claim is refused as an unsupported result.
+
+**Why it matters even though it fails closed.** It is the mirror of invariant I-04. I-04
+forbids turning unknown into grounded false; this turns **established into unknown**. The
+metric "unknown-to-false conversion = 0" would read clean while the envelope quietly refuses
+the strongest results the kernel can produce. And it fails *silently* in the sense that
+matters: the reason code says the combination is unsupported, which points an operator at the
+kernel rather than at the mapping.
+
+**Root cause, stated plainly so it does not recur.** `unverified_ground_ids` carries two
+different meanings depending on the disposition — informational under `EARNED` and `REFUTED`,
+load-bearing under `ON CREDIT`, blocking under `OPEN`. The `empty` constraint on row 25 reads
+the field with the `ON CREDIT` meaning. Row 21 already reads it correctly for `REFUTED`; the
+inconsistency between rows 21 and 25 is itself the evidence that this was a slip rather than a
+position.
+
+**We should say where this came from.** The ZTL side answered a question about this row in the
+previous round and the answer was recorded as the opposite of what was meant. Our answer was
+not written down as a fixture at the time, which is precisely why it could be inverted without
+anyone noticing. That is our process failure, and the census script now in
+`adapters/ztl/evidence/` exists so this class of question is settled by a re-runnable command
+instead of by correspondence.
+
+**Corrected row 25:**
+
+| field | from | to |
+|---|---|---|
+| `unverified` | `"empty"` | **`"any"`** |
+
+Nothing else in the row changes: `EARNED` + `hereditary` remains `USABLE` / `ESTABLISHED` /
+`ALLOW` / `SUBSTANTIVE` / `OIC-D-0001`. Every W-4 check outside the kernel still applies —
+`ALLOW` here means the logic does not stand in the way, which is exactly how the mapping
+already words it.
+
+**Five places carry the same correction:**
+
+1. `docs/contracts/ZTL-OCE-MAPPING-v0.1.json` — row 25, `"unverified": "any"`;
+2. `docs/contracts/kernel-profiles/ztl-v0.1.json` — `disposition_values` → `EARNED` →
+   `"unverified": "any"`;
+3. `schemas/proposed/warrant-artifact.schema.json` — the `disposition` description, drop
+   "unverified empty" and say instead: *unverified atoms may be present and are irrelevant to
+   the conclusion*;
+4. `tests/contract/test_warrant_contract.py:1477` — `assert earned["unverified"] == "any"`;
+5. `ZTL-OCE-MAPPING-v0.1.md` — re-render via `tools/render_mapping.py`.
+
+**And one fixture is missing from the contract suite.** Fixture `01-earned-hereditary-current`
+has `missing_ground_ids: []`, so it cannot catch this. A sibling is needed —
+`EARNED` / `hereditary` / non-empty `missing_ground_ids` / `ALLOW`, from
+`judge("p | q", {p:T, q:Z})` — asserting that the disclosure list survives onto an `ALLOW`
+decision. That is the case the schema already promises to surface ("always surfaced as
+`missing_ground_ids` … including when the outcome is ALLOW") and that no current fixture
+exercises.
+
+**On the pinned fixture set.** We did not add this case to
+`fixtures/interface-freeze-v0.1/`. Its `index_sha256` is pinned inside `ztl-v0.1.json` in the
+PR under review, and changing it underneath you would invalidate your own pin. The evidence
+sits in `adapters/ztl/evidence/` instead. Promoting it to a pinned fixture means a fixture-set
+version bump and a re-pin — your call, and we will produce it on request.
+
+### Rows 26–29 — **ACCEPT**
+
+| Row | Verdict | Measured |
+|---|---|---|
+| 26 `ON CREDIT` + `sound` → `CONDITIONALLY_SUPPORTED`, `ALLOW`/`BLOCK`/`ESCALATE`, `CONTROL_REQUIREMENT` | **ACCEPT** | Reachable but rare: 1 case in the 294-case census, plus the pinned fixture `on-credit-sound` (`(~p) -> (q -> q)`, `{p:Z, q:Z}`), reproduced live. Rarity is not a reason to drop the row — it is the row that carries the only conditional `ALLOW`. |
+| 27 `ON CREDIT` + `until-verification` → `BLOCK`/`ESCALATE`, `PRECAUTIONARY`, no `ALLOW` | **ACCEPT** | 6 cases. Correct — see §2.2. |
+| 28 `EARNED` + `sound`, `NOT_REACHABLE` | **ACCEPT** | Confirmed. `EARNED` is `hereditary` by construction; a non-hereditary `T` is `ON CREDIT`. |
+| 29 `EARNED` + `until-verification`, `NOT_REACHABLE` | **ACCEPT** | Confirmed. Reason-coding it `OIC-W-0022` rather than `OIC-W-0012` is right: its disposition is not `OPEN`, and labelling it `DISPOSITION_OPEN` would be false. |
 
 ---
 
-*This is provisional dependency evidence. Independent Tier-1 reproduction remains OPEN, and the OIC semantic implementation gate remains BLOCKED.*
+## 2. The four questions put to the ZTL side
+
+### 2.1 May `ON CREDIT` + `sound` support action where the institution explicitly accepts unverified conditional support?
+
+**Yes — with one thing named precisely, because the word "conditional" hides it.**
+
+`sound` means the verdict **never lies about the present marking**. At the moment of
+evaluation the claim is true. What `sound` does *not* buy is survival: under refinement the
+result may stall — cease to be established — without ever having been false.
+
+So the institution accepting `ON CREDIT` + `sound` is not accepting a risk of *falsity*. It is
+accepting a risk of *expiry*: that the basis stops supporting the action later. That is a
+coherent thing for an institution to accept, and it is why the row is right to exist.
+
+**Two conditions must ride with the acceptance**, and O-5 already carries the first:
+
+1. **The unverified grounds are disclosed on the record** — O-5's note requires exactly this.
+2. **The unverified grounds are subscribed for revocation and refinement.** An `ALLOW` on
+   `sound` is a promise to recompute when those atoms resolve. Without that, "conditional
+   support" degrades into unconditional support that nobody ever revisits — which is the
+   failure ZTL exists to expose, arriving through the front door with paperwork.
+
+Condition 2 is not currently stated anywhere we can find. Recommend adding it to O-5's note or
+to WARRANT-CONTRACT §7.
+
+### 2.2 Should `ON CREDIT` + `until-verification` remain non-automatic in OIC v0.1?
+
+**Yes. Confirmed, and it is the right conservatism.**
+
+`until-verification` holds **only in the present marking** — not at all endings, not under
+refinement. It is the weakest rung: the result is true as things stand and carries no promise
+whatever about what happens when the unverified atom resolves. Row 27's `PRECAUTIONARY` basis
+and the absence of `ALLOW` from its base choices are both correct.
+
+Row 27 also correctly refuses the tempting symmetry with row 26. The gap between `sound` and
+`until-verification` is not one of degree — `sound` is a statement about every ending, and
+`until-verification` is a statement about one moment.
+
+### 2.3 Are missing unverified atoms always preserved?
+
+**They must be, and the schema already requires it** — `unverified_ground_ids` is "always
+surfaced as `missing_ground_ids` on the runtime decision, including when the outcome is ALLOW".
+That is right and should not be weakened.
+
+Two qualifications:
+
+1. **Preservation must survive the row-25 correction.** With `unverified: empty` on row 25, the
+   "including when the outcome is ALLOW" clause was very nearly vacuous: the only unconditional
+   `ALLOW` row could not carry a non-empty list at all. Correcting row 25 gives that clause the
+   61-case cell it was written for, and the missing fixture named in §1 is what would hold it.
+2. **Preserved with the right meaning.** Under `EARNED` these are grounds that were *not
+   needed*; under `ON CREDIT` they are grounds that are *owed*. Presenting both as "missing"
+   invites an operator to escalate an established result or relax a conditional one. The
+   discriminator already exists — `epistemic_status` — and one sentence in WARRANT-CONTRACT §5
+   would fix it without a schema change. Detail in
+   [`WARRANT-FIELD-RESPONSE-v0.1.md §3`](WARRANT-FIELD-RESPONSE-v0.1.md).
+
+### 2.4 Does `CONTROL_REQUIREMENT` correctly represent an OIC policy decision rather than a ZTL conclusion?
+
+**Yes. Confirmed, and the vocabulary is used consistently across the whole table.**
+
+Checked every row and overlay for where each basis appears:
+
+| Basis | Where it appears | Correct? |
+|---|---|---|
+| `SUBSTANTIVE` | rows 20, 21, 25 — outcome derived from the grounds | yes |
+| `PRECAUTIONARY` | rows 8, 9, 22, 23, 27 — outcome from absence of ground, not from ground | yes |
+| `PROCEDURAL` | rows 1–7, 10–19, 24, 28, 29 — outcome from the artifact or the process | yes |
+| `CONTROL_REQUIREMENT` | row 26 and every overlay O-1…O-7 — outcome chosen by policy | yes |
+
+`CONTROL_REQUIREMENT` appears in exactly one classification row — 26 — and that is the one row
+whose execution genuinely is not determined by the logic: `ON CREDIT` + `sound` can go to
+`ALLOW`, `BLOCK` or `ESCALATE` depending on `unverified_ground_policy`. Marking it
+`CONTROL_REQUIREMENT` says openly that the institution, not ZTL, decides. That is exactly
+right, and it is the distinction we would have asked for had it been absent.
+
+---
+
+## 3. The four disposition mappings
+
+Confirmed, all four:
+
+| ZTL disposition | OIC epistemic status | Verdict |
+|---|---|---|
+| `EARNED` | `ESTABLISHED` | **CONFIRM** — subject to the row-25 correction; the mapping itself is right |
+| `ON CREDIT` | `CONDITIONALLY_SUPPORTED` | **CONFIRM** — and the new status was the right response to our correction. Neither `ESTABLISHED` (would authorise action on an unverified link) nor `UNRESOLVED` (would over-block a `T` that never lies) could have carried it. |
+| `OPEN` | `UNRESOLVED` | **CONFIRM** — and it must remain independent of `raw_verdict`, which rows 22 and 23 get right |
+| `REFUTED` | `REFUTED` | **CONFIRM** |
+
+---
+
+## 4. Control overlays
+
+Reviewed only for the question asked: **do they preserve ZTL's result, or do they claim ZTL
+owns the policy?**
+
+| Overlay | Verdict |
+|---|---|
+| O-1 `human_judgment` / `escalation_only` / `non_automatable` → `ESCALATE` | **ACCEPT** — `PRESERVE`; the note that `REFUTED` + human judgment stays `REFUTED` is the exact right example to have chosen |
+| O-2 `advisory` / `evidence_only` → `ADVISORY` | **ACCEPT** — `PRESERVE` |
+| O-3 grade below minimum, `on_insufficient_grade = escalate` | **ACCEPT** — `PRESERVE`; the note "the grounds did support the claim; the control declined to act on that grade" draws the line in the right place |
+| O-4 same, `= block` | **ACCEPT** — `PRESERVE` |
+| O-5 `CONDITIONALLY_SUPPORTED` + sufficient grade + `allow_with_disclosure` → `ALLOW` | **ACCEPT WITH QUALIFICATION** — see §2.1: add the revocation-subscription condition |
+| O-6 `CONDITIONALLY_SUPPORTED` + `forbid` → `BLOCK` | **ACCEPT** — `PRESERVE` |
+| O-7 `CONDITIONALLY_SUPPORTED` + `escalate` → `ESCALATE` | **ACCEPT** — `PRESERVE` |
+
+**The separation itself is the right architecture, and we want to say so specifically.** Every
+overlay declares `epistemic_effect = PRESERVE`, and the `composition` block explains why: a
+flat table let a `decision_mode` row assert an epistemic status of its own, so "a human decides
+this" could silently claim the grounds were established. Splitting classification from overlay
+makes that unsayable rather than merely discouraged. Structurally enforced, not documented —
+which is the difference between a rule and a hope.
+
+No overlay claims ZTL owns a policy. `decision_basis: CONTROL_REQUIREMENT` on all seven says
+the opposite, in the schema.
+
+---
+
+## 5. Warranty ladder — no objection
+
+Checked, because O-3 and O-4 depend on "below minimum" being well defined. The profile's
+ranking (`hereditary` 2, `sound` 1, `until-verification` 0) and its stated implication
+`hereditary ⟹ sound` match the kernel's own definitions in `zverify.py`, which computes
+`hereditary` first, `sound` second and `until-verification` as the fallback, and which records
+`hereditary ⟹ sound` as measured and `sound ⇏ hereditary` as separated. The ordering is a
+genuine total order of strength, so `minimum_warranty_grade` is meaningful.
+
+---
+
+## 6. What this review is not
+
+It is a review of the mapping against the kernel. It is **not** an architecture acceptance, not
+an approval of ADR-013, not an approval of PR #16, and not a statement that the mapping is
+implementable — we have no view on the OIC-side halves of rows 1–19 beyond confirming they
+claim nothing about ZTL.
+
+The census in `adapters/ztl/evidence/` is author-side evidence, Tier 3, run by us against our
+own kernel. The script is offered so that the run can be repeated by someone who is not us,
+which is the only thing that would raise its tier.
+
+---
+
+*This is provisional dependency evidence. Independent Tier-1 reproduction remains OPEN, and the
+OIC semantic implementation gate remains BLOCKED.*

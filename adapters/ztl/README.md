@@ -15,8 +15,10 @@ ZTL adapter zone. **Provisional project-controlled dependency** (TDD-OIC-001 v1.
 | `proposals/EPOCH-EXPIRY-REVOCATION-v0.1.md` | WO-002 **B** — epoch/expiry/revocation | submitted |
 | `fixtures/interface-freeze-v0.1/` | WO-002 **C** — machine-readable fixtures | 12 reachable + 3 not-reachable |
 | `CONFORMANCE-v0.1.md` | WO-002 **C** — conformance procedure | executable, PASS |
-| `WARRANT-FIELD-RESPONSE-v0.1.md` | WO-002 **D** — warrant field feasibility | **awaiting OIC field list** |
-| `MAPPING-REVIEW-v0.1.md` | WO-002 **E** — mapping review | **awaiting `docs/contracts/ZTL-OCE-MAPPING-v0.1.md`** |
+| `WARRANT-FIELD-RESPONSE-v0.1.md` | WO-002 **D** — warrant field feasibility | **COMPLETE** — all 28 schema fields classified |
+| `MAPPING-REVIEW-v0.1.md` | WO-002 **E** — mapping review | **COMPLETE** — 29 rows + 7 overlays; 1 REJECT |
+| `evidence/KERNEL-CENSUS-v0.1.md` | measured backing for D and E | 294 cases, re-runnable |
+| `evidence/kernel_census.py` | the census, as a command | executable |
 | `OPEN-ITEMS-2026-07-29.md` | ownership of the nine open items | current |
 
 ## Pin
@@ -57,7 +59,7 @@ There are **four** dispositions, not three:
 | **`ON CREDIT`** | sound / until-verification | T | **true only while an unverified atom holds** |
 | `OPEN` | until-verification | F or Z | not established; a mark matters |
 
-### Two traps, both fixtured
+### Three traps
 
 1. **`verdict` is not the answer.** `judge("p & q", {p:T, q:Z})` returns `verdict='F'` with
    `disposition='OPEN'`. Mapping that `F` to DENY converts "not yet established" into
@@ -68,6 +70,20 @@ There are **four** dispositions, not three:
 Also: `OPEN` never carries raw verdict `T` (fixture `open-with-raw-t`, NOT_REACHABLE), and
 `EARNED` is always `hereditary` — a non-hereditary T is `ON CREDIT`, never `EARNED`
 (fixtures `earned-sound`, `earned-until-verification`, both NOT_REACHABLE).
+
+3. **`unverified` means two different things**, and this one has already caused an error in a
+   downstream contract. `EARNED` **can** carry a non-empty `unverified` list:
+
+   ```
+   judge("p | q", {p:T, q:Z})  ->  EARNED / hereditary / T / unverified=['q']
+   ```
+
+   `q` was never checked; `p` grounds the disjunction outright, and no value of `q` can move
+   the result. Measured in 61 of 294 cases, with 138 refinements and zero verdict moves —
+   `evidence/KERNEL-CENSUS-v0.1.md`. So under `EARNED` and `REFUTED` the list is
+   **informational**; under `ON CREDIT` it is **load-bearing**; under `OPEN` it is
+   **blocking**. An adapter that treats a non-empty list as "incomplete" refuses the strongest
+   results the kernel produces.
 
 ## Boundary
 
@@ -91,8 +107,8 @@ Expected: `CONFORMANCE: PASS`, 12 reproduced, 0 mismatches. No network access re
 |---|---|---|
 | Independent Tier-1 reproduction | **OPEN** | not the ZTL side, by rule |
 | Signed release provenance | CLOSED 2026-07-29 | ZTL side |
-| Warrant artifact fields | awaiting OIC | OIC |
-| ZTL↔OCE mapping rows | awaiting OIC document | OIC, then ZTL review |
+| Warrant artifact fields | reviewed against PR #16 `9623cd4` | OIC to accept |
+| ZTL↔OCE mapping rows | reviewed; **row 25 rejected**, correction supplied | OIC to accept |
 | MissingGround granularity | awaiting OIC | OIC |
 | Epoch/expiry/revocation | proposal submitted | OIC to confirm |
 | VEIP boundary | awaiting OIC | OIC |
