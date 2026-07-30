@@ -27,7 +27,9 @@
     "source_version_set_hash",
     "input_hash",
     "evaluated_at",
-    "unverified_ground_policy_applied"
+    "unverified_ground_policy_applied",
+    "applied_control_overlay_ids",
+    "warrant_requirement_mode"
   ],
   "$defs": {
     "sha256_digest": {
@@ -53,6 +55,11 @@
         "OIC-D-0005",
         "OIC-D-0006"
       ]
+    },
+    "overlay_id": {
+      "type": "string",
+      "pattern": "^(WP|DM)-[0-9]+$",
+      "description": "A warrant-policy rule (WP-n) or decision-mode overlay (DM-n) identifier from the canonical mapping."
     }
   },
   "properties": {
@@ -187,9 +194,10 @@
         "REVOKED",
         "MISBOUND",
         "UNSUPPORTED_GRADE",
+        "UNSUPPORTED_RESULT",
         "NOT_REQUIRED"
       ],
-      "description": "Why the warrant was or was not usable. MISBOUND covers epoch, formula, profile, source-version, and admission-version mismatch: the artifact is well formed but describes a different world, a different proposition, or a different kernel's semantics. NOT_REQUIRED applies only when the control's warrant_requirement.mode is not_required or not_applicable, and never waives authority, admission, evidence, or version checks."
+      "description": "Why the warrant was or was not usable. MISBOUND covers epoch, formula, profile, source-version and admission-version mismatch. UNSUPPORTED_GRADE means the grade VOCABULARY is unknown. UNSUPPORTED_RESULT means the vocabulary is known but the disposition/grade/raw-verdict/unverified COMBINATION violates the frozen profile - an invalid combination is never reported as a grade defect. NOT_REQUIRED applies only when the control explicitly declared not_required or not_applicable, and never waives authority, admission, evidence or version checks."
     },
     "warranty_grade_observed": {
       "type": [
@@ -263,11 +271,32 @@
         null
       ],
       "description": "The control's unverified_ground_policy, recorded when it determined the outcome, otherwise null. Permission to act on conditional support is an admitted control decision, not a stronger epistemic claim, so the policy that granted it stays on the record."
+    },
+    "applied_control_overlay_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/overlay_id"
+      },
+      "uniqueItems": true,
+      "description": "Stage-2 and stage-3 identifiers that changed the outcome, in deterministic order (warrant-policy rules before decision-mode overlays). Empty when none applied. The identity overlay DM-1 (decision_mode automatic) is never recorded. Every matched policy reason code is retained in reason_codes even when a later stage changes the final execution disposition, so the lineage of a decision survives."
+    },
+    "warrant_requirement_mode": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "required",
+        "not_required",
+        "not_applicable",
+        null
+      ],
+      "description": "The mode the control declared. Null ONLY when the control contract itself was missing or invalid (OIC-W-0026), which is a procedural contract error. An explicit not_required or not_applicable is a declaration and is recorded as such - it is never conflated with an absent one."
     }
   },
   "allOf": [
     {
-      "$comment": "Rule 1. ALLOW has exactly two positive shapes. Route A: the EARNED/hereditary route, ESTABLISHED + SUBSTANTIVE. Route B: the ON CREDIT/sound route, CONDITIONALLY_SUPPORTED + CONTROL_REQUIREMENT with allow_with_disclosure, OIC-D-0005, and non-empty missing grounds. Both require a USABLE warrant, a non-null warrant id, and no on_unknown fallback.",
+      "$comment": "Rule 1. ALLOW has exactly two positive routes. Common preconditions apply to both.",
       "if": {
         "properties": {
           "execution_disposition": {
@@ -289,6 +318,9 @@
           },
           "on_unknown_applied": {
             "type": "null"
+          },
+          "warrant_requirement_mode": {
+            "const": "required"
           }
         },
         "oneOf": [
@@ -303,6 +335,17 @@
               },
               "warranty_grade_observed": {
                 "const": "hereditary"
+              },
+              "missing_ground_ids": {
+                "maxItems": 0
+              },
+              "unverified_ground_policy_applied": {
+                "type": "null"
+              },
+              "reason_codes": {
+                "contains": {
+                  "const": "OIC-D-0001"
+                }
               }
             },
             "required": [
@@ -322,18 +365,31 @@
               "warranty_grade_observed": {
                 "const": "sound"
               },
+              "warranty_grade_required": {
+                "enum": [
+                  "sound",
+                  "until-verification"
+                ]
+              },
               "unverified_ground_policy_applied": {
                 "const": "allow_with_disclosure"
               },
               "missing_ground_ids": {
-                "type": "array",
                 "minItems": 1
               },
               "reason_codes": {
-                "type": "array",
-                "contains": {
-                  "const": "OIC-D-0005"
-                }
+                "allOf": [
+                  {
+                    "contains": {
+                      "const": "OIC-D-0005"
+                    }
+                  },
+                  {
+                    "contains": {
+                      "const": "OIC-W-0015"
+                    }
+                  }
+                ]
               }
             },
             "required": [
@@ -372,12 +428,15 @@
               "PROCEDURAL",
               "CONTROL_REQUIREMENT"
             ]
+          },
+          "unverified_ground_policy_applied": {
+            "type": "null"
           }
         }
       }
     },
     {
-      "$comment": "Rule 3. CONDITIONALLY_SUPPORTED: never substantive, never without missing grounds, never with an on_unknown fallback, and never ALLOW on the weakest grade. v0.1 does not model risk, reversibility, compensation, or recovery controls sufficient to permit automatic consequential ALLOW on until-verification.",
+      "$comment": "Rule 3. CONDITIONALLY_SUPPORTED: never substantive, never without missing grounds, never with an on_unknown fallback.",
       "if": {
         "properties": {
           "epistemic_status": {
@@ -397,7 +456,6 @@
             ]
           },
           "missing_ground_ids": {
-            "type": "array",
             "minItems": 1
           },
           "on_unknown_applied": {
@@ -409,25 +467,140 @@
               "until-verification"
             ]
           }
-        },
-        "not": {
-          "properties": {
-            "execution_disposition": {
-              "const": "ALLOW"
-            },
-            "warranty_grade_observed": {
-              "const": "until-verification"
-            }
-          },
-          "required": [
-            "execution_disposition",
-            "warranty_grade_observed"
-          ]
         }
       }
     },
     {
-      "$comment": "Rule 4. REFUTED never permits the action. It blocks substantively, or is redirected by a control overlay which preserves the epistemic status.",
+      "$comment": "Rule 4. CONDITIONALLY_SUPPORTED + until-verification: never ALLOW, always PRECAUTIONARY, always OIC-W-0025. v0.1 does not model risk, reversibility, compensation or recovery controls sufficient to permit automatic consequential ALLOW here.",
+      "if": {
+        "properties": {
+          "epistemic_status": {
+            "const": "CONDITIONALLY_SUPPORTED"
+          },
+          "warranty_grade_observed": {
+            "const": "until-verification"
+          }
+        },
+        "required": [
+          "epistemic_status",
+          "warranty_grade_observed"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution_disposition": {
+            "enum": [
+              "BLOCK",
+              "ESCALATE",
+              "ADVISORY"
+            ]
+          },
+          "reason_codes": {
+            "contains": {
+              "const": "OIC-W-0025"
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Rule 5. Stage-2 outcomes for CONDITIONALLY_SUPPORTED + sound, when no decision-mode overlay applied. forbid must BLOCK and escalate must ESCALATE; a later stage-3 overlay may still redirect, which is why this is conditioned on DM-2/DM-3 being absent.",
+      "if": {
+        "allOf": [
+          {
+            "properties": {
+              "epistemic_status": {
+                "const": "CONDITIONALLY_SUPPORTED"
+              },
+              "warranty_grade_observed": {
+                "const": "sound"
+              },
+              "unverified_ground_policy_applied": {
+                "const": "forbid"
+              }
+            },
+            "required": [
+              "epistemic_status",
+              "unverified_ground_policy_applied"
+            ]
+          },
+          {
+            "not": {
+              "properties": {
+                "applied_control_overlay_ids": {
+                  "contains": {
+                    "enum": [
+                      "DM-2",
+                      "DM-3"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "applied_control_overlay_ids"
+              ]
+            }
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution_disposition": {
+            "const": "BLOCK"
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Rule 6. Same, for the escalate policy.",
+      "if": {
+        "allOf": [
+          {
+            "properties": {
+              "epistemic_status": {
+                "const": "CONDITIONALLY_SUPPORTED"
+              },
+              "warranty_grade_observed": {
+                "const": "sound"
+              },
+              "unverified_ground_policy_applied": {
+                "const": "escalate"
+              }
+            },
+            "required": [
+              "epistemic_status",
+              "unverified_ground_policy_applied"
+            ]
+          },
+          {
+            "not": {
+              "properties": {
+                "applied_control_overlay_ids": {
+                  "contains": {
+                    "enum": [
+                      "DM-2",
+                      "DM-3"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "applied_control_overlay_ids"
+              ]
+            }
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution_disposition": {
+            "const": "ESCALATE"
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Rule 7. REFUTED never permits the action; an overlay may redirect it while preserving the status.",
       "if": {
         "properties": {
           "epistemic_status": {
@@ -452,12 +625,15 @@
               "SUBSTANTIVE",
               "CONTROL_REQUIREMENT"
             ]
+          },
+          "unverified_ground_policy_applied": {
+            "type": "null"
           }
         }
       }
     },
     {
-      "$comment": "Rule 5. CONTRADICTED behaves like REFUTED for execution: a finding about the ground set, never a permission.",
+      "$comment": "Rule 8. CONTRADICTED behaves like REFUTED for execution.",
       "if": {
         "properties": {
           "epistemic_status": {
@@ -482,12 +658,15 @@
               "SUBSTANTIVE",
               "CONTROL_REQUIREMENT"
             ]
+          },
+          "unverified_ground_policy_applied": {
+            "type": "null"
           }
         }
       }
     },
     {
-      "$comment": "Rule 6. Any non-USABLE warrant state cannot ALLOW.",
+      "$comment": "Rule 9. Any non-USABLE warrant state cannot ALLOW.",
       "if": {
         "properties": {
           "warrant_state": {
@@ -501,6 +680,7 @@
               "REVOKED",
               "MISBOUND",
               "UNSUPPORTED_GRADE",
+              "UNSUPPORTED_RESULT",
               "NOT_REQUIRED"
             ]
           }
@@ -522,7 +702,7 @@
       }
     },
     {
-      "$comment": "Rule 7. A non-null on_unknown fallback cannot ALLOW and cannot be substantive.",
+      "$comment": "Rule 10. A non-null on_unknown fallback means the epistemic state was unresolved. It cannot ALLOW and cannot be substantive.",
       "if": {
         "properties": {
           "on_unknown_applied": {
@@ -535,6 +715,9 @@
       },
       "then": {
         "properties": {
+          "epistemic_status": {
+            "const": "UNRESOLVED"
+          },
           "execution_disposition": {
             "enum": [
               "BLOCK",
@@ -553,7 +736,30 @@
       }
     },
     {
-      "$comment": "Rule 8. CONTROL_REQUIREMENT must carry a control-policy reason code. It never rewrites the epistemic status; a control overlay changes what the runtime did, not what the grounds establish.",
+      "$comment": "Rule 11. An unverified-ground policy is only meaningful for conditional support.",
+      "if": {
+        "properties": {
+          "unverified_ground_policy_applied": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "unverified_ground_policy_applied"
+        ]
+      },
+      "then": {
+        "properties": {
+          "epistemic_status": {
+            "const": "CONDITIONALLY_SUPPORTED"
+          },
+          "missing_ground_ids": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Rule 12. CONTROL_REQUIREMENT must carry a control-policy reason code and at least one overlay identifier explaining which stage produced it.",
       "if": {
         "properties": {
           "decision_basis": {
@@ -567,34 +773,79 @@
       "then": {
         "properties": {
           "reason_codes": {
-            "type": "array",
             "contains": {
               "$ref": "#/$defs/control_policy_reason_code"
+            }
+          },
+          "applied_control_overlay_ids": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Rule 13. A null warrant_requirement_mode means the control contract was missing or invalid, which is a procedural error and never permits the action.",
+      "if": {
+        "properties": {
+          "warrant_requirement_mode": {
+            "type": "null"
+          }
+        },
+        "required": [
+          "warrant_requirement_mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution_disposition": {
+            "enum": [
+              "BLOCK",
+              "ESCALATE",
+              "ADVISORY"
+            ]
+          },
+          "decision_basis": {
+            "const": "PROCEDURAL"
+          },
+          "reason_codes": {
+            "contains": {
+              "const": "OIC-W-0026"
             }
           }
         }
       }
     },
     {
-      "$comment": "Rule 9. allow_with_disclosure is only meaningful for conditional support.",
+      "$comment": "Rule 14. An explicit non-requirement is recorded as NOT_REQUIRED with OIC-W-0024, and has no ALLOW path in v0.1.",
       "if": {
         "properties": {
-          "unverified_ground_policy_applied": {
-            "const": "allow_with_disclosure"
+          "warrant_requirement_mode": {
+            "enum": [
+              "not_required",
+              "not_applicable"
+            ]
           }
         },
         "required": [
-          "unverified_ground_policy_applied"
+          "warrant_requirement_mode"
         ]
       },
       "then": {
         "properties": {
-          "epistemic_status": {
-            "const": "CONDITIONALLY_SUPPORTED"
+          "warrant_state": {
+            "const": "NOT_REQUIRED"
           },
-          "missing_ground_ids": {
-            "type": "array",
-            "minItems": 1
+          "execution_disposition": {
+            "enum": [
+              "BLOCK",
+              "ESCALATE",
+              "ADVISORY"
+            ]
+          },
+          "reason_codes": {
+            "contains": {
+              "const": "OIC-W-0024"
+            }
           }
         }
       }
