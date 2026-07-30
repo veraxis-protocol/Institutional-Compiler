@@ -367,3 +367,127 @@ which is the only thing that would raise its tier.
 
 *This is provisional dependency evidence. Independent Tier-1 reproduction remains OPEN, and the
 OIC semantic implementation gate remains BLOCKED.*
+
+---
+
+# WO-003 Phase 2 — final cross-review of the accepted PR #16 head
+
+**Reviewed head:** `d9eba5fd89d2745341f0b4007672ef9124be073f` (exactly; nothing later).
+**Mapping reviewed:** `docs/contracts/ZTL-OCE-MAPPING-v0.1.json`,
+SHA-256 `795818df958fa73aa4bf1edf1fa2951fb77d996e81b55110f57fc556d5ad29bf` (verified byte-level).
+**Kernel profile reviewed:** `docs/contracts/kernel-profiles/ztl-v0.1.json`,
+SHA-256 `66438af3b742d4bd5f5a676d27d016f51a221f58c1b3c5d6ea1866e4d7744288` (verified byte-level).
+**Semantic-conformance rule set reviewed:** SC-RD-001…005, SC-WA-001, SC-WA-002 (the seven
+rules embedded in the mapping JSON and executable via `tests/contract/semantic_conformance.py`).
+**Kernel measured against:** `ztljudge.judge` at `56e1ff0` (`veraxis-ztl-input-v0.2-signed`);
+census re-run for this review: EARNED non-empty 61/294 (138 refinements, 0 moved),
+REFUTED non-empty 25/294, pair-withdrawal 38/180 — all three match the profile's claims.
+
+## Verdict totals
+
+| Artifact | ACCEPT | ACCEPT WITH QUALIFICATION | REJECT | CANNOT DETERMINE |
+|---|---|---|---|---|
+| 32 classification rows | 30 | 2 (rows 9, 10) | 0 | 0 |
+| 5 warrant-policy rules | 4 | 0 | **1 (WP-3)** | 0 |
+| 3 decision-mode overlays | 3 | 0 | 0 | 0 |
+| 7 semantic-conformance rules | 6 | 1 (SC-WA-001) | 0 | 0 |
+| kernel profile (out of the ordered lists, reviewed by its SHA) | — | — | **1 (commit + provenance fields)** | — |
+
+## The one mapping objection — WP-3 (REJECT)
+
+- **Rule:** `warrant_policy_rules`, `rule_id: WP-3` — the only ALLOW route for conditional
+  support. Its machine trigger reads `grade sufficient`; its own `note` and the contract
+  (§7 condition 3, and the §4 table row "ON CREDIT + until-verification → BLOCK / ESCALATE,
+  PRECAUTIONARY, OIC-W-0025") require **observed grade = sound**.
+- **Counterexample (measured-reachable input):** fixture `on-credit-until-verification`
+  (`(b -> a) -> (b = c)`, `{a:F, b:Z, c:T}` → `ON CREDIT / until-verification / T`), against
+  an envelope `{mode: required, minimum_warranty_grade: "until-verification",
+  unverified_ground_policy: "allow_with_disclosure"}` — legal per
+  `warrant-requirement.schema.json`, whose `minimum_warranty_grade` enum includes
+  `"until-verification"`. The observed grade meets the declared minimum, so the trigger's
+  `grade sufficient` conjunct is satisfied and WP-3 yields **ALLOW** for a T that can die on
+  the next resolving tick. No SC rule catches it: SC-RD-001/002 check subscription coverage
+  and triggers, not the grade.
+- **Expected behavior (per the contract's own text):** that input never reaches ALLOW —
+  PRECAUTIONARY BLOCK/ESCALATE with `OIC-W-0025`.
+- **Proposed correction (either closes it; both is belt-and-braces):**
+  1. WP-3 trigger: `epistemic_status = CONDITIONALLY_SUPPORTED, observed grade = sound,
+     grade sufficient, unverified_ground_policy = allow_with_disclosure`; and/or
+  2. remove `"until-verification"` from the `minimum_warranty_grade` enum (a control that
+     "accepts until-verification" accepts an unfalsified guess — no institutional meaning we
+     can see), or add an explicit WP-6: `ON CREDIT + until-verification → BLOCK/ESCALATE,
+     PRECAUTIONARY, OIC-W-0025`, so the prose row has a machine twin.
+
+## The kernel-profile objection (REJECT on two fields)
+
+`commit: e819dec7…` with provenance "reproduced against the pinned commit by its author".
+**Measured:** `ztljudge.judge` does not exist at `e819dec7` — `judge()` first appears in
+`25510dd` and is renamed in `c858429`, both later; `verify_fixtures.py` against a clean
+`e819dec7` worktree exits 2 (`No module named 'ztljudge'`). The v0.1 fixtures are genuine
+live-run records, but no judge-based fixture is recomputable at that pin, so the provenance
+line cannot be true as written. **Proposed correction:** pin
+`veraxis-ztl-input-v0.2-signed` = `56e1ff0510c62b04dbd85bbe08b7a6deacbf276b` (entrypoint
+exists; measured PASS 13/3/0/0) and point `conformance_fixture_set` at
+`interface-freeze-v0.2/` (index SHA-256
+`ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145`). Same hole, same fix,
+in `CONFORMANCE-v0.1.md` §1–2 (v0.1 is preserved unchanged; the correction lives in v0.2).
+
+## Qualifications (ACCEPT WITH QUALIFICATION)
+
+- **Rows 9, 10:** both map a ground event to `warrant_state: REVOKED`; expiry and revocation
+  stay distinguishable only through the reason codes (`OIC-W-0020` vs `OIC-W-0007`). Our
+  epoch model treats them as different events (expire = the world changed; revoke =
+  authoritative composite), and the trigger vocabulary keeps them apart — suggest either a
+  `GROUND_EXPIRED` state or a one-line note that the state label deliberately compresses
+  what the codes preserve.
+- **SC-WA-001:** the rule's wording ("the evaluated formula's atom set") is exactly right —
+  two measured edges for adapter authors: an atom present in the caller's marking but absent
+  from the formula appears in **neither** array (`p`, `{p:T, x:Z}` → both arrays exclude
+  `x`); an atom in the formula but absent from the marking **defaults to Z** and appears in
+  `unverified_ground_ids` (`p | q`, `{p:T}` → `unverified ['q']`, disposition still EARNED).
+
+## The seventeen ordered confirmations
+
+1. EARNED → ESTABLISHED incl. informational unverified — **CONFIRM** (row 27 `unverified:
+   any`; 61/294; the v0.2 witness fixture `earned-hereditary-nonempty-unverified.json`).
+2. REFUTED → REFUTED incl. informational unverified — **CONFIRM** (row 23; 25/294).
+3. ON CREDIT → CONDITIONALLY_SUPPORTED — **CONFIRM** (rows 28/29; the disposition our
+   dossier omitted, correctly restored by the profile).
+4. OPEN → UNRESOLVED — **CONFIRM** (rows 24/25; OPEN+T NOT_REACHABLE, row 26, matches our
+   exhaustive search).
+5. CONTRADICTED is OIC-plane — **CONFIRM**; measured: kernel `DISPOSITIONS = (EARNED,
+   ON CREDIT, OPEN, REFUTED)`; a contradictory formula is REFUTED, conflicting admitted
+   values are unrepresentable in a marking.
+6. dependency_ids = every T/F atom, no minimality — **CONFIRM** (the 38/180 pair-withdrawal
+   measurement is ours and the profile quotes it correctly).
+7. unverified_ground_ids = every Z atom — **CONFIRM with the SC-WA-001 precision**: every Z
+   atom *of the evaluated formula*, including unmarked atoms defaulting to Z.
+8. Disjoint, unique, covering — **CONFIRM** for the formula's atom set (the exact SC-WA-001
+   wording; "the evaluated marking" in the order should be read the same way).
+9. Conditional ALLOW quadruple requirement — **CONFIRM as intended, REJECT as encoded** —
+   see the WP-3 objection; the sound-grade conjunct is in the prose and missing from the
+   machine trigger.
+10. Five-trigger completeness — **CONFIRM** for the present anti-tick model: verify tick =
+    `ground_verified`, anti-tick = `ground_expired`, the authoritative composite =
+    `ground_revoked` + `ground_corrected`, epoch boundary = `relevant_epoch_changed`.
+    A formula change is a different warrant, not a trigger — correctly excluded.
+11. formula_hash = SHA-384 over UTF-8 kernel-rendered formula — **CONFIRM** (recomputed
+    independently for the v0.2 fixture: `sha384:b77102bb…`).
+12. output_hash = SHA-256 over the five-field projection, sorted keys, compact, no ASCII
+    escaping — **CONFIRM** (recomputed independently: `sha256:20657bd3…`).
+13. `why` and `marking` excluded from output_hash — **CONFIRM**; `why` is presentational
+    (its text varies with the unverified list), `marking` is input and covered by the input
+    hash and the two ground arrays.
+14. Classification codes survive overlays — **CONFIRM** (SC-RD-004 completeness + DM-2/DM-3
+    "codes retained").
+15. Applied overlay IDs complete, exact, ordered — **CONFIRM** (SC-RD-003 + SC-RD-005;
+    DM-1 never recorded).
+16. zverify prohibited — **CONFIRM**; ZTL-H-001 wording is accurate to our measured trap
+    (the 'M'-dialect: `Z` passed by mistake yields `hereditary` for everything, silently).
+17. No ZTL output as authority / admission / time authority / execution / reliance /
+    correction — **CONFIRM** (§ W-4 step 8 outside the kernel; time under the envelope's
+    `time_binding`; "ZTL must not create a VEIP lifecycle record"; "no reader mistakes a
+    warrant for a permission").
+
+*This is provisional dependency evidence. Independent Tier-1 reproduction remains OPEN, and
+the OIC semantic implementation gate remains BLOCKED.*
