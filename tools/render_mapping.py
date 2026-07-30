@@ -136,6 +136,25 @@ def render_table(document: dict[str, Any]) -> str:
         + "Applied last. `DM-1` is the identity and is never recorded in "
         "`applied_control_overlay_ids`.\n\n"
         + _table(DECISION_MODE_COLUMNS, mode_rows)
+        + "\n\n### Semantic conformance rules\n\n"
+        + "JSON Schema cannot express these. A record passing the schema and failing one of "
+        "them is **invalid**.\n\n"
+        + _table(
+            ("ID", "Name", "Applies to", "Requirement", "Not expressible as"),
+            [
+                [
+                    str(rule["rule_id"]),
+                    str(rule["name"]),
+                    str(rule["applies_to"]),
+                    str(rule["requirement"]),
+                    str(rule["not_expressible_in_json_schema"]),
+                ]
+                for rule in sorted(
+                    document["semantic_conformance_rules"]["rules"],
+                    key=lambda item: str(item["rule_id"]),
+                )
+            ],
+        )
         + "\n\nStages 2 and 3 may change the execution disposition, the decision basis, and "
         "the policy reason codes. Neither may change the epistemic status fixed by stage 1, "
         "which is why every rule and overlay declares `epistemic_effect = PRESERVE`. Every "

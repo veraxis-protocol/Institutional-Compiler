@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinstitutionalcompiler.org/schemas/proposed/runtime-decision.schema.json",
   "title": "RuntimeDecision",
-  "description": "PROPOSED, NOT ADMITTED. Separates what the grounds establish (epistemic_status), what the runtime did (execution_disposition), and why it did it (decision_basis). schemas/draft/runtime-evaluation.schema.json collapses all three into a single `verdict` field; that collapse is the defect this schema exists to correct. The cross-field constraints in `allOf` are the contract, not documentation: a decision violating one is invalid, not merely discouraged. See adr/ADR-013.md. schemas/draft is NOT modified by this proposal.",
+  "description": "PROPOSED, NOT ADMITTED. Separates what the grounds establish (epistemic_status), what the runtime did (execution_disposition), and why it did it (decision_basis). schemas/draft/runtime-evaluation.schema.json collapses all three into a single `verdict` field; that collapse is the defect this schema exists to correct. VALIDATION IS TWO-LAYER. This schema enforces STRUCTURAL conformance: structure, enums, nullability, local conditionals, and those cross-field constraints that JSON Schema can represent. It does NOT and cannot enforce equality between sibling arrays, canonical ordering, binding across artifacts, or invariants derived from the evaluated marking. Those are SEMANTIC conformance rules, declared in docs/contracts/ZTL-OCE-MAPPING-v0.1.json under semantic_conformance_rules. A record that passes this schema but fails a semantic conformance rule is INVALID. Passing structural validation alone is not conformance. See adr/ADR-013.md. schemas/draft is NOT modified by this proposal.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -121,7 +121,7 @@
         "$ref": "#/$defs/reason_code"
       },
       "minItems": 1,
-      "description": "Sorted lexicographically, deterministic. At least one is always present, including on ALLOW."
+      "description": "Sorted lexicographically, deterministic. At least one is always present, including on ALLOW. SEMANTIC RULE SC-RD-004 additionally requires lexicographic sorting and completeness relative to the mapping."
     },
     "missing_ground_ids": {
       "type": "array",
@@ -290,7 +290,7 @@
         "$ref": "#/$defs/overlay_id"
       },
       "uniqueItems": true,
-      "description": "Stage-2 and stage-3 identifiers that changed the outcome, in deterministic order (warrant-policy rules before decision-mode overlays). Empty when none applied. The identity overlay DM-1 (decision_mode automatic) is never recorded. Every matched policy reason code is retained in reason_codes even when a later stage changes the final execution disposition, so the lineage of a decision survives."
+      "description": "Stage-2 and stage-3 identifiers that changed the outcome, in deterministic order (warrant-policy rules before decision-mode overlays). Empty when none applied. The identity overlay DM-1 (decision_mode automatic) is never recorded. Every matched policy reason code is retained in reason_codes even when a later stage changes the final execution disposition, so the lineage of a decision survives. SEMANTIC RULE SC-RD-003 additionally requires stage-2 WP identifiers before the stage-3 DM identifier."
     },
     "warrant_requirement_mode": {
       "type": [
@@ -319,7 +319,7 @@
         "$ref": "#/$defs/identifier"
       },
       "uniqueItems": true,
-      "description": "Grounds the subscription covers, in deterministic order. For a conditional ALLOW this must equal missing_ground_ids exactly: a subscription that covers only some of the load-bearing grounds leaves the rest able to move unnoticed."
+      "description": "Grounds the subscription covers, in deterministic order. For a conditional ALLOW this must equal missing_ground_ids exactly: a subscription that covers only some of the load-bearing grounds leaves the rest able to move unnoticed. SEMANTIC RULE SC-RD-001 additionally requires this to EQUAL missing_ground_ids exactly, including canonical order; JSON Schema cannot express equality between sibling arrays."
     },
     "conditional_support_subscription_triggers": {
       "type": "array",
@@ -327,7 +327,7 @@
         "$ref": "#/$defs/subscription_trigger"
       },
       "uniqueItems": true,
-      "description": "Events that must trigger recomputation, in deterministic order. All five are required for a conditional ALLOW. Verification, expiry, revocation, correction and a relevant epoch change can each falsify the result, so omitting any one leaves a path by which the ALLOW silently outlives its grounds."
+      "description": "Events that must trigger recomputation, in deterministic order. All five are required for a conditional ALLOW. Verification, expiry, revocation, correction and a relevant epoch change can each falsify the result, so omitting any one leaves a path by which the ALLOW silently outlives its grounds. SEMANTIC RULE SC-RD-002 additionally requires the declared canonical order; the schema can require all five to be present but not their order."
     }
   },
   "allOf": [

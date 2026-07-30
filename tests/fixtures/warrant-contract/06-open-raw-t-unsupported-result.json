@@ -54,7 +54,7 @@
   "input": {
     "envelope": {
       "bound_canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
-      "bound_formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
+      "bound_formula_hash": "sha384:c5fd0cf3318ec40056117c73d3e5dc4a3e8afa7b26f90905c916db73fd618f63f3667c8d7ea9a3125f19cb3614535868",
       "bound_kernel_profile_id": "ztl-v0.1",
       "control_id": "ctl:proc-approval",
       "control_version": "1.0.0",
@@ -95,8 +95,8 @@
         "ground:under_threshold"
       ],
       "disposition": "OPEN",
-      "formula": "registered & under_threshold",
-      "formula_hash": "sha384:7fa6b5789c1f37496ec606af02fa6cf792b2a3d67b798cdf63928acc455694398abe3dd2ee34a5001d2bcac9a96cf88a",
+      "formula": "(ground:registered ∧ ground:under_threshold)",
+      "formula_hash": "sha384:c5fd0cf3318ec40056117c73d3e5dc4a3e8afa7b26f90905c916db73fd618f63f3667c8d7ea9a3125f19cb3614535868",
       "generated_at": "2026-07-29T00:00:00Z",
       "ground_epoch": {
         "authority_id": "authority:proc-registry",
@@ -138,6 +138,10 @@
     "ztl_result": {
       "disposition": "OPEN",
       "grade": "until-verification",
+      "marking": {
+        "ground:registered": "Z",
+        "ground:under_threshold": "T"
+      },
       "raw_verdict": "T",
       "unverified": [
         "ground:registered"

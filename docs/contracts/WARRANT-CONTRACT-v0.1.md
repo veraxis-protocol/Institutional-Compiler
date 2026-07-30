@@ -487,6 +487,21 @@ object with sorted keys and no whitespace. It **excludes `why`**, which is prese
 and may change without a profile version bump, and `marking`, which is input and already
 covered by `input_hash`.
 
+## 10d. Two layers of validation
+
+| Layer | Enforced by | Covers |
+|---|---|---|
+| **Structural** | JSON Schema Draft 2020-12 | structure, enums, nullability, local conditionals, representable cross-field constraints |
+| **Semantic** | `semantic_conformance_rules` in the canonical mapping | equality, canonical ordering, cross-artifact binding, formula- and marking-derived invariants |
+
+**A record that passes JSON Schema but fails semantic conformance is invalid.** Passing the
+schema alone is not conformance. Six rules are declared — `SC-RD-001` to `SC-RD-004` on the
+decision, `SC-WA-001` and `SC-WA-002` on the warrant — each recording what it requires, why,
+and which construct JSON Schema lacks.
+
+The rules are executable: `tests/contract/semantic_conformance.py` is a **test-only**
+validator, deliberately outside `src/oic`, so a rule cannot quietly become a comment.
+
 ## 11. Determinism
 
 - Field ordering in serialised JSON is by sorted key.
@@ -532,6 +547,31 @@ ADR-013 §7 for the chronology. `RuntimeDecision` is OIC's evaluation output and
 the first VEIP artifact.
 
 ZTL must not create a VEIP lifecycle record. VEIP must not reinterpret the ZTL formula.
+
+## 13a. Evidence dependency on PR #18
+
+**PR #16 must not merge before PR #18.**
+
+Every `MEASURED` label in the canonical mapping, and every field in
+[`kernel-profiles/ztl-v0.1.json`](kernel-profiles/ztl-v0.1.json), references evidence that
+is still in **draft** PR #18 and is not yet on `main`. Merging this first would leave the
+contract citing a branch that could still change or be abandoned — the mapping would claim
+measurement it could not point at.
+
+After PR #18 creates `interface-freeze-v0.2` and merges, this PR must:
+
+1. rebase onto the merged `main`;
+2. update the conformance fixture-set **path**, **counts**, and **`index_sha256`** to the
+   v0.2 set;
+3. re-verify **every** `MEASURED` authority label against the checked-in evidence rather
+   than against a draft branch;
+4. re-point the census reference at its merged path.
+
+The current pin is `interface-freeze-v0.1`, `index_sha256`
+`b6e007bd47fd64b030391d90b17dda99ee12310aa0cce48bb0fdd0f74118dca5`, **unchanged** by this
+revision. Whether the `EARNED` + non-empty-`unverified` case should become a pinned fixture
+requires a fixture-set version bump and a re-pin; PR #18 §4.4 records that as the OIC side's
+call, and it is left open rather than taken.
 
 ## 14. Standing
 

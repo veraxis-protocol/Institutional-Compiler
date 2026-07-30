@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinstitutionalcompiler.org/schemas/proposed/warrant-artifact.schema.json",
   "title": "WarrantArtifact",
-  "description": "PROPOSED, NOT ADMITTED. A recomputable record of what a logic kernel established over a supplied ground set. It records logic only: it does not assert source authenticity, institutional authority, admission, or an execution decision. A warrant is an input to a runtime decision, never the decision itself. See adr/ADR-013.md and docs/contracts/WARRANT-CONTRACT-v0.1.md.",
+  "description": "PROPOSED, NOT ADMITTED. A recomputable record of what a logic kernel established over a supplied ground set. It records logic only: it does not assert source authenticity, institutional authority, admission, or an execution decision. A warrant is an input to a runtime decision, never the decision itself. See adr/ADR-013.md and docs/contracts/WARRANT-CONTRACT-v0.1.md. VALIDATION IS TWO-LAYER: this schema is structural only. SEMANTIC RULES SC-WA-001 (ground partition) and SC-WA-002 (hash projections) are declared in docs/contracts/ZTL-OCE-MAPPING-v0.1.json and cannot be expressed here, because they depend on the evaluated marking and on the provenance of a digest's input.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -116,7 +116,7 @@
       "items": {
         "$ref": "#/$defs/identifier"
       },
-      "description": "Every VERIFIED atom (marked T or F) appearing in the kernel-evaluated formula. Disjoint from unverified_ground_ids by construction. This is a deliberate OVER-APPROXIMATION and minimality is NOT claimed: measured, 38 of 180 census cases with two or more verified grounds have a PAIR whose joint withdrawal moves the disposition although neither member does alone, so a minimised set would let a revocation propagate to nothing and leave a stale warrant usable."
+      "description": "Every VERIFIED atom (marked T or F) appearing in the kernel-evaluated formula. Disjoint from unverified_ground_ids by construction. This is a deliberate OVER-APPROXIMATION and minimality is NOT claimed: measured, 38 of 180 census cases with two or more verified grounds have a PAIR whose joint withdrawal moves the disposition although neither member does alone, so a minimised set would let a revocation propagate to nothing and leave a stale warrant usable. SEMANTIC RULE SC-WA-001: exactly the atoms marked T or F, disjoint from unverified_ground_ids, and together with them covering the formula's atom set."
     },
     "ground_epoch": {
       "type": "object",

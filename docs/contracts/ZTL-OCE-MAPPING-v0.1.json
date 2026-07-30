@@ -734,6 +734,66 @@
     "4": "disposition",
     "5": "disposition and warranty grade"
   },
+  "semantic_conformance_rules": {
+    "canonical_trigger_order": [
+      "ground_corrected",
+      "ground_expired",
+      "ground_revoked",
+      "ground_verified",
+      "relevant_epoch_changed"
+    ],
+    "note": "JSON Schema enforces structure, enums, nullability and locally representable conditionals. It cannot express equality between two arrays, canonical ordering, binding across artifacts, or anything derived from the evaluated marking. Those are the rules below. A record that passes JSON Schema but fails one of these is INVALID, not merely unusual.",
+    "rules": [
+      {
+        "applies_to": "RuntimeDecision where epistemic_status = CONDITIONALLY_SUPPORTED and execution_disposition = ALLOW",
+        "name": "SUBSCRIPTION_GROUND_COVERAGE",
+        "not_expressible_in_json_schema": "equality between two sibling arrays",
+        "requirement": "conditional_support_subscription_ground_ids must EQUAL missing_ground_ids exactly, including canonical order. Not a subset, not a superset, not a reordering.",
+        "rule_id": "SC-RD-001",
+        "why": "A subscription covering only some load-bearing grounds leaves the rest able to move unnoticed; one covering extra grounds is not evidence about the grounds that matter. Order is fixed so two conforming implementations produce identical bytes."
+      },
+      {
+        "applies_to": "RuntimeDecision where epistemic_status = CONDITIONALLY_SUPPORTED and execution_disposition = ALLOW",
+        "name": "SUBSCRIPTION_TRIGGER_SET",
+        "not_expressible_in_json_schema": "canonical ordering of an array",
+        "requirement": "conditional_support_subscription_triggers must equal exactly ['ground_corrected', 'ground_expired', 'ground_revoked', 'ground_verified', 'relevant_epoch_changed'], in that canonical order.",
+        "rule_id": "SC-RD-002",
+        "why": "Each trigger names an event that can falsify the result. Omitting one leaves a path by which the ALLOW silently outlives its grounds. JSON Schema can require all five to be present but cannot require the declared order."
+      },
+      {
+        "applies_to": "every RuntimeDecision",
+        "name": "OVERLAY_ORDER",
+        "not_expressible_in_json_schema": "ordering constrained by identifier prefix",
+        "requirement": "applied_control_overlay_ids must list all applicable stage-2 WP identifiers first, then the single applicable non-identity stage-3 DM identifier last. No duplicates. DM-1 never appears.",
+        "rule_id": "SC-RD-003",
+        "why": "The list is the evaluation lineage. Out of order it misreports which stage produced the outcome, and a reader cannot tell whether the grade gate fired before or after the decision mode."
+      },
+      {
+        "applies_to": "every RuntimeDecision",
+        "name": "REASON_CODE_CANONICALIZATION",
+        "not_expressible_in_json_schema": "completeness relative to the mapping",
+        "requirement": "reason_codes must be unique, sorted lexicographically, and complete: every matched classification row and every applied policy stage contributes its code.",
+        "rule_id": "SC-RD-004",
+        "why": "Completeness is the lineage rule -- a later stage may change the execution but may not erase why an earlier one fired. Sorting makes the bytes deterministic."
+      },
+      {
+        "applies_to": "WarrantArtifact produced under kernel_profile_id ztl-v0.1",
+        "name": "GROUND_PARTITION",
+        "not_expressible_in_json_schema": "a partition derived from the evaluated marking",
+        "requirement": "dependency_ids are exactly the formula atoms marked T or F; unverified_ground_ids are exactly the atoms marked Z; the two arrays are disjoint; their union equals the evaluated formula's atom set. Neither claims minimality.",
+        "rule_id": "SC-WA-001",
+        "why": "An atom in neither array is a ground nobody is tracking: it cannot trigger recomputation and cannot be revoked. Minimisation is separately unsound -- 38 of 180 census cases have a pair whose joint withdrawal moves the disposition although neither member does alone."
+      },
+      {
+        "applies_to": "WarrantArtifact produced under kernel_profile_id ztl-v0.1",
+        "name": "HASH_PROJECTIONS",
+        "not_expressible_in_json_schema": "the provenance of a digest's input",
+        "requirement": "formula_hash is computed over the kernel-rendered formula, not the caller's string. output_hash is computed over the declared semantic projection, which EXCLUDES why and marking.",
+        "rule_id": "SC-WA-002",
+        "why": "Hashing the caller's string makes two callers who wrote the same formula differently disagree about the same proposition. Including why makes replay fail on a cosmetic edit."
+      }
+    ]
+  },
   "status": "PROPOSED - not admitted",
   "unverified_ground_semantics": {
     "EARNED": "informational - irrelevant because the result is hereditary",
@@ -741,6 +801,11 @@
     "OPEN": "blocking - their resolution is needed",
     "REFUTED": "informational - the refutation holds regardless",
     "rule": "Whenever the kernel reports unverified grounds, OIC preserves them."
+  },
+  "validation_layers": {
+    "semantic": "semantic_conformance_rules above: equality, canonical ordering, cross-artifact binding, and formula/marking-derived invariants.",
+    "structural": "JSON Schema Draft 2020-12: structure, enums, nullability, local conditionals, and cross-field constraints that are representable.",
+    "verdict": "A record must pass BOTH. Passing one and failing the other is invalid."
   },
   "version": "0.1.0",
   "warrant_policy_rules": [

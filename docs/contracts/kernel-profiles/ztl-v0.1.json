@@ -77,6 +77,18 @@
     }
   ],
   "entrypoint": "ztljudge.judge",
+  "evidence_dependency_notice": {
+    "current_pin": "interface-freeze-v0.1, index_sha256 b6e007bd47fd64b030391d90b17dda99ee12310aa0cce48bb0fdd0f74118dca5. Unchanged by revision 4A; whether the EARNED + non-empty case becomes a pinned fixture is an owner decision, not ours to take underneath a PR under review.",
+    "merge_order": "PR #16 must not merge before PR #18.",
+    "on_pr18_merge": [
+      "PR #16 rebases onto the merged main.",
+      "conformance_fixture_set.location, .total/.reachable/.not_reachable and .index_sha256 are updated to the interface-freeze-v0.2 set.",
+      "Every MEASURED authority label in the canonical mapping is re-verified against the checked-in evidence rather than against a draft branch.",
+      "The census reference is re-pointed at its merged path."
+    ],
+    "statement": "Every field in this profile references evidence that is still in DRAFT pull request #18 and is NOT yet on main.",
+    "status": "BLOCKING for merge order"
+  },
   "formula_digest_algorithm": "sha384",
   "formula_hash_projection": {
     "algorithm": "sha384 under canonicalization_profile_id",

@@ -544,3 +544,60 @@ def test_conditional_allow_requires_subscription_coverage(repo_root: Path) -> No
 def test_subscription_is_never_described_as_stronger_support(repo_root: Path) -> None:
     text = _active(repo_root, CONTRACT)
     assert "never evidence of stronger epistemic support" in text
+
+
+# ---------------------------------------------------------------------------
+# Closure: two-layer validation and the PR #18 dependency
+# ---------------------------------------------------------------------------
+
+
+def test_active_documents_declare_two_validation_layers(repo_root: Path) -> None:
+    for relpath in (ADR, CONTRACT):
+        text = _active(repo_root, relpath)
+        assert "two layer" in text.lower().replace("-", " "), relpath
+        assert "semantic conformance" in text.lower(), relpath
+    contract = _active(repo_root, CONTRACT)
+    assert "passes JSON Schema but fails semantic conformance is invalid" in contract
+
+
+def test_semantic_rules_are_rendered_into_the_markdown(repo_root: Path) -> None:
+    text = (repo_root / MAPPING_MD).read_text(encoding="utf-8")
+    assert "### Semantic conformance rules" in text
+    for rule_id in ("SC-RD-001", "SC-RD-002", "SC-RD-003", "SC-RD-004", "SC-WA-001", "SC-WA-002"):
+        assert rule_id in text, rule_id
+
+
+def test_semantic_rules_and_validator_agree_on_rule_ids(repo_root: Path) -> None:
+    """A declared rule with no implementation, or vice versa, is a silent gap."""
+    document = _load(repo_root, MAPPING_JSON)
+    declared = {rule["rule_id"] for rule in document["semantic_conformance_rules"]["rules"]}
+    validator = (repo_root / "tests/contract/semantic_conformance.py").read_text("utf-8")
+    implemented = set(re.findall(r'"(SC-(?:RD|WA)-[0-9]{3})"', validator))
+    assert declared == implemented, (
+        f"declared {sorted(declared)} vs implemented {sorted(implemented)}"
+    )
+
+
+def test_pr18_dependency_is_recorded(repo_root: Path) -> None:
+    profile = _load(repo_root, PROFILE)
+    notice = profile["evidence_dependency_notice"]
+    assert "PR #16 must not merge before PR #18" in notice["merge_order"]
+    assert "draft" in notice["statement"].lower()
+    assert any("index_sha256" in step for step in notice["on_pr18_merge"])
+    assert any("MEASURED" in step for step in notice["on_pr18_merge"])
+
+    contract = _active(repo_root, CONTRACT)
+    assert "PR #16 must not merge before PR #18" in contract
+    assert "interface-freeze-v0.2" in contract
+    adr = _active(repo_root, ADR)
+    assert "PR #16 must not merge before PR #18" in adr
+
+
+def test_pinned_fixture_index_is_unchanged(repo_root: Path) -> None:
+    """Revision 4A must not re-pin the ZTL fixture set; that is an owner decision."""
+    profile = _load(repo_root, PROFILE)
+    assert (
+        profile["conformance_fixture_set"]["index_sha256"]
+        == "b6e007bd47fd64b030391d90b17dda99ee12310aa0cce48bb0fdd0f74118dca5"
+    )
+    assert profile["conformance_fixture_set"]["location"].endswith("interface-freeze-v0.1/")

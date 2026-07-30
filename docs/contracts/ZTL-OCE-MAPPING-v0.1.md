@@ -115,6 +115,19 @@ Applied last. `DM-1` is the identity and is never recorded in `applied_control_o
 | DM-2 | decision_mode in {human_judgment, escalation_only, non_automatable} | PRESERVE | ESCALATE | CONTROL_REQUIREMENT | OIC-D-0002 |
 | DM-3 | decision_mode in {advisory, evidence_only} | PRESERVE | ADVISORY | CONTROL_REQUIREMENT | OIC-D-0003 |
 
+### Semantic conformance rules
+
+JSON Schema cannot express these. A record passing the schema and failing one of them is **invalid**.
+
+| ID | Name | Applies to | Requirement | Not expressible as |
+|---|---|---|---|---|
+| SC-RD-001 | SUBSCRIPTION_GROUND_COVERAGE | RuntimeDecision where epistemic_status = CONDITIONALLY_SUPPORTED and execution_disposition = ALLOW | conditional_support_subscription_ground_ids must EQUAL missing_ground_ids exactly, including canonical order. Not a subset, not a superset, not a reordering. | equality between two sibling arrays |
+| SC-RD-002 | SUBSCRIPTION_TRIGGER_SET | RuntimeDecision where epistemic_status = CONDITIONALLY_SUPPORTED and execution_disposition = ALLOW | conditional_support_subscription_triggers must equal exactly ['ground_corrected', 'ground_expired', 'ground_revoked', 'ground_verified', 'relevant_epoch_changed'], in that canonical order. | canonical ordering of an array |
+| SC-RD-003 | OVERLAY_ORDER | every RuntimeDecision | applied_control_overlay_ids must list all applicable stage-2 WP identifiers first, then the single applicable non-identity stage-3 DM identifier last. No duplicates. DM-1 never appears. | ordering constrained by identifier prefix |
+| SC-RD-004 | REASON_CODE_CANONICALIZATION | every RuntimeDecision | reason_codes must be unique, sorted lexicographically, and complete: every matched classification row and every applied policy stage contributes its code. | completeness relative to the mapping |
+| SC-WA-001 | GROUND_PARTITION | WarrantArtifact produced under kernel_profile_id ztl-v0.1 | dependency_ids are exactly the formula atoms marked T or F; unverified_ground_ids are exactly the atoms marked Z; the two arrays are disjoint; their union equals the evaluated formula's atom set. Neither claims minimality. | a partition derived from the evaluated marking |
+| SC-WA-002 | HASH_PROJECTIONS | WarrantArtifact produced under kernel_profile_id ztl-v0.1 | formula_hash is computed over the kernel-rendered formula, not the caller's string. output_hash is computed over the declared semantic projection, which EXCLUDES why and marking. | the provenance of a digest's input |
+
 Stages 2 and 3 may change the execution disposition, the decision basis, and the policy reason codes. Neither may change the epistemic status fixed by stage 1, which is why every rule and overlay declares `epistemic_effect = PRESERVE`. Every matched policy reason code is **retained** even when a later stage changes the final execution disposition.
 
 <!-- MAPPING-TABLE-END -->
