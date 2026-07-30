@@ -27,9 +27,7 @@ RECEIPT_SCHEMA_RELPATH = "benchmarks/preflight/canada/RECEIPT-SCHEMA-v0.1.json"
 SCRIPT_RELPATH = "scripts/acquire_canada_preflight.py"
 
 EXPECTED_STATUS_SHA256 = "4a6894ca72ae8d2efcf48b3d25f8aca3bc1e2e86b6aa6aa5b38af31a52c7fde8"
-EXPECTED_SOURCE_MANIFEST_SHA256 = (
-    "c3ea6162cbeb9a5814f543ec23a02fecacad72053d90258162687ad3f48a2db2"
-)
+EXPECTED_SOURCE_MANIFEST_SHA256 = "c3ea6162cbeb9a5814f543ec23a02fecacad72053d90258162687ad3f48a2db2"
 EXPECTED_SCHEMA_SHA256 = {
     "admission-record.schema.json": (
         "d040c4c86794268e26d9dd833ecd3a40347b724fbd73fb3accb3df355065f748"
@@ -55,9 +53,7 @@ EXPECTED_SCHEMA_SHA256 = {
     "source-document.schema.json": (
         "865f128e687e9bbd46ae8fbcc807ed5610a2064703ac5961bf738cba03fa9a50"
     ),
-    "source-node.schema.json": (
-        "bc79f3e1f1449ef2f0570f6458371f621c0e6930ff71892738f5c765a35e80f2"
-    ),
+    "source-node.schema.json": ("bc79f3e1f1449ef2f0570f6458371f621c0e6930ff71892738f5c765a35e80f2"),
 }
 
 REQUIRED_REGISTRY_FIELDS = {
@@ -119,9 +115,7 @@ class AcquisitionModule(Protocol):
 
     def canonical_json_bytes(self, value: object) -> bytes: ...
 
-    def source_by_id(
-        self, source_id: str, sources: list[dict[str, Any]]
-    ) -> dict[str, Any]: ...
+    def source_by_id(self, source_id: str, sources: list[dict[str, Any]]) -> dict[str, Any]: ...
 
     def validate_content_type(self, actual: str | None, expected: str) -> str: ...
 
@@ -343,16 +337,15 @@ def test_governing_files_are_byte_identical(repo_root: Path) -> None:
 
 
 def test_no_semantic_artifact_types_are_created(repo_root: Path) -> None:
-    changed = {
-        path
-        for path in subprocess.run(
+    changed = set(
+        subprocess.run(
             ["git", "diff", "--name-only", "37d6fa4dd12f7f26c632169611b13c251bbec14a...HEAD"],
             cwd=repo_root,
             check=True,
             capture_output=True,
             text=True,
         ).stdout.splitlines()
-    }
+    )
     prohibited_fragments = {
         "candidate-normative",
         "control-envelope",
