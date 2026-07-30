@@ -111,7 +111,7 @@
         "Does not establish source authenticity, institutional authority, or admission.",
         "Does not decide ALLOW, BLOCK, or ESCALATE."
       ],
-      "output_hash": "sha256:f96aef3f6e68396bd01a8d0575d01670634878cf15a77268f5fcd8b92ae5c8f3",
+      "output_hash": "sha256:d6f2860e6e0e53b4354b09c00f993ebf0370b5dc4c4030b9635e36134b445243",
       "raw_verdict": "T",
       "recomputation_reference": "ztl@e819dec7e89d2dc67d6371e1eedb8e7aae854602 judge(input_hash=sha256:d7725764a33353c4566b2e6bcd03c171fbe4ef37c14d053400ff29b73ca4d517)",
       "revocation_references": [],

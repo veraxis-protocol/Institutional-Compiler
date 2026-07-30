@@ -50,6 +50,7 @@
       "primary_reason_code": "OIC-W-0002",
       "reachability": "REACHABLE",
       "row_id": 1,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "ABSENT"
     },
@@ -69,6 +70,7 @@
       "primary_reason_code": "OIC-W-0001",
       "reachability": "REACHABLE",
       "row_id": 2,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "ABSENT"
     },
@@ -88,6 +90,7 @@
       "primary_reason_code": "OIC-W-0003",
       "reachability": "REACHABLE",
       "row_id": 3,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "MALFORMED"
     },
@@ -107,6 +110,7 @@
       "primary_reason_code": "OIC-W-0004",
       "reachability": "REACHABLE",
       "row_id": 4,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "UNVERIFIABLE"
     },
@@ -126,6 +130,7 @@
       "primary_reason_code": "OIC-W-0026",
       "reachability": "REACHABLE",
       "row_id": 5,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "MALFORMED"
     },
@@ -145,6 +150,7 @@
       "primary_reason_code": "OIC-W-0005",
       "reachability": "REACHABLE",
       "row_id": 6,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "STALE"
     },
@@ -164,6 +170,7 @@
       "primary_reason_code": "OIC-W-0006",
       "reachability": "REACHABLE",
       "row_id": 7,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "EXPIRED"
     },
@@ -183,6 +190,7 @@
       "primary_reason_code": "OIC-W-0021",
       "reachability": "REACHABLE",
       "row_id": 8,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "NOT_YET_VALID"
     },
@@ -202,6 +210,7 @@
       "primary_reason_code": "OIC-W-0020",
       "reachability": "REACHABLE",
       "row_id": 9,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "REVOKED"
     },
@@ -221,6 +230,7 @@
       "primary_reason_code": "OIC-W-0007",
       "reachability": "REACHABLE",
       "row_id": 10,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "REVOKED"
     },
@@ -240,6 +250,7 @@
       "primary_reason_code": "OIC-W-0008",
       "reachability": "REACHABLE",
       "row_id": 11,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -259,6 +270,7 @@
       "primary_reason_code": "OIC-W-0009",
       "reachability": "REACHABLE",
       "row_id": 12,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -278,6 +290,7 @@
       "primary_reason_code": "OIC-W-0010",
       "reachability": "REACHABLE",
       "row_id": 13,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -297,6 +310,7 @@
       "primary_reason_code": "OIC-W-0011",
       "reachability": "REACHABLE",
       "row_id": 14,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -316,6 +330,7 @@
       "primary_reason_code": "OIC-W-0023",
       "reachability": "REACHABLE",
       "row_id": 15,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -335,6 +350,7 @@
       "primary_reason_code": "OIC-W-0018",
       "reachability": "REACHABLE",
       "row_id": 16,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -354,6 +370,7 @@
       "primary_reason_code": "OIC-W-0019",
       "reachability": "REACHABLE",
       "row_id": 17,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "MISBOUND"
     },
@@ -373,6 +390,7 @@
       "primary_reason_code": "OIC-W-0017",
       "reachability": "REACHABLE",
       "row_id": 18,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "UNSUPPORTED_GRADE"
     },
@@ -392,6 +410,7 @@
       "primary_reason_code": "OIC-W-0022",
       "reachability": "REACHABLE",
       "row_id": 19,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "UNSUPPORTED_RESULT"
     },
@@ -411,6 +430,7 @@
       "primary_reason_code": "OIC-W-0022",
       "reachability": "REACHABLE",
       "row_id": 20,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "UNSUPPORTED_RESULT"
     },
@@ -430,6 +450,7 @@
       "primary_reason_code": "OIC-W-0024",
       "reachability": "REACHABLE",
       "row_id": 21,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "NOT_REQUIRED"
     },
@@ -448,6 +469,7 @@
       "primary_reason_code": "OIC-W-0014",
       "reachability": "REACHABLE",
       "row_id": 22,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "USABLE"
     },
@@ -466,6 +488,7 @@
       "primary_reason_code": "OIC-W-0013",
       "reachability": "REACHABLE",
       "row_id": 23,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "USABLE"
     },
@@ -485,6 +508,7 @@
       "primary_reason_code": "OIC-W-0012",
       "reachability": "REACHABLE",
       "row_id": 24,
+      "stage_2_applies": false,
       "unverified": "non-empty",
       "warrant_state": "USABLE"
     },
@@ -504,6 +528,7 @@
       "primary_reason_code": "OIC-W-0012",
       "reachability": "REACHABLE",
       "row_id": 25,
+      "stage_2_applies": false,
       "unverified": "non-empty",
       "warrant_state": "USABLE"
     },
@@ -523,6 +548,7 @@
       "primary_reason_code": "OIC-W-0022",
       "reachability": "NOT_REACHABLE",
       "row_id": 26,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "UNSUPPORTED_RESULT"
     },
@@ -541,6 +567,7 @@
       "primary_reason_code": "OIC-D-0001",
       "reachability": "REACHABLE",
       "row_id": 27,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "USABLE"
     },
@@ -561,6 +588,7 @@
       "primary_reason_code": "OIC-W-0015",
       "reachability": "REACHABLE",
       "row_id": 28,
+      "stage_2_applies": true,
       "unverified": "non-empty",
       "warrant_state": "USABLE"
     },
@@ -580,6 +608,7 @@
       "primary_reason_code": "OIC-W-0025",
       "reachability": "REACHABLE",
       "row_id": 29,
+      "stage_2_applies": false,
       "unverified": "non-empty",
       "warrant_state": "USABLE"
     },
@@ -599,6 +628,7 @@
       "primary_reason_code": "OIC-W-0022",
       "reachability": "NOT_REACHABLE",
       "row_id": 30,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "UNSUPPORTED_RESULT"
     },
@@ -618,6 +648,7 @@
       "primary_reason_code": "OIC-W-0022",
       "reachability": "NOT_REACHABLE",
       "row_id": 31,
+      "stage_2_applies": false,
       "unverified": "any",
       "warrant_state": "UNSUPPORTED_RESULT"
     },
@@ -637,6 +668,7 @@
       "primary_reason_code": "OIC-W-0027",
       "reachability": "REACHABLE",
       "row_id": 32,
+      "stage_2_applies": false,
       "unverified": "non-empty",
       "warrant_state": "USABLE"
     }
@@ -697,6 +729,7 @@
       "note": "Precedence within this stage runs 1 to 5; the most restrictive match wins."
     },
     "2_warrant_policy": {
+      "applies_when": "the matched classification row declares stage_2_applies. Only row 28 (ON CREDIT + sound) does: rows whose stage-1 basis already determines the outcome do not delegate.",
       "artifact": "warrant_policy_rules",
       "determines": [
         "execution_disposition",
@@ -788,9 +821,17 @@
         "applies_to": "WarrantArtifact produced under kernel_profile_id ztl-v0.1",
         "name": "HASH_PROJECTIONS",
         "not_expressible_in_json_schema": "the provenance of a digest's input",
-        "requirement": "formula_hash is computed over the kernel-rendered formula, not the caller's string. output_hash is computed over the declared semantic projection, which EXCLUDES why and marking.",
+        "requirement": "Both digests are RECOMPUTED and compared, not merely required to be present. formula_hash = SHA-384 over the UTF-8 bytes of the kernel-rendered formula, serialised sha384:<96 lowercase hex>. output_hash = SHA-256 over the semantic projection {kernel_rendered_formula, disposition, raw_verdict, warranty_grade, unverified_ground_ids}, serialised UTF-8 with sorted keys, compact separators ',' and ':', no ASCII escaping and no whitespace, as sha256:<64 lowercase hex>. why, marking, dependency_ids, generated_at and every OIC-enriched field are excluded.",
         "rule_id": "SC-WA-002",
         "why": "Hashing the caller's string makes two callers who wrote the same formula differently disagree about the same proposition. Including why makes replay fail on a cosmetic edit."
+      },
+      {
+        "applies_to": "every RuntimeDecision",
+        "name": "OVERLAY_COMPLETENESS",
+        "not_expressible_in_json_schema": "completeness relative to the envelope and kernel result",
+        "requirement": "applied_control_overlay_ids must equal, exactly and in order, the overlays derivable from the envelope and kernel result: the applicable stage-2 WP rule where the classification row declares stage_2_applies, then the applicable non-identity stage-3 DM overlay.",
+        "rule_id": "SC-RD-005",
+        "why": "An omitted overlay makes the lineage under-report which stage produced the outcome; an extra one claims a rule fired that did not. Both are invisible to a schema, which can only see that the array is well formed."
       }
     ]
   },

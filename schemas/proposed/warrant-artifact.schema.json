@@ -109,14 +109,16 @@
       "items": {
         "$ref": "#/$defs/identifier"
       },
-      "description": "Formula atoms marked Z, echoed verbatim from the caller's marking. Always surfaced as missing_ground_ids on the runtime decision, including on ALLOW. The MEANING depends on the disposition: informational under EARNED and REFUTED, load-bearing under ON CREDIT, blocking under OPEN. Atom IDENTITY is the caller's responsibility."
+      "description": "Formula atoms marked Z, echoed verbatim from the caller's marking. Always surfaced as missing_ground_ids on the runtime decision, including on ALLOW. The MEANING depends on the disposition: informational under EARNED and REFUTED, load-bearing under ON CREDIT, blocking under OPEN. Atom IDENTITY is the caller's responsibility. Order is the KERNEL-EMITTED order and is NOT sorted by OIC: output_hash binds it, so re-ordering would change the digest of an unchanged result.",
+      "uniqueItems": true
     },
     "dependency_ids": {
       "type": "array",
       "items": {
         "$ref": "#/$defs/identifier"
       },
-      "description": "Every VERIFIED atom (marked T or F) appearing in the kernel-evaluated formula. Disjoint from unverified_ground_ids by construction. This is a deliberate OVER-APPROXIMATION and minimality is NOT claimed: measured, 38 of 180 census cases with two or more verified grounds have a PAIR whose joint withdrawal moves the disposition although neither member does alone, so a minimised set would let a revocation propagate to nothing and leave a stale warrant usable. SEMANTIC RULE SC-WA-001: exactly the atoms marked T or F, disjoint from unverified_ground_ids, and together with them covering the formula's atom set."
+      "description": "Every VERIFIED atom (marked T or F) appearing in the kernel-evaluated formula. Disjoint from unverified_ground_ids by construction. This is a deliberate OVER-APPROXIMATION and minimality is NOT claimed: measured, 38 of 180 census cases with two or more verified grounds have a PAIR whose joint withdrawal moves the disposition although neither member does alone, so a minimised set would let a revocation propagate to nothing and leave a stale warrant usable. SEMANTIC RULE SC-WA-001: exactly the atoms marked T or F, disjoint from unverified_ground_ids, and together with them covering the formula's atom set. Deterministic derivation order: lexicographic by identifier. Unique by construction, since the two arrays partition a set of atoms.",
+      "uniqueItems": true
     },
     "ground_epoch": {
       "type": "object",

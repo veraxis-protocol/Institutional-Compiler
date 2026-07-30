@@ -13,6 +13,13 @@ canonical ordering, binding across artifacts, or anything derived from the evalu
 marking. Those six rules live here. **A record passing the schema but failing one of these
 is invalid**; structural validation alone is not conformance.
 
+What SC-WA-002 does
+-------------------
+It **recomputes** both digests and compares them, rather than checking that the fields are
+present. `formula_hash` is re-derived by SHA-384 over the UTF-8 bytes of the kernel-rendered
+formula, and `output_hash` by SHA-256 over the declared five-field projection. A record
+carrying a well-formed but wrong digest is rejected.
+
 Scope
 -----
 Reads artifacts and returns findings. It calls nothing, evaluates no policy, and makes no
@@ -22,6 +29,8 @@ acceptance suite — they do not become part of it.
 
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import dataclass
 from typing import Any
 
@@ -30,6 +39,8 @@ __all__ = [
     "Finding",
     "check_runtime_decision",
     "check_warrant_artifact",
+    "expected_formula_hash",
+    "expected_output_hash",
 ]
 
 #: Declared canonical order. Not merely "these five" — this order.
@@ -42,6 +53,45 @@ CANONICAL_TRIGGERS: tuple[str, ...] = (
 )
 
 _ZTL_PROFILE = "ztl-v0.1"
+
+#: Fields the output projection includes. Everything else is excluded on purpose:
+#: `why` is presentational, `marking` is input, and the OIC-enriched fields
+#: (dependency_ids, generated_at, anchors, admissions) are not kernel output at all.
+_OUTPUT_PROJECTION_FIELDS = (
+    "kernel_rendered_formula",
+    "disposition",
+    "raw_verdict",
+    "warranty_grade",
+    "unverified_ground_ids",
+)
+
+
+def expected_formula_hash(rendered_formula: str) -> str:
+    """SHA-384 over the UTF-8 bytes of the KERNEL-RENDERED formula.
+
+    Not the caller's string. `(p \u2228 q)` and `p | q` are the same proposition and must
+    not be the same digest input, or two callers who wrote it differently would disagree.
+    """
+    return "sha384:" + hashlib.sha384(rendered_formula.encode("utf-8")).hexdigest()
+
+
+def expected_output_hash(warrant: dict[str, Any]) -> str:
+    """SHA-256 over the declared semantic output projection.
+
+    Serialised UTF-8, sorted keys, compact separators, no ASCII escaping, no whitespace.
+    """
+    projection = {
+        "kernel_rendered_formula": warrant["formula"],
+        "disposition": warrant["disposition"],
+        "raw_verdict": warrant["raw_verdict"],
+        "warranty_grade": warrant["warranty_grade"],
+        "unverified_ground_ids": list(warrant["unverified_ground_ids"]),
+    }
+    assert set(projection) == set(_OUTPUT_PROJECTION_FIELDS)
+    payload = json.dumps(
+        projection, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")
+    return "sha256:" + hashlib.sha256(payload).hexdigest()
 
 
 @dataclass(frozen=True, slots=True)
@@ -59,12 +109,18 @@ def check_runtime_decision(
     decision: dict[str, Any],
     *,
     expected_reason_codes: frozenset[str] | None = None,
+    expected_applied_overlay_ids: list[str] | None = None,
 ) -> list[Finding]:
-    """Apply SC-RD-001 to SC-RD-004.
+    """Apply SC-RD-001 to SC-RD-005.
 
     ``expected_reason_codes`` supplies the completeness half of SC-RD-004: the codes the
-    mapping says this decision's matched stages must contribute. Omit it to check only the
-    uniqueness and ordering halves.
+    mapping says this decision's matched stages must contribute -- the classification row's
+    primary code **always**, plus every applied rule's policy code. Omit it to check only
+    the uniqueness and ordering halves.
+
+    ``expected_applied_overlay_ids`` supplies SC-RD-005: the overlays derivable from the
+    envelope and kernel result. When given, the recorded list must equal it exactly,
+    including order.
     """
     findings: list[Finding] = []
     conditional_allow = (
@@ -129,6 +185,16 @@ def check_runtime_decision(
                 )
             )
 
+    # --- SC-RD-005 overlay completeness ---
+    if expected_applied_overlay_ids is not None and applied != expected_applied_overlay_ids:
+        findings.append(
+            Finding(
+                "SC-RD-005",
+                f"applied overlays are {applied!r}; the envelope and kernel result derive "
+                f"{expected_applied_overlay_ids!r}",
+            )
+        )
+
     return findings
 
 
@@ -151,6 +217,9 @@ def check_warrant_artifact(
     unverified = list(warrant.get("unverified_ground_ids") or ())
 
     # --- SC-WA-001 ground partition ---
+    for name, values in (("dependency_ids", dependencies), ("unverified_ground_ids", unverified)):
+        if len(values) != len(set(values)):
+            findings.append(Finding("SC-WA-001", f"duplicate identifier in {name}: {values!r}"))
     overlap = set(dependencies) & set(unverified)
     if overlap:
         findings.append(
@@ -187,17 +256,40 @@ def check_warrant_artifact(
                 )
             )
 
-    # --- SC-WA-002 hash projections ---
-    if rendered_formula is not None and warrant.get("formula") != rendered_formula:
-        findings.append(
-            Finding(
-                "SC-WA-002",
-                f"formula is {warrant.get('formula')!r}, not the kernel rendering "
-                f"{rendered_formula!r}",
-            )
-        )
+    # --- SC-WA-002 hash projections, RECOMPUTED ---
     for field in ("formula", "formula_hash", "output_hash"):
         if not warrant.get(field):
             findings.append(Finding("SC-WA-002", f"{field} is absent"))
+            return findings
+
+    if rendered_formula is not None and warrant["formula"] != rendered_formula:
+        findings.append(
+            Finding(
+                "SC-WA-002",
+                f"formula is {warrant['formula']!r}, not the kernel rendering {rendered_formula!r}",
+            )
+        )
+
+    wanted_formula_hash = expected_formula_hash(warrant["formula"])
+    if warrant["formula_hash"] != wanted_formula_hash:
+        findings.append(
+            Finding(
+                "SC-WA-002",
+                f"formula_hash is {warrant['formula_hash']}, recomputes to "
+                f"{wanted_formula_hash} over the kernel-rendered formula "
+                f"{warrant['formula']!r}",
+            )
+        )
+
+    wanted_output_hash = expected_output_hash(warrant)
+    if warrant["output_hash"] != wanted_output_hash:
+        findings.append(
+            Finding(
+                "SC-WA-002",
+                f"output_hash is {warrant['output_hash']}, recomputes to "
+                f"{wanted_output_hash} over the declared projection "
+                f"{list(_OUTPUT_PROJECTION_FIELDS)}",
+            )
+        )
 
     return findings
