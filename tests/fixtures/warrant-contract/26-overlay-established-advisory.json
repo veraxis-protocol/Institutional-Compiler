@@ -1,0 +1,150 @@
+{
+  "applied_control_overlay_ids": [
+    "DM-3"
+  ],
+  "case_id": "26-overlay-established-advisory",
+  "classification_row": 27,
+  "description": "Recorded, does not gate.",
+  "expected": {
+    "decision_basis": "CONTROL_REQUIREMENT",
+    "epistemic_status": "ESTABLISHED",
+    "execution_disposition": "ADVISORY",
+    "missing_ground_anchors": [],
+    "missing_ground_ids": [],
+    "reason_codes": [
+      "OIC-D-0001",
+      "OIC-D-0003"
+    ],
+    "runtime_decision": {
+      "admission_version": "adm-v3",
+      "applied_control_overlay_ids": [
+        "DM-3"
+      ],
+      "authority_version": "auth-v2",
+      "conditional_support_subscription_ground_ids": [],
+      "conditional_support_subscription_reference": null,
+      "conditional_support_subscription_triggers": [],
+      "control_id": "ctl:proc-approval",
+      "control_version": "1.0.0",
+      "decision_basis": "CONTROL_REQUIREMENT",
+      "envelope_id": "env:proc-001",
+      "epistemic_status": "ESTABLISHED",
+      "evaluated_at": "2026-08-01T12:00:00Z",
+      "evaluation_id": "eval:26",
+      "execution_disposition": "ADVISORY",
+      "input_hash": "sha256:6d332a3f176bbbfd023842a84c91b1e09f256507d3137c40de852e8a3f21837b",
+      "missing_ground_anchors": [],
+      "missing_ground_ids": [],
+      "on_unknown_applied": null,
+      "reason_codes": [
+        "OIC-D-0001",
+        "OIC-D-0003"
+      ],
+      "replay_reference": "replay:26-overlay-established-advisory@sha256:6d332a3f176bbbfd023842a84c91b1e09f256507d3137c40de852e8a3f21837b",
+      "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
+      "unverified_ground_policy_applied": null,
+      "warrant_artifact_id": "warrant:26",
+      "warrant_requirement_mode": "required",
+      "warrant_state": "USABLE",
+      "warranty_grade_observed": "hereditary",
+      "warranty_grade_required": "hereditary"
+    },
+    "warrant_state": "USABLE"
+  },
+  "input": {
+    "envelope": {
+      "bound_canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
+      "bound_formula_hash": "sha384:c5fd0cf3318ec40056117c73d3e5dc4a3e8afa7b26f90905c916db73fd618f63f3667c8d7ea9a3125f19cb3614535868",
+      "bound_kernel_profile_id": "ztl-v0.1",
+      "control_id": "ctl:proc-approval",
+      "control_version": "1.0.0",
+      "decision_mode": "advisory",
+      "envelope_id": "env:proc-001",
+      "on_unknown": "deny",
+      "warrant_requirement": {
+        "kernel_profile_id": "ztl-v0.1",
+        "minimum_warranty_grade": "hereditary",
+        "mode": "required",
+        "on_insufficient_grade": "escalate",
+        "unverified_ground_policy": "forbid"
+      }
+    },
+    "runtime_context": {
+      "admission_version": "adm-v3",
+      "authority_version": "auth-v2",
+      "contradiction_detected": false,
+      "current_ground_epoch": {
+        "authority_id": "authority:proc-registry",
+        "scope_id": "scope:proc-grounds",
+        "sequence": 7
+      },
+      "current_ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
+      "evaluated_at": "2026-08-01T12:00:00Z",
+      "expired_ground_ids": [],
+      "kernel_available": true,
+      "revoked_ground_ids": [],
+      "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4"
+    },
+    "warrant_artifact": {
+      "admission_ids": [
+        "adm:001"
+      ],
+      "canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
+      "claim_id": "claim:procurement-approval",
+      "dependency_ids": [
+        "ground:registered",
+        "ground:under_threshold"
+      ],
+      "disposition": "EARNED",
+      "formula": "(ground:registered ∧ ground:under_threshold)",
+      "formula_hash": "sha384:c5fd0cf3318ec40056117c73d3e5dc4a3e8afa7b26f90905c916db73fd618f63f3667c8d7ea9a3125f19cb3614535868",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "ground_epoch": {
+        "authority_id": "authority:proc-registry",
+        "scope_id": "scope:proc-grounds",
+        "sequence": 7
+      },
+      "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
+      "input_hash": "sha256:e6d1d98ce57cd5c8c56bffbf4ddc20a60785bdc96f506033f528f07bd907588b",
+      "kernel_commit": "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b",
+      "kernel_name": "ztl",
+      "kernel_profile_id": "ztl-v0.1",
+      "kernel_version": "veraxis-ztl-input-v0.1",
+      "limitations": [
+        "Establishes propositional structure over supplied grounds only.",
+        "Does not establish source authenticity, institutional authority, or admission.",
+        "Does not decide ALLOW, BLOCK, or ESCALATE."
+      ],
+      "output_hash": "sha256:d7b8fa73e35118dc04f893c9970e0a9b1d0286437e5995ff1e2278654207fbc3",
+      "raw_verdict": "T",
+      "recomputation_reference": "ztl@56e1ff0510c62b04dbd85bbe08b7a6deacbf276b judge(input_hash=sha256:e6d1d98ce57cd5c8c56bffbf4ddc20a60785bdc96f506033f528f07bd907588b)",
+      "revocation_references": [],
+      "schema_version": "0.1.0",
+      "source_anchor_ids": [
+        "anchor:a1"
+      ],
+      "time_binding": {
+        "attestation_hash": "sha256:4a41bae260536b9ad8f4dd3efa4507834c12971824db9457eeacb1608872246e",
+        "reference": "tsa:veraxis-dev",
+        "source": "attested_timestamp"
+      },
+      "unverified_ground_ids": [],
+      "valid_from": "2026-07-01T00:00:00Z",
+      "valid_until": "2026-12-31T23:59:59Z",
+      "warrant_artifact_id": "warrant:26",
+      "warranty_grade": "hereditary"
+    },
+    "ztl_result": {
+      "disposition": "EARNED",
+      "grade": "hereditary",
+      "marking": {
+        "ground:registered": "T",
+        "ground:under_threshold": "T"
+      },
+      "raw_verdict": "T",
+      "unverified": []
+    }
+  },
+  "reachability": "REACHABLE",
+  "status": "PROPOSED - conformance fixture, not admitted"
+}
