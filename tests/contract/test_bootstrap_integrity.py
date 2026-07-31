@@ -22,6 +22,7 @@ from oic.baseline import BaselineStatus, BlobStatus, verify_bootstrap_baseline
 from oic.errors import ConfigurationError
 from oic.hashing import hash_file
 from oic.manifests import (
+    EntryStatus,
     ManifestKind,
     VerificationStatus,
     verify_all,
@@ -92,15 +93,17 @@ def test_bootstrap_manifest_covers_the_expected_file_count(repo_root: Path) -> N
 
 
 def test_preflight_source_manifest_is_reported_incomplete(repo_root: Path) -> None:
-    """The corpus manifest holds only its header today.
+    """The corpus manifest holds one partially frozen row today.
 
-    STATUS.md records preflight corpus provenance as OPEN. This test pins the tooling to
-    that reality: an empty corpus manifest must never verify as complete or corpus-ready.
+    STATUS.md records preflight corpus provenance as OPEN. The Canada rights freeze added
+    CA-3 and left ten source units blocked. The manifest schema carries no path column, so
+    the verifier cannot bind a row to its committed bytes and must never report PASS.
+    Byte-level verification is scripts/verify_canada_freeze.py, not this verifier.
     """
     report = verify_source_manifest(repo_root / SOURCE_MANIFEST_RELPATH, repo_root)
     assert report.status is VerificationStatus.INCOMPLETE
-    assert report.entries == ()
-    assert any("not corpus-ready" in note for note in report.notes)
+    assert [entry.status.name for entry in report.entries] == ["RECORDED_NOT_VERIFIED"]
+    assert not any(entry.status is EntryStatus.PASS for entry in report.entries)
 
 
 def test_verify_all_covers_only_current_tree_manifests(repo_root: Path) -> None:

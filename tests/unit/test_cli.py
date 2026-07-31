@@ -302,8 +302,11 @@ def test_json_manifest_output_never_reports_an_empty_corpus_as_pass(
     payload = json.loads(out)
     source = next(m for m in payload["manifests"] if m["kind"] == "source-manifest")
     assert source["status"] == "INCOMPLETE"
-    assert source["entry_count"] == 0
+    # The Canada rights freeze recorded CA-3 and left ten source units blocked. A recorded
+    # row must never count as a verified one.
+    assert source["entry_count"] == 1
     assert source["summary"]["PASS"] == 0
+    assert source["summary"]["RECORDED_NOT_VERIFIED"] == 1
 
 
 # ---------------------------------------------------------------------------
