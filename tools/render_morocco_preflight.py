@@ -85,6 +85,30 @@ def render_source_register(data: dict[str, Any]) -> str:
             for source in sources
         ],
     )
+    lines += ["", "## Mission evidence observations", ""]
+    lines += _table(
+        [
+            "Candidate",
+            "Consultation",
+            "Tender artifact",
+            "Commission artifact",
+            "Result artifact",
+            "Observed",
+            "Bytes",
+        ],
+        [
+            [
+                observation["candidate_id"],
+                observation["consultation_record_url"],
+                observation["verified_tender_artifact_url"],
+                observation["verified_commission_artifact_url"],
+                observation["verified_result_artifact_url"],
+                observation["observed_utc"],
+                observation["bytes_acquired"],
+            ]
+            for observation in data["mission_evidence_observations"]
+        ],
+    )
     return "\n".join(lines) + "\n"
 
 
@@ -111,6 +135,17 @@ def render_normative_map(data: dict[str, Any]) -> str:
             for entry in data["entries"]
         ],
     )
+    lines += ["", "## Proposed normative corpus", ""] + [
+        f"- {source_id}" for source_id in data["proposed_normative_corpus"]
+    ]
+    lines += ["", "## Excluded discovery candidates", ""]
+    lines += _table(
+        ["ID", "Reason"],
+        [
+            [entry["source_id"], entry["reason"]]
+            for entry in data["excluded_from_proposed_normative_corpus"]
+        ],
+    )
     lines += ["", "## Unresolved", ""] + [f"- {item}" for item in data["unresolved"]]
     return "\n".join(lines) + "\n"
 
@@ -135,7 +170,10 @@ def render_candidates(data: dict[str, Any]) -> str:
             "Deadline",
             "State",
             "Portal",
-            "Objects",
+            "Tender artifacts",
+            "Commission artifacts",
+            "Result artifacts",
+            "Gate",
             "Disposition",
         ],
         [
@@ -147,10 +185,56 @@ def render_candidates(data: dict[str, Any]) -> str:
                 case["submission_deadline"],
                 case["state"],
                 case["official_portal_url"],
-                case["associated_public_objects"],
+                [item["artifact_id"] for item in case["verified_tender_document_artifacts"]],
+                [
+                    item["artifact_id"]
+                    for item in case["verified_commission_or_evaluation_artifacts"]
+                ],
+                [item["artifact_id"] for item in case["verified_award_or_result_artifacts"]],
+                "PASS" if case["mandatory_gate"]["eligible"] else "FAIL",
                 case["engineering_disposition"],
             ]
             for case in data["candidates"]
+        ],
+    )
+    lines += ["", "## Verified tender-document artifacts", ""]
+    lines += _table(
+        [
+            "Candidate",
+            "Artifact",
+            "Type",
+            "Exact official URL",
+            "Public state",
+            "Login",
+            "CAPTCHA",
+            "Bypass",
+            "Observed",
+            "Bytes",
+        ],
+        [
+            [
+                case["candidate_id"],
+                artifact["artifact_id"],
+                artifact["artifact_type"],
+                artifact["exact_official_url"],
+                artifact["public_accessibility_state"],
+                artifact["login_required"],
+                artifact["captcha_required"],
+                artifact["access_control_bypass_required"],
+                artifact["observed_utc"],
+                artifact["bytes_acquired"],
+            ]
+            for case in data["candidates"]
+            for artifact in case["verified_tender_document_artifacts"]
+        ],
+    )
+    lines += ["", "## Evidence-derived mandatory gate", ""]
+    lines += _table(
+        ["Candidate", "Criterion", "Passed", "Evidence"],
+        [
+            [case["candidate_id"], criterion, result["passed"], result["evidence_refs"]]
+            for case in data["candidates"]
+            for criterion, result in case["mandatory_gate"]["criteria"].items()
         ],
     )
     lines += ["", "## Missing objects", ""]
@@ -182,17 +266,27 @@ def render_scorecard(data: dict[str, Any]) -> str:
                 score["candidate_id"],
                 *score["values"],
                 score["total"],
-                score["mandatory_minimum"],
+                score["mandatory_gate_result"],
                 score["nomination"],
             ]
             for score in data["scores"]
         ],
     )
+    preferred = data["preferred"]
+    fallback = data["fallback"]
+    lines += ["", f"Outcome: **{data['selection_outcome']}**", ""]
     lines += [
+        (
+            f"Preferred: **{preferred['mission_id']} → {preferred['candidate_id']}**"
+            if preferred is not None
+            else "Preferred: **none**"
+        ),
         "",
-        f"Preferred: **{data['preferred']['mission_id']} → {data['preferred']['candidate_id']}**",
-        "",
-        f"Fallback: **{data['fallback']['candidate_id']}**",
+        (
+            f"Fallback: **{fallback['candidate_id']}**"
+            if fallback is not None
+            else "Fallback: **none**"
+        ),
         "",
     ]
     return "\n".join(lines)
@@ -244,6 +338,11 @@ def render_constraints(data: dict[str, Any]) -> str:
 
 def render_decision(data: dict[str, Any]) -> str:
     preferred = data["preferred_mission"]
+    fallback = data["fallback_mission"]
+    preferred_text = (
+        f"{preferred['mission_id']} — {preferred['reference']}" if preferred is not None else "none"
+    )
+    fallback_text = fallback["reference"] if fallback is not None else "none"
     return "\n".join(
         [
             "# Morocco Preflight Decision v0.1",
@@ -254,13 +353,18 @@ def render_decision(data: dict[str, Any]) -> str:
             "",
             f"PMP candidates: **{data['pmp_candidate_count']}**",
             "",
-            f"Preferred: **{preferred['mission_id']} — {preferred['reference']}**",
+            f"Mission selection: **{data['mission_selection_status']}**",
             "",
-            f"Fallback: **{data['fallback_mission']['reference']}**",
+            f"Preferred: **{preferred_text}**",
+            "",
+            f"Fallback: **{fallback_text}**",
             "",
             data["decision_basis"],
             "",
             f"No source bytes acquired: **{_cell(data['no_source_bytes_acquired'])}**",
+            "",
+            "No tender-document bytes acquired: "
+            f"**{_cell(data['no_tender_document_bytes_acquired'])}**",
             "",
             f"No semantic processing: **{_cell(data['no_semantic_processing'])}**",
             "",

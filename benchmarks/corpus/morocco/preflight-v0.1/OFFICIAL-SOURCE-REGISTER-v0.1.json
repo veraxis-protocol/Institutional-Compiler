@@ -1,7 +1,7 @@
 {
   "document_id": "OAM-MOROCCO-OFFICIAL-SOURCE-REGISTER-v0.1",
   "status": "PREFLIGHT_ONLY_NO_BYTES_ACQUIRED",
-  "observed_utc": "2026-07-31T00:00:00Z",
+  "observed_utc": "2026-07-31T20:49:46Z",
   "permitted_domains": ["tgr.gov.ma", "marchespublics.gov.ma", "sgg.gov.ma", "courdescomptes.ma", "govtech.trustvalley.swiss", "worldbank.org"],
   "engineering_dispositions": ["PUBLIC_REPO_BYTES_CANDIDATE", "LOCAL_REAL_BYTES_HASHED", "LINK_AND_RECEIPT_ONLY", "BLOCKED_TECHNICALLY", "BLOCKED_ACCESS_CONTROL", "UNRESOLVED"],
   "sources": [
@@ -104,8 +104,8 @@
       "redirect_behavior": "NOT_BYTE_TESTED_IN_PREFLIGHT",
       "expected_byte_format": "PDF",
       "translation_status": "ORIGINAL_FRENCH_PUBLICATION",
-      "proposed_corpus_use": "Sectoral candidate only for a works procurement mission; relevance is metadata-level and not a legal applicability conclusion",
-      "proposed_storage_disposition": "LINK_AND_RECEIPT_ONLY_PENDING_OWNER_SCOPE_AND_RIGHTS",
+      "proposed_corpus_use": "DISCOVERY_CANDIDATE_NOT_APPLICABLE_TO_CURRENT_MISSION; works CCAG excluded from the proposed normative corpus for the selected goods mission",
+      "proposed_storage_disposition": "LINK_ONLY_NOT_IN_PROPOSED_NORMATIVE_CORPUS",
       "engineering_disposition": "LINK_AND_RECEIPT_ONLY",
       "robots_observation": "No crawler execution; direct official PDF link is visible",
       "visible_download_mechanism": true,
@@ -114,8 +114,8 @@
       "automated_crawling_required": false,
       "source_bytes_appear_stable": "LIKELY_UUID_PATH_NOT_VERIFIED",
       "provenance_without_bypass": true,
-      "acquisition_risks": ["Applicability to a selected mission requires owner/legal confirmation", "Predates Decree 2-22-431"],
-      "unresolved_issues": ["Confirm current applicability and amendment chain without interpreting policy"]
+      "acquisition_risks": ["Predates Decree 2-22-431", "Not applicable to the selected goods mission by procurement category"],
+      "unresolved_issues": ["Current status outside the selected goods mission was not assessed"]
     },
     {
       "source_id": "CDC-CHALLENGE-001",
@@ -172,6 +172,53 @@
       "provenance_without_bypass": true,
       "acquisition_risks": ["Mutable HTML", "Terms and redistribution not reviewed"],
       "unresolved_issues": ["Full French challenge attachment, if any, not acquired"]
+    }
+  ],
+  "mission_evidence_observations": [
+    {
+      "candidate_id": "PMP-CASE-001",
+      "consultation_record_url": "https://www.marchespublics.gov.ma/index.php5?orgAcronyme=p8x&page=entreprise.EntrepriseDetailConsultation&refConsultation=1024549",
+      "verified_tender_artifact_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDemandeTelechargementDce&refConsultation=1024549&orgAcronyme=p8x",
+      "verified_commission_artifact_url": null,
+      "verified_result_artifact_url": null,
+      "observed_utc": "2026-07-31T20:49:46Z",
+      "bytes_acquired": false
+    },
+    {
+      "candidate_id": "PMP-CASE-002",
+      "consultation_record_url": "https://www.marchespublics.gov.ma/index.php5?orgAcronyme=q1s&page=entreprise.EntrepriseDetailConsultation&refConsultation=1017000",
+      "verified_tender_artifact_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDemandeTelechargementDce&refConsultation=1017000&orgAcronyme=q1s",
+      "verified_commission_artifact_url": null,
+      "verified_result_artifact_url": null,
+      "observed_utc": "2026-07-31T20:49:46Z",
+      "bytes_acquired": false
+    },
+    {
+      "candidate_id": "PMP-CASE-003",
+      "consultation_record_url": "https://www.marchespublics.gov.ma/index.php5?orgAcronyme=t5y&page=entreprise.EntrepriseDetailConsultation&refConsultation=1012408",
+      "verified_tender_artifact_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDemandeTelechargementDce&refConsultation=1012408&orgAcronyme=t5y",
+      "verified_commission_artifact_url": null,
+      "verified_result_artifact_url": null,
+      "observed_utc": "2026-07-31T20:49:46Z",
+      "bytes_acquired": false
+    },
+    {
+      "candidate_id": "PMP-CASE-004",
+      "consultation_record_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1015612&orgAcronyme=g0u",
+      "verified_tender_artifact_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDemandeTelechargementDce&refConsultation=1015612&orgAcronyme=g0u",
+      "verified_commission_artifact_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.ExtraitPV&refConsultation=1015612&orgAcronyme=g0u",
+      "verified_result_artifact_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1029218&orgAcronyme=g0u",
+      "observed_utc": "2026-07-31T20:49:46Z",
+      "bytes_acquired": false
+    },
+    {
+      "candidate_id": "PMP-CASE-005",
+      "consultation_record_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1010827&orgAcronyme=g0u",
+      "verified_tender_artifact_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDemandeTelechargementDce&refConsultation=1010827&orgAcronyme=g0u",
+      "verified_commission_artifact_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.ExtraitPV&refConsultation=1010827&orgAcronyme=g0u",
+      "verified_result_artifact_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1029211&orgAcronyme=g0u",
+      "observed_utc": "2026-07-31T20:49:46Z",
+      "bytes_acquired": false
     }
   ]
 }
