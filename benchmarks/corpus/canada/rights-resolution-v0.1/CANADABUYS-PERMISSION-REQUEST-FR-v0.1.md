@@ -23,7 +23,7 @@ Le fichier robots.txt publié à canadabuys.canada.ca comporte un groupe final �
 
 ## Autorisations demandées
 
-1. **Extraction des URL nommées exactes** — Extraction des seules URL sources énumérées dans la présente demande, à l'exclusion de toute autre page du site. Aucune exploration, aucun suivi de liens et aucune découverte de pages supplémentaires.
+1. **Extraction des URL nommées exactes** — Extraction des sept URL sources énumérées dans la présente demande, à l'exclusion de toute autre page du site. Aucune exploration, aucun suivi de liens et aucune découverte de pages supplémentaires.
 
 2. **Utilisation interne à des fins de recherche** — Conservation et lecture des octets extraits au sein de Veraxis aux fins de recherche sur la représentation lisible par machine des règles institutionnelles d'approvisionnement.
 

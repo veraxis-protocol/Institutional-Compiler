@@ -23,7 +23,7 @@ The robots.txt published at canadabuys.canada.ca declares a terminal 'User-agent
 
 ## Permission requested
 
-1. **Retrieval of the exact named URLs** — Retrieval of only the ten source URLs listed in this request, and of no other page on the site. No crawl, no link following, and no discovery of additional pages.
+1. **Retrieval of the exact named URLs** — Retrieval of only the seven source URLs listed in this request, and of no other page on the site. No crawl, no link following, and no discovery of additional pages.
 
 2. **Internal research use** — Retention and reading of the retrieved bytes inside Veraxis for research on machine-readable representation of institutional procurement rules.
 

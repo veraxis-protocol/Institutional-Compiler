@@ -9,6 +9,7 @@ from __future__ import annotations
 import ast
 import copy
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -289,10 +290,122 @@ def test_both_letters_render_every_category_and_commitment(repo_root: Path) -> N
 def test_permission_request_names_exactly_the_seven_canadabuys_sources(
     permission: dict[str, Any],
 ) -> None:
+    assert len(permission["requested_sources"]) == 7
     assert [source["source_id"] for source in permission["requested_sources"]] == sorted(
         CANADABUYS_SOURCES
     )
+    assert set(permission["applies_to_source_ids"]) == {
+        "CA-5-APPROVALS",
+        "CA-5-DELEGATION",
+        "CA-5-LIMITS",
+        "CA-5-SIGNING",
+        "CA-6-ARCHIVE",
+        "CA-6-CH6",
+        "CA-6-GLOSSARY",
+    }
     assert permission["applies_to_source_ids"] == sorted(CANADABUYS_SOURCES)
+
+
+def _retrieval_category(permission: dict[str, Any]) -> dict[str, Any]:
+    return cast(
+        "dict[str, Any]",
+        next(
+            category
+            for category in permission["permission_categories"]
+            if category["category_id"] == "retrieval_of_named_urls"
+        ),
+    )
+
+
+def _stated_count_failures(permission: dict[str, Any]) -> list[str]:
+    """The retrieval category must state seven in both languages and never ten.
+
+    The letter asks a publisher to authorize retrieval of a bounded set. A wrong
+    count in either language would ask for a scope the request does not enumerate.
+    """
+    category = _retrieval_category(permission)
+    expected = {"en": "seven", "fr": "sept"}
+    wrong = {"en": ("ten", "eleven", "six", "eight"), "fr": ("dix", "onze", "six", "huit")}
+    failures = []
+    for language, word in expected.items():
+        text = category[language]["text"].lower()
+        if word not in text:
+            failures.append(f"{language}: retrieval category does not state {word!r}")
+        for bad in wrong[language]:
+            # Match the count as a whole word so "sixty" or "sixième" cannot trip it.
+            if re.search(rf"\b{bad}\b", text):
+                failures.append(f"{language}: retrieval category states {bad!r}")
+    return failures
+
+
+def test_retrieval_category_states_seven_in_both_languages(permission: dict[str, Any]) -> None:
+    assert _stated_count_failures(permission) == []
+    category = _retrieval_category(permission)
+    assert "seven source URLs" in category["en"]["text"]
+    assert "sept URL sources" in category["fr"]["text"]
+
+
+def test_the_stated_count_matches_the_enumerated_sources(permission: dict[str, Any]) -> None:
+    words = {7: ("seven", "sept"), 10: ("ten", "dix")}
+    count = len(permission["requested_sources"])
+    english, french = words[count]
+    category = _retrieval_category(permission)
+    assert english in category["en"]["text"].lower()
+    assert french in category["fr"]["text"].lower()
+
+
+def test_no_rendering_of_the_request_refers_to_ten_source_urls(
+    repo_root: Path, permission: dict[str, Any]
+) -> None:
+    assert "ten source URLs" not in json.dumps(permission, ensure_ascii=False)
+    for filename in (
+        "CANADABUYS-PERMISSION-REQUEST-EN-v0.1.md",
+        "CANADABUYS-PERMISSION-REQUEST-FR-v0.1.md",
+    ):
+        text = (repo_root / DOSSIER_RELDIR / filename).read_text(encoding="utf-8")
+        assert "ten source URLs" not in text
+        assert "dix URL sources" not in text
+
+
+def test_all_seven_urls_appear_in_both_rendered_languages(
+    repo_root: Path, permission: dict[str, Any]
+) -> None:
+    urls = [source["url"] for source in permission["requested_sources"]]
+    assert len(urls) == len(set(urls)) == 7
+    for filename in (
+        "CANADABUYS-PERMISSION-REQUEST-EN-v0.1.md",
+        "CANADABUYS-PERMISSION-REQUEST-FR-v0.1.md",
+    ):
+        text = (repo_root / DOSSIER_RELDIR / filename).read_text(encoding="utf-8")
+        for url in urls:
+            assert url in text, f"{filename} omits {url}"
+
+
+def test_mutation_wrong_source_count_in_either_language_fails(
+    permission: dict[str, Any],
+) -> None:
+    assert _stated_count_failures(permission) == []
+    for language, wrong in (
+        ("en", "Retrieval of only the ten source URLs listed in this request."),
+        ("fr", "Extraction des dix URL sources énumérées dans la présente demande."),
+    ):
+        mutated = copy.deepcopy(permission)
+        _retrieval_category(mutated)[language]["text"] = wrong
+        failures = _stated_count_failures(mutated)
+        assert failures, f"a wrong {language} count was not detected"
+        assert all(failure.startswith(f"{language}:") for failure in failures)
+
+
+def test_mutation_a_dropped_source_desynchronizes_the_stated_count(
+    permission: dict[str, Any],
+) -> None:
+    mutated = copy.deepcopy(permission)
+    mutated["requested_sources"] = mutated["requested_sources"][:-1]
+    assert len(mutated["requested_sources"]) == 6
+    words = {7: "seven", 10: "ten"}
+    assert len(mutated["requested_sources"]) not in words, (
+        "a six-source request has no matching stated count, so the letter is inconsistent"
+    )
 
 
 def test_permission_request_was_not_sent(permission: dict[str, Any]) -> None:
