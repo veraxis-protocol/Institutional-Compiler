@@ -1,0 +1,15 @@
+{
+  "document_id": "OAM-MOROCCO-PREFLIGHT-DECISION-v0.1",
+  "status": "PROPOSED_PREFLIGHT_DECISION_NOT_SEMANTIC_ADMISSION",
+  "exact_base": "29daa374b7e5cdc30ca7788310fbabb85f19912b",
+  "normative_candidates": ["MAR-NORM-001", "MAR-NORM-001-EN", "MAR-IMPL-001", "MAR-CCAG-001"],
+  "challenge_sources": ["CDC-CHALLENGE-001", "CDC-CHALLENGE-001-FR"],
+  "pmp_candidate_count": 3,
+  "preferred_mission": {"mission_id": "MAR-MISSION-001", "candidate_id": "PMP-CASE-001", "reference": "44/FES/2026"},
+  "fallback_mission": {"candidate_id": "PMP-CASE-002", "reference": "14/2026"},
+  "decision_basis": "Both nominees pass the bounded public-record gate through stable official identity, French notice metadata, buyer, procedure, publication date, deadline and explicit open state. DAO, evaluation and award evidence remain missing and are not inferred. No compliance conclusion is made.",
+  "no_source_bytes_acquired": true,
+  "no_semantic_processing": true,
+  "semantic_implementation_gate": "BLOCKED",
+  "next_owner_decisions": ["Authorize rights review and exact-byte acquisition receipts", "Confirm works CCAG scope", "Confirm whether visible PV evidence is sufficient before artifact acquisition"]
+}

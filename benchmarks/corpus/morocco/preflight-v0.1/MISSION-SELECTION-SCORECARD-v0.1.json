@@ -1,0 +1,13 @@
+{
+  "document_id": "OAM-MISSION-SELECTION-SCORECARD-v0.1",
+  "scale": {"0": "absent", "1": "partial_or_uncertain", "2": "present_and_official"},
+  "dimensions": ["stable_official_identity", "french_source_availability", "tender_notice_availability", "dao_specifications_tor", "administrative_or_technical_clauses", "amendment_or_addendum_evidence", "evaluation_criteria_grid", "commission_minute_or_extract", "award_or_result", "programme_previsionnel_linkage", "buyer_procedure_value_date_completeness", "exact_byte_downloadable_artifacts", "no_login_captcha_access_control", "tender_evaluation_award_suitability"],
+  "scores": [
+    {"candidate_id": "PMP-CASE-001", "values": [2,2,2,0,0,0,0,0,2,0,1,0,2,1], "total": 12, "mandatory_minimum": true, "nomination": "PREFERRED_MAR-MISSION-001"},
+    {"candidate_id": "PMP-CASE-002", "values": [2,2,2,0,0,0,0,0,2,0,1,0,2,1], "total": 12, "mandatory_minimum": true, "nomination": "FALLBACK"},
+    {"candidate_id": "PMP-CASE-003", "values": [2,2,2,0,0,0,0,0,2,0,1,0,2,1], "total": 12, "mandatory_minimum": true, "nomination": "NOT_SELECTED"}
+  ],
+  "selection_rule": "Mandatory criteria gate first; these are open cases with official structured notices but no acquired DAO, evaluation or award objects; aggregate score cannot override missing evidence",
+  "preferred": {"mission_id": "MAR-MISSION-001", "candidate_id": "PMP-CASE-001"},
+  "fallback": {"candidate_id": "PMP-CASE-002"}
+}

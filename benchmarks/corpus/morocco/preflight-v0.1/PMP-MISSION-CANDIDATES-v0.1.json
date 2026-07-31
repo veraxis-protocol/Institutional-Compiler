@@ -1,0 +1,60 @@
+{
+  "document_id": "OAM-PMP-MISSION-CANDIDATES-v0.1",
+  "status": "PUBLIC_PORTAL_METADATA_ONLY_NO_DOWNLOADS",
+  "candidates": [
+    {
+      "candidate_id": "PMP-CASE-001",
+      "reference": "44/FES/2026",
+      "public_buyer": "Direction Provinciale du MEN Fès",
+      "title_fr": "Achat de fournitures de bureau de reprographie et imprimés destinés à la formation continue, aux établissements scolaires et aux services administratifs relevant de la direction provinciale à Fès, en lot unique",
+      "procedure_type": "Appel d'offres ouvert",
+      "publication_date": "2026-07-17",
+      "submission_deadline": "2026-09-04T10:00:00+01:00",
+      "official_portal_url": "https://www.marchespublics.gov.ma/index.php5?orgAcronyme=p8x&page=entreprise.EntrepriseDetailConsultation&refConsultation=1024549",
+      "associated_public_objects": ["Official structured consultation notice in the public portal search result"],
+      "state": "OPEN_DEADLINE_FUTURE_AT_OBSERVATION",
+      "login_requirement_for_page": "NONE_FOR_PUBLIC_SEARCH_RECORD",
+      "download_urls": [],
+      "download_url_note": "No artifact action invoked; DAO availability remains unresolved",
+      "synthetic": false,
+      "engineering_disposition": "LINK_AND_RECEIPT_ONLY",
+      "missing_objects": ["DAO/specifications not verified", "Administrative and technical clauses not verified", "Evaluation grid not available", "Commission minutes and award not yet available", "Programme prévisionnel link not established", "Exact artifact URLs and bytes not acquired"]
+    },
+    {
+      "candidate_id": "PMP-CASE-002",
+      "reference": "14/2026",
+      "public_buyer": "Directeur Régional d'Agriculture de la Région Béni Mellal-Khénifra",
+      "title_fr": "Achat de matériel et mobilier de bureau au profit du Centre Régional des Jeunes Entrepreneurs Agricoles et Agro-alimentaires relevant de la Direction Régionale de l’Agriculture de Béni Mellal-Khénifra en lot unique",
+      "procedure_type": "Appel d'offres ouvert simplifié",
+      "publication_date": "2026-07-22",
+      "submission_deadline": "2026-09-03T11:00:00+01:00",
+      "official_portal_url": "https://www.marchespublics.gov.ma/index.php5?orgAcronyme=q1s&page=entreprise.EntrepriseDetailConsultation&refConsultation=1017000",
+      "associated_public_objects": ["Official structured consultation notice in the public portal search result"],
+      "state": "OPEN_DEADLINE_FUTURE_AT_OBSERVATION",
+      "login_requirement_for_page": "NONE_FOR_PUBLIC_SEARCH_RECORD",
+      "download_urls": [],
+      "download_url_note": "No artifact action invoked; DAO availability remains unresolved",
+      "synthetic": false,
+      "engineering_disposition": "LINK_AND_RECEIPT_ONLY",
+      "missing_objects": ["DAO/specifications not verified", "Administrative and technical clauses not verified", "Evaluation grid not available", "Commission minutes and award not yet available", "Programme prévisionnel link not established", "Exact artifact URLs and bytes not acquired"]
+    },
+    {
+      "candidate_id": "PMP-CASE-003",
+      "reference": "22/2026",
+      "public_buyer": "Ministère de la Justice",
+      "title_fr": "Achat de fournitures de classement et d’archivage pour le compte des Juridictions du Royaume en lot unique",
+      "procedure_type": "Appel d'offres ouvert",
+      "publication_date": "2026-07-23",
+      "submission_deadline": "2026-09-03T10:00:00+01:00",
+      "official_portal_url": "https://www.marchespublics.gov.ma/index.php5?orgAcronyme=t5y&page=entreprise.EntrepriseDetailConsultation&refConsultation=1012408",
+      "associated_public_objects": ["Official structured consultation notice in the public portal search result"],
+      "state": "OPEN_DEADLINE_FUTURE_AT_OBSERVATION",
+      "login_requirement_for_page": "NONE_FOR_PUBLIC_SEARCH_RECORD",
+      "download_urls": [],
+      "download_url_note": "No artifact action invoked; DAO availability remains unresolved",
+      "synthetic": false,
+      "engineering_disposition": "LINK_AND_RECEIPT_ONLY",
+      "missing_objects": ["DAO/specifications not verified", "Administrative and technical clauses not verified", "Evaluation grid not available", "Commission minutes and award not yet available", "Programme prévisionnel link not established", "Exact artifact URLs and bytes not acquired"]
+    }
+  ]
+}

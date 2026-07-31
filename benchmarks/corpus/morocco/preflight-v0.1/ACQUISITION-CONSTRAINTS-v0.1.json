@@ -1,0 +1,11 @@
+{
+  "document_id": "OAM-MOROCCO-ACQUISITION-CONSTRAINTS-v0.1",
+  "status": "ENGINEERING_CLASSIFICATIONS_NOT_LEGAL_OPINIONS",
+  "no_source_bytes_acquired": true,
+  "constraints": [
+    {"scope": "TGR_PDF_SOURCES", "disposition": "LINK_AND_RECEIPT_ONLY", "robots_observation": "No automated crawl executed", "authentication": "None observed", "visible_download": true, "direct_get": "UNTESTED", "human_download": true, "crawl_required": false, "stability": "UUID paths appear stable but bytes not frozen", "blockers": ["rights review", "redirect receipt", "exact-byte freeze authorization"]},
+    {"scope": "CDC_CHALLENGE_HTML", "disposition": "LINK_AND_RECEIPT_ONLY", "robots_observation": "Single public pages observed; no crawl", "authentication": "None", "visible_download": false, "direct_get": true, "human_download": true, "crawl_required": false, "stability": "mutable HTML", "blockers": ["terms review", "immutable capture plan"]},
+    {"scope": "PMP_CASE_PAGES_AND_ACTION_DOWNLOADS", "disposition": "LINK_AND_RECEIPT_ONLY", "robots_observation": "Public detail pages observed; no automated crawl or artifact action invoked", "authentication": "Detail pages render unauthenticated; artifact actions not tested", "visible_download": true, "direct_get": "DETAIL_PAGE_YES_ARTIFACT_ENDPOINT_UNRESOLVED", "human_download": true, "crawl_required": false, "stability": "stable refConsultation identity; artifact bytes untested", "blockers": ["dynamic artifact URLs", "rights review", "exact-byte freeze authorization"]}
+  ],
+  "prohibited": ["authenticated download", "CAPTCHA bypass", "portal crawl", "source-byte commit", "invented legal clearance"]
+}

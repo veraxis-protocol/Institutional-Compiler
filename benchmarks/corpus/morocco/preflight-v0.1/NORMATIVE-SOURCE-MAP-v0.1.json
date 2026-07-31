@@ -1,0 +1,14 @@
+{
+  "document_id": "OAM-MOROCCO-NORMATIVE-SOURCE-MAP-v0.1",
+  "status": "PREFLIGHT_NO_LEGAL_INTERPRETATION",
+  "french_first": true,
+  "entries": [
+    {"source_id": "MAR-NORM-001", "role": "PRIMARY_FRENCH_NORMATIVE_CANDIDATE", "authoritative_for_semantics": "OWNER_AND_LEGAL_CONFIRMATION_REQUIRED", "relationship": "Decree 2-22-431"},
+    {"source_id": "MAR-NORM-001-EN", "role": "UNOFFICIAL_TRANSLATION_COMPANION", "authoritative_for_semantics": false, "relationship": "Navigation companion to MAR-NORM-001"},
+    {"source_id": "MAR-IMPL-001", "role": "IMPLEMENTING_ORDERS_COMPILATION", "authoritative_for_semantics": "OWNER_AND_LEGAL_CONFIRMATION_REQUIRED", "relationship": "Orders expressly cite Decree 2-22-431"},
+    {"source_id": "MAR-CCAG-001", "role": "WORKS_SECTOR_CANDIDATE", "authoritative_for_semantics": "OWNER_AND_LEGAL_CONFIRMATION_REQUIRED", "relationship": "Potentially relevant only to a works case; no applicability conclusion"},
+    {"source_id": "CDC-CHALLENGE-001", "role": "MISSION_FRAMING_EN", "authoritative_for_semantics": false, "relationship": "Challenge statement, not normative text"},
+    {"source_id": "CDC-CHALLENGE-001-FR", "role": "MISSION_FRAMING_FR", "authoritative_for_semantics": false, "relationship": "French challenge page, not normative text"}
+  ],
+  "unresolved": ["Bulletin Officiel chain and amendments", "Current CCAG applicability", "Complete implementing-order inventory"]
+}
