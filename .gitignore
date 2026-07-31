@@ -31,3 +31,7 @@ junit.xml
 
 # macOS finder metadata
 .DS_Store
+
+# Canada corpus rights evidence and internal-only frozen bytes (never committed).
+.local/canada-rights-evidence/
+.local/canada-freeze-internal/
