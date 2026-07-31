@@ -243,6 +243,8 @@
           "attached_notice_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDownloadAvisJAL&refConsultation=1029218&orgAcronyme=g0u&idAvis=527659",
           "source_candidate_id": "PMP-CASE-004",
           "public_accessibility_state": "PUBLIC_RESULT_RECORD_WITH_ATTACHED_NOTICE_LINK",
+          "cross_record_linkage_id": "PMP-CASE-004-LINK-001",
+          "result_evidence_eligible": true,
           "login_required": false,
           "captcha_required": false,
           "access_control_bypass_required": false,
@@ -251,6 +253,88 @@
           "bytes_acquired": false
         }
       ],
+      "cross_record_linkage": {
+        "linkage_id": "PMP-CASE-004-LINK-001",
+        "original_consultation_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1015612&orgAcronyme=g0u",
+        "result_record_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1029218&orgAcronyme=g0u",
+        "original_refConsultation": "1015612",
+        "result_refConsultation": "1029218",
+        "observed_procurement_reference": {
+          "original_record": "14/2026",
+          "result_record": "14/2026"
+        },
+        "observed_buyer": {
+          "original_record": {
+            "display_name": null,
+            "display_name_observation": "NOT_EXPOSED_AS_A_DISTINCT_FIELD_ON_PUBLIC_RECORD",
+            "portal_organization_acronym": "g0u"
+          },
+          "result_record": {
+            "display_name": null,
+            "display_name_observation": "NOT_EXPOSED_AS_A_DISTINCT_FIELD_ON_PUBLIC_RECORD",
+            "portal_organization_acronym": "g0u"
+          }
+        },
+        "observed_procurement_object": {
+          "original_record": "Achat de matériel de bureau pour le compte du Secrétariat Général du Gouvernement",
+          "result_record": "Achat de matériel de bureau pour le compte du Secrétariat Général du Gouvernement"
+        },
+        "observed_procedure_or_lot_information": {
+          "original_record": null,
+          "result_record": null,
+          "observation": "NOT_EXPOSED_ON_EITHER_PUBLIC_RECORD"
+        },
+        "explicit_portal_linkage_field": {
+          "field_name": null,
+          "value": null,
+          "observation": "NO_EXPLICIT_ORIGINAL_TO_RESULT_LINKAGE_FIELD_EXPOSED"
+        },
+        "normalized_matching_fields": [
+          {
+            "field": "procurement_reference",
+            "original": "14/2026",
+            "result": "14/2026",
+            "evidence_refs": ["PMP-CASE-004-LINK-ORIGINAL", "PMP-CASE-004-LINK-RESULT"]
+          },
+          {
+            "field": "buyer_portal_organization_acronym",
+            "original": "g0u",
+            "result": "g0u",
+            "evidence_refs": ["PMP-CASE-004-LINK-ORIGINAL", "PMP-CASE-004-LINK-RESULT"]
+          },
+          {
+            "field": "procurement_object",
+            "original": "achat de matériel de bureau pour le compte du secrétariat général du gouvernement",
+            "result": "achat de matériel de bureau pour le compte du secrétariat général du gouvernement",
+            "evidence_refs": ["PMP-CASE-004-LINK-ORIGINAL", "PMP-CASE-004-LINK-RESULT"]
+          }
+        ],
+        "mismatch_fields": [
+          {
+            "field": "refConsultation",
+            "original": "1015612",
+            "result": "1029218",
+            "recorded_linkage_basis": "Separate portal record identifiers are reconciled by the exact matching procurement reference, procurement object and portal organization acronym.",
+            "evidence_refs": ["PMP-CASE-004-LINK-ORIGINAL", "PMP-CASE-004-LINK-RESULT"]
+          }
+        ],
+        "evidence_references": [
+          {
+            "evidence_id": "PMP-CASE-004-LINK-ORIGINAL",
+            "record_role": "ORIGINAL_CONSULTATION",
+            "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1015612&orgAcronyme=g0u",
+            "observed_fields": ["refConsultation=1015612", "reference=14/2026", "orgAcronyme=g0u", "object=Achat de matériel de bureau pour le compte du Secrétariat Général du Gouvernement"]
+          },
+          {
+            "evidence_id": "PMP-CASE-004-LINK-RESULT",
+            "record_role": "DEFINITIVE_RESULT",
+            "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1029218&orgAcronyme=g0u",
+            "observed_fields": ["refConsultation=1029218", "reference=14/2026", "orgAcronyme=g0u", "object=Achat de matériel de bureau pour le compte du Secrétariat Général du Gouvernement"]
+          }
+        ],
+        "observed_utc": "2026-07-31T21:23:40Z",
+        "linkage_result": "VERIFIED_MATCH"
+      },
       "state": "DEFINITIVE_RESULT_PUBLISHED",
       "explicit_official_current_open_state": false,
       "synthetic": false,
@@ -332,6 +416,8 @@
           "attached_notice_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDownloadAvisJAL&refConsultation=1029211&orgAcronyme=g0u&idAvis=527649",
           "source_candidate_id": "PMP-CASE-005",
           "public_accessibility_state": "PUBLIC_RESULT_RECORD_WITH_ATTACHED_NOTICE_LINK",
+          "cross_record_linkage_id": "PMP-CASE-005-LINK-001",
+          "result_evidence_eligible": true,
           "login_required": false,
           "captcha_required": false,
           "access_control_bypass_required": false,
@@ -340,6 +426,88 @@
           "bytes_acquired": false
         }
       ],
+      "cross_record_linkage": {
+        "linkage_id": "PMP-CASE-005-LINK-001",
+        "original_consultation_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1010827&orgAcronyme=g0u",
+        "result_record_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1029211&orgAcronyme=g0u",
+        "original_refConsultation": "1010827",
+        "result_refConsultation": "1029211",
+        "observed_procurement_reference": {
+          "original_record": "13/2026",
+          "result_record": "13/2026"
+        },
+        "observed_buyer": {
+          "original_record": {
+            "display_name": null,
+            "display_name_observation": "NOT_EXPOSED_AS_A_DISTINCT_FIELD_ON_PUBLIC_RECORD",
+            "portal_organization_acronym": "g0u"
+          },
+          "result_record": {
+            "display_name": null,
+            "display_name_observation": "NOT_EXPOSED_AS_A_DISTINCT_FIELD_ON_PUBLIC_RECORD",
+            "portal_organization_acronym": "g0u"
+          }
+        },
+        "observed_procurement_object": {
+          "original_record": "Achat de toners pour le compte du Secrétariat Général du Gouvernement",
+          "result_record": "Achat de toners pour le compte du Secrétariat Général du Gouvernement"
+        },
+        "observed_procedure_or_lot_information": {
+          "original_record": null,
+          "result_record": null,
+          "observation": "NOT_EXPOSED_ON_EITHER_PUBLIC_RECORD"
+        },
+        "explicit_portal_linkage_field": {
+          "field_name": null,
+          "value": null,
+          "observation": "NO_EXPLICIT_ORIGINAL_TO_RESULT_LINKAGE_FIELD_EXPOSED"
+        },
+        "normalized_matching_fields": [
+          {
+            "field": "procurement_reference",
+            "original": "13/2026",
+            "result": "13/2026",
+            "evidence_refs": ["PMP-CASE-005-LINK-ORIGINAL", "PMP-CASE-005-LINK-RESULT"]
+          },
+          {
+            "field": "buyer_portal_organization_acronym",
+            "original": "g0u",
+            "result": "g0u",
+            "evidence_refs": ["PMP-CASE-005-LINK-ORIGINAL", "PMP-CASE-005-LINK-RESULT"]
+          },
+          {
+            "field": "procurement_object",
+            "original": "achat de toners pour le compte du secrétariat général du gouvernement",
+            "result": "achat de toners pour le compte du secrétariat général du gouvernement",
+            "evidence_refs": ["PMP-CASE-005-LINK-ORIGINAL", "PMP-CASE-005-LINK-RESULT"]
+          }
+        ],
+        "mismatch_fields": [
+          {
+            "field": "refConsultation",
+            "original": "1010827",
+            "result": "1029211",
+            "recorded_linkage_basis": "Separate portal record identifiers are reconciled by the exact matching procurement reference, procurement object and portal organization acronym.",
+            "evidence_refs": ["PMP-CASE-005-LINK-ORIGINAL", "PMP-CASE-005-LINK-RESULT"]
+          }
+        ],
+        "evidence_references": [
+          {
+            "evidence_id": "PMP-CASE-005-LINK-ORIGINAL",
+            "record_role": "ORIGINAL_CONSULTATION",
+            "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1010827&orgAcronyme=g0u",
+            "observed_fields": ["refConsultation=1010827", "reference=13/2026", "orgAcronyme=g0u", "object=Achat de toners pour le compte du Secrétariat Général du Gouvernement"]
+          },
+          {
+            "evidence_id": "PMP-CASE-005-LINK-RESULT",
+            "record_role": "DEFINITIVE_RESULT",
+            "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1029211&orgAcronyme=g0u",
+            "observed_fields": ["refConsultation=1029211", "reference=13/2026", "orgAcronyme=g0u", "object=Achat de toners pour le compte du Secrétariat Général du Gouvernement"]
+          }
+        ],
+        "observed_utc": "2026-07-31T21:23:40Z",
+        "linkage_result": "VERIFIED_MATCH"
+      },
       "state": "DEFINITIVE_RESULT_PUBLISHED",
       "explicit_official_current_open_state": false,
       "synthetic": false,

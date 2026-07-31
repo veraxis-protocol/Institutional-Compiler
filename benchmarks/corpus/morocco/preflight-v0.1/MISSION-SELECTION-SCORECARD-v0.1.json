@@ -5,6 +5,12 @@
     "1": "partial_or_uncertain",
     "2": "present_and_official"
   },
+  "mission_selection_status": "PROVISIONAL_UNRECONCILED",
+  "proposed_mission_id": "MAR-MISSION-001",
+  "institutional_admission": "NONE",
+  "golden_mission_status": "NOT_ADMITTED",
+  "cross_repository_reconciliation_required": true,
+  "semantic_implementation_gate": "BLOCKED",
   "dimensions": [
     "stable_official_identity",
     "french_source_availability",
@@ -67,9 +73,11 @@
   "selection_outcome": "ADMISSIBLE_CASES_FOUND",
   "preferred": {
     "mission_id": "MAR-MISSION-001",
-    "candidate_id": "PMP-CASE-004"
+    "candidate_id": "PMP-CASE-004",
+    "result_linkage_result": "VERIFIED_MATCH"
   },
   "fallback": {
-    "candidate_id": "PMP-CASE-005"
+    "candidate_id": "PMP-CASE-005",
+    "result_linkage_result": "VERIFIED_MATCH"
   }
 }

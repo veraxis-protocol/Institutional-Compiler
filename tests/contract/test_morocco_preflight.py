@@ -9,7 +9,7 @@ import sys
 from collections.abc import Iterator
 from pathlib import Path
 from typing import Any, cast
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 import pytest
 
@@ -46,6 +46,129 @@ def official_url(value: object) -> bool:
         return False
     host = (urlparse(value).hostname or "").removeprefix("www.")
     return host in PERMITTED
+
+
+def normalized(value: object) -> str:
+    return " ".join(value.casefold().split()) if isinstance(value, str) else ""
+
+
+def portal_record_fields(value: object) -> dict[str, str] | None:
+    if not official_url(value):
+        return None
+    parsed = urlparse(cast(str, value))
+    query = parse_qs(parsed.query)
+    fields = {
+        "page": query.get("page", [""])[0],
+        "refConsultation": query.get("refConsultation", [""])[0],
+        "orgAcronyme": query.get("orgAcronyme", [""])[0],
+    }
+    return fields if all(fields.values()) else None
+
+
+def derive_result_linkage(case: dict[str, Any], artifact: dict[str, Any]) -> str:
+    linkage = case.get("cross_record_linkage")
+    if not isinstance(linkage, dict):
+        return "NOT_VERIFIED"
+    original_url = linkage.get("original_consultation_url")
+    result_url = linkage.get("result_record_url")
+    original_fields = portal_record_fields(original_url)
+    result_fields = portal_record_fields(result_url)
+    if original_fields is None or result_fields is None:
+        return "NOT_VERIFIED"
+    if original_fields["page"] != "entreprise.EntrepriseDetailConsultation":
+        return "NOT_VERIFIED"
+    if result_fields["page"] != "entreprise.EntrepriseDetailConsultation":
+        return "NOT_VERIFIED"
+    if original_url != case.get("official_portal_url"):
+        return "NOT_VERIFIED"
+    if result_url != artifact.get("exact_official_url"):
+        return "NOT_VERIFIED"
+    if original_fields["refConsultation"] != linkage.get("original_refConsultation"):
+        return "NOT_VERIFIED"
+    if result_fields["refConsultation"] != linkage.get("result_refConsultation"):
+        return "NOT_VERIFIED"
+    if original_fields["refConsultation"] == result_fields["refConsultation"]:
+        return "NOT_VERIFIED"
+
+    evidence = linkage.get("evidence_references", [])
+    evidence_by_id = {item.get("evidence_id"): item for item in evidence if isinstance(item, dict)}
+    expected_evidence_ids = {
+        f"{case['candidate_id']}-LINK-ORIGINAL",
+        f"{case['candidate_id']}-LINK-RESULT",
+    }
+    if set(evidence_by_id) != expected_evidence_ids:
+        return "NOT_VERIFIED"
+    if (
+        evidence_by_id[f"{case['candidate_id']}-LINK-ORIGINAL"].get("exact_official_url")
+        != original_url
+    ):
+        return "NOT_VERIFIED"
+    if (
+        evidence_by_id[f"{case['candidate_id']}-LINK-RESULT"].get("exact_official_url")
+        != result_url
+    ):
+        return "NOT_VERIFIED"
+
+    observed_reference = linkage.get("observed_procurement_reference", {})
+    observed_buyer = linkage.get("observed_buyer", {})
+    observed_object = linkage.get("observed_procurement_object", {})
+    original_buyer = observed_buyer.get("original_record", {})
+    result_buyer = observed_buyer.get("result_record", {})
+    expected_matches = {
+        "procurement_reference": (
+            normalized(observed_reference.get("original_record")),
+            normalized(observed_reference.get("result_record")),
+            normalized(case.get("reference")),
+        ),
+        "buyer_portal_organization_acronym": (
+            normalized(original_buyer.get("portal_organization_acronym")),
+            normalized(result_buyer.get("portal_organization_acronym")),
+            normalized(original_fields["orgAcronyme"]),
+        ),
+        "procurement_object": (
+            normalized(observed_object.get("original_record")),
+            normalized(observed_object.get("result_record")),
+            normalized(case.get("title_fr")),
+        ),
+    }
+    matching_fields = linkage.get("normalized_matching_fields", [])
+    matching_by_name = {
+        item.get("field"): item for item in matching_fields if isinstance(item, dict)
+    }
+    if set(matching_by_name) != set(expected_matches):
+        return "NOT_VERIFIED"
+    for field, (original, result, expected) in expected_matches.items():
+        stored = matching_by_name[field]
+        if not original or original != result or original != expected:
+            return "NOT_VERIFIED"
+        if normalized(stored.get("original")) != original:
+            return "NOT_VERIFIED"
+        if normalized(stored.get("result")) != result:
+            return "NOT_VERIFIED"
+        if set(stored.get("evidence_refs", [])) != expected_evidence_ids:
+            return "NOT_VERIFIED"
+    if normalized(result_buyer.get("portal_organization_acronym")) != normalized(
+        result_fields["orgAcronyme"]
+    ):
+        return "NOT_VERIFIED"
+
+    mismatches = linkage.get("mismatch_fields", [])
+    if len(mismatches) != 1 or mismatches[0].get("field") != "refConsultation":
+        return "NOT_VERIFIED"
+    mismatch = mismatches[0]
+    if mismatch.get("original") != original_fields["refConsultation"]:
+        return "NOT_VERIFIED"
+    if mismatch.get("result") != result_fields["refConsultation"]:
+        return "NOT_VERIFIED"
+    if not mismatch.get("recorded_linkage_basis"):
+        return "NOT_VERIFIED"
+    if set(mismatch.get("evidence_refs", [])) != expected_evidence_ids:
+        return "NOT_VERIFIED"
+    if not linkage.get("observed_utc"):
+        return "NOT_VERIFIED"
+    if artifact.get("cross_record_linkage_id") != linkage.get("linkage_id"):
+        return "NOT_VERIFIED"
+    return "VERIFIED_MATCH"
 
 
 def iter_urls(value: object, key: str = "") -> Iterator[str]:
@@ -88,6 +211,9 @@ def verified_award_artifact(case: dict[str, Any], artifact: dict[str, Any]) -> b
         and bool(artifact.get("observed_utc"))
         and artifact.get("distinct_from_structured_consultation_record") is True
         and artifact.get("bytes_acquired") is False
+        and derive_result_linkage(case, artifact) == "VERIFIED_MATCH"
+        and case.get("cross_record_linkage", {}).get("linkage_result") == "VERIFIED_MATCH"
+        and artifact.get("result_evidence_eligible") is True
     )
 
 
@@ -207,6 +333,8 @@ def validate(
             assert score["values"][suitability_index] <= 1
         if score["nomination"] != "NOT_SELECTED":
             assert gate_passed
+            assert award_artifacts
+            assert all(verified_award_artifact(case, artifact) for artifact in award_artifacts)
 
     preferred_scores = [
         score for score in scorecard["scores"] if score["nomination"] == "PREFERRED_MAR-MISSION-001"
@@ -223,6 +351,20 @@ def validate(
         assert len(fallback_scores) == 1
         assert preferred_scores[0]["candidate_id"] == scorecard["preferred"]["candidate_id"]
         assert fallback_scores[0]["candidate_id"] == scorecard["fallback"]["candidate_id"]
+        preferred_case = next(
+            case for case in cases if case["candidate_id"] == scorecard["preferred"]["candidate_id"]
+        )
+        fallback_case = next(
+            case for case in cases if case["candidate_id"] == scorecard["fallback"]["candidate_id"]
+        )
+        assert (
+            scorecard["preferred"]["result_linkage_result"]
+            == preferred_case["cross_record_linkage"]["linkage_result"]
+        )
+        assert (
+            scorecard["fallback"]["result_linkage_result"]
+            == fallback_case["cross_record_linkage"]["linkage_result"]
+        )
 
     ccag = next(entry for entry in normative["entries"] if entry["source_id"] == "MAR-CCAG-001")
     assert ccag["role"] == "DISCOVERY_CANDIDATE_NOT_APPLICABLE_TO_CURRENT_MISSION"
@@ -234,14 +376,32 @@ def validate(
     )
 
     assert decision["pmp_candidate_count"] == len(cases)
-    assert decision["mission_selection_status"] == scorecard["selection_outcome"]
+    assert scorecard["mission_selection_status"] == "PROVISIONAL_UNRECONCILED"
+    assert decision["mission_selection_status"] == "PROVISIONAL_UNRECONCILED"
+    assert decision["mission_selection_outcome"] == scorecard["selection_outcome"]
+    assert decision["proposed_mission_id"] == scorecard["proposed_mission_id"]
+    assert decision["institutional_admission"] == "NONE"
+    assert scorecard["institutional_admission"] == "NONE"
+    assert decision["golden_mission_status"] == "NOT_ADMITTED"
+    assert scorecard["golden_mission_status"] == "NOT_ADMITTED"
+    assert decision["cross_repository_reconciliation_required"] is True
+    assert scorecard["cross_repository_reconciliation_required"] is True
     assert decision["preferred_mission"]["candidate_id"] == scorecard["preferred"]["candidate_id"]
     assert decision["fallback_mission"]["candidate_id"] == scorecard["fallback"]["candidate_id"]
+    assert (
+        decision["preferred_mission"]["result_linkage_result"]
+        == scorecard["preferred"]["result_linkage_result"]
+    )
+    assert (
+        decision["fallback_mission"]["result_linkage_result"]
+        == scorecard["fallback"]["result_linkage_result"]
+    )
     assert decision["normative_candidates"] == normative["proposed_normative_corpus"]
     assert decision["no_source_bytes_acquired"] is True
     assert decision["no_tender_document_bytes_acquired"] is True
     assert decision["no_semantic_processing"] is True
     assert decision["semantic_implementation_gate"] == "BLOCKED"
+    assert scorecard["semantic_implementation_gate"] == "BLOCKED"
 
 
 @pytest.fixture
@@ -441,6 +601,60 @@ def test_evidence_gate_correction_mutations_fail(
             candidates["candidates"][3]["verified_tender_document_artifacts"] = []
             scorecard["scores"][3]["values"] = [2] * 14
             scorecard["scores"][3]["total"] = 28
+        try:
+            validate(register, candidates, scorecard, normative, decision)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError(f"mutation survived validation: {mutation}")
+
+
+def test_result_lineage_mutations_fail(
+    bundle: tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]],
+) -> None:
+    mutations = (
+        "different_official_result_url",
+        "different_result_reference",
+        "different_result_buyer",
+        "different_result_object",
+        "different_ref_without_linkage_basis",
+        "manual_verified_unsupported",
+        "award_score_for_not_verified",
+        "nomination_on_unlinked_result",
+    )
+    for mutation in mutations:
+        register, candidates, scorecard, normative, decision = copy.deepcopy(bundle)
+        case = candidates["candidates"][3]
+        linkage = case["cross_record_linkage"]
+        result = case["verified_award_or_result_artifacts"][0]
+        if mutation == "different_official_result_url":
+            substituted = (
+                "https://www.marchespublics.gov.ma/index.php?"
+                "page=entreprise.EntrepriseDetailConsultation&"
+                "refConsultation=1029211&orgAcronyme=g0u"
+            )
+            result["exact_official_url"] = substituted
+            linkage["result_record_url"] = substituted
+        elif mutation == "different_result_reference":
+            linkage["observed_procurement_reference"]["result_record"] = "13/2026"
+        elif mutation == "different_result_buyer":
+            linkage["observed_buyer"]["result_record"]["portal_organization_acronym"] = "different"
+        elif mutation == "different_result_object":
+            linkage["observed_procurement_object"]["result_record"] = (
+                "Achat de toners pour le compte d'une autre institution"
+            )
+        elif mutation == "different_ref_without_linkage_basis":
+            del linkage["mismatch_fields"][0]["recorded_linkage_basis"]
+        elif mutation == "manual_verified_unsupported":
+            linkage["normalized_matching_fields"][0]["result"] = "13/2026"
+            linkage["linkage_result"] = "VERIFIED_MATCH"
+        elif mutation == "award_score_for_not_verified":
+            linkage["linkage_result"] = "NOT_VERIFIED"
+            result["result_evidence_eligible"] = False
+        else:
+            linkage["linkage_result"] = "NOT_VERIFIED"
+            result["result_evidence_eligible"] = False
+            scorecard["scores"][3]["nomination"] = "PREFERRED_MAR-MISSION-001"
         try:
             validate(register, candidates, scorecard, normative, decision)
         except AssertionError:

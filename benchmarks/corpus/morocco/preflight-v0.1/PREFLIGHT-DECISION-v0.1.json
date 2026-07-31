@@ -1,7 +1,12 @@
 {
   "document_id": "OAM-MOROCCO-PREFLIGHT-DECISION-v0.1",
   "status": "PROPOSED_PREFLIGHT_DECISION_NOT_SEMANTIC_ADMISSION",
-  "mission_selection_status": "ADMISSIBLE_CASES_FOUND",
+  "mission_selection_status": "PROVISIONAL_UNRECONCILED",
+  "mission_selection_outcome": "ADMISSIBLE_CASES_FOUND",
+  "proposed_mission_id": "MAR-MISSION-001",
+  "institutional_admission": "NONE",
+  "golden_mission_status": "NOT_ADMITTED",
+  "cross_repository_reconciliation_required": true,
   "exact_base": "29daa374b7e5cdc30ca7788310fbabb85f19912b",
   "normative_candidates": [
     "MAR-NORM-001",
@@ -23,13 +28,15 @@
   "preferred_mission": {
     "mission_id": "MAR-MISSION-001",
     "candidate_id": "PMP-CASE-004",
-    "reference": "14/2026"
+    "reference": "14/2026",
+    "result_linkage_result": "VERIFIED_MATCH"
   },
   "fallback_mission": {
     "candidate_id": "PMP-CASE-005",
-    "reference": "13/2026"
+    "reference": "13/2026",
+    "result_linkage_result": "VERIFIED_MATCH"
   },
-  "decision_basis": "The preferred and fallback candidates independently pass the evidence-derived eight-criterion gate. Each has an official French consultation record, a distinct verified DCE link, a public Extrait de PV and a separate definitive-result record. The three retained open candidates pass through their explicit official open state and distinct DCE links but have no award evidence. Aggregate scores did not override the gate.",
+  "decision_basis": "The preferred and fallback candidates independently pass the evidence-derived eight-criterion gate. Each has an official French consultation record, a distinct verified DCE link, a public Extrait de PV and a separate definitive-result record whose cross-record lineage is VERIFIED_MATCH through the exact procurement reference, procurement object and portal organization acronym. The differing refConsultation identifiers are recorded explicitly. The three retained open candidates pass through their explicit official open state and distinct DCE links but have no award evidence. Aggregate scores did not override the gate. This nomination is provisional and remains unreconciled with the separate OAM CDC repository.",
   "no_source_bytes_acquired": true,
   "no_tender_document_bytes_acquired": true,
   "no_semantic_processing": true,

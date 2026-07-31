@@ -228,6 +228,50 @@ def render_candidates(data: dict[str, Any]) -> str:
             for artifact in case["verified_tender_document_artifacts"]
         ],
     )
+    lines += ["", "## Cross-record result lineage", ""]
+    lines += _table(
+        [
+            "Candidate",
+            "Linkage",
+            "Original record",
+            "Result record",
+            "Original refConsultation",
+            "Result refConsultation",
+            "Reference match",
+            "Buyer portal ID match",
+            "Object match",
+            "Mismatch fields",
+            "Explicit portal linkage",
+            "Result",
+            "Observed",
+        ],
+        [
+            [
+                case["candidate_id"],
+                case["cross_record_linkage"]["linkage_id"],
+                case["cross_record_linkage"]["original_consultation_url"],
+                case["cross_record_linkage"]["result_record_url"],
+                case["cross_record_linkage"]["original_refConsultation"],
+                case["cross_record_linkage"]["result_refConsultation"],
+                case["cross_record_linkage"]["observed_procurement_reference"],
+                {
+                    "original": case["cross_record_linkage"]["observed_buyer"]["original_record"][
+                        "portal_organization_acronym"
+                    ],
+                    "result": case["cross_record_linkage"]["observed_buyer"]["result_record"][
+                        "portal_organization_acronym"
+                    ],
+                },
+                case["cross_record_linkage"]["observed_procurement_object"],
+                case["cross_record_linkage"]["mismatch_fields"],
+                case["cross_record_linkage"]["explicit_portal_linkage_field"],
+                case["cross_record_linkage"]["linkage_result"],
+                case["cross_record_linkage"]["observed_utc"],
+            ]
+            for case in data["candidates"]
+            if "cross_record_linkage" in case
+        ],
+    )
     lines += ["", "## Evidence-derived mandatory gate", ""]
     lines += _table(
         ["Candidate", "Criterion", "Passed", "Evidence"],
@@ -253,6 +297,19 @@ def render_scorecard(data: dict[str, Any]) -> str:
         "# Morocco Mission Selection Scorecard v0.1",
         "",
         "Scores: 0 absent; 1 partial/uncertain; 2 present and official.",
+        "",
+        f"Mission status: **{data['mission_selection_status']}**",
+        "",
+        f"Proposed mission ID: **{data['proposed_mission_id']}**",
+        "",
+        f"Institutional admission: **{data['institutional_admission']}**",
+        "",
+        f"Golden mission: **{data['golden_mission_status']}**",
+        "",
+        "Cross-repository reconciliation required: "
+        f"**{_cell(data['cross_repository_reconciliation_required'])}**",
+        "",
+        f"Semantic implementation gate: **{data['semantic_implementation_gate']}**",
         "",
         f"Rule: {data['selection_rule']}",
         "",
@@ -354,6 +411,17 @@ def render_decision(data: dict[str, Any]) -> str:
             f"PMP candidates: **{data['pmp_candidate_count']}**",
             "",
             f"Mission selection: **{data['mission_selection_status']}**",
+            "",
+            f"Selection outcome: **{data['mission_selection_outcome']}**",
+            "",
+            f"Proposed mission ID: **{data['proposed_mission_id']}**",
+            "",
+            f"Institutional admission: **{data['institutional_admission']}**",
+            "",
+            f"Golden mission: **{data['golden_mission_status']}**",
+            "",
+            "Cross-repository reconciliation required: "
+            f"**{_cell(data['cross_repository_reconciliation_required'])}**",
             "",
             f"Preferred: **{preferred_text}**",
             "",

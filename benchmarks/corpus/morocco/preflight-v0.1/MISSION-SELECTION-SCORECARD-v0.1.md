@@ -2,6 +2,18 @@
 
 Scores: 0 absent; 1 partial/uncertain; 2 present and official.
 
+Mission status: **PROVISIONAL_UNRECONCILED**
+
+Proposed mission ID: **MAR-MISSION-001**
+
+Institutional admission: **NONE**
+
+Golden mission: **NOT_ADMITTED**
+
+Cross-repository reconciliation required: **YES**
+
+Semantic implementation gate: **BLOCKED**
+
 Rule: Derive the eight mandatory criteria from candidate evidence before scoring. Aggregate score never overrides the mandatory gate. Open state is recorded separately and never counted as award evidence.
 
 ## Complete scorecard
