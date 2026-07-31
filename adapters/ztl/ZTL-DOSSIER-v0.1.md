@@ -49,13 +49,15 @@ judge(text: str, marking: dict[str, "T"|"F"|"Z"] | None) -> dict
 
 check(text, marking)                     # single claim
 join(text_a, text_b, operator, marking)  # two claims under an operator
-grade(phi, marking)                      # warranty grade only
+grade(phi, marking)                      # warranty grade only -- SEE HAZARD BELOW
 formalize(text)                          # parse to AST; no evaluation
 ```
 
 Connector-level JSON contracts (for artifact exchange rather than in-process calls):
 `connector/schema/warrant-form.schema.json`, `connector/schema/verdict-artifact.schema.json`.
 Canonicalisation: RFC 8785 (JCS) subset, float-free. Digest: SHA-384 over `{claim, rule, atoms}`.
+
+**Mark-dialect hazard.** `zverify.grade()` expects `'M'` for a mark; `judge()` accepts `'Z'` and converts internally. Passing `'Z'` to `zverify.grade()` returns `hereditary` **silently and wrongly** for every input. Consume `judge()`; if `grade()` is called directly, translate the dialect first. Every conformance fixture records both readings.
 
 ## 6. Semantics and semantic boundary statement
 
@@ -89,12 +91,15 @@ These are OIC's planes (compilation, admission, enforcement), not the kernel's. 
 
 This is a **proposed interpretation** and requires joint conformance tests before either side relies on it:
 
+> **CORRECTION 2026-07-29.** This section originally listed **three** dispositions. The kernel has **four**: `ON CREDIT` was missing. It is a T verdict that is *not* `hereditary` — true only while an unverified atom holds. Routed as EARNED it would authorise action on credit, which is the precise failure ZTL exists to expose. Both real cases are fixtured (`on-credit-sound`, `on-credit-until-verification`). Corrected table below; see also `MAPPING-REVIEW-v0.1.md`.
+
 | ZTL result (`disposition` + `grade`) | OIC Envelope behavior | Rationale |
 |---|---|---|
-| `EARNED`, grade `hereditary` | supports ALLOW (subject to authority/evidence, which ZTL does not check) | invariant under further verification |
-| `EARNED`, grade `sound` | ALLOW **only** if the envelope tolerates a non-monotone warrant; otherwise ESCALATE | may stall under refinement |
+| `EARNED` + `hereditary` | supports ALLOW (subject to authority/evidence, which ZTL does not check) | invariant under further verification |
+| **`ON CREDIT` + `sound`** | ALLOW **only** where the envelope explicitly tolerates a non-monotone warrant; otherwise ESCALATE with `unverified` | never lies about the present marking, but may stall |
+| **`ON CREDIT` + `until-verification`** | **ESCALATE**, not ALLOW | rides an unverified atom that can flip |
 | `REFUTED` | supports DENY | grounds establish falsity |
-| **`OPEN`** (any raw verdict, grade `until-verification`) | **`on_unknown` → ESCALATE / CANNOT**, *never* `on_conflict` → DENY | absence of verification is **not** falsity |
+| **`OPEN`** (raw verdict F or Z; never T) | **`on_unknown` → ESCALATE / CANNOT**, *never* `on_conflict` → DENY | absence of verification is **not** falsity |
 | `unverified` list non-empty | `missing_inputs` | the unverified atoms blocking the conclusion |
 | contradiction record | `on_conflict` → DENY | grounds are mutually inconsistent |
 
@@ -108,7 +113,7 @@ This is a **proposed interpretation** and requires joint conformance tests befor
 
 The raw `verdict` is **F** (default deny), while `disposition` is **OPEN** and `grade` is **until-verification**. An adapter that reads `verdict` alone turns *"not yet established"* into *"established false"* — violating OIC invariant I-04 and the metric `Unknown-to-false conversion = 0`. This will not surface in ordinary tests until a genuinely undetermined case reaches production.
 
-**Therefore the adapter contract we ask for:** consume **`disposition`** (`EARNED` / `REFUTED` / `OPEN`) as the primary signal, `grade` as the warranty qualifier, and `unverified` as `missing_inputs`. Treat the bare `verdict` field as an internal detail of the kernel, not as the operational answer. **The grade is not optional metadata; it is half of the result.**
+**Therefore the adapter contract we ask for:** consume **`disposition`** (`EARNED` / `REFUTED` / **`ON CREDIT`** / `OPEN`) as the primary signal, `grade` as the warranty qualifier, and `unverified` as `missing_inputs`. Treat the bare `verdict` field as an internal detail of the kernel, not as the operational answer. **The grade is not optional metadata; it is half of the result.**
 
 ### 6.4 Logical time (E24/E25) — offered for alignment
 

@@ -1,0 +1,44 @@
+{
+  "case_id": "on-credit-until-verification",
+  "cross_check": {
+    "note": "zverify.grade expects 'M' for a mark. Passing 'Z' returns a wrong grade SILENTLY. judge() accepts 'Z' and converts internally; prefer judge().",
+    "zverify_grade_if_Z_passed_by_mistake": "hereditary",
+    "zverify_grade_with_M_dialect": "until-verification"
+  },
+  "fixture_sha256": "d7c2e6c66ecbd2dc6eb48f175740554597345a9e4e2806c7bb2f2ccdcdc18cb5",
+  "input": {
+    "formula": "(b -> a) -> (b = c)",
+    "marking": {
+      "a": "F",
+      "b": "Z",
+      "c": "T"
+    }
+  },
+  "kernel": {
+    "entry": "ztljudge.judge",
+    "source": "live run"
+  },
+  "note": "TRUE ON CREDIT, weakest grade: the verdict rides the unverified atom and can die when it resolves",
+  "raw_output": {
+    "disposition": "ON CREDIT",
+    "formula": "((b \u2192 a) \u2192 (b \u2194 c))",
+    "grade": "until-verification",
+    "unverified": [
+      "b"
+    ],
+    "verdict": "T",
+    "why": "true only on credit \u2014 rides the unverified ['b']; if one flips, the claim can die"
+  },
+  "recomputation": {
+    "depends_on": [
+      "a",
+      "b",
+      "c"
+    ],
+    "deterministic": true,
+    "recompute_when": [
+      "any atom in unverified is verified or expires"
+    ]
+  },
+  "status": "REACHABLE"
+}

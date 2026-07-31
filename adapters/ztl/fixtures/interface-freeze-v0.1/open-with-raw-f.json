@@ -1,0 +1,42 @@
+{
+  "case_id": "open-with-raw-f",
+  "cross_check": {
+    "note": "zverify.grade expects 'M' for a mark. Passing 'Z' returns a wrong grade SILENTLY. judge() accepts 'Z' and converts internally; prefer judge().",
+    "zverify_grade_if_Z_passed_by_mistake": "hereditary",
+    "zverify_grade_with_M_dialect": "until-verification"
+  },
+  "fixture_sha256": "642cc565ab6b4cbe822066efc18caf92944603aa29f225ac7eb52eae4f06c3fe",
+  "input": {
+    "formula": "p & q",
+    "marking": {
+      "p": "T",
+      "q": "Z"
+    }
+  },
+  "kernel": {
+    "entry": "ztljudge.judge",
+    "source": "live run"
+  },
+  "note": "THE TRAP: raw verdict is F (default deny) while the disposition is OPEN. An adapter reading `verdict` alone converts 'not yet established' into 'established false' and breaks OIC invariant I-04.",
+  "raw_output": {
+    "disposition": "OPEN",
+    "formula": "(p \u2227 q)",
+    "grade": "until-verification",
+    "unverified": [
+      "q"
+    ],
+    "verdict": "F",
+    "why": "not established \u2014 verify ['q'] (it could still turn either way)"
+  },
+  "recomputation": {
+    "depends_on": [
+      "p",
+      "q"
+    ],
+    "deterministic": true,
+    "recompute_when": [
+      "any atom in unverified is verified or expires"
+    ]
+  },
+  "status": "REACHABLE"
+}

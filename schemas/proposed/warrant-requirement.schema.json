@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/proposed/warrant-requirement.schema.json",
+  "title": "WarrantRequirement",
+  "description": "PROPOSED, NOT ADMITTED. Declares whether an admitted control requires a logical warrant, and if so under which kernel profile and at which minimum assurance grade. There is NO implicit or default mode: a control must state its requirement explicitly, because a defaulted warrant requirement is indistinguishable from one nobody thought about. This object is a separate dimension from `decision_mode`; see adr/ADR-013.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mode",
+    "kernel_profile_id",
+    "minimum_warranty_grade",
+    "on_insufficient_grade",
+    "unverified_ground_policy"
+  ],
+  "properties": {
+    "mode": {
+      "enum": [
+        "required",
+        "not_required",
+        "not_applicable"
+      ],
+      "description": "`required`: the control's decision depends on a logical warrant. `not_required`: the control has a logical component but does not gate on a warrant. `not_applicable`: the control contains no logical-warrant requirement at all. NOTE: `not_required` is NOT permission to skip authority, admission, evidence, or version checks. Those are independent of this object and are never waived by it."
+    },
+    "kernel_profile_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "description": "Identifies the kernel semantics AND the disposition/grade vocabulary the control was admitted against, for example `ztl-v0.1`. Required when mode is `required`. A warrant produced under a different profile is MISBOUND and cannot ALLOW: grades and dispositions are not portable between kernels, and comparing them across profiles would silently equate different guarantees."
+    },
+    "minimum_warranty_grade": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "hereditary",
+        "sound",
+        "until-verification",
+        null
+      ],
+      "description": "Least durable warranty grade this control accepts. `hereditary` accepts only results invariant under every admissible monotone refinement. `sound` additionally accepts results that never lie about the present marking but may stall. Setting `sound` is an explicit institutional decision to tolerate a non-monotone warrant; it must never be a default. Required when mode is `required`."
+    },
+    "on_insufficient_grade": {
+      "enum": [
+        "block",
+        "escalate",
+        null
+      ],
+      "description": "What the runtime does when the observed grade is below the minimum. The outcome is always recorded with decision_basis CONTROL_REQUIREMENT: the grounds did establish the claim, and the control declined to act on that grade. It is neither a defect nor a doubt about the logic. Required when mode is `required`."
+    },
+    "unverified_ground_policy": {
+      "enum": [
+        "forbid",
+        "escalate",
+        "allow_with_disclosure",
+        null
+      ],
+      "description": "Whether this control may act on a positive result that depends on unverified grounds, and how. `forbid`: never act on conditional support. `escalate`: route to a human. `allow_with_disclosure`: permitted to proceed, with the missing grounds preserved on the decision record. Required and non-null when mode is `required`. A minimum warranty grade alone is NOT sufficient authorisation to act on unverified grounds: the grade says how durable the result is, this field says whether the institution accepts a result that rides an unverified link. They are different questions and a control must answer both."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "required"
+          }
+        },
+        "required": [
+          "mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "kernel_profile_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minimum_warranty_grade": {
+            "type": "string",
+            "enum": [
+              "hereditary",
+              "sound",
+              "until-verification"
+            ]
+          },
+          "on_insufficient_grade": {
+            "enum": [
+              "block",
+              "escalate"
+            ]
+          },
+          "unverified_ground_policy": {
+            "enum": [
+              "forbid",
+              "escalate",
+              "allow_with_disclosure"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "enum": [
+              "not_required",
+              "not_applicable"
+            ]
+          }
+        },
+        "required": [
+          "mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "kernel_profile_id": {
+            "type": "null"
+          },
+          "minimum_warranty_grade": {
+            "type": "null"
+          },
+          "on_insufficient_grade": {
+            "type": "null"
+          },
+          "unverified_ground_policy": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}

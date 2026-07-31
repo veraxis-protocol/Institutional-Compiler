@@ -1,0 +1,157 @@
+{
+  "applied_control_overlay_ids": [],
+  "case_id": "07-open-raw-z",
+  "classification_row": 25,
+  "description": "Bare Z mark on an atom.",
+  "expected": {
+    "decision_basis": "PRECAUTIONARY",
+    "epistemic_status": "UNRESOLVED",
+    "execution_disposition": "BLOCK",
+    "missing_ground_anchors": [],
+    "missing_ground_ids": [
+      "ground:registered",
+      "ground:under_threshold"
+    ],
+    "reason_codes": [
+      "OIC-D-0004",
+      "OIC-W-0012",
+      "OIC-W-0015"
+    ],
+    "runtime_decision": {
+      "admission_version": "adm-v3",
+      "applied_control_overlay_ids": [],
+      "authority_version": "auth-v2",
+      "conditional_support_subscription_ground_ids": [],
+      "conditional_support_subscription_reference": null,
+      "conditional_support_subscription_triggers": [],
+      "control_id": "ctl:proc-approval",
+      "control_version": "1.0.0",
+      "decision_basis": "PRECAUTIONARY",
+      "envelope_id": "env:proc-001",
+      "epistemic_status": "UNRESOLVED",
+      "evaluated_at": "2026-08-01T12:00:00Z",
+      "evaluation_id": "eval:07",
+      "execution_disposition": "BLOCK",
+      "input_hash": "sha256:0b43fba70ef0a558edc46b44feff06ea38ca21c1e7d96499228813e5d5871d43",
+      "missing_ground_anchors": [],
+      "missing_ground_ids": [
+        "ground:registered",
+        "ground:under_threshold"
+      ],
+      "on_unknown_applied": "cannot",
+      "reason_codes": [
+        "OIC-D-0004",
+        "OIC-W-0012",
+        "OIC-W-0015"
+      ],
+      "replay_reference": "replay:07-open-raw-z@sha256:0b43fba70ef0a558edc46b44feff06ea38ca21c1e7d96499228813e5d5871d43",
+      "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4",
+      "unverified_ground_policy_applied": null,
+      "warrant_artifact_id": "warrant:07",
+      "warrant_requirement_mode": "required",
+      "warrant_state": "USABLE",
+      "warranty_grade_observed": "until-verification",
+      "warranty_grade_required": "hereditary"
+    },
+    "warrant_state": "USABLE"
+  },
+  "input": {
+    "envelope": {
+      "bound_canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
+      "bound_formula_hash": "sha384:c5fd0cf3318ec40056117c73d3e5dc4a3e8afa7b26f90905c916db73fd618f63f3667c8d7ea9a3125f19cb3614535868",
+      "bound_kernel_profile_id": "ztl-v0.1",
+      "control_id": "ctl:proc-approval",
+      "control_version": "1.0.0",
+      "decision_mode": "automatic",
+      "envelope_id": "env:proc-001",
+      "on_unknown": "cannot",
+      "warrant_requirement": {
+        "kernel_profile_id": "ztl-v0.1",
+        "minimum_warranty_grade": "hereditary",
+        "mode": "required",
+        "on_insufficient_grade": "escalate",
+        "unverified_ground_policy": "forbid"
+      }
+    },
+    "runtime_context": {
+      "admission_version": "adm-v3",
+      "authority_version": "auth-v2",
+      "contradiction_detected": false,
+      "current_ground_epoch": {
+        "authority_id": "authority:proc-registry",
+        "scope_id": "scope:proc-grounds",
+        "sequence": 7
+      },
+      "current_ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
+      "evaluated_at": "2026-08-01T12:00:00Z",
+      "expired_ground_ids": [],
+      "kernel_available": true,
+      "revoked_ground_ids": [],
+      "source_version_set_hash": "sha256:903ffd39c43ed72bcb6c4058fa2d273979c7f1874c38730a8b45f9f19c1ecba4"
+    },
+    "warrant_artifact": {
+      "admission_ids": [
+        "adm:001"
+      ],
+      "canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
+      "claim_id": "claim:procurement-approval",
+      "dependency_ids": [],
+      "disposition": "OPEN",
+      "formula": "(ground:registered ∧ ground:under_threshold)",
+      "formula_hash": "sha384:c5fd0cf3318ec40056117c73d3e5dc4a3e8afa7b26f90905c916db73fd618f63f3667c8d7ea9a3125f19cb3614535868",
+      "generated_at": "2026-07-29T00:00:00Z",
+      "ground_epoch": {
+        "authority_id": "authority:proc-registry",
+        "scope_id": "scope:proc-grounds",
+        "sequence": 7
+      },
+      "ground_set_hash": "sha256:0ee34ab79a2b6cd7377f088ba02baa9d4e9654aae273e293bcce95dda1aa4926",
+      "input_hash": "sha256:35b32066cfaef6bfeed148bc254b4b9d8b1fded9d5c8ffa4a640b267586f8f3b",
+      "kernel_commit": "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b",
+      "kernel_name": "ztl",
+      "kernel_profile_id": "ztl-v0.1",
+      "kernel_version": "veraxis-ztl-input-v0.1",
+      "limitations": [
+        "Establishes propositional structure over supplied grounds only.",
+        "Does not establish source authenticity, institutional authority, or admission.",
+        "Does not decide ALLOW, BLOCK, or ESCALATE."
+      ],
+      "output_hash": "sha256:95f3bad8d8cb3b2b209c31ce451def51f3cf091ac461e3092660e48f1e5d19f6",
+      "raw_verdict": "Z",
+      "recomputation_reference": "ztl@56e1ff0510c62b04dbd85bbe08b7a6deacbf276b judge(input_hash=sha256:35b32066cfaef6bfeed148bc254b4b9d8b1fded9d5c8ffa4a640b267586f8f3b)",
+      "revocation_references": [],
+      "schema_version": "0.1.0",
+      "source_anchor_ids": [
+        "anchor:a1"
+      ],
+      "time_binding": {
+        "attestation_hash": "sha256:dbea71ca08d98d3897d9a130248cdbe24f4589c2361c076744cf41980e2ccf05",
+        "reference": "tsa:veraxis-dev",
+        "source": "attested_timestamp"
+      },
+      "unverified_ground_ids": [
+        "ground:registered",
+        "ground:under_threshold"
+      ],
+      "valid_from": "2026-07-01T00:00:00Z",
+      "valid_until": "2026-12-31T23:59:59Z",
+      "warrant_artifact_id": "warrant:07",
+      "warranty_grade": "until-verification"
+    },
+    "ztl_result": {
+      "disposition": "OPEN",
+      "grade": "until-verification",
+      "marking": {
+        "ground:registered": "Z",
+        "ground:under_threshold": "Z"
+      },
+      "raw_verdict": "Z",
+      "unverified": [
+        "ground:registered",
+        "ground:under_threshold"
+      ]
+    }
+  },
+  "reachability": "REACHABLE",
+  "status": "PROPOSED - conformance fixture, not admitted"
+}

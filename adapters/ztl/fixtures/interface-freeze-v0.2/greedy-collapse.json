@@ -1,0 +1,43 @@
+{
+  "case_id": "greedy-collapse",
+  "cross_check": {
+    "note": "zverify.grade expects 'M' for a mark. Passing 'Z' returns a wrong grade SILENTLY. judge() accepts 'Z' and converts internally; prefer judge().",
+    "zverify_grade_if_Z_passed_by_mistake": "hereditary",
+    "zverify_grade_with_M_dialect": "until-verification"
+  },
+  "fixture_sha256": "13725ef68a96423442bf7bb80039fc10dc9844c3d1f920e56080f74de3b228c6",
+  "input": {
+    "formula": "p | q",
+    "marking": {
+      "p": "Z",
+      "q": "Z"
+    }
+  },
+  "kernel": {
+    "entry": "ztljudge.judge",
+    "source": "live run"
+  },
+  "note": "no compound formula ever carries Z: the mark collapses under any operator",
+  "raw_output": {
+    "disposition": "OPEN",
+    "formula": "(p \u2228 q)",
+    "grade": "until-verification",
+    "unverified": [
+      "p",
+      "q"
+    ],
+    "verdict": "F",
+    "why": "not established \u2014 verify ['p', 'q'] (it could still turn either way)"
+  },
+  "recomputation": {
+    "depends_on": [
+      "p",
+      "q"
+    ],
+    "deterministic": true,
+    "recompute_when": [
+      "any atom in unverified is verified or expires"
+    ]
+  },
+  "status": "REACHABLE"
+}
