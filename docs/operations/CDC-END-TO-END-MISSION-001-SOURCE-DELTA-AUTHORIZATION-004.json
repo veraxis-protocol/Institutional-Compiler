@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "authorization_id": "OWNER-AUTHORIZATION-004",
+  "scope": "CDC-END-TO-END-MISSION-001",
+  "historical_baseline": "29daa374b7e5cdc30ca7788310fbabb85f19912b",
+  "historical_authorization_preserved": [
+    "src/oic/cdc_slice.py"
+  ],
+  "authorized_post_baseline_source_modules": [
+    "src/oic/cdc_slice.py",
+    "src/oic/cdc_e2e_mission.py"
+  ],
+  "additional_source_modules_authorized": false,
+  "result_bearing_mission_execution_authorized": false
+}

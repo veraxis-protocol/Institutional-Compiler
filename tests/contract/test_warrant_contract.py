@@ -37,6 +37,9 @@ MAPPING_MD = "docs/contracts/ZTL-OCE-MAPPING-v0.1.md"
 CONTRACT_DOC = "docs/contracts/WARRANT-CONTRACT-v0.1.md"
 ADR = "adr/ADR-013.md"
 PROPOSED = "schemas/proposed"
+CDC_SOURCE_DELTA_AUTHORIZATION = (
+    "docs/operations/CDC-END-TO-END-MISSION-001-SOURCE-DELTA-AUTHORIZATION-004.json"
+)
 
 EXPECTED_CASES = (
     "01-earned-hereditary-current",
@@ -1337,6 +1340,13 @@ def test_this_work_order_added_no_source_module(repo_root: Path) -> None:
     assert modules == historical_expected
 
 
+def _assert_exact_authorized_source_delta(
+    current_modules: set[str], baseline_modules: set[str], authorized: set[str]
+) -> None:
+    assert baseline_modules <= current_modules
+    assert current_modules - baseline_modules == authorized
+
+
 def test_cdc_slice_is_an_owner_authorized_post_baseline_source_delta(repo_root: Path) -> None:
     historical_baseline = "29daa374b7e5cdc30ca7788310fbabb85f19912b"
     relative = "src/oic/cdc_slice.py"
@@ -1366,8 +1376,40 @@ def test_cdc_slice_is_an_owner_authorized_post_baseline_source_delta(repo_root: 
         Path(path).name for path in historical.stdout.splitlines() if path.endswith(".py")
     }
     current_modules = {path.name for path in (repo_root / "src" / "oic").glob("*.py")}
-    assert baseline_modules <= current_modules
-    assert current_modules - baseline_modules == {"cdc_slice.py"}
+    authorization = json.loads((repo_root / CDC_SOURCE_DELTA_AUTHORIZATION).read_bytes())
+    assert authorization["authorization_id"] == "OWNER-AUTHORIZATION-004"
+    assert authorization["historical_baseline"] == historical_baseline
+    authorized = {
+        Path(path).name for path in authorization["authorized_post_baseline_source_modules"]
+    }
+    assert authorized == {"cdc_slice.py", "cdc_e2e_mission.py"}
+    _assert_exact_authorized_source_delta(current_modules, baseline_modules, authorized)
+
+
+def test_cdc_source_delta_guard_rejects_a_third_module(repo_root: Path) -> None:
+    historical_baseline = "29daa374b7e5cdc30ca7788310fbabb85f19912b"
+    historical = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(repo_root),
+            "ls-tree",
+            "-r",
+            "--name-only",
+            historical_baseline,
+            "src/oic",
+        ],
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    baseline_modules = {
+        Path(path).name for path in historical.stdout.splitlines() if path.endswith(".py")
+    }
+    authorized = {"cdc_slice.py", "cdc_e2e_mission.py"}
+    mutated = baseline_modules | authorized | {"unauthorized_third_module.py"}
+    with pytest.raises(AssertionError):
+        _assert_exact_authorized_source_delta(mutated, baseline_modules, authorized)
 
 
 def test_draft_schemas_are_byte_identical_to_the_bootstrap(repo_root: Path) -> None:
