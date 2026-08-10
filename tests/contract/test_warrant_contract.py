@@ -1302,8 +1302,28 @@ def test_no_ztl_or_veip_code_exists_or_is_imported(repo_root: Path) -> None:
 
 
 def test_this_work_order_added_no_source_module(repo_root: Path) -> None:
-    modules = {path.name for path in (repo_root / "src" / "oic").glob("*.py")}
-    assert modules == {
+    historical_baseline = "29daa374b7e5cdc30ca7788310fbabb85f19912b"
+    completed = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(repo_root),
+            "ls-tree",
+            "-r",
+            "--name-only",
+            historical_baseline,
+            "src/oic",
+        ],
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    modules = {
+        Path(path).name
+        for path in completed.stdout.splitlines()
+        if path.endswith(".py")
+    }
+    historical_expected = {
         "__init__.py",
         "baseline.py",
         "cli.py",
@@ -1314,6 +1334,40 @@ def test_this_work_order_added_no_source_module(repo_root: Path) -> None:
         "paths.py",
         "schemas.py",
     }
+    assert modules == historical_expected
+
+
+def test_cdc_slice_is_an_owner_authorized_post_baseline_source_delta(repo_root: Path) -> None:
+    historical_baseline = "29daa374b7e5cdc30ca7788310fbabb85f19912b"
+    relative = "src/oic/cdc_slice.py"
+    baseline = subprocess.run(
+        ["git", "-C", str(repo_root), "cat-file", "-e", f"{historical_baseline}:{relative}"],
+        capture_output=True,
+        check=False,
+    )
+    assert baseline.returncode != 0
+    assert (repo_root / relative).is_file()
+    historical = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(repo_root),
+            "ls-tree",
+            "-r",
+            "--name-only",
+            historical_baseline,
+            "src/oic",
+        ],
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    baseline_modules = {
+        Path(path).name for path in historical.stdout.splitlines() if path.endswith(".py")
+    }
+    current_modules = {path.name for path in (repo_root / "src" / "oic").glob("*.py")}
+    assert baseline_modules <= current_modules
+    assert current_modules - baseline_modules == {"cdc_slice.py"}
 
 
 def test_draft_schemas_are_byte_identical_to_the_bootstrap(repo_root: Path) -> None:
