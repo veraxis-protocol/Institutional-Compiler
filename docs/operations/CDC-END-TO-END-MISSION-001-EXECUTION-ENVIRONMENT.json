@@ -1,0 +1,14 @@
+{
+  "dev_requirements_sha256": "cf211a43c0f96dfb45f00376bfa940dae9beefd8f1425d96ed6c9f8fa2cc1172",
+  "mypy": "1.20.2",
+  "network": "disabled by suite-wide socket prohibition",
+  "pinned_requirements_sha256": "4840856b2fae0e793b061f5bf8ba87a5b180796177bdda45240ee7b0868e2d3f",
+  "pip_freeze_sha256": "e2d8f841532459ed15067d1ecb4f2977f198e326fccef518c506e40fd02e5d5d",
+  "platform": "macOS-13.7.8-x86_64-i386-64bit",
+  "pytest": "8.4.2",
+  "python_implementation": "CPython",
+  "python_version": "3.12.2",
+  "requires_python": ">=3.12,<3.13",
+  "ruff": "0.12.12",
+  "satisfies_pin": true
+}

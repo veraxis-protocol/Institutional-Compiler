@@ -1,0 +1,49 @@
+{
+  "clarification": "The nested governance_binding copy inside 01-MISSION-MANIFEST.json records the state at the moment that file was constructed, before the authorized governance-binding transition. It is preserved as history and is NOT controlling. The controlling governance state after the transition is 06-GOVERNANCE/binding.json = FROZEN_GOVERNANCE_BOUND, and the controlling package state is PACKAGE-MANIFEST.json = FROZEN. No file was edited to reconcile the nested copy, because rewriting a construction-time record to match a later state would destroy the evidence that the transition occurred.",
+  "classification": "SUCCESSOR_CLARIFICATION_RECORD",
+  "document_id": "CDC-END-TO-END-MISSION-001-INPUT-CLARIFICATION-v0.1",
+  "expected_results_encoded": false,
+  "governance_identities_unchanged": {
+    "adjudication_protocol_sha256": "0e2a9f7202b2136b1edd76148da4f1c957ff86301c42ddf6f0dc1055ce20426b",
+    "governance_commit": "2e2282cb1bdeef972e2cf189030f24b011be2868",
+    "oracle_sha256": "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9"
+  },
+  "implementation_modified": false,
+  "mission_executed": false,
+  "non_result_bearing": true,
+  "observed_internal_historical_condition": {
+    "01-MISSION-MANIFEST.json": {
+      "controlling": false,
+      "field": "governance_binding",
+      "observed_exact_bytes_available_to_claude": false,
+      "observed_value": "PENDING_FROZEN_GOVERNANCE_INPUT",
+      "status": "PRE_BINDING_CONSTRUCTION_SNAPSHOT"
+    },
+    "06-GOVERNANCE/binding.json": {
+      "controlling": true,
+      "observed_exact_bytes_verified_by_claude": true,
+      "observed_value": "FROZEN_GOVERNANCE_BOUND",
+      "status": "FINAL_FROZEN_GOVERNANCE_BINDING"
+    },
+    "PACKAGE-MANIFEST.json": {
+      "controlling": true,
+      "field": "governance_binding_state",
+      "observed_value": "FROZEN_GOVERNANCE_BOUND",
+      "status": "FINAL_PACKAGE_STATE"
+    }
+  },
+  "reader_rule": "Where 01-MISSION-MANIFEST.json and 06-GOVERNANCE/binding.json disagree about governance binding, 06-GOVERNANCE/binding.json controls.",
+  "relationship": "SUCCESSOR_TO_FROZEN_PACKAGE_NOT_A_MODIFICATION_OF_IT",
+  "subject_package": {
+    "bytes": 64199,
+    "content_sha256": "414d321dad9fe70671508848a19802f35635d27de60b932417f3305b961364f1",
+    "integrity_reverified_at_clarification_time": {
+      "member_mismatches": 0,
+      "recomputed_content_digest": "414d321dad9fe70671508848a19802f35635d27de60b932417f3305b961364f1",
+      "result": "MATCH"
+    },
+    "manifest_sha256": "506953539bd3991bf22d2855a898ae1a32ff618bd6dfed4be0d4c396a6fd152f",
+    "modified_by_this_clarification": false,
+    "package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.1"
+  }
+}
