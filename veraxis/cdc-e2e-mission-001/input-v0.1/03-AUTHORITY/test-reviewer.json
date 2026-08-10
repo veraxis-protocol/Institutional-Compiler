@@ -1,0 +1,44 @@
+{
+  "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+  "authority_basis": "mission-scoped test standing conferred by the slice contract only",
+  "authority_scope_ref": "CDC-TEST-MISSION-001/TEST-REVIEWER",
+  "authorization_representation": "Authority is represented as a bounded relation over identity, role, mission, scope, validity window, revocation status and permitted action. It is not a login flag and confers no legal competence, delegation or CDC authority.",
+  "identity": {
+    "display_name": "SYNTHETIC TEST REVIEWER",
+    "real_world_identity": "NONE; this record names no real person",
+    "reviewer_id": "TEST-REVIEWER-001"
+  },
+  "mission": "CDC-TEST-MISSION-001",
+  "out_of_scope_counterpart": {
+    "authority_scope_ref": "CDC-TEST-MISSION-999/TEST-REVIEWER",
+    "purpose": "negative standing input; not an authorized reviewer",
+    "reviewer_id": "TEST-REVIEWER-OUT-OF-SCOPE-001"
+  },
+  "permitted_action": {
+    "action": "APPLY_TEST_DISPOSITION",
+    "permitted_dispositions": [
+      "ACCEPT_CANDIDATE",
+      "DEFER",
+      "DISMISS",
+      "ESCALATE",
+      "QUALIFY",
+      "REQUEST_EVIDENCE"
+    ],
+    "scope_limited_to": "CDC-TEST-MISSION-001/TEST-REVIEWER"
+  },
+  "record_id": "CDC-E2E-TEST-REVIEWER-001",
+  "revocation": {
+    "revocation_checked_at_transition_time": "REQUIRED_OF_RUNNER",
+    "revocation_ref": null,
+    "status": "NOT_REVOKED"
+  },
+  "role": {
+    "role_basis": "SYNTHETIC_TEST_CHARTER",
+    "role_id": "CDC_TEST_CONTROLLER"
+  },
+  "validity": {
+    "effective_from": "2026-08-10T00:00:00Z",
+    "effective_until": "2026-08-11T00:00:00Z",
+    "validity_is_bounded": true
+  }
+}

@@ -2,12 +2,20 @@
 
 from __future__ import annotations
 
+import json
+from copy import deepcopy
+from pathlib import Path
 from typing import Any
 
 import pytest
 
 from oic.cdc_e2e_mission import (
+    ADJUDICATION_PROTOCOL_SHA256,
     DRAFT_KINDS,
+    FROZEN_MISSION_MANIFEST_SHA256,
+    FROZEN_MISSION_PACKAGE_SHA256,
+    GOVERNANCE_COMMIT,
+    ORACLE_SHA256,
     ExecutionClearance,
     MissionContractError,
     ResultBearingMissionBlockedError,
@@ -15,13 +23,19 @@ from oic.cdc_e2e_mission import (
     execute_result_bearing_mission,
     prepare_mission,
     require_result_clearance,
+    validate_frozen_reviewer_standing,
+    verify_frozen_mission_input,
 )
+from oic.cdc_slice import make_successor
+
+PACKAGE_ROOT = Path(__file__).parents[2] / "veraxis/cdc-e2e-mission-001/input-v0.1"
 
 
 def _package() -> dict[str, Any]:
     return {
         "mission_id": "CDC-TEST-MISSION-001",
         "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+        "mission_package_sha256": FROZEN_MISSION_PACKAGE_SHA256,
         "admitted_controls": [
             {
                 "control_id": "OIC-CONTROL-001",
@@ -43,6 +57,21 @@ def test_prepare_binds_admitted_control_and_population_without_execution() -> No
     assert prepared.status == "PREPARED_NOT_EXECUTED"
     assert prepared.admitted_control_ids == ("OIC-CONTROL-001",)
     assert prepared.population_ids == ("P-001",)
+
+
+def test_persisted_frozen_mission_package_and_governance_bindings() -> None:
+    verified = verify_frozen_mission_input(PACKAGE_ROOT)
+    assert verified.package_sha256 == FROZEN_MISSION_PACKAGE_SHA256
+    assert verified.manifest_sha256 == FROZEN_MISSION_MANIFEST_SHA256
+    assert verified.package_bytes == 64199
+    assert verified.population_count == 3
+    assert verified.control_count == 3
+    assert verified.evidence_object_count == 54
+    assert verified.output_artifact_count == 5
+    governance = json.loads((PACKAGE_ROOT / "06-GOVERNANCE/binding.json").read_bytes())
+    assert governance["governance_commit"] == GOVERNANCE_COMMIT
+    assert governance["mission_oracle_sha256"] == ORACLE_SHA256
+    assert governance["mission_adjudication_protocol_sha256"] == ADJUDICATION_PROTOCOL_SHA256
 
 
 def test_raw_source_interpretation_is_rejected() -> None:
@@ -89,6 +118,51 @@ def test_five_bounded_draft_kinds_are_explicit_and_not_official() -> None:
         "findings_summary",
         "transmittal_letter",
     )
+    templates = [
+        json.loads(path.read_bytes())
+        for path in sorted((PACKAGE_ROOT / "04-OUTPUTS").glob("*.json"))
+    ]
+    assert len(templates) == 5
+    assert all(item["official_status"] == "NOT_AUTHORIZED_AS_OFFICIAL" for item in templates)
+    assert all(item["content_state"] == "NOT_YET_OBSERVED" for item in templates)
+
+
+def test_frozen_reviewer_standing_requires_scope_validity_and_revocation() -> None:
+    standing = json.loads((PACKAGE_ROOT / "03-AUTHORITY/test-reviewer.json").read_bytes())
+    validate_frozen_reviewer_standing(
+        standing,
+        mission_id="CDC-TEST-MISSION-001",
+        action="APPLY_TEST_DISPOSITION",
+        observed_at="2026-08-10T12:00:00Z",
+    )
+    revoked = deepcopy(standing)
+    revoked["revocation"]["status"] = "REVOKED"
+    with pytest.raises(MissionContractError, match="unauthorized"):
+        validate_frozen_reviewer_standing(
+            revoked,
+            mission_id="CDC-TEST-MISSION-001",
+            action="APPLY_TEST_DISPOSITION",
+            observed_at="2026-08-10T12:00:00Z",
+        )
+
+
+def test_correction_preserves_predecessor_identity_and_bytes() -> None:
+    predecessor = {"ebawu_id": "EBAWU-001", "state": "CANDIDATE_FORMED"}
+    before = deepcopy(predecessor)
+    successor = make_successor(
+        predecessor,
+        {
+            "new_ebawu_or_successor_id": "EBAWU-002",
+            "new_candidate_digest": "sha256:successor",
+            "correction_reason": "SYNTHETIC_CORRECTION",
+            "changed_fact_or_control_refs": ["FACT-001"],
+            "new_state": "CORRECTED_CANDIDATE",
+            "correction_event_id": "EVENT-002",
+        },
+    )
+    assert predecessor == before
+    assert successor["supersedes"] == "EBAWU-001"
+    assert successor["successor_id"] == "EBAWU-002"
 
 
 def test_mission_package_digest_mismatch_refuses() -> None:

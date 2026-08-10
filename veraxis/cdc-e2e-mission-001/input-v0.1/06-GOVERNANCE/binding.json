@@ -1,0 +1,40 @@
+{
+  "binding_rule": "Bound by commit, artifact identity and sha256 only. Neither instrument's bytes, content or expectations are copied into this package; acceptance expectations remain external to the mission input.",
+  "binding_state": "FROZEN_GOVERNANCE_BOUND",
+  "bound_artifacts": [
+    {
+      "artifact_identity": "CDC-END-TO-END-MISSION-001-SEMANTIC-ACCEPTANCE-ORACLE-v0.1.md",
+      "bytes": 11585,
+      "commit": "2e2282cb1bdeef972e2cf189030f24b011be2868",
+      "path_in_governance_commit": "veraxis/cdc-e2e-mission-001/CDC-END-TO-END-MISSION-001-SEMANTIC-ACCEPTANCE-ORACLE-v0.1.md",
+      "sha256": "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9",
+      "verification": "MATCH"
+    },
+    {
+      "artifact_identity": "CDC-END-TO-END-MISSION-001-RESULT-ADJUDICATION-PROTOCOL-v0.1.md",
+      "bytes": 4661,
+      "commit": "2e2282cb1bdeef972e2cf189030f24b011be2868",
+      "path_in_governance_commit": "veraxis/cdc-e2e-mission-001/CDC-END-TO-END-MISSION-001-RESULT-ADJUDICATION-PROTOCOL-v0.1.md",
+      "sha256": "0e2a9f7202b2136b1edd76148da4f1c957ff86301c42ddf6f0dc1055ce20426b",
+      "verification": "MATCH"
+    }
+  ],
+  "embedded": false,
+  "exact_bytes_available_to_claude": true,
+  "exact_bytes_verified_by_claude": true,
+  "governance_commit": "2e2282cb1bdeef972e2cf189030f24b011be2868",
+  "identifiers_bound": true,
+  "mission_adjudication_protocol_sha256": "0e2a9f7202b2136b1edd76148da4f1c957ff86301c42ddf6f0dc1055ce20426b",
+  "mission_oracle_sha256": "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9",
+  "note": "Identifiers bound and independently verified at byte level from the materialized governance commit.",
+  "verification": {
+    "bundle_verify": "PASS",
+    "digests_computed_by": "claude, byte-level, from the materialized commit",
+    "materialized_commit": "2e2282cb1bdeef972e2cf189030f24b011be2868",
+    "materialized_tree": "8dae072096e097e4364086f4554dd2bf2df23ab7",
+    "transport": "CDC-E2E-MISSION-001-GOVERNANCE-CLAUDE-TRANSFER.bundle",
+    "transport_bytes": 17327774,
+    "transport_sha256": "e67edbe0529d6a5da4ff10226d5d30c1ce0bb1dcb2b6ac9d298c897dfa9e7db0",
+    "working_tree": "CLEAN"
+  }
+}
