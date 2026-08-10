@@ -20,7 +20,8 @@ import pytest
 
 pytestmark = pytest.mark.contract
 
-BASE_SHA = "2dab50aa5e84cc2995bb8561a8d1fb63741e4a3a"
+CANADA_RIGHTS_RESOLUTION_BASE_SHA = "2dab50aa5e84cc2995bb8561a8d1fb63741e4a3a"
+CANADA_RIGHTS_RESOLUTION_TERMINAL_SHA = "29daa374b7e5cdc30ca7788310fbabb85f19912b"
 
 FREEZE_RELDIR = "benchmarks/corpus/canada/freeze-v0.1"
 DOSSIER_RELDIR = "benchmarks/corpus/canada/rights-resolution-v0.1"
@@ -76,13 +77,25 @@ def _load(repo_root: Path, name: str) -> dict[str, Any]:
 
 
 def _changed_files(repo_root: Path) -> list[str]:
+    interval = (
+        f"{CANADA_RIGHTS_RESOLUTION_BASE_SHA}...{CANADA_RIGHTS_RESOLUTION_TERMINAL_SHA}"
+    )
     return subprocess.run(
-        ["git", "diff", "--name-only", f"{BASE_SHA}...HEAD"],
+        ["git", "diff", "--name-only", interval],
         cwd=repo_root,
         check=True,
         capture_output=True,
         text=True,
     ).stdout.splitlines()
+
+
+def _protected_surface_violations(changed: list[str]) -> list[str]:
+    protected_prefixes = ("schemas/draft/", "docs/contracts/", "adapters/ztl/")
+    return [
+        path
+        for path in changed
+        if path == "STATUS.md" or any(path.startswith(prefix) for prefix in protected_prefixes)
+    ]
 
 
 @pytest.fixture(scope="module")
@@ -638,6 +651,41 @@ def test_no_semantic_artifact_was_produced(repo_root: Path) -> None:
         "rego",
     )
     assert not any(fragment in path for path in changed for fragment in prohibited)
+
+
+def test_historical_protected_path_mutation_remains_rejected() -> None:
+    changed = ["schemas/draft/synthetic-historical-violation.schema.json"]
+    assert _protected_surface_violations(changed) == changed
+
+
+def test_later_authorized_contract_is_outside_historical_interval(repo_root: Path) -> None:
+    later_path = "docs/contracts/VEIP-CDC-SLICE-EVALUATION-CONTRACT-v0.1-OWNER-ATTESTED.md"
+    historical = _changed_files(repo_root)
+    later = subprocess.run(
+        [
+            "git",
+            "diff",
+            "--name-only",
+            f"{CANADA_RIGHTS_RESOLUTION_TERMINAL_SHA}...HEAD",
+        ],
+        cwd=repo_root,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.splitlines()
+    assert later_path not in historical
+    assert later_path in later
+
+
+def test_historical_interval_terminal_is_never_dynamic_head() -> None:
+    interval = (
+        f"{CANADA_RIGHTS_RESOLUTION_BASE_SHA}...{CANADA_RIGHTS_RESOLUTION_TERMINAL_SHA}"
+    )
+    assert interval == (
+        "2dab50aa5e84cc2995bb8561a8d1fb63741e4a3a..."
+        "29daa374b7e5cdc30ca7788310fbabb85f19912b"
+    )
+    assert "HEAD" not in interval
 
 
 def test_generated_markdown_matches_the_canonical_json(repo_root: Path) -> None:

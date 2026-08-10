@@ -32,6 +32,9 @@ SHA256SUMS_RELPATH = f"{FREEZE_RELDIR}/SHA256SUMS"
 SHA512SUMS_RELPATH = f"{FREEZE_RELDIR}/SHA512SUMS"
 MANIFEST_RELPATH = "benchmarks/preflight/SOURCE_MANIFEST.csv"
 
+CANADA_ACQUISITION_FREEZE_BASE_SHA = "d99a38510e51a36972a414cadd0e44d49a04227c"
+CANADA_ACQUISITION_FREEZE_TERMINAL_SHA = "2dab50aa5e84cc2995bb8561a8d1fb63741e4a3a"
+
 CA3_XML_URL = "https://laws-lois.justice.gc.ca/eng/XML/SOR-87-402.xml"
 CA3_INDEX_URL = "https://laws-lois.justice.gc.ca/eng/regulations/sor-87-402/index.html"
 CA3_PDF_URL = "https://laws-lois.justice.gc.ca/PDF/SOR-87-402.pdf"
@@ -116,6 +119,29 @@ def _ca3_record(rights: dict[str, Any]) -> dict[str, Any]:
     return copy.deepcopy(
         next(record for record in rights["records"] if record["source_id"] == "CA-3")
     )
+
+
+def _historical_changed_files(repo_root: Path) -> list[str]:
+    interval = (
+        f"{CANADA_ACQUISITION_FREEZE_BASE_SHA}..."
+        f"{CANADA_ACQUISITION_FREEZE_TERMINAL_SHA}"
+    )
+    return subprocess.run(
+        ["git", "diff", "--name-only", interval],
+        cwd=repo_root,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.splitlines()
+
+
+def _protected_surface_violations(changed: list[str]) -> list[str]:
+    protected_prefixes = ("schemas/draft/", "docs/contracts/", "adapters/ztl/")
+    return [
+        path
+        for path in changed
+        if path == "STATUS.md" or any(path.startswith(prefix) for prefix in protected_prefixes)
+    ]
 
 
 # --------------------------------------------------------------------------
@@ -447,13 +473,7 @@ def test_mutation_blocked_source_with_a_freeze_entry_fails_verification(
 
 
 def test_status_and_draft_schemas_are_untouched(repo_root: Path) -> None:
-    changed = subprocess.run(
-        ["git", "diff", "--name-only", "d99a38510e51a36972a414cadd0e44d49a04227c...HEAD"],
-        cwd=repo_root,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.splitlines()
+    changed = _historical_changed_files(repo_root)
     assert "STATUS.md" not in changed
     assert not any(path.startswith("schemas/draft/") for path in changed)
     assert not any(path.startswith("docs/contracts/") for path in changed)
@@ -461,13 +481,7 @@ def test_status_and_draft_schemas_are_untouched(repo_root: Path) -> None:
 
 
 def test_no_semantic_artifact_was_produced(repo_root: Path) -> None:
-    changed = subprocess.run(
-        ["git", "diff", "--name-only", "d99a38510e51a36972a414cadd0e44d49a04227c...HEAD"],
-        cwd=repo_root,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.splitlines()
+    changed = _historical_changed_files(repo_root)
     prohibited = (
         "candidate-normative",
         "control-envelope",
@@ -477,6 +491,42 @@ def test_no_semantic_artifact_was_produced(repo_root: Path) -> None:
         "rego",
     )
     assert not any(fragment in path for path in changed for fragment in prohibited)
+
+
+def test_historical_protected_path_mutation_remains_rejected() -> None:
+    changed = ["docs/contracts/synthetic-historical-violation.md"]
+    assert _protected_surface_violations(changed) == changed
+
+
+def test_later_authorized_contract_is_outside_historical_interval(repo_root: Path) -> None:
+    later_path = "docs/contracts/VEIP-CDC-SLICE-EVALUATION-CONTRACT-v0.1-OWNER-ATTESTED.md"
+    historical = _historical_changed_files(repo_root)
+    later = subprocess.run(
+        [
+            "git",
+            "diff",
+            "--name-only",
+            f"{CANADA_ACQUISITION_FREEZE_TERMINAL_SHA}...HEAD",
+        ],
+        cwd=repo_root,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.splitlines()
+    assert later_path not in historical
+    assert later_path in later
+
+
+def test_historical_interval_terminal_is_never_dynamic_head() -> None:
+    interval = (
+        f"{CANADA_ACQUISITION_FREEZE_BASE_SHA}..."
+        f"{CANADA_ACQUISITION_FREEZE_TERMINAL_SHA}"
+    )
+    assert interval == (
+        "d99a38510e51a36972a414cadd0e44d49a04227c..."
+        "2dab50aa5e84cc2995bb8561a8d1fb63741e4a3a"
+    )
+    assert "HEAD" not in interval
 
 
 def test_freeze_tooling_has_no_semantic_or_model_integrations(repo_root: Path) -> None:
