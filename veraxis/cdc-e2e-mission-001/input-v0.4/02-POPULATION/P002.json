@@ -1,0 +1,347 @@
+{
+  "C-AWARD-01": {
+    "adjudicated_result": "NOT_PRECOMPUTED",
+    "admission_record": {
+      "admission_id": "ADM-P-002-C-AWARD-01",
+      "authority_basis": "SYNTHETIC_TEST_CHARTER",
+      "disposition": "ADMITTED",
+      "reviewer": "TEST-REVIEWER-001",
+      "reviewer_role": "CDC_TEST_CONTROLLER",
+      "scope": "CDC-TEST-MISSION-001/TEST-REVIEWER",
+      "source_hashes": [
+        "sha256:0636ab0bb018526779ef8ba92b1efa2e0734c60f0e3155c189820645537489b4"
+      ],
+      "subject_id": "C-AWARD-01"
+    },
+    "admitted_control": {
+      "conditions": [
+        "contract_award_condition_satisfied"
+      ],
+      "control_id": "C-AWARD-01",
+      "decision_mode": "DETERMINISTIC",
+      "on_unknown": "ESCALATE",
+      "phase": "contract_award",
+      "procedure_id": "P-002",
+      "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001",
+      "source_anchors": [
+        {
+          "anchor_id": "ANCHOR-P-002-C-AWARD-01-art-1",
+          "content_hash": "sha256:33232666d5e6f84637170385095fcf4304aac4e429b2a11df095b40814253ea9",
+          "node_id": "art-1",
+          "source_id": "SRC-P-002"
+        }
+      ]
+    },
+    "candidate": {
+      "candidate_id": "CAND-P-002-C-AWARD-01",
+      "epistemic_state": "SUPPORTED",
+      "interpretation_state": "SYNTHETIC",
+      "source_anchors": [
+        {
+          "anchor_id": "ANCHOR-P-002-C-AWARD-01-art-1",
+          "content_hash": "sha256:33232666d5e6f84637170385095fcf4304aac4e429b2a11df095b40814253ea9",
+          "node_id": "art-1",
+          "source_id": "SRC-P-002"
+        }
+      ],
+      "unit_type": "CONTROL_RESULT_CANDIDATE"
+    },
+    "chain_order": [
+      "source_anchors",
+      "admitted_control",
+      "evidence_bundle",
+      "deterministic_evaluation",
+      "warrant_artifact",
+      "candidate"
+    ],
+    "control_ref": "C-AWARD-01",
+    "deterministic_evaluation": {
+      "control_id": "C-AWARD-01",
+      "evaluation_id": "EVAL-P-002-C-AWARD-01",
+      "reason_codes": [
+        "BREACH_SYNTHETIC"
+      ],
+      "verdict": "BREACH"
+    },
+    "ebawu": {
+      "ebawu_id": "EBAWU-P-002-C-AWARD-01"
+    },
+    "evidence_bundle": {
+      "control_id": "C-AWARD-01",
+      "evidence_bundle_id": "EVB-P-002-C-AWARD-01",
+      "observations": [
+        {
+          "fact": "publication_window_days",
+          "value": 9
+        }
+      ],
+      "procedure_id": "P-002",
+      "source_anchors": [
+        {
+          "anchor_id": "ANCHOR-P-002-C-AWARD-01-dossier-1",
+          "content_hash": "sha256:fff40e49c9293469ab62a07ddcf743fe0ec59796f73f14d158af0910e598a0c6",
+          "node_id": "dossier-1",
+          "source_id": "SRC-P-002"
+        }
+      ]
+    },
+    "object_digests": {
+      "admission_record": "sha256:9e043997a98aac4431ef563394be339ac2a09bd6fc1efb9a5966d27f4ecd1ddf",
+      "admitted_control": "sha256:40a871431e3996a8ce7b325705c70c670f64ddf9ced02c1d47294fe3b25e0d4d",
+      "candidate": "sha256:4b54c80591c963ec00e14da62b7ae498c311c4f3285ca8b6f15755e229d8e57d",
+      "deterministic_evaluation": "sha256:0ebbe0b6b49894aa8a1ed48b3968f43b27abf5386f116ab69a73802c68bca4cd",
+      "evidence_bundle": "sha256:03b85ac5025947b7f2261f09f8a480c79f28a7919dc6fa6f6b4fba45ddd68bde",
+      "warrant_artifact": "sha256:8426e36eb9db492cec3547b3606b78313452ff162cec6fac67ce9fe15a1fd3af"
+    },
+    "prior_institutional_state": "CANDIDATE_FORMED",
+    "procedure_id": "P-002",
+    "public_id": "P002",
+    "shape": "DETERMINISTIC_BREACH",
+    "source_anchors": [
+      {
+        "anchor_id": "ANCHOR-P-002-C-AWARD-01-art-1",
+        "content_hash": "sha256:33232666d5e6f84637170385095fcf4304aac4e429b2a11df095b40814253ea9",
+        "node_id": "art-1",
+        "source_id": "SRC-P-002"
+      }
+    ],
+    "warrant_artifact": {
+      "claim_id": "CLAIM-P-002-C-AWARD-01",
+      "limitations": [
+        "SYNTHETIC_EVALUATION_ONLY"
+      ],
+      "warrant_artifact_id": "ZTL-P-002-C-AWARD-01",
+      "warranty_grade": "SYNTHETIC"
+    }
+  },
+  "C-EVAL-01": {
+    "adjudicated_result": "NOT_PRECOMPUTED",
+    "admission_record": {
+      "admission_id": "ADM-P-002-C-EVAL-01",
+      "authority_basis": "SYNTHETIC_TEST_CHARTER",
+      "disposition": "ADMITTED",
+      "reviewer": "TEST-REVIEWER-001",
+      "reviewer_role": "CDC_TEST_CONTROLLER",
+      "scope": "CDC-TEST-MISSION-001/TEST-REVIEWER",
+      "source_hashes": [
+        "sha256:28729084830f5168c5bb3161f94bc5e3c17ae9bc1180f30babfb32508848cf10"
+      ],
+      "subject_id": "C-EVAL-01"
+    },
+    "admitted_control": {
+      "conditions": [
+        "bid_evaluation_condition_satisfied"
+      ],
+      "control_id": "C-EVAL-01",
+      "decision_mode": "DETERMINISTIC",
+      "on_unknown": "ESCALATE",
+      "phase": "bid_evaluation",
+      "procedure_id": "P-002",
+      "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001",
+      "source_anchors": [
+        {
+          "anchor_id": "ANCHOR-P-002-C-EVAL-01-art-1",
+          "content_hash": "sha256:60e437d6c814dbff2c59694c44c7cefa687270176a88a7c2777896922ee45614",
+          "node_id": "art-1",
+          "source_id": "SRC-P-002"
+        }
+      ]
+    },
+    "candidate": {
+      "candidate_id": "CAND-P-002-C-EVAL-01",
+      "epistemic_state": "SUPPORTED",
+      "interpretation_state": "SYNTHETIC",
+      "source_anchors": [
+        {
+          "anchor_id": "ANCHOR-P-002-C-EVAL-01-art-1",
+          "content_hash": "sha256:60e437d6c814dbff2c59694c44c7cefa687270176a88a7c2777896922ee45614",
+          "node_id": "art-1",
+          "source_id": "SRC-P-002"
+        }
+      ],
+      "unit_type": "CONTROL_RESULT_CANDIDATE"
+    },
+    "chain_order": [
+      "source_anchors",
+      "admitted_control",
+      "evidence_bundle",
+      "deterministic_evaluation",
+      "warrant_artifact",
+      "candidate"
+    ],
+    "control_ref": "C-EVAL-01",
+    "deterministic_evaluation": {
+      "control_id": "C-EVAL-01",
+      "evaluation_id": "EVAL-P-002-C-EVAL-01",
+      "reason_codes": [
+        "BREACH_SYNTHETIC"
+      ],
+      "verdict": "BREACH"
+    },
+    "ebawu": {
+      "ebawu_id": "EBAWU-P-002-C-EVAL-01"
+    },
+    "evidence_bundle": {
+      "control_id": "C-EVAL-01",
+      "evidence_bundle_id": "EVB-P-002-C-EVAL-01",
+      "observations": [
+        {
+          "fact": "publication_window_days",
+          "value": 9
+        }
+      ],
+      "procedure_id": "P-002",
+      "source_anchors": [
+        {
+          "anchor_id": "ANCHOR-P-002-C-EVAL-01-dossier-1",
+          "content_hash": "sha256:e61252930820c5e3c4de67dd1cb5e0f7dc986c8ff7e32fc871d0cd71b4565ad5",
+          "node_id": "dossier-1",
+          "source_id": "SRC-P-002"
+        }
+      ]
+    },
+    "object_digests": {
+      "admission_record": "sha256:0086522bf8252c009c062f73fcbc20cf1e35d991a66ce475c10c3e58d328ef74",
+      "admitted_control": "sha256:1880263dfe98713ed53f9a3c635544cd8740369ed2031cfd93455671ad3e523c",
+      "candidate": "sha256:7364624b6e910a164b300d09573df1391cbe4f290b60c96f0bed3d578073ef65",
+      "deterministic_evaluation": "sha256:478abe068c0f3c7e93e183b8234ac1766d7123698e3eecbe65904f7dfa44ecba",
+      "evidence_bundle": "sha256:e38da7747337cbbf5784cfc8cc7486e00f3682177092b45b590eac818a90b04f",
+      "warrant_artifact": "sha256:52511cf9f437fb261e232a6a656409797eb70df4be245dec5e83e305ba3140d7"
+    },
+    "prior_institutional_state": "CANDIDATE_FORMED",
+    "procedure_id": "P-002",
+    "public_id": "P002",
+    "shape": "DETERMINISTIC_BREACH",
+    "source_anchors": [
+      {
+        "anchor_id": "ANCHOR-P-002-C-EVAL-01-art-1",
+        "content_hash": "sha256:60e437d6c814dbff2c59694c44c7cefa687270176a88a7c2777896922ee45614",
+        "node_id": "art-1",
+        "source_id": "SRC-P-002"
+      }
+    ],
+    "warrant_artifact": {
+      "claim_id": "CLAIM-P-002-C-EVAL-01",
+      "limitations": [
+        "SYNTHETIC_EVALUATION_ONLY"
+      ],
+      "warrant_artifact_id": "ZTL-P-002-C-EVAL-01",
+      "warranty_grade": "SYNTHETIC"
+    }
+  },
+  "C-TENDER-01": {
+    "adjudicated_result": "NOT_PRECOMPUTED",
+    "admission_record": {
+      "admission_id": "ADM-P-002-C-TENDER-01",
+      "authority_basis": "SYNTHETIC_TEST_CHARTER",
+      "disposition": "ADMITTED",
+      "reviewer": "TEST-REVIEWER-001",
+      "reviewer_role": "CDC_TEST_CONTROLLER",
+      "scope": "CDC-TEST-MISSION-001/TEST-REVIEWER",
+      "source_hashes": [
+        "sha256:0d8b1446ef68a66772ee7286c26db40fe0351f0d49eedda130e7cf52c787ac1d"
+      ],
+      "subject_id": "C-TENDER-01"
+    },
+    "admitted_control": {
+      "conditions": [
+        "competitive_tendering_condition_satisfied"
+      ],
+      "control_id": "C-TENDER-01",
+      "decision_mode": "DETERMINISTIC",
+      "on_unknown": "ESCALATE",
+      "phase": "competitive_tendering",
+      "procedure_id": "P-002",
+      "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001",
+      "source_anchors": [
+        {
+          "anchor_id": "ANCHOR-P-002-C-TENDER-01-art-1",
+          "content_hash": "sha256:a7bca06d50a4def07d212e33b809b5e420e07a743b7a21cc0308376644ac3a46",
+          "node_id": "art-1",
+          "source_id": "SRC-P-002"
+        }
+      ]
+    },
+    "candidate": {
+      "candidate_id": "CAND-P-002-C-TENDER-01",
+      "epistemic_state": "SUPPORTED",
+      "interpretation_state": "SYNTHETIC",
+      "source_anchors": [
+        {
+          "anchor_id": "ANCHOR-P-002-C-TENDER-01-art-1",
+          "content_hash": "sha256:a7bca06d50a4def07d212e33b809b5e420e07a743b7a21cc0308376644ac3a46",
+          "node_id": "art-1",
+          "source_id": "SRC-P-002"
+        }
+      ],
+      "unit_type": "CONTROL_RESULT_CANDIDATE"
+    },
+    "chain_order": [
+      "source_anchors",
+      "admitted_control",
+      "evidence_bundle",
+      "deterministic_evaluation",
+      "warrant_artifact",
+      "candidate"
+    ],
+    "control_ref": "C-TENDER-01",
+    "deterministic_evaluation": {
+      "control_id": "C-TENDER-01",
+      "evaluation_id": "EVAL-P-002-C-TENDER-01",
+      "reason_codes": [
+        "BREACH_SYNTHETIC"
+      ],
+      "verdict": "BREACH"
+    },
+    "ebawu": {
+      "ebawu_id": "EBAWU-P-002-C-TENDER-01"
+    },
+    "evidence_bundle": {
+      "control_id": "C-TENDER-01",
+      "evidence_bundle_id": "EVB-P-002-C-TENDER-01",
+      "observations": [
+        {
+          "fact": "publication_window_days",
+          "value": 9
+        }
+      ],
+      "procedure_id": "P-002",
+      "source_anchors": [
+        {
+          "anchor_id": "ANCHOR-P-002-C-TENDER-01-dossier-1",
+          "content_hash": "sha256:77d840e28fdedb802a18ecded47a032456bc550b7fed056330b581c8fcca06e4",
+          "node_id": "dossier-1",
+          "source_id": "SRC-P-002"
+        }
+      ]
+    },
+    "object_digests": {
+      "admission_record": "sha256:d731e9532ce7f333c43d1000d187161429d12a7909319ecf406095b17342925a",
+      "admitted_control": "sha256:28592828c97cfe8c3f7822ad8ed270ea70a1942ef5e506e504159af2d1ed5686",
+      "candidate": "sha256:fb5fd08d76c71d321805c8dd234ea33d9fd50a896704df2605be424326469b17",
+      "deterministic_evaluation": "sha256:6af81b4abefaa139c1bdf2903fae6dd6f91a1f03d753075686ef2d0ebadb0639",
+      "evidence_bundle": "sha256:61340d98277e7ed3986e9387b3d06164bd057831b1b42585417b5766234a4d8c",
+      "warrant_artifact": "sha256:44c87a1b110f7d385d35dc0949e9388d816379f30cc61126a65ad627eadfe189"
+    },
+    "prior_institutional_state": "CANDIDATE_FORMED",
+    "procedure_id": "P-002",
+    "public_id": "P002",
+    "shape": "DETERMINISTIC_BREACH",
+    "source_anchors": [
+      {
+        "anchor_id": "ANCHOR-P-002-C-TENDER-01-art-1",
+        "content_hash": "sha256:a7bca06d50a4def07d212e33b809b5e420e07a743b7a21cc0308376644ac3a46",
+        "node_id": "art-1",
+        "source_id": "SRC-P-002"
+      }
+    ],
+    "warrant_artifact": {
+      "claim_id": "CLAIM-P-002-C-TENDER-01",
+      "limitations": [
+        "SYNTHETIC_EVALUATION_ONLY"
+      ],
+      "warrant_artifact_id": "ZTL-P-002-C-TENDER-01",
+      "warranty_grade": "SYNTHETIC"
+    }
+  }
+}

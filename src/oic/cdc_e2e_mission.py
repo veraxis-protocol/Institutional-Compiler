@@ -30,14 +30,31 @@ OFFICIAL_CDC_RECORD_CREATION: Final = "PROHIBITED"
 # v0.1 is reviewer-authority currentness: the v0.1 standing expired at
 # 2026-08-11T00:00:00Z, so it could not authorize a real later disposition.
 # v0.1 is retained immutable and addressable as the predecessor.
-FROZEN_MISSION_INPUT_RELPATH: Final = "veraxis/cdc-e2e-mission-001/input-v0.3"
+FROZEN_MISSION_INPUT_RELPATH: Final = "veraxis/cdc-e2e-mission-001/input-v0.4"
+# The package digest is computed over the declared member identities, and the
+# manifest is self-excluded, so a manifest-only correction leaves it unchanged:
+# v0.4 shares v0.3's package digest by construction. The manifest digest and the
+# physical byte count are what separate them, and both are checked.
 FROZEN_MISSION_PACKAGE_SHA256: Final = (
     "1d4738d615bf2cbca481268910a14fadc0a4fceb4f60bb5619d1acf1a69687c3"
 )
-FROZEN_MISSION_PACKAGE_BYTES: Final = 67268
+FROZEN_MISSION_PACKAGE_BYTES: Final = 67965
 FROZEN_MISSION_MANIFEST_SHA256: Final = (
+    "9b85ec3b6f5f615dbdf464f68ce5dfda1e081e886520a4e98883e02573415f6b"
+)
+
+# v0.3 carried the correct owner-issued authority but an unqualified top-level
+# ``issued_at`` inherited from the rejected v0.2 local-clock lineage. It is
+# retained unchanged as the immediate predecessor.
+OWNER_ISSUED_MISSION_INPUT_RELPATH: Final = "veraxis/cdc-e2e-mission-001/input-v0.3"
+OWNER_ISSUED_MISSION_PACKAGE_SHA256: Final = (
+    "1d4738d615bf2cbca481268910a14fadc0a4fceb4f60bb5619d1acf1a69687c3"
+)
+OWNER_ISSUED_MISSION_PACKAGE_BYTES: Final = 67268
+OWNER_ISSUED_MISSION_MANIFEST_SHA256: Final = (
     "6a71ab4d6caeffe208f312400c3c7850e6905163c2b0fd28c87391ba4ae20261"
 )
+MANIFEST_CORRECTION_REASON: Final = "MANIFEST_PROVENANCE_CORRECTION"
 
 # v0.2 chose its effective_from from a locally observed clock. The owner has since
 # ruled that provenance unreliable, so v0.2 is retained and addressable but is not
@@ -59,10 +76,11 @@ PREDECESSOR_AUTHORITY_SHA256: Final = (
     "a82c078427fefe23abbb2bd066e9e730cea7e1fc2a3bab553e8352fa48b3db23"
 )
 SUPERSESSION_REASON: Final = "PREEXECUTION_AUTHORITY_CURRENTNESS"
-# Owner-issued prospective time. No local clock was consulted to choose it, and
-# it is also a fail-closed sanity boundary: an execution environment whose UTC
-# clock sits before it must refuse rather than compensate.
-AUTHORITY_ISSUED_AT: Final = "2026-08-11T20:30:00Z"
+# Owner-issued prospective time. This is the authority's *effective* time, not an
+# issuance timestamp: no trustworthy independent issuance instant was captured and
+# none is reconstructed. It is also a fail-closed sanity boundary: an execution
+# environment whose UTC clock sits before it must refuse rather than compensate.
+AUTHORITY_EFFECTIVE_FROM: Final = "2026-08-11T20:30:00Z"
 AUTHORITY_EFFECTIVE_FROM_SOURCE: Final = "OWNER_EXPLICIT_PROSPECTIVE_TIME"
 AUTHORITY_EFFECTIVE_UNTIL: Final = "2026-08-18T00:00:00Z"
 GOVERNANCE_COMMIT: Final = "2e2282cb1bdeef972e2cf189030f24b011be2868"

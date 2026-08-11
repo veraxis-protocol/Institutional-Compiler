@@ -37,6 +37,7 @@ from cdc_e2e_support import (
     NOT_ADOPTED_PACKAGE_RELPATH,
     OBSERVED_AT,
     OWNER_INTERPRETATION_RELPATH,
+    OWNER_ISSUED_PACKAGE_RELPATH,
     PACKAGE_RELPATH,
     PREDECESSOR_PACKAGE_RELPATH,
     PREDECESSOR_STRUCTURAL_OBSERVED_AT,
@@ -54,21 +55,27 @@ from cdc_e2e_support import (
 
 from oic import cdc_e2e_mission
 from oic.cdc_e2e_mission import (
+    AUTHORITY_EFFECTIVE_FROM,
     AUTHORITY_EFFECTIVE_FROM_SOURCE,
     AUTHORITY_EFFECTIVE_UNTIL,
-    AUTHORITY_ISSUED_AT,
     DRAFT_KINDS,
     EXPECTED_CHAIN_COUNT,
     FROZEN_MISSION_INPUT_RELPATH,
+    FROZEN_MISSION_MANIFEST_SHA256,
+    FROZEN_MISSION_PACKAGE_BYTES,
     FROZEN_MISSION_PACKAGE_SHA256,
     HUMAN_ACTION_PLAN_BYTES,
     HUMAN_ACTION_PLAN_SHA256,
     HUMAN_DISPOSITION_REQUIRED_FIELDS,
     LEGACY_MAPPING_ENTRYPOINT_STATE,
+    MANIFEST_CORRECTION_REASON,
     NOT_ADOPTED_CLASSIFICATION,
     NOT_ADOPTED_MISSION_PACKAGE_BYTES,
     NOT_ADOPTED_MISSION_PACKAGE_SHA256,
     NOT_ADOPTED_REASON,
+    OWNER_ISSUED_MISSION_MANIFEST_SHA256,
+    OWNER_ISSUED_MISSION_PACKAGE_BYTES,
+    OWNER_ISSUED_MISSION_PACKAGE_SHA256,
     OWNER_PREEXECUTION_INTERPRETATION_BYTES,
     OWNER_PREEXECUTION_INTERPRETATION_SHA256,
     OWNER_PREEXECUTION_INTERPRETATION_STATUS,
@@ -1503,7 +1510,7 @@ def test_v2_before_effective_from_is_rejected(projection: MissionProjection) -> 
     effective_from = projection.authority["validity"]["effective_from"]
     with pytest.raises(AuthorityCurrentnessError, match="not current"):
         _validate_at(projection.authority, "2026-08-11T00:00:00Z")
-    assert effective_from == AUTHORITY_ISSUED_AT
+    assert effective_from == AUTHORITY_EFFECTIVE_FROM
 
 
 def test_v2_inside_the_validity_interval_is_accepted(projection: MissionProjection) -> None:
@@ -1572,7 +1579,7 @@ def test_public_bind_path_obtains_runtime_utc(
     """
     now = observe_runtime_utc()
     disposition = disposition_for(stage_1, projection, TARGET_CHAIN, action_plan)
-    if now < AUTHORITY_ISSUED_AT:
+    if now < AUTHORITY_EFFECTIVE_FROM:
         with pytest.raises(AuthorityCurrentnessError, match="not current"):
             bind_human_disposition(
                 stage_1, disposition, projection=projection, action_plan=action_plan
@@ -1588,7 +1595,7 @@ def test_public_bind_path_obtains_runtime_utc(
         stage_1, disposition, projection=projection, action_plan=action_plan
     )
     assert bound["clock_source"] == RUNTIME_CLOCK_SOURCE
-    assert AUTHORITY_ISSUED_AT <= bound["observed_at"] <= AUTHORITY_EFFECTIVE_UNTIL
+    assert AUTHORITY_EFFECTIVE_FROM <= bound["observed_at"] <= AUTHORITY_EFFECTIVE_UNTIL
 
 
 def test_injected_clock_artifacts_are_explicitly_non_result_bearing(
@@ -1662,7 +1669,7 @@ def test_v0_2_is_retained_unchanged_and_is_not_controlling(repo_root: Path) -> N
         == NOT_ADOPTED_MISSION_PACKAGE_BYTES
     )
     # Not controlling: the module binds v0.3, and v0.2 would fail verification.
-    assert FROZEN_MISSION_INPUT_RELPATH.endswith("input-v0.3")
+    assert FROZEN_MISSION_INPUT_RELPATH.endswith("input-v0.4")
     assert str(NOT_ADOPTED_MISSION_PACKAGE_SHA256) not in {str(FROZEN_MISSION_PACKAGE_SHA256)}
     with pytest.raises(MissionContractError, match="identity or counts differ"):
         verify_frozen_mission_input(v2)
@@ -1679,17 +1686,21 @@ def test_v0_3_records_the_full_predecessor_chain_and_owner_issued_time(
         "CDC-END-TO-END-MISSION-001-INPUT-v0.1",
         "CDC-END-TO-END-MISSION-001-INPUT-v0.2",
         "CDC-END-TO-END-MISSION-001-INPUT-v0.3",
+        "CDC-END-TO-END-MISSION-001-INPUT-v0.4",
     ]
+    assert chain[0]["classification"] == "ORIGINAL_FROZEN_MISSION_INPUT"
     assert chain[1]["classification"] == NOT_ADOPTED_CLASSIFICATION
     assert chain[1]["reason"] == NOT_ADOPTED_REASON
+    assert chain[2]["classification"] == "OWNER_ISSUED_CURRENTNESS_SUCCESSOR"
+    assert chain[3]["classification"] == "CONTROLLING_MISSION_INPUT"
     assert all(entry["result_bearing_execution_seen"] is False for entry in chain)
-    assert manifest["effective_from"] == "2026-08-11T20:30:00Z"
-    assert manifest["effective_from_source"] == AUTHORITY_EFFECTIVE_FROM_SOURCE
+    assert manifest["authority_effective_from"] == "2026-08-11T20:30:00Z"
+    assert manifest["authority_effective_from_source"] == AUTHORITY_EFFECTIVE_FROM_SOURCE
     assert manifest["backdating_permitted"] is False
     assert manifest["system_clock_used_to_choose_effective_from"] is False
 
     validity = projection.authority["validity"]
-    assert validity["effective_from"] == "2026-08-11T20:30:00Z" == AUTHORITY_ISSUED_AT
+    assert validity["effective_from"] == "2026-08-11T20:30:00Z" == AUTHORITY_EFFECTIVE_FROM
     assert validity["effective_until"] == AUTHORITY_EFFECTIVE_UNTIL
     supersession = projection.authority["supersession"]
     assert supersession["effective_from_source"] == AUTHORITY_EFFECTIVE_FROM_SOURCE
@@ -1703,7 +1714,7 @@ def test_v0_3_changes_only_authority_currentness(
     """Exactly two members differ from v0.2, and the invariants survive from v0.1."""
     v1 = repo_root / PREDECESSOR_PACKAGE_RELPATH
     v2 = repo_root / NOT_ADOPTED_PACKAGE_RELPATH
-    v3 = repo_root / PACKAGE_RELPATH
+    v3 = repo_root / OWNER_ISSUED_PACKAGE_RELPATH
     manifest = json.loads((v3 / "PACKAGE-MANIFEST.json").read_bytes())
     for predecessor in (v1, v2):
         differing = [
@@ -1737,3 +1748,157 @@ def test_v0_3_changes_only_authority_currentness(
         "REQUEST_EVIDENCE",
     ]
     assert "synthetic test authority only" in after["supersession"]["claim_ceiling"]
+
+
+# ===========================================================================
+# R. Manifest provenance correction (input-v0.4)
+# ===========================================================================
+
+
+def test_v0_3_remains_immutable_and_addressable(repo_root: Path) -> None:
+    """v0.3 is retained byte-for-byte and still recomputes its own identity."""
+    v3 = repo_root / OWNER_ISSUED_PACKAGE_RELPATH
+    assert v3.is_dir()
+    manifest = json.loads((v3 / "PACKAGE-MANIFEST.json").read_bytes())
+    assert manifest["package_id"] == "CDC-END-TO-END-MISSION-001-INPUT-v0.3"
+    identities = []
+    for member in manifest["members"]:
+        payload = (v3 / member["path"]).read_bytes()
+        identities.append(
+            {
+                "path": member["path"],
+                "bytes": len(payload),
+                "sha256": hashlib.sha256(payload).hexdigest(),
+                "sha512": hashlib.sha512(payload).hexdigest(),
+            }
+        )
+    for observed, declared in zip(identities, manifest["members"], strict=True):
+        assert observed == {name: declared[name] for name in observed}
+    assert (
+        hashlib.sha256(
+            json.dumps(identities, sort_keys=True, ensure_ascii=False).encode()
+        ).hexdigest()
+        == OWNER_ISSUED_MISSION_PACKAGE_SHA256
+    )
+    assert (
+        sum(path.stat().st_size for path in v3.rglob("*") if path.is_file())
+        == OWNER_ISSUED_MISSION_PACKAGE_BYTES
+    )
+    assert (
+        hashlib.sha256((v3 / "PACKAGE-MANIFEST.json").read_bytes()).hexdigest()
+        == OWNER_ISSUED_MISSION_MANIFEST_SHA256
+    )
+    # The defect is still present in v0.3, unrewritten. That is the point.
+    assert manifest["issued_at"] == "2026-08-11T16:00:02Z"
+
+
+def test_v0_4_payload_is_byte_identical_to_v0_3(repo_root: Path) -> None:
+    """All fourteen payload members carry over unchanged; only the manifest differs."""
+    v3 = repo_root / OWNER_ISSUED_PACKAGE_RELPATH
+    v4 = repo_root / PACKAGE_RELPATH
+    manifest = json.loads((v4 / "PACKAGE-MANIFEST.json").read_bytes())
+    assert len(manifest["members"]) == 14
+    identical = [
+        member["path"]
+        for member in manifest["members"]
+        if (v3 / member["path"]).read_bytes() == (v4 / member["path"]).read_bytes()
+    ]
+    assert len(identical) == 14
+    assert manifest["changed_members"] == []
+    assert manifest["changed_physical_files"] == ["PACKAGE-MANIFEST.json"]
+
+    # And nothing else on disk moved either.
+    physical = sorted(path.relative_to(v4).as_posix() for path in v4.rglob("*") if path.is_file())
+    differing = [name for name in physical if (v4 / name).read_bytes() != (v3 / name).read_bytes()]
+    assert differing == ["PACKAGE-MANIFEST.json"]
+
+
+def test_v0_4_authority_is_byte_identical_to_v0_3(repo_root: Path) -> None:
+    """The authority record did not change; only its manifest description did."""
+    v3 = repo_root / OWNER_ISSUED_PACKAGE_RELPATH
+    v4 = repo_root / PACKAGE_RELPATH
+    relative = "03-AUTHORITY/test-reviewer.json"
+    assert (v4 / relative).read_bytes() == (v3 / relative).read_bytes()
+    manifest = json.loads((v4 / "PACKAGE-MANIFEST.json").read_bytes())
+    assert manifest["authority_changed"] is False
+    assert manifest["execution_payload_changed"] is False
+    assert manifest["experimental_meaning_changed"] is False
+
+
+def test_v0_4_carries_no_unqualified_stale_issued_at(repo_root: Path) -> None:
+    """The stale local-clock issuance claim is gone and was not replaced.
+
+    The v0.2 instant may still appear inside the authority record's
+    ``supersession.predecessor_validity``, where it is a qualified description of
+    the interval that was superseded. What must not survive is an unqualified
+    top-level issuance claim in the controlling manifest.
+    """
+    v4 = repo_root / PACKAGE_RELPATH
+    payload = (v4 / "PACKAGE-MANIFEST.json").read_bytes()
+    manifest = json.loads(payload)
+    assert "issued_at" not in manifest
+    assert b"2026-08-11T16:00:02Z" not in payload
+    assert manifest["issuance_timestamp_recorded"] is False
+    assert manifest["issuance_timestamp_absent_reason"]
+    # No reconstructed timestamp took its place: no issuance key survives at all.
+    assert [key for key in manifest if "issued" in key] == []
+
+    # The qualified predecessor record is retained in the untouched authority.
+    authority = json.loads((v4 / "03-AUTHORITY/test-reviewer.json").read_bytes())
+    assert (
+        authority["supersession"]["predecessor_validity"]["effective_from"]
+        == "2026-08-11T16:00:02Z"
+    )
+
+
+def test_v0_4_preserves_the_owner_issued_effective_time(
+    projection: MissionProjection, repo_root: Path
+) -> None:
+    """The controlling effective time and its provenance survive the correction."""
+    manifest = json.loads((repo_root / PACKAGE_RELPATH / "PACKAGE-MANIFEST.json").read_bytes())
+    assert manifest["authority_effective_from"] == "2026-08-11T20:30:00Z"
+    assert manifest["authority_effective_from_source"] == "OWNER_EXPLICIT_PROSPECTIVE_TIME"
+    assert manifest["backdating_permitted"] is False
+    assert manifest["system_clock_used_to_choose_effective_from"] is False
+    assert manifest["supersession_reason"] == MANIFEST_CORRECTION_REASON
+    assert manifest["classification"] == MANIFEST_CORRECTION_REASON
+    assert manifest["result_bearing_execution_seen_before_supersession"] is False
+    assert projection.authority["validity"]["effective_from"] == AUTHORITY_EFFECTIVE_FROM
+    assert AUTHORITY_EFFECTIVE_FROM == "2026-08-11T20:30:00Z"
+
+
+def test_manifest_digest_and_byte_count_separate_v0_4_from_v0_3(repo_root: Path) -> None:
+    """The package digest alone cannot distinguish them; verification still can.
+
+    The package digest is taken over declared member identities and the manifest
+    excludes itself, so a manifest-only correction leaves that digest unchanged.
+    This is a real property of the existing algorithm, not an accident: it is
+    recorded here so nobody later mistakes the shared digest for a copy-paste
+    error, and so the checks that *do* separate the two are pinned.
+    """
+    assert FROZEN_MISSION_PACKAGE_SHA256 == OWNER_ISSUED_MISSION_PACKAGE_SHA256
+    assert str(FROZEN_MISSION_MANIFEST_SHA256) not in {str(OWNER_ISSUED_MISSION_MANIFEST_SHA256)}
+    assert int(FROZEN_MISSION_PACKAGE_BYTES) not in {int(OWNER_ISSUED_MISSION_PACKAGE_BYTES)}
+    # v0.3 therefore fails verification against the controlling identity.
+    with pytest.raises(MissionContractError, match="identity or counts differ"):
+        verify_frozen_mission_input(repo_root / OWNER_ISSUED_PACKAGE_RELPATH)
+    # v0.4 verifies.
+    verified = verify_frozen_mission_input(repo_root / PACKAGE_RELPATH)
+    assert verified.manifest_sha256 == FROZEN_MISSION_MANIFEST_SHA256
+    assert verified.package_bytes == FROZEN_MISSION_PACKAGE_BYTES
+
+
+def test_runtime_clock_rule_is_unchanged_by_the_correction() -> None:
+    """The correction touched provenance only; the clock interlock is intact."""
+    signature = inspect.signature(bind_human_disposition)
+    assert set(signature.parameters) == {
+        "stage_1",
+        "disposition",
+        "projection",
+        "action_plan",
+    }
+    assert "observed_at" not in HUMAN_DISPOSITION_REQUIRED_FIELDS
+    source = inspect.getsource(bind_human_disposition)
+    assert "observe_runtime_utc()" in source
+    assert "clock_source=RUNTIME_CLOCK_SOURCE" in source
+    assert not hasattr(cdc_e2e_mission, "AUTHORITY_ISSUED_AT")
