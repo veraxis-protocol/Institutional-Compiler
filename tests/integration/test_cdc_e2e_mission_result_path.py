@@ -34,12 +34,14 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from cdc_e2e_support import (
     ACTION_PLAN_RELPATH,
+    NOT_ADOPTED_PACKAGE_RELPATH,
     OBSERVED_AT,
     OWNER_INTERPRETATION_RELPATH,
     PACKAGE_RELPATH,
     PREDECESSOR_PACKAGE_RELPATH,
     PREDECESSOR_STRUCTURAL_OBSERVED_AT,
     STUB_RUNTIME,
+    bind_disposition_at,
     bindings_for,
     correction_object,
     disposition_for,
@@ -52,23 +54,31 @@ from cdc_e2e_support import (
 
 from oic import cdc_e2e_mission
 from oic.cdc_e2e_mission import (
+    AUTHORITY_EFFECTIVE_FROM_SOURCE,
     AUTHORITY_EFFECTIVE_UNTIL,
     AUTHORITY_ISSUED_AT,
     DRAFT_KINDS,
     EXPECTED_CHAIN_COUNT,
     FROZEN_MISSION_INPUT_RELPATH,
+    FROZEN_MISSION_PACKAGE_SHA256,
     HUMAN_ACTION_PLAN_BYTES,
     HUMAN_ACTION_PLAN_SHA256,
+    HUMAN_DISPOSITION_REQUIRED_FIELDS,
     LEGACY_MAPPING_ENTRYPOINT_STATE,
+    NOT_ADOPTED_CLASSIFICATION,
+    NOT_ADOPTED_MISSION_PACKAGE_BYTES,
+    NOT_ADOPTED_MISSION_PACKAGE_SHA256,
+    NOT_ADOPTED_REASON,
     OWNER_PREEXECUTION_INTERPRETATION_BYTES,
     OWNER_PREEXECUTION_INTERPRETATION_SHA256,
     OWNER_PREEXECUTION_INTERPRETATION_STATUS,
     PREDECESSOR_AUTHORITY_SHA256,
     PREDECESSOR_MISSION_PACKAGE_BYTES,
     PREDECESSOR_MISSION_PACKAGE_SHA256,
+    RUNTIME_CLOCK_SOURCE,
     STAGE_1_AUTHORIZATION_CLEARED,
     STAGE_2_OUTCOME_STATES,
-    SUPERSESSION_REASON,
+    TEST_CLOCK_SOURCE,
     ActionPlanBindingError,
     ActionPlanProvenanceError,
     AuthorityCurrentnessError,
@@ -92,6 +102,7 @@ from oic.cdc_e2e_mission import (
     execute_authorized_stage_2,
     execute_result_bearing_mission,
     observation_producer,
+    observe_runtime_utc,
     project_frozen_mission,
     render_drafts,
     require_verified_action_plan,
@@ -170,7 +181,7 @@ def _all_dispositions(
 ) -> dict[str, Mapping[str, Any]]:
     """Bind the preregistered stimulus for every chain that formed a candidate."""
     return {
-        chain_id: bind_human_disposition(
+        chain_id: bind_disposition_at(
             stage_1,
             disposition_for(stage_1, projection, chain_id, plan),
             projection=projection,
@@ -312,14 +323,14 @@ def test_authority_permitted_but_nonpreregistered_action_is_rejected(
     assert "QUALIFY" in projection.authority["permitted_action"]["permitted_dispositions"]
     substitute = disposition_for(stage_1, projection, TARGET_CHAIN, action_plan, action="QUALIFY")
     with pytest.raises(ActionPlanBindingError) as caught:
-        bind_human_disposition(stage_1, substitute, projection=projection, action_plan=action_plan)
+        bind_disposition_at(stage_1, substitute, projection=projection, action_plan=action_plan)
     message = str(caught.value)
     assert "action-plan mismatch on HA-P001-C-TENDER-01" in message
     assert "authority ceiling" in message
     assert not isinstance(caught.value, ReviewerStandingError)
 
     # Same reviewer, same scope, same validity: accepted for the preregistered class.
-    accepted = bind_human_disposition(
+    accepted = bind_disposition_at(
         stage_1,
         disposition_for(stage_1, projection, TARGET_CHAIN, action_plan),
         projection=projection,
@@ -328,7 +339,6 @@ def test_authority_permitted_but_nonpreregistered_action_is_rejected(
     assert accepted["action"] == "ACCEPT_CANDIDATE"
     assert accepted["reviewer_id"] == substitute["reviewer_id"]
     assert accepted["authority_scope_ref"] == substitute["authority_scope_ref"]
-    assert accepted["observed_at"] == substitute["observed_at"]
 
 
 def test_p003_chains_require_request_evidence_not_accept(
@@ -341,7 +351,7 @@ def test_p003_chains_require_request_evidence_not_accept(
     )
     wrong = disposition_for(stage_1, projection, chain_id, action_plan, action="ACCEPT_CANDIDATE")
     with pytest.raises(ActionPlanBindingError, match="HA-P003-C-EVAL-01"):
-        bind_human_disposition(stage_1, wrong, projection=projection, action_plan=action_plan)
+        bind_disposition_at(stage_1, wrong, projection=projection, action_plan=action_plan)
 
 
 def test_disposition_carrying_a_stale_plan_digest_is_rejected(
@@ -353,7 +363,7 @@ def test_disposition_carrying_a_stale_plan_digest_is_rejected(
         "action_plan_sha256": "0" * 64,
     }
     with pytest.raises(ActionPlanBindingError, match="verified action-plan digest"):
-        bind_human_disposition(stage_1, stale, projection=projection, action_plan=action_plan)
+        bind_disposition_at(stage_1, stale, projection=projection, action_plan=action_plan)
 
 
 def test_a_mapping_cannot_be_passed_as_the_action_plan(
@@ -366,7 +376,7 @@ def test_a_mapping_cannot_be_passed_as_the_action_plan(
             stage_1,
             disposition,
             projection=projection,
-            action_plan={"sha256": HUMAN_ACTION_PLAN_SHA256},
+            action_plan=cast("FrozenActionPlan", {"sha256": HUMAN_ACTION_PLAN_SHA256}),
         )
 
 
@@ -736,7 +746,7 @@ def test_disposition_binds_the_actual_candidate_and_frozen_standing(
     projection: MissionProjection, stage_1: Stage1Observation, action_plan: FrozenActionPlan
 ) -> None:
     """Every required field is bound and the reviewer is validated frozen-side."""
-    bound = bind_human_disposition(
+    bound = bind_disposition_at(
         stage_1,
         disposition_for(stage_1, projection, TARGET_CHAIN, action_plan),
         projection=projection,
@@ -760,7 +770,7 @@ def test_disposition_missing_a_required_field_is_rejected(
     incomplete = dict(disposition_for(stage_1, projection, TARGET_CHAIN, action_plan))
     del incomplete["reviewer_role"]
     with pytest.raises(MissionContractError, match="missing required fields"):
-        bind_human_disposition(stage_1, incomplete, projection=projection, action_plan=action_plan)
+        bind_disposition_at(stage_1, incomplete, projection=projection, action_plan=action_plan)
 
 
 def test_disposition_with_a_foreign_reviewer_is_rejected(
@@ -774,7 +784,7 @@ def test_disposition_with_a_foreign_reviewer_is_rejected(
         "authority_scope_ref": counterpart["authority_scope_ref"],
     }
     with pytest.raises(ReviewerStandingError, match="reviewer_id"):
-        bind_human_disposition(stage_1, forged, projection=projection, action_plan=action_plan)
+        bind_disposition_at(stage_1, forged, projection=projection, action_plan=action_plan)
 
 
 def test_disposition_outside_the_validity_window_is_rejected(
@@ -786,7 +796,7 @@ def test_disposition_outside_the_validity_window_is_rejected(
         "observed_at": "2027-01-01T00:00:00Z",
     }
     with pytest.raises(MissionContractError):
-        bind_human_disposition(stage_1, late, projection=projection, action_plan=action_plan)
+        bind_disposition_at(stage_1, late, projection=projection, action_plan=action_plan)
 
 
 def test_disposition_for_a_chain_with_no_candidate_cannot_bind(
@@ -825,7 +835,7 @@ def test_disposition_for_a_chain_with_no_candidate_cannot_bind(
         "stage_1_observation_digest": partial.digest(),
     }
     with pytest.raises(MissionContractError):
-        bind_human_disposition(partial, stimulus, projection=projection, action_plan=action_plan)
+        bind_disposition_at(partial, stimulus, projection=projection, action_plan=action_plan)
 
 
 # ===========================================================================
@@ -1518,39 +1528,83 @@ def test_revoked_v2_authority_is_rejected(projection: MissionProjection) -> None
         _validate_at(revoked, OBSERVED_AT)
 
 
-def test_caller_cannot_override_observed_at_or_validity(
+def test_the_authoritative_path_has_no_clock_argument_at_all(
     projection: MissionProjection, stage_1: Stage1Observation, action_plan: FrozenActionPlan
 ) -> None:
-    """No standing substitute, and a real clock cannot be contradicted."""
-    signature = inspect.signature(bind_human_disposition)
-    for forbidden in ("standing", "reviewer_standings", "authority", "validity"):
-        assert forbidden not in signature.parameters
+    """A caller cannot select, omit or historicize the observation clock.
 
-    # A disposition claiming a different time than the observed clock is refused.
+    There is no clock parameter to pass and none to leave out, so there is no
+    argument whose absence disables the currentness check. The public path takes
+    its instant from the runtime; a caller may state ``observed_at``, but only in
+    agreement with what the runtime observed.
+    """
+    signature = inspect.signature(bind_human_disposition)
+    for forbidden in ("observed_now", "clock", "now", "observed_at", "standing", "validity"):
+        assert forbidden not in signature.parameters
+    assert set(signature.parameters) == {
+        "stage_1",
+        "disposition",
+        "projection",
+        "action_plan",
+    }
+    assert "observed_at" not in HUMAN_DISPOSITION_REQUIRED_FIELDS
+
+    # A historical observed_at cannot control currentness: it is compared against
+    # the runtime's own observation and refused when it disagrees.
+    historical = {
+        **disposition_for(stage_1, projection, TARGET_CHAIN, action_plan),
+        "observed_at": PREDECESSOR_STRUCTURAL_OBSERVED_AT,
+    }
+    with pytest.raises(AuthorityCurrentnessError, match="may not select its own observation"):
+        bind_human_disposition(stage_1, historical, projection=projection, action_plan=action_plan)
+
+
+def test_public_bind_path_obtains_runtime_utc(
+    projection: MissionProjection, stage_1: Stage1Observation, action_plan: FrozenActionPlan
+) -> None:
+    """The public path observes UTC itself, and refuses while not yet effective.
+
+    The owner-issued interval opens at 2026-08-11T20:30:00Z. On an environment
+    whose UTC clock sits before that, the real path must refuse rather than
+    compensate; on one inside the window it binds and stamps the runtime clock.
+    Both branches are asserted against the runtime's own reading, so this test
+    states the same fact on either side of the boundary.
+    """
+    now = observe_runtime_utc()
     disposition = disposition_for(stage_1, projection, TARGET_CHAIN, action_plan)
-    with pytest.raises(AuthorityCurrentnessError, match="must state the observed clock"):
-        bind_human_disposition(
-            stage_1,
-            disposition,
-            projection=projection,
-            action_plan=action_plan,
-            observed_now="2026-08-13T09:00:00Z",
-        )
-    # Agreeing with the clock, inside the window, is admitted.
+    if now < AUTHORITY_ISSUED_AT:
+        with pytest.raises(AuthorityCurrentnessError, match="not current"):
+            bind_human_disposition(
+                stage_1, disposition, projection=projection, action_plan=action_plan
+            )
+        return
+    if now > AUTHORITY_EFFECTIVE_UNTIL:
+        with pytest.raises(AuthorityCurrentnessError, match="not current"):
+            bind_human_disposition(
+                stage_1, disposition, projection=projection, action_plan=action_plan
+            )
+        return
     bound = bind_human_disposition(
+        stage_1, disposition, projection=projection, action_plan=action_plan
+    )
+    assert bound["clock_source"] == RUNTIME_CLOCK_SOURCE
+    assert AUTHORITY_ISSUED_AT <= bound["observed_at"] <= AUTHORITY_EFFECTIVE_UNTIL
+
+
+def test_injected_clock_artifacts_are_explicitly_non_result_bearing(
+    projection: MissionProjection, stage_1: Stage1Observation, action_plan: FrozenActionPlan
+) -> None:
+    """Every structurally bound disposition says its clock was supplied."""
+    bound = bind_disposition_at(
         stage_1,
-        disposition,
+        disposition_for(stage_1, projection, TARGET_CHAIN, action_plan),
         projection=projection,
         action_plan=action_plan,
-        observed_now=OBSERVED_AT,
     )
+    assert bound["clock_source"] == TEST_CLOCK_SOURCE
+    assert bound["clock_source"] != RUNTIME_CLOCK_SOURCE
     assert bound["observed_at"] == OBSERVED_AT
-
-    # The validity window itself comes from the verified bytes, not the caller.
-    on_disk = json.loads(
-        (REPO_ROOT / FROZEN_MISSION_INPUT_RELPATH / "03-AUTHORITY/test-reviewer.json").read_bytes()
-    )
-    assert projection.authority["validity"] == on_disk["validity"]
+    assert "NOT_RESULT_BEARING" in bound["clock_source"]
 
 
 def test_v1_remains_immutable_and_addressable(repo_root: Path) -> None:
@@ -1583,27 +1637,83 @@ def test_v1_remains_immutable_and_addressable(repo_root: Path) -> None:
     )
 
 
-def test_v2_supersedes_v1_for_authority_currentness_only(
+def test_v0_2_is_retained_unchanged_and_is_not_controlling(repo_root: Path) -> None:
+    """v0.2 stays addressable and byte-verifiable, but does not control."""
+    v2 = repo_root / NOT_ADOPTED_PACKAGE_RELPATH
+    assert v2.is_dir()
+    manifest = json.loads((v2 / "PACKAGE-MANIFEST.json").read_bytes())
+    identities = [
+        {
+            "path": member["path"],
+            "bytes": len((v2 / member["path"]).read_bytes()),
+            "sha256": hashlib.sha256((v2 / member["path"]).read_bytes()).hexdigest(),
+            "sha512": hashlib.sha512((v2 / member["path"]).read_bytes()).hexdigest(),
+        }
+        for member in manifest["members"]
+    ]
+    for observed, declared in zip(identities, manifest["members"], strict=True):
+        assert observed == {name: declared[name] for name in observed}
+    recomputed = hashlib.sha256(
+        json.dumps(identities, sort_keys=True, ensure_ascii=False).encode()
+    ).hexdigest()
+    assert recomputed == NOT_ADOPTED_MISSION_PACKAGE_SHA256
+    assert (
+        sum(path.stat().st_size for path in v2.rglob("*") if path.is_file())
+        == NOT_ADOPTED_MISSION_PACKAGE_BYTES
+    )
+    # Not controlling: the module binds v0.3, and v0.2 would fail verification.
+    assert FROZEN_MISSION_INPUT_RELPATH.endswith("input-v0.3")
+    assert str(NOT_ADOPTED_MISSION_PACKAGE_SHA256) not in {str(FROZEN_MISSION_PACKAGE_SHA256)}
+    with pytest.raises(MissionContractError, match="identity or counts differ"):
+        verify_frozen_mission_input(v2)
+
+
+def test_v0_3_records_the_full_predecessor_chain_and_owner_issued_time(
     projection: MissionProjection, repo_root: Path
 ) -> None:
-    """Exactly one substantive member changed, and it changed only its validity."""
-    v1 = repo_root / PREDECESSOR_PACKAGE_RELPATH
-    v2 = repo_root / PACKAGE_RELPATH
-    manifest = json.loads((v2 / "PACKAGE-MANIFEST.json").read_bytes())
-    assert manifest["supersession_reason"] == SUPERSESSION_REASON
-    assert manifest["supersedes"] == "CDC-END-TO-END-MISSION-001-INPUT-v0.1"
-    assert manifest["predecessor_package_sha256"] == PREDECESSOR_MISSION_PACKAGE_SHA256
-    assert manifest["predecessor_retained_immutable"] is True
-    assert manifest["result_bearing_execution_seen_before_supersession"] is False
-
-    differing = [
-        member["path"]
-        for member in manifest["members"]
-        if (v1 / member["path"]).read_bytes() != (v2 / member["path"]).read_bytes()
+    """v0.1 -> v0.2 -> v0.3, with v0.2 classified NOT_ADOPTED and no execution seen."""
+    v3 = repo_root / PACKAGE_RELPATH
+    manifest = json.loads((v3 / "PACKAGE-MANIFEST.json").read_bytes())
+    chain = manifest["predecessor_chain"]
+    assert [entry["package_id"] for entry in chain] == [
+        "CDC-END-TO-END-MISSION-001-INPUT-v0.1",
+        "CDC-END-TO-END-MISSION-001-INPUT-v0.2",
+        "CDC-END-TO-END-MISSION-001-INPUT-v0.3",
     ]
-    assert differing == ["03-AUTHORITY/test-reviewer.json", "SHA256SUMS"]
+    assert chain[1]["classification"] == NOT_ADOPTED_CLASSIFICATION
+    assert chain[1]["reason"] == NOT_ADOPTED_REASON
+    assert all(entry["result_bearing_execution_seen"] is False for entry in chain)
+    assert manifest["effective_from"] == "2026-08-11T20:30:00Z"
+    assert manifest["effective_from_source"] == AUTHORITY_EFFECTIVE_FROM_SOURCE
+    assert manifest["backdating_permitted"] is False
+    assert manifest["system_clock_used_to_choose_effective_from"] is False
 
-    before = _v1_authority(repo_root)
+    validity = projection.authority["validity"]
+    assert validity["effective_from"] == "2026-08-11T20:30:00Z" == AUTHORITY_ISSUED_AT
+    assert validity["effective_until"] == AUTHORITY_EFFECTIVE_UNTIL
+    supersession = projection.authority["supersession"]
+    assert supersession["effective_from_source"] == AUTHORITY_EFFECTIVE_FROM_SOURCE
+    assert supersession["backdating_permitted"] is False
+    assert supersession["result_bearing_execution_seen_before_supersession"] is False
+
+
+def test_v0_3_changes_only_authority_currentness(
+    projection: MissionProjection, repo_root: Path
+) -> None:
+    """Exactly two members differ from v0.2, and the invariants survive from v0.1."""
+    v1 = repo_root / PREDECESSOR_PACKAGE_RELPATH
+    v2 = repo_root / NOT_ADOPTED_PACKAGE_RELPATH
+    v3 = repo_root / PACKAGE_RELPATH
+    manifest = json.loads((v3 / "PACKAGE-MANIFEST.json").read_bytes())
+    for predecessor in (v1, v2):
+        differing = [
+            member["path"]
+            for member in manifest["members"]
+            if (predecessor / member["path"]).read_bytes() != (v3 / member["path"]).read_bytes()
+        ]
+        assert differing == ["03-AUTHORITY/test-reviewer.json", "SHA256SUMS"]
+
+    original = _v1_authority(repo_root)
     after = projection.authority
     for key in (
         "identity",
@@ -1617,10 +1727,13 @@ def test_v2_supersedes_v1_for_authority_currentness_only(
         "record_id",
         "authorization_representation",
     ):
-        assert after[key] == before[key], key
-    assert after["validity"] != before["validity"]
-    supersession = after["supersession"]
-    assert supersession["supersession_reason"] == SUPERSESSION_REASON
-    assert supersession["predecessor_authority_sha256"] == PREDECESSOR_AUTHORITY_SHA256
-    assert supersession["result_bearing_execution_seen_before_supersession"] is False
-    assert "synthetic test authority only" in supersession["claim_ceiling"]
+        assert after[key] == original[key], key
+    assert sorted(after["permitted_action"]["permitted_dispositions"]) == [
+        "ACCEPT_CANDIDATE",
+        "DEFER",
+        "DISMISS",
+        "ESCALATE",
+        "QUALIFY",
+        "REQUEST_EVIDENCE",
+    ]
+    assert "synthetic test authority only" in after["supersession"]["claim_ceiling"]

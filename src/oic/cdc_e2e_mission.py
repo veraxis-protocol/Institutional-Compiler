@@ -11,6 +11,7 @@ import hashlib
 import json
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Final
 
@@ -29,14 +30,25 @@ OFFICIAL_CDC_RECORD_CREATION: Final = "PROHIBITED"
 # v0.1 is reviewer-authority currentness: the v0.1 standing expired at
 # 2026-08-11T00:00:00Z, so it could not authorize a real later disposition.
 # v0.1 is retained immutable and addressable as the predecessor.
-FROZEN_MISSION_INPUT_RELPATH: Final = "veraxis/cdc-e2e-mission-001/input-v0.2"
+FROZEN_MISSION_INPUT_RELPATH: Final = "veraxis/cdc-e2e-mission-001/input-v0.3"
 FROZEN_MISSION_PACKAGE_SHA256: Final = (
+    "1d4738d615bf2cbca481268910a14fadc0a4fceb4f60bb5619d1acf1a69687c3"
+)
+FROZEN_MISSION_PACKAGE_BYTES: Final = 67268
+FROZEN_MISSION_MANIFEST_SHA256: Final = (
+    "6a71ab4d6caeffe208f312400c3c7850e6905163c2b0fd28c87391ba4ae20261"
+)
+
+# v0.2 chose its effective_from from a locally observed clock. The owner has since
+# ruled that provenance unreliable, so v0.2 is retained and addressable but is not
+# the controlling input. No result-bearing execution occurred under v0.1 or v0.2.
+NOT_ADOPTED_MISSION_INPUT_RELPATH: Final = "veraxis/cdc-e2e-mission-001/input-v0.2"
+NOT_ADOPTED_MISSION_PACKAGE_SHA256: Final = (
     "00dd820cfe43b780d5bec1a12382b16a7d6d9e45d6546c4fc10f3a83ab321510"
 )
-FROZEN_MISSION_PACKAGE_BYTES: Final = 65849
-FROZEN_MISSION_MANIFEST_SHA256: Final = (
-    "b159625c4d812f197278b91e7175551cbb2e77efb24a3952ba41c89643987a95"
-)
+NOT_ADOPTED_MISSION_PACKAGE_BYTES: Final = 65849
+NOT_ADOPTED_CLASSIFICATION: Final = "PREEXECUTION_CURRENTNESS_SUCCESSOR_NOT_ADOPTED"
+NOT_ADOPTED_REASON: Final = "ISSUANCE_CLOCK_PROVENANCE_UNRELIABLE"
 
 PREDECESSOR_MISSION_INPUT_RELPATH: Final = "veraxis/cdc-e2e-mission-001/input-v0.1"
 PREDECESSOR_MISSION_PACKAGE_SHA256: Final = (
@@ -47,8 +59,11 @@ PREDECESSOR_AUTHORITY_SHA256: Final = (
     "a82c078427fefe23abbb2bd066e9e730cea7e1fc2a3bab553e8352fa48b3db23"
 )
 SUPERSESSION_REASON: Final = "PREEXECUTION_AUTHORITY_CURRENTNESS"
-# Observed system UTC clock at issuance. Not backdated.
-AUTHORITY_ISSUED_AT: Final = "2026-08-11T16:00:02Z"
+# Owner-issued prospective time. No local clock was consulted to choose it, and
+# it is also a fail-closed sanity boundary: an execution environment whose UTC
+# clock sits before it must refuse rather than compensate.
+AUTHORITY_ISSUED_AT: Final = "2026-08-11T20:30:00Z"
+AUTHORITY_EFFECTIVE_FROM_SOURCE: Final = "OWNER_EXPLICIT_PROSPECTIVE_TIME"
 AUTHORITY_EFFECTIVE_UNTIL: Final = "2026-08-18T00:00:00Z"
 GOVERNANCE_COMMIT: Final = "2e2282cb1bdeef972e2cf189030f24b011be2868"
 ORACLE_SHA256: Final = "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9"
@@ -1138,7 +1153,6 @@ HUMAN_DISPOSITION_REQUIRED_FIELDS: Final = (
     "reviewer_role",
     "authority_scope_ref",
     "action",
-    "observed_at",
     "reason",
     "action_plan_sha256",
     "stage_1_observation_digest",
@@ -1550,13 +1564,71 @@ def validate_frozen_reviewer_standing_exact(
     }
 
 
+RUNTIME_CLOCK_SOURCE: Final = "RUNTIME_OBSERVED_UTC"
+TEST_CLOCK_SOURCE: Final = "TEST_INJECTED_CLOCK_NOT_RESULT_BEARING"
+
+
+def observe_runtime_utc() -> str:
+    """The execution runtime's own UTC observation. Not a caller input."""
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def bind_human_disposition(
     stage_1: Stage1Observation,
     disposition: Mapping[str, Any],
     *,
     projection: MissionProjection,
     action_plan: object,
-    observed_now: str | None = None,
+) -> dict[str, Any]:
+    """Bind a disposition against the clock the runtime observes for itself.
+
+    There is deliberately no clock parameter. A caller cannot select the observed
+    time, cannot pass a historical one, and cannot omit an argument to skip the
+    currentness check, because no such argument exists on this path. A caller may
+    still *state* ``observed_at``, but it must equal what the runtime observed.
+    """
+    return _bind_disposition(
+        stage_1,
+        disposition,
+        projection=projection,
+        action_plan=action_plan,
+        observed_at=observe_runtime_utc(),
+        clock_source=RUNTIME_CLOCK_SOURCE,
+    )
+
+
+def _bind_disposition_with_injected_clock(
+    stage_1: Stage1Observation,
+    disposition: Mapping[str, Any],
+    *,
+    projection: MissionProjection,
+    action_plan: object,
+    clock: str,
+) -> dict[str, Any]:
+    """TEST-ONLY. Deterministic boundary testing with an injected clock.
+
+    Private and explicitly non-result-bearing: the artifact it produces is stamped
+    :data:`TEST_CLOCK_SOURCE`, so a reader can always tell that its observed time
+    was supplied rather than observed.
+    """
+    return _bind_disposition(
+        stage_1,
+        disposition,
+        projection=projection,
+        action_plan=action_plan,
+        observed_at=clock,
+        clock_source=TEST_CLOCK_SOURCE,
+    )
+
+
+def _bind_disposition(
+    stage_1: Stage1Observation,
+    disposition: Mapping[str, Any],
+    *,
+    projection: MissionProjection,
+    action_plan: object,
+    observed_at: str,
+    clock_source: str,
 ) -> dict[str, Any]:
     """Accept a disposition only if it is the preregistered stimulus for this chain.
 
@@ -1573,10 +1645,11 @@ def bind_human_disposition(
     as an action-plan mismatch, not an authority failure.
     """
     plan = require_verified_action_plan(action_plan)
-    if observed_now is not None and disposition.get("observed_at") != observed_now:
+    stated = disposition.get("observed_at")
+    if stated is not None and stated != observed_at:
         raise AuthorityCurrentnessError(
-            f"a real disposition must state the observed clock: observed_now is "
-            f"{observed_now!r}, disposition claims {disposition.get('observed_at')!r}"
+            f"a disposition may not select its own observation clock: the runtime "
+            f"observed {observed_at!r}, the disposition claims {stated!r}"
         )
     missing = sorted(set(HUMAN_DISPOSITION_REQUIRED_FIELDS) - disposition.keys())
     if missing:
@@ -1626,7 +1699,7 @@ def bind_human_disposition(
             _require_mapping(projection.authority["permitted_action"], "permitted_action")["action"]
         ),
         disposition=action,
-        observed_at=str(disposition["observed_at"]),
+        observed_at=observed_at,
     )
     record = {
         **observed,
@@ -1635,7 +1708,8 @@ def bind_human_disposition(
         "reviewer_id": str(disposition["reviewer_id"]),
         "reviewer_role": str(disposition["reviewer_role"]),
         "authority_scope_ref": str(disposition["authority_scope_ref"]),
-        "observed_at": str(disposition["observed_at"]),
+        "observed_at": observed_at,
+        "clock_source": clock_source,
         "reason": str(disposition["reason"]),
         "action_plan_sha256": plan.sha256_hex,
         "action_plan_provenance_token": plan.provenance_token,

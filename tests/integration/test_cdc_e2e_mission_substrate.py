@@ -64,7 +64,7 @@ def test_persisted_frozen_mission_package_and_governance_bindings() -> None:
     verified = verify_frozen_mission_input(PACKAGE_ROOT)
     assert verified.package_sha256 == FROZEN_MISSION_PACKAGE_SHA256
     assert verified.manifest_sha256 == FROZEN_MISSION_MANIFEST_SHA256
-    assert verified.package_bytes == 65849
+    assert verified.package_bytes == 67268
     assert verified.population_count == 3
     assert verified.control_count == 3
     assert verified.evidence_object_count == 54

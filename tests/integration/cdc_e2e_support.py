@@ -22,6 +22,7 @@ from oic.cdc_e2e_mission import (
     FROZEN_MISSION_PACKAGE_SHA256,
     HUMAN_ACTION_PLAN_RELPATH,
     HUMAN_ACTION_PLAN_SHA256,
+    NOT_ADOPTED_MISSION_INPUT_RELPATH,
     ORACLE_SHA256,
     OWNER_PREEXECUTION_INTERPRETATION_RELPATH,
     OWNER_PREEXECUTION_INTERPRETATION_SHA256,
@@ -34,13 +35,15 @@ from oic.cdc_e2e_mission import (
     RuntimeIdentity,
     Stage1Observation,
     WarrantFunction,
+    _bind_disposition_with_injected_clock,
     _form_stage_1,
 )
 
 PACKAGE_RELPATH = FROZEN_MISSION_INPUT_RELPATH
 PREDECESSOR_PACKAGE_RELPATH = PREDECESSOR_MISSION_INPUT_RELPATH
+NOT_ADOPTED_PACKAGE_RELPATH = NOT_ADOPTED_MISSION_INPUT_RELPATH
 
-# Inside the v0.2 standing's validity window (2026-08-11T16:00:02Z .. 2026-08-18).
+# Inside the v0.3 standing's validity window (2026-08-11T20:30:00Z .. 2026-08-18).
 OBSERVED_AT = "2026-08-12T00:00:00Z"
 
 # Inside the *expired* v0.1 window. Legitimate only as a structural timestamp in
@@ -120,7 +123,6 @@ def disposition_for(
         "reviewer_role": authority["role"]["role_id"],
         "authority_scope_ref": authority["authority_scope_ref"],
         "action": action,
-        "observed_at": OBSERVED_AT,
         "reason": "structural test stimulus; not a real reviewer judgement",
         "action_plan_sha256": HUMAN_ACTION_PLAN_SHA256,
         "stage_1_observation_digest": stage_1.digest(),
@@ -194,3 +196,23 @@ def bindings_for(
         "action_plan_sha256": plan.sha256_hex,
         "action_plan_provenance_token": plan.provenance_token,
     }
+
+
+def bind_disposition_at(
+    stage_1: Stage1Observation,
+    disposition: Mapping[str, Any],
+    *,
+    projection: MissionProjection,
+    action_plan: FrozenActionPlan,
+    clock: str = OBSERVED_AT,
+) -> dict[str, Any]:
+    """Test-support binder over the private injected-clock helper.
+
+    The public path takes its clock from the runtime and has no clock parameter.
+    Structural tests need a deterministic instant inside the frozen window, so
+    they reach the private helper from here. Every artifact it produces is
+    stamped TEST_INJECTED_CLOCK_NOT_RESULT_BEARING.
+    """
+    return _bind_disposition_with_injected_clock(
+        stage_1, disposition, projection=projection, action_plan=action_plan, clock=clock
+    )

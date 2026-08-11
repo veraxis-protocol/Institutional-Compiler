@@ -1,0 +1,149 @@
+{
+  "adjudication_protocol_changed": false,
+  "backdating_permitted": false,
+  "changed_members": [
+    "03-AUTHORITY/test-reviewer.json",
+    "SHA256SUMS"
+  ],
+  "classification": "NON_RESULT_BEARING_MISSION_INPUT",
+  "controls_changed": false,
+  "declared_payload_files": 14,
+  "effective_from": "2026-08-11T20:30:00Z",
+  "effective_from_source": "OWNER_EXPLICIT_PROSPECTIVE_TIME",
+  "evidence_changed": false,
+  "expected_results_encoded": false,
+  "french_packet_changed": false,
+  "governance_binding_state": "FROZEN_GOVERNANCE_BOUND",
+  "governance_commit": "2e2282cb1bdeef972e2cf189030f24b011be2868",
+  "governance_embedded_in_package": false,
+  "governance_exact_bytes_verified_by_claude": true,
+  "human_action_plan_changed": false,
+  "implementation_modified": false,
+  "issued_at": "2026-08-11T16:00:02Z",
+  "manifest_self_binding": "The manifest is excluded from members[] because it cannot contain its own digest; its identity is reported outside the package.",
+  "manifest_self_inclusion": false,
+  "members": [
+    {
+      "bytes": 5904,
+      "path": "01-MISSION-MANIFEST.json",
+      "sha256": "8855e0b25b02c87741380595d638258bfb407eb684438655bddeea45dbbf5ba6",
+      "sha512": "bde522e5499ac0d0a7dc40cf843a8b5f5ccbc661024501e1bd73ed231d54b189467a1b6f9f8f8d6c15c88a4e3a2d6013deca397deeae315f623312cd14ce8a58"
+    },
+    {
+      "bytes": 11753,
+      "path": "02-POPULATION/P001.json",
+      "sha256": "9b02e716f662eb29004a5f48b1aacf1906511da53bb168d16fb3dcd67d3990b7",
+      "sha512": "6b2bef235a68ec6b8b949e258d17b74234c6a986a99285404e9e818dd3d14c1d9ed9b51e142fa95e051650edff597fb27b5056c9ad6d73915fda7fea7d38aa46"
+    },
+    {
+      "bytes": 11777,
+      "path": "02-POPULATION/P002.json",
+      "sha256": "ca6a9b0750e43df8ee158f92ac0f57c5fe8babf598e89405201527e8471154e9",
+      "sha512": "561c5369f6b8ad3bb5f65a3f8e78319dc9afe7edf5d688a8869361541f1905eab5fe6c6148359868ff295510cd71398d5b4ff18c231a30123f0e049d55859345"
+    },
+    {
+      "bytes": 12974,
+      "path": "02-POPULATION/P003.json",
+      "sha256": "a4e1eed2dc9da846a4c9d4bca1a27e3d033ff5de32dbf47f0b3ea6083a2207d8",
+      "sha512": "f1cd0c1537d7b99cfbe67e8e5e887bea3a053cf7caa72ec39b252304cb4f377e37f37ea1dbf7b1fd8a879783e5c4bf924468cc99fcc501bd0d360ddfe3aaf37e"
+    },
+    {
+      "bytes": 3000,
+      "path": "03-AUTHORITY/test-reviewer.json",
+      "sha256": "b548a9191460eb0263dfecd39055f2ef989f830f836f006031a73b1ba6630277",
+      "sha512": "91307e870d59f98083c0ae0327eb87d865f13aef80f68f9d171a21e841ece4c0f8b878a3ca72aae04a1613188ffe7ad1db968378cbf10866a75e314c7bd814db"
+    },
+    {
+      "bytes": 903,
+      "path": "04-OUTPUTS/01-orientation-note.json",
+      "sha256": "8b65de1017a5e21832ed8f2b730866817433e8182bf5c898739355698f9aac2d",
+      "sha512": "c57b855154300b563831a3d0580229c6542aa6970c37b7a3dd6f4f4b53e39fbacdabd46fa02836381643e8baace43d19b8848f22bd011661645eb49c81b4d5e7"
+    },
+    {
+      "bytes": 905,
+      "path": "04-OUTPUTS/02-provisional-report.json",
+      "sha256": "47d89874cb2d87160ee34ab52c1531c1bd559365712d2629e632653cd8b7d1e9",
+      "sha512": "dbf8a0cc928c053c9493bff70859d49843ef323092075d4c7569d5dd6770b6e9f64c95a174b97c26e46a7b6e27a5c8f247499fe03bec9ee2a7ae0c31030d237c"
+    },
+    {
+      "bytes": 899,
+      "path": "04-OUTPUTS/03-final-report.json",
+      "sha256": "8b29979884126899139195bc4f8de07e860860a6b8ad5cdbf659bc48703cb799",
+      "sha512": "7b35c6d0a985aaa6b3a2ac52bf3016f0552eeae3951650a461c3d4e2098e44bcae7ab48ce266ffe31353fc95a4538a575180247cfef3316b6c2ed72c57564e8e"
+    },
+    {
+      "bytes": 921,
+      "path": "04-OUTPUTS/04-findings-summary.json",
+      "sha256": "187fa662dc37437d7baace122182746e1bebcfe6c49a3fccb779cb061365ed3a",
+      "sha512": "62d7baa8365f61b36ed5116e7277b14574139c0117fdc34a299194ac468a52fe4909838404b42361b3fb1324cac67bf7c818469f5a0fd86ea87a8cea362c014d"
+    },
+    {
+      "bytes": 909,
+      "path": "04-OUTPUTS/05-transmittal-letter.json",
+      "sha256": "4cae0a67961880fdb81c50ea54a2688324e8ff14dc7ba80af4e55945c85b4e42",
+      "sha512": "ef4726b025ee5e68307d51ebca4beaa1932c6ff56e04b93fa0f23f01ea56135bc7382940c2f6ab6d908282942abeb5fdfb846afb6ba4c1bdd6a2ec59d024af53"
+    },
+    {
+      "bytes": 1719,
+      "path": "05-FRENCH/french-packet.json",
+      "sha256": "cffc3ccf25f336e4449f3c7c9912a1352ab996788922ae21e171b28e0419be11",
+      "sha512": "d92a473b803c02aac84c6c520cefe2cbedd12195ca32125abed8a59b80272bf978a4008201e2bcee2da0bb180332b92eb3170ad36669312bba33621364e09be4"
+    },
+    {
+      "bytes": 2174,
+      "path": "06-GOVERNANCE/binding.json",
+      "sha256": "ea0df800d5c3988cc5279e245ad08d313ca9066df9b360548599a5cca7413e15",
+      "sha512": "67c350408851047609355bae99fef6e1c5b89371b3ea814a96ad6cb12de7e465a692bfdfe2db24877c70fd1fcc2c29a5347154977971dd65fe8715bd1f6ba906"
+    },
+    {
+      "bytes": 4930,
+      "path": "07-CLAIM-EVIDENCE-MAP/CDC-END-TO-END-MISSION-001-CLAIM-EVIDENCE-MAP-v0.1.json",
+      "sha256": "a835c6d34794234a9b62ce43051964fa8c4612aadb45a7ba3d8eb443caabe34b",
+      "sha512": "e7e85220fe4cbcdabb7bac5f9cc1fc3b8c5e93d97b43933d64f79c1eed29de10b3c9c84e899ef9a2c63642a1fb333f182f98ccb1509cac0cb0799383f6cdbb07"
+    },
+    {
+      "bytes": 1301,
+      "path": "SHA256SUMS",
+      "sha256": "357a350c821ce2af57230b2f088b92fc601aae48b2350750f406321f5d9f7556",
+      "sha512": "9ddc51b7ffa6f53ad00c4abba3148ba0545c068405c8163308f0c491012c530d937a0f483d6273bb1e6dce8c6c441021d9f96b580f69a13326f54b43ebd94fb5"
+    }
+  ],
+  "mission_executed": false,
+  "outputs_changed": false,
+  "owner_interpretation_changed": false,
+  "package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.3",
+  "physical_files": 15,
+  "population_changed": false,
+  "predecessor_chain": [
+    {
+      "classification": "ORIGINAL_FROZEN_MISSION_INPUT",
+      "package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.1",
+      "package_sha256": "414d321dad9fe70671508848a19802f35635d27de60b932417f3305b961364f1",
+      "result_bearing_execution_seen": false
+    },
+    {
+      "classification": "PREEXECUTION_CURRENTNESS_SUCCESSOR_NOT_ADOPTED",
+      "package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.2",
+      "package_sha256": "00dd820cfe43b780d5bec1a12382b16a7d6d9e45d6546c4fc10f3a83ab321510",
+      "reason": "ISSUANCE_CLOCK_PROVENANCE_UNRELIABLE",
+      "result_bearing_execution_seen": false
+    },
+    {
+      "classification": "CONTROLLING_MISSION_INPUT",
+      "package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.3",
+      "result_bearing_execution_seen": false
+    }
+  ],
+  "predecessor_manifest_sha256": "b159625c4d812f197278b91e7175551cbb2e77efb24a3952ba41c89643987a95",
+  "predecessor_package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.2",
+  "predecessor_package_sha256": "00dd820cfe43b780d5bec1a12382b16a7d6d9e45d6546c4fc10f3a83ab321510",
+  "predecessor_retained_immutable": true,
+  "result_bearing_execution_seen_before_supersession": false,
+  "semantic_oracle_changed": false,
+  "source_combined_commit": "6dc88cec0aca048e6117b54bac8bf577ae7bc96d",
+  "source_combined_tree": "d19a2f58cf9cbf6de7fde33b6c3aad089660a07e",
+  "state": "FROZEN",
+  "supersedes": "CDC-END-TO-END-MISSION-001-INPUT-v0.2",
+  "supersession_reason": "PREEXECUTION_AUTHORITY_CURRENTNESS",
+  "system_clock_used_to_choose_effective_from": false
+}

@@ -26,6 +26,7 @@ from cdc_e2e_support import (
     ACTION_PLAN_RELPATH,
     PACKAGE_RELPATH,
     STUB_RUNTIME,
+    bind_disposition_at,
     disposition_for,
     exact_clearance,
     form_stage_1_for_tests,
@@ -55,7 +56,6 @@ from oic.cdc_e2e_mission import (
     ProjectionProvenanceError,
     ResultBearingMissionBlockedError,
     bind_correction,
-    bind_human_disposition,
     member_consumption_ledger,
     observation_producer,
     project_frozen_mission,
@@ -244,14 +244,14 @@ def test_candidate_digest_mismatch_is_rejected(
     chain_id = "P001xC-TENDER-01"
     base = disposition_for(stage_1, projection, chain_id, action_plan)
     with pytest.raises(CandidateBindingError, match="candidate_digest"):
-        bind_human_disposition(
+        bind_disposition_at(
             stage_1,
             {**base, "candidate_digest": "0" * 64},
             projection=projection,
             action_plan=action_plan,
         )
     observed = stage_1.candidate_digests()[chain_id]
-    bound = bind_human_disposition(stage_1, base, projection=projection, action_plan=action_plan)
+    bound = bind_disposition_at(stage_1, base, projection=projection, action_plan=action_plan)
     assert bound["candidate_digest"] == observed
 
 
