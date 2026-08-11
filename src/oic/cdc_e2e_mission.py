@@ -45,7 +45,10 @@ REQUIRED_CLEARANCE_FIELDS: Final = (
     "mission_package_sha256",
     "oracle_sha256",
     "adjudication_protocol_sha256",
+    "action_plan_sha256",
 )
+# Retained only as the historical five-kind vocabulary. It is NOT the authoritative
+# output source: Stage 2 renders from the five frozen ``04-OUTPUTS/`` definitions.
 DRAFT_KINDS: Final = (
     "orientation_note",
     "provisional_report",
@@ -101,6 +104,7 @@ class ExecutionClearance:
     mission_package_sha256: str | None
     oracle_sha256: str | None
     adjudication_protocol_sha256: str | None
+    action_plan_sha256: str | None = None
 
     def as_mapping(self) -> dict[str, str | None]:
         """Expose the exact fields for deterministic validation and evidence."""
@@ -308,6 +312,8 @@ def require_result_clearance(
         mismatches.append("oracle_sha256")
     if clearance.adjudication_protocol_sha256 != ADJUDICATION_PROTOCOL_SHA256:
         mismatches.append("adjudication_protocol_sha256")
+    if clearance.action_plan_sha256 != HUMAN_ACTION_PLAN_SHA256:
+        mismatches.append("action_plan_sha256")
     if mismatches:
         raise ResultBearingMissionBlockedError(f"result-bearing binding mismatch: {mismatches}")
 
@@ -359,29 +365,15 @@ def validate_frozen_reviewer_standing(
         raise MissionContractError("frozen reviewer standing is absent, expired, or unauthorized")
 
 
-def _drafts(
-    *, candidate: Mapping[str, Any], disposition: Mapping[str, Any], event: Mapping[str, Any]
-) -> tuple[Mapping[str, Any], ...]:
-    provenance = {
-        "finding_id": candidate["finding_id"],
-        "candidate_id": candidate["candidate_id"],
-        "evidence_ref": candidate["evidence_ref"],
-        "control_id": candidate["control_id"],
-        "admission_record_ref": candidate["admission_record_ref"],
-        "warrant_ref": candidate["warrant_ref"],
-        "human_disposition_id": disposition["disposition_id"],
-        "transition_event_id": event["event_id"],
-    }
-    return tuple(
-        {
-            "draft_id": f"CDC-TEST-MISSION-001/{kind}",
-            "kind": kind,
-            "status": "SYNTHETIC_DRAFT_NOT_OFFICIAL",
-            "official_handoff": "PROHIBITED",
-            "provenance": provenance,
-        }
-        for kind in DRAFT_KINDS
-    )
+LEGACY_MAPPING_ENTRYPOINT_STATE: Final = "RETIRED_FAIL_CLOSED"
+
+LEGACY_MAPPING_ENTRYPOINT_NOTICE: Final = (
+    "the caller-supplied mapping entrypoint is retired: "
+    "execute_result_bearing_mission() can no longer execute anything. A mapping is a "
+    "claim about bytes, not the bytes. Result-bearing execution now runs only through "
+    "execute_authorized_stage_1() and execute_authorized_stage_2(), which consume a "
+    "MissionProjection derived from verified frozen bytes under an exact ExecutionClearance."
+)
 
 
 def execute_result_bearing_mission(
@@ -392,80 +384,18 @@ def execute_result_bearing_mission(
     evaluator: EvaluationFunction,
     warrant_builder: WarrantFunction,
 ) -> MissionExecution:
-    """Execute the bounded path after the external interlock has opened.
+    """Retired. Fails closed before doing anything at all.
 
-    This work order deliberately does not call this function.  The two injected
-    components must implement independently governed evaluation and warrant
-    contracts; the runner only binds their outputs.
+    The symbol is preserved for compatibility only. Independent review found this
+    entrypoint reachable with an arbitrary mapping that merely carried the correct
+    package-digest label, which made every downstream binding negotiable. It now
+    raises before it can prepare a mission, evaluate, form a candidate, validate a
+    caller-supplied standing, evaluate a transition, emit an event, create a draft
+    or create a correction. The injected components are accepted and discarded
+    unused so no caller can observe them being reached.
     """
-    prepared = prepare_mission(package)
-    require_result_clearance(clearance, runtime, package)
-    controls = {
-        str(item["control_id"]): _require_mapping(item, "admitted_control")
-        for item in _require_sequence(package["admitted_controls"], "admitted_controls")
-        if isinstance(item, Mapping)
-    }
-    evidence = _require_mapping(package.get("evidence"), "evidence")
-    standings = _require_mapping(package.get("reviewer_standings"), "reviewer_standings")
-    registry = _require_mapping(package.get("transition_registry"), "transition_registry")
-    evaluations: list[Mapping[str, Any]] = []
-    candidates: list[Mapping[str, Any]] = []
-    dispositions: list[Mapping[str, Any]] = []
-    events: list[Mapping[str, Any]] = []
-    drafts: list[Mapping[str, Any]] = []
-    for raw_member in _require_sequence(package["population"], "population"):
-        member = _require_mapping(raw_member, "population member")
-        control = controls.get(str(member.get("control_id")))
-        if control is None:
-            raise MissionContractError("population references an unadmitted control")
-        evidence_item = _require_mapping(evidence.get(str(member.get("evidence_ref"))), "evidence")
-        evaluation = evaluator(member, control, evidence_item)
-        evaluations.append(evaluation)
-        warrant_class, warrant = warrant_builder(evaluation, control)
-        if warrant_class not in {"ZTL_WARRANT", "FALLBACK_WARRANT"}:
-            raise MissionContractError("warrant artifact class is not governed")
-        candidate = {
-            "candidate_id": member["candidate_id"],
-            "finding_id": member["finding_id"],
-            "status": "CANDIDATE_NOT_OFFICIAL",
-            "control_id": control["control_id"],
-            "admission_record_ref": control["admission_record_ref"],
-            "evidence_ref": member["evidence_ref"],
-            "evaluation_ref": evaluation["evaluation_id"],
-            "warrant_ref": warrant["warrant_id"],
-            "warrant_class": warrant_class,
-            "warrant_digest": digest(warrant),
-        }
-        candidates.append(candidate)
-        disposition = _require_mapping(member.get("human_disposition"), "human_disposition")
-        standing = _require_mapping(standings.get(str(disposition.get("reviewer_id"))), "standing")
-        _require_standing(standing, mission_id=prepared.mission_id)
-        if disposition.get("action") != standing.get("action"):
-            raise MissionContractError("disposition exceeds reviewer standing")
-        proposal = _require_mapping(member.get("transition_proposal"), "transition_proposal")
-        decision: GateDecision = evaluate_test_transition(proposal, registry)
-        event_metadata = _require_mapping(member.get("event_metadata"), "event_metadata")
-        event = emit_transition_event(proposal, decision, event_metadata=event_metadata)
-        dispositions.append({**disposition, "status": "HUMAN_TEST_DISPOSITION"})
-        events.append(event)
-        drafts.extend(_drafts(candidate=candidate, disposition=disposition, event=event))
-    corrections = tuple(
-        make_successor(
-            _require_mapping(item["predecessor"], "correction.predecessor"),
-            _require_mapping(item["correction"], "correction.correction"),
-        )
-        for item in _require_sequence(package.get("corrections", []), "corrections")
-        if isinstance(item, Mapping)
-    )
-    return MissionExecution(
-        mission_id=prepared.mission_id,
-        evaluations=tuple(evaluations),
-        candidates=tuple(candidates),
-        dispositions=tuple(dispositions),
-        transition_events=tuple(events),
-        drafts=tuple(drafts),
-        corrections=corrections,
-    )
+    del package, clearance, runtime, evaluator, warrant_builder
+    raise ResultBearingMissionBlockedError(LEGACY_MAPPING_ENTRYPOINT_NOTICE)
 
 
 # ---------------------------------------------------------------------------
@@ -593,6 +523,13 @@ class MissionProjection:
     def chain_ids(self) -> tuple[str, ...]:
         """Stable ordered chain identifiers."""
         return tuple(chain.chain_id for chain in self.chains)
+
+    def chain(self, chain_id: str) -> ExecutionChain:
+        """Return the verified chain, or refuse. Never synthesizes one."""
+        for chain in self.chains:
+            if chain.chain_id == chain_id:
+                return chain
+        raise MissionContractError(f"no verified chain {chain_id}")
 
 
 def _provenance_token(root: Path, manifest: Mapping[str, Any]) -> str:
@@ -782,6 +719,134 @@ class PredecessorBindingError(MissionContractError):
     """A correction did not bind, or would mutate, its actual predecessor."""
 
 
+# Stage-1 authorization tokens. Only the owner-cleared token satisfies Stage 2;
+# the unit-test helper cannot mint it, because it is not a parameter of any
+# public function.
+STAGE_1_AUTHORIZATION_CLEARED: Final = "OWNER_CLEARED_STAGE_1"
+STAGE_1_AUTHORIZATION_HELPER: Final = "UNAUTHORIZED_HELPER_NOT_RESULT_BEARING"
+
+STAGE_2_OUTCOME_STATES: Final = (
+    "transitioned",
+    "refused",
+    "unresolved",
+    "blocked",
+    "non_evaluable",
+)
+
+HUMAN_DISPOSITION_REQUIRED_FIELDS: Final = (
+    "mission_id",
+    "procedure_id",
+    "control_id",
+    "chain_id",
+    "ebawu_id",
+    "candidate_digest",
+    "warrant_ref",
+    "warrant_digest",
+    "reviewer_id",
+    "reviewer_role",
+    "authority_scope_ref",
+    "action",
+    "observed_at",
+    "reason",
+    "action_plan_sha256",
+    "stage_1_observation_digest",
+)
+
+RUN_METADATA_FIELDS: Final = (
+    "run_id",
+    "trace_id",
+    "producer",
+    "producer_version",
+    "occurred_at",
+    "recorded_at",
+)
+
+# The institutional state a permitted disposition requests. Derived here so no
+# caller can propose an arbitrary destination state.
+NEW_STATE_BY_ACTION: Final[dict[str, str]] = {
+    "ACCEPT_CANDIDATE": "ACCEPTED_CANDIDATE",
+    "QUALIFY": "QUALIFIED",
+    "DISMISS": "DISMISSED",
+    "REQUEST_EVIDENCE": "EVIDENCE_REQUESTED",
+    "ESCALATE": "ESCALATED",
+    "DEFER": "DEFERRED",
+}
+
+OUTPUT_DEFINITION_REQUIRED_KEYS: Final = frozenset(
+    {
+        "artifact_id",
+        "official_status",
+        "content_state",
+        "eligibility_determination",
+        "required_data_bindings",
+        "label_en",
+        "label_fr",
+    }
+)
+
+NONCLAIMS: Final = (
+    "not an official CDC record",
+    "not CDC validation or deployment",
+    "not evidence sufficiency",
+    "not legal authority",
+    "not a real reviewer identity",
+    "not an adjudication against the semantic oracle",
+)
+
+
+class ReviewerStandingError(MissionContractError):
+    """The frozen reviewer standing did not authorize the observed disposition."""
+
+
+class TransitionDerivationError(MissionContractError):
+    """A transition proposal or registry was supplied instead of being derived."""
+
+
+@dataclass(frozen=True, slots=True)
+class Stage1ChainArtifact:
+    """The complete Stage-1 artifact set for one chain.
+
+    Stage 2 must compare against the objects actually formed, not against digests
+    of objects that no longer exist. Every object is retained here in full.
+    """
+
+    chain_id: str
+    procedure_id: str
+    control_id: str
+    ebawu_id: str
+    input_digest: str
+    evaluation: Mapping[str, Any]
+    evaluation_digest: str
+    warrant_class: str
+    warrant_ref: str
+    warrant: Mapping[str, Any]
+    warrant_digest: str
+    candidate_id: str
+    candidate: Mapping[str, Any]
+    candidate_digest: str
+    outcome_state: str
+
+    def as_record(self) -> dict[str, Any]:
+        """JSON-safe record binding every object, not merely its digest."""
+        return {
+            "chain_id": self.chain_id,
+            "procedure_id": self.procedure_id,
+            "control_id": self.control_id,
+            "ebawu_id": self.ebawu_id,
+            "input_digest": self.input_digest,
+            "evaluation": dict(self.evaluation),
+            "evaluation_digest": self.evaluation_digest,
+            "warrant_class": self.warrant_class,
+            "warrant_ref": self.warrant_ref,
+            "warrant": dict(self.warrant),
+            "warrant_digest": self.warrant_digest,
+            "candidate_id": self.candidate_id,
+            "candidate": dict(self.candidate),
+            "candidate_digest": self.candidate_digest,
+            "outcome_state": self.outcome_state,
+        }
+
+
 @dataclass(frozen=True, slots=True)
 class Stage1ChainObservation:
     """One chain's Stage-1 outcome. Non-adjudicating."""
@@ -791,6 +856,7 @@ class Stage1ChainObservation:
     candidate_digest: str | None
     input_digest: str
     detail: str
+    artifact: Stage1ChainArtifact | None = None
 
     def as_record(self) -> dict[str, Any]:
         """JSON-safe record."""
@@ -800,6 +866,7 @@ class Stage1ChainObservation:
             "candidate_digest": self.candidate_digest,
             "input_digest": self.input_digest,
             "detail": self.detail,
+            "artifact": None if self.artifact is None else self.artifact.as_record(),
         }
 
 
@@ -813,6 +880,7 @@ class Stage1Observation:
     stage: str
     chains: tuple[Stage1ChainObservation, ...]
     accounting: Mapping[str, int]
+    authorization: str = STAGE_1_AUTHORIZATION_HELPER
     institutional_transition: str = "NONE"
     draft_eligibility: str = "NONE"
     official_handoff: str = "PROHIBITED"
@@ -825,6 +893,7 @@ class Stage1Observation:
             "package_sha256": self.package_sha256,
             "provenance_token": self.provenance_token,
             "stage": self.stage,
+            "authorization": self.authorization,
             "chains": [chain.as_record() for chain in self.chains],
             "accounting": dict(self.accounting),
             "institutional_transition": self.institutional_transition,
@@ -836,7 +905,7 @@ class Stage1Observation:
         return body
 
     def digest(self) -> str:
-        """The frozen Stage-1 observation digest."""
+        """The frozen Stage-1 observation digest, binding every formed object."""
         return str(self.as_record()["stage_1_observation_digest"])
 
     def candidate_digests(self) -> dict[str, str]:
@@ -847,15 +916,26 @@ class Stage1Observation:
             if chain.candidate_digest is not None
         }
 
+    def artifacts(self) -> dict[str, Stage1ChainArtifact]:
+        """Complete Stage-1 artifacts actually formed, by chain."""
+        return {
+            chain.chain_id: chain.artifact for chain in self.chains if chain.artifact is not None
+        }
 
-def run_stage_1(
+    def is_owner_cleared(self) -> bool:
+        """True only for an observation produced under an exact owner clearance."""
+        return self.authorization == STAGE_1_AUTHORIZATION_CLEARED
+
+
+def _form_stage_1(
     projection: MissionProjection,
     frozen: FrozenMissionInput,
     *,
     evaluator: EvaluationFunction,
     warrant_builder: WarrantFunction,
+    authorization: str,
 ) -> Stage1Observation:
-    """Evaluate and form candidates across all nine chains, then stop.
+    """Form candidates across all nine chains, then stop.
 
     The denominator survives individual failures: a chain that raises is recorded
     as ``non_evaluable`` and the remaining chains still run. An early exception
@@ -872,23 +952,49 @@ def run_stage_1(
             warrant_class, warrant = warrant_builder(evaluation, chain.execution_input)
             if warrant_class not in {"ZTL_WARRANT", "FALLBACK_WARRANT"}:
                 raise MissionContractError("warrant artifact class is not governed")
+            control = _require_mapping(chain.execution_input["admitted_control"], "control")
+            evidence = _require_mapping(chain.execution_input["evidence_bundle"], "evidence")
+            admission = _require_mapping(chain.execution_input["admission_record"], "admission")
+            procedure_id = str(control["procedure_id"])
+            candidate_id = f"CAND-{procedure_id}-{chain.control_id}"
             candidate = {
+                "candidate_id": candidate_id,
                 "chain_id": chain.chain_id,
                 "status": "CANDIDATE_NOT_OFFICIAL",
                 "control_id": chain.control_id,
+                "admission_record_ref": str(admission["admission_id"]),
+                "evidence_bundle_ref": str(evidence["evidence_bundle_id"]),
                 "evaluation": evaluation,
                 "warrant_class": warrant_class,
                 "warrant": warrant,
                 "input_digest": chain.input_digest(),
             }
+            artifact = Stage1ChainArtifact(
+                chain_id=chain.chain_id,
+                procedure_id=procedure_id,
+                control_id=chain.control_id,
+                ebawu_id=chain.ebawu_ref,
+                input_digest=chain.input_digest(),
+                evaluation=evaluation,
+                evaluation_digest=sha256(evaluation),
+                warrant_class=warrant_class,
+                warrant_ref=str(warrant["warrant_id"]),
+                warrant=warrant,
+                warrant_digest=sha256(warrant),
+                candidate_id=candidate_id,
+                candidate=candidate,
+                candidate_digest=sha256(candidate),
+                outcome_state="completed",
+            )
             tally["completed"] += 1
             observations.append(
                 Stage1ChainObservation(
                     chain_id=chain.chain_id,
                     outcome_state="completed",
-                    candidate_digest=sha256(candidate),
+                    candidate_digest=artifact.candidate_digest,
                     input_digest=chain.input_digest(),
                     detail="candidate formed; no transition and no draft eligibility",
+                    artifact=artifact,
                 )
             )
         # A failing chain is an observation, not a reason to abandon the denominator.
@@ -913,51 +1019,199 @@ def run_stage_1(
         stage=STAGE_1_TERMINAL_STATE,
         chains=tuple(observations),
         accounting=tally,
+        authorization=authorization,
     )
+
+
+def unauthorized_stage_1_helper(
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    *,
+    evaluator: EvaluationFunction,
+    warrant_builder: WarrantFunction,
+) -> Stage1Observation:
+    """NON-AUTHORITATIVE pure helper for unit tests. Never an execution entrypoint.
+
+    Candidate formation is result-bearing, so this helper is not a way to perform
+    it. Its output is stamped :data:`STAGE_1_AUTHORIZATION_HELPER`, which
+    :func:`require_stage_2_clearance` refuses. The owner-cleared token is not a
+    parameter of this function, so no caller can promote a helper observation
+    into the authorized path.
+    """
+    return _form_stage_1(
+        projection,
+        frozen,
+        evaluator=evaluator,
+        warrant_builder=warrant_builder,
+        authorization=STAGE_1_AUTHORIZATION_HELPER,
+    )
+
+
+def execute_authorized_stage_1(
+    projection: object,
+    frozen: FrozenMissionInput,
+    clearance: ExecutionClearance,
+    runtime: RuntimeIdentity,
+    *,
+    evaluator: EvaluationFunction,
+    warrant_builder: WarrantFunction,
+) -> Stage1Observation:
+    """The single authorized route to Stage-1 candidate formation.
+
+    Refuses unless the source is a :class:`MissionProjection` derived from
+    verified frozen bytes *and* every external binding matches observation,
+    including the human action-plan digest.
+    """
+    verified = require_projected_source(projection, frozen)
+    require_result_clearance(
+        clearance, runtime, {"mission_package_sha256": verified.package_sha256}
+    )
+    if verified.package_sha256 != frozen.package_sha256:
+        raise ResultBearingMissionBlockedError("projection and verified bytes disagree")
+    return _form_stage_1(
+        verified,
+        frozen,
+        evaluator=evaluator,
+        warrant_builder=warrant_builder,
+        authorization=STAGE_1_AUTHORIZATION_CLEARED,
+    )
+
+
+def validate_frozen_reviewer_standing_exact(
+    authority: Mapping[str, Any],
+    *,
+    mission_id: str,
+    reviewer_id: str,
+    reviewer_role: str,
+    authority_scope_ref: str,
+    action_class: str,
+    disposition: str,
+    observed_at: str,
+) -> dict[str, Any]:
+    """Stricter successor to :func:`validate_frozen_reviewer_standing`.
+
+    Requires exact correspondence of reviewer identity, reviewer role, mission,
+    scope, permitted action, validity and revocation against the frozen
+    ``03-AUTHORITY/test-reviewer.json`` object. There is no parameter through
+    which a caller can supply a flat standing substitute.
+    """
+    validate_frozen_reviewer_standing(
+        authority, mission_id=mission_id, action=action_class, observed_at=observed_at
+    )
+    identity = _require_mapping(authority.get("identity"), "standing.identity")
+    role = _require_mapping(authority.get("role"), "standing.role")
+    permitted = _require_mapping(authority.get("permitted_action"), "standing.permitted_action")
+    validity = _require_mapping(authority.get("validity"), "standing.validity")
+    revocation = _require_mapping(authority.get("revocation"), "standing.revocation")
+    permitted_dispositions = _require_sequence(
+        permitted.get("permitted_dispositions"), "standing.permitted_dispositions"
+    )
+    mismatches = [
+        name
+        for name, matched in (
+            ("reviewer_id", identity.get("reviewer_id") == reviewer_id),
+            ("reviewer_role", role.get("role_id") == reviewer_role),
+            ("mission", authority.get("mission") == mission_id),
+            ("authority_scope_ref", authority.get("authority_scope_ref") == authority_scope_ref),
+            ("scope_limited_to", permitted.get("scope_limited_to") == authority_scope_ref),
+            ("permitted_action", permitted.get("action") == action_class),
+            ("permitted_disposition", disposition in permitted_dispositions),
+            (
+                "validity",
+                str(validity.get("effective_from"))
+                <= observed_at
+                <= str(validity.get("effective_until")),
+            ),
+            ("revocation", revocation.get("status") == "NOT_REVOKED"),
+        )
+        if not matched
+    ]
+    if mismatches:
+        raise ReviewerStandingError(f"frozen reviewer standing does not authorize: {mismatches}")
+    return {
+        "standing_source": "03-AUTHORITY/test-reviewer.json",
+        "standing_digest": sha256(authority),
+        "reviewer_id": reviewer_id,
+        "reviewer_role": reviewer_role,
+        "authority_scope_ref": authority_scope_ref,
+        "action_class": action_class,
+        "disposition": disposition,
+        "observed_at": observed_at,
+        "revocation_status": revocation.get("status"),
+        "caller_supplied_standing_accepted": False,
+    }
 
 
 def bind_human_disposition(
     stage_1: Stage1Observation,
     disposition: Mapping[str, Any],
     *,
+    projection: MissionProjection,
     action_plan_sha256: str,
 ) -> dict[str, Any]:
-    """Accept a disposition only if it binds the observed Stage-1 candidate.
+    """Accept a disposition only if it binds the actual candidate and frozen standing.
 
     The pre-registered stimulus class is not authority to proceed. The binding
-    check is on the candidate digest that Stage 1 actually produced.
+    check is on the artifacts Stage 1 actually produced, and the reviewer is
+    validated through the frozen authority object rather than through anything
+    the caller supplies.
     """
     if action_plan_sha256 != HUMAN_ACTION_PLAN_SHA256:
         raise MissionContractError("human action plan identity mismatch")
-    chain_id = str(disposition.get("chain_id"))
-    observed = stage_1.candidate_digests().get(chain_id)
-    if observed is None:
+    missing = sorted(set(HUMAN_DISPOSITION_REQUIRED_FIELDS) - disposition.keys())
+    if missing:
+        raise MissionContractError(f"human disposition missing required fields: {missing}")
+    chain_id = str(disposition["chain_id"])
+    artifact = stage_1.artifacts().get(chain_id)
+    if artifact is None:
         raise HumanDispositionRequiredError(
             f"no Stage-1 candidate exists for {chain_id}; disposition cannot bind"
         )
-    supplied = disposition.get("candidate_digest")
-    if supplied != observed:
+    observed = {
+        "mission_id": stage_1.mission_id,
+        "procedure_id": artifact.procedure_id,
+        "control_id": artifact.control_id,
+        "ebawu_id": artifact.ebawu_id,
+        "candidate_digest": artifact.candidate_digest,
+        "warrant_ref": artifact.warrant_ref,
+        "warrant_digest": artifact.warrant_digest,
+        "stage_1_observation_digest": stage_1.digest(),
+    }
+    divergent = sorted(name for name, value in observed.items() if disposition.get(name) != value)
+    if divergent:
         raise CandidateBindingError(
-            f"disposition for {chain_id} binds {supplied!r}, Stage 1 observed {observed!r}"
+            f"disposition for {chain_id} does not bind the observed Stage-1 artifacts: {divergent}"
         )
-    action = str(disposition.get("action"))
-    if action not in {
-        "ACCEPT_CANDIDATE",
-        "QUALIFY",
-        "DISMISS",
-        "REQUEST_EVIDENCE",
-        "ESCALATE",
-        "DEFER",
-    }:
+    action = str(disposition["action"])
+    if action not in NEW_STATE_BY_ACTION:
         raise MissionContractError(f"disposition action is not permitted: {action}")
-    return {
+    standing = validate_frozen_reviewer_standing_exact(
+        projection.authority,
+        mission_id=stage_1.mission_id,
+        reviewer_id=str(disposition["reviewer_id"]),
+        reviewer_role=str(disposition["reviewer_role"]),
+        authority_scope_ref=str(disposition["authority_scope_ref"]),
+        action_class=str(
+            _require_mapping(projection.authority["permitted_action"], "permitted_action")["action"]
+        ),
+        disposition=action,
+        observed_at=str(disposition["observed_at"]),
+    )
+    record = {
+        **observed,
         "chain_id": chain_id,
         "action": action,
-        "candidate_digest": observed,
-        "bound_to_stage_1_observation": stage_1.digest(),
+        "reviewer_id": str(disposition["reviewer_id"]),
+        "reviewer_role": str(disposition["reviewer_role"]),
+        "authority_scope_ref": str(disposition["authority_scope_ref"]),
+        "observed_at": str(disposition["observed_at"]),
+        "reason": str(disposition["reason"]),
         "action_plan_sha256": action_plan_sha256,
+        "frozen_standing": standing,
         "status": "HUMAN_TEST_DISPOSITION_BOUND",
     }
+    record["disposition_artifact_digest"] = sha256(record)
+    return record
 
 
 def require_human_disposition(stage_1: Stage1Observation, dispositions: Mapping[str, Any]) -> None:
@@ -969,6 +1223,547 @@ def require_human_disposition(stage_1: Stage1Observation, dispositions: Mapping[
         raise HumanDispositionRequiredError(
             f"HOLD: Stage-1 complete, human disposition not supplied for {missing}"
         )
+
+
+def require_stage_2_clearance(
+    clearance: ExecutionClearance,
+    runtime: RuntimeIdentity,
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    *,
+    stage_1: Stage1Observation,
+    dispositions: Mapping[str, Mapping[str, Any]],
+    correction_stimulus: Mapping[str, Any],
+    stage_2_bindings: Mapping[str, Any],
+) -> None:
+    """Stage-2 continuation compares exact artifacts, never mere non-emptiness."""
+    require_projected_source(projection, frozen)
+    require_result_clearance(
+        clearance, runtime, {"mission_package_sha256": projection.package_sha256}
+    )
+    if not stage_1.is_owner_cleared():
+        raise ResultBearingMissionBlockedError(
+            f"Stage-1 observation was not produced under owner clearance: {stage_1.authorization}"
+        )
+    missing = sorted(name for name in STAGE_2_BINDING_FIELDS if not stage_2_bindings.get(name))
+    if missing:
+        raise ResultBearingMissionBlockedError(f"missing stage-2 bindings: {missing}")
+    observed_dispositions = sorted(sha256(dict(record)) for record in dispositions.values())
+    supplied_dispositions = stage_2_bindings.get("human_disposition_artifact_digests")
+    mismatches = [
+        name
+        for name, matched in (
+            (
+                "stage_1_observation_digest",
+                stage_2_bindings.get("stage_1_observation_digest") == stage_1.digest(),
+            ),
+            (
+                "human_disposition_artifact_digests",
+                isinstance(supplied_dispositions, list | tuple)
+                and sorted(str(value) for value in supplied_dispositions) == observed_dispositions,
+            ),
+            (
+                "correction_stimulus_digest",
+                stage_2_bindings.get("correction_stimulus_digest") == sha256(correction_stimulus),
+            ),
+        )
+        if not matched
+    ]
+    if mismatches:
+        raise ResultBearingMissionBlockedError(f"stage-2 artifact binding mismatch: {mismatches}")
+
+
+def derive_transition_registry(
+    projection: MissionProjection, artifact: Stage1ChainArtifact
+) -> dict[str, Any]:
+    """Build the immutable Slice-001 registry from the actual objects.
+
+    Nothing here is caller-supplied. The registry is a snapshot of the frozen
+    chain inputs plus the artifacts Stage 1 actually formed.
+    """
+    chain = projection.chain(artifact.chain_id)
+    control = _require_mapping(chain.execution_input["admitted_control"], "control")
+    evidence = _require_mapping(chain.execution_input["evidence_bundle"], "evidence")
+    admission = _require_mapping(chain.execution_input["admission_record"], "admission")
+    reviewer_id = str(_require_mapping(projection.authority["identity"], "identity")["reviewer_id"])
+    warrant_category = (
+        "warrants" if artifact.warrant_class == "ZTL_WARRANT" else "fallback_warrants"
+    )
+    return {
+        "candidates": {artifact.candidate_id: artifact.candidate},
+        "ebawus": {
+            artifact.ebawu_id: {
+                "ebawu_id": artifact.ebawu_id,
+                "procedure_id": artifact.procedure_id,
+                "control_id": artifact.control_id,
+            }
+        },
+        "controls": {str(control["control_id"]): control},
+        "admissions": {str(admission["admission_id"]): admission},
+        "evidence": {str(evidence["evidence_bundle_id"]): evidence},
+        "evaluations": {str(artifact.evaluation["evaluation_id"]): artifact.evaluation},
+        "reviewers": {reviewer_id: projection.authority},
+        warrant_category: {artifact.warrant_ref: artifact.warrant},
+        "states": {artifact.ebawu_id: chain.execution_input["prior_institutional_state"]},
+        "stale_candidate_ids": (),
+    }
+
+
+def derive_transition_proposal(
+    projection: MissionProjection,
+    artifact: Stage1ChainArtifact,
+    disposition: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Derive the Slice-001 proposal deterministically. Never accepted from a caller."""
+    chain = projection.chain(artifact.chain_id)
+    control = _require_mapping(chain.execution_input["admitted_control"], "control")
+    evidence = _require_mapping(chain.execution_input["evidence_bundle"], "evidence")
+    admission = _require_mapping(chain.execution_input["admission_record"], "admission")
+    action = str(disposition["action"])
+    proposal: dict[str, Any] = {
+        "mission_id": projection.mission_id,
+        "assurance_mode": ASSURANCE_MODE,
+        "authority_scope_ref": str(projection.authority["authority_scope_ref"]),
+        "requested_disposition": action,
+        "candidate_id": artifact.candidate_id,
+        "candidate_digest": digest(artifact.candidate),
+        "ebawu_id": artifact.ebawu_id,
+        "OIC_control_id": str(control["control_id"]),
+        "OIC_control_digest": digest(control),
+        "admission_record_ref": str(admission["admission_id"]),
+        "evidence_bundle_ref": str(evidence["evidence_bundle_id"]),
+        "evidence_bundle_digest": digest(evidence),
+        "deterministic_execution_result_ref": str(artifact.evaluation["evaluation_id"]),
+        "reviewer_id": str(disposition["reviewer_id"]),
+        "reviewer_role_assertion": str(disposition["reviewer_role"]),
+        "prior_institutional_state": chain.execution_input["prior_institutional_state"],
+        "requested_new_institutional_state": NEW_STATE_BY_ACTION[action],
+        "parent_event_id": None,
+    }
+    if artifact.warrant_class == "ZTL_WARRANT":
+        proposal["ZTL_warrant_ref"] = artifact.warrant_ref
+        proposal["ZTL_warrant_digest"] = digest(artifact.warrant)
+    else:
+        proposal["fallback_warrant_ref"] = artifact.warrant_ref
+        proposal["fallback_warrant_digest"] = digest(artifact.warrant)
+    # The frozen control declares ``on_unknown: ESCALATE``. An unknown or CANNOT
+    # condition is a property of the evaluation actually produced, so it is read
+    # from the evaluation object rather than accepted from a caller.
+    condition_state = artifact.evaluation.get("required_condition_state")
+    if condition_state is not None:
+        proposal["required_condition_state"] = str(condition_state)
+    if artifact.evaluation.get("cannot_condition") is True:
+        proposal["cannot_condition"] = True
+    return proposal
+
+
+def _event_metadata(
+    run_metadata: Mapping[str, Any], artifact: Stage1ChainArtifact
+) -> dict[str, Any]:
+    missing = sorted(set(RUN_METADATA_FIELDS) - run_metadata.keys())
+    if missing:
+        raise MissionContractError(f"run metadata incomplete: {missing}")
+    return {
+        **{name: run_metadata[name] for name in RUN_METADATA_FIELDS},
+        "event_id": f"CDC-E2E-EVT-{artifact.chain_id}",
+        "aggregate_version": 1,
+    }
+
+
+def render_drafts(
+    output_definitions: Sequence[Mapping[str, Any]],
+    *,
+    provenance: Mapping[str, Any],
+    french_packet: Mapping[str, Any],
+) -> tuple[Mapping[str, Any], ...]:
+    """Render one draft per frozen output definition.
+
+    The authoritative output source is the five frozen ``04-OUTPUTS/`` objects.
+    A hard-coded kind vocabulary cannot substitute: every definition must be a
+    frozen object carrying the exact required keys, or this refuses.
+    """
+    if len(output_definitions) != 5:
+        raise MissionContractError(
+            f"five frozen output definitions are required, received {len(output_definitions)}"
+        )
+    french_state = str(french_packet.get("french_path_state"))
+    absences = list(
+        _require_sequence(
+            french_packet.get("substantive_french_support_absent_at", []), "french absences"
+        )
+    )
+    drafts: list[Mapping[str, Any]] = []
+    for raw in output_definitions:
+        if not isinstance(raw, Mapping):
+            raise MissionContractError(
+                "output definition is not a frozen object; a hard-coded draft kind "
+                "cannot substitute for 04-OUTPUTS/"
+            )
+        missing = sorted(OUTPUT_DEFINITION_REQUIRED_KEYS - raw.keys())
+        if missing:
+            raise MissionContractError(f"frozen output definition missing keys: {missing}")
+        if raw["official_status"] != "NOT_AUTHORIZED_AS_OFFICIAL":
+            raise MissionContractError("an output definition claims official status")
+        required = [str(name) for name in _require_sequence(raw["required_data_bindings"], "req")]
+        satisfied = sorted(name for name in required if provenance.get(name))
+        absent = sorted(name for name in required if not provenance.get(name))
+        drafts.append(
+            {
+                "draft_id": f"{MISSION_ID}/{raw['artifact_id']}",
+                "output_definition_artifact_id": str(raw["artifact_id"]),
+                "label_en": raw["label_en"],
+                "label_fr": raw["label_fr"],
+                "official_status": raw["official_status"],
+                "content_state_rule": raw["content_state"],
+                "eligibility_determination": raw["eligibility_determination"],
+                "eligibility_state": (
+                    "ELIGIBLE_AS_SYNTHETIC_DRAFT"
+                    if not absent
+                    else "INELIGIBLE_PROVENANCE_INCOMPLETE"
+                ),
+                "provenance_requirements": required,
+                "provenance_satisfied": satisfied,
+                "provenance_absent": absent,
+                "provenance": dict(provenance),
+                "french_path_state": french_state,
+                "french_render_capability": french_state,
+                "french_named_absences": absences,
+                "french_capability_synthesized": False,
+                "status": "SYNTHETIC_DRAFT_NOT_OFFICIAL",
+                "official_handoff": OFFICIAL_CDC_RECORD_CREATION,
+                "nonclaims": list(NONCLAIMS),
+            }
+        )
+    return tuple(drafts)
+
+
+@dataclass(frozen=True, slots=True)
+class Stage2ChainOutcome:
+    """One chain's Stage-2 outcome. Non-adjudicating; a refusal is a result."""
+
+    chain_id: str
+    outcome_state: str
+    decision: str | None
+    reason_code: str | None
+    epistemic_state: str | None
+    transition_event: Mapping[str, Any] | None
+    detail: str
+
+    def as_record(self) -> dict[str, Any]:
+        """JSON-safe record."""
+        return {
+            "chain_id": self.chain_id,
+            "outcome_state": self.outcome_state,
+            "decision": self.decision,
+            "reason_code": self.reason_code,
+            "epistemic_state": self.epistemic_state,
+            "transition_event": (
+                None if self.transition_event is None else dict(self.transition_event)
+            ),
+            "detail": self.detail,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class Stage2Result:
+    """Immutable Stage-2 result. Never an official CDC record."""
+
+    mission_id: str
+    package_sha256: str
+    stage_1_observation_digest: str
+    outcomes: tuple[Stage2ChainOutcome, ...]
+    accounting: Mapping[str, int]
+    drafts: tuple[Mapping[str, Any], ...]
+    correction: Mapping[str, Any]
+    official_handoff: str = "PROHIBITED"
+
+    def as_record(self) -> dict[str, Any]:
+        """JSON-safe record."""
+        body = {
+            "mission_id": self.mission_id,
+            "package_sha256": self.package_sha256,
+            "stage_1_observation_digest": self.stage_1_observation_digest,
+            "outcomes": [outcome.as_record() for outcome in self.outcomes],
+            "accounting": dict(self.accounting),
+            "drafts": [dict(draft) for draft in self.drafts],
+            "correction": dict(self.correction),
+            "official_handoff": self.official_handoff,
+        }
+        body["stage_2_result_digest"] = sha256(body)
+        return body
+
+    def transition_events(self) -> tuple[Mapping[str, Any], ...]:
+        """Events actually emitted; a non-ALLOW gate result emits nothing."""
+        return tuple(
+            outcome.transition_event
+            for outcome in self.outcomes
+            if outcome.transition_event is not None
+        )
+
+
+def integrate_correction(
+    projection: MissionProjection,
+    stage_1: Stage1Observation,
+    outcomes: Sequence[Stage2ChainOutcome],
+    correction_stimulus: Mapping[str, Any],
+    correction: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    """Execute the correction only after an eligible completed predecessor exists.
+
+    If the precondition never occurred, this records an explicit absence. It does
+    not manufacture a correction execution.
+    """
+    target_ebawu = str(correction_stimulus.get("predecessor_ebawu_ref"))
+    stimulus_id = str(correction_stimulus.get("correction_stimulus_id"))
+    artifact = next(
+        (item for item in stage_1.artifacts().values() if item.ebawu_id == target_ebawu), None
+    )
+    outcome = next(
+        (item for item in outcomes if artifact is not None and item.chain_id == artifact.chain_id),
+        None,
+    )
+    eligible = (
+        artifact is not None
+        and outcome is not None
+        and outcome.outcome_state == "transitioned"
+        and outcome.transition_event is not None
+    )
+    if not eligible or artifact is None or outcome is None or outcome.transition_event is None:
+        return {
+            "correction_stimulus_id": stimulus_id,
+            "correction_executed": False,
+            "m12_state": "unavailable_incomplete",
+            "predecessor_ebawu_ref": target_ebawu,
+            "eligible_completed_predecessor": False,
+            "detail": (
+                "the preregistered correction target has no eligible completed "
+                "predecessor; no correction was manufactured"
+            ),
+        }
+    if correction is None:
+        return {
+            "correction_stimulus_id": stimulus_id,
+            "correction_executed": False,
+            "m12_state": "unavailable_incomplete",
+            "predecessor_ebawu_ref": target_ebawu,
+            "eligible_completed_predecessor": True,
+            "detail": "an eligible predecessor exists but no correction object was supplied",
+        }
+    del projection
+    predecessor = {
+        "ebawu_id": artifact.ebawu_id,
+        "state": str(outcome.transition_event["new_state"]),
+        "candidate_id": artifact.candidate_id,
+        "candidate_digest": artifact.candidate_digest,
+    }
+    derived = sha256(predecessor)
+    supplied = correction.get("predecessor_digest")
+    if supplied is not None and supplied != derived:
+        raise PredecessorBindingError(
+            f"correction binds predecessor {supplied!r}, actual {derived!r}"
+        )
+    record = bind_correction(predecessor, {**correction, "predecessor_digest": derived})
+    return {
+        **record,
+        "correction_stimulus_id": stimulus_id,
+        "correction_executed": True,
+        "m12_state": "executed",
+        "predecessor_ebawu_ref": target_ebawu,
+        "eligible_completed_predecessor": True,
+        "predecessor_object_preserved": predecessor,
+        "detail": "correction executed through frozen Slice-001 make_successor semantics",
+    }
+
+
+def execute_authorized_stage_2(
+    projection: object,
+    frozen: FrozenMissionInput,
+    clearance: ExecutionClearance,
+    runtime: RuntimeIdentity,
+    *,
+    stage_1: Stage1Observation,
+    dispositions: Mapping[str, Mapping[str, Any]],
+    correction_stimulus: Mapping[str, Any],
+    correction: Mapping[str, Any] | None,
+    run_metadata: Mapping[str, Any],
+    stage_2_bindings: Mapping[str, Any],
+) -> Stage2Result:
+    """The single authorized route to transition evaluation and rendering.
+
+    No caller-supplied transition proposal or registry can enter here: both are
+    derived from the actual Stage-1 artifacts and the frozen chain inputs.
+    """
+    verified = require_projected_source(projection, frozen)
+    require_stage_2_clearance(
+        clearance,
+        runtime,
+        verified,
+        frozen,
+        stage_1=stage_1,
+        dispositions=dispositions,
+        correction_stimulus=correction_stimulus,
+        stage_2_bindings=stage_2_bindings,
+    )
+    forbidden = {"transition_proposal", "transition_registry", "registry", "proposal"}
+    for chain_id, record in dispositions.items():
+        intruding = sorted(forbidden & record.keys())
+        if intruding:
+            raise TransitionDerivationError(
+                f"disposition {chain_id} carries a caller-supplied {intruding}; "
+                "the proposal and registry are derived, never accepted"
+            )
+    artifacts = stage_1.artifacts()
+    tally = dict.fromkeys(STAGE_2_OUTCOME_STATES, 0)
+    outcomes: list[Stage2ChainOutcome] = []
+    for chain in verified.chains:
+        artifact = artifacts.get(chain.chain_id)
+        if artifact is None:
+            tally["non_evaluable"] += 1
+            outcomes.append(
+                Stage2ChainOutcome(
+                    chain_id=chain.chain_id,
+                    outcome_state="non_evaluable",
+                    decision=None,
+                    reason_code=None,
+                    epistemic_state=None,
+                    transition_event=None,
+                    detail="no Stage-1 candidate was formed for this chain",
+                )
+            )
+            continue
+        disposition = dispositions.get(chain.chain_id)
+        if disposition is None:
+            tally["blocked"] += 1
+            outcomes.append(
+                Stage2ChainOutcome(
+                    chain_id=chain.chain_id,
+                    outcome_state="blocked",
+                    decision=None,
+                    reason_code=None,
+                    epistemic_state=None,
+                    transition_event=None,
+                    detail="candidate formed but no bound human disposition exists",
+                )
+            )
+            continue
+        registry = derive_transition_registry(verified, artifact)
+        proposal = derive_transition_proposal(verified, artifact, disposition)
+        decision: GateDecision = evaluate_test_transition(proposal, registry)
+        if decision.decision == "ALLOW":
+            event = emit_transition_event(
+                proposal, decision, event_metadata=_event_metadata(run_metadata, artifact)
+            )
+            state = "transitioned"
+            detail = "transition event emitted after ALLOW"
+        else:
+            event = None
+            state = "refused" if decision.decision == "DENY" else "unresolved"
+            detail = f"gate returned {decision.decision}; no transition event was fabricated"
+        tally[state] += 1
+        outcomes.append(
+            Stage2ChainOutcome(
+                chain_id=chain.chain_id,
+                outcome_state=state,
+                decision=decision.decision,
+                reason_code=decision.reason_code,
+                epistemic_state=decision.epistemic_state,
+                transition_event=event,
+                detail=detail,
+            )
+        )
+    total = sum(tally.values())
+    if total != EXPECTED_CHAIN_COUNT:
+        raise MissionContractError(f"denominator lost: {total} of 9 accounted")
+    correction_record = integrate_correction(
+        verified, stage_1, outcomes, correction_stimulus, correction
+    )
+    provenance = _draft_provenance(verified, stage_1, outcomes, correction_record)
+    drafts = render_drafts(
+        verified.output_definitions, provenance=provenance, french_packet=verified.french_packet
+    )
+    return Stage2Result(
+        mission_id=verified.mission_id,
+        package_sha256=verified.package_sha256,
+        stage_1_observation_digest=stage_1.digest(),
+        outcomes=tuple(outcomes),
+        accounting=tally,
+        drafts=drafts,
+        correction=correction_record,
+    )
+
+
+def _new_state(outcome: Stage2ChainOutcome) -> str | None:
+    """The institutional state actually reached, or None when nothing transitioned."""
+    if outcome.transition_event is None:
+        return None
+    return str(outcome.transition_event["new_state"])
+
+
+def _draft_provenance(
+    projection: MissionProjection,
+    stage_1: Stage1Observation,
+    outcomes: Sequence[Stage2ChainOutcome],
+    correction_record: Mapping[str, Any],
+) -> dict[str, Any]:
+    artifacts = stage_1.artifacts()
+    by_chain = {outcome.chain_id: outcome for outcome in outcomes}
+    return {
+        "mission_id": projection.mission_id,
+        "mission_scope": projection.authority.get("authority_scope_ref"),
+        "procedure_ids": sorted({chain.procedure_id for chain in projection.chains}),
+        "control_ids": sorted({chain.control_id for chain in projection.chains}),
+        "candidate_refs": sorted(item.candidate_id for item in artifacts.values()),
+        "candidate_digests": sorted(item.candidate_digest for item in artifacts.values()),
+        "evidence_bundle_refs": sorted(
+            str(chain.execution_input["evidence_bundle"]["evidence_bundle_id"])
+            for chain in projection.chains
+        ),
+        "evidence_bundle_digests": sorted(
+            sha256(chain.execution_input["evidence_bundle"]) for chain in projection.chains
+        ),
+        "admission_refs": sorted(
+            str(chain.execution_input["admission_record"]["admission_id"])
+            for chain in projection.chains
+        ),
+        "source_anchor_refs": sorted(
+            str(anchor["anchor_id"])
+            for chain in projection.chains
+            for anchor in _require_sequence(chain.execution_input["source_anchors"], "anchors")
+            if isinstance(anchor, Mapping)
+        ),
+        "warrant_refs": sorted(item.warrant_ref for item in artifacts.values()),
+        "warrant_digests": sorted(item.warrant_digest for item in artifacts.values()),
+        "deterministic_evaluation_refs": sorted(
+            str(item.evaluation["evaluation_id"]) for item in artifacts.values()
+        ),
+        "reviewer_id": _require_mapping(projection.authority["identity"], "identity").get(
+            "reviewer_id"
+        ),
+        "reviewer_role": _require_mapping(projection.authority["role"], "role").get("role_id"),
+        "authority_scope_ref": projection.authority.get("authority_scope_ref"),
+        "disposition_per_candidate": {
+            chain_id: by_chain[chain_id].outcome_state
+            for chain_id in sorted(artifacts)
+            if chain_id in by_chain
+        },
+        "institutional_state_per_ebawu": {
+            artifacts[chain_id].ebawu_id: _new_state(by_chain[chain_id])
+            for chain_id in sorted(artifacts)
+            if chain_id in by_chain
+        },
+        "correction_refs": (
+            [correction_record.get("successor_id")]
+            if correction_record.get("correction_executed")
+            else []
+        ),
+        "limitations": list(
+            _require_sequence(
+                projection.french_packet.get("substantive_french_support_absent_at", []),
+                "french absences",
+            )
+        ),
+        "nonclaims": list(NONCLAIMS),
+    }
 
 
 def bind_correction(
@@ -998,30 +1793,13 @@ def bind_correction(
     }
 
 
-def require_stage_2_clearance(
-    clearance: ExecutionClearance,
-    runtime: RuntimeIdentity,
-    projection: MissionProjection,
-    frozen: FrozenMissionInput,
-    *,
-    stage_2_bindings: Mapping[str, Any],
-) -> None:
-    """Stage-2 continuation binds Stage-1 and human artifacts in addition."""
-    require_projected_source(projection, frozen)
-    require_result_clearance(
-        clearance, runtime, {"mission_package_sha256": projection.package_sha256}
-    )
-    missing = sorted(name for name in STAGE_2_BINDING_FIELDS if not stage_2_bindings.get(name))
-    if missing:
-        raise ResultBearingMissionBlockedError(f"missing stage-2 bindings: {missing}")
-
-
 def observation_producer(
     projection: MissionProjection,
     frozen: FrozenMissionInput,
     stage_1: Stage1Observation | None = None,
+    stage_2: Stage2Result | None = None,
 ) -> dict[str, Any]:
-    """Produce M01-M12 non-adjudicating observations.
+    """Produce M01-M12 result-aware, non-adjudicating observations.
 
     These record what was observed. They contain no adjudication vocabulary: no
     MATCH, PASS, FAIL, VIOLATION or COMPLIANT. Comparing an observation to the
@@ -1063,18 +1841,29 @@ def observation_producer(
             "precomputed_evaluation_classified_reference_only": all(
                 "deterministic_evaluation" in c.reference_only for c in projection.chains
             ),
+            "evaluations_formed_at_runtime": (0 if stage_1 is None else len(stage_1.artifacts())),
         },
         "M06_ZTL_WARRANT_VS_FALLBACK_SEPARATION": {
             "precomputed_warrant_in_execution_input": any(
                 "warrant_artifact" in c.execution_input for c in projection.chains
             ),
             "governed_warrant_classes": ["ZTL_WARRANT", "FALLBACK_WARRANT"],
+            "warrant_classes_observed": (
+                "NOT_YET_OBSERVED"
+                if stage_1 is None
+                else sorted({item.warrant_class for item in stage_1.artifacts().values()})
+            ),
         },
         "M07_CANDIDATE_FINDING_NON_OFFICIALITY": {
             "output_official_status": sorted(
                 {str(o.get("official_status")) for o in projection.output_definitions}
             ),
             "official_cdc_record_creation": OFFICIAL_CDC_RECORD_CREATION,
+            "draft_official_status": (
+                "NOT_YET_OBSERVED"
+                if stage_2 is None
+                else sorted({str(d["official_status"]) for d in stage_2.drafts})
+            ),
         },
         "M08_REVIEWER_STANDING_AND_AUTHORITY_SCOPE": {
             "standing_dimensions_present": sorted(
@@ -1091,6 +1880,8 @@ def observation_producer(
                 if d in projection.authority
             ),
             "authority_scope_ref": projection.authority.get("authority_scope_ref"),
+            "standing_source": "03-AUTHORITY/test-reviewer.json",
+            "caller_supplied_standing_accepted": False,
         },
         "M09_HUMAN_DISPOSITION_BOUNDARY": {
             "stage_1_terminal_state": STAGE_1_TERMINAL_STATE,
@@ -1100,11 +1891,11 @@ def observation_producer(
             "institutional_transition": (
                 stage_1.institutional_transition if stage_1 is not None else "NONE"
             ),
+            "stage_1_authorization": (
+                "NOT_YET_OBSERVED" if stage_1 is None else stage_1.authorization
+            ),
         },
-        "M10_VEIP_TRANSITION_AFTER_VALID_DISPOSITION": {
-            "transition_emitted": False,
-            "requires_bound_disposition": True,
-        },
+        "M10_VEIP_TRANSITION_AFTER_VALID_DISPOSITION": _m10(stage_2),
         "M11_DELIVERABLE_STATE_FIDELITY": {
             "output_definition_ids": [
                 str(o.get("artifact_id")) for o in projection.output_definitions
@@ -1115,12 +1906,19 @@ def observation_producer(
                     french.get("substantive_french_support_absent_at", []), "french absences"
                 )
             ),
+            "drafts_rendered": 0 if stage_2 is None else len(stage_2.drafts),
+            "drafts_traced_to_frozen_definitions": (
+                "NOT_YET_OBSERVED"
+                if stage_2 is None
+                else sorted(str(d["output_definition_artifact_id"]) for d in stage_2.drafts)
+            ),
+            "french_capability_synthesized": (
+                "NOT_YET_OBSERVED"
+                if stage_2 is None
+                else any(bool(d["french_capability_synthesized"]) for d in stage_2.drafts)
+            ),
         },
-        "M12_CORRECTION_AND_PREDECESSOR_PRESERVATION": {
-            "correction_stimulus_id": "HA-CORRECTION-001",
-            "predecessor_mutation_prohibited": True,
-            "correction_executed": False,
-        },
+        "M12_CORRECTION_AND_PREDECESSOR_PRESERVATION": _m12(stage_2),
     }
     missing = sorted(set(OBSERVATION_IDS) - observations.keys())
     if missing:
@@ -1130,5 +1928,72 @@ def observation_producer(
         "observations": observations,
         "member_consumption": ledger,
         "historical_governance_field": projection.historical_governance_field,
+        "denominator_accounting": (
+            "NOT_YET_OBSERVED" if stage_2 is None else dict(stage_2.accounting)
+        ),
         "adjudication_present": False,
+    }
+
+
+def _m10(stage_2: Stage2Result | None) -> dict[str, Any]:
+    """M10 reports the transition facts actually observed, never a literal false."""
+    if stage_2 is None:
+        return {
+            "requires_bound_disposition": True,
+            "stage_2_observed": False,
+            "transition_events_emitted": "NOT_YET_OBSERVED",
+            "outcome_states": "NOT_YET_OBSERVED",
+        }
+    return {
+        "requires_bound_disposition": True,
+        "stage_2_observed": True,
+        "transition_events_emitted": len(stage_2.transition_events()),
+        "outcome_states": dict(stage_2.accounting),
+        "per_chain": {
+            outcome.chain_id: {
+                "outcome_state": outcome.outcome_state,
+                "decision": outcome.decision,
+                "reason_code": outcome.reason_code,
+                "epistemic_state": outcome.epistemic_state,
+                "event_id": (
+                    None
+                    if outcome.transition_event is None
+                    else outcome.transition_event["event_id"]
+                ),
+                "new_state": (
+                    None
+                    if outcome.transition_event is None
+                    else outcome.transition_event["new_state"]
+                ),
+            }
+            for outcome in stage_2.outcomes
+        },
+        "denominator": sum(stage_2.accounting.values()),
+    }
+
+
+def _m12(stage_2: Stage2Result | None) -> dict[str, Any]:
+    """M12 reports actual correction facts, or an explicit absence."""
+    if stage_2 is None:
+        return {
+            "predecessor_mutation_prohibited": True,
+            "stage_2_observed": False,
+            "correction_executed": "NOT_YET_OBSERVED",
+            "m12_state": "precondition_not_yet_reached",
+        }
+    correction = stage_2.correction
+    return {
+        "predecessor_mutation_prohibited": True,
+        "stage_2_observed": True,
+        "correction_stimulus_id": correction.get("correction_stimulus_id"),
+        "correction_executed": bool(correction.get("correction_executed")),
+        "m12_state": correction.get("m12_state"),
+        "eligible_completed_predecessor": correction.get("eligible_completed_predecessor"),
+        "predecessor_before_digest": correction.get("predecessor_before_digest"),
+        "predecessor_after_digest": correction.get("predecessor_after_digest"),
+        "predecessor_mutated": correction.get("predecessor_mutated"),
+        "successor_id": correction.get("successor_id"),
+        "supersedes": correction.get("supersedes"),
+        "affected_output_eligibility": correction.get("affected_output_eligibility"),
+        "detail": correction.get("detail"),
     }

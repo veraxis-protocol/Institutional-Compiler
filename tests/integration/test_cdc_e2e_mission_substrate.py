@@ -89,6 +89,7 @@ def test_result_interlock_refuses_all_missing_bindings() -> None:
 
 
 def test_result_entrypoint_refuses_before_evaluator_is_called() -> None:
+    """The legacy mapping entrypoint is retired and refuses before doing anything."""
     calls = 0
 
     def forbidden_evaluator(*_args: object) -> dict[str, Any]:
@@ -175,6 +176,7 @@ def test_mission_package_digest_mismatch_refuses() -> None:
         mission_package_sha256="not-the-package",
         oracle_sha256="oracle",
         adjudication_protocol_sha256="protocol",
+        action_plan_sha256="plan",
     )
     with pytest.raises(ResultBearingMissionBlockedError, match="mission_package_sha256"):
         require_result_clearance(

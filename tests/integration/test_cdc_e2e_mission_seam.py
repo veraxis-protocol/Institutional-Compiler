@@ -13,11 +13,27 @@ correct package-digest *label* cannot substitute for the verified frozen bytes.
 from __future__ import annotations
 
 import json
+import sys
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent))
+
+from cdc_e2e_support import (
+    PACKAGE_RELPATH,
+    STUB_RUNTIME,
+    disposition_for,
+    exact_clearance,
+)
+from cdc_e2e_support import (
+    stub_evaluator as _stub_evaluator,
+)
+from cdc_e2e_support import (
+    stub_warrant as _stub_warrant,
+)
 
 from oic.cdc_e2e_mission import (
     DENOMINATOR_STATES,
@@ -35,7 +51,6 @@ from oic.cdc_e2e_mission import (
     PredecessorBindingError,
     ProjectionProvenanceError,
     ResultBearingMissionBlockedError,
-    RuntimeIdentity,
     bind_correction,
     bind_human_disposition,
     member_consumption_ledger,
@@ -44,11 +59,9 @@ from oic.cdc_e2e_mission import (
     require_human_disposition,
     require_projected_source,
     require_stage_2_clearance,
-    run_stage_1,
+    unauthorized_stage_1_helper,
     verify_frozen_mission_input,
 )
-
-PACKAGE_RELPATH = "veraxis/cdc-e2e-mission-001/input-v0.1"
 
 
 @pytest.fixture
@@ -67,22 +80,6 @@ def frozen(package_root: Path) -> FrozenMissionInput:
 def projection(frozen: FrozenMissionInput) -> MissionProjection:
     """Executable projection derived from the verified bytes."""
     return project_frozen_mission(frozen)
-
-
-def _stub_evaluator(
-    member: Mapping[str, Any], control: Mapping[str, Any], evidence: Mapping[str, Any]
-) -> Mapping[str, Any]:
-    """A deliberately trivial stand-in; it reaches no institutional conclusion."""
-    del control, evidence
-    return {"evaluation_id": f"STUB-EVAL-{member['control_ref']}", "verdict": "STUB_NOT_A_VERDICT"}
-
-
-def _stub_warrant(
-    evaluation: Mapping[str, Any], control: Mapping[str, Any]
-) -> tuple[str, Mapping[str, Any]]:
-    """A stand-in warrant builder; produces no ZTL claim."""
-    del control
-    return "ZTL_WARRANT", {"warrant_id": f"STUB-W-{evaluation['evaluation_id']}"}
 
 
 # 1 --------------------------------------------------------------------------
@@ -215,7 +212,7 @@ def test_missing_disposition_after_stage_1_holds(
     projection: MissionProjection, frozen: FrozenMissionInput
 ) -> None:
     """Stage 1 terminates and holds; no transition, no draft eligibility."""
-    stage_1 = run_stage_1(
+    stage_1 = unauthorized_stage_1_helper(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
     )
     assert stage_1.stage == "EVALUATION_AND_CANDIDATE_FORMATION_COMPLETE"
@@ -232,20 +229,20 @@ def test_candidate_digest_mismatch_is_rejected(
     projection: MissionProjection, frozen: FrozenMissionInput
 ) -> None:
     """A disposition must bind the candidate Stage 1 actually formed."""
-    stage_1 = run_stage_1(
+    stage_1 = unauthorized_stage_1_helper(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
     )
-    chain_id = next(iter(stage_1.candidate_digests()))
-    with pytest.raises(CandidateBindingError):
+    chain_id = "P001xC-TENDER-01"
+    forged = {**disposition_for(stage_1, projection, chain_id), "candidate_digest": "0" * 64}
+    with pytest.raises(CandidateBindingError, match="candidate_digest"):
         bind_human_disposition(
-            stage_1,
-            {"chain_id": chain_id, "action": "ACCEPT_CANDIDATE", "candidate_digest": "0" * 64},
-            action_plan_sha256=HUMAN_ACTION_PLAN_SHA256,
+            stage_1, forged, projection=projection, action_plan_sha256=HUMAN_ACTION_PLAN_SHA256
         )
     observed = stage_1.candidate_digests()[chain_id]
     bound = bind_human_disposition(
         stage_1,
-        {"chain_id": chain_id, "action": "ACCEPT_CANDIDATE", "candidate_digest": observed},
+        disposition_for(stage_1, projection, chain_id),
+        projection=projection,
         action_plan_sha256=HUMAN_ACTION_PLAN_SHA256,
     )
     assert bound["candidate_digest"] == observed
@@ -295,9 +292,33 @@ def test_result_interlock_without_exact_clearance_is_rejected(
 ) -> None:
     """Stage-2 continuation refuses without every exact binding."""
     empty = ExecutionClearance(None, None, None, None, None, None, None)
-    runtime = RuntimeIdentity("c", "t", "e")
-    with pytest.raises(ResultBearingMissionBlockedError):
-        require_stage_2_clearance(empty, runtime, projection, frozen, stage_2_bindings={})
+    stage_1 = unauthorized_stage_1_helper(
+        projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
+    )
+    with pytest.raises(ResultBearingMissionBlockedError, match="missing result-bearing clearance"):
+        require_stage_2_clearance(
+            empty,
+            STUB_RUNTIME,
+            projection,
+            frozen,
+            stage_1=stage_1,
+            dispositions={},
+            correction_stimulus={},
+            stage_2_bindings={},
+        )
+    with pytest.raises(
+        ResultBearingMissionBlockedError, match="not produced under owner clearance"
+    ):
+        require_stage_2_clearance(
+            exact_clearance(),
+            STUB_RUNTIME,
+            projection,
+            frozen,
+            stage_1=stage_1,
+            dispositions={},
+            correction_stimulus={},
+            stage_2_bindings={},
+        )
 
 
 # denominator ----------------------------------------------------------------
@@ -314,7 +335,9 @@ def test_denominator_survives_individual_chain_failure(
             raise RuntimeError("injected component failure")
         return _stub_evaluator(member, member, member)
 
-    stage_1 = run_stage_1(projection, frozen, evaluator=failing, warrant_builder=_stub_warrant)
+    stage_1 = unauthorized_stage_1_helper(
+        projection, frozen, evaluator=failing, warrant_builder=_stub_warrant
+    )
     assert sum(stage_1.accounting.values()) == EXPECTED_CHAIN_COUNT
     assert set(stage_1.accounting) == set(DENOMINATOR_STATES)
     assert stage_1.accounting["non_evaluable"] == 3
@@ -335,10 +358,10 @@ def test_stage_1_observation_digest_is_stable(
     projection: MissionProjection, frozen: FrozenMissionInput
 ) -> None:
     """The Stage-1 checkpoint digest is deterministic over identical inputs."""
-    first = run_stage_1(
+    first = unauthorized_stage_1_helper(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
     )
-    second = run_stage_1(
+    second = unauthorized_stage_1_helper(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
     )
     assert first.digest() == second.digest()
