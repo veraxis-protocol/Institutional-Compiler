@@ -1,0 +1,241 @@
+{
+  "authorization_disposition": {
+    "OWNER_STAGE_1_AUTHORIZATION_V0_1": "NOT_CONSUMED",
+    "OWNER_STAGE_1_AUTHORIZATION_V0_1_REUSABLE_AFTER_SOURCE_SUCCESSOR": false,
+    "artifact_state": "IMMUTABLE_HISTORICAL_AUTHORITY_ARTIFACT",
+    "associated_attempt": "PRE_CANDIDATE_REFUSAL_001",
+    "deleted_or_rewritten": false,
+    "reason": "ANY GOVERNED COMPONENT IMPLEMENTATION WILL CHANGE THE AUTHORIZED IMPLEMENTATION IDENTITY AND REQUIRES A NEW OWNER AUTHORIZATION"
+  },
+  "authorized_attempt_consumed": false,
+  "authorized_implementation_commit": "c37e82b7aa33cc4ad2d2db2ef5fd4760ef3fe330",
+  "authorized_implementation_tree": "a531ac6faf3170c57d595f6c0935edfe9a11a0f2",
+  "automatic_retry": "PROHIBITED",
+  "blocking_issue": "AWAITING_OWNER_STAGE_1_COMPONENT_PROFILE",
+  "candidate_count": 0,
+  "classification": "NON_RESULT_BEARING_REFUSAL_RECORD",
+  "component_census": {
+    "governed_evaluator_implementation": "ABSENT",
+    "governed_warrant_builder_implementation": "ABSENT",
+    "implementations_of_EvaluationFunction_outside_tests": 0,
+    "implementations_of_WarrantFunction_outside_tests": 0,
+    "search_scope": [
+      "src/",
+      "scripts/",
+      "tests/"
+    ],
+    "stub_location": "tests/integration/cdc_e2e_support.py",
+    "stubs_are_candidate_implementations": false,
+    "stubs_invoked_during_this_attempt": false,
+    "test_stub_evaluator": "PRESENT_NOT_ELIGIBLE_FOR_RESULT_BEARING_USE",
+    "test_stub_warrant": "PRESENT_NOT_ELIGIBLE_FOR_RESULT_BEARING_USE"
+  },
+  "evaluator_invoked": false,
+  "existing_warrant_contract": {
+    "declared_status_line": "Status: PROPOSED. Not admitted, not implemented, not called.",
+    "eligible_as_governed_stage_1_warrant_implementation": false,
+    "path": "docs/contracts/WARRANT-CONTRACT-v0.1.md",
+    "referenced_from_src": false,
+    "requires_separate_owner_action": true,
+    "state": [
+      "PROPOSED",
+      "NOT_ADMITTED",
+      "NOT_IMPLEMENTED",
+      "NOT_CALLED"
+    ]
+  },
+  "human_disposition_created": false,
+  "implementation_identity_matched": true,
+  "mission_input": "input-v0.4",
+  "mission_manifest_sha256": "9b85ec3b6f5f615dbdf464f68ce5dfda1e081e886520a4e98883e02573415f6b",
+  "mission_package_sha256": "1d4738d615bf2cbca481268910a14fadc0a4fceb4f60bb5619d1acf1a69687c3",
+  "observed_implementation_commit": "c37e82b7aa33cc4ad2d2db2ef5fd4760ef3fe330",
+  "observed_implementation_tree": "a531ac6faf3170c57d595f6c0935edfe9a11a0f2",
+  "owner_stage_1_authorization_bytes": 11934,
+  "owner_stage_1_authorization_committed_to_implementation_branch": false,
+  "owner_stage_1_authorization_sha256": "108703e871438b634931a088ba05e5f17c96ab3f330f7262c05b5679b3444aba",
+  "owner_stage_1_authorization_verified_in_place": true,
+  "preserved_unchanged": [
+    "veraxis/cdc-e2e-mission-001/input-v0.1",
+    "veraxis/cdc-e2e-mission-001/input-v0.2",
+    "veraxis/cdc-e2e-mission-001/input-v0.3",
+    "veraxis/cdc-e2e-mission-001/input-v0.4",
+    "semantic oracle",
+    "adjudication protocol",
+    "human action plan",
+    "owner pre-execution interpretation",
+    "owner Stage-1 authorization",
+    "src/oic/cdc_slice.py",
+    "src/oic/cdc_e2e_mission.py",
+    "all implementation source"
+  ],
+  "record_class": "PRE_CANDIDATE_REFUSAL",
+  "record_id": "CDC-END-TO-END-MISSION-001-STAGE-1-PRE-CANDIDATE-REFUSAL-001",
+  "refusal_observed_at_runtime_utc": "2026-08-11T20:55:17Z",
+  "refusal_reason": "GOVERNED_STAGE_1_COMPONENTS_NOT_DESIGNATED",
+  "refusal_stage": "PRE_CANDIDATE",
+  "result_bearing": false,
+  "result_bearing_mission_executed": false,
+  "semantic_gap": {
+    "additional_observation": "Every chain, including C-EVAL-01 and C-AWARD-01, carries the single evidence fact publication_window_days. Even the fact vocabulary does not differentiate the three controls, which further indicates no evaluation rule was designated for any of them.",
+    "chains": [
+      {
+        "candidate_formed": false,
+        "chain_id": "P001xC-AWARD-01",
+        "control_id": "C-AWARD-01",
+        "decision_mode": "DETERMINISTIC",
+        "declared_conditions": [
+          "contract_award_condition_satisfied"
+        ],
+        "evaluation_predicate_encoded": false,
+        "observed_evidence_facts": [
+          "publication_window_days"
+        ],
+        "on_unknown": "ESCALATE"
+      },
+      {
+        "candidate_formed": false,
+        "chain_id": "P001xC-EVAL-01",
+        "control_id": "C-EVAL-01",
+        "decision_mode": "DETERMINISTIC",
+        "declared_conditions": [
+          "bid_evaluation_condition_satisfied"
+        ],
+        "evaluation_predicate_encoded": false,
+        "observed_evidence_facts": [
+          "publication_window_days"
+        ],
+        "on_unknown": "ESCALATE"
+      },
+      {
+        "candidate_formed": false,
+        "chain_id": "P001xC-TENDER-01",
+        "control_id": "C-TENDER-01",
+        "decision_mode": "DETERMINISTIC",
+        "declared_conditions": [
+          "competitive_tendering_condition_satisfied"
+        ],
+        "evaluation_predicate_encoded": false,
+        "observed_evidence_facts": [
+          "publication_window_days"
+        ],
+        "on_unknown": "ESCALATE"
+      },
+      {
+        "candidate_formed": false,
+        "chain_id": "P002xC-AWARD-01",
+        "control_id": "C-AWARD-01",
+        "decision_mode": "DETERMINISTIC",
+        "declared_conditions": [
+          "contract_award_condition_satisfied"
+        ],
+        "evaluation_predicate_encoded": false,
+        "observed_evidence_facts": [
+          "publication_window_days"
+        ],
+        "on_unknown": "ESCALATE"
+      },
+      {
+        "candidate_formed": false,
+        "chain_id": "P002xC-EVAL-01",
+        "control_id": "C-EVAL-01",
+        "decision_mode": "DETERMINISTIC",
+        "declared_conditions": [
+          "bid_evaluation_condition_satisfied"
+        ],
+        "evaluation_predicate_encoded": false,
+        "observed_evidence_facts": [
+          "publication_window_days"
+        ],
+        "on_unknown": "ESCALATE"
+      },
+      {
+        "candidate_formed": false,
+        "chain_id": "P002xC-TENDER-01",
+        "control_id": "C-TENDER-01",
+        "decision_mode": "DETERMINISTIC",
+        "declared_conditions": [
+          "competitive_tendering_condition_satisfied"
+        ],
+        "evaluation_predicate_encoded": false,
+        "observed_evidence_facts": [
+          "publication_window_days"
+        ],
+        "on_unknown": "ESCALATE"
+      },
+      {
+        "candidate_formed": false,
+        "chain_id": "P003xC-AWARD-01",
+        "control_id": "C-AWARD-01",
+        "decision_mode": "DETERMINISTIC",
+        "declared_conditions": [
+          "contract_award_condition_satisfied"
+        ],
+        "evaluation_predicate_encoded": false,
+        "observed_evidence_facts": [
+          "publication_window_days",
+          "publication_window_days"
+        ],
+        "on_unknown": "ESCALATE"
+      },
+      {
+        "candidate_formed": false,
+        "chain_id": "P003xC-EVAL-01",
+        "control_id": "C-EVAL-01",
+        "decision_mode": "DETERMINISTIC",
+        "declared_conditions": [
+          "bid_evaluation_condition_satisfied"
+        ],
+        "evaluation_predicate_encoded": false,
+        "observed_evidence_facts": [
+          "publication_window_days",
+          "publication_window_days"
+        ],
+        "on_unknown": "ESCALATE"
+      },
+      {
+        "candidate_formed": false,
+        "chain_id": "P003xC-TENDER-01",
+        "control_id": "C-TENDER-01",
+        "decision_mode": "DETERMINISTIC",
+        "declared_conditions": [
+          "competitive_tendering_condition_satisfied"
+        ],
+        "evaluation_predicate_encoded": false,
+        "observed_evidence_facts": [
+          "publication_window_days",
+          "publication_window_days"
+        ],
+        "on_unknown": "ESCALATE"
+      }
+    ],
+    "chains_total": 9,
+    "chains_whose_admitted_control_encodes_no_predicate": 9,
+    "inference_from_reference_results_prohibited_and_not_performed": true,
+    "predicate_bearing_keys_found": [],
+    "predicate_bearing_keys_searched": [
+      "threshold",
+      "rule",
+      "predicate",
+      "operator",
+      "expr",
+      "mapping"
+    ],
+    "publication_window_days_to_verdict_mapping": "NOT_PRESENT_IN_CONTROLLING_ADMITTED_CONTROL",
+    "reference_only_precomputed_evaluations_available": true,
+    "reference_only_results_permitted_as_computational_input": false,
+    "reference_only_results_used_to_infer_missing_predicate": false,
+    "statement": "The missing evaluator is not merely missing source code. Each controlling admitted control declares a named condition token, a decision_mode of DETERMINISTIC and an on_unknown of ESCALATE, but encodes no threshold, operator, rule, expression or mapping. Nothing in the controlling input derives SATISFIED / BREACH / UNRESOLVED from the observed evidence.",
+    "underlying_control_evaluation_predicate": "NOT_DESIGNATED"
+  },
+  "slice_001_fixture_warrant": {
+    "eligible_for_promotion": false,
+    "path": "tests/integration/cdc_slice_corpus.py",
+    "state": "SYNTHETIC_STAND_IN",
+    "symbol": "build_warrant"
+  },
+  "stage_1_observation_created": false,
+  "stage_2_invoked": false,
+  "warrant_builder_invoked": false,
+  "working_tree_clean_at_refusal": true
+}
