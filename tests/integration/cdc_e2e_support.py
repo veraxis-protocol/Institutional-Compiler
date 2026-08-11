@@ -18,12 +18,14 @@ from typing import Any
 
 from oic.cdc_e2e_mission import (
     ADJUDICATION_PROTOCOL_SHA256,
+    FROZEN_MISSION_INPUT_RELPATH,
     FROZEN_MISSION_PACKAGE_SHA256,
     HUMAN_ACTION_PLAN_RELPATH,
     HUMAN_ACTION_PLAN_SHA256,
     ORACLE_SHA256,
     OWNER_PREEXECUTION_INTERPRETATION_RELPATH,
     OWNER_PREEXECUTION_INTERPRETATION_SHA256,
+    PREDECESSOR_MISSION_INPUT_RELPATH,
     EvaluationFunction,
     ExecutionClearance,
     FrozenActionPlan,
@@ -35,10 +37,15 @@ from oic.cdc_e2e_mission import (
     _form_stage_1,
 )
 
-PACKAGE_RELPATH = "veraxis/cdc-e2e-mission-001/input-v0.1"
+PACKAGE_RELPATH = FROZEN_MISSION_INPUT_RELPATH
+PREDECESSOR_PACKAGE_RELPATH = PREDECESSOR_MISSION_INPUT_RELPATH
 
-# Inside the frozen standing's validity window (2026-08-10 .. 2026-08-11).
-OBSERVED_AT = "2026-08-10T12:00:00Z"
+# Inside the v0.2 standing's validity window (2026-08-11T16:00:02Z .. 2026-08-18).
+OBSERVED_AT = "2026-08-12T00:00:00Z"
+
+# Inside the *expired* v0.1 window. Legitimate only as a structural timestamp in
+# a test; it must never stand as the observed time of a real later disposition.
+PREDECESSOR_STRUCTURAL_OBSERVED_AT = "2026-08-10T12:00:00Z"
 
 STUB_RUNTIME = RuntimeIdentity(
     implementation_commit="STUB-IMPLEMENTATION-COMMIT",

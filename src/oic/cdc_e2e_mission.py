@@ -25,13 +25,31 @@ from oic.cdc_slice import (
 MISSION_ID: Final = "CDC-TEST-MISSION-001"
 ASSURANCE_MODE: Final = "SYNTHETIC_EVALUATION_ONLY"
 OFFICIAL_CDC_RECORD_CREATION: Final = "PROHIBITED"
+# The controlling mission input is v0.2. Its only substantive difference from
+# v0.1 is reviewer-authority currentness: the v0.1 standing expired at
+# 2026-08-11T00:00:00Z, so it could not authorize a real later disposition.
+# v0.1 is retained immutable and addressable as the predecessor.
+FROZEN_MISSION_INPUT_RELPATH: Final = "veraxis/cdc-e2e-mission-001/input-v0.2"
 FROZEN_MISSION_PACKAGE_SHA256: Final = (
+    "00dd820cfe43b780d5bec1a12382b16a7d6d9e45d6546c4fc10f3a83ab321510"
+)
+FROZEN_MISSION_PACKAGE_BYTES: Final = 65849
+FROZEN_MISSION_MANIFEST_SHA256: Final = (
+    "b159625c4d812f197278b91e7175551cbb2e77efb24a3952ba41c89643987a95"
+)
+
+PREDECESSOR_MISSION_INPUT_RELPATH: Final = "veraxis/cdc-e2e-mission-001/input-v0.1"
+PREDECESSOR_MISSION_PACKAGE_SHA256: Final = (
     "414d321dad9fe70671508848a19802f35635d27de60b932417f3305b961364f1"
 )
-FROZEN_MISSION_PACKAGE_BYTES: Final = 64199
-FROZEN_MISSION_MANIFEST_SHA256: Final = (
-    "506953539bd3991bf22d2855a898ae1a32ff618bd6dfed4be0d4c396a6fd152f"
+PREDECESSOR_MISSION_PACKAGE_BYTES: Final = 64199
+PREDECESSOR_AUTHORITY_SHA256: Final = (
+    "a82c078427fefe23abbb2bd066e9e730cea7e1fc2a3bab553e8352fa48b3db23"
 )
+SUPERSESSION_REASON: Final = "PREEXECUTION_AUTHORITY_CURRENTNESS"
+# Observed system UTC clock at issuance. Not backdated.
+AUTHORITY_ISSUED_AT: Final = "2026-08-11T16:00:02Z"
+AUTHORITY_EFFECTIVE_UNTIL: Final = "2026-08-18T00:00:00Z"
 GOVERNANCE_COMMIT: Final = "2e2282cb1bdeef972e2cf189030f24b011be2868"
 ORACLE_SHA256: Final = "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9"
 ADJUDICATION_PROTOCOL_SHA256: Final = (
@@ -1172,6 +1190,16 @@ class ReviewerStandingError(MissionContractError):
     """The frozen reviewer standing did not authorize the observed disposition."""
 
 
+class AuthorityCurrentnessError(ReviewerStandingError):
+    """A disposition was observed outside the frozen standing's validity interval.
+
+    Distinguished from a general standing failure because currentness is the one
+    dimension that can lapse without anything about the record changing. The
+    v0.1 authority expired on 2026-08-11T00:00:00Z; a structural test timestamp
+    inside that window is legitimate for a test and is not a real observation.
+    """
+
+
 class TransitionDerivationError(MissionContractError):
     """A transition proposal or registry was supplied instead of being derived."""
 
@@ -1462,9 +1490,6 @@ def validate_frozen_reviewer_standing_exact(
     ``03-AUTHORITY/test-reviewer.json`` object. There is no parameter through
     which a caller can supply a flat standing substitute.
     """
-    validate_frozen_reviewer_standing(
-        authority, mission_id=mission_id, action=action_class, observed_at=observed_at
-    )
     identity = _require_mapping(authority.get("identity"), "standing.identity")
     role = _require_mapping(authority.get("role"), "standing.role")
     permitted = _require_mapping(authority.get("permitted_action"), "standing.permitted_action")
@@ -1472,6 +1497,22 @@ def validate_frozen_reviewer_standing_exact(
     revocation = _require_mapping(authority.get("revocation"), "standing.revocation")
     permitted_dispositions = _require_sequence(
         permitted.get("permitted_dispositions"), "standing.permitted_dispositions"
+    )
+    # Currentness is checked first so a lapsed interval is attributable as such
+    # rather than surfacing as a generic "absent, expired, or unauthorized".
+    effective_from = str(validity.get("effective_from"))
+    effective_until = str(validity.get("effective_until"))
+    if not effective_from <= observed_at <= effective_until:
+        raise AuthorityCurrentnessError(
+            f"frozen reviewer standing is not current: observed_at {observed_at!r} is outside "
+            f"[{effective_from}, {effective_until}]"
+        )
+    if revocation.get("status") != "NOT_REVOKED":
+        raise ReviewerStandingError(
+            f"frozen reviewer standing is revoked or unresolved: {revocation.get('status')!r}"
+        )
+    validate_frozen_reviewer_standing(
+        authority, mission_id=mission_id, action=action_class, observed_at=observed_at
     )
     mismatches = [
         name
@@ -1515,6 +1556,7 @@ def bind_human_disposition(
     *,
     projection: MissionProjection,
     action_plan: object,
+    observed_now: str | None = None,
 ) -> dict[str, Any]:
     """Accept a disposition only if it is the preregistered stimulus for this chain.
 
@@ -1531,6 +1573,11 @@ def bind_human_disposition(
     as an action-plan mismatch, not an authority failure.
     """
     plan = require_verified_action_plan(action_plan)
+    if observed_now is not None and disposition.get("observed_at") != observed_now:
+        raise AuthorityCurrentnessError(
+            f"a real disposition must state the observed clock: observed_now is "
+            f"{observed_now!r}, disposition claims {disposition.get('observed_at')!r}"
+        )
     missing = sorted(set(HUMAN_DISPOSITION_REQUIRED_FIELDS) - disposition.keys())
     if missing:
         raise MissionContractError(f"human disposition missing required fields: {missing}")

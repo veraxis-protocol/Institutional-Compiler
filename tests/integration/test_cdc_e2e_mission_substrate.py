@@ -12,6 +12,7 @@ import pytest
 from oic.cdc_e2e_mission import (
     ADJUDICATION_PROTOCOL_SHA256,
     DRAFT_KINDS,
+    FROZEN_MISSION_INPUT_RELPATH,
     FROZEN_MISSION_MANIFEST_SHA256,
     FROZEN_MISSION_PACKAGE_SHA256,
     GOVERNANCE_COMMIT,
@@ -28,7 +29,7 @@ from oic.cdc_e2e_mission import (
 )
 from oic.cdc_slice import make_successor
 
-PACKAGE_ROOT = Path(__file__).parents[2] / "veraxis/cdc-e2e-mission-001/input-v0.1"
+PACKAGE_ROOT = Path(__file__).parents[2] / FROZEN_MISSION_INPUT_RELPATH
 
 
 def _package() -> dict[str, Any]:
@@ -63,7 +64,7 @@ def test_persisted_frozen_mission_package_and_governance_bindings() -> None:
     verified = verify_frozen_mission_input(PACKAGE_ROOT)
     assert verified.package_sha256 == FROZEN_MISSION_PACKAGE_SHA256
     assert verified.manifest_sha256 == FROZEN_MISSION_MANIFEST_SHA256
-    assert verified.package_bytes == 64199
+    assert verified.package_bytes == 65849
     assert verified.population_count == 3
     assert verified.control_count == 3
     assert verified.evidence_object_count == 54
@@ -134,7 +135,7 @@ def test_frozen_reviewer_standing_requires_scope_validity_and_revocation() -> No
         standing,
         mission_id="CDC-TEST-MISSION-001",
         action="APPLY_TEST_DISPOSITION",
-        observed_at="2026-08-10T12:00:00Z",
+        observed_at="2026-08-12T00:00:00Z",
     )
     revoked = deepcopy(standing)
     revoked["revocation"]["status"] = "REVOKED"
@@ -143,7 +144,7 @@ def test_frozen_reviewer_standing_requires_scope_validity_and_revocation() -> No
             revoked,
             mission_id="CDC-TEST-MISSION-001",
             action="APPLY_TEST_DISPOSITION",
-            observed_at="2026-08-10T12:00:00Z",
+            observed_at="2026-08-12T00:00:00Z",
         )
 
 

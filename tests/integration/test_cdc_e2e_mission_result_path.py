@@ -22,6 +22,8 @@ import inspect
 import json
 import sys
 from collections.abc import Mapping
+from copy import deepcopy
+from datetime import UTC, datetime
 from pathlib import Path
 from types import CodeType
 from typing import Any, cast
@@ -32,8 +34,11 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from cdc_e2e_support import (
     ACTION_PLAN_RELPATH,
+    OBSERVED_AT,
     OWNER_INTERPRETATION_RELPATH,
     PACKAGE_RELPATH,
+    PREDECESSOR_PACKAGE_RELPATH,
+    PREDECESSOR_STRUCTURAL_OBSERVED_AT,
     STUB_RUNTIME,
     bindings_for,
     correction_object,
@@ -47,18 +52,26 @@ from cdc_e2e_support import (
 
 from oic import cdc_e2e_mission
 from oic.cdc_e2e_mission import (
+    AUTHORITY_EFFECTIVE_UNTIL,
+    AUTHORITY_ISSUED_AT,
     DRAFT_KINDS,
     EXPECTED_CHAIN_COUNT,
+    FROZEN_MISSION_INPUT_RELPATH,
     HUMAN_ACTION_PLAN_BYTES,
     HUMAN_ACTION_PLAN_SHA256,
     LEGACY_MAPPING_ENTRYPOINT_STATE,
     OWNER_PREEXECUTION_INTERPRETATION_BYTES,
     OWNER_PREEXECUTION_INTERPRETATION_SHA256,
     OWNER_PREEXECUTION_INTERPRETATION_STATUS,
+    PREDECESSOR_AUTHORITY_SHA256,
+    PREDECESSOR_MISSION_PACKAGE_BYTES,
+    PREDECESSOR_MISSION_PACKAGE_SHA256,
     STAGE_1_AUTHORIZATION_CLEARED,
     STAGE_2_OUTCOME_STATES,
+    SUPERSESSION_REASON,
     ActionPlanBindingError,
     ActionPlanProvenanceError,
+    AuthorityCurrentnessError,
     ExecutionClearance,
     FrozenActionPlan,
     FrozenMissionInput,
@@ -83,6 +96,7 @@ from oic.cdc_e2e_mission import (
     render_drafts,
     require_verified_action_plan,
     require_verified_owner_interpretation,
+    validate_frozen_reviewer_standing_exact,
     verify_frozen_action_plan,
     verify_frozen_mission_input,
     verify_owner_preexecution_interpretation,
@@ -1409,3 +1423,204 @@ def test_owner_interpretation_prose_never_reaches_the_computation(
             if phrase == "OWNER_FROZEN_PREEXECUTION_INTERPRETATION":
                 continue
             assert phrase not in blob, phrase
+
+
+# ===========================================================================
+# Q. Reviewer-authority currentness (input-v0.2 successor)
+# ===========================================================================
+
+
+def _v1_authority(repo_root: Path) -> Mapping[str, Any]:
+    return cast(
+        "Mapping[str, Any]",
+        json.loads(
+            (
+                repo_root / PREDECESSOR_PACKAGE_RELPATH / "03-AUTHORITY/test-reviewer.json"
+            ).read_bytes()
+        ),
+    )
+
+
+def _validate_at(authority: Mapping[str, Any], observed_at: str) -> dict[str, Any]:
+    return validate_frozen_reviewer_standing_exact(
+        authority,
+        mission_id="CDC-TEST-MISSION-001",
+        reviewer_id="TEST-REVIEWER-001",
+        reviewer_role="CDC_TEST_CONTROLLER",
+        authority_scope_ref="CDC-TEST-MISSION-001/TEST-REVIEWER",
+        action_class="APPLY_TEST_DISPOSITION",
+        disposition="ACCEPT_CANDIDATE",
+        observed_at=observed_at,
+    )
+
+
+def test_v1_expired_authority_rejects_a_current_real_time_disposition(
+    repo_root: Path,
+) -> None:
+    """The v0.1 standing lapsed on 2026-08-11T00:00:00Z and cannot authorize now."""
+    authority = _v1_authority(repo_root)
+    assert authority["validity"]["effective_until"] == "2026-08-11T00:00:00Z"
+    now = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    assert now > authority["validity"]["effective_until"]
+    with pytest.raises(AuthorityCurrentnessError, match="not current"):
+        _validate_at(authority, now)
+
+
+def test_v1_historical_structural_timestamp_remains_usable_only_in_tests(
+    repo_root: Path,
+) -> None:
+    """The v0.1 window still validates a structural timestamp, and only that.
+
+    This is the distinction the successor exists to draw: the historical
+    timestamp is a legitimate fixture for exercising v0.1's structure, and is
+    simultaneously not a permissible observation for any real later disposition,
+    which the preceding test shows being refused.
+    """
+    authority = _v1_authority(repo_root)
+    record = _validate_at(authority, PREDECESSOR_STRUCTURAL_OBSERVED_AT)
+    assert record["observed_at"] == PREDECESSOR_STRUCTURAL_OBSERVED_AT
+    assert record["caller_supplied_standing_accepted"] is False
+    # And the same timestamp is now outside the controlling v0.2 window.
+    current = json.loads(
+        (repo_root / PACKAGE_RELPATH / "03-AUTHORITY/test-reviewer.json").read_bytes()
+    )
+    with pytest.raises(AuthorityCurrentnessError, match="not current"):
+        _validate_at(current, PREDECESSOR_STRUCTURAL_OBSERVED_AT)
+
+
+def test_v2_before_effective_from_is_rejected(projection: MissionProjection) -> None:
+    """A disposition observed before issuance is not authorized."""
+    effective_from = projection.authority["validity"]["effective_from"]
+    with pytest.raises(AuthorityCurrentnessError, match="not current"):
+        _validate_at(projection.authority, "2026-08-11T00:00:00Z")
+    assert effective_from == AUTHORITY_ISSUED_AT
+
+
+def test_v2_inside_the_validity_interval_is_accepted(projection: MissionProjection) -> None:
+    """Inside the issued window the standing authorizes structurally."""
+    record = _validate_at(projection.authority, OBSERVED_AT)
+    assert record["revocation_status"] == "NOT_REVOKED"
+    assert record["standing_source"] == "03-AUTHORITY/test-reviewer.json"
+
+
+def test_v2_after_effective_until_is_rejected(projection: MissionProjection) -> None:
+    """The successor standing is bounded too; it expires on 2026-08-18."""
+    assert projection.authority["validity"]["effective_until"] == AUTHORITY_EFFECTIVE_UNTIL
+    with pytest.raises(AuthorityCurrentnessError, match="not current"):
+        _validate_at(projection.authority, "2026-08-18T00:00:01Z")
+
+
+def test_revoked_v2_authority_is_rejected(projection: MissionProjection) -> None:
+    """Revocation is checked at disposition time, inside a valid window."""
+    revoked = deepcopy(dict(projection.authority))
+    revoked["revocation"] = {**revoked["revocation"], "status": "REVOKED"}
+    with pytest.raises(ReviewerStandingError):
+        _validate_at(revoked, OBSERVED_AT)
+
+
+def test_caller_cannot_override_observed_at_or_validity(
+    projection: MissionProjection, stage_1: Stage1Observation, action_plan: FrozenActionPlan
+) -> None:
+    """No standing substitute, and a real clock cannot be contradicted."""
+    signature = inspect.signature(bind_human_disposition)
+    for forbidden in ("standing", "reviewer_standings", "authority", "validity"):
+        assert forbidden not in signature.parameters
+
+    # A disposition claiming a different time than the observed clock is refused.
+    disposition = disposition_for(stage_1, projection, TARGET_CHAIN, action_plan)
+    with pytest.raises(AuthorityCurrentnessError, match="must state the observed clock"):
+        bind_human_disposition(
+            stage_1,
+            disposition,
+            projection=projection,
+            action_plan=action_plan,
+            observed_now="2026-08-13T09:00:00Z",
+        )
+    # Agreeing with the clock, inside the window, is admitted.
+    bound = bind_human_disposition(
+        stage_1,
+        disposition,
+        projection=projection,
+        action_plan=action_plan,
+        observed_now=OBSERVED_AT,
+    )
+    assert bound["observed_at"] == OBSERVED_AT
+
+    # The validity window itself comes from the verified bytes, not the caller.
+    on_disk = json.loads(
+        (REPO_ROOT / FROZEN_MISSION_INPUT_RELPATH / "03-AUTHORITY/test-reviewer.json").read_bytes()
+    )
+    assert projection.authority["validity"] == on_disk["validity"]
+
+
+def test_v1_remains_immutable_and_addressable(repo_root: Path) -> None:
+    """The predecessor package is retained byte-for-byte and still verifies."""
+    v1 = repo_root / PREDECESSOR_PACKAGE_RELPATH
+    assert v1.is_dir()
+    manifest = json.loads((v1 / "PACKAGE-MANIFEST.json").read_bytes())
+    identities = [
+        {
+            "path": member["path"],
+            "bytes": len((v1 / member["path"]).read_bytes()),
+            "sha256": hashlib.sha256((v1 / member["path"]).read_bytes()).hexdigest(),
+            "sha512": hashlib.sha512((v1 / member["path"]).read_bytes()).hexdigest(),
+        }
+        for member in manifest["members"]
+    ]
+    for observed, declared in zip(identities, manifest["members"], strict=True):
+        assert observed == {name: declared[name] for name in observed}
+    recomputed = hashlib.sha256(
+        json.dumps(identities, sort_keys=True, ensure_ascii=False).encode()
+    ).hexdigest()
+    assert recomputed == PREDECESSOR_MISSION_PACKAGE_SHA256
+    assert (
+        sum(path.stat().st_size for path in v1.rglob("*") if path.is_file())
+        == PREDECESSOR_MISSION_PACKAGE_BYTES
+    )
+    assert (
+        hashlib.sha256((v1 / "03-AUTHORITY/test-reviewer.json").read_bytes()).hexdigest()
+        == PREDECESSOR_AUTHORITY_SHA256
+    )
+
+
+def test_v2_supersedes_v1_for_authority_currentness_only(
+    projection: MissionProjection, repo_root: Path
+) -> None:
+    """Exactly one substantive member changed, and it changed only its validity."""
+    v1 = repo_root / PREDECESSOR_PACKAGE_RELPATH
+    v2 = repo_root / PACKAGE_RELPATH
+    manifest = json.loads((v2 / "PACKAGE-MANIFEST.json").read_bytes())
+    assert manifest["supersession_reason"] == SUPERSESSION_REASON
+    assert manifest["supersedes"] == "CDC-END-TO-END-MISSION-001-INPUT-v0.1"
+    assert manifest["predecessor_package_sha256"] == PREDECESSOR_MISSION_PACKAGE_SHA256
+    assert manifest["predecessor_retained_immutable"] is True
+    assert manifest["result_bearing_execution_seen_before_supersession"] is False
+
+    differing = [
+        member["path"]
+        for member in manifest["members"]
+        if (v1 / member["path"]).read_bytes() != (v2 / member["path"]).read_bytes()
+    ]
+    assert differing == ["03-AUTHORITY/test-reviewer.json", "SHA256SUMS"]
+
+    before = _v1_authority(repo_root)
+    after = projection.authority
+    for key in (
+        "identity",
+        "role",
+        "mission",
+        "authority_scope_ref",
+        "permitted_action",
+        "assurance_mode",
+        "authority_basis",
+        "revocation",
+        "record_id",
+        "authorization_representation",
+    ):
+        assert after[key] == before[key], key
+    assert after["validity"] != before["validity"]
+    supersession = after["supersession"]
+    assert supersession["supersession_reason"] == SUPERSESSION_REASON
+    assert supersession["predecessor_authority_sha256"] == PREDECESSOR_AUTHORITY_SHA256
+    assert supersession["result_bearing_execution_seen_before_supersession"] is False
+    assert "synthetic test authority only" in supersession["claim_ceiling"]
