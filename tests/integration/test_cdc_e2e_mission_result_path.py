@@ -17,6 +17,7 @@ flows through them is explicitly synthetic.
 from __future__ import annotations
 
 import dataclasses
+import hashlib
 import inspect
 import json
 import sys
@@ -31,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from cdc_e2e_support import (
     ACTION_PLAN_RELPATH,
+    OWNER_INTERPRETATION_RELPATH,
     PACKAGE_RELPATH,
     STUB_RUNTIME,
     bindings_for,
@@ -50,6 +52,9 @@ from oic.cdc_e2e_mission import (
     HUMAN_ACTION_PLAN_BYTES,
     HUMAN_ACTION_PLAN_SHA256,
     LEGACY_MAPPING_ENTRYPOINT_STATE,
+    OWNER_PREEXECUTION_INTERPRETATION_BYTES,
+    OWNER_PREEXECUTION_INTERPRETATION_SHA256,
+    OWNER_PREEXECUTION_INTERPRETATION_STATUS,
     STAGE_1_AUTHORIZATION_CLEARED,
     STAGE_2_OUTCOME_STATES,
     ActionPlanBindingError,
@@ -57,8 +62,10 @@ from oic.cdc_e2e_mission import (
     ExecutionClearance,
     FrozenActionPlan,
     FrozenMissionInput,
+    FrozenOwnerInterpretation,
     MissionContractError,
     MissionProjection,
+    OwnerInterpretationProvenanceError,
     ProjectionProvenanceError,
     ResultBearingMissionBlockedError,
     ReviewerStandingError,
@@ -75,11 +82,21 @@ from oic.cdc_e2e_mission import (
     project_frozen_mission,
     render_drafts,
     require_verified_action_plan,
+    require_verified_owner_interpretation,
     verify_frozen_action_plan,
     verify_frozen_mission_input,
+    verify_owner_preexecution_interpretation,
 )
 
 TARGET_CHAIN = "P001xC-TENDER-01"
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _owner_interpretation() -> FrozenOwnerInterpretation:
+    """Verify the owner record from its bytes; used wherever Stage 1 is invoked."""
+    return verify_owner_preexecution_interpretation(REPO_ROOT / OWNER_INTERPRETATION_RELPATH)
+
 
 # The action classes the frozen plan preregisters, transcribed here so the suite
 # states them independently of the loader that recovers them.
@@ -115,6 +132,12 @@ def action_plan(repo_root: Path) -> FrozenActionPlan:
 
 
 @pytest.fixture
+def owner_interpretation(repo_root: Path) -> FrozenOwnerInterpretation:
+    """The owner pre-execution interpretation record, verified from its bytes."""
+    return verify_owner_preexecution_interpretation(repo_root / OWNER_INTERPRETATION_RELPATH)
+
+
+@pytest.fixture
 def stage_1(projection: MissionProjection, frozen: FrozenMissionInput) -> Stage1Observation:
     """An owner-cleared Stage-1 observation formed with stub components."""
     return execute_authorized_stage_1(
@@ -122,6 +145,7 @@ def stage_1(projection: MissionProjection, frozen: FrozenMissionInput) -> Stage1
         frozen,
         exact_clearance(),
         STUB_RUNTIME,
+        owner_interpretation=_owner_interpretation(),
         evaluator=stub_evaluator,
         warrant_builder=stub_warrant,
     )
@@ -582,6 +606,7 @@ def test_authorized_stage_1_requires_every_exact_binding(
             frozen,
             empty,
             STUB_RUNTIME,
+            owner_interpretation=_owner_interpretation(),
             evaluator=stub_evaluator,
             warrant_builder=stub_warrant,
         )
@@ -598,6 +623,7 @@ def test_authorized_stage_1_requires_the_action_plan_digest(
             frozen,
             wrong,
             STUB_RUNTIME,
+            owner_interpretation=_owner_interpretation(),
             evaluator=stub_evaluator,
             warrant_builder=stub_warrant,
         )
@@ -612,6 +638,7 @@ def test_authorized_stage_1_refuses_a_mapping_source(frozen: FrozenMissionInput)
             frozen,
             exact_clearance(),
             STUB_RUNTIME,
+            owner_interpretation=_owner_interpretation(),
             evaluator=stub_evaluator,
             warrant_builder=stub_warrant,
         )
@@ -667,6 +694,7 @@ def test_stage_1_digest_binds_the_objects_not_only_the_digests(
         frozen,
         exact_clearance(),
         STUB_RUNTIME,
+        owner_interpretation=_owner_interpretation(),
         evaluator=stub_evaluator,
         warrant_builder=other_warrant,
     )
@@ -764,6 +792,7 @@ def test_disposition_for_a_chain_with_no_candidate_cannot_bind(
         frozen,
         exact_clearance(),
         STUB_RUNTIME,
+        owner_interpretation=_owner_interpretation(),
         evaluator=failing,
         warrant_builder=stub_warrant,
     )
@@ -773,6 +802,7 @@ def test_disposition_for_a_chain_with_no_candidate_cannot_bind(
         frozen,
         exact_clearance(),
         STUB_RUNTIME,
+        owner_interpretation=_owner_interpretation(),
         evaluator=stub_evaluator,
         warrant_builder=stub_warrant,
     )
@@ -936,6 +966,7 @@ def test_an_escalating_chain_is_preserved_as_unresolved_with_no_event(
         frozen,
         exact_clearance(),
         STUB_RUNTIME,
+        owner_interpretation=_owner_interpretation(),
         evaluator=unknown_on_one_chain,
         warrant_builder=stub_warrant,
     )
@@ -1165,3 +1196,216 @@ def test_frozen_package_and_projection_invariants_survive(
         for field in ("deterministic_evaluation", "warrant_artifact", "candidate"):
             assert field not in chain.execution_input
             assert field in chain.reference_only
+
+
+# ===========================================================================
+# P. Owner pre-execution interpretation record
+# ===========================================================================
+
+
+def test_owner_interpretation_exact_bytes_are_accepted(
+    owner_interpretation: FrozenOwnerInterpretation, repo_root: Path
+) -> None:
+    """The persisted record verifies byte-for-byte against the owner's identity."""
+    payload = (repo_root / OWNER_INTERPRETATION_RELPATH).read_bytes()
+    assert len(payload) == OWNER_PREEXECUTION_INTERPRETATION_BYTES == 9311
+    assert (
+        hashlib.sha256(payload).hexdigest()
+        == OWNER_PREEXECUTION_INTERPRETATION_SHA256
+        == "8242ccf9612531dc7b3b1d648625a934c4f616d8b8565c61d958a6825d7f2f84"
+    )
+    assert owner_interpretation.sha256_hex == OWNER_PREEXECUTION_INTERPRETATION_SHA256
+    assert owner_interpretation.byte_count == OWNER_PREEXECUTION_INTERPRETATION_BYTES
+    assert owner_interpretation.status == OWNER_PREEXECUTION_INTERPRETATION_STATUS
+    assert owner_interpretation.role == "INTERPRETIVE_AUTHORITY_NOT_COMPUTATIONAL_INPUT"
+
+
+def test_one_byte_mutation_of_the_owner_record_is_rejected(tmp_path: Path, repo_root: Path) -> None:
+    """A single altered byte breaks verification."""
+    payload = (repo_root / OWNER_INTERPRETATION_RELPATH).read_bytes()
+    mutated = tmp_path / "owner.md"
+    mutated.write_bytes(payload[:-1] + bytes([payload[-1] ^ 0x01]))
+    assert len(mutated.read_bytes()) == len(payload)
+    with pytest.raises(OwnerInterpretationProvenanceError, match="digest is"):
+        verify_owner_preexecution_interpretation(mutated)
+
+
+def test_arbitrary_mapping_with_the_owner_digest_label_is_rejected() -> None:
+    """A mapping carrying the record's SHA-256 is not the record."""
+    forged = {
+        "sha256": OWNER_PREEXECUTION_INTERPRETATION_SHA256,
+        "bytes": OWNER_PREEXECUTION_INTERPRETATION_BYTES,
+        "status": OWNER_PREEXECUTION_INTERPRETATION_STATUS,
+    }
+    with pytest.raises(OwnerInterpretationProvenanceError, match="is not the record"):
+        require_verified_owner_interpretation(forged)
+
+
+def test_missing_owner_interpretation_clearance_field_blocks_stage_1(
+    projection: MissionProjection, frozen: FrozenMissionInput
+) -> None:
+    """An otherwise-complete clearance without the field fails closed."""
+    incomplete = ExecutionClearance(
+        **{**exact_clearance().as_mapping(), "owner_preexecution_interpretation_sha256": None}
+    )
+    with pytest.raises(
+        ResultBearingMissionBlockedError,
+        match="owner_preexecution_interpretation_sha256",
+    ):
+        execute_authorized_stage_1(
+            projection,
+            frozen,
+            incomplete,
+            STUB_RUNTIME,
+            owner_interpretation=_owner_interpretation(),
+            evaluator=stub_evaluator,
+            warrant_builder=stub_warrant,
+        )
+
+
+def test_empty_owner_interpretation_clearance_field_blocks_stage_1(
+    projection: MissionProjection, frozen: FrozenMissionInput
+) -> None:
+    """An empty string is absence, not a value."""
+    empty_field = ExecutionClearance(
+        **{**exact_clearance().as_mapping(), "owner_preexecution_interpretation_sha256": ""}
+    )
+    with pytest.raises(
+        ResultBearingMissionBlockedError,
+        match="owner_preexecution_interpretation_sha256",
+    ):
+        execute_authorized_stage_1(
+            projection,
+            frozen,
+            empty_field,
+            STUB_RUNTIME,
+            owner_interpretation=_owner_interpretation(),
+            evaluator=stub_evaluator,
+            warrant_builder=stub_warrant,
+        )
+
+
+def test_wrong_owner_interpretation_digest_blocks_stage_1(
+    projection: MissionProjection, frozen: FrozenMissionInput
+) -> None:
+    """A different digest is refused; no new digest is ever adopted."""
+    wrong = ExecutionClearance(
+        **{**exact_clearance().as_mapping(), "owner_preexecution_interpretation_sha256": "0" * 64}
+    )
+    with pytest.raises(
+        ResultBearingMissionBlockedError,
+        match="owner_preexecution_interpretation_sha256",
+    ):
+        execute_authorized_stage_1(
+            projection,
+            frozen,
+            wrong,
+            STUB_RUNTIME,
+            owner_interpretation=_owner_interpretation(),
+            evaluator=stub_evaluator,
+            warrant_builder=stub_warrant,
+        )
+
+
+def test_stage_1_binds_the_verified_object_not_a_digest_label(
+    projection: MissionProjection, frozen: FrozenMissionInput
+) -> None:
+    """A caller-supplied label cannot stand in for the verified record."""
+    with pytest.raises(OwnerInterpretationProvenanceError, match="is not the record"):
+        execute_authorized_stage_1(
+            projection,
+            frozen,
+            exact_clearance(),
+            STUB_RUNTIME,
+            owner_interpretation={"sha256": OWNER_PREEXECUTION_INTERPRETATION_SHA256},
+            evaluator=stub_evaluator,
+            warrant_builder=stub_warrant,
+        )
+
+
+def test_verified_owner_interpretation_admits_stage_1_structurally(
+    stage_1: Stage1Observation,
+) -> None:
+    """With the verified record and every other exact binding, Stage 1 is admitted."""
+    assert stage_1.is_owner_cleared() is True
+    assert stage_1.owner_interpretation_sha256 == OWNER_PREEXECUTION_INTERPRETATION_SHA256
+    assert len(stage_1.artifacts()) == EXPECTED_CHAIN_COUNT
+    # The interpretation is bound into the Stage-1 checkpoint digest.
+    assert stage_1.as_record()["owner_interpretation_sha256"] == (
+        OWNER_PREEXECUTION_INTERPRETATION_SHA256
+    )
+
+
+def test_owner_interpretation_prose_never_reaches_the_computation(
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    owner_interpretation: FrozenOwnerInterpretation,
+    repo_root: Path,
+) -> None:
+    """The record is interpretive authority, never computational input.
+
+    Two independent checks. First, the verified object holds no document text at
+    all, so there is nothing for a component to read. Second, the evaluator and
+    warrant builder are wrapped and every argument they receive is scanned for
+    distinctive phrases from the record; none appears, and neither does any of it
+    reach the resulting evaluations, warrants, candidates, dispositions,
+    transitions or drafts.
+    """
+    document = (repo_root / OWNER_INTERPRETATION_RELPATH).read_text(encoding="utf-8")
+    phrases = (
+        "TERMINOLOGICAL_SHORTHAND_ONLY",
+        "INCOMPLETE_OBSERVATION",
+        "RUN_UNTIL_PASS",
+        "OWNER_FROZEN_PREEXECUTION_INTERPRETATION",
+        "pre-execution interpretive authority artifact",
+    )
+    for phrase in phrases:
+        assert phrase in document, phrase
+
+    # The verified object carries identity only.
+    identity = json.dumps(owner_interpretation.as_record())
+    for phrase in phrases:
+        if phrase == "OWNER_FROZEN_PREEXECUTION_INTERPRETATION":
+            continue  # the status marker is identity, not prose
+        assert phrase not in identity, phrase
+    assert len(identity) < 400
+
+    seen: list[str] = []
+
+    def watching_evaluator(
+        member: Mapping[str, Any], control: Mapping[str, Any], evidence: Mapping[str, Any]
+    ) -> Mapping[str, Any]:
+        seen.append(json.dumps([member, control, evidence], default=str))
+        return stub_evaluator(member, control, evidence)
+
+    def watching_warrant(
+        evaluation: Mapping[str, Any], control: Mapping[str, Any]
+    ) -> tuple[str, Mapping[str, Any]]:
+        seen.append(json.dumps([evaluation, control], default=str))
+        return stub_warrant(evaluation, control)
+
+    cleared = execute_authorized_stage_1(
+        projection,
+        frozen,
+        exact_clearance(),
+        STUB_RUNTIME,
+        owner_interpretation=owner_interpretation,
+        evaluator=watching_evaluator,
+        warrant_builder=watching_warrant,
+    )
+    assert seen
+    result = _stage_2(projection, frozen, cleared, action_plan, correction=correction_object())
+    produced = json.dumps(
+        {
+            "stage_1": cleared.as_record(),
+            "stage_2": result.as_record(),
+            "observations": observation_producer(projection, frozen, cleared, result),
+        },
+        default=str,
+    )
+    for blob in (*seen, produced):
+        for phrase in phrases:
+            if phrase == "OWNER_FROZEN_PREEXECUTION_INTERPRETATION":
+                continue
+            assert phrase not in blob, phrase

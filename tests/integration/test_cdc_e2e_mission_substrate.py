@@ -177,6 +177,7 @@ def test_mission_package_digest_mismatch_refuses() -> None:
         oracle_sha256="oracle",
         adjudication_protocol_sha256="protocol",
         action_plan_sha256="plan",
+        owner_preexecution_interpretation_sha256="interpretation",
     )
     with pytest.raises(ResultBearingMissionBlockedError, match="mission_package_sha256"):
         require_result_clearance(

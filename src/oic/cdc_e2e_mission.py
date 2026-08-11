@@ -46,6 +46,7 @@ REQUIRED_CLEARANCE_FIELDS: Final = (
     "oracle_sha256",
     "adjudication_protocol_sha256",
     "action_plan_sha256",
+    "owner_preexecution_interpretation_sha256",
 )
 # Retained only as the historical five-kind vocabulary. It is NOT the authoritative
 # output source: Stage 2 renders from the five frozen ``04-OUTPUTS/`` definitions.
@@ -105,6 +106,7 @@ class ExecutionClearance:
     oracle_sha256: str | None
     adjudication_protocol_sha256: str | None
     action_plan_sha256: str | None = None
+    owner_preexecution_interpretation_sha256: str | None = None
 
     def as_mapping(self) -> dict[str, str | None]:
         """Expose the exact fields for deterministic validation and evidence."""
@@ -314,6 +316,11 @@ def require_result_clearance(
         mismatches.append("adjudication_protocol_sha256")
     if clearance.action_plan_sha256 != HUMAN_ACTION_PLAN_SHA256:
         mismatches.append("action_plan_sha256")
+    if (
+        clearance.owner_preexecution_interpretation_sha256
+        != OWNER_PREEXECUTION_INTERPRETATION_SHA256
+    ):
+        mismatches.append("owner_preexecution_interpretation_sha256")
     if mismatches:
         raise ResultBearingMissionBlockedError(f"result-bearing binding mismatch: {mismatches}")
 
@@ -957,6 +964,104 @@ def require_verified_action_plan(plan: object) -> FrozenActionPlan:
 
 
 # ---------------------------------------------------------------------------
+# Owner pre-execution interpretation record.
+#
+# This artifact is *interpretive authority*, not computational input. It fixes,
+# before any result exists, the terminology under which M09 is read and the
+# conditional observability under which M12 is read, and it forbids rerunning a
+# campaign merely to obtain a measurable M12. Nothing here parses its prose:
+# reinterpreting the document at runtime would be exactly the coupling the record
+# is meant to prevent, and would let its wording leak into a computed result. The
+# verified object therefore carries identity only, never the document text.
+# ---------------------------------------------------------------------------
+
+OWNER_PREEXECUTION_INTERPRETATION_RELPATH: Final = (
+    "veraxis/cdc-e2e-mission-001/preexecution/"
+    "CDC-END-TO-END-MISSION-001-OWNER-PREEXECUTION-INTERPRETATION-v0.1.md"
+)
+OWNER_PREEXECUTION_INTERPRETATION_SHA256: Final = (
+    "8242ccf9612531dc7b3b1d648625a934c4f616d8b8565c61d958a6825d7f2f84"
+)
+OWNER_PREEXECUTION_INTERPRETATION_BYTES: Final = 9311
+OWNER_PREEXECUTION_INTERPRETATION_STATUS: Final = "OWNER_FROZEN_PREEXECUTION_INTERPRETATION"
+
+
+class OwnerInterpretationProvenanceError(MissionContractError):
+    """The owner interpretation record was not verified from its exact bytes."""
+
+
+@dataclass(frozen=True, slots=True)
+class FrozenOwnerInterpretation:
+    """Verified identity of the owner pre-execution interpretation record.
+
+    Deliberately holds no document content. The record binds the interpretation
+    under which a later result is adjudicated; it must not become an input to the
+    computation that produces that result.
+    """
+
+    path: Path
+    sha256_hex: str
+    byte_count: int
+    status: str
+    role: str = "INTERPRETIVE_AUTHORITY_NOT_COMPUTATIONAL_INPUT"
+
+    def as_record(self) -> dict[str, Any]:
+        """Identity-only record; carries no prose."""
+        return {
+            "sha256": self.sha256_hex,
+            "bytes": self.byte_count,
+            "status": self.status,
+            "role": self.role,
+        }
+
+
+def verify_owner_preexecution_interpretation(path: Path) -> FrozenOwnerInterpretation:
+    """Read the exact bytes and establish identity, byte count and frozen status.
+
+    No parser reinterprets the substantive prose. Verifying the bytes, the digest,
+    the byte count and the frozen-status marker is sufficient and is deliberately
+    all that happens.
+    """
+    payload = path.read_bytes()
+    observed = _file_sha256(payload)
+    if observed != OWNER_PREEXECUTION_INTERPRETATION_SHA256:
+        raise OwnerInterpretationProvenanceError(
+            f"owner interpretation digest is {observed}, "
+            f"expected {OWNER_PREEXECUTION_INTERPRETATION_SHA256}"
+        )
+    if len(payload) != OWNER_PREEXECUTION_INTERPRETATION_BYTES:
+        raise OwnerInterpretationProvenanceError(
+            f"owner interpretation is {len(payload)} bytes, "
+            f"expected {OWNER_PREEXECUTION_INTERPRETATION_BYTES}"
+        )
+    if OWNER_PREEXECUTION_INTERPRETATION_STATUS.encode() not in payload:
+        raise OwnerInterpretationProvenanceError(
+            "owner interpretation does not carry the frozen-status marker"
+        )
+    return FrozenOwnerInterpretation(
+        path=path,
+        sha256_hex=observed,
+        byte_count=len(payload),
+        status=OWNER_PREEXECUTION_INTERPRETATION_STATUS,
+    )
+
+
+def require_verified_owner_interpretation(record: object) -> FrozenOwnerInterpretation:
+    """Refuse anything that is not a verification of the exact frozen bytes."""
+    if not isinstance(record, FrozenOwnerInterpretation):
+        raise OwnerInterpretationProvenanceError(
+            "the owner interpretation must be a FrozenOwnerInterpretation verified from "
+            "bytes; a mapping carrying the record digest label is not the record"
+        )
+    authoritative = verify_owner_preexecution_interpretation(record.path)
+    if record != authoritative:
+        raise OwnerInterpretationProvenanceError(
+            "owner interpretation identity does not recompute from the bytes on disk"
+        )
+    return record
+
+
+# ---------------------------------------------------------------------------
 # Two-stage human boundary.
 #
 # Stage 1 stops at machine candidate formation. It emits no transition, confers
@@ -1150,6 +1255,7 @@ class Stage1Observation:
     chains: tuple[Stage1ChainObservation, ...]
     accounting: Mapping[str, int]
     authorization: str = STAGE_1_AUTHORIZATION_HELPER
+    owner_interpretation_sha256: str = "NOT_BOUND"
     institutional_transition: str = "NONE"
     draft_eligibility: str = "NONE"
     official_handoff: str = "PROHIBITED"
@@ -1163,6 +1269,7 @@ class Stage1Observation:
             "provenance_token": self.provenance_token,
             "stage": self.stage,
             "authorization": self.authorization,
+            "owner_interpretation_sha256": self.owner_interpretation_sha256,
             "chains": [chain.as_record() for chain in self.chains],
             "accounting": dict(self.accounting),
             "institutional_transition": self.institutional_transition,
@@ -1203,6 +1310,7 @@ def _form_stage_1(
     evaluator: EvaluationFunction,
     warrant_builder: WarrantFunction,
     authorization: str,
+    owner_interpretation_sha256: str = "NOT_BOUND",
 ) -> Stage1Observation:
     """Form candidates across all nine chains, then stop.
 
@@ -1289,6 +1397,7 @@ def _form_stage_1(
         chains=tuple(observations),
         accounting=tally,
         authorization=authorization,
+        owner_interpretation_sha256=owner_interpretation_sha256,
     )
 
 
@@ -1298,6 +1407,7 @@ def execute_authorized_stage_1(
     clearance: ExecutionClearance,
     runtime: RuntimeIdentity,
     *,
+    owner_interpretation: object,
     evaluator: EvaluationFunction,
     warrant_builder: WarrantFunction,
 ) -> Stage1Observation:
@@ -1305,12 +1415,23 @@ def execute_authorized_stage_1(
 
     Refuses unless the source is a :class:`MissionProjection` derived from
     verified frozen bytes *and* every external binding matches observation,
-    including the human action-plan digest.
+    including the human action-plan digest and the owner pre-execution
+    interpretation record.
+
+    The interpretation record is verified from its bytes here, before the
+    clearance digest is compared against it, so authorization binds a verified
+    object rather than a caller-supplied label. Its identity is recorded in the
+    Stage-1 observation; its prose is never read into the computation.
     """
+    interpretation = require_verified_owner_interpretation(owner_interpretation)
     verified = require_projected_source(projection, frozen)
     require_result_clearance(
         clearance, runtime, {"mission_package_sha256": verified.package_sha256}
     )
+    if clearance.owner_preexecution_interpretation_sha256 != interpretation.sha256_hex:
+        raise ResultBearingMissionBlockedError(
+            "clearance and verified owner interpretation disagree"
+        )
     if verified.package_sha256 != frozen.package_sha256:
         raise ResultBearingMissionBlockedError("projection and verified bytes disagree")
     return _form_stage_1(
@@ -1319,6 +1440,7 @@ def execute_authorized_stage_1(
         evaluator=evaluator,
         warrant_builder=warrant_builder,
         authorization=STAGE_1_AUTHORIZATION_CLEARED,
+        owner_interpretation_sha256=interpretation.sha256_hex,
     )
 
 

@@ -22,6 +22,8 @@ from oic.cdc_e2e_mission import (
     HUMAN_ACTION_PLAN_RELPATH,
     HUMAN_ACTION_PLAN_SHA256,
     ORACLE_SHA256,
+    OWNER_PREEXECUTION_INTERPRETATION_RELPATH,
+    OWNER_PREEXECUTION_INTERPRETATION_SHA256,
     EvaluationFunction,
     ExecutionClearance,
     FrozenActionPlan,
@@ -45,6 +47,7 @@ STUB_RUNTIME = RuntimeIdentity(
 )
 
 ACTION_PLAN_RELPATH = HUMAN_ACTION_PLAN_RELPATH
+OWNER_INTERPRETATION_RELPATH = OWNER_PREEXECUTION_INTERPRETATION_RELPATH
 
 
 def stub_evaluator(
@@ -74,6 +77,7 @@ def exact_clearance(runtime: RuntimeIdentity = STUB_RUNTIME) -> ExecutionClearan
         oracle_sha256=ORACLE_SHA256,
         adjudication_protocol_sha256=ADJUDICATION_PROTOCOL_SHA256,
         action_plan_sha256=HUMAN_ACTION_PLAN_SHA256,
+        owner_preexecution_interpretation_sha256=OWNER_PREEXECUTION_INTERPRETATION_SHA256,
     )
 
 
