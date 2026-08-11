@@ -1,0 +1,272 @@
+{
+ "C-AWARD-01": {
+  "admission_record": {
+   "admission_id": "ADM-P-001-C-AWARD-01",
+   "authority_basis": "SYNTHETIC_TEST_CHARTER",
+   "disposition": "ADMITTED",
+   "reviewer": "TEST-REVIEWER-001",
+   "reviewer_role": "CDC_TEST_CONTROLLER",
+   "scope": "CDC-TEST-MISSION-001/TEST-REVIEWER",
+   "source_hashes": [
+    "sha256:dc90d1903233e18ff23a11dd60beb5fa0a8bf03213ad0fb9bcf92bdc3458aba6"
+   ],
+   "subject_id": "C-AWARD-01"
+  },
+  "admitted_control": {
+   "conditions": [
+    "contract_award_condition_satisfied"
+   ],
+   "control_id": "C-AWARD-01",
+   "decision_mode": "DETERMINISTIC",
+   "evaluation_semantics_ref": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.1",
+   "on_unknown": "ESCALATE",
+   "phase": "contract_award",
+   "procedure_id": "P-001",
+   "required_facts": [
+    "award_traceable_to_scoring",
+    "required_approvals_present"
+   ],
+   "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001",
+   "source_anchors": [
+    {
+     "anchor_id": "ANCHOR-P-001-C-AWARD-01-art-1",
+     "content_hash": "sha256:f5ced81859f8c91292f5299c574ae0323d66b7691737720e599dbd829a7fc96b",
+     "node_id": "art-1",
+     "source_id": "SRC-P-001"
+    }
+   ]
+  },
+  "chain_order": [
+   "source_anchors",
+   "admitted_control",
+   "evidence_bundle"
+  ],
+  "control_ref": "C-AWARD-01",
+  "ebawu": {
+   "ebawu_id": "EBAWU-P-001-C-AWARD-01"
+  },
+  "evidence_bundle": {
+   "control_id": "C-AWARD-01",
+   "evidence_bundle_id": "EVB-P-001-C-AWARD-01",
+   "fact_vocabulary": [
+    "award_traceable_to_scoring",
+    "required_approvals_present"
+   ],
+   "observations": [
+    {
+     "fact": "award_traceable_to_scoring",
+     "value": true
+    },
+    {
+     "fact": "required_approvals_present",
+     "value": true
+    }
+   ],
+   "procedure_id": "P-001",
+   "source_anchors": [
+    {
+     "anchor_id": "ANCHOR-P-001-C-AWARD-01-dossier-1",
+     "content_hash": "sha256:23ddc18b1a5c3276db58434d727e46e4211da4d9ca63db820f79e5cd621718e3",
+     "node_id": "dossier-1",
+     "source_id": "SRC-P-001"
+    }
+   ]
+  },
+  "object_digests": {
+   "admission_record": "sha256:f1edb11d918f7dc21c42bc467a3193f010e867d5e16063de32086d2c04ee1dde",
+   "admitted_control": "sha256:dd8a40b97bb9f573f808af93a825d012cc7b8753ad0f7ab3432f5991e03619a5",
+   "evidence_bundle": "sha256:9627e1b4b83523867612438c43ade5397266544b6927fbde9fa91e3795b4626a"
+  },
+  "prior_institutional_state": "CANDIDATE_FORMED",
+  "procedure_id": "P-001",
+  "public_id": "P001",
+  "source_anchors": [
+   {
+    "anchor_id": "ANCHOR-P-001-C-AWARD-01-art-1",
+    "content_hash": "sha256:f5ced81859f8c91292f5299c574ae0323d66b7691737720e599dbd829a7fc96b",
+    "node_id": "art-1",
+    "source_id": "SRC-P-001"
+   }
+  ]
+ },
+ "C-EVAL-01": {
+  "admission_record": {
+   "admission_id": "ADM-P-001-C-EVAL-01",
+   "authority_basis": "SYNTHETIC_TEST_CHARTER",
+   "disposition": "ADMITTED",
+   "reviewer": "TEST-REVIEWER-001",
+   "reviewer_role": "CDC_TEST_CONTROLLER",
+   "scope": "CDC-TEST-MISSION-001/TEST-REVIEWER",
+   "source_hashes": [
+    "sha256:b9506abe5a3dfcca14fea0bb7a8bca1781523940ed881259a01e7e1a15fa74d2"
+   ],
+   "subject_id": "C-EVAL-01"
+  },
+  "admitted_control": {
+   "conditions": [
+    "bid_evaluation_condition_satisfied"
+   ],
+   "control_id": "C-EVAL-01",
+   "decision_mode": "DETERMINISTIC",
+   "evaluation_semantics_ref": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.1",
+   "on_unknown": "ESCALATE",
+   "phase": "bid_evaluation",
+   "procedure_id": "P-001",
+   "required_facts": [
+    "scoring_record_complete",
+    "declared_criteria_only"
+   ],
+   "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001",
+   "source_anchors": [
+    {
+     "anchor_id": "ANCHOR-P-001-C-EVAL-01-art-1",
+     "content_hash": "sha256:9eb1b1b713601e7ccd023577eb456e354dcc1e9a57898b6e0a11dd408bb9c40f",
+     "node_id": "art-1",
+     "source_id": "SRC-P-001"
+    }
+   ]
+  },
+  "chain_order": [
+   "source_anchors",
+   "admitted_control",
+   "evidence_bundle"
+  ],
+  "control_ref": "C-EVAL-01",
+  "ebawu": {
+   "ebawu_id": "EBAWU-P-001-C-EVAL-01"
+  },
+  "evidence_bundle": {
+   "control_id": "C-EVAL-01",
+   "evidence_bundle_id": "EVB-P-001-C-EVAL-01",
+   "fact_vocabulary": [
+    "scoring_record_complete",
+    "declared_criteria_only"
+   ],
+   "observations": [
+    {
+     "fact": "scoring_record_complete",
+     "value": true
+    },
+    {
+     "fact": "declared_criteria_only",
+     "value": true
+    }
+   ],
+   "procedure_id": "P-001",
+   "source_anchors": [
+    {
+     "anchor_id": "ANCHOR-P-001-C-EVAL-01-dossier-1",
+     "content_hash": "sha256:4c1b3604e011a798feb2984f06e87c49fd284f603415bc0c48e1061b75a19f84",
+     "node_id": "dossier-1",
+     "source_id": "SRC-P-001"
+    }
+   ]
+  },
+  "object_digests": {
+   "admission_record": "sha256:af65e8c2bd36819a2a826921a4230f83534a214578746f4bec9785e4e4c907b7",
+   "admitted_control": "sha256:a3b64a07bdf5d861ee328b947288c9c37af89aa564099b0a04117f41be90ab7a",
+   "evidence_bundle": "sha256:c8cb7097a06b28bcd3ab6b0e0f8d20d02121b7e7d6f3d6c29d719f7213d9680b"
+  },
+  "prior_institutional_state": "CANDIDATE_FORMED",
+  "procedure_id": "P-001",
+  "public_id": "P001",
+  "source_anchors": [
+   {
+    "anchor_id": "ANCHOR-P-001-C-EVAL-01-art-1",
+    "content_hash": "sha256:9eb1b1b713601e7ccd023577eb456e354dcc1e9a57898b6e0a11dd408bb9c40f",
+    "node_id": "art-1",
+    "source_id": "SRC-P-001"
+   }
+  ]
+ },
+ "C-TENDER-01": {
+  "admission_record": {
+   "admission_id": "ADM-P-001-C-TENDER-01",
+   "authority_basis": "SYNTHETIC_TEST_CHARTER",
+   "disposition": "ADMITTED",
+   "reviewer": "TEST-REVIEWER-001",
+   "reviewer_role": "CDC_TEST_CONTROLLER",
+   "scope": "CDC-TEST-MISSION-001/TEST-REVIEWER",
+   "source_hashes": [
+    "sha256:7e3eed503bfa25f56190b5527983981cd17a0c6f9240adfd1016d504ae58e7eb"
+   ],
+   "subject_id": "C-TENDER-01"
+  },
+  "admitted_control": {
+   "conditions": [
+    "competitive_tendering_condition_satisfied"
+   ],
+   "control_id": "C-TENDER-01",
+   "decision_mode": "DETERMINISTIC",
+   "evaluation_semantics_ref": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.1",
+   "on_unknown": "ESCALATE",
+   "phase": "competitive_tendering",
+   "procedure_id": "P-001",
+   "required_facts": [
+    "competition_notice_published",
+    "minimum_competition_period_met"
+   ],
+   "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001",
+   "source_anchors": [
+    {
+     "anchor_id": "ANCHOR-P-001-C-TENDER-01-art-1",
+     "content_hash": "sha256:eb2736fb1babd1fee0cc155fe705c9b5a4af865f6e02f0a91c1205d747ebdbf7",
+     "node_id": "art-1",
+     "source_id": "SRC-P-001"
+    }
+   ]
+  },
+  "chain_order": [
+   "source_anchors",
+   "admitted_control",
+   "evidence_bundle"
+  ],
+  "control_ref": "C-TENDER-01",
+  "ebawu": {
+   "ebawu_id": "EBAWU-P-001-C-TENDER-01"
+  },
+  "evidence_bundle": {
+   "control_id": "C-TENDER-01",
+   "evidence_bundle_id": "EVB-P-001-C-TENDER-01",
+   "fact_vocabulary": [
+    "competition_notice_published",
+    "minimum_competition_period_met"
+   ],
+   "observations": [
+    {
+     "fact": "competition_notice_published",
+     "value": true
+    },
+    {
+     "fact": "minimum_competition_period_met",
+     "value": true
+    }
+   ],
+   "procedure_id": "P-001",
+   "source_anchors": [
+    {
+     "anchor_id": "ANCHOR-P-001-C-TENDER-01-dossier-1",
+     "content_hash": "sha256:e78b01a3ccbe694a3ce64e36d8dcc7531f2f139d62bc356b9c30d3c98fcf2d55",
+     "node_id": "dossier-1",
+     "source_id": "SRC-P-001"
+    }
+   ]
+  },
+  "object_digests": {
+   "admission_record": "sha256:cf5397b4154db962fb5f89b65b7b4e52a15170d21edc50e760a30f88b6fba223",
+   "admitted_control": "sha256:a2f9190e9b4070eab71ff90db518dc4f8b9ab13c4e90d1ae173294c290ccd7ed",
+   "evidence_bundle": "sha256:76911bb866d766c6e05c11cb5b8906f4ba9287c4254be0df7e549cc49cf3eada"
+  },
+  "prior_institutional_state": "CANDIDATE_FORMED",
+  "procedure_id": "P-001",
+  "public_id": "P001",
+  "source_anchors": [
+   {
+    "anchor_id": "ANCHOR-P-001-C-TENDER-01-art-1",
+    "content_hash": "sha256:eb2736fb1babd1fee0cc155fe705c9b5a4af865f6e02f0a91c1205d747ebdbf7",
+    "node_id": "art-1",
+    "source_id": "SRC-P-001"
+   }
+  ]
+ }
+}

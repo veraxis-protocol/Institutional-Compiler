@@ -1,0 +1,178 @@
+{
+  "adjudicated_result_objects_present": false,
+  "adjudication_protocol_changed": false,
+  "authority_effective_from": "2026-08-11T20:30:00Z",
+  "authority_effective_from_source": "OWNER_EXPLICIT_PROSPECTIVE_TIME",
+  "backdating_permitted": false,
+  "changed_members": [
+    "01-MISSION-MANIFEST.json",
+    "02-POPULATION/P001.json",
+    "02-POPULATION/P002.json",
+    "02-POPULATION/P003.json",
+    "SHA256SUMS"
+  ],
+  "classification": "STAGE_1_COMPONENT_SEMANTICS_SUCCESSOR",
+  "control_specific_evidence_vocabularies": 3,
+  "controls_changed": false,
+  "declared_payload_files": 14,
+  "design_shape_labels_present": false,
+  "evidence_changed": false,
+  "expected_results_encoded": false,
+  "french_packet_changed": false,
+  "governance_binding_state": "FROZEN_GOVERNANCE_BOUND",
+  "governance_commit": "2e2282cb1bdeef972e2cf189030f24b011be2868",
+  "governance_embedded_in_package": false,
+  "governance_exact_bytes_verified_by_claude": true,
+  "human_action_plan_changed": false,
+  "implementation_modified": false,
+  "issuance_timestamp_absent_reason": "no trustworthy independent v0.4 issuance timestamp was captured; the stale value inherited from the rejected v0.2 local-clock lineage was removed and deliberately not replaced with a reconstructed one",
+  "issuance_timestamp_recorded": false,
+  "manifest_self_binding": "The manifest is excluded from members[] because it cannot contain its own digest; its identity is reported outside the package.",
+  "manifest_self_inclusion": false,
+  "members": [
+    {
+      "bytes": 6315,
+      "path": "01-MISSION-MANIFEST.json",
+      "sha256": "9d73362237173eaab68be9ba97ecb3239c6a752c0e5d38f5fba965d4d4c86e4d",
+      "sha512": "01ff023cfec5f0a4c5a36358fb0ba9302421f85219ce463e7f359bfb1a661edf0567836c7f5bf998118ccc1d64ec541acda5b566034da5353ac341b5fbe9d5b0"
+    },
+    {
+      "bytes": 7994,
+      "path": "02-POPULATION/P001.json",
+      "sha256": "54758a664bf709436ef3ad07495dfe08b492a78d5c5d1249d712efd5435b504a",
+      "sha512": "132243a21bd94eff5b85dbbcd2a3b8705a4847fa6e1e397f46b09200af70e0f0e75decf9c23686e7c77df59965d1415c7cd2cc2b698ed742b9b2d06337ef8969"
+    },
+    {
+      "bytes": 7997,
+      "path": "02-POPULATION/P002.json",
+      "sha256": "fe0420c52d0cf85a3b0b8bf7ecddd019441f315b969a241f2bf26a73bea1ce1b",
+      "sha512": "0ec43f879cfc7783bf42a77edc7a2a93c25f36b22330c42ded4ddd7c4d1c8028504197821fe8c159eca81b668da0f337be97a59e58bc5e2b79a5aaac00aec889"
+    },
+    {
+      "bytes": 7998,
+      "path": "02-POPULATION/P003.json",
+      "sha256": "296fb9ec3eea48d197779e636875336fecee96c605d9ab95a33e5596380d1fd3",
+      "sha512": "0401a18c30448691a5844d978afe612844798dd9ad6f9525a5366d10cb52c84ade0997c62b34a7843c113c41e00cb000886dfad60151fb0270d14e60d5949bce"
+    },
+    {
+      "bytes": 3000,
+      "path": "03-AUTHORITY/test-reviewer.json",
+      "sha256": "b548a9191460eb0263dfecd39055f2ef989f830f836f006031a73b1ba6630277",
+      "sha512": "91307e870d59f98083c0ae0327eb87d865f13aef80f68f9d171a21e841ece4c0f8b878a3ca72aae04a1613188ffe7ad1db968378cbf10866a75e314c7bd814db"
+    },
+    {
+      "bytes": 903,
+      "path": "04-OUTPUTS/01-orientation-note.json",
+      "sha256": "8b65de1017a5e21832ed8f2b730866817433e8182bf5c898739355698f9aac2d",
+      "sha512": "c57b855154300b563831a3d0580229c6542aa6970c37b7a3dd6f4f4b53e39fbacdabd46fa02836381643e8baace43d19b8848f22bd011661645eb49c81b4d5e7"
+    },
+    {
+      "bytes": 905,
+      "path": "04-OUTPUTS/02-provisional-report.json",
+      "sha256": "47d89874cb2d87160ee34ab52c1531c1bd559365712d2629e632653cd8b7d1e9",
+      "sha512": "dbf8a0cc928c053c9493bff70859d49843ef323092075d4c7569d5dd6770b6e9f64c95a174b97c26e46a7b6e27a5c8f247499fe03bec9ee2a7ae0c31030d237c"
+    },
+    {
+      "bytes": 899,
+      "path": "04-OUTPUTS/03-final-report.json",
+      "sha256": "8b29979884126899139195bc4f8de07e860860a6b8ad5cdbf659bc48703cb799",
+      "sha512": "7b35c6d0a985aaa6b3a2ac52bf3016f0552eeae3951650a461c3d4e2098e44bcae7ab48ce266ffe31353fc95a4538a575180247cfef3316b6c2ed72c57564e8e"
+    },
+    {
+      "bytes": 921,
+      "path": "04-OUTPUTS/04-findings-summary.json",
+      "sha256": "187fa662dc37437d7baace122182746e1bebcfe6c49a3fccb779cb061365ed3a",
+      "sha512": "62d7baa8365f61b36ed5116e7277b14574139c0117fdc34a299194ac468a52fe4909838404b42361b3fb1324cac67bf7c818469f5a0fd86ea87a8cea362c014d"
+    },
+    {
+      "bytes": 909,
+      "path": "04-OUTPUTS/05-transmittal-letter.json",
+      "sha256": "4cae0a67961880fdb81c50ea54a2688324e8ff14dc7ba80af4e55945c85b4e42",
+      "sha512": "ef4726b025ee5e68307d51ebca4beaa1932c6ff56e04b93fa0f23f01ea56135bc7382940c2f6ab6d908282942abeb5fdfb846afb6ba4c1bdd6a2ec59d024af53"
+    },
+    {
+      "bytes": 1719,
+      "path": "05-FRENCH/french-packet.json",
+      "sha256": "cffc3ccf25f336e4449f3c7c9912a1352ab996788922ae21e171b28e0419be11",
+      "sha512": "d92a473b803c02aac84c6c520cefe2cbedd12195ca32125abed8a59b80272bf978a4008201e2bcee2da0bb180332b92eb3170ad36669312bba33621364e09be4"
+    },
+    {
+      "bytes": 2174,
+      "path": "06-GOVERNANCE/binding.json",
+      "sha256": "ea0df800d5c3988cc5279e245ad08d313ca9066df9b360548599a5cca7413e15",
+      "sha512": "67c350408851047609355bae99fef6e1c5b89371b3ea814a96ad6cb12de7e465a692bfdfe2db24877c70fd1fcc2c29a5347154977971dd65fe8715bd1f6ba906"
+    },
+    {
+      "bytes": 4930,
+      "path": "07-CLAIM-EVIDENCE-MAP/CDC-END-TO-END-MISSION-001-CLAIM-EVIDENCE-MAP-v0.1.json",
+      "sha256": "a835c6d34794234a9b62ce43051964fa8c4612aadb45a7ba3d8eb443caabe34b",
+      "sha512": "e7e85220fe4cbcdabb7bac5f9cc1fc3b8c5e93d97b43933d64f79c1eed29de10b3c9c84e899ef9a2c63642a1fb333f182f98ccb1509cac0cb0799383f6cdbb07"
+    },
+    {
+      "bytes": 1301,
+      "path": "SHA256SUMS",
+      "sha256": "48dc3a9522c9b76b9e1d685e81893723657dc1c825f199c1f72c78f8bc8b17a0",
+      "sha512": "74e191d7b21c829b67d882cd71d404215c36ffc4dd30c6677c4fa502adbfb666cbac3a1873ca37cf4c38938076f322dff1050518d0f11cfd1950222fae6ff1d4"
+    }
+  ],
+  "mission_executed": false,
+  "not_yet_consumable_by_current_implementation": true,
+  "not_yet_consumable_reason": "the controlling implementation at c37e82b7 pins the v0.4 package identity and expects 54 evidence objects; v0.5 carries 27 because the three result objects per chain were removed. A successor implementation is required and is not authorized by this work order.",
+  "outputs_changed": false,
+  "owner_interpretation_changed": false,
+  "package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.5",
+  "physical_files": 15,
+  "population_changed": false,
+  "precomputed_candidate_objects_present": false,
+  "precomputed_evaluation_objects_present": false,
+  "precomputed_warrant_objects_present": false,
+  "predecessor_chain": [
+    {
+      "classification": "ORIGINAL_FROZEN_MISSION_INPUT",
+      "package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.1"
+    },
+    {
+      "classification": "PREEXECUTION_CURRENTNESS_SUCCESSOR_NOT_ADOPTED",
+      "package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.2",
+      "reason": "ISSUANCE_CLOCK_PROVENANCE_UNRELIABLE"
+    },
+    {
+      "classification": "OWNER_ISSUED_CURRENTNESS_SUCCESSOR",
+      "package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.3"
+    },
+    {
+      "classification": "MANIFEST_PROVENANCE_CORRECTION",
+      "package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.4"
+    },
+    {
+      "classification": "CONTROLLING_MISSION_INPUT_PENDING_OWNER_REVIEW",
+      "package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.5"
+    }
+  ],
+  "predecessor_manifest_sha256": "9b85ec3b6f5f615dbdf464f68ce5dfda1e081e886520a4e98883e02573415f6b",
+  "predecessor_package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.4",
+  "predecessor_package_sha256": "1d4738d615bf2cbca481268910a14fadc0a4fceb4f60bb5619d1acf1a69687c3",
+  "predecessor_retained_immutable": true,
+  "reference_results_used_to_construct_v0_5": false,
+  "result_bearing_execution_seen_before_supersession": false,
+  "semantic_oracle_changed": false,
+  "source_combined_commit": "6dc88cec0aca048e6117b54bac8bf577ae7bc96d",
+  "source_combined_tree": "d19a2f58cf9cbf6de7fde33b6c3aad089660a07e",
+  "stage_1_component_profile_ref": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.1",
+  "stage_1_component_profile_sha256": "95ffd83dc8a4d0b3d8fb525b02c6f6f31e34ff0dd09369aaebaaf2661997828b",
+  "state": "FROZEN",
+  "supersedes": "CDC-END-TO-END-MISSION-001-INPUT-v0.4",
+  "supersession_reason": "STAGE_1_COMPONENT_SEMANTICS_AND_RESULT_OBJECT_REMOVAL",
+  "system_clock_used_to_choose_effective_from": false,
+  "unchanged_members": [
+    "03-AUTHORITY/test-reviewer.json",
+    "04-OUTPUTS/01-orientation-note.json",
+    "04-OUTPUTS/02-provisional-report.json",
+    "04-OUTPUTS/03-final-report.json",
+    "04-OUTPUTS/04-findings-summary.json",
+    "04-OUTPUTS/05-transmittal-letter.json",
+    "05-FRENCH/french-packet.json",
+    "06-GOVERNANCE/binding.json",
+    "07-CLAIM-EVIDENCE-MAP/CDC-END-TO-END-MISSION-001-CLAIM-EVIDENCE-MAP-v0.1.json"
+  ]
+}
