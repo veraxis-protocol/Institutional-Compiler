@@ -19,12 +19,18 @@ from typing import Any
 from oic.cdc_e2e_mission import (
     ADJUDICATION_PROTOCOL_SHA256,
     FROZEN_MISSION_PACKAGE_SHA256,
+    HUMAN_ACTION_PLAN_RELPATH,
     HUMAN_ACTION_PLAN_SHA256,
     ORACLE_SHA256,
+    EvaluationFunction,
     ExecutionClearance,
+    FrozenActionPlan,
+    FrozenMissionInput,
     MissionProjection,
     RuntimeIdentity,
     Stage1Observation,
+    WarrantFunction,
+    _form_stage_1,
 )
 
 PACKAGE_RELPATH = "veraxis/cdc-e2e-mission-001/input-v0.1"
@@ -38,12 +44,7 @@ STUB_RUNTIME = RuntimeIdentity(
     environment_manifest_sha256="STUB-ENVIRONMENT-MANIFEST",
 )
 
-CORRECTION_STIMULUS: Mapping[str, Any] = {
-    "correction_stimulus_id": "HA-CORRECTION-001",
-    "target_id": "HA-P001-C-TENDER-01",
-    "predecessor_ebawu_ref": "EBAWU-P-001-C-TENDER-01",
-    "precondition": "issue only after an eligible completed transition on this chain",
-}
+ACTION_PLAN_RELPATH = HUMAN_ACTION_PLAN_RELPATH
 
 
 def stub_evaluator(
@@ -80,11 +81,20 @@ def disposition_for(
     stage_1: Stage1Observation,
     projection: MissionProjection,
     chain_id: str,
+    plan: FrozenActionPlan,
     *,
-    action: str = "ACCEPT_CANDIDATE",
+    action: str | None = None,
 ) -> dict[str, Any]:
-    """Build a disposition that binds the artifacts Stage 1 actually formed."""
+    """Build the disposition the frozen plan preregisters for this chain.
+
+    ``action`` defaults to the preregistered class recovered from the plan bytes.
+    A test that wants a non-preregistered stimulus passes one explicitly.
+    """
     artifact = stage_1.artifacts()[chain_id]
+    if action is None:
+        action = plan.target_for(
+            artifact.procedure_id, artifact.control_id
+        ).preregistered_action_class
     authority = projection.authority
     return {
         "mission_id": stage_1.mission_id,
@@ -128,4 +138,48 @@ def correction_object() -> dict[str, Any]:
         "changed_fact_or_control_refs": ["EVB-P-001-C-TENDER-01"],
         "new_state": "QUALIFIED",
         "correction_event_id": "CORR-EVT-STRUCTURAL-001",
+        "affected_output_refs": [],
+    }
+
+
+def form_stage_1_for_tests(
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    *,
+    evaluator: EvaluationFunction,
+    warrant_builder: WarrantFunction,
+    authorization: str = "TEST_SUPPORT_WRAPPER_NOT_RESULT_BEARING",
+) -> Stage1Observation:
+    """Test-support wrapper over the private candidate-forming helper.
+
+    This lives under ``tests/`` deliberately. The production module exposes no
+    public callable that can form candidates without owner clearance; a unit test
+    that needs an unauthorized observation reaches the private helper from here,
+    where it cannot be mistaken for a runtime entrypoint.
+    """
+    return _form_stage_1(
+        projection,
+        frozen,
+        evaluator=evaluator,
+        warrant_builder=warrant_builder,
+        authorization=authorization,
+    )
+
+
+def bindings_for(
+    stage_1: Stage1Observation,
+    dispositions: Mapping[str, Mapping[str, Any]],
+    plan: FrozenActionPlan,
+) -> dict[str, Any]:
+    """Stage-2 bindings computed from the artifacts and the verified plan."""
+    from oic.cdc_e2e_mission import sha256
+
+    return {
+        "stage_1_observation_digest": stage_1.digest(),
+        "human_disposition_artifact_digests": sorted(
+            sha256(dict(record)) for record in dispositions.values()
+        ),
+        "correction_stimulus_digest": plan.correction.digest(),
+        "action_plan_sha256": plan.sha256_hex,
+        "action_plan_provenance_token": plan.provenance_token,
     }

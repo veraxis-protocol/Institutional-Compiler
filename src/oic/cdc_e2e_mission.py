@@ -690,6 +690,273 @@ def member_consumption_ledger(frozen: FrozenMissionInput) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
+# Frozen human action plan.
+#
+# The defect this closes: the plan's SHA-256 was checked, but its bytes did not
+# determine anything. A correct digest label sitting beside a caller's own choice
+# of stimulus is an attestation about a file nobody read. Everything below reads
+# the file, recomputes its digest, and makes the recovered contents the only
+# source of the preregistered action classes and the correction target.
+# ---------------------------------------------------------------------------
+
+HUMAN_ACTION_PLAN_RELPATH: Final = (
+    "veraxis/cdc-e2e-mission-001/preexecution/"
+    "CDC-END-TO-END-MISSION-001-HUMAN-ACTION-PLAN-v0.1.json"
+)
+HUMAN_ACTION_PLAN_BYTES: Final = 11374
+EXPECTED_DISPOSITION_TARGET_COUNT: Final = 9
+
+ACTION_PLAN_TARGET_REQUIRED_FIELDS: Final = (
+    "target_id",
+    "procedure_id",
+    "public_procedure_id",
+    "control_ref",
+    "preregistered_reviewer_action_class",
+    "runtime_binding_requirement",
+)
+
+ACTION_PLAN_CORRECTION_REQUIRED_FIELDS: Final = (
+    "correction_stimulus_id",
+    "target_id",
+    "procedure_id",
+    "control_ref",
+    "predecessor_ebawu_ref",
+    "precondition",
+    "predecessor_mutation_prohibited",
+    "required_correction_fields",
+)
+
+
+class ActionPlanProvenanceError(MissionContractError):
+    """An action plan was not derived from the verified frozen bytes."""
+
+
+class ActionPlanBindingError(MissionContractError):
+    """A submitted stimulus is not the one the frozen action plan preregistered."""
+
+
+@dataclass(frozen=True, slots=True)
+class ActionPlanTarget:
+    """One preregistered disposition target recovered from frozen bytes."""
+
+    target_id: str
+    procedure_id: str
+    public_procedure_id: str
+    control_ref: str
+    preregistered_action_class: str
+    runtime_binding_requirement: str
+
+    def as_record(self) -> dict[str, Any]:
+        """JSON-safe record."""
+        return {
+            "target_id": self.target_id,
+            "procedure_id": self.procedure_id,
+            "public_procedure_id": self.public_procedure_id,
+            "control_ref": self.control_ref,
+            "preregistered_reviewer_action_class": self.preregistered_action_class,
+            "runtime_binding_requirement": self.runtime_binding_requirement,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class ActionPlanCorrection:
+    """The single correction stimulus recovered from frozen bytes."""
+
+    correction_stimulus_id: str
+    target_id: str
+    procedure_id: str
+    control_ref: str
+    predecessor_ebawu_ref: str
+    precondition: str
+    predecessor_mutation_prohibited: bool
+    required_correction_fields: tuple[str, ...]
+
+    def as_record(self) -> dict[str, Any]:
+        """JSON-safe record; this is the controlling correction-stimulus content."""
+        return {
+            "correction_stimulus_id": self.correction_stimulus_id,
+            "target_id": self.target_id,
+            "procedure_id": self.procedure_id,
+            "control_ref": self.control_ref,
+            "predecessor_ebawu_ref": self.predecessor_ebawu_ref,
+            "precondition": self.precondition,
+            "predecessor_mutation_prohibited": self.predecessor_mutation_prohibited,
+            "required_correction_fields": list(self.required_correction_fields),
+        }
+
+    def digest(self) -> str:
+        """Digest of the frozen stimulus, never of a caller mapping."""
+        return sha256(self.as_record())
+
+
+@dataclass(frozen=True, slots=True)
+class FrozenActionPlan:
+    """Operational projection of the frozen human action plan.
+
+    ``provenance_token`` is derived from the bytes actually read, so a caller
+    cannot mint one by asserting the plan's digest, and cannot mutate a field of
+    a constructed instance without the token ceasing to recompute.
+    """
+
+    path: Path
+    sha256_hex: str
+    byte_count: int
+    provenance_token: str
+    mission_id: str
+    reviewer_id: str
+    authority_scope_ref: str
+    permitted_action: str
+    permitted_disposition_vocabulary: tuple[str, ...]
+    targets: tuple[ActionPlanTarget, ...]
+    correction: ActionPlanCorrection
+
+    def target_for(self, procedure_id: str, control_id: str) -> ActionPlanTarget:
+        """Recover the preregistered target for an actual chain, or refuse."""
+        for target in self.targets:
+            if target.procedure_id == procedure_id and target.control_ref == control_id:
+                return target
+        raise ActionPlanBindingError(
+            f"the frozen action plan preregisters no target for {procedure_id} x {control_id}"
+        )
+
+    def action_classes(self) -> dict[str, str]:
+        """Preregistered action class per target id, recovered from bytes."""
+        return {target.target_id: target.preregistered_action_class for target in self.targets}
+
+
+def _action_plan_provenance_token(payload: bytes, document: Mapping[str, Any]) -> str:
+    """Derive a token from the bytes on disk, not from any declared label."""
+    targets = _require_sequence(document.get("disposition_targets"), "disposition_targets")
+    return sha256(
+        {
+            "action_plan_sha256": _file_sha256(payload),
+            "action_plan_sha512": _file_sha512(payload),
+            "byte_count": len(payload),
+            "target_action_classes": sorted(
+                [
+                    str(_require_mapping(raw, "target").get("target_id")),
+                    str(_require_mapping(raw, "target").get("preregistered_reviewer_action_class")),
+                ]
+                for raw in targets
+            ),
+            "correction_stimulus_id": _require_mapping(
+                document.get("correction_stimulus"), "correction_stimulus"
+            ).get("correction_stimulus_id"),
+        }
+    )
+
+
+def verify_frozen_action_plan(path: Path) -> FrozenActionPlan:
+    """Read the exact bytes, recompute the digest, and refuse any mismatch."""
+    payload = path.read_bytes()
+    observed_sha256 = _file_sha256(payload)
+    if observed_sha256 != HUMAN_ACTION_PLAN_SHA256:
+        raise ActionPlanProvenanceError(
+            f"human action plan digest is {observed_sha256}, expected {HUMAN_ACTION_PLAN_SHA256}"
+        )
+    if len(payload) != HUMAN_ACTION_PLAN_BYTES:
+        raise ActionPlanProvenanceError(
+            f"human action plan is {len(payload)} bytes, expected {HUMAN_ACTION_PLAN_BYTES}"
+        )
+    document = _require_mapping(json.loads(payload), "human action plan")
+    raw_targets = _require_sequence(document.get("disposition_targets"), "disposition_targets")
+    if len(raw_targets) != EXPECTED_DISPOSITION_TARGET_COUNT:
+        raise ActionPlanProvenanceError(
+            f"frozen action plan declares {len(raw_targets)} disposition targets, expected 9"
+        )
+    targets: list[ActionPlanTarget] = []
+    for raw in raw_targets:
+        target = _require_mapping(raw, "disposition target")
+        missing = sorted(set(ACTION_PLAN_TARGET_REQUIRED_FIELDS) - target.keys())
+        if missing:
+            raise ActionPlanProvenanceError(f"disposition target missing fields: {missing}")
+        action_class = str(target["preregistered_reviewer_action_class"])
+        if action_class not in NEW_STATE_BY_ACTION:
+            raise ActionPlanProvenanceError(
+                f"preregistered action class is not a permitted disposition: {action_class}"
+            )
+        targets.append(
+            ActionPlanTarget(
+                target_id=str(target["target_id"]),
+                procedure_id=str(target["procedure_id"]),
+                public_procedure_id=str(target["public_procedure_id"]),
+                control_ref=str(target["control_ref"]),
+                preregistered_action_class=action_class,
+                runtime_binding_requirement=str(target["runtime_binding_requirement"]),
+            )
+        )
+    raw_correction = _require_mapping(document.get("correction_stimulus"), "correction_stimulus")
+    missing = sorted(set(ACTION_PLAN_CORRECTION_REQUIRED_FIELDS) - raw_correction.keys())
+    if missing:
+        raise ActionPlanProvenanceError(f"correction stimulus missing fields: {missing}")
+    correction = ActionPlanCorrection(
+        correction_stimulus_id=str(raw_correction["correction_stimulus_id"]),
+        target_id=str(raw_correction["target_id"]),
+        procedure_id=str(raw_correction["procedure_id"]),
+        control_ref=str(raw_correction["control_ref"]),
+        predecessor_ebawu_ref=str(raw_correction["predecessor_ebawu_ref"]),
+        precondition=str(raw_correction["precondition"]),
+        predecessor_mutation_prohibited=bool(raw_correction["predecessor_mutation_prohibited"]),
+        required_correction_fields=tuple(
+            str(name)
+            for name in _require_sequence(
+                raw_correction["required_correction_fields"], "required_correction_fields"
+            )
+        ),
+    )
+    if document.get("mission_id") != MISSION_ID:
+        raise ActionPlanProvenanceError("frozen action plan is bound to another mission")
+    plan = FrozenActionPlan(
+        path=path,
+        sha256_hex=observed_sha256,
+        byte_count=len(payload),
+        provenance_token=_action_plan_provenance_token(payload, document),
+        mission_id=str(document["mission_id"]),
+        reviewer_id=str(document["reviewer_id"]),
+        authority_scope_ref=str(document["authority_scope_ref"]),
+        permitted_action=str(document["permitted_action"]),
+        permitted_disposition_vocabulary=tuple(
+            str(name)
+            for name in _require_sequence(
+                document.get("permitted_disposition_vocabulary"), "permitted_disposition_vocabulary"
+            )
+        ),
+        targets=tuple(targets),
+        correction=correction,
+    )
+    if correction.target_id not in {target.target_id for target in plan.targets}:
+        raise ActionPlanProvenanceError(
+            "the correction stimulus names a target the plan does not preregister"
+        )
+    return plan
+
+
+def require_verified_action_plan(plan: object) -> FrozenActionPlan:
+    """Refuse anything that is not a projection of the verified plan bytes.
+
+    A mapping carrying the correct SHA-256 label is rejected here, and so is a
+    :class:`FrozenActionPlan` whose fields were edited after construction: the
+    provenance token is recomputed from the file the instance names.
+    """
+    if not isinstance(plan, FrozenActionPlan):
+        raise ActionPlanProvenanceError(
+            "the action plan must be a FrozenActionPlan derived from verified bytes; "
+            "a mapping carrying the plan digest label is not the plan"
+        )
+    # Re-derive the whole projection from the file the instance names and compare
+    # every field. Checking only the token would let a caller edit a target's
+    # action class or the correction target on a constructed instance while the
+    # token, computed from the untouched file, still matched.
+    authoritative = verify_frozen_action_plan(plan.path)
+    if plan != authoritative:
+        raise ActionPlanProvenanceError(
+            "action plan provenance token does not recompute: the supplied projection "
+            "differs from the one the frozen bytes produce"
+        )
+    return plan
+
+
+# ---------------------------------------------------------------------------
 # Two-stage human boundary.
 #
 # Stage 1 stops at machine candidate formation. It emits no transition, confers
@@ -704,6 +971,8 @@ STAGE_2_BINDING_FIELDS: Final = (
     "stage_1_observation_digest",
     "human_disposition_artifact_digests",
     "correction_stimulus_digest",
+    "action_plan_sha256",
+    "action_plan_provenance_token",
 )
 
 
@@ -1023,30 +1292,6 @@ def _form_stage_1(
     )
 
 
-def unauthorized_stage_1_helper(
-    projection: MissionProjection,
-    frozen: FrozenMissionInput,
-    *,
-    evaluator: EvaluationFunction,
-    warrant_builder: WarrantFunction,
-) -> Stage1Observation:
-    """NON-AUTHORITATIVE pure helper for unit tests. Never an execution entrypoint.
-
-    Candidate formation is result-bearing, so this helper is not a way to perform
-    it. Its output is stamped :data:`STAGE_1_AUTHORIZATION_HELPER`, which
-    :func:`require_stage_2_clearance` refuses. The owner-cleared token is not a
-    parameter of this function, so no caller can promote a helper observation
-    into the authorized path.
-    """
-    return _form_stage_1(
-        projection,
-        frozen,
-        evaluator=evaluator,
-        warrant_builder=warrant_builder,
-        authorization=STAGE_1_AUTHORIZATION_HELPER,
-    )
-
-
 def execute_authorized_stage_1(
     projection: object,
     frozen: FrozenMissionInput,
@@ -1147,17 +1392,23 @@ def bind_human_disposition(
     disposition: Mapping[str, Any],
     *,
     projection: MissionProjection,
-    action_plan_sha256: str,
+    action_plan: object,
 ) -> dict[str, Any]:
-    """Accept a disposition only if it binds the actual candidate and frozen standing.
+    """Accept a disposition only if it is the preregistered stimulus for this chain.
 
-    The pre-registered stimulus class is not authority to proceed. The binding
-    check is on the artifacts Stage 1 actually produced, and the reviewer is
-    validated through the frozen authority object rather than through anything
-    the caller supplies.
+    Three independent gates, deliberately ordered so a refusal is attributable:
+
+    1. the disposition must bind the artifacts Stage 1 actually produced;
+    2. the action must equal the class the frozen action plan preregistered for
+       this chain, recovered from the plan's bytes;
+    3. the frozen reviewer standing must permit it.
+
+    Gate 2 sits before gate 3 because the standing is an authority *ceiling*, not
+    a licence to substitute stimuli. ``QUALIFY`` on a chain whose plan says
+    ``ACCEPT_CANDIDATE`` is inside the reviewer's authority and still refused —
+    as an action-plan mismatch, not an authority failure.
     """
-    if action_plan_sha256 != HUMAN_ACTION_PLAN_SHA256:
-        raise MissionContractError("human action plan identity mismatch")
+    plan = require_verified_action_plan(action_plan)
     missing = sorted(set(HUMAN_DISPOSITION_REQUIRED_FIELDS) - disposition.keys())
     if missing:
         raise MissionContractError(f"human disposition missing required fields: {missing}")
@@ -1185,6 +1436,17 @@ def bind_human_disposition(
     action = str(disposition["action"])
     if action not in NEW_STATE_BY_ACTION:
         raise MissionContractError(f"disposition action is not permitted: {action}")
+    if disposition.get("action_plan_sha256") != plan.sha256_hex:
+        raise ActionPlanBindingError("disposition does not carry the verified action-plan digest")
+    target = plan.target_for(artifact.procedure_id, artifact.control_id)
+    if action != target.preregistered_action_class:
+        raise ActionPlanBindingError(
+            f"action-plan mismatch on {target.target_id}: the frozen plan preregisters "
+            f"{target.preregistered_action_class!r} for {artifact.procedure_id} x "
+            f"{artifact.control_id}, submitted {action!r}. The reviewer's standing is an "
+            "authority ceiling and does not license substituting another permitted "
+            "disposition for the preregistered stimulus."
+        )
     standing = validate_frozen_reviewer_standing_exact(
         projection.authority,
         mission_id=stage_1.mission_id,
@@ -1206,7 +1468,11 @@ def bind_human_disposition(
         "authority_scope_ref": str(disposition["authority_scope_ref"]),
         "observed_at": str(disposition["observed_at"]),
         "reason": str(disposition["reason"]),
-        "action_plan_sha256": action_plan_sha256,
+        "action_plan_sha256": plan.sha256_hex,
+        "action_plan_provenance_token": plan.provenance_token,
+        "action_plan_target_id": target.target_id,
+        "preregistered_action_class": target.preregistered_action_class,
+        "runtime_binding_requirement": target.runtime_binding_requirement,
         "frozen_standing": standing,
         "status": "HUMAN_TEST_DISPOSITION_BOUND",
     }
@@ -1233,10 +1499,15 @@ def require_stage_2_clearance(
     *,
     stage_1: Stage1Observation,
     dispositions: Mapping[str, Mapping[str, Any]],
-    correction_stimulus: Mapping[str, Any],
+    action_plan: object,
     stage_2_bindings: Mapping[str, Any],
 ) -> None:
-    """Stage-2 continuation compares exact artifacts, never mere non-emptiness."""
+    """Stage-2 continuation compares exact artifacts, never mere non-emptiness.
+
+    The controlling correction-stimulus digest is computed from the verified plan
+    object, so an arbitrary caller mapping cannot define what Stage 2 is bound to.
+    """
+    plan = require_verified_action_plan(action_plan)
     require_projected_source(projection, frozen)
     require_result_clearance(
         clearance, runtime, {"mission_package_sha256": projection.package_sha256}
@@ -1263,8 +1534,16 @@ def require_stage_2_clearance(
                 and sorted(str(value) for value in supplied_dispositions) == observed_dispositions,
             ),
             (
+                "action_plan_sha256",
+                stage_2_bindings.get("action_plan_sha256") == plan.sha256_hex,
+            ),
+            (
+                "action_plan_provenance_token",
+                stage_2_bindings.get("action_plan_provenance_token") == plan.provenance_token,
+            ),
+            (
                 "correction_stimulus_digest",
-                stage_2_bindings.get("correction_stimulus_digest") == sha256(correction_stimulus),
+                stage_2_bindings.get("correction_stimulus_digest") == plan.correction.digest(),
             ),
         )
         if not matched
@@ -1505,16 +1784,22 @@ def integrate_correction(
     projection: MissionProjection,
     stage_1: Stage1Observation,
     outcomes: Sequence[Stage2ChainOutcome],
-    correction_stimulus: Mapping[str, Any],
+    action_plan: object,
     correction: Mapping[str, Any] | None,
 ) -> dict[str, Any]:
     """Execute the correction only after an eligible completed predecessor exists.
 
+    The target and its precondition come from the verified frozen action-plan
+    bytes; there is no parameter through which a caller can choose a different
+    correction target. Only the runtime correction *object* is supplied, and only
+    after the predecessor exists, because its digest cannot be known earlier.
+
     If the precondition never occurred, this records an explicit absence. It does
     not manufacture a correction execution.
     """
-    target_ebawu = str(correction_stimulus.get("predecessor_ebawu_ref"))
-    stimulus_id = str(correction_stimulus.get("correction_stimulus_id"))
+    plan = require_verified_action_plan(action_plan)
+    target_ebawu = plan.correction.predecessor_ebawu_ref
+    stimulus_id = plan.correction.correction_stimulus_id
     artifact = next(
         (item for item in stage_1.artifacts().values() if item.ebawu_id == target_ebawu), None
     )
@@ -1535,6 +1820,9 @@ def integrate_correction(
             "m12_state": "unavailable_incomplete",
             "predecessor_ebawu_ref": target_ebawu,
             "eligible_completed_predecessor": False,
+            "correction_target_id": plan.correction.target_id,
+            "correction_target_source": "FROZEN_ACTION_PLAN_BYTES",
+            "precondition": plan.correction.precondition,
             "detail": (
                 "the preregistered correction target has no eligible completed "
                 "predecessor; no correction was manufactured"
@@ -1547,9 +1835,19 @@ def integrate_correction(
             "m12_state": "unavailable_incomplete",
             "predecessor_ebawu_ref": target_ebawu,
             "eligible_completed_predecessor": True,
+            "correction_target_id": plan.correction.target_id,
+            "correction_target_source": "FROZEN_ACTION_PLAN_BYTES",
+            "precondition": plan.correction.precondition,
             "detail": "an eligible predecessor exists but no correction object was supplied",
         }
     del projection
+    missing = sorted(set(plan.correction.required_correction_fields) - correction.keys())
+    frozen_side = {"supersedes", "superseded_by", "prior_state", "reliance_impact_refs"}
+    missing = sorted(set(missing) - frozen_side)
+    if missing:
+        raise MissionContractError(
+            f"correction object lacks fields the frozen plan requires: {missing}"
+        )
     predecessor = {
         "ebawu_id": artifact.ebawu_id,
         "state": str(outcome.transition_event["new_state"]),
@@ -1570,6 +1868,10 @@ def integrate_correction(
         "m12_state": "executed",
         "predecessor_ebawu_ref": target_ebawu,
         "eligible_completed_predecessor": True,
+        "correction_target_id": plan.correction.target_id,
+        "correction_target_source": "FROZEN_ACTION_PLAN_BYTES",
+        "precondition": plan.correction.precondition,
+        "predecessor_mutation_prohibited": plan.correction.predecessor_mutation_prohibited,
         "predecessor_object_preserved": predecessor,
         "detail": "correction executed through frozen Slice-001 make_successor semantics",
     }
@@ -1583,16 +1885,18 @@ def execute_authorized_stage_2(
     *,
     stage_1: Stage1Observation,
     dispositions: Mapping[str, Mapping[str, Any]],
-    correction_stimulus: Mapping[str, Any],
+    action_plan: object,
     correction: Mapping[str, Any] | None,
     run_metadata: Mapping[str, Any],
     stage_2_bindings: Mapping[str, Any],
 ) -> Stage2Result:
     """The single authorized route to transition evaluation and rendering.
 
-    No caller-supplied transition proposal or registry can enter here: both are
-    derived from the actual Stage-1 artifacts and the frozen chain inputs.
+    No caller-supplied transition proposal, registry or correction target can
+    enter here. The first two are derived from the actual Stage-1 artifacts and
+    the frozen chain inputs; the third comes from the verified action-plan bytes.
     """
+    plan = require_verified_action_plan(action_plan)
     verified = require_projected_source(projection, frozen)
     require_stage_2_clearance(
         clearance,
@@ -1601,7 +1905,7 @@ def execute_authorized_stage_2(
         frozen,
         stage_1=stage_1,
         dispositions=dispositions,
-        correction_stimulus=correction_stimulus,
+        action_plan=plan,
         stage_2_bindings=stage_2_bindings,
     )
     forbidden = {"transition_proposal", "transition_registry", "registry", "proposal"}
@@ -1674,9 +1978,7 @@ def execute_authorized_stage_2(
     total = sum(tally.values())
     if total != EXPECTED_CHAIN_COUNT:
         raise MissionContractError(f"denominator lost: {total} of 9 accounted")
-    correction_record = integrate_correction(
-        verified, stage_1, outcomes, correction_stimulus, correction
-    )
+    correction_record = integrate_correction(verified, stage_1, outcomes, plan, correction)
     provenance = _draft_provenance(verified, stage_1, outcomes, correction_record)
     drafts = render_drafts(
         verified.output_definitions, provenance=provenance, french_packet=verified.french_packet

@@ -23,10 +23,12 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent))
 
 from cdc_e2e_support import (
+    ACTION_PLAN_RELPATH,
     PACKAGE_RELPATH,
     STUB_RUNTIME,
     disposition_for,
     exact_clearance,
+    form_stage_1_for_tests,
 )
 from cdc_e2e_support import (
     stub_evaluator as _stub_evaluator,
@@ -44,6 +46,7 @@ from oic.cdc_e2e_mission import (
     REFERENCE_ONLY_CHAIN_FIELDS,
     CandidateBindingError,
     ExecutionClearance,
+    FrozenActionPlan,
     FrozenMissionInput,
     HumanDispositionRequiredError,
     MissionContractError,
@@ -59,7 +62,7 @@ from oic.cdc_e2e_mission import (
     require_human_disposition,
     require_projected_source,
     require_stage_2_clearance,
-    unauthorized_stage_1_helper,
+    verify_frozen_action_plan,
     verify_frozen_mission_input,
 )
 
@@ -80,6 +83,12 @@ def frozen(package_root: Path) -> FrozenMissionInput:
 def projection(frozen: FrozenMissionInput) -> MissionProjection:
     """Executable projection derived from the verified bytes."""
     return project_frozen_mission(frozen)
+
+
+@pytest.fixture
+def action_plan(repo_root: Path) -> FrozenActionPlan:
+    """The verified frozen human action plan."""
+    return verify_frozen_action_plan(repo_root / ACTION_PLAN_RELPATH)
 
 
 # 1 --------------------------------------------------------------------------
@@ -212,7 +221,7 @@ def test_missing_disposition_after_stage_1_holds(
     projection: MissionProjection, frozen: FrozenMissionInput
 ) -> None:
     """Stage 1 terminates and holds; no transition, no draft eligibility."""
-    stage_1 = unauthorized_stage_1_helper(
+    stage_1 = form_stage_1_for_tests(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
     )
     assert stage_1.stage == "EVALUATION_AND_CANDIDATE_FORMATION_COMPLETE"
@@ -226,25 +235,23 @@ def test_missing_disposition_after_stage_1_holds(
 
 # 11 -------------------------------------------------------------------------
 def test_candidate_digest_mismatch_is_rejected(
-    projection: MissionProjection, frozen: FrozenMissionInput
+    projection: MissionProjection, frozen: FrozenMissionInput, action_plan: FrozenActionPlan
 ) -> None:
     """A disposition must bind the candidate Stage 1 actually formed."""
-    stage_1 = unauthorized_stage_1_helper(
+    stage_1 = form_stage_1_for_tests(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
     )
     chain_id = "P001xC-TENDER-01"
-    forged = {**disposition_for(stage_1, projection, chain_id), "candidate_digest": "0" * 64}
+    base = disposition_for(stage_1, projection, chain_id, action_plan)
     with pytest.raises(CandidateBindingError, match="candidate_digest"):
         bind_human_disposition(
-            stage_1, forged, projection=projection, action_plan_sha256=HUMAN_ACTION_PLAN_SHA256
+            stage_1,
+            {**base, "candidate_digest": "0" * 64},
+            projection=projection,
+            action_plan=action_plan,
         )
     observed = stage_1.candidate_digests()[chain_id]
-    bound = bind_human_disposition(
-        stage_1,
-        disposition_for(stage_1, projection, chain_id),
-        projection=projection,
-        action_plan_sha256=HUMAN_ACTION_PLAN_SHA256,
-    )
+    bound = bind_human_disposition(stage_1, base, projection=projection, action_plan=action_plan)
     assert bound["candidate_digest"] == observed
 
 
@@ -288,11 +295,11 @@ def test_observation_producer_covers_m01_to_m12(
 
 # 14 -------------------------------------------------------------------------
 def test_result_interlock_without_exact_clearance_is_rejected(
-    projection: MissionProjection, frozen: FrozenMissionInput
+    projection: MissionProjection, frozen: FrozenMissionInput, action_plan: FrozenActionPlan
 ) -> None:
     """Stage-2 continuation refuses without every exact binding."""
     empty = ExecutionClearance(None, None, None, None, None, None, None)
-    stage_1 = unauthorized_stage_1_helper(
+    stage_1 = form_stage_1_for_tests(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
     )
     with pytest.raises(ResultBearingMissionBlockedError, match="missing result-bearing clearance"):
@@ -303,7 +310,7 @@ def test_result_interlock_without_exact_clearance_is_rejected(
             frozen,
             stage_1=stage_1,
             dispositions={},
-            correction_stimulus={},
+            action_plan=action_plan,
             stage_2_bindings={},
         )
     with pytest.raises(
@@ -316,7 +323,7 @@ def test_result_interlock_without_exact_clearance_is_rejected(
             frozen,
             stage_1=stage_1,
             dispositions={},
-            correction_stimulus={},
+            action_plan=action_plan,
             stage_2_bindings={},
         )
 
@@ -335,7 +342,7 @@ def test_denominator_survives_individual_chain_failure(
             raise RuntimeError("injected component failure")
         return _stub_evaluator(member, member, member)
 
-    stage_1 = unauthorized_stage_1_helper(
+    stage_1 = form_stage_1_for_tests(
         projection, frozen, evaluator=failing, warrant_builder=_stub_warrant
     )
     assert sum(stage_1.accounting.values()) == EXPECTED_CHAIN_COUNT
@@ -358,10 +365,10 @@ def test_stage_1_observation_digest_is_stable(
     projection: MissionProjection, frozen: FrozenMissionInput
 ) -> None:
     """The Stage-1 checkpoint digest is deterministic over identical inputs."""
-    first = unauthorized_stage_1_helper(
+    first = form_stage_1_for_tests(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
     )
-    second = unauthorized_stage_1_helper(
+    second = form_stage_1_for_tests(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
     )
     assert first.digest() == second.digest()
