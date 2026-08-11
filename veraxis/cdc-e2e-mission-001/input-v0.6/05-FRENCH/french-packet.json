@@ -1,0 +1,46 @@
+{
+  "deliverable_labels_fr": [
+    "note d'orientation",
+    "rapport provisoire",
+    "rapport définitif",
+    "fiche de synthèse des constatations",
+    "lettre de transmission"
+  ],
+  "disposition_vocabulary_fr": {
+    "ACCEPT_CANDIDATE": "ABSENT",
+    "DEFER": "ABSENT",
+    "DISMISS": "ABSENT",
+    "ESCALATE": "ABSENT",
+    "QUALIFY": "ABSENT",
+    "REQUEST_EVIDENCE": "ABSENT"
+  },
+  "french_path_state": "PARTIAL",
+  "measured_capability": {
+    "deliverables_not_templated": 4,
+    "deliverables_templated": 1,
+    "french_section_headers_rendered": 6,
+    "placeholder_slots_rendered": 17,
+    "renderer": "scripts/cdc_slice_render_deliverable.py at the frozen combined head",
+    "substantive_french_prose_blocks": 3
+  },
+  "not_a_translation_deliverable": true,
+  "packet_id": "CDC-E2E-FRENCH-PACKET-v0.1",
+  "purpose": "mission artifact/input test that institutional objects can traverse the French output path",
+  "section_labels_fr": [
+    "Statut du document",
+    "Livrables de mission",
+    "Constatations candidates",
+    "Traçabilité",
+    "Guide de lecture",
+    "Limites et non-revendications"
+  ],
+  "substantive_french_support_absent_at": [
+    "all result values render as NOT_YET_OBSERVED / NOT_YET_ADJUDICATED placeholders; no French result content exists",
+    "no French translation of the six permitted dispositions",
+    "no French control terminology for C-TENDER-01 / C-EVAL-01 / C-AWARD-01",
+    "no French source documents in the corpus; every source anchor is synthetic and untranslated",
+    "no French reason-code vocabulary for gate decisions",
+    "four of five deliverables have no template at all, only a label",
+    "no French findings prose generation of any kind"
+  ]
+}

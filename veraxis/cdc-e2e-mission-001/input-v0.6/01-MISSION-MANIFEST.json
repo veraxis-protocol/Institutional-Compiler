@@ -1,0 +1,204 @@
+{
+  "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+  "authority_scope_ref": "CDC-TEST-MISSION-001/TEST-REVIEWER",
+  "candidate_count": 0,
+  "claim_evidence_map": "CDC-END-TO-END-MISSION-001-CLAIM-EVIDENCE-MAP-v0.2",
+  "contract_id": "VEIP-CDC-SLICE-EVALUATION-CONTRACT-v0.1",
+  "control_ids": [
+    "C-TENDER-01",
+    "C-EVAL-01",
+    "C-AWARD-01"
+  ],
+  "control_specific_evidence_vocabularies": {
+    "C-AWARD-01": [
+      "award_traceable_to_scoring",
+      "required_approvals_present"
+    ],
+    "C-EVAL-01": [
+      "scoring_record_complete",
+      "declared_criteria_only"
+    ],
+    "C-TENDER-01": [
+      "competition_notice_published",
+      "minimum_competition_period_met"
+    ]
+  },
+  "correction_predecessor_references": {
+    "predecessor_ebawu_refs": [
+      "EBAWU-P-001-C-TENDER-01",
+      "EBAWU-P-001-C-EVAL-01",
+      "EBAWU-P-001-C-AWARD-01",
+      "EBAWU-P-002-C-TENDER-01",
+      "EBAWU-P-002-C-EVAL-01",
+      "EBAWU-P-002-C-AWARD-01",
+      "EBAWU-P-003-C-TENDER-01",
+      "EBAWU-P-003-C-EVAL-01",
+      "EBAWU-P-003-C-AWARD-01"
+    ],
+    "predecessor_mutation_prohibited": true,
+    "successor_refs": "NOT_YET_OBSERVED"
+  },
+  "design_shape_labels_removed": {
+    "historical_values_retained_here": false,
+    "reason": "design metadata only; must not be passed to or inspected by the evaluator or warrant builder, so neither the field nor its values appear in the controlling runtime projection",
+    "removed_from": "mission_population[*].shape",
+    "retained_addressably_in": "CDC-END-TO-END-MISSION-001-INPUT-v0.4 (immutable)"
+  },
+  "evidence_object_references": [
+    "EVB-P-001-C-TENDER-01",
+    "EVB-P-001-C-EVAL-01",
+    "EVB-P-001-C-AWARD-01",
+    "EVB-P-002-C-TENDER-01",
+    "EVB-P-002-C-EVAL-01",
+    "EVB-P-002-C-AWARD-01",
+    "EVB-P-003-C-TENDER-01",
+    "EVB-P-003-C-EVAL-01",
+    "EVB-P-003-C-AWARD-01"
+  ],
+  "expected_results_encoded": false,
+  "five_output_artifact_identities": [
+    {
+      "artifact_id": "CDC-E2E-OUTPUT-01",
+      "label_en": "orientation note",
+      "label_fr": "note d'orientation"
+    },
+    {
+      "artifact_id": "CDC-E2E-OUTPUT-02",
+      "label_en": "provisional report",
+      "label_fr": "rapport provisoire"
+    },
+    {
+      "artifact_id": "CDC-E2E-OUTPUT-03",
+      "label_en": "final report",
+      "label_fr": "rapport définitif"
+    },
+    {
+      "artifact_id": "CDC-E2E-OUTPUT-04",
+      "label_en": "findings summary",
+      "label_fr": "fiche de synthèse des constatations"
+    },
+    {
+      "artifact_id": "CDC-E2E-OUTPUT-05",
+      "label_en": "transmittal letter",
+      "label_fr": "lettre de transmission"
+    }
+  ],
+  "governance_binding": {
+    "binding_state": "PENDING_FROZEN_GOVERNANCE_INPUT",
+    "exact_bytes_available_to_claude": false,
+    "governance_commit": "2e2282cb1bdeef972e2cf189030f24b011be2868",
+    "identifiers_bound": true,
+    "mission_adjudication_protocol_sha256": "0e2a9f7202b2136b1edd76148da4f1c957ff86301c42ddf6f0dc1055ce20426b",
+    "mission_oracle_sha256": "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9",
+    "note": "Exact identifiers bound as supplied. The bytes are not reachable from this environment, so no content of either instrument is reproduced or paraphrased."
+  },
+  "implementation_modified": false,
+  "language_requirements": {
+    "french_path_state": "PARTIAL",
+    "packet": "05-FRENCH/french-packet.json",
+    "required_paths": [
+      "fr",
+      "en"
+    ]
+  },
+  "mission_executed": false,
+  "mission_id": "CDC-TEST-MISSION-001",
+  "mission_population": {
+    "P001": {
+      "control_chains": [
+        "C-TENDER-01",
+        "C-EVAL-01",
+        "C-AWARD-01"
+      ],
+      "procedure_id": "P-001"
+    },
+    "P002": {
+      "control_chains": [
+        "C-TENDER-01",
+        "C-EVAL-01",
+        "C-AWARD-01"
+      ],
+      "procedure_id": "P-002"
+    },
+    "P003": {
+      "control_chains": [
+        "C-TENDER-01",
+        "C-EVAL-01",
+        "C-AWARD-01"
+      ],
+      "procedure_id": "P-003"
+    }
+  },
+  "mission_scope": "CDC-TEST-MISSION-001/TEST-REVIEWER",
+  "oic_control_and_admission_references": [
+    {
+      "admission_ref": "ADM-P-001-C-TENDER-01",
+      "control_ref": "C-TENDER-01",
+      "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001"
+    },
+    {
+      "admission_ref": "ADM-P-001-C-EVAL-01",
+      "control_ref": "C-EVAL-01",
+      "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001"
+    },
+    {
+      "admission_ref": "ADM-P-001-C-AWARD-01",
+      "control_ref": "C-AWARD-01",
+      "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001"
+    },
+    {
+      "admission_ref": "ADM-P-002-C-TENDER-01",
+      "control_ref": "C-TENDER-01",
+      "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001"
+    },
+    {
+      "admission_ref": "ADM-P-002-C-EVAL-01",
+      "control_ref": "C-EVAL-01",
+      "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001"
+    },
+    {
+      "admission_ref": "ADM-P-002-C-AWARD-01",
+      "control_ref": "C-AWARD-01",
+      "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001"
+    },
+    {
+      "admission_ref": "ADM-P-003-C-TENDER-01",
+      "control_ref": "C-TENDER-01",
+      "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001"
+    },
+    {
+      "admission_ref": "ADM-P-003-C-EVAL-01",
+      "control_ref": "C-EVAL-01",
+      "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001"
+    },
+    {
+      "admission_ref": "ADM-P-003-C-AWARD-01",
+      "control_ref": "C-AWARD-01",
+      "semantic_epoch": "OIC-SEMANTIC-EPOCH-TEST-0001"
+    }
+  ],
+  "package_id": "CDC-END-TO-END-MISSION-001-INPUT-v0.6",
+  "permitted_disposition_vocabulary": [
+    "ACCEPT_CANDIDATE",
+    "DEFER",
+    "DISMISS",
+    "ESCALATE",
+    "QUALIFY",
+    "REQUEST_EVIDENCE"
+  ],
+  "precomputed_candidate_objects_present": false,
+  "precomputed_evaluation_objects_present": false,
+  "precomputed_warrant_objects_present": false,
+  "prior_institutional_state_present_in_chains": false,
+  "reviewer_test_standing_object": "03-AUTHORITY/test-reviewer.json",
+  "source_of_truth": {
+    "combined_commit": "6dc88cec0aca048e6117b54bac8bf577ae7bc96d",
+    "combined_tree": "d19a2f58cf9cbf6de7fde33b6c3aad089660a07e",
+    "objects_read_from": "materialized frozen combined head; nothing reconstructed from memory",
+    "transport_sha256": "760d5db9bfd9f6ba402dae6fa8d5d6e08267bf6d00ae834a9504295b3ca2132d"
+  },
+  "stage_1_component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+  "stage_1_component_profile_is_admitted_oic_meaning": false,
+  "stage_1_component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+  "stage_1_input_state": "PRE_CANDIDATE"
+}

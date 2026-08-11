@@ -1,0 +1,33 @@
+{
+  "artifact_id": "CDC-E2E-OUTPUT-01",
+  "candidate_findings_are_not_official": true,
+  "content_state": "NOT_YET_OBSERVED",
+  "eligibility_determination": "DELEGATED_TO_MISSION_EXECUTION_SYSTEM",
+  "eligibility_not_decided_here": true,
+  "label_en": "orientation note",
+  "label_fr": "note d'orientation",
+  "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+  "required_data_bindings": [
+    "mission_id",
+    "mission_scope",
+    "procedure_ids",
+    "control_ids",
+    "candidate_refs",
+    "candidate_digests",
+    "evidence_bundle_refs",
+    "evidence_bundle_digests",
+    "admission_refs",
+    "source_anchor_refs",
+    "warrant_refs",
+    "warrant_digests",
+    "deterministic_evaluation_refs",
+    "reviewer_id",
+    "reviewer_role",
+    "authority_scope_ref",
+    "disposition_per_candidate",
+    "institutional_state_per_ebawu",
+    "correction_refs",
+    "limitations",
+    "nonclaims"
+  ]
+}

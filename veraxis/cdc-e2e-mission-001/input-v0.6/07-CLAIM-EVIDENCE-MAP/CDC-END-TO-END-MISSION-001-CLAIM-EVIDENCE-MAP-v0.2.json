@@ -1,0 +1,124 @@
+{
+  "all_claims_state": {
+    "assessment_state": "NOT_ASSESSED",
+    "execution_state": "NOT_YET_EXECUTED"
+  },
+  "claims": [
+    {
+      "assessment_state": "NOT_ASSESSED",
+      "claim": "source to admitted control binding is inspectable",
+      "claim_ceiling": "DESIGN_ONLY_NOT_DEMONSTRATED",
+      "claim_id": "CL-01",
+      "execution_state": "NOT_YET_EXECUTED",
+      "measurement_state": "PLANNED_MEASUREMENT",
+      "required_artifact": "02-POPULATION/*.json",
+      "required_digest_or_reference": "admission_record digest",
+      "required_observation": "observation of admission binding per chain"
+    },
+    {
+      "assessment_state": "NOT_ASSESSED",
+      "claim": "evidence to evaluation to FALLBACK_WARRANT to candidate chain is traversable",
+      "claim_ceiling": "DESIGN_ONLY_NOT_DEMONSTRATED",
+      "claim_id": "CL-02",
+      "execution_state": "NOT_YET_EXECUTED",
+      "input_population_contains_result_digests": false,
+      "measurement_state": "PLANNED_MEASUREMENT",
+      "required_artifact": "future Stage-1 observation artifact set",
+      "required_digest_or_reference": "Stage-1 evaluation, fallback-warrant and candidate artifacts and their digests, formed at runtime; no such objects exist in the input population",
+      "required_observation": "full chain observation per procedure, taken from the Stage-1 observation"
+    },
+    {
+      "assessment_state": "NOT_ASSESSED",
+      "claim": "missing/conflicting required-fact observations are preserved, not repaired",
+      "claim_ceiling": "DESIGN_ONLY_NOT_DEMONSTRATED",
+      "claim_id": "CL-03",
+      "execution_state": "NOT_YET_EXECUTED",
+      "measurement_state": "PLANNED_MEASUREMENT",
+      "required_artifact": "02-POPULATION/P003.json and the future Stage-1 observation",
+      "required_digest_or_reference": "evidence_bundle digest and Stage-1 evaluation artifact",
+      "required_observation": "raw absent and conflicting required-fact observations survive Stage 1 without synthetic repair, completion or promotion"
+    },
+    {
+      "assessment_state": "NOT_ASSESSED",
+      "claim": "reviewer standing is a bounded relation, not a flag",
+      "claim_ceiling": "DESIGN_ONLY_NOT_DEMONSTRATED",
+      "claim_id": "CL-04",
+      "execution_state": "NOT_YET_EXECUTED",
+      "measurement_state": "PLANNED_MEASUREMENT",
+      "required_artifact": "03-AUTHORITY/test-reviewer.json",
+      "required_digest_or_reference": "record digest",
+      "required_observation": "authority record observation at transition time"
+    },
+    {
+      "assessment_state": "NOT_ASSESSED",
+      "claim": "unauthorized scope is refused",
+      "claim_ceiling": "DESIGN_ONLY_NOT_DEMONSTRATED",
+      "claim_id": "CL-05",
+      "execution_state": "NOT_YET_EXECUTED",
+      "measurement_state": "PLANNED_MEASUREMENT",
+      "required_artifact": "03-AUTHORITY/test-reviewer.json",
+      "required_digest_or_reference": "out_of_scope_counterpart",
+      "required_observation": "negative standing observation"
+    },
+    {
+      "assessment_state": "NOT_ASSESSED",
+      "claim": "five CDC outputs can be data-bound",
+      "claim_ceiling": "DESIGN_ONLY_NOT_DEMONSTRATED",
+      "claim_id": "CL-06",
+      "execution_state": "NOT_YET_EXECUTED",
+      "measurement_state": "PLANNED_MEASUREMENT",
+      "required_artifact": "04-OUTPUTS/*.json",
+      "required_digest_or_reference": "artifact digests",
+      "required_observation": "output binding observation"
+    },
+    {
+      "assessment_state": "NOT_ASSESSED",
+      "claim": "French path carries institutional objects",
+      "claim_ceiling": "PARTIAL_LABELS_ONLY",
+      "claim_id": "CL-07",
+      "execution_state": "NOT_YET_EXECUTED",
+      "measurement_state": "PLANNED_MEASUREMENT",
+      "required_artifact": "05-FRENCH/french-packet.json",
+      "required_digest_or_reference": "packet digest",
+      "required_observation": "French render observation"
+    },
+    {
+      "assessment_state": "NOT_ASSESSED",
+      "claim": "candidate findings never become official by generation",
+      "claim_ceiling": "DESIGN_ONLY_NOT_DEMONSTRATED",
+      "claim_id": "CL-08",
+      "execution_state": "NOT_YET_EXECUTED",
+      "measurement_state": "PLANNED_MEASUREMENT",
+      "required_artifact": "04-OUTPUTS/*.json",
+      "required_digest_or_reference": "NOT_AUTHORIZED_AS_OFFICIAL",
+      "required_observation": "official_status observation on every output"
+    },
+    {
+      "assessment_state": "NOT_ASSESSED",
+      "claim": "correction creates a successor without mutating predecessor",
+      "claim_ceiling": "DESIGN_ONLY_NOT_DEMONSTRATED",
+      "claim_id": "CL-09",
+      "execution_state": "NOT_YET_EXECUTED",
+      "measurement_state": "PLANNED_MEASUREMENT",
+      "required_artifact": "01-MISSION-MANIFEST.json",
+      "required_digest_or_reference": "correction refs",
+      "required_observation": "correction observation"
+    },
+    {
+      "assessment_state": "NOT_ASSESSED",
+      "claim": "adjudication is external to runtime",
+      "claim_ceiling": "PENDING_FROZEN_GOVERNANCE_INPUT",
+      "claim_id": "CL-10",
+      "execution_state": "NOT_YET_EXECUTED",
+      "measurement_state": "PLANNED_MEASUREMENT",
+      "required_artifact": "06-GOVERNANCE/binding.json",
+      "required_digest_or_reference": "oracle + protocol sha256",
+      "required_observation": "governance binding observation"
+    }
+  ],
+  "document_id": "CDC-END-TO-END-MISSION-001-CLAIM-EVIDENCE-MAP-v0.2",
+  "no_claim_demonstrated_yet": true,
+  "stage_1_component_profile_ref": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+  "successor_reason": "v0.1 pointed CL-02 at result digests that no longer exist in the input population and CL-03 at the removed absence_and_conflict block",
+  "supersedes": "CDC-END-TO-END-MISSION-001-CLAIM-EVIDENCE-MAP-v0.1"
+}
