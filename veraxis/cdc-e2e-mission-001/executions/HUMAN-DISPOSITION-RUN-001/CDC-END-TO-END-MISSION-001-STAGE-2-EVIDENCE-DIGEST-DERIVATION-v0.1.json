@@ -1,0 +1,206 @@
+{
+  "artifact_id": "CDC-END-TO-END-MISSION-001-STAGE-2-EVIDENCE-DIGEST-DERIVATION-v0.1",
+  "authorizes_execution": false,
+  "canonical_serialization": {
+    "encoding": "UTF-8",
+    "ensure_ascii": false,
+    "indent": null,
+    "item_separator": ",",
+    "key_separator": ":",
+    "object_keys": "LEXICOGRAPHICALLY_SORTED",
+    "reference_expression": "json.dumps(value, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False).encode()",
+    "trailing_newline_in_hashed_canonical_form": false
+  },
+  "claim_ceiling": {
+    "M08_compliant_path_demonstrated": true,
+    "M08_out_of_scope_refusal_path_demonstrated": false,
+    "identity_derivation_only": "this artifact establishes no semantic, institutional or legal claim",
+    "note": "TEST-REVIEWER-OUT-OF-SCOPE-001 remains a separate future observation",
+    "out_of_scope_reviewer_exercised_in_stage_2": false
+  },
+  "correction_sequencing": {
+    "correction_object_prebound": false,
+    "correction_predecessor_eligibility_at_preflight": "UNDETERMINED_BEFORE_STAGE_2_RESULT",
+    "correction_target": "HA-P001-C-TENDER-01",
+    "eligibility_determined_by": "MISSION_EXECUTION_SYSTEM_NOT_THIS_PLAN",
+    "eligibility_manufactured": false,
+    "first_stage_2_execution_manipulated_to_make_m12_measurable": false,
+    "if_eligible": "freeze the Stage-2 result first; any subsequent correction requires separate governance after the predecessor actually exists",
+    "if_not_eligible": "M12 remains INCOMPLETE_OBSERVATION and there is no rerun",
+    "precondition": "issue only after an eligible completed transition on this chain",
+    "predecessor_candidate_digest": "BIND_AT_RUNTIME_AFTER_PREDECESSOR_EXISTS",
+    "predecessor_digest_predicted": false,
+    "predecessor_state_predicted": false
+  },
+  "inspected_implementation_commit": "2e15267194d320b54015f0c212a8041cedc22050",
+  "inspected_implementation_tree": "7e8cb3abfdb58c4334a8c0dad1a0a74dad4b0c5c",
+  "is_an_identity_specification_not_a_prediction": true,
+  "mission_id": "CDC-TEST-MISSION-001",
+  "next_gate": "OWNER_STAGE_2_EXECUTION_AUTHORIZATION",
+  "object_classes": {
+    "Stage2ChainOutcome": {
+      "derived_rule": "sha256(canonical(Stage2ChainOutcome.as_record()))",
+      "digest_form": "UNPREFIXED_HEX",
+      "embedded_digest_field": null,
+      "excluded_keys": [],
+      "identity_class": "DERIVED_ARCHIVAL_EVIDENCE_IDENTITY",
+      "note": "no implementation contract digest exists; this identity is archival only"
+    },
+    "Stage2Result": {
+      "digest_form": "UNPREFIXED_HEX",
+      "embedded_digest_field": "stage_2_result_digest",
+      "excluded_keys": [
+        "stage_2_result_digest"
+      ],
+      "identity_class": "RUNTIME_CONTRACT_DIGEST",
+      "rule": "sha256(canonical(Stage2Result body excluding stage_2_result_digest))",
+      "verification_note": "Stage2Result.as_record builds body then sets body[\"stage_2_result_digest\"] = sha256(body)",
+      "verified_against_implementation_source": true
+    },
+    "correction_result_record": {
+      "carries_predecessor_digests": [
+        "predecessor_before_digest",
+        "predecessor_after_digest"
+      ],
+      "derived_rule": "sha256(canonical(correction_record))",
+      "digest_form": "UNPREFIXED_HEX",
+      "embedded_digest_field": null,
+      "excluded_keys": [],
+      "identity_class": "DERIVED_ARCHIVAL_EVIDENCE_IDENTITY",
+      "note": "the predecessor digests are content computed at runtime from the actual emitted predecessor; they are not an identity of this record"
+    },
+    "draft_object": {
+      "derived_rule": "sha256(canonical(draft_object))",
+      "digest_form": "UNPREFIXED_HEX",
+      "embedded_digest_field": null,
+      "excluded_keys": [],
+      "identity_class": "DERIVED_ARCHIVAL_EVIDENCE_IDENTITY"
+    },
+    "runtime_route_observation_trace": {
+      "authority_class": "EXTERNAL_EXECUTION_OBSERVATION_NOT_AUTHORITY",
+      "derived_rule": "sha256 over the exact persisted trace file bytes",
+      "digest_form": "UNPREFIXED_HEX",
+      "embedded_digest_field": null,
+      "identity_class": "DERIVED_ARCHIVAL_EVIDENCE_IDENTITY"
+    },
+    "successor_object": {
+      "derived_rule": "sha256(canonical(successor_object))",
+      "digest_form": "UNPREFIXED_HEX",
+      "embedded_digest_field": null,
+      "excluded_keys": [],
+      "exists_only_if": "a correction actually executes after an eligible predecessor",
+      "identity_class": "DERIVED_ARCHIVAL_EVIDENCE_IDENTITY"
+    },
+    "transition_event": {
+      "content_vs_identity": "the event object itself carries sha256:-prefixed digests of the candidate, evidence bundle, control and warrant, produced by oic.cdc_slice.digest. Those are event CONTENT. The evidence-identity digest above is computed externally over the whole object and is a different thing.",
+      "derived_rule": "sha256(canonical(transition_event_object))",
+      "digest_form": "UNPREFIXED_HEX",
+      "embedded_digest_field": null,
+      "excluded_keys": [],
+      "identity_class": "DERIVED_ARCHIVAL_EVIDENCE_IDENTITY",
+      "runtime_event_gains_a_digest_field": false,
+      "source_change_to_add_one": "PROHIBITED"
+    }
+  },
+  "pending_successor_notice": {
+    "effect_on_this_specification": "the pending Stage-2 seam repair adds owner_stage_2_authorization and attempt_record to the Stage2Result body. The stage_2_result_digest RULE is unchanged, but the body it covers is larger, so a Stage-2 executed under the successor will not produce the same digest as one executed under 2e152671. This specification is written against the accepted implementation and must be reconfirmed against whichever implementation the owner finally authorizes.",
+    "seam_repair_head": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+    "seam_repair_tree": "86513415bca23ca20c9cb37ee2d59a5fa03c5790",
+    "status": "AWAITING_INDEPENDENT_VERIFICATION"
+  },
+  "per_chain_m10_evidence_requirements": {
+    "expected_gate_result_preregistered": false,
+    "expected_transition_count_preregistered": false,
+    "inference_that_request_evidence_must_allow_or_refuse": "NOT_MADE",
+    "p003_relationship_must_be_independently_inspectable": {
+      "epistemic_state": "OBSERVED_ONLY_AT_EXECUTION",
+      "gate_decision": "OBSERVED_ONLY_AT_EXECUTION",
+      "human_disposition": "REQUEST_EVIDENCE",
+      "stage_1_verdict": "UNRESOLVED",
+      "transition_event": "OBSERVED_ONLY_AT_EXECUTION"
+    },
+    "preserve_for_all_nine_chains_without_adjudication": [
+      "chain_id",
+      "prior_institutional_state",
+      "human_disposition_identity",
+      "human_disposition_action",
+      "gate_decision",
+      "reason_code",
+      "epistemic_state",
+      "transition_event_present",
+      "transition_event_identity_if_present",
+      "outcome_state",
+      "post_state_if_one_exists",
+      "predecessor_preservation_facts"
+    ]
+  },
+  "persisted_file_rules": {
+    "serialization": "json.dumps(record, indent=2, sort_keys=True, ensure_ascii=False) + \"\\n\"",
+    "sha256_rule": "sha256 over the exact persisted file bytes"
+  },
+  "prospective": true,
+  "record_class": "STAGE_2_EVIDENCE_DIGEST_DERIVATION",
+  "result_bearing": false,
+  "route_observability": {
+    "event_metadata_fields_required_by_emit_transition_event": [
+      "aggregate_version",
+      "event_id",
+      "occurred_at",
+      "producer",
+      "producer_version",
+      "recorded_at",
+      "run_id",
+      "trace_id"
+    ],
+    "external_route_observation_contract": {
+      "authority_class": "EXTERNAL_EXECUTION_OBSERVATION_NOT_AUTHORITY",
+      "executed_during_this_preflight": false,
+      "implementation_source_modified": false,
+      "mechanism": "external Python call tracer/profiler wrapped around exactly the one authorized call",
+      "must_establish": {
+        "execute_authorized_stage_2_entry_count": 1,
+        "low_level_calls_outside_public_route_authorized": false,
+        "low_level_calls_recorded_with_parent_stack": [
+          "derive_transition_registry",
+          "derive_transition_proposal",
+          "evaluate_test_transition",
+          "emit_transition_event",
+          "integrate_correction",
+          "render_drafts"
+        ]
+      },
+      "required_trace_fields": [
+        "trace_id",
+        "implementation_commit",
+        "implementation_tree",
+        "module",
+        "code_filename",
+        "function_name",
+        "qualified_name",
+        "call_event",
+        "return_or_exception_event",
+        "call_depth",
+        "parent_function"
+      ],
+      "shared_trace_id": "CDC-E2E-STAGE2-RUN-001-TRACE-001",
+      "status": "FROZEN"
+    },
+    "preregistered_run_metadata": {
+      "producer": "oic.cdc_e2e_mission.execute_authorized_stage_2",
+      "producer_version": "2e15267194d320b54015f0c212a8041cedc22050",
+      "run_id": "CDC-E2E-STAGE2-RUN-001",
+      "trace_id": "CDC-E2E-STAGE2-RUN-001-TRACE-001"
+    },
+    "run_metadata_fields_required_by_implementation": [
+      "run_id",
+      "trace_id",
+      "producer",
+      "producer_version",
+      "occurred_at",
+      "recorded_at"
+    ],
+    "stage_2_route_identity_in_event_supported": true,
+    "transition_event_producer_field_alone_proves_route_invocation": false,
+    "why_not": "run_metadata is supplied to the public route by the caller, so the producer field records what the caller declared, not what was invoked"
+  }
+}
