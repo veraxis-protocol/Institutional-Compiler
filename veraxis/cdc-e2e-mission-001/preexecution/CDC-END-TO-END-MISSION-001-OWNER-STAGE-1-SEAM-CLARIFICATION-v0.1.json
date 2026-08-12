@@ -1,0 +1,77 @@
+{
+  "artifact_class": "OWNER_PREIMPLEMENTATION_SEAM_CLARIFICATION",
+  "artifact_id": "CDC-END-TO-END-MISSION-001-OWNER-STAGE-1-SEAM-CLARIFICATION-v0.1",
+  "authorizes_implementation": false,
+  "authorizes_stage_1_execution": false,
+  "binds": {
+    "adjudication_protocol_sha256": "0e2a9f7202b2136b1edd76148da4f1c957ff86301c42ddf6f0dc1055ce20426b",
+    "human_action_plan_sha256": "229a0c15d2bd2ee1db807904ff4d640f8fe39931372a002fbc3abf9e3244731e",
+    "input_v0_6_manifest_sha256": "8aad5e78635b691fa2fad0336e07d9b0738b61db7b12ded2ed22149a258bdb77",
+    "input_v0_6_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+    "owner_preexecution_addendum_v0_2_sha256": "b8a2174ff2f8306782547423c067826df260ec8a7553c7512757706703573ea8",
+    "semantic_oracle_sha256": "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9",
+    "stage_1_component_profile_v0_2_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+    "vitaliy_stage_1_component_semantic_review_commit": "b6f5ad0fe988edf2dbea3878775b2bd2b0abc5e8",
+    "vitaliy_stage_1_component_semantic_review_declared_bytes": 15559,
+    "vitaliy_stage_1_component_semantic_review_declared_sha256": "3886e15a463a0731522ce4ff75b3c21bd2d39d3c8120eea7cc58cbb3fcb96082"
+  },
+  "campaign": "CDC-END-TO-END-MISSION-001",
+  "claim_ceiling": [
+    "synthetic Stage-1 seam clarification only",
+    "not Moroccan procurement law",
+    "not CDC policy",
+    "not legal interpretation",
+    "not admitted OIC meaning",
+    "not production conformance",
+    "not Stage-1 execution authorization"
+  ],
+  "evidence_source_precedence": {
+    "component_profile_preregistered_population_assignments_role": "PREEXECUTION_CONFORMANCE_CONSTRAINT_ONLY",
+    "fallback_from_package_evidence_to_profile_assignment": "PROHIBITED",
+    "merge_package_evidence_with_profile_assignment": "PROHIBITED",
+    "profile_assignment_mismatch_with_package_evidence": "PRECONDITION_MISMATCH_FAIL_CLOSED",
+    "profile_assignment_used_as_runtime_evidence": false,
+    "runtime_evidence_source": "input-v0.6 evidence_bundle only"
+  },
+  "governance_effect": {
+    "adjudication_protocol_changed": false,
+    "admitted_control_changed": false,
+    "component_profile_changed": false,
+    "human_action_plan_changed": false,
+    "input_v0_6_changed": false,
+    "m09_interpretation_changed": false,
+    "m12_no_rerun_interpretation_changed": false,
+    "semantic_oracle_changed": false,
+    "synthetic_predicates_changed": false
+  },
+  "issuance_timestamp_absent_reason": "The clarification is not time-bounded authority and no exact independent issuance instant is needed for its semantics; identity is established by exact bytes and repository commit.",
+  "issuance_timestamp_recorded": false,
+  "on_unknown_stage_1_interpretation": {
+    "admitted_control_field": "on_unknown",
+    "invariant": "NO_MACHINE_OUTPUT_IS_A_DISPOSITION",
+    "may_emit_machine_disposition": false,
+    "may_substitute_for_human_action_plan": false,
+    "may_trigger_APPLY_TEST_DISPOSITION": false,
+    "missing_or_conflicting_required_evidence_stage_1_verdict": "UNRESOLVED",
+    "observed_value": "ESCALATE",
+    "preserved_as_admitted_control_metadata": true,
+    "required_stage_1_record_fields": {
+      "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+      "on_unknown_applied": false,
+      "on_unknown_observed": "ESCALATE"
+    },
+    "routing_boundary": "Any disposition occurs only at the separately governed human-disposition boundary under the frozen human action plan.",
+    "stage_1_evaluator_consumes_as_verdict_rule": false,
+    "stage_1_warrant_builder_consumes_as_warrant_rule": false
+  },
+  "out_of_domain_observation_rule": {
+    "allowed_observation_value_domain": [
+      true,
+      false
+    ],
+    "coercion_to_boolean": "PROHIBITED",
+    "non_boolean_observation": "PRECONDITION_MISMATCH_FAIL_CLOSED"
+  },
+  "owner": "Arkadiy Miteiko",
+  "result_bearing": false
+}

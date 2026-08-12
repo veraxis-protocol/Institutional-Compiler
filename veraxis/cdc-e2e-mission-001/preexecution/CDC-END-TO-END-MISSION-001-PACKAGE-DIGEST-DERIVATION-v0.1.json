@@ -1,0 +1,49 @@
+{
+  "applies_to": {
+    "declared_member_count": 14,
+    "expected_identity_serialization_bytes": 3921,
+    "expected_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+    "input_package": "CDC-END-TO-END-MISSION-001-INPUT-v0.6",
+    "manifest_sha256": "8aad5e78635b691fa2fad0336e07d9b0738b61db7b12ded2ed22149a258bdb77"
+  },
+  "artifact_class": "PUBLISHED_PACKAGE_IDENTITY_DERIVATION_RULE",
+  "artifact_id": "CDC-END-TO-END-MISSION-001-PACKAGE-DIGEST-DERIVATION-v0.1",
+  "campaign": "CDC-END-TO-END-MISSION-001",
+  "claim_ceiling": "Package identity derivation only; does not establish semantic correctness, legal validity, authority, or execution readiness.",
+  "normative_derivation": {
+    "step_1": "Read PACKAGE-MANIFEST.json and iterate manifest.members in the exact listed order.",
+    "step_2": "For each member construct exactly one identity object containing only path, bytes, sha256, and sha512, using the literal manifest values without path normalization or digest prefixes.",
+    "step_3": "Append each identity object to an array, preserving manifest.members order.",
+    "step_4": "Serialize that array as UTF-8 JSON with lexicographically sorted object keys, ensure_ascii=false, no indentation, separators exactly comma+space and colon+space, and no trailing newline.",
+    "step_5": "Compute SHA-256 over the exact serialized bytes; lowercase hexadecimal output is the package digest."
+  },
+  "reference_implementation_equivalence": {
+    "expression": "identity_bytes = json.dumps(identities, sort_keys=True, ensure_ascii=False).encode(); package_digest = hashlib.sha256(identity_bytes).hexdigest()",
+    "language": "Python",
+    "note": "This published rule makes the aggregate digest independently reproducible without reading implementation source.",
+    "source_symbol": "src/oic/cdc_e2e_mission.py::verify_frozen_mission_input"
+  },
+  "result_bearing": false,
+  "serialization_profile": {
+    "array_member_order": "MANIFEST_MEMBERS_ORDER",
+    "encoding": "UTF-8",
+    "ensure_ascii": false,
+    "identity_object_key_order_after_sort": [
+      "bytes",
+      "path",
+      "sha256",
+      "sha512"
+    ],
+    "indent": null,
+    "item_separator": ", ",
+    "json_object_key_order": "LEXICOGRAPHIC",
+    "key_separator": ": ",
+    "manifest_self_included": false,
+    "trailing_newline": false
+  },
+  "v0_6_test_vector": {
+    "computed_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+    "identity_serialization_bytes": 3921,
+    "matches_declared_package_sha256": true
+  }
+}
