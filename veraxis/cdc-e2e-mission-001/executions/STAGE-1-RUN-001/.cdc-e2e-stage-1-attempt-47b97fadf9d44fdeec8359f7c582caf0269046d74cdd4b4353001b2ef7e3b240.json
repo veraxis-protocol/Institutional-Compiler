@@ -1,0 +1,7 @@
+{
+  "attempt_state": "CONSUMED_AFTER_GOVERNED_EVALUATOR_INVOCATION",
+  "implementation_commit": "2e15267194d320b54015f0c212a8041cedc22050",
+  "implementation_tree": "7e8cb3abfdb58c4334a8c0dad1a0a74dad4b0c5c",
+  "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+  "owner_execution_authorization_sha256": "47b97fadf9d44fdeec8359f7c582caf0269046d74cdd4b4353001b2ef7e3b240"
+}

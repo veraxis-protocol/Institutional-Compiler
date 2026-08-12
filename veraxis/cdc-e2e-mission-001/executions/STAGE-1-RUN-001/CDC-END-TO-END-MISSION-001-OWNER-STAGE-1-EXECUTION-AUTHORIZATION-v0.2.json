@@ -1,0 +1,64 @@
+{
+  "artifact_id": "CDC-END-TO-END-MISSION-001-OWNER-STAGE-1-EXECUTION-AUTHORIZATION-v0.2",
+  "authorization_id": "CDC-E2E-MISSION-001-STAGE1-AUTH-002",
+  "authorization_scope": "ONE_RESULT_BEARING_STAGE_1_EXECUTION",
+  "authorized_stage": "STAGE_1_ONLY",
+  "automatic_retry_authorized": false,
+  "bindings": {
+    "action_plan_sha256": "229a0c15d2bd2ee1db807904ff4d640f8fe39931372a002fbc3abf9e3244731e",
+    "adjudication_protocol_sha256": "0e2a9f7202b2136b1edd76148da4f1c957ff86301c42ddf6f0dc1055ce20426b",
+    "environment_manifest_sha256": "7ace2de68d54c9ca2f3e1ee827e26fe11458c89854a0ed4d3552fce292876fe1",
+    "implementation_commit": "2e15267194d320b54015f0c212a8041cedc22050",
+    "implementation_tree": "7e8cb3abfdb58c4334a8c0dad1a0a74dad4b0c5c",
+    "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+    "oracle_sha256": "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9",
+    "owner_preexecution_interpretation_sha256": "8242ccf9612531dc7b3b1d648625a934c4f616d8b8565c61d958a6825d7f2f84",
+    "owner_semantic_preimplementation_freeze_sha256": "fa8f18cb1d890b41fd078b92238200e58cb0e7f1ff65628f2390df520e20ab2a",
+    "owner_stage_1_seam_clarification_sha256": "a4a87ec5698416eaa9af970392070a25181df263537524e8b0fc8a91d86fec60",
+    "stage_1_component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57"
+  },
+  "canonical_authorization_path": "/private/tmp/cdc-e2e-stage1-run/CDC-END-TO-END-MISSION-001-OWNER-STAGE-1-EXECUTION-AUTHORIZATION-v0.2.json",
+  "claim_ceiling": {
+    "authorizes_only": "ONE_RESULT_BEARING_STAGE_1_EXECUTION_OF_THE_FROZEN_SYNTHETIC_MISSION",
+    "does_not_establish": [
+      "CDC_ACCEPTANCE",
+      "MOROCCAN_LEGAL_VALIDITY",
+      "INSTITUTIONAL_AUTHORITY",
+      "PRODUCTION_CONFORMANCE",
+      "PRODUCTION_READINESS",
+      "ZTL_LOGICAL_WARRANT",
+      "STAGE_2_AUTHORITY"
+    ]
+  },
+  "execution_environment": {
+    "environment_manifest_bytes": 3191,
+    "environment_manifest_path": "/private/tmp/cdc-e2e-stage1-run/CDC-END-TO-END-MISSION-001-STAGE-1-EXECUTION-ENVIRONMENT-v0.1.json",
+    "platform": "macOS-13.7.8-x86_64-i386-64bit",
+    "pyproject_sha256": "be858356b8b2d519b538c79e624e0e600dbb0899802ecc636341f85b134654a2",
+    "python_version": "3.12.2",
+    "repository_root_canonical": "/private/tmp/claude-501/cleanroom",
+    "requirements_dev_sha256": "cf211a43c0f96dfb45f00376bfa940dae9beefd8f1425d96ed6c9f8fa2cc1172"
+  },
+  "execution_rules": {
+    "automatic_retry_or_rerun": "PROHIBITED",
+    "claimed_not_consumed_blocks_automatic_retry": true,
+    "consume_on_first_governed_evaluator_invocation": true,
+    "consumed_blocks_reuse": true,
+    "precondition_failure_consumes_authorization": false,
+    "raw_stage_1_result_must_be_frozen_before_semantic_adjudication": true,
+    "stage_2_requires_separate_owner_authorization": true
+  },
+  "issued_at_utc": "2026-08-12T15:55:55Z",
+  "mission_id": "CDC-TEST-MISSION-001",
+  "owner_authorized": true,
+  "preexecution_state": {
+    "attempt_claim_exists": false,
+    "candidate_count": 0,
+    "mission_executed": false,
+    "prior_stage_1_authorization_reusable": false
+  },
+  "record_class": "OWNER_STAGE_1_EXECUTION_AUTHORIZATION",
+  "result_bearing": true,
+  "single_use": true,
+  "stage_2_authorized": false
+}

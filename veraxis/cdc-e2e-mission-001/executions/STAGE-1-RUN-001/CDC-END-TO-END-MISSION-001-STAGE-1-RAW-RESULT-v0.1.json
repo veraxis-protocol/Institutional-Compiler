@@ -1,0 +1,1247 @@
+{
+  "accounting": {
+    "blocked": 0,
+    "completed": 9,
+    "non_evaluable": 0,
+    "refused": 0,
+    "unresolved": 0
+  },
+  "attempt_record": {
+    "attempt_record_bytes": 416,
+    "attempt_record_path": "/private/tmp/cdc-e2e-stage1-run/.cdc-e2e-stage-1-attempt-47b97fadf9d44fdeec8359f7c582caf0269046d74cdd4b4353001b2ef7e3b240.json",
+    "attempt_record_sha256": "b9977ea18e0a44b0213607aa9b8e512cac3aeebd4e1871aa6b80d9a2fca6478f",
+    "attempt_state": "CONSUMED_AFTER_GOVERNED_EVALUATOR_INVOCATION",
+    "implementation_commit": "2e15267194d320b54015f0c212a8041cedc22050",
+    "implementation_tree": "7e8cb3abfdb58c4334a8c0dad1a0a74dad4b0c5c",
+    "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+    "owner_execution_authorization_sha256": "47b97fadf9d44fdeec8359f7c582caf0269046d74cdd4b4353001b2ef7e3b240"
+  },
+  "authorization": "OWNER_CLEARED_STAGE_1",
+  "chains": [
+    {
+      "artifact": {
+        "candidate": {
+          "admission_record_ref": "ADM-P-001-C-TENDER-01",
+          "candidate_id": "CAND-P-001-C-TENDER-01",
+          "chain_id": "P001xC-TENDER-01",
+          "control_id": "C-TENDER-01",
+          "evaluation": {
+            "admission_record_ref": "ADM-P-001-C-TENDER-01",
+            "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+            "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+            "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+            "control_id": "C-TENDER-01",
+            "evaluation_digest": "5953cc33c259f8384603cd7e1728c5cacd7dfa461ab3c8a3930f887b5e15e445",
+            "evaluation_id": "EVAL-P-001-C-TENDER-01",
+            "evidence_bundle_digest": "f88bdbccb09c3d6dadd67dbb167b5035b3788aa8d6001291b4a54dfd4439a521",
+            "evidence_bundle_ref": "EVB-P-001-C-TENDER-01",
+            "machine_disposition": null,
+            "mission_id": "CDC-TEST-MISSION-001",
+            "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+            "observed_required_facts": {
+              "competition_notice_published": [
+                true
+              ],
+              "minimum_competition_period_met": [
+                true
+              ]
+            },
+            "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+            "on_unknown_applied": false,
+            "on_unknown_observed": "ESCALATE",
+            "procedure_id": "P-001",
+            "reason_code": "ALL_REQUIRED_CONDITIONS_SATISFIED",
+            "reason_detail_facts": [],
+            "required_facts": [
+              "competition_notice_published",
+              "minimum_competition_period_met"
+            ],
+            "verdict": "SATISFIED"
+          },
+          "evidence_bundle_ref": "EVB-P-001-C-TENDER-01",
+          "input_digest": "d36ec3a84f89242aaf086cb62578f17826ad760a2bfd8ee4f719a43530a981cd",
+          "institutional_transition": "NONE",
+          "machine_disposition": null,
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "status": "CANDIDATE_NOT_OFFICIAL",
+          "warrant": {
+            "control_id": "C-TENDER-01",
+            "evaluation_digest": "5953cc33c259f8384603cd7e1728c5cacd7dfa461ab3c8a3930f887b5e15e445",
+            "evaluation_id": "EVAL-P-001-C-TENDER-01",
+            "evaluation_verdict": "SATISFIED",
+            "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+            "limitations": [
+              "NO_ZTL_DERIVATION"
+            ],
+            "logical_warrant_status": "NOT_ESTABLISHED",
+            "mission_id": "CDC-TEST-MISSION-001",
+            "procedure_id": "P-001",
+            "warrant_class": "FALLBACK_WARRANT",
+            "warrant_id": "FBW-P-001-C-TENDER-01",
+            "ztl_kernel_invoked": false
+          },
+          "warrant_class": "FALLBACK_WARRANT"
+        },
+        "candidate_digest": "207c317cb47aada8d7782b2df5691bf4367b9a3b9fd1720f0732f37279050c12",
+        "candidate_id": "CAND-P-001-C-TENDER-01",
+        "chain_id": "P001xC-TENDER-01",
+        "control_id": "C-TENDER-01",
+        "ebawu_id": "EBAWU-P-001-C-TENDER-01",
+        "evaluation": {
+          "admission_record_ref": "ADM-P-001-C-TENDER-01",
+          "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+          "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+          "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+          "control_id": "C-TENDER-01",
+          "evaluation_digest": "5953cc33c259f8384603cd7e1728c5cacd7dfa461ab3c8a3930f887b5e15e445",
+          "evaluation_id": "EVAL-P-001-C-TENDER-01",
+          "evidence_bundle_digest": "f88bdbccb09c3d6dadd67dbb167b5035b3788aa8d6001291b4a54dfd4439a521",
+          "evidence_bundle_ref": "EVB-P-001-C-TENDER-01",
+          "machine_disposition": null,
+          "mission_id": "CDC-TEST-MISSION-001",
+          "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+          "observed_required_facts": {
+            "competition_notice_published": [
+              true
+            ],
+            "minimum_competition_period_met": [
+              true
+            ]
+          },
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "on_unknown_applied": false,
+          "on_unknown_observed": "ESCALATE",
+          "procedure_id": "P-001",
+          "reason_code": "ALL_REQUIRED_CONDITIONS_SATISFIED",
+          "reason_detail_facts": [],
+          "required_facts": [
+            "competition_notice_published",
+            "minimum_competition_period_met"
+          ],
+          "verdict": "SATISFIED"
+        },
+        "evaluation_digest": "5953cc33c259f8384603cd7e1728c5cacd7dfa461ab3c8a3930f887b5e15e445",
+        "input_digest": "d36ec3a84f89242aaf086cb62578f17826ad760a2bfd8ee4f719a43530a981cd",
+        "outcome_state": "completed",
+        "procedure_id": "P-001",
+        "warrant": {
+          "control_id": "C-TENDER-01",
+          "evaluation_digest": "5953cc33c259f8384603cd7e1728c5cacd7dfa461ab3c8a3930f887b5e15e445",
+          "evaluation_id": "EVAL-P-001-C-TENDER-01",
+          "evaluation_verdict": "SATISFIED",
+          "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+          "limitations": [
+            "NO_ZTL_DERIVATION"
+          ],
+          "logical_warrant_status": "NOT_ESTABLISHED",
+          "mission_id": "CDC-TEST-MISSION-001",
+          "procedure_id": "P-001",
+          "warrant_class": "FALLBACK_WARRANT",
+          "warrant_id": "FBW-P-001-C-TENDER-01",
+          "ztl_kernel_invoked": false
+        },
+        "warrant_class": "FALLBACK_WARRANT",
+        "warrant_digest": "20880d3aba99378b8c91a95ea2a7cedd8e9c5046bc495b3aa5d1f49dc94a635c",
+        "warrant_ref": "FBW-P-001-C-TENDER-01"
+      },
+      "candidate_digest": "207c317cb47aada8d7782b2df5691bf4367b9a3b9fd1720f0732f37279050c12",
+      "chain_id": "P001xC-TENDER-01",
+      "detail": "candidate formed; no transition and no draft eligibility",
+      "input_digest": "d36ec3a84f89242aaf086cb62578f17826ad760a2bfd8ee4f719a43530a981cd",
+      "outcome_state": "completed"
+    },
+    {
+      "artifact": {
+        "candidate": {
+          "admission_record_ref": "ADM-P-001-C-EVAL-01",
+          "candidate_id": "CAND-P-001-C-EVAL-01",
+          "chain_id": "P001xC-EVAL-01",
+          "control_id": "C-EVAL-01",
+          "evaluation": {
+            "admission_record_ref": "ADM-P-001-C-EVAL-01",
+            "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+            "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+            "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+            "control_id": "C-EVAL-01",
+            "evaluation_digest": "dbc9d7da87b93910e9f94e661665ddd082849ba9e476cb96024e8a743dbf5163",
+            "evaluation_id": "EVAL-P-001-C-EVAL-01",
+            "evidence_bundle_digest": "180da980ec85adda4c31457f85004a95e632bee7ca869a12045d698368979e42",
+            "evidence_bundle_ref": "EVB-P-001-C-EVAL-01",
+            "machine_disposition": null,
+            "mission_id": "CDC-TEST-MISSION-001",
+            "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+            "observed_required_facts": {
+              "declared_criteria_only": [
+                true
+              ],
+              "scoring_record_complete": [
+                true
+              ]
+            },
+            "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+            "on_unknown_applied": false,
+            "on_unknown_observed": "ESCALATE",
+            "procedure_id": "P-001",
+            "reason_code": "ALL_REQUIRED_CONDITIONS_SATISFIED",
+            "reason_detail_facts": [],
+            "required_facts": [
+              "scoring_record_complete",
+              "declared_criteria_only"
+            ],
+            "verdict": "SATISFIED"
+          },
+          "evidence_bundle_ref": "EVB-P-001-C-EVAL-01",
+          "input_digest": "362b7216c75e0348952996135762b0fc67262f1cfa1ecb4c6a8a7a3065d4ce7c",
+          "institutional_transition": "NONE",
+          "machine_disposition": null,
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "status": "CANDIDATE_NOT_OFFICIAL",
+          "warrant": {
+            "control_id": "C-EVAL-01",
+            "evaluation_digest": "dbc9d7da87b93910e9f94e661665ddd082849ba9e476cb96024e8a743dbf5163",
+            "evaluation_id": "EVAL-P-001-C-EVAL-01",
+            "evaluation_verdict": "SATISFIED",
+            "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+            "limitations": [
+              "NO_ZTL_DERIVATION"
+            ],
+            "logical_warrant_status": "NOT_ESTABLISHED",
+            "mission_id": "CDC-TEST-MISSION-001",
+            "procedure_id": "P-001",
+            "warrant_class": "FALLBACK_WARRANT",
+            "warrant_id": "FBW-P-001-C-EVAL-01",
+            "ztl_kernel_invoked": false
+          },
+          "warrant_class": "FALLBACK_WARRANT"
+        },
+        "candidate_digest": "6f56bfe50a2ab1ca0a0ff240700a63fa6821536bc9517dd45631d3616c37aad5",
+        "candidate_id": "CAND-P-001-C-EVAL-01",
+        "chain_id": "P001xC-EVAL-01",
+        "control_id": "C-EVAL-01",
+        "ebawu_id": "EBAWU-P-001-C-EVAL-01",
+        "evaluation": {
+          "admission_record_ref": "ADM-P-001-C-EVAL-01",
+          "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+          "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+          "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+          "control_id": "C-EVAL-01",
+          "evaluation_digest": "dbc9d7da87b93910e9f94e661665ddd082849ba9e476cb96024e8a743dbf5163",
+          "evaluation_id": "EVAL-P-001-C-EVAL-01",
+          "evidence_bundle_digest": "180da980ec85adda4c31457f85004a95e632bee7ca869a12045d698368979e42",
+          "evidence_bundle_ref": "EVB-P-001-C-EVAL-01",
+          "machine_disposition": null,
+          "mission_id": "CDC-TEST-MISSION-001",
+          "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+          "observed_required_facts": {
+            "declared_criteria_only": [
+              true
+            ],
+            "scoring_record_complete": [
+              true
+            ]
+          },
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "on_unknown_applied": false,
+          "on_unknown_observed": "ESCALATE",
+          "procedure_id": "P-001",
+          "reason_code": "ALL_REQUIRED_CONDITIONS_SATISFIED",
+          "reason_detail_facts": [],
+          "required_facts": [
+            "scoring_record_complete",
+            "declared_criteria_only"
+          ],
+          "verdict": "SATISFIED"
+        },
+        "evaluation_digest": "dbc9d7da87b93910e9f94e661665ddd082849ba9e476cb96024e8a743dbf5163",
+        "input_digest": "362b7216c75e0348952996135762b0fc67262f1cfa1ecb4c6a8a7a3065d4ce7c",
+        "outcome_state": "completed",
+        "procedure_id": "P-001",
+        "warrant": {
+          "control_id": "C-EVAL-01",
+          "evaluation_digest": "dbc9d7da87b93910e9f94e661665ddd082849ba9e476cb96024e8a743dbf5163",
+          "evaluation_id": "EVAL-P-001-C-EVAL-01",
+          "evaluation_verdict": "SATISFIED",
+          "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+          "limitations": [
+            "NO_ZTL_DERIVATION"
+          ],
+          "logical_warrant_status": "NOT_ESTABLISHED",
+          "mission_id": "CDC-TEST-MISSION-001",
+          "procedure_id": "P-001",
+          "warrant_class": "FALLBACK_WARRANT",
+          "warrant_id": "FBW-P-001-C-EVAL-01",
+          "ztl_kernel_invoked": false
+        },
+        "warrant_class": "FALLBACK_WARRANT",
+        "warrant_digest": "54198b26cff38a72d5cfa6783349cb274ee1b1042a801db0cf3468393ad11f9c",
+        "warrant_ref": "FBW-P-001-C-EVAL-01"
+      },
+      "candidate_digest": "6f56bfe50a2ab1ca0a0ff240700a63fa6821536bc9517dd45631d3616c37aad5",
+      "chain_id": "P001xC-EVAL-01",
+      "detail": "candidate formed; no transition and no draft eligibility",
+      "input_digest": "362b7216c75e0348952996135762b0fc67262f1cfa1ecb4c6a8a7a3065d4ce7c",
+      "outcome_state": "completed"
+    },
+    {
+      "artifact": {
+        "candidate": {
+          "admission_record_ref": "ADM-P-001-C-AWARD-01",
+          "candidate_id": "CAND-P-001-C-AWARD-01",
+          "chain_id": "P001xC-AWARD-01",
+          "control_id": "C-AWARD-01",
+          "evaluation": {
+            "admission_record_ref": "ADM-P-001-C-AWARD-01",
+            "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+            "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+            "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+            "control_id": "C-AWARD-01",
+            "evaluation_digest": "8c47f603b30afd04d76b53ea5fb1e158446d948495f08915ff64c736b52f85fc",
+            "evaluation_id": "EVAL-P-001-C-AWARD-01",
+            "evidence_bundle_digest": "121077e67d3ef59759fdf4fe091a5668f30bf1077a3fb46f9455abdde8fcd5fc",
+            "evidence_bundle_ref": "EVB-P-001-C-AWARD-01",
+            "machine_disposition": null,
+            "mission_id": "CDC-TEST-MISSION-001",
+            "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+            "observed_required_facts": {
+              "award_traceable_to_scoring": [
+                true
+              ],
+              "required_approvals_present": [
+                true
+              ]
+            },
+            "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+            "on_unknown_applied": false,
+            "on_unknown_observed": "ESCALATE",
+            "procedure_id": "P-001",
+            "reason_code": "ALL_REQUIRED_CONDITIONS_SATISFIED",
+            "reason_detail_facts": [],
+            "required_facts": [
+              "award_traceable_to_scoring",
+              "required_approvals_present"
+            ],
+            "verdict": "SATISFIED"
+          },
+          "evidence_bundle_ref": "EVB-P-001-C-AWARD-01",
+          "input_digest": "e2ca9d45c0f6fa74eb735e91a704fec31b31c9c74e917db6e668e0a4afe14d02",
+          "institutional_transition": "NONE",
+          "machine_disposition": null,
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "status": "CANDIDATE_NOT_OFFICIAL",
+          "warrant": {
+            "control_id": "C-AWARD-01",
+            "evaluation_digest": "8c47f603b30afd04d76b53ea5fb1e158446d948495f08915ff64c736b52f85fc",
+            "evaluation_id": "EVAL-P-001-C-AWARD-01",
+            "evaluation_verdict": "SATISFIED",
+            "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+            "limitations": [
+              "NO_ZTL_DERIVATION"
+            ],
+            "logical_warrant_status": "NOT_ESTABLISHED",
+            "mission_id": "CDC-TEST-MISSION-001",
+            "procedure_id": "P-001",
+            "warrant_class": "FALLBACK_WARRANT",
+            "warrant_id": "FBW-P-001-C-AWARD-01",
+            "ztl_kernel_invoked": false
+          },
+          "warrant_class": "FALLBACK_WARRANT"
+        },
+        "candidate_digest": "95bc94733611ef0c19490efbf913374d077a21447d1fc9bb86c03478a44f8159",
+        "candidate_id": "CAND-P-001-C-AWARD-01",
+        "chain_id": "P001xC-AWARD-01",
+        "control_id": "C-AWARD-01",
+        "ebawu_id": "EBAWU-P-001-C-AWARD-01",
+        "evaluation": {
+          "admission_record_ref": "ADM-P-001-C-AWARD-01",
+          "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+          "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+          "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+          "control_id": "C-AWARD-01",
+          "evaluation_digest": "8c47f603b30afd04d76b53ea5fb1e158446d948495f08915ff64c736b52f85fc",
+          "evaluation_id": "EVAL-P-001-C-AWARD-01",
+          "evidence_bundle_digest": "121077e67d3ef59759fdf4fe091a5668f30bf1077a3fb46f9455abdde8fcd5fc",
+          "evidence_bundle_ref": "EVB-P-001-C-AWARD-01",
+          "machine_disposition": null,
+          "mission_id": "CDC-TEST-MISSION-001",
+          "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+          "observed_required_facts": {
+            "award_traceable_to_scoring": [
+              true
+            ],
+            "required_approvals_present": [
+              true
+            ]
+          },
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "on_unknown_applied": false,
+          "on_unknown_observed": "ESCALATE",
+          "procedure_id": "P-001",
+          "reason_code": "ALL_REQUIRED_CONDITIONS_SATISFIED",
+          "reason_detail_facts": [],
+          "required_facts": [
+            "award_traceable_to_scoring",
+            "required_approvals_present"
+          ],
+          "verdict": "SATISFIED"
+        },
+        "evaluation_digest": "8c47f603b30afd04d76b53ea5fb1e158446d948495f08915ff64c736b52f85fc",
+        "input_digest": "e2ca9d45c0f6fa74eb735e91a704fec31b31c9c74e917db6e668e0a4afe14d02",
+        "outcome_state": "completed",
+        "procedure_id": "P-001",
+        "warrant": {
+          "control_id": "C-AWARD-01",
+          "evaluation_digest": "8c47f603b30afd04d76b53ea5fb1e158446d948495f08915ff64c736b52f85fc",
+          "evaluation_id": "EVAL-P-001-C-AWARD-01",
+          "evaluation_verdict": "SATISFIED",
+          "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+          "limitations": [
+            "NO_ZTL_DERIVATION"
+          ],
+          "logical_warrant_status": "NOT_ESTABLISHED",
+          "mission_id": "CDC-TEST-MISSION-001",
+          "procedure_id": "P-001",
+          "warrant_class": "FALLBACK_WARRANT",
+          "warrant_id": "FBW-P-001-C-AWARD-01",
+          "ztl_kernel_invoked": false
+        },
+        "warrant_class": "FALLBACK_WARRANT",
+        "warrant_digest": "a3a9313e6ffa4ffe858d54a56aadfebd1237dd21e0d175ebb0649c9f7ff46ef5",
+        "warrant_ref": "FBW-P-001-C-AWARD-01"
+      },
+      "candidate_digest": "95bc94733611ef0c19490efbf913374d077a21447d1fc9bb86c03478a44f8159",
+      "chain_id": "P001xC-AWARD-01",
+      "detail": "candidate formed; no transition and no draft eligibility",
+      "input_digest": "e2ca9d45c0f6fa74eb735e91a704fec31b31c9c74e917db6e668e0a4afe14d02",
+      "outcome_state": "completed"
+    },
+    {
+      "artifact": {
+        "candidate": {
+          "admission_record_ref": "ADM-P-002-C-TENDER-01",
+          "candidate_id": "CAND-P-002-C-TENDER-01",
+          "chain_id": "P002xC-TENDER-01",
+          "control_id": "C-TENDER-01",
+          "evaluation": {
+            "admission_record_ref": "ADM-P-002-C-TENDER-01",
+            "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+            "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+            "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+            "control_id": "C-TENDER-01",
+            "evaluation_digest": "3d8c7acb9322fbdf589d0199015a84d0c2498b0fcacbe7f7b091f063cdeb724e",
+            "evaluation_id": "EVAL-P-002-C-TENDER-01",
+            "evidence_bundle_digest": "ffc0015d6990e1f7dcbbafbf692ec7f24122afae13fdf30a384ee9e4696f422b",
+            "evidence_bundle_ref": "EVB-P-002-C-TENDER-01",
+            "machine_disposition": null,
+            "mission_id": "CDC-TEST-MISSION-001",
+            "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+            "observed_required_facts": {
+              "competition_notice_published": [
+                true
+              ],
+              "minimum_competition_period_met": [
+                false
+              ]
+            },
+            "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+            "on_unknown_applied": false,
+            "on_unknown_observed": "ESCALATE",
+            "procedure_id": "P-002",
+            "reason_code": "REQUIRED_CONDITION_NOT_SATISFIED",
+            "reason_detail_facts": [
+              "minimum_competition_period_met"
+            ],
+            "required_facts": [
+              "competition_notice_published",
+              "minimum_competition_period_met"
+            ],
+            "verdict": "BREACH"
+          },
+          "evidence_bundle_ref": "EVB-P-002-C-TENDER-01",
+          "input_digest": "188ef61d75b39b241163f53598019901bb87d251f8c08a3c40b3444305a8fe53",
+          "institutional_transition": "NONE",
+          "machine_disposition": null,
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "status": "CANDIDATE_NOT_OFFICIAL",
+          "warrant": {
+            "control_id": "C-TENDER-01",
+            "evaluation_digest": "3d8c7acb9322fbdf589d0199015a84d0c2498b0fcacbe7f7b091f063cdeb724e",
+            "evaluation_id": "EVAL-P-002-C-TENDER-01",
+            "evaluation_verdict": "BREACH",
+            "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+            "limitations": [
+              "NO_ZTL_DERIVATION"
+            ],
+            "logical_warrant_status": "NOT_ESTABLISHED",
+            "mission_id": "CDC-TEST-MISSION-001",
+            "procedure_id": "P-002",
+            "warrant_class": "FALLBACK_WARRANT",
+            "warrant_id": "FBW-P-002-C-TENDER-01",
+            "ztl_kernel_invoked": false
+          },
+          "warrant_class": "FALLBACK_WARRANT"
+        },
+        "candidate_digest": "344f328432065a2ab70ada5868f6811efdd7336b77e769c361bc646b9dd9709f",
+        "candidate_id": "CAND-P-002-C-TENDER-01",
+        "chain_id": "P002xC-TENDER-01",
+        "control_id": "C-TENDER-01",
+        "ebawu_id": "EBAWU-P-002-C-TENDER-01",
+        "evaluation": {
+          "admission_record_ref": "ADM-P-002-C-TENDER-01",
+          "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+          "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+          "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+          "control_id": "C-TENDER-01",
+          "evaluation_digest": "3d8c7acb9322fbdf589d0199015a84d0c2498b0fcacbe7f7b091f063cdeb724e",
+          "evaluation_id": "EVAL-P-002-C-TENDER-01",
+          "evidence_bundle_digest": "ffc0015d6990e1f7dcbbafbf692ec7f24122afae13fdf30a384ee9e4696f422b",
+          "evidence_bundle_ref": "EVB-P-002-C-TENDER-01",
+          "machine_disposition": null,
+          "mission_id": "CDC-TEST-MISSION-001",
+          "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+          "observed_required_facts": {
+            "competition_notice_published": [
+              true
+            ],
+            "minimum_competition_period_met": [
+              false
+            ]
+          },
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "on_unknown_applied": false,
+          "on_unknown_observed": "ESCALATE",
+          "procedure_id": "P-002",
+          "reason_code": "REQUIRED_CONDITION_NOT_SATISFIED",
+          "reason_detail_facts": [
+            "minimum_competition_period_met"
+          ],
+          "required_facts": [
+            "competition_notice_published",
+            "minimum_competition_period_met"
+          ],
+          "verdict": "BREACH"
+        },
+        "evaluation_digest": "3d8c7acb9322fbdf589d0199015a84d0c2498b0fcacbe7f7b091f063cdeb724e",
+        "input_digest": "188ef61d75b39b241163f53598019901bb87d251f8c08a3c40b3444305a8fe53",
+        "outcome_state": "completed",
+        "procedure_id": "P-002",
+        "warrant": {
+          "control_id": "C-TENDER-01",
+          "evaluation_digest": "3d8c7acb9322fbdf589d0199015a84d0c2498b0fcacbe7f7b091f063cdeb724e",
+          "evaluation_id": "EVAL-P-002-C-TENDER-01",
+          "evaluation_verdict": "BREACH",
+          "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+          "limitations": [
+            "NO_ZTL_DERIVATION"
+          ],
+          "logical_warrant_status": "NOT_ESTABLISHED",
+          "mission_id": "CDC-TEST-MISSION-001",
+          "procedure_id": "P-002",
+          "warrant_class": "FALLBACK_WARRANT",
+          "warrant_id": "FBW-P-002-C-TENDER-01",
+          "ztl_kernel_invoked": false
+        },
+        "warrant_class": "FALLBACK_WARRANT",
+        "warrant_digest": "7d6c49f754b6fb5c6ce070c50d61bbd6733f90d6f520f5d77be5370e1513168e",
+        "warrant_ref": "FBW-P-002-C-TENDER-01"
+      },
+      "candidate_digest": "344f328432065a2ab70ada5868f6811efdd7336b77e769c361bc646b9dd9709f",
+      "chain_id": "P002xC-TENDER-01",
+      "detail": "candidate formed; no transition and no draft eligibility",
+      "input_digest": "188ef61d75b39b241163f53598019901bb87d251f8c08a3c40b3444305a8fe53",
+      "outcome_state": "completed"
+    },
+    {
+      "artifact": {
+        "candidate": {
+          "admission_record_ref": "ADM-P-002-C-EVAL-01",
+          "candidate_id": "CAND-P-002-C-EVAL-01",
+          "chain_id": "P002xC-EVAL-01",
+          "control_id": "C-EVAL-01",
+          "evaluation": {
+            "admission_record_ref": "ADM-P-002-C-EVAL-01",
+            "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+            "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+            "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+            "control_id": "C-EVAL-01",
+            "evaluation_digest": "0af262895e623d709875c98c343f594074046f85242eb72ca40e33587938787c",
+            "evaluation_id": "EVAL-P-002-C-EVAL-01",
+            "evidence_bundle_digest": "7e4d3b446b1567926433853c64b2c510438598152d34e851e9a6dc88c65e2c02",
+            "evidence_bundle_ref": "EVB-P-002-C-EVAL-01",
+            "machine_disposition": null,
+            "mission_id": "CDC-TEST-MISSION-001",
+            "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+            "observed_required_facts": {
+              "declared_criteria_only": [
+                false
+              ],
+              "scoring_record_complete": [
+                true
+              ]
+            },
+            "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+            "on_unknown_applied": false,
+            "on_unknown_observed": "ESCALATE",
+            "procedure_id": "P-002",
+            "reason_code": "REQUIRED_CONDITION_NOT_SATISFIED",
+            "reason_detail_facts": [
+              "declared_criteria_only"
+            ],
+            "required_facts": [
+              "scoring_record_complete",
+              "declared_criteria_only"
+            ],
+            "verdict": "BREACH"
+          },
+          "evidence_bundle_ref": "EVB-P-002-C-EVAL-01",
+          "input_digest": "229001f306aaa723fbd94d27f0e7c5b709dd7978f9c6f600a62b764164feba68",
+          "institutional_transition": "NONE",
+          "machine_disposition": null,
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "status": "CANDIDATE_NOT_OFFICIAL",
+          "warrant": {
+            "control_id": "C-EVAL-01",
+            "evaluation_digest": "0af262895e623d709875c98c343f594074046f85242eb72ca40e33587938787c",
+            "evaluation_id": "EVAL-P-002-C-EVAL-01",
+            "evaluation_verdict": "BREACH",
+            "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+            "limitations": [
+              "NO_ZTL_DERIVATION"
+            ],
+            "logical_warrant_status": "NOT_ESTABLISHED",
+            "mission_id": "CDC-TEST-MISSION-001",
+            "procedure_id": "P-002",
+            "warrant_class": "FALLBACK_WARRANT",
+            "warrant_id": "FBW-P-002-C-EVAL-01",
+            "ztl_kernel_invoked": false
+          },
+          "warrant_class": "FALLBACK_WARRANT"
+        },
+        "candidate_digest": "44b8ea3e8b7f678ab4a8711547dea6252de4347b87b9129cf1ccde4832ee25e5",
+        "candidate_id": "CAND-P-002-C-EVAL-01",
+        "chain_id": "P002xC-EVAL-01",
+        "control_id": "C-EVAL-01",
+        "ebawu_id": "EBAWU-P-002-C-EVAL-01",
+        "evaluation": {
+          "admission_record_ref": "ADM-P-002-C-EVAL-01",
+          "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+          "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+          "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+          "control_id": "C-EVAL-01",
+          "evaluation_digest": "0af262895e623d709875c98c343f594074046f85242eb72ca40e33587938787c",
+          "evaluation_id": "EVAL-P-002-C-EVAL-01",
+          "evidence_bundle_digest": "7e4d3b446b1567926433853c64b2c510438598152d34e851e9a6dc88c65e2c02",
+          "evidence_bundle_ref": "EVB-P-002-C-EVAL-01",
+          "machine_disposition": null,
+          "mission_id": "CDC-TEST-MISSION-001",
+          "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+          "observed_required_facts": {
+            "declared_criteria_only": [
+              false
+            ],
+            "scoring_record_complete": [
+              true
+            ]
+          },
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "on_unknown_applied": false,
+          "on_unknown_observed": "ESCALATE",
+          "procedure_id": "P-002",
+          "reason_code": "REQUIRED_CONDITION_NOT_SATISFIED",
+          "reason_detail_facts": [
+            "declared_criteria_only"
+          ],
+          "required_facts": [
+            "scoring_record_complete",
+            "declared_criteria_only"
+          ],
+          "verdict": "BREACH"
+        },
+        "evaluation_digest": "0af262895e623d709875c98c343f594074046f85242eb72ca40e33587938787c",
+        "input_digest": "229001f306aaa723fbd94d27f0e7c5b709dd7978f9c6f600a62b764164feba68",
+        "outcome_state": "completed",
+        "procedure_id": "P-002",
+        "warrant": {
+          "control_id": "C-EVAL-01",
+          "evaluation_digest": "0af262895e623d709875c98c343f594074046f85242eb72ca40e33587938787c",
+          "evaluation_id": "EVAL-P-002-C-EVAL-01",
+          "evaluation_verdict": "BREACH",
+          "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+          "limitations": [
+            "NO_ZTL_DERIVATION"
+          ],
+          "logical_warrant_status": "NOT_ESTABLISHED",
+          "mission_id": "CDC-TEST-MISSION-001",
+          "procedure_id": "P-002",
+          "warrant_class": "FALLBACK_WARRANT",
+          "warrant_id": "FBW-P-002-C-EVAL-01",
+          "ztl_kernel_invoked": false
+        },
+        "warrant_class": "FALLBACK_WARRANT",
+        "warrant_digest": "94a097829fa2f5ac30abb310dc84d184a47326e1096dc2c2e335a53fa042463a",
+        "warrant_ref": "FBW-P-002-C-EVAL-01"
+      },
+      "candidate_digest": "44b8ea3e8b7f678ab4a8711547dea6252de4347b87b9129cf1ccde4832ee25e5",
+      "chain_id": "P002xC-EVAL-01",
+      "detail": "candidate formed; no transition and no draft eligibility",
+      "input_digest": "229001f306aaa723fbd94d27f0e7c5b709dd7978f9c6f600a62b764164feba68",
+      "outcome_state": "completed"
+    },
+    {
+      "artifact": {
+        "candidate": {
+          "admission_record_ref": "ADM-P-002-C-AWARD-01",
+          "candidate_id": "CAND-P-002-C-AWARD-01",
+          "chain_id": "P002xC-AWARD-01",
+          "control_id": "C-AWARD-01",
+          "evaluation": {
+            "admission_record_ref": "ADM-P-002-C-AWARD-01",
+            "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+            "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+            "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+            "control_id": "C-AWARD-01",
+            "evaluation_digest": "394b78dae53050251cbdd55d196cc6d14df9a797de761cc644f374e377e0e1e7",
+            "evaluation_id": "EVAL-P-002-C-AWARD-01",
+            "evidence_bundle_digest": "03f47955916fc8c837da44e0ff20b6259d7eb0dc17850faafab3dfcabd71baf7",
+            "evidence_bundle_ref": "EVB-P-002-C-AWARD-01",
+            "machine_disposition": null,
+            "mission_id": "CDC-TEST-MISSION-001",
+            "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+            "observed_required_facts": {
+              "award_traceable_to_scoring": [
+                true
+              ],
+              "required_approvals_present": [
+                false
+              ]
+            },
+            "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+            "on_unknown_applied": false,
+            "on_unknown_observed": "ESCALATE",
+            "procedure_id": "P-002",
+            "reason_code": "REQUIRED_CONDITION_NOT_SATISFIED",
+            "reason_detail_facts": [
+              "required_approvals_present"
+            ],
+            "required_facts": [
+              "award_traceable_to_scoring",
+              "required_approvals_present"
+            ],
+            "verdict": "BREACH"
+          },
+          "evidence_bundle_ref": "EVB-P-002-C-AWARD-01",
+          "input_digest": "d2e0850ff4d9d23c5cd6784df7060de487b29324ab31bb725d7352f9c87e5c6a",
+          "institutional_transition": "NONE",
+          "machine_disposition": null,
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "status": "CANDIDATE_NOT_OFFICIAL",
+          "warrant": {
+            "control_id": "C-AWARD-01",
+            "evaluation_digest": "394b78dae53050251cbdd55d196cc6d14df9a797de761cc644f374e377e0e1e7",
+            "evaluation_id": "EVAL-P-002-C-AWARD-01",
+            "evaluation_verdict": "BREACH",
+            "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+            "limitations": [
+              "NO_ZTL_DERIVATION"
+            ],
+            "logical_warrant_status": "NOT_ESTABLISHED",
+            "mission_id": "CDC-TEST-MISSION-001",
+            "procedure_id": "P-002",
+            "warrant_class": "FALLBACK_WARRANT",
+            "warrant_id": "FBW-P-002-C-AWARD-01",
+            "ztl_kernel_invoked": false
+          },
+          "warrant_class": "FALLBACK_WARRANT"
+        },
+        "candidate_digest": "d3d750aa43d560c487f76fe19555923bb7ffa0c79f0f5e3d88fdd598025324e3",
+        "candidate_id": "CAND-P-002-C-AWARD-01",
+        "chain_id": "P002xC-AWARD-01",
+        "control_id": "C-AWARD-01",
+        "ebawu_id": "EBAWU-P-002-C-AWARD-01",
+        "evaluation": {
+          "admission_record_ref": "ADM-P-002-C-AWARD-01",
+          "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+          "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+          "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+          "control_id": "C-AWARD-01",
+          "evaluation_digest": "394b78dae53050251cbdd55d196cc6d14df9a797de761cc644f374e377e0e1e7",
+          "evaluation_id": "EVAL-P-002-C-AWARD-01",
+          "evidence_bundle_digest": "03f47955916fc8c837da44e0ff20b6259d7eb0dc17850faafab3dfcabd71baf7",
+          "evidence_bundle_ref": "EVB-P-002-C-AWARD-01",
+          "machine_disposition": null,
+          "mission_id": "CDC-TEST-MISSION-001",
+          "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+          "observed_required_facts": {
+            "award_traceable_to_scoring": [
+              true
+            ],
+            "required_approvals_present": [
+              false
+            ]
+          },
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "on_unknown_applied": false,
+          "on_unknown_observed": "ESCALATE",
+          "procedure_id": "P-002",
+          "reason_code": "REQUIRED_CONDITION_NOT_SATISFIED",
+          "reason_detail_facts": [
+            "required_approvals_present"
+          ],
+          "required_facts": [
+            "award_traceable_to_scoring",
+            "required_approvals_present"
+          ],
+          "verdict": "BREACH"
+        },
+        "evaluation_digest": "394b78dae53050251cbdd55d196cc6d14df9a797de761cc644f374e377e0e1e7",
+        "input_digest": "d2e0850ff4d9d23c5cd6784df7060de487b29324ab31bb725d7352f9c87e5c6a",
+        "outcome_state": "completed",
+        "procedure_id": "P-002",
+        "warrant": {
+          "control_id": "C-AWARD-01",
+          "evaluation_digest": "394b78dae53050251cbdd55d196cc6d14df9a797de761cc644f374e377e0e1e7",
+          "evaluation_id": "EVAL-P-002-C-AWARD-01",
+          "evaluation_verdict": "BREACH",
+          "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+          "limitations": [
+            "NO_ZTL_DERIVATION"
+          ],
+          "logical_warrant_status": "NOT_ESTABLISHED",
+          "mission_id": "CDC-TEST-MISSION-001",
+          "procedure_id": "P-002",
+          "warrant_class": "FALLBACK_WARRANT",
+          "warrant_id": "FBW-P-002-C-AWARD-01",
+          "ztl_kernel_invoked": false
+        },
+        "warrant_class": "FALLBACK_WARRANT",
+        "warrant_digest": "e7bd3daac9938524c18a84b07e764e334fc5b4c0a7b3b1de4867cf85792d14f6",
+        "warrant_ref": "FBW-P-002-C-AWARD-01"
+      },
+      "candidate_digest": "d3d750aa43d560c487f76fe19555923bb7ffa0c79f0f5e3d88fdd598025324e3",
+      "chain_id": "P002xC-AWARD-01",
+      "detail": "candidate formed; no transition and no draft eligibility",
+      "input_digest": "d2e0850ff4d9d23c5cd6784df7060de487b29324ab31bb725d7352f9c87e5c6a",
+      "outcome_state": "completed"
+    },
+    {
+      "artifact": {
+        "candidate": {
+          "admission_record_ref": "ADM-P-003-C-TENDER-01",
+          "candidate_id": "CAND-P-003-C-TENDER-01",
+          "chain_id": "P003xC-TENDER-01",
+          "control_id": "C-TENDER-01",
+          "evaluation": {
+            "admission_record_ref": "ADM-P-003-C-TENDER-01",
+            "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+            "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+            "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+            "control_id": "C-TENDER-01",
+            "evaluation_digest": "0250cc0da4a5c90c9872551203b7f0c0685b488541c91841ff86fb74eee7b6a2",
+            "evaluation_id": "EVAL-P-003-C-TENDER-01",
+            "evidence_bundle_digest": "9310872c9eeb562c45e86ba6127b33b415e669ce2a79d63ab4af7b76e1b7b54f",
+            "evidence_bundle_ref": "EVB-P-003-C-TENDER-01",
+            "machine_disposition": null,
+            "mission_id": "CDC-TEST-MISSION-001",
+            "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+            "observed_required_facts": {
+              "competition_notice_published": [],
+              "minimum_competition_period_met": [
+                true,
+                false
+              ]
+            },
+            "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+            "on_unknown_applied": false,
+            "on_unknown_observed": "ESCALATE",
+            "procedure_id": "P-003",
+            "reason_code": "MISSING_REQUIRED_EVIDENCE",
+            "reason_detail_facts": [
+              "competition_notice_published"
+            ],
+            "required_facts": [
+              "competition_notice_published",
+              "minimum_competition_period_met"
+            ],
+            "verdict": "UNRESOLVED"
+          },
+          "evidence_bundle_ref": "EVB-P-003-C-TENDER-01",
+          "input_digest": "3295a1d22dee8a2674ad6fff446e34efe4e55e581973d93244ee3d1dda87e89e",
+          "institutional_transition": "NONE",
+          "machine_disposition": null,
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "status": "CANDIDATE_NOT_OFFICIAL",
+          "warrant": {
+            "control_id": "C-TENDER-01",
+            "evaluation_digest": "0250cc0da4a5c90c9872551203b7f0c0685b488541c91841ff86fb74eee7b6a2",
+            "evaluation_id": "EVAL-P-003-C-TENDER-01",
+            "evaluation_verdict": "UNRESOLVED",
+            "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+            "limitations": [
+              "NO_ZTL_DERIVATION"
+            ],
+            "logical_warrant_status": "NOT_ESTABLISHED",
+            "mission_id": "CDC-TEST-MISSION-001",
+            "procedure_id": "P-003",
+            "warrant_class": "FALLBACK_WARRANT",
+            "warrant_id": "FBW-P-003-C-TENDER-01",
+            "ztl_kernel_invoked": false
+          },
+          "warrant_class": "FALLBACK_WARRANT"
+        },
+        "candidate_digest": "3c9a940b9eadf634a8191eb01c69cf3e0e1bd630954b3babef5ac81fdcb61a1c",
+        "candidate_id": "CAND-P-003-C-TENDER-01",
+        "chain_id": "P003xC-TENDER-01",
+        "control_id": "C-TENDER-01",
+        "ebawu_id": "EBAWU-P-003-C-TENDER-01",
+        "evaluation": {
+          "admission_record_ref": "ADM-P-003-C-TENDER-01",
+          "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+          "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+          "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+          "control_id": "C-TENDER-01",
+          "evaluation_digest": "0250cc0da4a5c90c9872551203b7f0c0685b488541c91841ff86fb74eee7b6a2",
+          "evaluation_id": "EVAL-P-003-C-TENDER-01",
+          "evidence_bundle_digest": "9310872c9eeb562c45e86ba6127b33b415e669ce2a79d63ab4af7b76e1b7b54f",
+          "evidence_bundle_ref": "EVB-P-003-C-TENDER-01",
+          "machine_disposition": null,
+          "mission_id": "CDC-TEST-MISSION-001",
+          "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+          "observed_required_facts": {
+            "competition_notice_published": [],
+            "minimum_competition_period_met": [
+              true,
+              false
+            ]
+          },
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "on_unknown_applied": false,
+          "on_unknown_observed": "ESCALATE",
+          "procedure_id": "P-003",
+          "reason_code": "MISSING_REQUIRED_EVIDENCE",
+          "reason_detail_facts": [
+            "competition_notice_published"
+          ],
+          "required_facts": [
+            "competition_notice_published",
+            "minimum_competition_period_met"
+          ],
+          "verdict": "UNRESOLVED"
+        },
+        "evaluation_digest": "0250cc0da4a5c90c9872551203b7f0c0685b488541c91841ff86fb74eee7b6a2",
+        "input_digest": "3295a1d22dee8a2674ad6fff446e34efe4e55e581973d93244ee3d1dda87e89e",
+        "outcome_state": "completed",
+        "procedure_id": "P-003",
+        "warrant": {
+          "control_id": "C-TENDER-01",
+          "evaluation_digest": "0250cc0da4a5c90c9872551203b7f0c0685b488541c91841ff86fb74eee7b6a2",
+          "evaluation_id": "EVAL-P-003-C-TENDER-01",
+          "evaluation_verdict": "UNRESOLVED",
+          "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+          "limitations": [
+            "NO_ZTL_DERIVATION"
+          ],
+          "logical_warrant_status": "NOT_ESTABLISHED",
+          "mission_id": "CDC-TEST-MISSION-001",
+          "procedure_id": "P-003",
+          "warrant_class": "FALLBACK_WARRANT",
+          "warrant_id": "FBW-P-003-C-TENDER-01",
+          "ztl_kernel_invoked": false
+        },
+        "warrant_class": "FALLBACK_WARRANT",
+        "warrant_digest": "595f2ed7b7fd471dd29cefcd9ca7077be7abe1efa7c7f9bbfdfdc9acc915d2ed",
+        "warrant_ref": "FBW-P-003-C-TENDER-01"
+      },
+      "candidate_digest": "3c9a940b9eadf634a8191eb01c69cf3e0e1bd630954b3babef5ac81fdcb61a1c",
+      "chain_id": "P003xC-TENDER-01",
+      "detail": "candidate formed; no transition and no draft eligibility",
+      "input_digest": "3295a1d22dee8a2674ad6fff446e34efe4e55e581973d93244ee3d1dda87e89e",
+      "outcome_state": "completed"
+    },
+    {
+      "artifact": {
+        "candidate": {
+          "admission_record_ref": "ADM-P-003-C-EVAL-01",
+          "candidate_id": "CAND-P-003-C-EVAL-01",
+          "chain_id": "P003xC-EVAL-01",
+          "control_id": "C-EVAL-01",
+          "evaluation": {
+            "admission_record_ref": "ADM-P-003-C-EVAL-01",
+            "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+            "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+            "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+            "control_id": "C-EVAL-01",
+            "evaluation_digest": "4102666474c5ff3ac834a30d073b12a05558ae89db881336cc909fd2f40ce217",
+            "evaluation_id": "EVAL-P-003-C-EVAL-01",
+            "evidence_bundle_digest": "1af208bd137db275ba2cf4a0b2ae9604509960716962bc6f49092b09002e5cbd",
+            "evidence_bundle_ref": "EVB-P-003-C-EVAL-01",
+            "machine_disposition": null,
+            "mission_id": "CDC-TEST-MISSION-001",
+            "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+            "observed_required_facts": {
+              "declared_criteria_only": [
+                true,
+                false
+              ],
+              "scoring_record_complete": []
+            },
+            "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+            "on_unknown_applied": false,
+            "on_unknown_observed": "ESCALATE",
+            "procedure_id": "P-003",
+            "reason_code": "MISSING_REQUIRED_EVIDENCE",
+            "reason_detail_facts": [
+              "scoring_record_complete"
+            ],
+            "required_facts": [
+              "scoring_record_complete",
+              "declared_criteria_only"
+            ],
+            "verdict": "UNRESOLVED"
+          },
+          "evidence_bundle_ref": "EVB-P-003-C-EVAL-01",
+          "input_digest": "93b6e04ac84802dcc29f487aa9da229702d803b58ff305d7c23ed9a89e8eee9d",
+          "institutional_transition": "NONE",
+          "machine_disposition": null,
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "status": "CANDIDATE_NOT_OFFICIAL",
+          "warrant": {
+            "control_id": "C-EVAL-01",
+            "evaluation_digest": "4102666474c5ff3ac834a30d073b12a05558ae89db881336cc909fd2f40ce217",
+            "evaluation_id": "EVAL-P-003-C-EVAL-01",
+            "evaluation_verdict": "UNRESOLVED",
+            "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+            "limitations": [
+              "NO_ZTL_DERIVATION"
+            ],
+            "logical_warrant_status": "NOT_ESTABLISHED",
+            "mission_id": "CDC-TEST-MISSION-001",
+            "procedure_id": "P-003",
+            "warrant_class": "FALLBACK_WARRANT",
+            "warrant_id": "FBW-P-003-C-EVAL-01",
+            "ztl_kernel_invoked": false
+          },
+          "warrant_class": "FALLBACK_WARRANT"
+        },
+        "candidate_digest": "c1555482d05607ba69ffeeb88e134454da03937beb46afe096c390166ee28a3d",
+        "candidate_id": "CAND-P-003-C-EVAL-01",
+        "chain_id": "P003xC-EVAL-01",
+        "control_id": "C-EVAL-01",
+        "ebawu_id": "EBAWU-P-003-C-EVAL-01",
+        "evaluation": {
+          "admission_record_ref": "ADM-P-003-C-EVAL-01",
+          "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+          "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+          "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+          "control_id": "C-EVAL-01",
+          "evaluation_digest": "4102666474c5ff3ac834a30d073b12a05558ae89db881336cc909fd2f40ce217",
+          "evaluation_id": "EVAL-P-003-C-EVAL-01",
+          "evidence_bundle_digest": "1af208bd137db275ba2cf4a0b2ae9604509960716962bc6f49092b09002e5cbd",
+          "evidence_bundle_ref": "EVB-P-003-C-EVAL-01",
+          "machine_disposition": null,
+          "mission_id": "CDC-TEST-MISSION-001",
+          "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+          "observed_required_facts": {
+            "declared_criteria_only": [
+              true,
+              false
+            ],
+            "scoring_record_complete": []
+          },
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "on_unknown_applied": false,
+          "on_unknown_observed": "ESCALATE",
+          "procedure_id": "P-003",
+          "reason_code": "MISSING_REQUIRED_EVIDENCE",
+          "reason_detail_facts": [
+            "scoring_record_complete"
+          ],
+          "required_facts": [
+            "scoring_record_complete",
+            "declared_criteria_only"
+          ],
+          "verdict": "UNRESOLVED"
+        },
+        "evaluation_digest": "4102666474c5ff3ac834a30d073b12a05558ae89db881336cc909fd2f40ce217",
+        "input_digest": "93b6e04ac84802dcc29f487aa9da229702d803b58ff305d7c23ed9a89e8eee9d",
+        "outcome_state": "completed",
+        "procedure_id": "P-003",
+        "warrant": {
+          "control_id": "C-EVAL-01",
+          "evaluation_digest": "4102666474c5ff3ac834a30d073b12a05558ae89db881336cc909fd2f40ce217",
+          "evaluation_id": "EVAL-P-003-C-EVAL-01",
+          "evaluation_verdict": "UNRESOLVED",
+          "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+          "limitations": [
+            "NO_ZTL_DERIVATION"
+          ],
+          "logical_warrant_status": "NOT_ESTABLISHED",
+          "mission_id": "CDC-TEST-MISSION-001",
+          "procedure_id": "P-003",
+          "warrant_class": "FALLBACK_WARRANT",
+          "warrant_id": "FBW-P-003-C-EVAL-01",
+          "ztl_kernel_invoked": false
+        },
+        "warrant_class": "FALLBACK_WARRANT",
+        "warrant_digest": "0f9e355081d72474ead1434e0de88b1c22f8d91fbe8409eb32a06187797e44b8",
+        "warrant_ref": "FBW-P-003-C-EVAL-01"
+      },
+      "candidate_digest": "c1555482d05607ba69ffeeb88e134454da03937beb46afe096c390166ee28a3d",
+      "chain_id": "P003xC-EVAL-01",
+      "detail": "candidate formed; no transition and no draft eligibility",
+      "input_digest": "93b6e04ac84802dcc29f487aa9da229702d803b58ff305d7c23ed9a89e8eee9d",
+      "outcome_state": "completed"
+    },
+    {
+      "artifact": {
+        "candidate": {
+          "admission_record_ref": "ADM-P-003-C-AWARD-01",
+          "candidate_id": "CAND-P-003-C-AWARD-01",
+          "chain_id": "P003xC-AWARD-01",
+          "control_id": "C-AWARD-01",
+          "evaluation": {
+            "admission_record_ref": "ADM-P-003-C-AWARD-01",
+            "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+            "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+            "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+            "control_id": "C-AWARD-01",
+            "evaluation_digest": "4765dc9e04bfdd309f7b493ff4dfcda325c628b723db9582605c4b78e72e50be",
+            "evaluation_id": "EVAL-P-003-C-AWARD-01",
+            "evidence_bundle_digest": "66849118075947fad552b9662159ed62d10c5d89c73da2106eb3f9d6d95d02bf",
+            "evidence_bundle_ref": "EVB-P-003-C-AWARD-01",
+            "machine_disposition": null,
+            "mission_id": "CDC-TEST-MISSION-001",
+            "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+            "observed_required_facts": {
+              "award_traceable_to_scoring": [],
+              "required_approvals_present": [
+                true,
+                false
+              ]
+            },
+            "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+            "on_unknown_applied": false,
+            "on_unknown_observed": "ESCALATE",
+            "procedure_id": "P-003",
+            "reason_code": "MISSING_REQUIRED_EVIDENCE",
+            "reason_detail_facts": [
+              "award_traceable_to_scoring"
+            ],
+            "required_facts": [
+              "award_traceable_to_scoring",
+              "required_approvals_present"
+            ],
+            "verdict": "UNRESOLVED"
+          },
+          "evidence_bundle_ref": "EVB-P-003-C-AWARD-01",
+          "input_digest": "6fb56841cb683a481f0b891bbbc8cfb373ff252ede58f20112d7bb811c7891f5",
+          "institutional_transition": "NONE",
+          "machine_disposition": null,
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "status": "CANDIDATE_NOT_OFFICIAL",
+          "warrant": {
+            "control_id": "C-AWARD-01",
+            "evaluation_digest": "4765dc9e04bfdd309f7b493ff4dfcda325c628b723db9582605c4b78e72e50be",
+            "evaluation_id": "EVAL-P-003-C-AWARD-01",
+            "evaluation_verdict": "UNRESOLVED",
+            "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+            "limitations": [
+              "NO_ZTL_DERIVATION"
+            ],
+            "logical_warrant_status": "NOT_ESTABLISHED",
+            "mission_id": "CDC-TEST-MISSION-001",
+            "procedure_id": "P-003",
+            "warrant_class": "FALLBACK_WARRANT",
+            "warrant_id": "FBW-P-003-C-AWARD-01",
+            "ztl_kernel_invoked": false
+          },
+          "warrant_class": "FALLBACK_WARRANT"
+        },
+        "candidate_digest": "3d3576121df03857a755e13144d69b413563b4f766c4e94c7ba2b0532d5cd6f8",
+        "candidate_id": "CAND-P-003-C-AWARD-01",
+        "chain_id": "P003xC-AWARD-01",
+        "control_id": "C-AWARD-01",
+        "ebawu_id": "EBAWU-P-003-C-AWARD-01",
+        "evaluation": {
+          "admission_record_ref": "ADM-P-003-C-AWARD-01",
+          "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+          "component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+          "component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+          "control_id": "C-AWARD-01",
+          "evaluation_digest": "4765dc9e04bfdd309f7b493ff4dfcda325c628b723db9582605c4b78e72e50be",
+          "evaluation_id": "EVAL-P-003-C-AWARD-01",
+          "evidence_bundle_digest": "66849118075947fad552b9662159ed62d10c5d89c73da2106eb3f9d6d95d02bf",
+          "evidence_bundle_ref": "EVB-P-003-C-AWARD-01",
+          "machine_disposition": null,
+          "mission_id": "CDC-TEST-MISSION-001",
+          "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+          "observed_required_facts": {
+            "award_traceable_to_scoring": [],
+            "required_approvals_present": [
+              true,
+              false
+            ]
+          },
+          "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+          "on_unknown_applied": false,
+          "on_unknown_observed": "ESCALATE",
+          "procedure_id": "P-003",
+          "reason_code": "MISSING_REQUIRED_EVIDENCE",
+          "reason_detail_facts": [
+            "award_traceable_to_scoring"
+          ],
+          "required_facts": [
+            "award_traceable_to_scoring",
+            "required_approvals_present"
+          ],
+          "verdict": "UNRESOLVED"
+        },
+        "evaluation_digest": "4765dc9e04bfdd309f7b493ff4dfcda325c628b723db9582605c4b78e72e50be",
+        "input_digest": "6fb56841cb683a481f0b891bbbc8cfb373ff252ede58f20112d7bb811c7891f5",
+        "outcome_state": "completed",
+        "procedure_id": "P-003",
+        "warrant": {
+          "control_id": "C-AWARD-01",
+          "evaluation_digest": "4765dc9e04bfdd309f7b493ff4dfcda325c628b723db9582605c4b78e72e50be",
+          "evaluation_id": "EVAL-P-003-C-AWARD-01",
+          "evaluation_verdict": "UNRESOLVED",
+          "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+          "limitations": [
+            "NO_ZTL_DERIVATION"
+          ],
+          "logical_warrant_status": "NOT_ESTABLISHED",
+          "mission_id": "CDC-TEST-MISSION-001",
+          "procedure_id": "P-003",
+          "warrant_class": "FALLBACK_WARRANT",
+          "warrant_id": "FBW-P-003-C-AWARD-01",
+          "ztl_kernel_invoked": false
+        },
+        "warrant_class": "FALLBACK_WARRANT",
+        "warrant_digest": "48d3998b47f9c761fe56edf07d1b0663f50aa285d3870076bccc2196ad903d11",
+        "warrant_ref": "FBW-P-003-C-AWARD-01"
+      },
+      "candidate_digest": "3d3576121df03857a755e13144d69b413563b4f766c4e94c7ba2b0532d5cd6f8",
+      "chain_id": "P003xC-AWARD-01",
+      "detail": "candidate formed; no transition and no draft eligibility",
+      "input_digest": "6fb56841cb683a481f0b891bbbc8cfb373ff252ede58f20112d7bb811c7891f5",
+      "outcome_state": "completed"
+    }
+  ],
+  "draft_eligibility": "NONE",
+  "human_disposition": "NOT_YET_SUPPLIED",
+  "institutional_transition": "NONE",
+  "mission_id": "CDC-TEST-MISSION-001",
+  "official_handoff": "PROHIBITED",
+  "owner_execution_authorization": {
+    "authorized_stage": "STAGE_1_ONLY",
+    "owner_execution_authorization_bytes": 3306,
+    "owner_execution_authorization_id": "CDC-E2E-MISSION-001-STAGE1-AUTH-002",
+    "owner_execution_authorization_record_class": "OWNER_STAGE_1_EXECUTION_AUTHORIZATION",
+    "owner_execution_authorization_reference": "sha256:47b97fadf9d44fdeec8359f7c582caf0269046d74cdd4b4353001b2ef7e3b240",
+    "owner_execution_authorization_scope": "ONE_RESULT_BEARING_STAGE_1_EXECUTION",
+    "owner_execution_authorization_sha256": "47b97fadf9d44fdeec8359f7c582caf0269046d74cdd4b4353001b2ef7e3b240"
+  },
+  "owner_interpretation_sha256": "8242ccf9612531dc7b3b1d648625a934c4f616d8b8565c61d958a6825d7f2f84",
+  "package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+  "provenance_token": "1cfb0d9d592783bfba610ac49b7e2637a219997e97510330c986604d07d4196c",
+  "stage": "EVALUATION_AND_CANDIDATE_FORMATION_COMPLETE",
+  "stage_1_observation_digest": "0c7c9aa770aee07b7c42f9bb48ec3b13058bbaf7559d5696bc59c6eb276510be"
+}

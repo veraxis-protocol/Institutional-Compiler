@@ -1,0 +1,73 @@
+{
+  "archival_copy_note": "byte-for-byte copies of the execution originals. The archived owner authorization retains its embedded runtime canonical_authorization_path unchanged; it was not rewritten for the repository location, and this copy is evidence only, not a usable authorization.",
+  "archived_members": [
+    {
+      "byte_identical_to_execution_original": true,
+      "bytes": 416,
+      "path": ".cdc-e2e-stage-1-attempt-47b97fadf9d44fdeec8359f7c582caf0269046d74cdd4b4353001b2ef7e3b240.json",
+      "sha256": "b9977ea18e0a44b0213607aa9b8e512cac3aeebd4e1871aa6b80d9a2fca6478f"
+    },
+    {
+      "byte_identical_to_execution_original": true,
+      "bytes": 3306,
+      "path": "CDC-END-TO-END-MISSION-001-OWNER-STAGE-1-EXECUTION-AUTHORIZATION-v0.2.json",
+      "sha256": "47b97fadf9d44fdeec8359f7c582caf0269046d74cdd4b4353001b2ef7e3b240"
+    },
+    {
+      "byte_identical_to_execution_original": true,
+      "bytes": 3191,
+      "path": "CDC-END-TO-END-MISSION-001-STAGE-1-EXECUTION-ENVIRONMENT-v0.1.json",
+      "sha256": "7ace2de68d54c9ca2f3e1ee827e26fe11458c89854a0ed4d3552fce292876fe1"
+    },
+    {
+      "byte_identical_to_execution_original": true,
+      "bytes": 57970,
+      "path": "CDC-END-TO-END-MISSION-001-STAGE-1-RAW-RESULT-v0.1.json",
+      "sha256": "aa32274f238d01bc9f6c6d1c67879acfb4765a34d0dc0b4ccf568f3c07353a70"
+    }
+  ],
+  "artifact_id": "CDC-END-TO-END-MISSION-001-STAGE-1-RUN-001-EVIDENCE-INDEX-v0.1",
+  "attempt_record_bytes": 416,
+  "attempt_record_sha256": "b9977ea18e0a44b0213607aa9b8e512cac3aeebd4e1871aa6b80d9a2fca6478f",
+  "attempt_state": "CONSUMED_AFTER_GOVERNED_EVALUATOR_INVOCATION",
+  "candidate_count": 9,
+  "chain_count": 9,
+  "claim_ceiling": "bounded synthetic Stage-1 demonstration only. Verdict counts are factual observations, not a comparison against the semantic oracle. No CDC acceptance, legal validity, institutional authority, production conformance or ZTL logical warrant is claimed; FALLBACK_WARRANT is explicitly non-ZTL and candidates are non-official.",
+  "completed_chain_count": 9,
+  "denominator_accounting": {
+    "blocked": 0,
+    "completed": 9,
+    "non_evaluable": 0,
+    "refused": 0,
+    "unresolved": 0
+  },
+  "derived_metadata_only": true,
+  "environment_manifest_bytes": 3191,
+  "environment_manifest_sha256": "7ace2de68d54c9ca2f3e1ee827e26fe11458c89854a0ed4d3552fce292876fe1",
+  "human_disposition_applied": false,
+  "implementation_branch": "cdc-e2e-stage1-component-implementation-v0.1",
+  "implementation_commit": "2e15267194d320b54015f0c212a8041cedc22050",
+  "implementation_tree": "7e8cb3abfdb58c4334a8c0dad1a0a74dad4b0c5c",
+  "institutional_transition_performed": false,
+  "mission_id": "CDC-TEST-MISSION-001",
+  "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+  "next_gate": "INDEPENDENT_RAW_STAGE1_EVIDENCE_VERIFICATION",
+  "official_cdc_record_created": false,
+  "owner_authorization_bytes": 3306,
+  "owner_authorization_sha256": "47b97fadf9d44fdeec8359f7c582caf0269046d74cdd4b4353001b2ef7e3b240",
+  "raw_result_bytes": 57970,
+  "raw_result_sha256": "aa32274f238d01bc9f6c6d1c67879acfb4765a34d0dc0b4ccf568f3c07353a70",
+  "record_class": "STAGE_1_EXECUTION_EVIDENCE_INDEX",
+  "result_bearing": false,
+  "run_id": "STAGE-1-RUN-001",
+  "semantic_adjudication_performed": false,
+  "stage": "STAGE_1_ONLY",
+  "stage_1_component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+  "stage_1_observation_digest": "0c7c9aa770aee07b7c42f9bb48ec3b13058bbaf7559d5696bc59c6eb276510be",
+  "stage_2_executed": false,
+  "verdict_counts": {
+    "BREACH": 3,
+    "SATISFIED": 3,
+    "UNRESOLVED": 3
+  }
+}
