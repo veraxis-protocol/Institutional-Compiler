@@ -38,6 +38,7 @@ from cdc_e2e_support import (
     stub_warrant as _stub_warrant,
 )
 
+from oic import cdc_e2e_mission
 from oic.cdc_e2e_mission import (
     DENOMINATOR_STATES,
     EXPECTED_CHAIN_COUNT,
@@ -65,6 +66,22 @@ from oic.cdc_e2e_mission import (
     verify_frozen_action_plan,
     verify_frozen_mission_input,
 )
+
+
+# Stage-1 candidate formation over the frozen mission population is blocked by
+# MissionPopulationExecutionBlockedError until a fresh one-run owner execution
+# authorization exists. The owner source-delta authorization explicitly forbids
+# producing the mission's actual nine outcomes in any test. These tests are
+# preserved in place and re-enable themselves the moment formation is
+# authorized; the refusal itself is asserted by
+# test_stage_1_over_the_frozen_population_is_blocked.
+def _skip_unless_formation_authorized() -> None:
+    if cdc_e2e_mission.MISSION_EXECUTION_AUTHORIZATION is None:
+        pytest.skip(
+            "Stage-1 candidate formation over the frozen mission population is not "
+            "authorized (MISSION_POPULATION_EXECUTION_STATE="
+            f"{cdc_e2e_mission.MISSION_POPULATION_EXECUTION_STATE})"
+        )
 
 
 @pytest.fixture
@@ -142,13 +159,16 @@ def test_nine_chain_projection_is_exact(projection: MissionProjection) -> None:
 
 # 4 --------------------------------------------------------------------------
 def test_precomputed_values_are_not_execution_input(projection: MissionProjection) -> None:
-    """Frozen answers are classified reference-only and never fed to computation."""
+    """Frozen answers cannot reach computation: v0.6 does not carry them at all.
+
+    The earlier packages carried precomputed evaluations, warrants and candidates
+    and relied on classifying them reference-only. input-v0.6 removed them, so
+    the stronger property now holds: there is nothing to classify.
+    """
     for chain in projection.chains:
         for field in REFERENCE_ONLY_CHAIN_FIELDS:
             assert field not in chain.execution_input, f"{chain.chain_id}:{field}"
-        assert "deterministic_evaluation" in chain.reference_only
-        assert "warrant_artifact" in chain.reference_only
-        assert "candidate" in chain.reference_only
+        assert chain.reference_only == {}, chain.chain_id
 
 
 # 5 --------------------------------------------------------------------------
@@ -221,6 +241,7 @@ def test_missing_disposition_after_stage_1_holds(
     projection: MissionProjection, frozen: FrozenMissionInput
 ) -> None:
     """Stage 1 terminates and holds; no transition, no draft eligibility."""
+    _skip_unless_formation_authorized()
     stage_1 = form_stage_1_for_tests(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
     )
@@ -238,6 +259,7 @@ def test_candidate_digest_mismatch_is_rejected(
     projection: MissionProjection, frozen: FrozenMissionInput, action_plan: FrozenActionPlan
 ) -> None:
     """A disposition must bind the candidate Stage 1 actually formed."""
+    _skip_unless_formation_authorized()
     stage_1 = form_stage_1_for_tests(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
     )
@@ -298,6 +320,7 @@ def test_result_interlock_without_exact_clearance_is_rejected(
     projection: MissionProjection, frozen: FrozenMissionInput, action_plan: FrozenActionPlan
 ) -> None:
     """Stage-2 continuation refuses without every exact binding."""
+    _skip_unless_formation_authorized()
     empty = ExecutionClearance(None, None, None, None, None, None, None)
     stage_1 = form_stage_1_for_tests(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
@@ -333,6 +356,7 @@ def test_denominator_survives_individual_chain_failure(
     projection: MissionProjection, frozen: FrozenMissionInput
 ) -> None:
     """An early failure must not erase the remaining population."""
+    _skip_unless_formation_authorized()
 
     def failing(
         member: Mapping[str, Any], control: Mapping[str, Any], evidence: Mapping[str, Any]
@@ -365,6 +389,7 @@ def test_stage_1_observation_digest_is_stable(
     projection: MissionProjection, frozen: FrozenMissionInput
 ) -> None:
     """The Stage-1 checkpoint digest is deterministic over identical inputs."""
+    _skip_unless_formation_authorized()
     first = form_stage_1_for_tests(
         projection, frozen, evaluator=_stub_evaluator, warrant_builder=_stub_warrant
     )

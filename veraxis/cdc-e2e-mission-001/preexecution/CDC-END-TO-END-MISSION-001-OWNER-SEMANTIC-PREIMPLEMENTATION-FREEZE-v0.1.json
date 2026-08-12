@@ -1,0 +1,143 @@
+{
+  "artifact_id": "CDC-END-TO-END-MISSION-001-OWNER-SEMANTIC-PREIMPLEMENTATION-FREEZE-v0.1",
+  "authorization_boundaries": {
+    "authorizes_implementation": false,
+    "authorizes_stage_1_execution": false,
+    "authorizes_stage_2_execution": false,
+    "candidate_count": 0,
+    "clearance_bindings_modified": false,
+    "evaluator_implemented": false,
+    "fallback_warrant_builder_implemented": false,
+    "mission_executed": false,
+    "new_stage_1_authorization_created": false,
+    "prior_stage_1_authorization": {
+      "sha256": "108703e871438b634931a088ba05e5f17c96ab3f330f7262c05b5679b3444aba",
+      "state": "HISTORICAL_UNCONSUMED_AND_NON_REUSABLE"
+    },
+    "source_modified": false,
+    "stage_1_executed": false,
+    "tests_modified": false,
+    "v0_6_loader_modified": false
+  },
+  "campaign": "CDC-END-TO-END-MISSION-001",
+  "claim_ceiling": "bounded synthetic test scope only; no CDC acceptance, legal validity, institutional authority, production conformance or readiness is claimed",
+  "controlling_input_and_profile": {
+    "input_v0_6_manifest_sha256": "8aad5e78635b691fa2fad0336e07d9b0738b61db7b12ded2ed22149a258bdb77",
+    "input_v0_6_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+    "input_v0_6_path": "veraxis/cdc-e2e-mission-001/input-v0.6",
+    "owner_preexecution_addendum_v0_2_sha256": "b8a2174ff2f8306782547423c067826df260ec8a7553c7512757706703573ea8",
+    "stage_1_component_profile_v0_2_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57"
+  },
+  "controlling_veraxis_point": {
+    "branch": "cdc-e2e-mission-001-preexecution-records",
+    "integration_branch_unchanged": "c37e82b7aa33cc4ad2d2db2ef5fd4760ef3fe330",
+    "parent_commit": "de285ccbe8df75fd1b5fd7ae01383572c92fb1aa",
+    "parent_tree": "72d472aab20db1c648e0b42ae7f72a19f7d4c186",
+    "pr_23_head_unchanged": "c37e82b7aa33cc4ad2d2db2ef5fd4760ef3fe330",
+    "repository": "veraxis-protocol/Institutional-Compiler"
+  },
+  "freeze_state": {
+    "adjudication_protocol": "FROZEN",
+    "change_to_any_bound_artifact_after_this_freeze": "INVALIDATES_LATER_IMPLEMENTATION_AUTHORIZATION_AND_REQUIRES_A_NEW_OWNER_DECISION",
+    "further_semantic_redesign_authorized": false,
+    "human_action_plan": "FROZEN",
+    "input_v0_6": "FROZEN",
+    "owner_seam_interpretation": "FROZEN",
+    "package_digest_derivation": "FROZEN",
+    "semantic_oracle": "FROZEN",
+    "semantic_preimplementation_layer": "FROZEN",
+    "semantic_profile": "FROZEN",
+    "synthetic_predicates": "FROZEN"
+  },
+  "frozen_governance": {
+    "adjudication_protocol_sha256": "0e2a9f7202b2136b1edd76148da4f1c957ff86301c42ddf6f0dc1055ce20426b",
+    "human_action_plan_sha256": "229a0c15d2bd2ee1db807904ff4d640f8fe39931372a002fbc3abf9e3244731e",
+    "owner_preexecution_interpretation_sha256": "8242ccf9612531dc7b3b1d648625a934c4f616d8b8565c61d958a6825d7f2f84",
+    "semantic_oracle_sha256": "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9"
+  },
+  "interpretive_caution_a_package_digest_scope": {
+    "aggregate_digest_substitutes_for_member_byte_verification": false,
+    "aggregate_digest_verifies_manifest_identity_projection": true,
+    "integrity_claim_valid_only_in_combination_with": {
+      "byte_counts_matched": true,
+      "members_checked_against_actual_bytes": "14/14",
+      "mismatches": 0,
+      "sha256_matched": true,
+      "sha256sums_consistent": true,
+      "sha512_matched": true
+    },
+    "statement": "The aggregate package digest is computed from the manifest's declared member identities. It does not replace member-byte verification."
+  },
+  "interpretive_caution_b_on_unknown_versus_p003": {
+    "admitted_controls_retain": {
+      "on_unknown": "ESCALATE"
+    },
+    "at_stage_1": {
+      "non_application_reason": "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT",
+      "on_unknown_applied": false,
+      "on_unknown_observed": "ESCALATE"
+    },
+    "human_action_plan_preregisters_on_p003_chains": "REQUEST_EVIDENCE",
+    "is_a_contradiction": false,
+    "is_evidence_reviewer_acts_against_admitted_control_guidance": false,
+    "subsequent_disposition_governed_by": "the separately frozen human action plan, exclusively"
+  },
+  "mission_id": "CDC-TEST-MISSION-001",
+  "next_gate": "OWNER_SOURCE_DELTA_IMPLEMENTATION_AUTHORIZATION",
+  "owner_seam_clarification": {
+    "artifact": "CDC-END-TO-END-MISSION-001-OWNER-STAGE-1-SEAM-CLARIFICATION-v0.1.json",
+    "bytes": 3961,
+    "sha256": "a4a87ec5698416eaa9af970392070a25181df263537524e8b0fc8a91d86fec60"
+  },
+  "published_package_digest_rule": {
+    "artifact": "CDC-END-TO-END-MISSION-001-PACKAGE-DIGEST-DERIVATION-v0.1.json",
+    "bytes": 2574,
+    "independently_reproduced": true,
+    "reproduction_byte_identical_to_published_rule_output": true,
+    "sha256": "0fbb8d5deb7d1bef79d68aa30d47c57c8430177e373ce85c7a0c6dd4da1fe577",
+    "test_vector": {
+      "identity_serialization_bytes": 3921,
+      "package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b"
+    }
+  },
+  "record_class": "OWNER_SEMANTIC_PREIMPLEMENTATION_FREEZE",
+  "result_bearing": false,
+  "settled_is_not_demonstrated": {
+    "implementation_conformance_demonstrated": false,
+    "must_later_be_demonstrated_through": "tests and the governed run, including M02, M06 and M09",
+    "runtime_conformance_demonstrated": false,
+    "semantic_requirements_settled": true,
+    "this_freeze_is_evidence_the_future_evaluator_conforms": false
+  },
+  "vitaliy_original_semantic_review": {
+    "bytes": 15559,
+    "commit": "b6f5ad0fe988edf2dbea3878775b2bd2b0abc5e8",
+    "determination": "CONFORMANT",
+    "independently_recomputed": true,
+    "path": "veraxis/cdc-e2e-mission-001/CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-SEMANTIC-REVIEW-001.md",
+    "repository": "inventor1975/ZTL",
+    "sha256": "3886e15a463a0731522ce4ff75b3c21bd2d39d3c8120eea7cc58cbb3fcb96082"
+  },
+  "vitaliy_semantic_closure_acknowledgment": {
+    "blocking_issue": "NONE",
+    "bytes": 7030,
+    "closure": "CLOSED",
+    "commit": "8a3b5057de66a63f0ee9a558d86a405dcf6d7508",
+    "declared_assertions_verified_present": {
+      "CDC_E2E_MISSION_001_STAGE_1_COMPONENT_SEMANTIC_CLOSURE_ACK": "CLOSED",
+      "blocking_issue": "NONE",
+      "human_action_plan_change_required": false,
+      "implementation_seen": false,
+      "input_v0_6_change_required": false,
+      "original_CONFORMANT_determination_stands": true,
+      "profile_change_required": false,
+      "semantic_oracle_change_required": false
+    },
+    "independently_recomputed": true,
+    "parent": "b6f5ad0fe988edf2dbea3878775b2bd2b0abc5e8",
+    "path": "veraxis/cdc-e2e-mission-001/CDC-END-TO-END-MISSION-001-STAGE-1-SEMANTIC-CLOSURE-ACK-001.md",
+    "repository": "inventor1975/ZTL",
+    "sha256": "0736586959cd4a23138a59b9dd39622b8f84044794c839f1d122107fe914a92d",
+    "tree": "c3fb3d613b120be7cb37ad4aa8a564278a7335d8"
+  }
+}

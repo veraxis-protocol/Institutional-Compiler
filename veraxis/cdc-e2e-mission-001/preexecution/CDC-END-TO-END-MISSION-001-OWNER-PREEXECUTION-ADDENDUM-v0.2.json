@@ -1,0 +1,67 @@
+{
+  "artifact_id": "CDC-END-TO-END-MISSION-001-OWNER-PREEXECUTION-ADDENDUM-v0.2",
+  "binds": {
+    "mission_input": "CDC-END-TO-END-MISSION-001-INPUT-v0.6",
+    "mission_input_path": "veraxis/cdc-e2e-mission-001/input-v0.6",
+    "mission_manifest_sha256": "8aad5e78635b691fa2fad0336e07d9b0738b61db7b12ded2ed22149a258bdb77",
+    "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+    "physical_package_bytes": 57452,
+    "stage_1_component_profile_bytes": 9015,
+    "stage_1_component_profile_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+    "stage_1_component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57"
+  },
+  "claim_ceiling": "bounded synthetic test scope only; no CDC acceptance, legal validity, institutional authority, production conformance or readiness is claimed",
+  "frozen_governance_unmodified": {
+    "adjudication_protocol_sha256": "0e2a9f7202b2136b1edd76148da4f1c957ff86301c42ddf6f0dc1055ce20426b",
+    "human_action_plan_remains": "PREREGISTERED_STIMULUS_PLAN_NOT_A_PREDICTION_OF_RESULTS",
+    "human_action_plan_sha256": "229a0c15d2bd2ee1db807904ff4d640f8fe39931372a002fbc3abf9e3244731e",
+    "m09_interpretation_modified": false,
+    "m12_no_rerun_interpretation_modified": false,
+    "semantic_oracle_sha256": "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9"
+  },
+  "future_clearance_requirement": {
+    "implemented_yet": false,
+    "new_required_field": "stage_1_component_profile_sha256",
+    "profile_change_after_authorization": "INVALIDATES_CLEARANCE",
+    "verification_requirement": "verify the profile from exact bytes before Stage 1"
+  },
+  "original_interpretation": {
+    "artifact": "CDC-END-TO-END-MISSION-001-OWNER-PREEXECUTION-INTERPRETATION-v0.1.md",
+    "bytes": 9311,
+    "modified_by_this_addendum": false,
+    "sha256": "8242ccf9612531dc7b3b1d648625a934c4f616d8b8565c61d958a6825d7f2f84",
+    "still_controlling_for": [
+      "M09 ACCEPT / ACCEPT_CANDIDATE terminology crosswalk",
+      "M12 conditional observability",
+      "no-rerun rule"
+    ]
+  },
+  "predecessor_addendum_preserved_immutable": true,
+  "predecessor_addendum_sha256": "6c7b4ac96a700791dad602bd34e517fe8a4b6448d3ec82751a4733cc0608f1cd",
+  "preserved_immutable_pre_review_artifacts": {
+    "PRE_CANDIDATE_REFUSAL_001": "694a34bbb7259afa73b9677601ffca5dd592f04e58d590cd7b8cf8cdb5341dd0",
+    "input_v0_5_package_sha256": "f847b322825199a97ee3ddd33dd5edfffcdc7e762cbde62b0ee5e27166e7f84d",
+    "owner_preexecution_addendum_v0_1": "6c7b4ac96a700791dad602bd34e517fe8a4b6448d3ec82751a4733cc0608f1cd",
+    "stage_1_component_profile_v0_1": "95ffd83dc8a4d0b3d8fb525b02c6f6f31e34ff0dd09369aaebaaf2661997828b"
+  },
+  "record_class": "PREEXECUTION_INTERPRETIVE_ADDENDUM",
+  "relationship_to_predecessors": "SUCCESSOR_ADDENDUM_NOT_A_REWRITE",
+  "result_bearing": false,
+  "scope_of_this_correction": {
+    "admission_integrity_restored": true,
+    "component_profile_is_admitted_oic_meaning": false,
+    "provenance_corrected": true,
+    "representation_corrected": true,
+    "synthetic_evaluation_semantics_changed": false
+  },
+  "state": {
+    "candidate_count": 0,
+    "components_implemented": false,
+    "mission_executed": false,
+    "next_gate": "OWNER_REVIEW_THEN_IMPLEMENTATION_BLIND_SEMANTIC_REVIEW",
+    "prior_authorization_sha256": "108703e871438b634931a088ba05e5f17c96ab3f330f7262c05b5679b3444aba",
+    "prior_stage_1_authorization_v0_1": "NOT_CONSUMED_AND_NOT_REUSABLE",
+    "stage_1_authorization_created": false
+  },
+  "supersedes": "CDC-END-TO-END-MISSION-001-OWNER-PREEXECUTION-ADDENDUM-v0.1"
+}

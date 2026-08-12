@@ -70,7 +70,6 @@ from oic.cdc_e2e_mission import (
     LEGACY_MAPPING_ENTRYPOINT_STATE,
     MANIFEST_CORRECTION_REASON,
     NOT_ADOPTED_CLASSIFICATION,
-    NOT_ADOPTED_MISSION_PACKAGE_BYTES,
     NOT_ADOPTED_MISSION_PACKAGE_SHA256,
     NOT_ADOPTED_REASON,
     OWNER_ISSUED_MISSION_MANIFEST_SHA256,
@@ -122,6 +121,10 @@ from oic.cdc_e2e_mission import (
 
 TARGET_CHAIN = "P001xC-TENDER-01"
 
+# Historical packages, addressed explicitly now that PACKAGE_RELPATH is v0.6.
+V0_3_RELPATH = "veraxis/cdc-e2e-mission-001/input-v0.3"
+V0_4_RELPATH = "veraxis/cdc-e2e-mission-001/input-v0.4"
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -169,9 +172,26 @@ def owner_interpretation(repo_root: Path) -> FrozenOwnerInterpretation:
     return verify_owner_preexecution_interpretation(repo_root / OWNER_INTERPRETATION_RELPATH)
 
 
+# Stage-1 candidate formation over the frozen mission population is blocked by
+# MissionPopulationExecutionBlockedError until a fresh one-run owner execution
+# authorization exists. The owner source-delta authorization explicitly forbids
+# producing the mission's actual nine outcomes in any test. These tests are
+# preserved in place and re-enable themselves the moment formation is
+# authorized; the refusal itself is asserted by
+# test_stage_1_over_the_frozen_population_is_blocked.
+def _skip_unless_formation_authorized() -> None:
+    if cdc_e2e_mission.MISSION_EXECUTION_AUTHORIZATION is None:
+        pytest.skip(
+            "Stage-1 candidate formation over the frozen mission population is not "
+            "authorized (MISSION_POPULATION_EXECUTION_STATE="
+            f"{cdc_e2e_mission.MISSION_POPULATION_EXECUTION_STATE})"
+        )
+
+
 @pytest.fixture
 def stage_1(projection: MissionProjection, frozen: FrozenMissionInput) -> Stage1Observation:
     """An owner-cleared Stage-1 observation formed with stub components."""
+    _skip_unless_formation_authorized()
     return execute_authorized_stage_1(
         projection,
         frozen,
@@ -554,6 +574,7 @@ def test_a_test_support_observation_cannot_enter_stage_2(
     action_plan: FrozenActionPlan,
 ) -> None:
     """Even the test-support wrapper's output is refused by Stage 2."""
+    _skip_unless_formation_authorized()
     helper_observation = form_stage_1_for_tests(
         projection, frozen, evaluator=stub_evaluator, warrant_builder=stub_warrant
     )
@@ -710,6 +731,7 @@ def test_stage_1_digest_binds_the_objects_not_only_the_digests(
     projection: MissionProjection, frozen: FrozenMissionInput, stage_1: Stage1Observation
 ) -> None:
     """Changing a warrant body changes the Stage-1 observation digest."""
+    _skip_unless_formation_authorized()
 
     def other_warrant(
         evaluation: Mapping[str, Any], control: Mapping[str, Any]
@@ -810,6 +832,7 @@ def test_disposition_for_a_chain_with_no_candidate_cannot_bind(
     projection: MissionProjection, frozen: FrozenMissionInput, action_plan: FrozenActionPlan
 ) -> None:
     """A stimulus for a chain that formed nothing is refused, not accommodated."""
+    _skip_unless_formation_authorized()
 
     def failing(
         member: Mapping[str, Any], control: Mapping[str, Any], evidence: Mapping[str, Any]
@@ -983,6 +1006,7 @@ def test_an_escalating_chain_is_preserved_as_unresolved_with_no_event(
     projection: MissionProjection, frozen: FrozenMissionInput, action_plan: FrozenActionPlan
 ) -> None:
     """The frozen control declares on_unknown: ESCALATE. That outcome is preserved."""
+    _skip_unless_formation_authorized()
 
     def unknown_on_one_chain(
         member: Mapping[str, Any], control: Mapping[str, Any], evidence: Mapping[str, Any]
@@ -1383,6 +1407,7 @@ def test_owner_interpretation_prose_never_reaches_the_computation(
     reach the resulting evaluations, warrants, candidates, dispositions,
     transitions or drafts.
     """
+    _skip_unless_formation_authorized()
     document = (repo_root / OWNER_INTERPRETATION_RELPATH).read_text(encoding="utf-8")
     phrases = (
         "TERMINOLOGICAL_SHORTHAND_ONLY",
@@ -1663,13 +1688,10 @@ def test_v0_2_is_retained_unchanged_and_is_not_controlling(repo_root: Path) -> N
     recomputed = hashlib.sha256(
         json.dumps(identities, sort_keys=True, ensure_ascii=False).encode()
     ).hexdigest()
-    assert recomputed == NOT_ADOPTED_MISSION_PACKAGE_SHA256
-    assert (
-        sum(path.stat().st_size for path in v2.rglob("*") if path.is_file())
-        == NOT_ADOPTED_MISSION_PACKAGE_BYTES
-    )
+    assert recomputed == "00dd820cfe43b780d5bec1a12382b16a7d6d9e45d6546c4fc10f3a83ab321510"
+    assert sum(path.stat().st_size for path in v2.rglob("*") if path.is_file()) == 65849
     # Not controlling: the module binds v0.3, and v0.2 would fail verification.
-    assert FROZEN_MISSION_INPUT_RELPATH.endswith("input-v0.4")
+    assert FROZEN_MISSION_INPUT_RELPATH.endswith("input-v0.6")
     assert str(NOT_ADOPTED_MISSION_PACKAGE_SHA256) not in {str(FROZEN_MISSION_PACKAGE_SHA256)}
     with pytest.raises(MissionContractError, match="identity or counts differ"):
         verify_frozen_mission_input(v2)
@@ -1679,23 +1701,21 @@ def test_v0_3_records_the_full_predecessor_chain_and_owner_issued_time(
     projection: MissionProjection, repo_root: Path
 ) -> None:
     """v0.1 -> v0.2 -> v0.3, with v0.2 classified NOT_ADOPTED and no execution seen."""
-    v3 = repo_root / PACKAGE_RELPATH
+    v3 = repo_root / V0_3_RELPATH
     manifest = json.loads((v3 / "PACKAGE-MANIFEST.json").read_bytes())
     chain = manifest["predecessor_chain"]
     assert [entry["package_id"] for entry in chain] == [
         "CDC-END-TO-END-MISSION-001-INPUT-v0.1",
         "CDC-END-TO-END-MISSION-001-INPUT-v0.2",
         "CDC-END-TO-END-MISSION-001-INPUT-v0.3",
-        "CDC-END-TO-END-MISSION-001-INPUT-v0.4",
     ]
     assert chain[0]["classification"] == "ORIGINAL_FROZEN_MISSION_INPUT"
     assert chain[1]["classification"] == NOT_ADOPTED_CLASSIFICATION
     assert chain[1]["reason"] == NOT_ADOPTED_REASON
-    assert chain[2]["classification"] == "OWNER_ISSUED_CURRENTNESS_SUCCESSOR"
-    assert chain[3]["classification"] == "CONTROLLING_MISSION_INPUT"
+    assert chain[2]["classification"] == "CONTROLLING_MISSION_INPUT"
     assert all(entry["result_bearing_execution_seen"] is False for entry in chain)
-    assert manifest["authority_effective_from"] == "2026-08-11T20:30:00Z"
-    assert manifest["authority_effective_from_source"] == AUTHORITY_EFFECTIVE_FROM_SOURCE
+    assert manifest["effective_from"] == "2026-08-11T20:30:00Z"
+    assert manifest["effective_from_source"] == AUTHORITY_EFFECTIVE_FROM_SOURCE
     assert manifest["backdating_permitted"] is False
     assert manifest["system_clock_used_to_choose_effective_from"] is False
 
@@ -1714,7 +1734,7 @@ def test_v0_3_changes_only_authority_currentness(
     """Exactly two members differ from v0.2, and the invariants survive from v0.1."""
     v1 = repo_root / PREDECESSOR_PACKAGE_RELPATH
     v2 = repo_root / NOT_ADOPTED_PACKAGE_RELPATH
-    v3 = repo_root / OWNER_ISSUED_PACKAGE_RELPATH
+    v3 = repo_root / V0_3_RELPATH
     manifest = json.loads((v3 / "PACKAGE-MANIFEST.json").read_bytes())
     for predecessor in (v1, v2):
         differing = [
@@ -1757,7 +1777,7 @@ def test_v0_3_changes_only_authority_currentness(
 
 def test_v0_3_remains_immutable_and_addressable(repo_root: Path) -> None:
     """v0.3 is retained byte-for-byte and still recomputes its own identity."""
-    v3 = repo_root / OWNER_ISSUED_PACKAGE_RELPATH
+    v3 = repo_root / V0_3_RELPATH
     assert v3.is_dir()
     manifest = json.loads((v3 / "PACKAGE-MANIFEST.json").read_bytes())
     assert manifest["package_id"] == "CDC-END-TO-END-MISSION-001-INPUT-v0.3"
@@ -1794,8 +1814,8 @@ def test_v0_3_remains_immutable_and_addressable(repo_root: Path) -> None:
 
 def test_v0_4_payload_is_byte_identical_to_v0_3(repo_root: Path) -> None:
     """All fourteen payload members carry over unchanged; only the manifest differs."""
-    v3 = repo_root / OWNER_ISSUED_PACKAGE_RELPATH
-    v4 = repo_root / PACKAGE_RELPATH
+    v3 = repo_root / V0_3_RELPATH
+    v4 = repo_root / V0_4_RELPATH
     manifest = json.loads((v4 / "PACKAGE-MANIFEST.json").read_bytes())
     assert len(manifest["members"]) == 14
     identical = [
@@ -1815,8 +1835,8 @@ def test_v0_4_payload_is_byte_identical_to_v0_3(repo_root: Path) -> None:
 
 def test_v0_4_authority_is_byte_identical_to_v0_3(repo_root: Path) -> None:
     """The authority record did not change; only its manifest description did."""
-    v3 = repo_root / OWNER_ISSUED_PACKAGE_RELPATH
-    v4 = repo_root / PACKAGE_RELPATH
+    v3 = repo_root / V0_3_RELPATH
+    v4 = repo_root / V0_4_RELPATH
     relative = "03-AUTHORITY/test-reviewer.json"
     assert (v4 / relative).read_bytes() == (v3 / relative).read_bytes()
     manifest = json.loads((v4 / "PACKAGE-MANIFEST.json").read_bytes())
@@ -1833,7 +1853,7 @@ def test_v0_4_carries_no_unqualified_stale_issued_at(repo_root: Path) -> None:
     the interval that was superseded. What must not survive is an unqualified
     top-level issuance claim in the controlling manifest.
     """
-    v4 = repo_root / PACKAGE_RELPATH
+    v4 = repo_root / V0_4_RELPATH
     payload = (v4 / "PACKAGE-MANIFEST.json").read_bytes()
     manifest = json.loads(payload)
     assert "issued_at" not in manifest
@@ -1855,13 +1875,17 @@ def test_v0_4_preserves_the_owner_issued_effective_time(
     projection: MissionProjection, repo_root: Path
 ) -> None:
     """The controlling effective time and its provenance survive the correction."""
-    manifest = json.loads((repo_root / PACKAGE_RELPATH / "PACKAGE-MANIFEST.json").read_bytes())
+    manifest = json.loads((repo_root / V0_4_RELPATH / "PACKAGE-MANIFEST.json").read_bytes())
     assert manifest["authority_effective_from"] == "2026-08-11T20:30:00Z"
     assert manifest["authority_effective_from_source"] == "OWNER_EXPLICIT_PROSPECTIVE_TIME"
     assert manifest["backdating_permitted"] is False
     assert manifest["system_clock_used_to_choose_effective_from"] is False
     assert manifest["supersession_reason"] == MANIFEST_CORRECTION_REASON
     assert manifest["classification"] == MANIFEST_CORRECTION_REASON
+    # The controlling v0.6 manifest preserves the same owner-issued time.
+    controlling = json.loads((repo_root / PACKAGE_RELPATH / "PACKAGE-MANIFEST.json").read_bytes())
+    assert controlling["authority_effective_from"] == "2026-08-11T20:30:00Z"
+    assert controlling["authority_effective_from_source"] == "OWNER_EXPLICIT_PROSPECTIVE_TIME"
     assert manifest["result_bearing_execution_seen_before_supersession"] is False
     assert projection.authority["validity"]["effective_from"] == AUTHORITY_EFFECTIVE_FROM
     assert AUTHORITY_EFFECTIVE_FROM == "2026-08-11T20:30:00Z"
@@ -1876,9 +1900,11 @@ def test_manifest_digest_and_byte_count_separate_v0_4_from_v0_3(repo_root: Path)
     recorded here so nobody later mistakes the shared digest for a copy-paste
     error, and so the checks that *do* separate the two are pinned.
     """
-    assert FROZEN_MISSION_PACKAGE_SHA256 == OWNER_ISSUED_MISSION_PACKAGE_SHA256
-    assert str(FROZEN_MISSION_MANIFEST_SHA256) not in {str(OWNER_ISSUED_MISSION_MANIFEST_SHA256)}
-    assert int(FROZEN_MISSION_PACKAGE_BYTES) not in {int(OWNER_ISSUED_MISSION_PACKAGE_BYTES)}
+    v0_4_package = "1d4738d615bf2cbca481268910a14fadc0a4fceb4f60bb5619d1acf1a69687c3"
+    v0_4_manifest = "9b85ec3b6f5f615dbdf464f68ce5dfda1e081e886520a4e98883e02573415f6b"
+    assert v0_4_package == OWNER_ISSUED_MISSION_PACKAGE_SHA256
+    assert str(v0_4_manifest) not in {str(OWNER_ISSUED_MISSION_MANIFEST_SHA256)}
+    assert int(OWNER_ISSUED_MISSION_PACKAGE_BYTES) not in {67965}
     # v0.3 therefore fails verification against the controlling identity.
     with pytest.raises(MissionContractError, match="identity or counts differ"):
         verify_frozen_mission_input(repo_root / OWNER_ISSUED_PACKAGE_RELPATH)

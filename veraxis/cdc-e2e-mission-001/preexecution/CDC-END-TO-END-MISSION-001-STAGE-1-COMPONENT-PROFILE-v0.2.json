@@ -1,0 +1,263 @@
+{
+  "applies_to_mission_input": "CDC-END-TO-END-MISSION-001-INPUT-v0.6",
+  "artifact_id": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2",
+  "campaign": "CDC-END-TO-END-MISSION-001",
+  "claim_ceiling": {
+    "is": "synthetic evaluation semantics only",
+    "is_not": [
+      "not Moroccan procurement law",
+      "not CDC policy",
+      "not legal interpretation",
+      "not production OIC semantics",
+      "not ZTL kernel semantics",
+      "not admitted OIC meaning"
+    ],
+    "relationship_to_admitted_meaning": "a separately governed Stage-1 evaluation profile; it does not retroactively become admitted OIC meaning and is not written into any admitted control"
+  },
+  "classification": "OWNER_DESIGNATED_SYNTHETIC_STAGE_1_COMPONENT_SEMANTICS",
+  "clearance_binding_requirement": {
+    "implemented_yet": false,
+    "new_required_clearance_field": "stage_1_component_profile_sha256",
+    "profile_change_after_authorization": "INVALIDATES_CLEARANCE",
+    "verification_requirement": "the future implementation must verify this profile from its exact bytes before Stage 1"
+  },
+  "components_implemented": false,
+  "controls": {
+    "C-AWARD-01": {
+      "absence_is_not_false": true,
+      "conflict_is_not_resolved_by_precedence_or_recency": true,
+      "control_id": "C-AWARD-01",
+      "observation_value_domain": [
+        true,
+        false
+      ],
+      "required_facts": [
+        "award_traceable_to_scoring",
+        "required_approvals_present"
+      ]
+    },
+    "C-EVAL-01": {
+      "absence_is_not_false": true,
+      "conflict_is_not_resolved_by_precedence_or_recency": true,
+      "control_id": "C-EVAL-01",
+      "observation_value_domain": [
+        true,
+        false
+      ],
+      "required_facts": [
+        "scoring_record_complete",
+        "declared_criteria_only"
+      ]
+    },
+    "C-TENDER-01": {
+      "absence_is_not_false": true,
+      "conflict_is_not_resolved_by_precedence_or_recency": true,
+      "control_id": "C-TENDER-01",
+      "observation_value_domain": [
+        true,
+        false
+      ],
+      "required_facts": [
+        "competition_notice_published",
+        "minimum_competition_period_met"
+      ]
+    }
+  },
+  "decision_procedure": {
+    "absence_definition": "the required fact has no admitted observation",
+    "conflict_definition": "the required fact has admitted observations of more than one distinct value",
+    "no_other_decision_route_exists": true,
+    "ordered_rules": [
+      {
+        "condition": "any required fact absent",
+        "order": 1,
+        "reason": "MISSING_REQUIRED_EVIDENCE",
+        "verdict": "UNRESOLVED"
+      },
+      {
+        "condition": "any required fact conflicting",
+        "order": 2,
+        "reason": "CONFLICTING_REQUIRED_EVIDENCE",
+        "verdict": "UNRESOLVED"
+      },
+      {
+        "condition": "all required facts true",
+        "order": 3,
+        "reason": "ALL_REQUIRED_CONDITIONS_SATISFIED",
+        "verdict": "SATISFIED"
+      },
+      {
+        "condition": "otherwise",
+        "order": 4,
+        "reason": "REQUIRED_CONDITION_NOT_SATISFIED",
+        "verdict": "BREACH"
+      }
+    ],
+    "unknown_may_become_breach": false,
+    "unknown_may_become_satisfied": false
+  },
+  "historical_knowledge": {
+    "note": "The three control vocabularies and the four-rule procedure were owner-designated independently of the historical 30 / 9 / null+7 publication_window_days mapping. No claim is made that no participant ever inspected the historical reference-only results; the claim is about what the rules were derived from and what may enter the computation.",
+    "reference_only_results_used_as_computational_input": false,
+    "reference_only_results_used_to_infer_component_rules": false
+  },
+  "mission_executed": false,
+  "mission_id": "CDC-TEST-MISSION-001",
+  "predecessor_preserved_immutable": true,
+  "predecessor_sha256": "95ffd83dc8a4d0b3d8fb525b02c6f6f31e34ff0dd09369aaebaaf2661997828b",
+  "preregistered_population_assignments": {
+    "P001": {
+      "controls": {
+        "C-AWARD-01": {
+          "award_traceable_to_scoring": [
+            true
+          ],
+          "required_approvals_present": [
+            true
+          ]
+        },
+        "C-EVAL-01": {
+          "declared_criteria_only": [
+            true
+          ],
+          "scoring_record_complete": [
+            true
+          ]
+        },
+        "C-TENDER-01": {
+          "competition_notice_published": [
+            true
+          ],
+          "minimum_competition_period_met": [
+            true
+          ]
+        }
+      }
+    },
+    "P002": {
+      "controls": {
+        "C-AWARD-01": {
+          "award_traceable_to_scoring": [
+            true
+          ],
+          "required_approvals_present": [
+            false
+          ]
+        },
+        "C-EVAL-01": {
+          "declared_criteria_only": [
+            false
+          ],
+          "scoring_record_complete": [
+            true
+          ]
+        },
+        "C-TENDER-01": {
+          "competition_notice_published": [
+            true
+          ],
+          "minimum_competition_period_met": [
+            false
+          ]
+        }
+      }
+    },
+    "P003": {
+      "controls": {
+        "C-AWARD-01": {
+          "award_traceable_to_scoring": [],
+          "required_approvals_present": [
+            true,
+            false
+          ]
+        },
+        "C-EVAL-01": {
+          "declared_criteria_only": [
+            true,
+            false
+          ],
+          "scoring_record_complete": []
+        },
+        "C-TENDER-01": {
+          "competition_notice_published": [],
+          "minimum_competition_period_met": [
+            true,
+            false
+          ]
+        }
+      }
+    },
+    "representation": "per required fact, the list of admitted observation values, in the same form runtime evidence uses. An empty list is absence; a list of more than one distinct value is conflict. No string pseudo-values are used.",
+    "status": "PREREGISTERED_BEFORE_COMPONENT_IMPLEMENTATION_AND_RESULT_BEARING_EXECUTION"
+  },
+  "reason_code_vocabulary": [
+    "ALL_REQUIRED_CONDITIONS_SATISFIED",
+    "REQUIRED_CONDITION_NOT_SATISFIED",
+    "MISSING_REQUIRED_EVIDENCE",
+    "CONFLICTING_REQUIRED_EVIDENCE"
+  ],
+  "result_bearing": false,
+  "result_language": {
+    "derived_results_supplied_as_runtime_inputs": false,
+    "deterministic_results_derivable_from_frozen_rules_and_inputs": true,
+    "note": "This is a deterministic experiment. That its answers are derivable from the frozen rules and the frozen inputs is a property of determinism, not a defect and not an encoded expected result. What must not happen is a derived result being handed back to the computation that is supposed to produce it.",
+    "precomputed_candidate_objects_present": false,
+    "precomputed_evaluation_objects_present": false,
+    "precomputed_verdict_objects_present": false,
+    "precomputed_warrant_objects_present": false
+  },
+  "stage_1_authorized_by_this_profile": false,
+  "successor_implementation_requirements": {
+    "current_defect": "the authoritative Stage-1 path passes the same object three times: evaluator(chain.execution_input, chain.execution_input, chain.execution_input)",
+    "implemented_yet": false,
+    "prohibited_inputs": [
+      "reference-only deterministic_evaluation",
+      "reference-only warrant_artifact",
+      "reference-only candidate",
+      "any design shape label"
+    ],
+    "required_interface": "evaluator(admitted_control, evidence_bundle, admission_record)",
+    "warrant_builder_receives": "the resulting evaluation plus the exact governed inputs this profile requires"
+  },
+  "successor_scope": "REPRESENTATION_AND_PROVENANCE_CORRECTION_ONLY",
+  "supersedes": "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.1",
+  "synthetic_evaluation_semantics_changed_vs_v0_1": false,
+  "verdict_vocabulary": [
+    "SATISFIED",
+    "BREACH",
+    "UNRESOLVED"
+  ],
+  "warrant_builder": {
+    "ZTL_WARRANT": "PROHIBITED",
+    "establishes_logical_warrant": false,
+    "fixed_field_values": {
+      "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+      "logical_warrant_status": "NOT_ESTABLISHED",
+      "warrant_class": "FALLBACK_WARRANT",
+      "ztl_kernel_invoked": false
+    },
+    "permitted_warrant_class": [
+      "FALLBACK_WARRANT"
+    ],
+    "prohibition_lifts_only_on": "a separately governed ZTL runtime/kernel adapter designated by the owner",
+    "required_fields": [
+      "warrant_id",
+      "warrant_class",
+      "mission_id",
+      "procedure_id",
+      "control_id",
+      "evaluation_id",
+      "evaluation_digest",
+      "evaluation_verdict",
+      "logical_warrant_status",
+      "ztl_kernel_invoked",
+      "fallback_basis",
+      "limitations"
+    ],
+    "required_limitations": [
+      "NO_ZTL_DERIVATION"
+    ],
+    "semantics": "The fallback artifact is provenance around an evaluation. It does not establish a logical warrant.",
+    "unresolved_evaluation_handling": "preserve UNRESOLVED verbatim; promotion to SATISFIED or BREACH is prohibited"
+  }
+}

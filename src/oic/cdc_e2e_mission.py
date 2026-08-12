@@ -30,18 +30,21 @@ OFFICIAL_CDC_RECORD_CREATION: Final = "PROHIBITED"
 # v0.1 is reviewer-authority currentness: the v0.1 standing expired at
 # 2026-08-11T00:00:00Z, so it could not authorize a real later disposition.
 # v0.1 is retained immutable and addressable as the predecessor.
-FROZEN_MISSION_INPUT_RELPATH: Final = "veraxis/cdc-e2e-mission-001/input-v0.4"
+FROZEN_MISSION_INPUT_RELPATH: Final = "veraxis/cdc-e2e-mission-001/input-v0.6"
 # The package digest is computed over the declared member identities, and the
 # manifest is self-excluded, so a manifest-only correction leaves it unchanged:
 # v0.4 shares v0.3's package digest by construction. The manifest digest and the
 # physical byte count are what separate them, and both are checked.
 FROZEN_MISSION_PACKAGE_SHA256: Final = (
-    "1d4738d615bf2cbca481268910a14fadc0a4fceb4f60bb5619d1acf1a69687c3"
+    "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b"
 )
-FROZEN_MISSION_PACKAGE_BYTES: Final = 67965
+FROZEN_MISSION_PACKAGE_BYTES: Final = 57452
 FROZEN_MISSION_MANIFEST_SHA256: Final = (
-    "9b85ec3b6f5f615dbdf464f68ce5dfda1e081e886520a4e98883e02573415f6b"
+    "8aad5e78635b691fa2fad0336e07d9b0738b61db7b12ded2ed22149a258bdb77"
 )
+# v0.6 carries three evidence objects per chain. The three result objects the
+# earlier packages carried per chain were removed, so this count is 27, not 54.
+FROZEN_MISSION_EVIDENCE_OBJECT_COUNT: Final = 27
 
 # v0.3 carried the correct owner-issued authority but an unqualified top-level
 # ``issued_at`` inherited from the rejected v0.2 local-clock lineage. It is
@@ -98,6 +101,7 @@ REQUIRED_CLEARANCE_FIELDS: Final = (
     "adjudication_protocol_sha256",
     "action_plan_sha256",
     "owner_preexecution_interpretation_sha256",
+    "stage_1_component_profile_sha256",
 )
 # Retained only as the historical five-kind vocabulary. It is NOT the authoritative
 # output source: Stage 2 renders from the five frozen ``04-OUTPUTS/`` definitions.
@@ -158,6 +162,7 @@ class ExecutionClearance:
     adjudication_protocol_sha256: str | None
     action_plan_sha256: str | None = None
     owner_preexecution_interpretation_sha256: str | None = None
+    stage_1_component_profile_sha256: str | None = None
 
     def as_mapping(self) -> dict[str, str | None]:
         """Expose the exact fields for deterministic validation and evidence."""
@@ -249,6 +254,21 @@ def verify_frozen_mission_input(root: Path) -> FrozenMissionInput:
     physical = {path.relative_to(root).as_posix() for path in root.rglob("*") if path.is_file()}
     if physical != declared_paths | {"PACKAGE-MANIFEST.json"}:
         raise MissionContractError("mission package contains missing or undeclared files")
+    # SHA256SUMS is checked in addition to the member-byte verification above.
+    # Neither substitutes for the other, and neither substitutes for the
+    # aggregate package digest computed below.
+    declared_sums: dict[str, str] = {}
+    for line in (root / "SHA256SUMS").read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        digest_text, _, listed = line.partition("  ")
+        declared_sums[listed] = digest_text
+    for identity in identities:
+        listed_path = str(identity["path"])
+        if listed_path == "SHA256SUMS":
+            continue
+        if declared_sums.get(listed_path) != identity["sha256"]:
+            raise MissionContractError(f"SHA256SUMS disagrees with member bytes: {listed_path}")
     identity_bytes = json.dumps(identities, sort_keys=True, ensure_ascii=False).encode()
     package_digest = _file_sha256(identity_bytes)
     package_bytes = sum(path.stat().st_size for path in root.rglob("*") if path.is_file())
@@ -289,7 +309,7 @@ def verify_frozen_mission_input(root: Path) -> FrozenMissionInput:
         manifest_sha256=FROZEN_MISSION_MANIFEST_SHA256,
         population_count=3,
         control_count=3,
-        evidence_object_count=54,
+        evidence_object_count=FROZEN_MISSION_EVIDENCE_OBJECT_COUNT,
         output_artifact_count=5,
     )
     if result != expected_result:
@@ -372,6 +392,8 @@ def require_result_clearance(
         != OWNER_PREEXECUTION_INTERPRETATION_SHA256
     ):
         mismatches.append("owner_preexecution_interpretation_sha256")
+    if clearance.stage_1_component_profile_sha256 != STAGE_1_COMPONENT_PROFILE_SHA256:
+        mismatches.append("stage_1_component_profile_sha256")
     if mismatches:
         raise ResultBearingMissionBlockedError(f"result-bearing binding mismatch: {mismatches}")
 
@@ -491,8 +513,13 @@ EXECUTION_INPUT_CHAIN_FIELDS: Final = (
     "admission_record",
     "admitted_control",
     "evidence_bundle",
-    "prior_institutional_state",
 )
+
+# Stage 2 needs a prior institutional state. input-v0.6 deliberately carries
+# none, because at Stage-1 input time no candidate exists and inventing one
+# would be a pre-candidate state promotion. It is therefore optional in the
+# projection and its absence makes Stage-2 derivation refuse explicitly.
+OPTIONAL_STAGE_2_CHAIN_FIELDS: Final = ("prior_institutional_state",)
 
 MEMBER_ROLES: Final[dict[str, str]] = {
     "01-MISSION-MANIFEST.json": "REFERENCE_ONLY",
@@ -508,7 +535,7 @@ MEMBER_ROLES: Final[dict[str, str]] = {
     "05-FRENCH/french-packet.json": "POST_EXECUTION_RENDER_INPUT",
     "06-GOVERNANCE/binding.json": "GOVERNANCE_BINDING",
     "07-CLAIM-EVIDENCE-MAP/"
-    "CDC-END-TO-END-MISSION-001-CLAIM-EVIDENCE-MAP-v0.1.json": "EVALUATION_AID",
+    "CDC-END-TO-END-MISSION-001-CLAIM-EVIDENCE-MAP-v0.2.json": "EVALUATION_AID",
     "SHA256SUMS": "MANIFEST_INTEGRITY",
 }
 SELF_EXCLUDED_MEMBER: Final = "PACKAGE-MANIFEST.json"
@@ -641,6 +668,9 @@ def project_frozen_mission(frozen: FrozenMissionInput) -> MissionProjection:
                 raise MissionContractError(
                     f"chain {procedure_id}x{control_id} lacks execution inputs: {missing}"
                 )
+            for optional in OPTIONAL_STAGE_2_CHAIN_FIELDS:
+                if optional in chain:
+                    execution_input[optional] = chain[optional]
             execution_input["procedure_id"] = chain["procedure_id"]
             execution_input["control_ref"] = chain["control_ref"]
             execution_input["ebawu"] = chain["ebawu"]
@@ -1379,14 +1409,29 @@ def _form_stage_1(
     must never erase the rest of the population.
     """
     require_projected_source(projection, frozen)
+    # Candidate formation over the frozen mission population is result-bearing
+    # and consumes the single authorized attempt. The interlock sits here, above
+    # the injected components, so it cannot be sidestepped by supplying a
+    # different evaluator -- including a stub in a test.
+    _require_mission_population_not_formed(projection)
     tally = dict.fromkeys(DENOMINATOR_STATES, 0)
     observations: list[Stage1ChainObservation] = []
     for chain in projection.chains:
         try:
-            evaluation = evaluator(
-                chain.execution_input, chain.execution_input, chain.execution_input
+            # Three semantically distinct inputs. Passing the same object three
+            # times, as this previously did, meant the interface guaranteed
+            # nothing about what the component actually received.
+            admitted_control = _require_mapping(
+                chain.execution_input["admitted_control"], "admitted_control"
             )
-            warrant_class, warrant = warrant_builder(evaluation, chain.execution_input)
+            evidence_bundle = _require_mapping(
+                chain.execution_input["evidence_bundle"], "evidence_bundle"
+            )
+            admission_record = _require_mapping(
+                chain.execution_input["admission_record"], "admission_record"
+            )
+            evaluation = evaluator(admitted_control, evidence_bundle, admission_record)
+            warrant_class, warrant = warrant_builder(evaluation, admitted_control)
             if warrant_class not in {"ZTL_WARRANT", "FALLBACK_WARRANT"}:
                 raise MissionContractError("warrant artifact class is not governed")
             control = _require_mapping(chain.execution_input["admitted_control"], "control")
@@ -1405,6 +1450,9 @@ def _form_stage_1(
                 "warrant_class": warrant_class,
                 "warrant": warrant,
                 "input_digest": chain.input_digest(),
+                "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+                "machine_disposition": None,
+                "institutional_transition": "NONE",
             }
             artifact = Stage1ChainArtifact(
                 chain_id=chain.chain_id,
@@ -1813,6 +1861,17 @@ def require_stage_2_clearance(
         raise ResultBearingMissionBlockedError(f"stage-2 artifact binding mismatch: {mismatches}")
 
 
+def _require_prior_institutional_state(chain: ExecutionChain) -> object:
+    """Stage-2 needs a prior state; refuse clearly when the input carries none."""
+    if "prior_institutional_state" not in chain.execution_input:
+        raise MissionContractError(
+            f"chain {chain.chain_id} carries no prior_institutional_state: the "
+            "controlling Stage-1 input declares PRE_CANDIDATE, so no Stage-2 "
+            "transition proposal can be derived from it"
+        )
+    return chain.execution_input["prior_institutional_state"]
+
+
 def derive_transition_registry(
     projection: MissionProjection, artifact: Stage1ChainArtifact
 ) -> dict[str, Any]:
@@ -1844,7 +1903,7 @@ def derive_transition_registry(
         "evaluations": {str(artifact.evaluation["evaluation_id"]): artifact.evaluation},
         "reviewers": {reviewer_id: projection.authority},
         warrant_category: {artifact.warrant_ref: artifact.warrant},
-        "states": {artifact.ebawu_id: chain.execution_input["prior_institutional_state"]},
+        "states": {artifact.ebawu_id: _require_prior_institutional_state(chain)},
         "stale_candidate_ids": (),
     }
 
@@ -1876,7 +1935,7 @@ def derive_transition_proposal(
         "deterministic_execution_result_ref": str(artifact.evaluation["evaluation_id"]),
         "reviewer_id": str(disposition["reviewer_id"]),
         "reviewer_role_assertion": str(disposition["reviewer_role"]),
-        "prior_institutional_state": chain.execution_input["prior_institutional_state"],
+        "prior_institutional_state": _require_prior_institutional_state(chain),
         "requested_new_institutional_state": NEW_STATE_BY_ACTION[action],
         "parent_event_id": None,
     }
@@ -2560,3 +2619,393 @@ def _m12(stage_2: Stage2Result | None) -> dict[str, Any]:
         "affected_output_eligibility": correction.get("affected_output_eligibility"),
         "detail": correction.get("detail"),
     }
+
+
+# ---------------------------------------------------------------------------
+# Stage-1 governed components.
+#
+# The gap these close: the mission had no designated evaluator or warrant
+# builder, and the admitted controls encoded no rule deriving a verdict from
+# evidence. The rule now lives in an owner-designated component profile that is
+# separately governed configuration -- it is verified from exact bytes and is
+# deliberately NOT written into any admitted control, because a synthetic
+# evaluation profile must not become admitted OIC meaning.
+# ---------------------------------------------------------------------------
+
+STAGE_1_COMPONENT_PROFILE_RELPATH: Final = (
+    "veraxis/cdc-e2e-mission-001/preexecution/"
+    "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2.json"
+)
+STAGE_1_COMPONENT_PROFILE_SHA256: Final = (
+    "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57"
+)
+STAGE_1_COMPONENT_PROFILE_ID: Final = "CDC-END-TO-END-MISSION-001-STAGE-1-COMPONENT-PROFILE-v0.2"
+
+VERDICT_SATISFIED: Final = "SATISFIED"
+VERDICT_BREACH: Final = "BREACH"
+VERDICT_UNRESOLVED: Final = "UNRESOLVED"
+VERDICTS: Final = (VERDICT_SATISFIED, VERDICT_BREACH, VERDICT_UNRESOLVED)
+
+REASON_ALL_SATISFIED: Final = "ALL_REQUIRED_CONDITIONS_SATISFIED"
+REASON_NOT_SATISFIED: Final = "REQUIRED_CONDITION_NOT_SATISFIED"
+REASON_MISSING: Final = "MISSING_REQUIRED_EVIDENCE"
+REASON_CONFLICTING: Final = "CONFLICTING_REQUIRED_EVIDENCE"
+
+FALLBACK_WARRANT_CLASS: Final = "FALLBACK_WARRANT"
+ZTL_WARRANT_STATE: Final = "PROHIBITED"
+NO_ZTL_DERIVATION: Final = "NO_ZTL_DERIVATION"
+
+ON_UNKNOWN_NON_APPLICATION_REASON: Final = "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT"
+
+# The frozen mission population. The governed components refuse to evaluate it
+# until a fresh one-run owner execution authorization exists; none does.
+FROZEN_MISSION_PROCEDURE_IDS: Final = ("P-001", "P-002", "P-003")
+MISSION_EXECUTION_AUTHORIZATION: Final[str | None] = None
+MISSION_POPULATION_EXECUTION_STATE: Final = "AWAITING_FRESH_OWNER_EXECUTION_AUTHORIZATION"
+
+
+class ComponentProfileProvenanceError(MissionContractError):
+    """The component profile was not verified from its exact bytes."""
+
+
+class PreconditionMismatchError(MissionContractError):
+    """A fail-closed precondition mismatch. Never a verdict."""
+
+
+class MissionPopulationExecutionBlockedError(ResultBearingMissionBlockedError):
+    """Evaluation of the frozen mission population was attempted without authorization."""
+
+
+@dataclass(frozen=True, slots=True)
+class FrozenComponentProfile:
+    """Verified Stage-1 component semantics.
+
+    Parsed only after the exact-byte identity check succeeds: a profile whose
+    bytes do not match is never interpreted, so a mutated rule cannot reach
+    semantic use even briefly.
+    """
+
+    path: Path
+    sha256_hex: str
+    byte_count: int
+    profile_id: str
+    required_facts: Mapping[str, tuple[str, ...]]
+    preregistered_assignments: Mapping[str, Mapping[str, Mapping[str, tuple[bool, ...]]]]
+    permitted_warrant_classes: tuple[str, ...]
+    ztl_warrant_state: str
+
+    def facts_for(self, control_id: str) -> tuple[str, ...]:
+        """Required facts for a control, or refuse. Never guesses a vocabulary."""
+        facts = self.required_facts.get(control_id)
+        if facts is None:
+            raise PreconditionMismatchError(
+                f"the component profile designates no required facts for {control_id}"
+            )
+        return facts
+
+
+def verify_frozen_component_profile(path: Path) -> FrozenComponentProfile:
+    """Verify exact profile bytes, then parse. Never the other way round."""
+    payload = path.read_bytes()
+    observed = _file_sha256(payload)
+    if observed != STAGE_1_COMPONENT_PROFILE_SHA256:
+        raise ComponentProfileProvenanceError(
+            f"component profile digest is {observed}, expected {STAGE_1_COMPONENT_PROFILE_SHA256}"
+        )
+    document = _require_mapping(json.loads(payload), "component profile")
+    if document.get("artifact_id") != STAGE_1_COMPONENT_PROFILE_ID:
+        raise ComponentProfileProvenanceError("component profile identity mismatch")
+    controls = _require_mapping(document.get("controls"), "profile.controls")
+    required = {
+        control_id: tuple(
+            str(name)
+            for name in _require_sequence(
+                _require_mapping(body, "profile control").get("required_facts"), "required_facts"
+            )
+        )
+        for control_id, body in controls.items()
+    }
+    raw_assignments = _require_mapping(
+        document.get("preregistered_population_assignments"), "profile.assignments"
+    )
+    assignments: dict[str, dict[str, dict[str, tuple[bool, ...]]]] = {}
+    for procedure, body in raw_assignments.items():
+        if not isinstance(body, Mapping) or "controls" not in body:
+            continue
+        per_control: dict[str, dict[str, tuple[bool, ...]]] = {}
+        for control_id, facts in _require_mapping(body["controls"], "assignment").items():
+            per_control[control_id] = {
+                str(fact): tuple(bool(value) for value in _require_sequence(values, "values"))
+                for fact, values in _require_mapping(facts, "facts").items()
+            }
+        assignments[procedure] = per_control
+    warrant = _require_mapping(document.get("warrant_builder"), "profile.warrant_builder")
+    return FrozenComponentProfile(
+        path=path,
+        sha256_hex=observed,
+        byte_count=len(payload),
+        profile_id=str(document["artifact_id"]),
+        required_facts=required,
+        preregistered_assignments=assignments,
+        permitted_warrant_classes=tuple(
+            str(name)
+            for name in _require_sequence(
+                warrant.get("permitted_warrant_class"), "permitted_warrant_class"
+            )
+        ),
+        ztl_warrant_state=str(warrant.get("ZTL_WARRANT")),
+    )
+
+
+def require_verified_component_profile(profile: object) -> FrozenComponentProfile:
+    """Refuse anything that is not a verification of the exact profile bytes."""
+    if not isinstance(profile, FrozenComponentProfile):
+        raise ComponentProfileProvenanceError(
+            "the component profile must be a FrozenComponentProfile verified from bytes; "
+            "a mapping carrying the profile digest label is not the profile"
+        )
+    if profile != verify_frozen_component_profile(profile.path):
+        raise ComponentProfileProvenanceError(
+            "component profile does not recompute from the bytes on disk"
+        )
+    return profile
+
+
+def _observed_values(evidence_bundle: Mapping[str, Any], fact: str) -> tuple[bool, ...]:
+    """Admitted observation values for one fact, with no coercion whatsoever.
+
+    A non-boolean observation is a fail-closed precondition mismatch, not a
+    falsy value. ``0``, ``""``, ``null`` and ``"true"`` are all refused.
+    """
+    values: list[bool] = []
+    for raw in _require_sequence(evidence_bundle.get("observations", []), "observations"):
+        observation = _require_mapping(raw, "observation")
+        if str(observation.get("fact")) != fact:
+            continue
+        value = observation.get("value")
+        if not isinstance(value, bool):
+            raise PreconditionMismatchError(
+                f"PRECONDITION_MISMATCH_FAIL_CLOSED: observation for {fact!r} is "
+                f"{value!r} of type {type(value).__name__}; only JSON booleans are admitted "
+                "and no truthiness coercion is performed"
+            )
+        values.append(value)
+    return tuple(values)
+
+
+def evaluate_control(
+    admitted_control: Mapping[str, Any],
+    evidence_bundle: Mapping[str, Any],
+    admission_record: Mapping[str, Any],
+    *,
+    profile: object,
+    mission_id: str,
+) -> dict[str, Any]:
+    """The governed Stage-1 evaluator.
+
+    Three semantically distinct inputs. The component profile is separately
+    bound configuration supplied out of band, not a fourth mutable semantic
+    input the caller may vary per chain.
+
+    The decision order is exactly the frozen one and there is no fifth route:
+    absence and conflict both resolve to UNRESOLVED and are tested *before*
+    truth, so neither can fall through into BREACH. Absence is not false and
+    conflict is not resolved by precedence or recency.
+    """
+    verified = require_verified_component_profile(profile)
+    control_id = str(admitted_control["control_id"])
+    procedure_id = str(admitted_control["procedure_id"])
+    _require_mission_population_not_evaluated(mission_id, procedure_id)
+    facts = verified.facts_for(control_id)
+
+    observations = {fact: _observed_values(evidence_bundle, fact) for fact in facts}
+    absent = sorted(fact for fact, values in observations.items() if not values)
+    conflicting = sorted(fact for fact, values in observations.items() if len(set(values)) > 1)
+
+    if absent:
+        verdict, reason, detail = VERDICT_UNRESOLVED, REASON_MISSING, absent
+    elif conflicting:
+        verdict, reason, detail = VERDICT_UNRESOLVED, REASON_CONFLICTING, conflicting
+    elif all(values[0] for values in observations.values()):
+        verdict, reason, detail = VERDICT_SATISFIED, REASON_ALL_SATISFIED, []
+    else:
+        verdict = VERDICT_BREACH
+        reason = REASON_NOT_SATISFIED
+        detail = sorted(fact for fact, values in observations.items() if values[0] is False)
+
+    record: dict[str, Any] = {
+        "evaluation_id": f"EVAL-{procedure_id}-{control_id}",
+        "mission_id": mission_id,
+        "procedure_id": procedure_id,
+        "control_id": control_id,
+        "admission_record_ref": str(admission_record["admission_id"]),
+        "evidence_bundle_ref": str(evidence_bundle["evidence_bundle_id"]),
+        "evidence_bundle_digest": sha256(evidence_bundle),
+        "component_profile_id": verified.profile_id,
+        "component_profile_sha256": verified.sha256_hex,
+        "required_facts": list(facts),
+        "observed_required_facts": {fact: list(values) for fact, values in observations.items()},
+        "verdict": verdict,
+        "reason_code": reason,
+        "reason_detail_facts": detail,
+        # on_unknown is admitted-control metadata. Stage 1 observes it and does
+        # not apply it: applying it here would let the machine emit a
+        # disposition, which is the human action plan's role, not the
+        # evaluator's.
+        "on_unknown_observed": admitted_control.get("on_unknown"),
+        "on_unknown_applied": False,
+        "non_application_reason": ON_UNKNOWN_NON_APPLICATION_REASON,
+        "assurance_mode": ASSURANCE_MODE,
+        "machine_disposition": None,
+        "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+    }
+    if verdict not in VERDICTS:
+        raise MissionContractError(f"evaluator produced an ungoverned verdict: {verdict}")
+    record["evaluation_digest"] = sha256(record)
+    return record
+
+
+def build_fallback_warrant(
+    evaluation: Mapping[str, Any], *, profile: object
+) -> tuple[str, dict[str, Any]]:
+    """The governed warrant builder. FALLBACK_WARRANT only; ZTL is not invoked.
+
+    The artifact is provenance around a deterministic evaluation. It establishes
+    no logical warrant, and it carries the evaluation's verdict through
+    unchanged -- an UNRESOLVED evaluation stays UNRESOLVED.
+    """
+    verified = require_verified_component_profile(profile)
+    if verified.ztl_warrant_state != ZTL_WARRANT_STATE:
+        raise MissionContractError("the profile no longer prohibits ZTL_WARRANT")
+    if tuple(verified.permitted_warrant_classes) != (FALLBACK_WARRANT_CLASS,):
+        raise MissionContractError("the profile permits a warrant class this builder cannot emit")
+    verdict = str(evaluation["verdict"])
+    if verdict not in VERDICTS:
+        raise MissionContractError(f"evaluation carries an ungoverned verdict: {verdict}")
+    warrant = {
+        "warrant_id": f"FBW-{evaluation['procedure_id']}-{evaluation['control_id']}",
+        "warrant_class": FALLBACK_WARRANT_CLASS,
+        "mission_id": evaluation["mission_id"],
+        "procedure_id": evaluation["procedure_id"],
+        "control_id": evaluation["control_id"],
+        "evaluation_id": evaluation["evaluation_id"],
+        "evaluation_digest": evaluation["evaluation_digest"],
+        "evaluation_verdict": verdict,
+        "logical_warrant_status": "NOT_ESTABLISHED",
+        "ztl_kernel_invoked": False,
+        "fallback_basis": "DETERMINISTIC_EVALUATION_RECORD",
+        "limitations": [NO_ZTL_DERIVATION],
+    }
+    return FALLBACK_WARRANT_CLASS, warrant
+
+
+def _require_mission_population_not_evaluated(mission_id: str, procedure_id: str) -> None:
+    """Refuse to evaluate the frozen mission population without authorization.
+
+    The implementation authorization permits building and testing these
+    components; it does not permit producing the mission's actual nine
+    outcomes. This interlock makes that structural rather than a matter of test
+    discipline, so no unit, contract, integration or CI run can consume the one
+    Stage-1 attempt by accident.
+    """
+    if MISSION_EXECUTION_AUTHORIZATION is not None:
+        return
+    if mission_id == MISSION_ID and procedure_id in FROZEN_MISSION_PROCEDURE_IDS:
+        raise MissionPopulationExecutionBlockedError(
+            f"result-bearing evaluation of the frozen mission population is not "
+            f"authorized: {mission_id} / {procedure_id}. State is "
+            f"{MISSION_POPULATION_EXECUTION_STATE}."
+        )
+
+
+def _require_mission_population_not_formed(projection: MissionProjection) -> None:
+    """Refuse Stage-1 candidate formation over the frozen mission population."""
+    if MISSION_EXECUTION_AUTHORIZATION is not None:
+        return
+    if (
+        projection.mission_id == MISSION_ID
+        and projection.package_sha256 == FROZEN_MISSION_PACKAGE_SHA256
+    ):
+        raise MissionPopulationExecutionBlockedError(
+            "Stage-1 candidate formation over the frozen mission population is not "
+            f"authorized: package {FROZEN_MISSION_PACKAGE_SHA256}. State is "
+            f"{MISSION_POPULATION_EXECUTION_STATE}. The implementation authorization "
+            "covers building and testing the components, not producing the mission's "
+            "actual nine outcomes."
+        )
+
+
+def require_evidence_matches_preregistered_assignments(
+    projection: MissionProjection, profile: object
+) -> dict[str, Any]:
+    """Check package evidence against the frozen preregistered assignments.
+
+    The assignments are a PREEXECUTION_CONFORMANCE_CONSTRAINT_ONLY. They are not
+    runtime evidence and are never read in their place: this function compares
+    and refuses, it does not supply. A mismatch is a fail-closed precondition
+    mismatch, not something to reconcile.
+    """
+    verified = require_verified_component_profile(profile)
+    checked: list[str] = []
+    for chain in projection.chains:
+        evidence = _require_mapping(chain.execution_input["evidence_bundle"], "evidence")
+        control = _require_mapping(chain.execution_input["admitted_control"], "control")
+        public_id = chain.procedure_id
+        expected = verified.preregistered_assignments.get(public_id, {}).get(chain.control_id)
+        if expected is None:
+            raise PreconditionMismatchError(
+                f"PRECONDITION_MISMATCH_FAIL_CLOSED: the profile preregisters no assignment "
+                f"for {public_id} x {chain.control_id}"
+            )
+        observed = {
+            fact: list(_observed_values(evidence, fact))
+            for fact in verified.facts_for(str(control["control_id"]))
+        }
+        if observed != {fact: list(values) for fact, values in expected.items()}:
+            raise PreconditionMismatchError(
+                f"PRECONDITION_MISMATCH_FAIL_CLOSED: package evidence for {public_id} x "
+                f"{chain.control_id} does not match the frozen preregistered assignment; "
+                f"observed {observed}, preregistered "
+                f"{ {fact: list(v) for fact, v in expected.items()} }"
+            )
+        checked.append(chain.chain_id)
+    return {
+        "constraint": "PREEXECUTION_CONFORMANCE_CONSTRAINT_ONLY",
+        "assignments_are_runtime_evidence": False,
+        "chains_checked": checked,
+        "runtime_evidence_source": "input-v0.6 evidence_bundle",
+        "fallback_to_profile_assignments": False,
+    }
+
+
+def governed_stage_1_components(
+    profile: object, *, mission_id: str
+) -> tuple[EvaluationFunction, WarrantFunction]:
+    """Bind the profile out of band and return the governed component pair.
+
+    The profile is closed over here rather than passed per chain, so a caller
+    driving Stage 1 has no parameter through which to vary the semantics between
+    chains, and no way to supply a fourth mutable semantic input.
+    """
+    verified = require_verified_component_profile(profile)
+
+    def evaluator(
+        admitted_control: Mapping[str, Any],
+        evidence_bundle: Mapping[str, Any],
+        admission_record: Mapping[str, Any],
+    ) -> Mapping[str, Any]:
+        return evaluate_control(
+            admitted_control,
+            evidence_bundle,
+            admission_record,
+            profile=verified,
+            mission_id=mission_id,
+        )
+
+    def warrant_builder(
+        evaluation: Mapping[str, Any], admitted_control: Mapping[str, Any]
+    ) -> tuple[str, Mapping[str, Any]]:
+        del admitted_control
+        return build_fallback_warrant(evaluation, profile=verified)
+
+    return evaluator, warrant_builder

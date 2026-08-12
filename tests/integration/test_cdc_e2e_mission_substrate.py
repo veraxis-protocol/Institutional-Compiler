@@ -64,10 +64,10 @@ def test_persisted_frozen_mission_package_and_governance_bindings() -> None:
     verified = verify_frozen_mission_input(PACKAGE_ROOT)
     assert verified.package_sha256 == FROZEN_MISSION_PACKAGE_SHA256
     assert verified.manifest_sha256 == FROZEN_MISSION_MANIFEST_SHA256
-    assert verified.package_bytes == 67965
+    assert verified.package_bytes == 57452
     assert verified.population_count == 3
     assert verified.control_count == 3
-    assert verified.evidence_object_count == 54
+    assert verified.evidence_object_count == 27
     assert verified.output_artifact_count == 5
     governance = json.loads((PACKAGE_ROOT / "06-GOVERNANCE/binding.json").read_bytes())
     assert governance["governance_commit"] == GOVERNANCE_COMMIT
@@ -179,6 +179,7 @@ def test_mission_package_digest_mismatch_refuses() -> None:
         adjudication_protocol_sha256="protocol",
         action_plan_sha256="plan",
         owner_preexecution_interpretation_sha256="interpretation",
+        stage_1_component_profile_sha256="profile",
     )
     with pytest.raises(ResultBearingMissionBlockedError, match="mission_package_sha256"):
         require_result_clearance(
