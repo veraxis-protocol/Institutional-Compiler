@@ -186,6 +186,11 @@ def _component_profile() -> object:
     )
 
 
+def _stage_2_authorization_path() -> Path:
+    """No Stage-2 owner authorization exists; this path is deliberately absent."""
+    return Path(__file__).parents[2] / "veraxis/cdc-e2e-mission-001/NO-SUCH-STAGE-2-AUTH.json"
+
+
 def _authorization_path() -> Path:
     """No owner authorization exists; this path is deliberately absent."""
     return Path(__file__).parents[2] / "veraxis/cdc-e2e-mission-001/NO-SUCH-AUTHORIZATION.md"
@@ -250,6 +255,7 @@ def _stage_2(
         action_plan=plan,
         correction=correction,
         run_metadata=run_metadata(),
+        owner_stage_2_authorization_path=_stage_2_authorization_path(),
         stage_2_bindings=bindings_for(stage_1, bound, plan),
     )
 
@@ -481,6 +487,7 @@ def test_a_caller_supplied_p002_correction_target_is_impossible(
             action_plan=redirected,
             correction=correction_object(),
             run_metadata=run_metadata(),
+            owner_stage_2_authorization_path=_stage_2_authorization_path(),
             stage_2_bindings=bindings_for(stage_1, dispositions, redirected),
         )
 
@@ -510,6 +517,7 @@ def test_stage_2_binds_the_plan_derived_correction_digest(
             action_plan=action_plan,
             correction=None,
             run_metadata=run_metadata(),
+            owner_stage_2_authorization_path=_stage_2_authorization_path(),
             stage_2_bindings=caller_choice,
         )
 
@@ -535,6 +543,7 @@ def test_stage_2_binds_the_action_plan_identity(
                 action_plan=action_plan,
                 correction=None,
                 run_metadata=run_metadata(),
+                owner_stage_2_authorization_path=_stage_2_authorization_path(),
                 stage_2_bindings=broken,
             )
 
@@ -605,6 +614,7 @@ def test_a_test_support_observation_cannot_enter_stage_2(
             action_plan=action_plan,
             correction=None,
             run_metadata=run_metadata(),
+            owner_stage_2_authorization_path=_stage_2_authorization_path(),
             stage_2_bindings=bindings_for(helper_observation, dispositions, action_plan),
         )
 
@@ -908,6 +918,7 @@ def test_stage_2_rejects_a_nonempty_but_wrong_binding(
             action_plan=action_plan,
             correction=None,
             run_metadata=run_metadata(),
+            owner_stage_2_authorization_path=_stage_2_authorization_path(),
             stage_2_bindings=wrong,
         )
 
@@ -937,6 +948,7 @@ def test_stage_2_rejects_a_disposition_digest_set_that_is_not_the_bound_set(
             action_plan=action_plan,
             correction=None,
             run_metadata=run_metadata(),
+            owner_stage_2_authorization_path=_stage_2_authorization_path(),
             stage_2_bindings=wrong,
         )
 
@@ -969,6 +981,7 @@ def test_caller_supplied_transition_proposal_cannot_enter(
             action_plan=action_plan,
             correction=None,
             run_metadata=run_metadata(),
+            owner_stage_2_authorization_path=_stage_2_authorization_path(),
             stage_2_bindings=bindings_for(stage_1, dispositions, action_plan),
         )
 
@@ -981,8 +994,8 @@ def test_proposal_and_registry_are_derived_from_the_actual_objects(
 
     artifact = stage_1.artifacts()[TARGET_CHAIN]
     disposition = disposition_for(stage_1, projection, TARGET_CHAIN, action_plan)
-    registry = derive_transition_registry(projection, artifact)
-    proposal = derive_transition_proposal(projection, artifact, disposition)
+    registry = derive_transition_registry(projection, artifact, stage_1)
+    proposal = derive_transition_proposal(projection, artifact, disposition, stage_1)
     assert proposal["candidate_digest"] == slice_digest(
         registry["candidates"][artifact.candidate_id]
     )

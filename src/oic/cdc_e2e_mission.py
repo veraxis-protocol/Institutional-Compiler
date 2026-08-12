@@ -1919,19 +1919,53 @@ def require_stage_2_clearance(
         raise ResultBearingMissionBlockedError(f"stage-2 artifact binding mismatch: {mismatches}")
 
 
-def _require_prior_institutional_state(chain: ExecutionChain) -> object:
-    """Stage-2 needs a prior state; refuse clearly when the input carries none."""
-    if "prior_institutional_state" not in chain.execution_input:
-        raise MissionContractError(
-            f"chain {chain.chain_id} carries no prior_institutional_state: the "
-            "controlling Stage-1 input declares PRE_CANDIDATE, so no Stage-2 "
-            "transition proposal can be derived from it"
+DERIVED_PRIOR_INSTITUTIONAL_STATE: Final = "CANDIDATE_FORMED"
+PRIOR_STATE_SOURCE: Final = "ACTUAL_STAGE_1_OBSERVATION"
+
+
+class PriorStateDerivationError(MissionContractError):
+    """Stage-2 prior state was requested before an actual candidate existed."""
+
+
+def derive_stage_2_prior_state(stage_1: object, chain_id: str) -> str:
+    """Derive the prior institutional state from the actual Stage-1 checkpoint.
+
+    input-v0.6 deliberately carries no prior_institutional_state: writing one at
+    Stage-1 input time would assert a state before any candidate existed. The
+    state becomes true by actual candidate formation, so it is recovered here
+    out of the completed, owner-cleared Stage-1 observation and nowhere else.
+
+    There is no parameter through which a caller can supply or override it.
+    """
+    if not isinstance(stage_1, Stage1Observation):
+        raise PriorStateDerivationError(
+            "Stage-2 prior state must derive from a Stage1Observation; a mapping, "
+            "disposition, binding set or run metadata is not one"
         )
-    return chain.execution_input["prior_institutional_state"]
+    if stage_1.stage != STAGE_1_TERMINAL_STATE:
+        raise PriorStateDerivationError(
+            f"Stage-1 is {stage_1.stage!r}, not {STAGE_1_TERMINAL_STATE!r}; no prior "
+            "institutional state exists yet"
+        )
+    if not stage_1.is_owner_cleared():
+        raise PriorStateDerivationError(
+            f"Stage-1 observation is {stage_1.authorization}; only an owner-cleared "
+            "observation establishes a prior institutional state"
+        )
+    artifact = stage_1.artifacts().get(chain_id)
+    if artifact is None:
+        raise PriorStateDerivationError(
+            f"no Stage-1 artifact exists for {chain_id}; prior state is not derivable"
+        )
+    if not artifact.candidate or not artifact.candidate_digest:
+        raise PriorStateDerivationError(
+            f"chain {chain_id} formed no candidate; prior state is not derivable"
+        )
+    return DERIVED_PRIOR_INSTITUTIONAL_STATE
 
 
 def derive_transition_registry(
-    projection: MissionProjection, artifact: Stage1ChainArtifact
+    projection: MissionProjection, artifact: Stage1ChainArtifact, stage_1: object
 ) -> dict[str, Any]:
     """Build the immutable Slice-001 registry from the actual objects.
 
@@ -1961,7 +1995,7 @@ def derive_transition_registry(
         "evaluations": {str(artifact.evaluation["evaluation_id"]): artifact.evaluation},
         "reviewers": {reviewer_id: projection.authority},
         warrant_category: {artifact.warrant_ref: artifact.warrant},
-        "states": {artifact.ebawu_id: _require_prior_institutional_state(chain)},
+        "states": {artifact.ebawu_id: derive_stage_2_prior_state(stage_1, artifact.chain_id)},
         "stale_candidate_ids": (),
     }
 
@@ -1970,6 +2004,7 @@ def derive_transition_proposal(
     projection: MissionProjection,
     artifact: Stage1ChainArtifact,
     disposition: Mapping[str, Any],
+    stage_1: object,
 ) -> dict[str, Any]:
     """Derive the Slice-001 proposal deterministically. Never accepted from a caller."""
     chain = projection.chain(artifact.chain_id)
@@ -1993,7 +2028,7 @@ def derive_transition_proposal(
         "deterministic_execution_result_ref": str(artifact.evaluation["evaluation_id"]),
         "reviewer_id": str(disposition["reviewer_id"]),
         "reviewer_role_assertion": str(disposition["reviewer_role"]),
-        "prior_institutional_state": _require_prior_institutional_state(chain),
+        "prior_institutional_state": derive_stage_2_prior_state(stage_1, artifact.chain_id),
         "requested_new_institutional_state": NEW_STATE_BY_ACTION[action],
         "parent_event_id": None,
     }
@@ -2012,6 +2047,13 @@ def derive_transition_proposal(
     if artifact.evaluation.get("cannot_condition") is True:
         proposal["cannot_condition"] = True
     return proposal
+
+
+def _event_metadata_fields(run_metadata: Mapping[str, Any]) -> None:
+    """Structural run-metadata validation, run before anything is claimed."""
+    missing = sorted(set(RUN_METADATA_FIELDS) - run_metadata.keys())
+    if missing:
+        raise MissionContractError(f"run metadata incomplete: {missing}")
 
 
 def _event_metadata(
@@ -2132,6 +2174,8 @@ class Stage2Result:
     accounting: Mapping[str, int]
     drafts: tuple[Mapping[str, Any], ...]
     correction: Mapping[str, Any]
+    owner_stage_2_authorization: Mapping[str, Any] | None = None
+    attempt_record: Mapping[str, Any] | None = None
     official_handoff: str = "PROHIBITED"
 
     def as_record(self) -> dict[str, Any]:
@@ -2144,6 +2188,12 @@ class Stage2Result:
             "accounting": dict(self.accounting),
             "drafts": [dict(draft) for draft in self.drafts],
             "correction": dict(self.correction),
+            "owner_stage_2_authorization": (
+                None
+                if self.owner_stage_2_authorization is None
+                else dict(self.owner_stage_2_authorization)
+            ),
+            "attempt_record": (None if self.attempt_record is None else dict(self.attempt_record)),
             "official_handoff": self.official_handoff,
         }
         body["stage_2_result_digest"] = sha256(body)
@@ -2255,6 +2305,305 @@ def integrate_correction(
     }
 
 
+# ---------------------------------------------------------------------------
+# Stage-2 owner issuance and attempt ledger.
+#
+# Stage 2 gets its own exact-byte authorization and its own attempt ledger. A
+# nonempty owner_execution_authorization label satisfied the generic clearance
+# but says nothing about whether Stage 2 was authorized, and reusing the Stage-1
+# ledger would let one issuance cover two result-bearing phases.
+# ---------------------------------------------------------------------------
+
+STAGE_2_AUTHORIZATION_RECORD_CLASS: Final = "OWNER_STAGE_2_EXECUTION_AUTHORIZATION"
+STAGE_2_AUTHORIZATION_STAGE: Final = "STAGE_2_ONLY"
+STAGE_2_AUTHORIZATION_SCOPE: Final = "ONE_RESULT_BEARING_STAGE_2_EXECUTION"
+
+STAGE_2_AUTHORIZATION_DECLARATIONS: Final[dict[str, object]] = {
+    "record_class": STAGE_2_AUTHORIZATION_RECORD_CLASS,
+    "mission_id": MISSION_ID,
+    "owner_authorized": True,
+    "authorized_stage": STAGE_2_AUTHORIZATION_STAGE,
+    "authorization_scope": STAGE_2_AUTHORIZATION_SCOPE,
+    "single_use": True,
+    "automatic_retry_authorized": False,
+    "stage_1_reexecution_authorized": False,
+    "additional_human_disposition_authorized": False,
+    "stage_2_transition_evaluation_authorized": True,
+    "transition_event_emission_authorized": "GATE_RESULT_CONTROLLED",
+    "draft_rendering_authorized": "FROZEN_OUTPUT_DEFINITION_CONTROLLED",
+    "correction_handling_authorized": "FROZEN_ACTION_PLAN_PRECONDITION_CONTROLLED",
+    "official_handoff_authorized": False,
+    "result_bearing": True,
+}
+
+STAGE_2_AUTHORIZATION_BINDING_FIELDS: Final = (
+    "implementation_commit",
+    "implementation_tree",
+    "environment_manifest_sha256",
+    "mission_package_sha256",
+    "stage_1_component_profile_sha256",
+    "oracle_sha256",
+    "adjudication_protocol_sha256",
+    "action_plan_sha256",
+    "action_plan_provenance_token",
+    "owner_preexecution_interpretation_sha256",
+    "stage_1_raw_result_sha256",
+    "stage_1_observation_digest",
+    "human_disposition_evidence_commit",
+    "human_disposition_evidence_tree",
+    "correction_stimulus_digest",
+    "owner_m08_m09_acceptance_sha256",
+)
+
+ATTEMPT_STATE_STAGE_2_CONSUMED: Final = "CONSUMED_AFTER_FIRST_TRANSITION_EVALUATION"
+
+# Immutable prior-phase evidence. These are frozen historical artifacts that
+# cannot move because this implementation moved, so binding them here is not
+# circular in the way an implementation digest would be.
+STAGE_1_RAW_RESULT_SHA256: Final = (
+    "aa32274f238d01bc9f6c6d1c67879acfb4765a34d0dc0b4ccf568f3c07353a70"
+)
+HUMAN_DISPOSITION_EVIDENCE_COMMIT: Final = "a61fae0a94eeaf54f69c42f40af67d9e43516294"
+HUMAN_DISPOSITION_EVIDENCE_TREE: Final = "e1747b5bfa1a11f3f852a92ad13fdd975aceef9e"
+OWNER_M08_M09_ACCEPTANCE_SHA256: Final = (
+    "5f13fe1920be490429b9cc562bcaade38293de35e9898a4d5803f0744c29381a"
+)
+
+
+class OwnerStage2AuthorizationError(ResultBearingMissionBlockedError):
+    """The Stage-2 owner authorization is absent, wrong, unbound or relocated."""
+
+
+@dataclass(frozen=True, slots=True)
+class OwnerStage2Authorization:
+    """A Stage-2 owner authorization verified from exact external bytes."""
+
+    path: Path
+    sha256_hex: str
+    byte_count: int
+    reference: str
+    record_class: str
+    authorized_stage: str
+    authorization_scope: str
+    authorization_id: str
+    canonical_path: str
+
+    def as_record(self) -> dict[str, Any]:
+        """Identity and declared scope only; carries no authorization prose."""
+        return {
+            "owner_stage_2_authorization_sha256": self.sha256_hex,
+            "owner_stage_2_authorization_bytes": self.byte_count,
+            "owner_stage_2_authorization_reference": self.reference,
+            "owner_stage_2_authorization_record_class": self.record_class,
+            "owner_stage_2_authorization_scope": self.authorization_scope,
+            "owner_stage_2_authorization_id": self.authorization_id,
+            "authorized_stage": self.authorized_stage,
+        }
+
+
+def verify_owner_stage_2_authorization(
+    path: Path,
+    *,
+    clearance: ExecutionClearance,
+    runtime: RuntimeIdentity,
+    frozen: FrozenMissionInput,
+    stage_1: Stage1Observation,
+    dispositions: Mapping[str, Mapping[str, Any]],
+    action_plan: object,
+) -> OwnerStage2Authorization:
+    """Verify a Stage-2 authorization: identity, location, semantics and bindings.
+
+    Hashing says which artifact this is; the declarations say whether it
+    authorizes Stage 2; the bindings say whether it authorizes *this* Stage 2.
+    All three are required, and the artifact only verifies at the canonical path
+    it declares, so a byte-identical copy elsewhere is not a second issuance.
+    """
+    plan = require_verified_action_plan(action_plan)
+    try:
+        payload = path.read_bytes()
+    except OSError as error:
+        raise OwnerStage2AuthorizationError(
+            f"Stage-2 owner authorization is not readable at {path}: {error}"
+        ) from error
+    digest = _file_sha256(payload)
+    reference = f"{OWNER_AUTHORIZATION_REFERENCE_PREFIX}{digest}"
+    observed_path = path.resolve()
+    if clearance.owner_execution_authorization != reference:
+        raise OwnerStage2AuthorizationError(
+            f"clearance owner_execution_authorization is "
+            f"{clearance.owner_execution_authorization!r}, but the supplied artifact "
+            f"hashes to {reference!r}; a label is not the artifact"
+        )
+    try:
+        document = json.loads(payload)
+    except json.JSONDecodeError as error:
+        raise OwnerStage2AuthorizationError(
+            f"Stage-2 owner authorization is not structured JSON: {error}"
+        ) from error
+    if not isinstance(document, Mapping):
+        raise OwnerStage2AuthorizationError("Stage-2 authorization must be a JSON object")
+
+    declared_location = document.get("canonical_authorization_path")
+    if not isinstance(declared_location, str) or not declared_location:
+        raise OwnerStage2AuthorizationError(
+            "Stage-2 authorization declares no canonical_authorization_path"
+        )
+    if Path(declared_location).resolve() != observed_path:
+        raise OwnerStage2AuthorizationError(
+            f"Stage-2 authorization was presented at {observed_path} but declares "
+            f"{Path(declared_location).resolve()}; a relocated copy is not a second issuance"
+        )
+    wrong = [
+        f"{name}={document.get(name)!r} (required {expected!r})"
+        for name, expected in STAGE_2_AUTHORIZATION_DECLARATIONS.items()
+        if document.get(name) is not expected and document.get(name) != expected
+    ]
+    if wrong:
+        raise OwnerStage2AuthorizationError(
+            f"the artifact does not declare Stage-2 authorization semantics: {wrong}"
+        )
+
+    observed_bindings = {
+        "implementation_commit": runtime.implementation_commit,
+        "implementation_tree": runtime.implementation_tree,
+        "environment_manifest_sha256": runtime.environment_manifest_sha256,
+        "mission_package_sha256": frozen.package_sha256,
+        "stage_1_component_profile_sha256": STAGE_1_COMPONENT_PROFILE_SHA256,
+        "oracle_sha256": ORACLE_SHA256,
+        "adjudication_protocol_sha256": ADJUDICATION_PROTOCOL_SHA256,
+        "action_plan_sha256": plan.sha256_hex,
+        "action_plan_provenance_token": plan.provenance_token,
+        "owner_preexecution_interpretation_sha256": OWNER_PREEXECUTION_INTERPRETATION_SHA256,
+        "stage_1_observation_digest": stage_1.digest(),
+        "correction_stimulus_digest": plan.correction.digest(),
+        "stage_1_raw_result_sha256": STAGE_1_RAW_RESULT_SHA256,
+        "human_disposition_evidence_commit": HUMAN_DISPOSITION_EVIDENCE_COMMIT,
+        "human_disposition_evidence_tree": HUMAN_DISPOSITION_EVIDENCE_TREE,
+        "owner_m08_m09_acceptance_sha256": OWNER_M08_M09_ACCEPTANCE_SHA256,
+    }
+    raw_bindings = document.get("bindings")
+    if not isinstance(raw_bindings, Mapping):
+        raise OwnerStage2AuthorizationError(
+            "Stage-2 authorization carries no structured 'bindings' object"
+        )
+    missing = sorted(set(STAGE_2_AUTHORIZATION_BINDING_FIELDS) - raw_bindings.keys())
+    if missing:
+        raise OwnerStage2AuthorizationError(f"Stage-2 authorization bindings missing: {missing}")
+    mismatched = sorted(
+        name for name, value in observed_bindings.items() if raw_bindings.get(name) != value
+    )
+    if mismatched:
+        raise OwnerStage2AuthorizationError(
+            f"Stage-2 authorization bindings do not match the running mission: {mismatched}"
+        )
+    expected_set = sorted(sha256(dict(record)) for record in dispositions.values())
+    declared_set = raw_bindings.get("stage_2_human_disposition_binding_digests")
+    if (
+        not isinstance(declared_set, list | tuple)
+        or sorted(str(v) for v in declared_set) != expected_set
+    ):
+        raise OwnerStage2AuthorizationError(
+            "Stage-2 authorization does not bind the exact human-disposition binding set"
+        )
+    return OwnerStage2Authorization(
+        path=observed_path,
+        sha256_hex=digest,
+        byte_count=len(payload),
+        reference=reference,
+        record_class=str(document["record_class"]),
+        authorized_stage=str(document["authorized_stage"]),
+        authorization_scope=str(document["authorization_scope"]),
+        authorization_id=str(document.get("authorization_id", "UNIDENTIFIED")),
+        canonical_path=str(observed_path),
+    )
+
+
+def stage_2_attempt_record_path(authorization: OwnerStage2Authorization) -> Path:
+    """Derived from the verified canonical location plus the Stage-2 digest."""
+    canonical = Path(authorization.canonical_path or authorization.path).resolve()
+    return canonical.parent / f".cdc-e2e-stage-2-attempt-{authorization.sha256_hex}.json"
+
+
+def read_stage_2_attempt_state(authorization: OwnerStage2Authorization) -> str:
+    """Current Stage-2 attempt state for this authorization."""
+    path = stage_2_attempt_record_path(authorization)
+    if not path.exists():
+        return ATTEMPT_STATE_NONE
+    document = _require_mapping(json.loads(path.read_bytes()), "attempt record")
+    return str(document.get("attempt_state"))
+
+
+def require_unclaimed_stage_2_attempt(authorization: OwnerStage2Authorization) -> None:
+    """Refuse before any transition evaluation when the authorization is used."""
+    state = read_stage_2_attempt_state(authorization)
+    if state == ATTEMPT_STATE_NONE:
+        return
+    if state == ATTEMPT_STATE_CLAIMED:
+        raise MissionAttemptStateError(
+            f"Stage-2 authorization {authorization.reference} is {ATTEMPT_STATE_CLAIMED}: a "
+            "prior attempt claimed it and no consumption was recorded. Automatic retry is "
+            "prohibited; this requires a separate owner decision."
+        )
+    raise MissionAttemptStateError(
+        f"Stage-2 authorization {authorization.reference} is {state}: it authorized one "
+        "result-bearing Stage-2 execution and is permanently non-reusable."
+    )
+
+
+def claim_stage_2_attempt(
+    authorization: OwnerStage2Authorization,
+    runtime: RuntimeIdentity,
+    frozen: FrozenMissionInput,
+    stage_1: Stage1Observation,
+    disposition_binding_digests: Sequence[str],
+) -> MissionAttemptRecord:
+    """Atomically claim the single authorized Stage-2 attempt, or refuse."""
+    record = MissionAttemptRecord(
+        path=stage_2_attempt_record_path(authorization),
+        state=ATTEMPT_STATE_CLAIMED,
+        owner_execution_authorization_sha256=authorization.sha256_hex,
+        implementation_commit=runtime.implementation_commit,
+        implementation_tree=runtime.implementation_tree,
+        mission_package_sha256=frozen.package_sha256,
+    )
+    body = {
+        **record.as_record(),
+        "stage": STAGE_2_AUTHORIZATION_STAGE,
+        "stage_1_observation_digest": stage_1.digest(),
+        "human_disposition_binding_digests": sorted(disposition_binding_digests),
+    }
+    payload = (json.dumps(body, indent=2, sort_keys=True) + "\n").encode()
+    try:
+        handle = os.open(record.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+    except FileExistsError as error:
+        raise MissionAttemptStateError(
+            f"Stage-2 authorization {authorization.reference} was already claimed by "
+            "another attempt; automatic retry is prohibited"
+        ) from error
+    with os.fdopen(handle, "wb") as stream:
+        stream.write(payload)
+    written = record.path.read_bytes()
+    return replace(record, record_sha256=_file_sha256(written), record_bytes=len(written))
+
+
+def mark_stage_2_attempt_consumed(
+    record: MissionAttemptRecord,
+    stage_1: Stage1Observation,
+    disposition_binding_digests: Sequence[str],
+) -> MissionAttemptRecord:
+    """Record that a governed transition evaluation was actually invoked."""
+    consumed = replace(record, state=ATTEMPT_STATE_STAGE_2_CONSUMED)
+    body = {
+        **consumed.as_record(),
+        "stage": STAGE_2_AUTHORIZATION_STAGE,
+        "stage_1_observation_digest": stage_1.digest(),
+        "human_disposition_binding_digests": sorted(disposition_binding_digests),
+    }
+    record.path.write_bytes((json.dumps(body, indent=2, sort_keys=True) + "\n").encode())
+    written = record.path.read_bytes()
+    return replace(consumed, record_sha256=_file_sha256(written), record_bytes=len(written))
+
+
 def execute_authorized_stage_2(
     projection: object,
     frozen: FrozenMissionInput,
@@ -2267,6 +2616,7 @@ def execute_authorized_stage_2(
     correction: Mapping[str, Any] | None,
     run_metadata: Mapping[str, Any],
     stage_2_bindings: Mapping[str, Any],
+    owner_stage_2_authorization_path: Path,
 ) -> Stage2Result:
     """The single authorized route to transition evaluation and rendering.
 
@@ -2276,6 +2626,8 @@ def execute_authorized_stage_2(
     """
     plan = require_verified_action_plan(action_plan)
     verified = require_projected_source(projection, frozen)
+    # Structural preconditions run first and in full: nothing below may claim the
+    # attempt until every one of them has passed.
     require_stage_2_clearance(
         clearance,
         runtime,
@@ -2286,7 +2638,14 @@ def execute_authorized_stage_2(
         action_plan=plan,
         stage_2_bindings=stage_2_bindings,
     )
-    forbidden = {"transition_proposal", "transition_registry", "registry", "proposal"}
+    forbidden = {
+        "transition_proposal",
+        "transition_registry",
+        "registry",
+        "proposal",
+        "prior_institutional_state",
+        "states",
+    }
     for chain_id, record in dispositions.items():
         intruding = sorted(forbidden & record.keys())
         if intruding:
@@ -2294,7 +2653,25 @@ def execute_authorized_stage_2(
                 f"disposition {chain_id} carries a caller-supplied {intruding}; "
                 "the proposal and registry are derived, never accepted"
             )
+    authorization = verify_owner_stage_2_authorization(
+        owner_stage_2_authorization_path,
+        clearance=clearance,
+        runtime=runtime,
+        frozen=frozen,
+        stage_1=stage_1,
+        dispositions=dispositions,
+        action_plan=plan,
+    )
+    require_unclaimed_stage_2_attempt(authorization)
     artifacts = stage_1.artifacts()
+    # Prior state must be derivable for every chain that will be evaluated, before
+    # anything is claimed.
+    for chain_id in sorted(set(artifacts) & set(dispositions)):
+        derive_stage_2_prior_state(stage_1, chain_id)
+    _event_metadata_fields(run_metadata)
+    binding_digests = [sha256(dict(record)) for record in dispositions.values()]
+    claimed: MissionAttemptRecord | None = None
+    evaluation_invoked = False
     tally = dict.fromkeys(STAGE_2_OUTCOME_STATES, 0)
     outcomes: list[Stage2ChainOutcome] = []
     for chain in verified.chains:
@@ -2328,8 +2705,15 @@ def execute_authorized_stage_2(
                 )
             )
             continue
-        registry = derive_transition_registry(verified, artifact)
-        proposal = derive_transition_proposal(verified, artifact, disposition)
+        registry = derive_transition_registry(verified, artifact, stage_1)
+        proposal = derive_transition_proposal(verified, artifact, disposition, stage_1)
+        if claimed is None:
+            # Every structural precondition has passed; claim immediately before
+            # the first result-bearing gate evaluation.
+            claimed = claim_stage_2_attempt(
+                authorization, runtime, frozen, stage_1, binding_digests
+            )
+        evaluation_invoked = True
         decision: GateDecision = evaluate_test_transition(proposal, registry)
         if decision.decision == "ALLOW":
             event = emit_transition_event(
@@ -2353,6 +2737,11 @@ def execute_authorized_stage_2(
                 detail=detail,
             )
         )
+    consumed = (
+        mark_stage_2_attempt_consumed(claimed, stage_1, binding_digests)
+        if claimed is not None and evaluation_invoked
+        else claimed
+    )
     total = sum(tally.values())
     if total != EXPECTED_CHAIN_COUNT:
         raise MissionContractError(f"denominator lost: {total} of 9 accounted")
@@ -2369,6 +2758,8 @@ def execute_authorized_stage_2(
         accounting=tally,
         drafts=drafts,
         correction=correction_record,
+        owner_stage_2_authorization=authorization.as_record(),
+        attempt_record=None if consumed is None else consumed.identity(),
     )
 
 

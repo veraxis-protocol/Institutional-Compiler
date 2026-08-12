@@ -717,8 +717,10 @@ def test_stage_2_remains_untouched_and_unexecuted(
     del profile
     chain = projection.chains[0]
     assert "prior_institutional_state" not in chain.execution_input
-    with pytest.raises(MissionContractError, match="no prior_institutional_state"):
-        cdc_e2e_mission._require_prior_institutional_state(chain)
+    # Prior state is now derived from the actual Stage-1 checkpoint, and is
+    # unavailable until an owner-cleared candidate exists.
+    with pytest.raises(cdc_e2e_mission.PriorStateDerivationError):
+        cdc_e2e_mission.derive_stage_2_prior_state(None, chain.chain_id)
     manifest = json.loads((repo_root / PACKAGE_RELPATH / "01-MISSION-MANIFEST.json").read_bytes())
     assert manifest["stage_1_input_state"] == "PRE_CANDIDATE"
     assert manifest["candidate_count"] == 0
