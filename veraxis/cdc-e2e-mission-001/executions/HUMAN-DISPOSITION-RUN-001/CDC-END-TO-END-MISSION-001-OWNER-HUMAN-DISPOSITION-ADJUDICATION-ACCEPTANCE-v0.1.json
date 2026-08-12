@@ -1,0 +1,76 @@
+{
+  "artifact_id": "CDC-END-TO-END-MISSION-001-OWNER-HUMAN-DISPOSITION-ADJUDICATION-ACCEPTANCE-v0.1",
+  "authorization_boundary": {
+    "authorizes_additional_human_dispositions": false,
+    "authorizes_correction": false,
+    "authorizes_draft_generation": false,
+    "authorizes_stage_1_reexecution": false,
+    "authorizes_stage_2": false,
+    "authorizes_veip_transition": false
+  },
+  "claim_ceiling": "bounded synthetic scope only; no CDC acceptance, legal validity, institutional authority, production conformance or readiness, and no institutional transition is established by a bound disposition",
+  "decision_chain": "OBSERVATION -> ORACLE -> ADJUDICATION -> OWNER_CLAIM_DECISION",
+  "human_disposition_evidence": {
+    "batch_result_sha256": "0ce542e29e6811b12848bc8651535b643ead03b30824548ec646d54e52515670",
+    "binding_refusal_count": 0,
+    "bound_disposition_count": 9,
+    "human_disposition_evidence_commit": "a61fae0a94eeaf54f69c42f40af67d9e43516294",
+    "human_disposition_evidence_tree": "e1747b5bfa1a11f3f852a92ad13fdd975aceef9e",
+    "owner_batch_authorization_sha256": "c86a2eab8602a20ee699ef5d4dc243fc31bb071a6793311e66787e1aed86aeb5"
+  },
+  "mission_id": "CDC-TEST-MISSION-001",
+  "next_gate": "OWNER_STAGE_2_EXECUTION_AUTHORIZATION",
+  "owner_decision": {
+    "M08": "MATCH",
+    "M09": "MATCH",
+    "cumulative_match_cases": 9,
+    "cumulative_measured_cases": "9/12",
+    "forbidden_promotions": 0,
+    "full_e2e_pass": "NOT_ESTABLISHED",
+    "full_mission_aggregate": "INCOMPLETE",
+    "out_of_scope_reviewer_refusal": "NOT_DEMONSTRATED_BY_THIS_RUN",
+    "reviewer_standing_compliant_path": "DEMONSTRATED",
+    "semantic_violations": 0
+  },
+  "preserved_limitation": {
+    "m08_compliant_path_demonstrated": true,
+    "negative_fixture_exists_and_was_not_exercised": true,
+    "negative_fixture_reviewer_id": "TEST-REVIEWER-OUT-OF-SCOPE-001",
+    "negative_fixture_scope": "CDC-TEST-MISSION-999/TEST-REVIEWER",
+    "note": "M08 is matched on nine in-scope dispositions. The refusal behaviour for an out-of-scope reviewer is a separate observation that this run did not make, and reading this run as proof of it would be overreading.",
+    "out_of_scope_reviewer_refusal_demonstrated_by_this_run": false,
+    "recorded_as": "LIMITATION_NOT_BLOCKER",
+    "verification_note": "the limitation is stated in prose in the adjudication rather than as a key=value line; it was verified by locating its exact sentences, not by a key=value match"
+  },
+  "record_class": "OWNER_HUMAN_DISPOSITION_ADJUDICATION_ACCEPTANCE",
+  "result_bearing": false,
+  "run_id": "HUMAN-DISPOSITION-RUN-001",
+  "vitaliy_adjudication": {
+    "declared_identity_matched": true,
+    "declared_states_verified": {
+      "M08": "MATCH",
+      "M09": "MATCH",
+      "M10": "INCOMPLETE_OBSERVATION",
+      "M11": "INCOMPLETE_OBSERVATION",
+      "M12": "INCOMPLETE_OBSERVATION",
+      "aggregate_protocol_state": "INCOMPLETE",
+      "blocking_issue": "NONE",
+      "forbidden_promotions": 0,
+      "implementation_seen": false,
+      "institutional_transition_observed": false,
+      "match_cases": 9,
+      "measured_cases": "9/12",
+      "semantic_violations": 0,
+      "stage_2_seen": false
+    },
+    "external_reviewer_repository": "inventor1975/ZTL",
+    "independently_recomputed": true,
+    "reinterpreted_by_owner": false,
+    "vitaliy_adjudication_bytes": 15071,
+    "vitaliy_adjudication_commit": "ea2d0b0ef5a231b5d77c8bed8d98453e2b623630",
+    "vitaliy_adjudication_git_blob": "0f8bfe0dc6ece570b23259faa9f7b280b742efc9",
+    "vitaliy_adjudication_path": "veraxis/cdc-e2e-mission-001/CDC-END-TO-END-MISSION-001-HUMAN-DISPOSITION-RUN-001-SEMANTIC-ADJUDICATION-001.md",
+    "vitaliy_adjudication_sha256": "487c2b13fa94c51cae29b3befe8da25949f825f3f26160701f5d9680b36763a0",
+    "vitaliy_adjudication_tree": "58a1d614a85b5e33f03986c19c7b92dc5d38e305"
+  }
+}
