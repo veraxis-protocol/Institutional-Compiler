@@ -75,8 +75,20 @@ from oic.cdc_e2e_mission import (
 # preserved in place and re-enable themselves the moment formation is
 # authorized; the refusal itself is asserted by
 # test_stage_1_over_the_frozen_population_is_blocked.
+def _component_profile() -> object:
+    """The verified component profile, for the skipped formation tests."""
+    return cdc_e2e_mission.verify_frozen_component_profile(
+        Path(__file__).parents[2] / cdc_e2e_mission.STAGE_1_COMPONENT_PROFILE_RELPATH
+    )
+
+
+def _authorization_path() -> Path:
+    """No owner authorization exists; this path is deliberately absent."""
+    return Path(__file__).parents[2] / "veraxis/cdc-e2e-mission-001/NO-SUCH-AUTHORIZATION.md"
+
+
 def _skip_unless_formation_authorized() -> None:
-    if cdc_e2e_mission.MISSION_EXECUTION_AUTHORIZATION is None:
+    if cdc_e2e_mission.MISSION_POPULATION_EXECUTION_STATE.startswith("REQUIRES"):
         pytest.skip(
             "Stage-1 candidate formation over the frozen mission population is not "
             "authorized (MISSION_POPULATION_EXECUTION_STATE="

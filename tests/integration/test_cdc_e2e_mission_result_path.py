@@ -179,8 +179,20 @@ def owner_interpretation(repo_root: Path) -> FrozenOwnerInterpretation:
 # preserved in place and re-enable themselves the moment formation is
 # authorized; the refusal itself is asserted by
 # test_stage_1_over_the_frozen_population_is_blocked.
+def _component_profile() -> object:
+    """The verified component profile, for the skipped formation tests."""
+    return cdc_e2e_mission.verify_frozen_component_profile(
+        Path(__file__).parents[2] / cdc_e2e_mission.STAGE_1_COMPONENT_PROFILE_RELPATH
+    )
+
+
+def _authorization_path() -> Path:
+    """No owner authorization exists; this path is deliberately absent."""
+    return Path(__file__).parents[2] / "veraxis/cdc-e2e-mission-001/NO-SUCH-AUTHORIZATION.md"
+
+
 def _skip_unless_formation_authorized() -> None:
-    if cdc_e2e_mission.MISSION_EXECUTION_AUTHORIZATION is None:
+    if cdc_e2e_mission.MISSION_POPULATION_EXECUTION_STATE.startswith("REQUIRES"):
         pytest.skip(
             "Stage-1 candidate formation over the frozen mission population is not "
             "authorized (MISSION_POPULATION_EXECUTION_STATE="
@@ -198,8 +210,8 @@ def stage_1(projection: MissionProjection, frozen: FrozenMissionInput) -> Stage1
         exact_clearance(),
         STUB_RUNTIME,
         owner_interpretation=_owner_interpretation(),
-        evaluator=stub_evaluator,
-        warrant_builder=stub_warrant,
+        component_profile=_component_profile(),
+        owner_execution_authorization_path=_authorization_path(),
     )
 
 
@@ -659,8 +671,8 @@ def test_authorized_stage_1_requires_every_exact_binding(
             empty,
             STUB_RUNTIME,
             owner_interpretation=_owner_interpretation(),
-            evaluator=stub_evaluator,
-            warrant_builder=stub_warrant,
+            component_profile=_component_profile(),
+            owner_execution_authorization_path=_authorization_path(),
         )
 
 
@@ -676,8 +688,8 @@ def test_authorized_stage_1_requires_the_action_plan_digest(
             wrong,
             STUB_RUNTIME,
             owner_interpretation=_owner_interpretation(),
-            evaluator=stub_evaluator,
-            warrant_builder=stub_warrant,
+            component_profile=_component_profile(),
+            owner_execution_authorization_path=_authorization_path(),
         )
     assert exact_clearance().action_plan_sha256 == HUMAN_ACTION_PLAN_SHA256
 
@@ -691,8 +703,8 @@ def test_authorized_stage_1_refuses_a_mapping_source(frozen: FrozenMissionInput)
             exact_clearance(),
             STUB_RUNTIME,
             owner_interpretation=_owner_interpretation(),
-            evaluator=stub_evaluator,
-            warrant_builder=stub_warrant,
+            component_profile=_component_profile(),
+            owner_execution_authorization_path=_authorization_path(),
         )
 
 
@@ -748,8 +760,8 @@ def test_stage_1_digest_binds_the_objects_not_only_the_digests(
         exact_clearance(),
         STUB_RUNTIME,
         owner_interpretation=_owner_interpretation(),
-        evaluator=stub_evaluator,
-        warrant_builder=other_warrant,
+        component_profile=_component_profile(),
+        owner_execution_authorization_path=_authorization_path(),
     )
     assert other.artifacts()[TARGET_CHAIN].warrant_ref == (
         stage_1.artifacts()[TARGET_CHAIN].warrant_ref
@@ -847,8 +859,8 @@ def test_disposition_for_a_chain_with_no_candidate_cannot_bind(
         exact_clearance(),
         STUB_RUNTIME,
         owner_interpretation=_owner_interpretation(),
-        evaluator=failing,
-        warrant_builder=stub_warrant,
+        component_profile=_component_profile(),
+        owner_execution_authorization_path=_authorization_path(),
     )
     assert TARGET_CHAIN not in partial.artifacts()
     complete = execute_authorized_stage_1(
@@ -857,8 +869,8 @@ def test_disposition_for_a_chain_with_no_candidate_cannot_bind(
         exact_clearance(),
         STUB_RUNTIME,
         owner_interpretation=_owner_interpretation(),
-        evaluator=stub_evaluator,
-        warrant_builder=stub_warrant,
+        component_profile=_component_profile(),
+        owner_execution_authorization_path=_authorization_path(),
     )
     stimulus = {
         **disposition_for(complete, projection, TARGET_CHAIN, action_plan),
@@ -1022,8 +1034,8 @@ def test_an_escalating_chain_is_preserved_as_unresolved_with_no_event(
         exact_clearance(),
         STUB_RUNTIME,
         owner_interpretation=_owner_interpretation(),
-        evaluator=unknown_on_one_chain,
-        warrant_builder=stub_warrant,
+        component_profile=_component_profile(),
+        owner_execution_authorization_path=_authorization_path(),
     )
     result = _stage_2(projection, frozen, cleared, action_plan, correction=correction_object())
     target = next(o for o in result.outcomes if o.chain_id == TARGET_CHAIN)
@@ -1313,8 +1325,8 @@ def test_missing_owner_interpretation_clearance_field_blocks_stage_1(
             incomplete,
             STUB_RUNTIME,
             owner_interpretation=_owner_interpretation(),
-            evaluator=stub_evaluator,
-            warrant_builder=stub_warrant,
+            component_profile=_component_profile(),
+            owner_execution_authorization_path=_authorization_path(),
         )
 
 
@@ -1335,8 +1347,8 @@ def test_empty_owner_interpretation_clearance_field_blocks_stage_1(
             empty_field,
             STUB_RUNTIME,
             owner_interpretation=_owner_interpretation(),
-            evaluator=stub_evaluator,
-            warrant_builder=stub_warrant,
+            component_profile=_component_profile(),
+            owner_execution_authorization_path=_authorization_path(),
         )
 
 
@@ -1357,8 +1369,8 @@ def test_wrong_owner_interpretation_digest_blocks_stage_1(
             wrong,
             STUB_RUNTIME,
             owner_interpretation=_owner_interpretation(),
-            evaluator=stub_evaluator,
-            warrant_builder=stub_warrant,
+            component_profile=_component_profile(),
+            owner_execution_authorization_path=_authorization_path(),
         )
 
 
@@ -1373,8 +1385,8 @@ def test_stage_1_binds_the_verified_object_not_a_digest_label(
             exact_clearance(),
             STUB_RUNTIME,
             owner_interpretation={"sha256": OWNER_PREEXECUTION_INTERPRETATION_SHA256},
-            evaluator=stub_evaluator,
-            warrant_builder=stub_warrant,
+            component_profile=_component_profile(),
+            owner_execution_authorization_path=_authorization_path(),
         )
 
 
@@ -1447,8 +1459,8 @@ def test_owner_interpretation_prose_never_reaches_the_computation(
         exact_clearance(),
         STUB_RUNTIME,
         owner_interpretation=owner_interpretation,
-        evaluator=watching_evaluator,
-        warrant_builder=watching_warrant,
+        component_profile=_component_profile(),
+        owner_execution_authorization_path=_authorization_path(),
     )
     assert seen
     result = _stage_2(projection, frozen, cleared, action_plan, correction=correction_object())

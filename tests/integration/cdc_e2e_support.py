@@ -14,6 +14,7 @@ wrong one still refuses.
 from __future__ import annotations
 
 from collections.abc import Mapping
+from pathlib import Path
 from typing import Any
 
 from oic.cdc_e2e_mission import (
@@ -221,4 +222,49 @@ def bind_disposition_at(
     """
     return _bind_disposition_with_injected_clock(
         stage_1, disposition, projection=projection, action_plan=action_plan, clock=clock
+    )
+
+
+def synthetic_authorization(
+    tmp_path: Path,
+    *,
+    runtime: RuntimeIdentity = STUB_RUNTIME,
+    package_sha256: str = FROZEN_MISSION_PACKAGE_SHA256,
+    body: str | None = None,
+) -> Path:
+    """Write a synthetic, explicitly non-result-bearing authorization artifact.
+
+    This is a test fixture, not an owner authorization. It exists so the gate can
+    be observed refusing and, where a test needs the gate open, opening on
+    something whose bytes are visibly synthetic. No real owner authorization
+    exists and none is created here.
+    """
+    text = (
+        body
+        if body is not None
+        else (
+            "SYNTHETIC NON-RESULT-BEARING TEST AUTHORIZATION\n"
+            "NOT AN OWNER AUTHORIZATION\n"
+            f"implementation_commit = {runtime.implementation_commit}\n"
+            f"implementation_tree = {runtime.implementation_tree}\n"
+            f"mission_package_sha256 = {package_sha256}\n"
+        )
+    )
+    path = tmp_path / "SYNTHETIC-NON-RESULT-BEARING-AUTHORIZATION.md"
+    path.write_text(text, encoding="utf-8")
+    return path
+
+
+def clearance_for_authorization(
+    authorization_path: Path, runtime: RuntimeIdentity = STUB_RUNTIME
+) -> ExecutionClearance:
+    """A clearance whose owner reference names the artifact's exact digest."""
+    import hashlib
+
+    digest = hashlib.sha256(authorization_path.read_bytes()).hexdigest()
+    return ExecutionClearance(
+        **{
+            **exact_clearance(runtime).as_mapping(),
+            "owner_execution_authorization": f"sha256:{digest}",
+        }
     )

@@ -17,6 +17,7 @@ from __future__ import annotations
 import hashlib
 import inspect
 import json
+import re
 import shutil
 import sys
 from collections.abc import Mapping
@@ -31,7 +32,9 @@ from cdc_e2e_support import (
     COMPONENT_PROFILE_RELPATH,
     PACKAGE_RELPATH,
     STUB_RUNTIME,
+    clearance_for_authorization,
     exact_clearance,
+    synthetic_authorization,
 )
 
 from oic import cdc_e2e_mission
@@ -655,11 +658,10 @@ def test_stage_1_over_the_frozen_population_is_blocked(
     """The mission's actual nine outcomes cannot be produced by this suite.
 
     Both routes refuse: the governed evaluator called directly on a mission
-    chain, and the whole authorized Stage-1 path with any injected components.
+    chain with no authorization, and the whole authorized Stage-1 path, which
+    has no real owner authorization artifact to verify.
     """
-    evaluator, warrant_builder = governed_stage_1_components(
-        profile, mission_id=cdc_e2e_mission.MISSION_ID
-    )
+    evaluator, _ = governed_stage_1_components(profile, mission_id=cdc_e2e_mission.MISSION_ID)
     chain = projection.chains[0]
     with pytest.raises(MissionPopulationExecutionBlockedError):
         evaluator(
@@ -667,7 +669,7 @@ def test_stage_1_over_the_frozen_population_is_blocked(
             chain.execution_input["evidence_bundle"],
             chain.execution_input["admission_record"],
         )
-    with pytest.raises(MissionPopulationExecutionBlockedError, match="not"):
+    with pytest.raises(cdc_e2e_mission.OwnerExecutionAuthorizationError):
         execute_authorized_stage_1(
             projection,
             frozen,
@@ -676,13 +678,14 @@ def test_stage_1_over_the_frozen_population_is_blocked(
             owner_interpretation=cdc_e2e_mission.verify_owner_preexecution_interpretation(
                 repo_root / cdc_e2e_mission.OWNER_PREEXECUTION_INTERPRETATION_RELPATH
             ),
-            evaluator=evaluator,
-            warrant_builder=warrant_builder,
+            component_profile=profile,
+            owner_execution_authorization_path=(
+                repo_root / "veraxis/cdc-e2e-mission-001/NO-SUCH-OWNER-AUTHORIZATION.md"
+            ),
         )
-    assert cdc_e2e_mission.MISSION_EXECUTION_AUTHORIZATION is None
     assert (
         cdc_e2e_mission.MISSION_POPULATION_EXECUTION_STATE
-        == "AWAITING_FRESH_OWNER_EXECUTION_AUTHORIZATION"
+        == "REQUIRES_RUNTIME_OWNER_EXECUTION_AUTHORIZATION"
     )
 
 
@@ -849,3 +852,312 @@ def test_mutation_profile_hash_mismatch_is_never_accepted(tmp_path: Path, repo_r
         verify_frozen_component_profile(victim)
     for entry in (evaluate_control, build_fallback_warrant, governed_stage_1_components):
         assert "require_verified_component_profile" in inspect.getsource(entry)
+
+
+# ---------------------------------------------------------------------------
+# Blocker 1 -- the result-bearing gate is runtime evidence, not a source toggle
+# ---------------------------------------------------------------------------
+
+
+def test_no_source_constant_switches_execution_on() -> None:
+    """The module carries no authority switch that a source edit could flip.
+
+    A source toggle would be circular: the owner authorization must bind the
+    accepted implementation commit and tree, and editing a constant to enable
+    execution changes both.
+    """
+    assert not hasattr(cdc_e2e_mission, "MISSION_EXECUTION_AUTHORIZATION")
+    assert (
+        cdc_e2e_mission.MISSION_POPULATION_EXECUTION_STATE
+        == "REQUIRES_RUNTIME_OWNER_EXECUTION_AUTHORIZATION"
+    )
+    source = inspect.getsource(cdc_e2e_mission)
+    assert "os.environ" not in source
+    assert "getenv" not in source
+    # No authorization digest is compiled in: the only 64-hex constants are the
+    # frozen package, profile, oracle, protocol, plan and interpretation.
+    verifier = inspect.getsource(cdc_e2e_mission.verify_owner_execution_authorization)
+    assert not re.search(r"[0-9a-f]{64}", verifier)
+
+
+@pytest.mark.parametrize(
+    "authorization",
+    [None, "sha256:" + "0" * 64, True, 1, {"sha256": "0" * 64}, object()],
+)
+def test_a_label_or_flag_is_not_an_authorization(authorization: object) -> None:
+    """Strings, flags, mappings and sentinels are all refused."""
+    with pytest.raises(cdc_e2e_mission.OwnerExecutionAuthorizationError):
+        cdc_e2e_mission.require_mission_execution_authorization(authorization)
+
+
+def test_absent_authorization_artifact_fails_closed(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """A path that does not exist refuses before anything else happens."""
+    with pytest.raises(cdc_e2e_mission.OwnerExecutionAuthorizationError, match="not readable"):
+        cdc_e2e_mission.verify_owner_execution_authorization(
+            tmp_path / "absent.md",
+            clearance=exact_clearance(),
+            runtime=STUB_RUNTIME,
+            frozen=frozen,
+        )
+
+
+def test_clearance_alone_cannot_unlock_without_the_artifact(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """A constructed clearance naming a digest unlocks nothing on its own."""
+    artifact = synthetic_authorization(tmp_path)
+    forged = ExecutionClearance(
+        **{
+            **exact_clearance().as_mapping(),
+            "owner_execution_authorization": "sha256:" + "0" * 64,
+        }
+    )
+    with pytest.raises(
+        cdc_e2e_mission.OwnerExecutionAuthorizationError, match="a label is not the artifact"
+    ):
+        cdc_e2e_mission.verify_owner_execution_authorization(
+            artifact, clearance=forged, runtime=STUB_RUNTIME, frozen=frozen
+        )
+
+
+def test_authorization_must_name_the_running_implementation_and_package(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """An authorization issued against another implementation does not carry over."""
+    other = synthetic_authorization(
+        tmp_path,
+        runtime=cdc_e2e_mission.RuntimeIdentity("OTHER-COMMIT", "OTHER-TREE", "OTHER-ENV"),
+    )
+    with pytest.raises(
+        cdc_e2e_mission.OwnerExecutionAuthorizationError, match="does not name the running"
+    ):
+        cdc_e2e_mission.verify_owner_execution_authorization(
+            other,
+            clearance=clearance_for_authorization(other),
+            runtime=STUB_RUNTIME,
+            frozen=frozen,
+        )
+
+
+def test_a_correctly_bound_synthetic_authorization_verifies(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """The gate is openable without any source change -- by evidence, at runtime."""
+    artifact = synthetic_authorization(tmp_path)
+    verified = cdc_e2e_mission.verify_owner_execution_authorization(
+        artifact,
+        clearance=clearance_for_authorization(artifact),
+        runtime=STUB_RUNTIME,
+        frozen=frozen,
+    )
+    assert verified.sha256_hex == hashlib.sha256(artifact.read_bytes()).hexdigest()
+    assert verified.reference == f"sha256:{verified.sha256_hex}"
+    assert verified.authorized_stage == "STAGE_1_ONLY"
+    assert "NOT AN OWNER AUTHORIZATION" in artifact.read_text(encoding="utf-8")
+
+
+# ---------------------------------------------------------------------------
+# Blocker 2 -- no injected-component bypass on the authoritative route
+# ---------------------------------------------------------------------------
+
+
+def test_public_authorized_route_exposes_no_component_injection() -> None:
+    """No evaluator, warrant-builder or per-chain profile parameter exists."""
+    parameters = set(inspect.signature(execute_authorized_stage_1).parameters)
+    for forbidden in (
+        "evaluator",
+        "warrant_builder",
+        "components",
+        "evaluation_function",
+        "warrant_function",
+        "profile_per_chain",
+    ):
+        assert forbidden not in parameters, forbidden
+    assert parameters == {
+        "projection",
+        "frozen",
+        "clearance",
+        "runtime",
+        "owner_interpretation",
+        "component_profile",
+        "owner_execution_authorization_path",
+    }
+    source = inspect.getsource(execute_authorized_stage_1)
+    assert "governed_stage_1_components(" in source
+
+
+def test_private_injection_remains_only_for_non_mission_unit_tests() -> None:
+    """_form_stage_1 still accepts components, and is private and gated."""
+    assert cdc_e2e_mission._form_stage_1.__name__.startswith("_")
+    assert "evaluator" in inspect.signature(cdc_e2e_mission._form_stage_1).parameters
+    assert "_require_mission_population_not_formed" in inspect.getsource(
+        cdc_e2e_mission._form_stage_1
+    )
+
+
+# ---------------------------------------------------------------------------
+# Blocker 3 -- conformance is an operational precondition
+# ---------------------------------------------------------------------------
+
+
+def test_conformance_is_enforced_before_any_evaluator_invocation(
+    tmp_path: Path, repo_root: Path
+) -> None:
+    """A valid clearance and authorization still cannot reach the evaluator.
+
+    A mutated copy of the package diverges from the frozen preregistered
+    assignment on one chain. Everything else is correct, so only the conformance
+    precondition can be what stops it. The mutated copy is not the mission
+    package, and no mission outcome is produced.
+    """
+    copy = tmp_path / "pkg"
+    shutil.copytree(repo_root / PACKAGE_RELPATH, copy)
+    population = json.loads((copy / "02-POPULATION/P001.json").read_bytes())
+    population["C-TENDER-01"]["evidence_bundle"]["observations"] = [
+        {"fact": TENDER_FACTS[0], "value": True},
+        {"fact": TENDER_FACTS[1], "value": False},
+    ]
+    (copy / "02-POPULATION/P001.json").write_bytes(
+        (json.dumps(population, indent=1, sort_keys=True) + "\n").encode()
+    )
+    # The mutated copy no longer verifies as the frozen package at all, which is
+    # itself the first precondition; assert that, then assert the conformance
+    # check independently rejects the divergence on a projection.
+    with pytest.raises(MissionContractError):
+        verify_frozen_mission_input(copy)
+
+    profile = verify_frozen_component_profile(repo_root / COMPONENT_PROFILE_RELPATH)
+    frozen = verify_frozen_mission_input(repo_root / PACKAGE_RELPATH)
+    drifted = _projection_with_evidence(
+        project_frozen_mission(frozen),
+        "P001xC-TENDER-01",
+        [
+            {"fact": TENDER_FACTS[0], "value": True},
+            {"fact": TENDER_FACTS[1], "value": False},
+        ],
+    )
+    with pytest.raises(PreconditionMismatchError, match="PRECONDITION_MISMATCH_FAIL_CLOSED"):
+        require_evidence_matches_preregistered_assignments(drifted, profile)
+
+
+def test_authoritative_route_orders_its_preconditions(repo_root: Path) -> None:
+    """Conformance is wired in, and sits ahead of component construction."""
+    source = inspect.getsource(execute_authorized_stage_1)
+    conformance = source.index("require_evidence_matches_preregistered_assignments")
+    components = source.index("governed_stage_1_components(")
+    formation = source.index("_form_stage_1(")
+    authorization = source.index("verify_owner_execution_authorization(")
+    assert authorization < conformance < components < formation
+    for required in (
+        "require_verified_component_profile",
+        "require_verified_owner_interpretation",
+        "require_projected_source",
+        "require_result_clearance",
+    ):
+        assert required in source
+    del repo_root
+
+
+# ---------------------------------------------------------------------------
+# Blocker 4 -- one canonical evaluation identity
+# ---------------------------------------------------------------------------
+
+
+def test_evaluation_digest_is_a_single_identity(profile: FrozenComponentProfile) -> None:
+    """record == artifact == warrant == canonical digest of the body."""
+    record = _evaluate(profile, _both(True, True))
+    canonical = cdc_e2e_mission.canonical_evaluation_digest(record)
+    _, warrant = build_fallback_warrant(record, profile=profile)
+    assert record["evaluation_digest"] == canonical
+    assert warrant["evaluation_digest"] == canonical
+    assert cdc_e2e_mission.evaluation_digest_is_intact(record)
+    # And the Stage-1 artifact reuses it rather than rehashing the record.
+    artifact_source = inspect.getsource(cdc_e2e_mission._form_stage_1)
+    assert 'evaluation_digest=str(evaluation["evaluation_digest"])' in artifact_source
+    assert "evaluation_digest=sha256(evaluation)" not in artifact_source
+
+
+def test_the_digest_is_not_defined_over_a_record_containing_itself(
+    profile: FrozenComponentProfile,
+) -> None:
+    """Excluding the claimed digest reproduces it exactly."""
+    record = _evaluate(profile, _both(True, False))
+    body = {k: v for k, v in record.items() if k != "evaluation_digest"}
+    assert cdc_e2e_mission.sha256(body) == record["evaluation_digest"]
+    assert cdc_e2e_mission.sha256(record) != record["evaluation_digest"]
+
+
+@pytest.mark.parametrize(
+    "field",
+    ["verdict", "reason_code", "control_id", "observed_required_facts", "on_unknown_observed"],
+)
+def test_mutating_any_evaluation_body_field_invalidates_the_digest(
+    profile: FrozenComponentProfile, field: str
+) -> None:
+    """A tampered body no longer matches its claimed digest, and the warrant refuses."""
+    record = _evaluate(profile, _both(True, True))
+    tampered = {**record, field: "TAMPERED"}
+    assert not cdc_e2e_mission.evaluation_digest_is_intact(tampered)
+    with pytest.raises(MissionContractError, match="does not recompute"):
+        build_fallback_warrant(tampered, profile=profile)
+
+
+# ---------------------------------------------------------------------------
+# Hardening -- profile assignment values are booleans, never coerced
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("value", ["true", "false", 0, 1, None, [], {}])
+def test_non_boolean_profile_assignment_value_fails_closed(
+    tmp_path: Path, repo_root: Path, value: object
+) -> None:
+    """A non-boolean preregistered assignment value is refused, not coerced."""
+    document = json.loads((repo_root / COMPONENT_PROFILE_RELPATH).read_bytes())
+    controls = document["preregistered_population_assignments"]["P001"]["controls"]
+    controls["C-TENDER-01"][TENDER_FACTS[0]] = [value]
+    victim = tmp_path / "profile.json"
+    victim.write_bytes((json.dumps(document, indent=2, sort_keys=True) + "\n").encode())
+    # The byte check fires first; bypass it to reach the assignment validator and
+    # prove the coercion path is gone rather than merely unreachable today.
+    with pytest.raises(ComponentProfileProvenanceError):
+        verify_frozen_component_profile(victim)
+    with pytest.raises(ComponentProfileProvenanceError, match="PRECONDITION_MISMATCH_FAIL_CLOSED"):
+        cdc_e2e_mission._profile_assignment_values("P001", "C-TENDER-01", "f", [value])
+
+
+def test_profile_assignment_loader_does_not_coerce() -> None:
+    """No bool() call survives in the assignment loader."""
+    source = inspect.getsource(cdc_e2e_mission._profile_assignment_values)
+    assert "bool(value)" not in source
+    assert "isinstance(value, bool)" in source
+
+
+# ---------------------------------------------------------------------------
+# on_unknown -- corrected invariant
+# ---------------------------------------------------------------------------
+
+
+def test_on_unknown_changes_the_record_but_not_the_decision(
+    profile: FrozenComponentProfile,
+) -> None:
+    """Observed metadata is faithfully recorded, so records are not byte-identical.
+
+    The invariant is decision independence, not record equality: varying
+    on_unknown must not move the verdict or reason, must never be applied, must
+    emit no disposition and must never yield an ESCALATE verdict -- while the
+    observed value itself is recorded, which necessarily changes the digest.
+    """
+    observations = [{"fact": TENDER_FACTS[0], "value": True}]
+    digests = set()
+    for on_unknown in ("ESCALATE", "DENY", "ALLOW", None):
+        record = _evaluate(profile, observations, control={**_control(), "on_unknown": on_unknown})
+        assert record["verdict"] == VERDICT_UNRESOLVED
+        assert record["reason_code"] == REASON_MISSING
+        assert record["on_unknown_applied"] is False
+        assert record["on_unknown_observed"] == on_unknown
+        assert record["machine_disposition"] is None
+        assert record["verdict"] != "ESCALATE"
+        digests.add(record["evaluation_digest"])
+    assert len(digests) == 4, "the observed metadata must be recorded, so digests differ"

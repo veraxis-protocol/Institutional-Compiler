@@ -1401,6 +1401,7 @@ def _form_stage_1(
     warrant_builder: WarrantFunction,
     authorization: str,
     owner_interpretation_sha256: str = "NOT_BOUND",
+    mission_authorization: object = None,
 ) -> Stage1Observation:
     """Form candidates across all nine chains, then stop.
 
@@ -1413,7 +1414,7 @@ def _form_stage_1(
     # and consumes the single authorized attempt. The interlock sits here, above
     # the injected components, so it cannot be sidestepped by supplying a
     # different evaluator -- including a stub in a test.
-    _require_mission_population_not_formed(projection)
+    _require_mission_population_not_formed(projection, mission_authorization)
     tally = dict.fromkeys(DENOMINATOR_STATES, 0)
     observations: list[Stage1ChainObservation] = []
     for chain in projection.chains:
@@ -1461,7 +1462,7 @@ def _form_stage_1(
                 ebawu_id=chain.ebawu_ref,
                 input_digest=chain.input_digest(),
                 evaluation=evaluation,
-                evaluation_digest=sha256(evaluation),
+                evaluation_digest=str(evaluation["evaluation_digest"]),
                 warrant_class=warrant_class,
                 warrant_ref=str(warrant["warrant_id"]),
                 warrant=warrant,
@@ -1516,21 +1517,30 @@ def execute_authorized_stage_1(
     runtime: RuntimeIdentity,
     *,
     owner_interpretation: object,
-    evaluator: EvaluationFunction,
-    warrant_builder: WarrantFunction,
+    component_profile: object,
+    owner_execution_authorization_path: Path,
 ) -> Stage1Observation:
     """The single authorized route to Stage-1 candidate formation.
 
-    Refuses unless the source is a :class:`MissionProjection` derived from
-    verified frozen bytes *and* every external binding matches observation,
-    including the human action-plan digest and the owner pre-execution
-    interpretation record.
+    The caller supplies identities and evidence locations. It supplies no
+    components: the evaluator and warrant builder are constructed here from the
+    verified profile, so there is no parameter through which a stub evaluator,
+    a stub warrant builder or a per-chain semantic profile can be substituted
+    once execution becomes authorized.
 
-    The interpretation record is verified from its bytes here, before the
-    clearance digest is compared against it, so authorization binds a verified
-    object rather than a caller-supplied label. Its identity is recorded in the
-    Stage-1 observation; its prose is never read into the computation.
+    Order matters, and every step is a precondition for the next:
+
+    1. the component profile is verified from exact bytes;
+    2. the mission projection is verified against the frozen package bytes;
+    3. the clearance matches observed runtime and every governed identity;
+    4. the owner interpretation is verified from exact bytes;
+    5. the owner execution authorization is verified from exact external bytes
+       and cross-bound to the clearance reference and the running implementation;
+    6. package evidence is checked against the profile's preregistered
+       assignments as a conformance constraint only;
+    7. and only then are the governed components built and invoked.
     """
+    profile = require_verified_component_profile(component_profile)
     interpretation = require_verified_owner_interpretation(owner_interpretation)
     verified = require_projected_source(projection, frozen)
     require_result_clearance(
@@ -1540,8 +1550,26 @@ def execute_authorized_stage_1(
         raise ResultBearingMissionBlockedError(
             "clearance and verified owner interpretation disagree"
         )
+    if clearance.stage_1_component_profile_sha256 != profile.sha256_hex:
+        raise ResultBearingMissionBlockedError("clearance and verified component profile disagree")
     if verified.package_sha256 != frozen.package_sha256:
         raise ResultBearingMissionBlockedError("projection and verified bytes disagree")
+
+    authorization = verify_owner_execution_authorization(
+        owner_execution_authorization_path,
+        clearance=clearance,
+        runtime=runtime,
+        frozen=frozen,
+    )
+    # The conformance constraint is an operational precondition, not a report:
+    # a mismatch stops the run before any evaluator is invoked.
+    conformance = require_evidence_matches_preregistered_assignments(verified, profile)
+    if conformance["fallback_to_profile_assignments"]:
+        raise PreconditionMismatchError("profile assignments must never act as evidence")
+
+    evaluator, warrant_builder = governed_stage_1_components(
+        profile, mission_id=verified.mission_id, mission_authorization=authorization
+    )
     return _form_stage_1(
         verified,
         frozen,
@@ -1549,6 +1577,7 @@ def execute_authorized_stage_1(
         warrant_builder=warrant_builder,
         authorization=STAGE_1_AUTHORIZATION_CLEARED,
         owner_interpretation_sha256=interpretation.sha256_hex,
+        mission_authorization=authorization,
     )
 
 
@@ -2657,11 +2686,19 @@ NO_ZTL_DERIVATION: Final = "NO_ZTL_DERIVATION"
 
 ON_UNKNOWN_NON_APPLICATION_REASON: Final = "OUTSIDE_STAGE_1_EVALUATOR_CONTRACT"
 
-# The frozen mission population. The governed components refuse to evaluate it
-# until a fresh one-run owner execution authorization exists; none does.
+# The frozen mission population. Evaluating it requires an owner execution
+# authorization supplied at runtime as an exact external artifact.
+#
+# There is deliberately no module constant that switches execution on. A source
+# toggle would be circular: the owner authorization must bind the accepted
+# implementation commit and tree, but flipping a constant to enable execution
+# produces a different commit and tree, so the authorization would bind an
+# implementation that is no longer the one running. The gate is therefore
+# runtime evidence cross-bound to the clearance, and this file never needs to
+# change again to permit or refuse a run.
 FROZEN_MISSION_PROCEDURE_IDS: Final = ("P-001", "P-002", "P-003")
-MISSION_EXECUTION_AUTHORIZATION: Final[str | None] = None
-MISSION_POPULATION_EXECUTION_STATE: Final = "AWAITING_FRESH_OWNER_EXECUTION_AUTHORIZATION"
+MISSION_POPULATION_EXECUTION_STATE: Final = "REQUIRES_RUNTIME_OWNER_EXECUTION_AUTHORIZATION"
+OWNER_AUTHORIZATION_REFERENCE_PREFIX: Final = "sha256:"
 
 
 class ComponentProfileProvenanceError(MissionContractError):
@@ -2674,6 +2711,107 @@ class PreconditionMismatchError(MissionContractError):
 
 class MissionPopulationExecutionBlockedError(ResultBearingMissionBlockedError):
     """Evaluation of the frozen mission population was attempted without authorization."""
+
+
+@dataclass(frozen=True, slots=True)
+class OwnerExecutionAuthorization:
+    """An owner execution authorization verified from exact external bytes.
+
+    No expected digest is compiled into this module. The authorization's
+    identity is whatever its bytes hash to, and it is accepted only when the
+    externally issued ``ExecutionClearance.owner_execution_authorization``
+    reference names that exact digest and the artifact itself names the exact
+    implementation and package it authorizes.
+    """
+
+    path: Path
+    sha256_hex: str
+    byte_count: int
+    reference: str
+    authorized_stage: str = "STAGE_1_ONLY"
+
+    def as_record(self) -> dict[str, Any]:
+        """Identity-only record; carries no authorization text."""
+        return {
+            "sha256": self.sha256_hex,
+            "bytes": self.byte_count,
+            "reference": self.reference,
+            "authorized_stage": self.authorized_stage,
+        }
+
+
+class OwnerExecutionAuthorizationError(ResultBearingMissionBlockedError):
+    """The runtime owner execution authorization is absent, wrong or unbound."""
+
+
+def verify_owner_execution_authorization(
+    path: Path,
+    *,
+    clearance: ExecutionClearance,
+    runtime: RuntimeIdentity,
+    frozen: FrozenMissionInput,
+) -> OwnerExecutionAuthorization:
+    """Verify an externally supplied authorization and cross-bind it.
+
+    Four independent conditions, all required:
+
+    1. the artifact exists and its bytes are read here, not described;
+    2. ``clearance.owner_execution_authorization`` names that exact digest, so a
+       constructed clearance alone unlocks nothing;
+    3. the artifact text names the exact implementation commit and tree that are
+       running, so an authorization issued against a different implementation
+       does not carry over;
+    4. the artifact text names the exact controlling package digest.
+
+    Nothing about this is a flag or a truthiness check, and no digest is
+    hard-coded, so a future authorization needs no source change.
+    """
+    try:
+        payload = path.read_bytes()
+    except OSError as error:
+        raise OwnerExecutionAuthorizationError(
+            f"owner execution authorization artifact is not readable at {path}: {error}"
+        ) from error
+    digest = _file_sha256(payload)
+    reference = f"{OWNER_AUTHORIZATION_REFERENCE_PREFIX}{digest}"
+    supplied = clearance.owner_execution_authorization
+    if not supplied:
+        raise OwnerExecutionAuthorizationError(
+            "clearance carries no owner_execution_authorization reference"
+        )
+    if supplied != reference:
+        raise OwnerExecutionAuthorizationError(
+            f"clearance owner_execution_authorization is {supplied!r}, but the supplied "
+            f"artifact hashes to {reference!r}; a label is not the artifact"
+        )
+    missing = [
+        name
+        for name, token in (
+            ("implementation_commit", runtime.implementation_commit),
+            ("implementation_tree", runtime.implementation_tree),
+            ("mission_package_sha256", frozen.package_sha256),
+        )
+        if token.encode() not in payload
+    ]
+    if missing:
+        raise OwnerExecutionAuthorizationError(
+            f"the owner authorization does not name the running {missing}; an "
+            "authorization issued against another implementation or package does not "
+            "carry over to this one"
+        )
+    return OwnerExecutionAuthorization(
+        path=path, sha256_hex=digest, byte_count=len(payload), reference=reference
+    )
+
+
+def require_mission_execution_authorization(authorization: object) -> OwnerExecutionAuthorization:
+    """Refuse anything that is not a verified authorization artifact."""
+    if not isinstance(authorization, OwnerExecutionAuthorization):
+        raise OwnerExecutionAuthorizationError(
+            "mission execution requires an OwnerExecutionAuthorization verified from "
+            "external bytes; a string, flag, environment value or mapping is not one"
+        )
+    return authorization
 
 
 @dataclass(frozen=True, slots=True)
@@ -2702,6 +2840,27 @@ class FrozenComponentProfile:
                 f"the component profile designates no required facts for {control_id}"
             )
         return facts
+
+
+def _profile_assignment_values(
+    procedure: str, control_id: str, fact: object, values: object
+) -> tuple[bool, ...]:
+    """Preregistered assignment values must already be booleans. No coercion.
+
+    Truthiness conversion would have silently turned "false", 0 or [] into a
+    boolean. The frozen profile carries real booleans today, so this changes no
+    current result; it removes the latent path.
+    """
+    admitted: list[bool] = []
+    for value in _require_sequence(values, "assignment values"):
+        if not isinstance(value, bool):
+            raise ComponentProfileProvenanceError(
+                f"PRECONDITION_MISMATCH_FAIL_CLOSED: preregistered assignment "
+                f"{procedure}/{control_id}/{fact} carries {value!r} of type "
+                f"{type(value).__name__}; only JSON booleans are admitted"
+            )
+        admitted.append(value)
+    return tuple(admitted)
 
 
 def verify_frozen_component_profile(path: Path) -> FrozenComponentProfile:
@@ -2735,7 +2894,7 @@ def verify_frozen_component_profile(path: Path) -> FrozenComponentProfile:
         per_control: dict[str, dict[str, tuple[bool, ...]]] = {}
         for control_id, facts in _require_mapping(body["controls"], "assignment").items():
             per_control[control_id] = {
-                str(fact): tuple(bool(value) for value in _require_sequence(values, "values"))
+                str(fact): _profile_assignment_values(procedure, control_id, fact, values)
                 for fact, values in _require_mapping(facts, "facts").items()
             }
         assignments[procedure] = per_control
@@ -2800,6 +2959,7 @@ def evaluate_control(
     *,
     profile: object,
     mission_id: str,
+    mission_authorization: object = None,
 ) -> dict[str, Any]:
     """The governed Stage-1 evaluator.
 
@@ -2815,7 +2975,7 @@ def evaluate_control(
     verified = require_verified_component_profile(profile)
     control_id = str(admitted_control["control_id"])
     procedure_id = str(admitted_control["procedure_id"])
-    _require_mission_population_not_evaluated(mission_id, procedure_id)
+    _require_mission_population_not_evaluated(mission_id, procedure_id, mission_authorization)
     facts = verified.facts_for(control_id)
 
     observations = {fact: _observed_values(evidence_bundle, fact) for fact in facts}
@@ -2861,8 +3021,27 @@ def evaluate_control(
     }
     if verdict not in VERDICTS:
         raise MissionContractError(f"evaluator produced an ungoverned verdict: {verdict}")
-    record["evaluation_digest"] = sha256(record)
+    # One canonical identity: the digest is taken over the body that does not
+    # contain it, and every downstream object reuses this exact value rather
+    # than rehashing the digest-bearing record into a second identity.
+    record["evaluation_digest"] = canonical_evaluation_digest(record)
     return record
+
+
+def canonical_evaluation_digest(evaluation: Mapping[str, Any]) -> str:
+    """The evaluation's canonical identity, excluding any claimed digest.
+
+    Recomputable by a verifier: drop ``evaluation_digest`` and hash the rest, so
+    the identity is never defined recursively over a record containing itself.
+    """
+    body = {key: value for key, value in evaluation.items() if key != "evaluation_digest"}
+    return sha256(body)
+
+
+def evaluation_digest_is_intact(evaluation: Mapping[str, Any]) -> bool:
+    """True when the claimed digest matches the canonical digest of the body."""
+    claimed = evaluation.get("evaluation_digest")
+    return isinstance(claimed, str) and claimed == canonical_evaluation_digest(evaluation)
 
 
 def build_fallback_warrant(
@@ -2879,6 +3058,11 @@ def build_fallback_warrant(
         raise MissionContractError("the profile no longer prohibits ZTL_WARRANT")
     if tuple(verified.permitted_warrant_classes) != (FALLBACK_WARRANT_CLASS,):
         raise MissionContractError("the profile permits a warrant class this builder cannot emit")
+    if not evaluation_digest_is_intact(evaluation):
+        raise MissionContractError(
+            "evaluation digest does not recompute from its body; the warrant would "
+            "bind an identity that does not describe the evaluation it wraps"
+        )
     verdict = str(evaluation["verdict"])
     if verdict not in VERDICTS:
         raise MissionContractError(f"evaluation carries an ungoverned verdict: {verdict}")
@@ -2899,7 +3083,9 @@ def build_fallback_warrant(
     return FALLBACK_WARRANT_CLASS, warrant
 
 
-def _require_mission_population_not_evaluated(mission_id: str, procedure_id: str) -> None:
+def _require_mission_population_not_evaluated(
+    mission_id: str, procedure_id: str, authorization: object
+) -> None:
     """Refuse to evaluate the frozen mission population without authorization.
 
     The implementation authorization permits building and testing these
@@ -2908,24 +3094,30 @@ def _require_mission_population_not_evaluated(mission_id: str, procedure_id: str
     discipline, so no unit, contract, integration or CI run can consume the one
     Stage-1 attempt by accident.
     """
-    if MISSION_EXECUTION_AUTHORIZATION is not None:
+    if mission_id != MISSION_ID or procedure_id not in FROZEN_MISSION_PROCEDURE_IDS:
         return
-    if mission_id == MISSION_ID and procedure_id in FROZEN_MISSION_PROCEDURE_IDS:
+    if authorization is None:
         raise MissionPopulationExecutionBlockedError(
             f"result-bearing evaluation of the frozen mission population is not "
             f"authorized: {mission_id} / {procedure_id}. State is "
             f"{MISSION_POPULATION_EXECUTION_STATE}."
         )
+    require_mission_execution_authorization(authorization)
 
 
-def _require_mission_population_not_formed(projection: MissionProjection) -> None:
+def _require_mission_population_not_formed(
+    projection: MissionProjection, authorization: object = None
+) -> None:
     """Refuse Stage-1 candidate formation over the frozen mission population."""
-    if MISSION_EXECUTION_AUTHORIZATION is not None:
-        return
     if (
-        projection.mission_id == MISSION_ID
-        and projection.package_sha256 == FROZEN_MISSION_PACKAGE_SHA256
+        projection.mission_id != MISSION_ID
+        or projection.package_sha256 != FROZEN_MISSION_PACKAGE_SHA256
     ):
+        return
+    if authorization is not None:
+        require_mission_execution_authorization(authorization)
+        return
+    if True:
         raise MissionPopulationExecutionBlockedError(
             "Stage-1 candidate formation over the frozen mission population is not "
             f"authorized: package {FROZEN_MISSION_PACKAGE_SHA256}. State is "
@@ -2979,7 +3171,7 @@ def require_evidence_matches_preregistered_assignments(
 
 
 def governed_stage_1_components(
-    profile: object, *, mission_id: str
+    profile: object, *, mission_id: str, mission_authorization: object = None
 ) -> tuple[EvaluationFunction, WarrantFunction]:
     """Bind the profile out of band and return the governed component pair.
 
@@ -3000,6 +3192,7 @@ def governed_stage_1_components(
             admission_record,
             profile=verified,
             mission_id=mission_id,
+            mission_authorization=mission_authorization,
         )
 
     def warrant_builder(
