@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -1346,6 +1347,8 @@ class Stage1Observation:
     accounting: Mapping[str, int]
     authorization: str = STAGE_1_AUTHORIZATION_HELPER
     owner_interpretation_sha256: str = "NOT_BOUND"
+    owner_execution_authorization: Mapping[str, Any] | None = None
+    attempt_record: Mapping[str, Any] | None = None
     institutional_transition: str = "NONE"
     draft_eligibility: str = "NONE"
     official_handoff: str = "PROHIBITED"
@@ -1360,6 +1363,12 @@ class Stage1Observation:
             "stage": self.stage,
             "authorization": self.authorization,
             "owner_interpretation_sha256": self.owner_interpretation_sha256,
+            "owner_execution_authorization": (
+                None
+                if self.owner_execution_authorization is None
+                else dict(self.owner_execution_authorization)
+            ),
+            "attempt_record": (None if self.attempt_record is None else dict(self.attempt_record)),
             "chains": [chain.as_record() for chain in self.chains],
             "accounting": dict(self.accounting),
             "institutional_transition": self.institutional_transition,
@@ -1402,6 +1411,7 @@ def _form_stage_1(
     authorization: str,
     owner_interpretation_sha256: str = "NOT_BOUND",
     mission_authorization: object = None,
+    attempt_claim: Callable[[], MissionAttemptRecord] | None = None,
 ) -> Stage1Observation:
     """Form candidates across all nine chains, then stop.
 
@@ -1417,6 +1427,8 @@ def _form_stage_1(
     _require_mission_population_not_formed(projection, mission_authorization)
     tally = dict.fromkeys(DENOMINATOR_STATES, 0)
     observations: list[Stage1ChainObservation] = []
+    claimed: MissionAttemptRecord | None = None
+    evaluator_invoked = False
     for chain in projection.chains:
         try:
             # Three semantically distinct inputs. Passing the same object three
@@ -1431,6 +1443,12 @@ def _form_stage_1(
             admission_record = _require_mapping(
                 chain.execution_input["admission_record"], "admission_record"
             )
+            if attempt_claim is not None and claimed is None:
+                # The claim is taken here, after every precondition has already
+                # passed and immediately before the first governed invocation, so
+                # a precondition failure never consumes the authorization.
+                claimed = attempt_claim()
+            evaluator_invoked = True
             evaluation = evaluator(admitted_control, evidence_bundle, admission_record)
             warrant_class, warrant = warrant_builder(evaluation, admitted_control)
             if warrant_class not in {"ZTL_WARRANT", "FALLBACK_WARRANT"}:
@@ -1495,6 +1513,9 @@ def _form_stage_1(
                     detail=f"{type(error).__name__}: {error}",
                 )
             )
+    consumed = (
+        mark_attempt_consumed(claimed) if claimed is not None and evaluator_invoked else claimed
+    )
     total = sum(tally.values())
     if total != EXPECTED_CHAIN_COUNT:
         raise MissionContractError(f"denominator lost: {total} of 9 accounted")
@@ -1507,6 +1528,12 @@ def _form_stage_1(
         accounting=tally,
         authorization=authorization,
         owner_interpretation_sha256=owner_interpretation_sha256,
+        owner_execution_authorization=(
+            None
+            if not isinstance(mission_authorization, OwnerExecutionAuthorization)
+            else mission_authorization.as_record()
+        ),
+        attempt_record=None if consumed is None else consumed.as_record(),
     )
 
 
@@ -1563,6 +1590,7 @@ def execute_authorized_stage_1(
     )
     # The conformance constraint is an operational precondition, not a report:
     # a mismatch stops the run before any evaluator is invoked.
+    require_unclaimed_attempt(authorization)
     conformance = require_evidence_matches_preregistered_assignments(verified, profile)
     if conformance["fallback_to_profile_assignments"]:
         raise PreconditionMismatchError("profile assignments must never act as evidence")
@@ -1578,6 +1606,7 @@ def execute_authorized_stage_1(
         authorization=STAGE_1_AUTHORIZATION_CLEARED,
         owner_interpretation_sha256=interpretation.sha256_hex,
         mission_authorization=authorization,
+        attempt_claim=lambda: claim_attempt(authorization, runtime, frozen),
     )
 
 
@@ -2728,20 +2757,72 @@ class OwnerExecutionAuthorization:
     sha256_hex: str
     byte_count: int
     reference: str
-    authorized_stage: str = "STAGE_1_ONLY"
+    authorized_stage: str
+    record_class: str
+    authorization_scope: str
+    authorization_id: str
 
     def as_record(self) -> dict[str, Any]:
-        """Identity-only record; carries no authorization text."""
+        """Identity and declared scope only; carries no authorization prose."""
         return {
-            "sha256": self.sha256_hex,
-            "bytes": self.byte_count,
-            "reference": self.reference,
+            "owner_execution_authorization_sha256": self.sha256_hex,
+            "owner_execution_authorization_bytes": self.byte_count,
+            "owner_execution_authorization_reference": self.reference,
+            "owner_execution_authorization_record_class": self.record_class,
+            "owner_execution_authorization_scope": self.authorization_scope,
+            "owner_execution_authorization_id": self.authorization_id,
             "authorized_stage": self.authorized_stage,
         }
 
 
 class OwnerExecutionAuthorizationError(ResultBearingMissionBlockedError):
     """The runtime owner execution authorization is absent, wrong or unbound."""
+
+
+OWNER_AUTHORIZATION_RECORD_CLASS: Final = "OWNER_STAGE_1_EXECUTION_AUTHORIZATION"
+OWNER_AUTHORIZATION_SCOPE: Final = "ONE_RESULT_BEARING_STAGE_1_EXECUTION"
+OWNER_AUTHORIZATION_STAGE: Final = "STAGE_1_ONLY"
+
+# Immutable predecessor governance objects. Binding their fixed identities is
+# safe: unlike the implementation commit and tree, they cannot change as a
+# result of this implementation changing, so there is no circularity.
+OWNER_SEMANTIC_PREIMPLEMENTATION_FREEZE_SHA256: Final = (
+    "fa8f18cb1d890b41fd078b92238200e58cb0e7f1ff65628f2390df520e20ab2a"
+)
+OWNER_STAGE_1_SEAM_CLARIFICATION_SHA256: Final = (
+    "a4a87ec5698416eaa9af970392070a25181df263537524e8b0fc8a91d86fec60"
+)
+
+# Declarations the artifact must make about itself. A digest identifies an
+# artifact; it says nothing about whether the artifact authorizes anything.
+OWNER_AUTHORIZATION_DECLARATIONS: Final[dict[str, object]] = {
+    "record_class": OWNER_AUTHORIZATION_RECORD_CLASS,
+    "mission_id": MISSION_ID,
+    "owner_authorized": True,
+    "authorized_stage": OWNER_AUTHORIZATION_STAGE,
+    "authorization_scope": OWNER_AUTHORIZATION_SCOPE,
+    "single_use": True,
+    "automatic_retry_authorized": False,
+    "stage_2_authorized": False,
+    "result_bearing": True,
+}
+
+# Structured bindings, compared field by field against observed runtime, the
+# clearance and the frozen governance identities. None of this is substring
+# presence in a text blob.
+OWNER_AUTHORIZATION_BINDING_FIELDS: Final = (
+    "implementation_commit",
+    "implementation_tree",
+    "environment_manifest_sha256",
+    "mission_package_sha256",
+    "stage_1_component_profile_sha256",
+    "oracle_sha256",
+    "adjudication_protocol_sha256",
+    "action_plan_sha256",
+    "owner_preexecution_interpretation_sha256",
+    "owner_semantic_preimplementation_freeze_sha256",
+    "owner_stage_1_seam_clarification_sha256",
+)
 
 
 def verify_owner_execution_authorization(
@@ -2751,20 +2832,16 @@ def verify_owner_execution_authorization(
     runtime: RuntimeIdentity,
     frozen: FrozenMissionInput,
 ) -> OwnerExecutionAuthorization:
-    """Verify an externally supplied authorization and cross-bind it.
+    """Verify an externally supplied authorization: identity *and* semantics.
 
-    Four independent conditions, all required:
+    Hashing establishes which artifact this is. It does not establish that the
+    artifact authorizes anything, so the bytes are hashed first and then parsed
+    as structured data, and the artifact must declare its own authorization
+    semantics and bind every governed identity as a field.
 
-    1. the artifact exists and its bytes are read here, not described;
-    2. ``clearance.owner_execution_authorization`` names that exact digest, so a
-       constructed clearance alone unlocks nothing;
-    3. the artifact text names the exact implementation commit and tree that are
-       running, so an authorization issued against a different implementation
-       does not carry over;
-    4. the artifact text names the exact controlling package digest.
-
-    Nothing about this is a flag or a truthiness check, and no digest is
-    hard-coded, so a future authorization needs no source change.
+    No future authorization digest is compiled into this module. The two fixed
+    digests bound here are immutable predecessor governance objects, which
+    cannot change because this implementation changed.
     """
     try:
         payload = path.read_bytes()
@@ -2784,24 +2861,219 @@ def verify_owner_execution_authorization(
             f"clearance owner_execution_authorization is {supplied!r}, but the supplied "
             f"artifact hashes to {reference!r}; a label is not the artifact"
         )
-    missing = [
-        name
-        for name, token in (
-            ("implementation_commit", runtime.implementation_commit),
-            ("implementation_tree", runtime.implementation_tree),
-            ("mission_package_sha256", frozen.package_sha256),
-        )
-        if token.encode() not in payload
-    ]
-    if missing:
+    try:
+        document = json.loads(payload)
+    except json.JSONDecodeError as error:
         raise OwnerExecutionAuthorizationError(
-            f"the owner authorization does not name the running {missing}; an "
-            "authorization issued against another implementation or package does not "
-            "carry over to this one"
+            f"owner execution authorization is not structured JSON: {error}"
+        ) from error
+    if not isinstance(document, Mapping):
+        raise OwnerExecutionAuthorizationError(
+            "owner execution authorization must be a JSON object"
+        )
+
+    wrong = [
+        f"{name}={document.get(name)!r} (required {expected!r})"
+        for name, expected in OWNER_AUTHORIZATION_DECLARATIONS.items()
+        if document.get(name) is not expected and document.get(name) != expected
+    ]
+    if wrong:
+        raise OwnerExecutionAuthorizationError(
+            f"the artifact does not declare Stage-1 authorization semantics: {wrong}"
+        )
+
+    expected_bindings = {
+        "implementation_commit": runtime.implementation_commit,
+        "implementation_tree": runtime.implementation_tree,
+        "environment_manifest_sha256": runtime.environment_manifest_sha256,
+        "mission_package_sha256": frozen.package_sha256,
+        "stage_1_component_profile_sha256": STAGE_1_COMPONENT_PROFILE_SHA256,
+        "oracle_sha256": ORACLE_SHA256,
+        "adjudication_protocol_sha256": ADJUDICATION_PROTOCOL_SHA256,
+        "action_plan_sha256": HUMAN_ACTION_PLAN_SHA256,
+        "owner_preexecution_interpretation_sha256": OWNER_PREEXECUTION_INTERPRETATION_SHA256,
+        "owner_semantic_preimplementation_freeze_sha256": (
+            OWNER_SEMANTIC_PREIMPLEMENTATION_FREEZE_SHA256
+        ),
+        "owner_stage_1_seam_clarification_sha256": OWNER_STAGE_1_SEAM_CLARIFICATION_SHA256,
+    }
+    raw_bindings = document.get("bindings")
+    if not isinstance(raw_bindings, Mapping):
+        raise OwnerExecutionAuthorizationError(
+            "owner authorization carries no structured 'bindings' object; governed "
+            "identities must be bound as fields, not present as loose text"
+        )
+    bindings: Mapping[str, Any] = raw_bindings
+    mismatched = [
+        name
+        for name in OWNER_AUTHORIZATION_BINDING_FIELDS
+        if bindings.get(name) != expected_bindings[name]
+    ]
+    if mismatched:
+        raise OwnerExecutionAuthorizationError(
+            f"owner authorization bindings do not match the running mission: {mismatched}"
+        )
+    # Cross-check the clearance itself, so an authorization cannot bind one set
+    # of identities while the clearance carries another.
+    clearance_conflicts = [
+        name
+        for name in (
+            "stage_1_component_profile_sha256",
+            "owner_preexecution_interpretation_sha256",
+            "action_plan_sha256",
+            "oracle_sha256",
+            "adjudication_protocol_sha256",
+            "mission_package_sha256",
+        )
+        if getattr(clearance, name) != bindings.get(name)
+    ]
+    if clearance_conflicts:
+        raise OwnerExecutionAuthorizationError(
+            f"clearance and owner authorization disagree on: {clearance_conflicts}"
         )
     return OwnerExecutionAuthorization(
-        path=path, sha256_hex=digest, byte_count=len(payload), reference=reference
+        path=path,
+        sha256_hex=digest,
+        byte_count=len(payload),
+        reference=reference,
+        authorized_stage=str(document["authorized_stage"]),
+        record_class=str(document["record_class"]),
+        authorization_scope=str(document["authorization_scope"]),
+        authorization_id=str(document.get("authorization_id", "UNIDENTIFIED")),
     )
+
+
+# ---------------------------------------------------------------------------
+# Single-use attempt state.
+#
+# "One run" has to be operational, not prose. The attempt record lives beside
+# the authorization artifact at a path derived from that artifact's own digest,
+# so a caller cannot pick a fresh location to get a second run. The claim is
+# taken with an exclusive create immediately before the first governed
+# evaluator invocation, which is also what makes two concurrent invocations
+# impossible.
+#
+# CLAIMED and CONSUMED are deliberately different states. A crash between them
+# leaves CLAIMED, which blocks automatic retry and requires an owner decision;
+# it is never silently released.
+# ---------------------------------------------------------------------------
+
+ATTEMPT_STATE_NONE: Final = "NO_ATTEMPT_RECORD"
+ATTEMPT_STATE_CLAIMED: Final = "CLAIMED_NOT_CONSUMED"
+ATTEMPT_STATE_CONSUMED: Final = "CONSUMED_AFTER_GOVERNED_EVALUATOR_INVOCATION"
+
+
+class MissionAttemptStateError(ResultBearingMissionBlockedError):
+    """The authorization has already been claimed or consumed."""
+
+
+@dataclass(frozen=True, slots=True)
+class MissionAttemptRecord:
+    """Immutable view of the attempt state for one authorization."""
+
+    path: Path
+    state: str
+    owner_execution_authorization_sha256: str
+    implementation_commit: str
+    implementation_tree: str
+    mission_package_sha256: str
+
+    def as_record(self) -> dict[str, Any]:
+        """JSON-safe record."""
+        return {
+            "attempt_state": self.state,
+            "owner_execution_authorization_sha256": self.owner_execution_authorization_sha256,
+            "implementation_commit": self.implementation_commit,
+            "implementation_tree": self.implementation_tree,
+            "mission_package_sha256": self.mission_package_sha256,
+        }
+
+    def digest(self) -> str:
+        """Identity of this attempt record."""
+        return sha256(self.as_record())
+
+
+def attempt_record_path(authorization: OwnerExecutionAuthorization) -> Path:
+    """Derived from the authorization's own identity; never caller-selected."""
+    return authorization.path.parent / (f".cdc-e2e-stage-1-attempt-{authorization.sha256_hex}.json")
+
+
+def read_attempt_state(authorization: OwnerExecutionAuthorization) -> str:
+    """Current attempt state for this authorization."""
+    path = attempt_record_path(authorization)
+    if not path.exists():
+        return ATTEMPT_STATE_NONE
+    document = _require_mapping(json.loads(path.read_bytes()), "attempt record")
+    return str(document.get("attempt_state"))
+
+
+def require_unclaimed_attempt(authorization: OwnerExecutionAuthorization) -> None:
+    """Refuse before any evaluator runs when the authorization is already used."""
+    state = read_attempt_state(authorization)
+    if state == ATTEMPT_STATE_NONE:
+        return
+    if state == ATTEMPT_STATE_CLAIMED:
+        raise MissionAttemptStateError(
+            f"authorization {authorization.reference} is {ATTEMPT_STATE_CLAIMED}: a prior "
+            "attempt claimed it and no definitive consumption was recorded. Automatic "
+            "retry is prohibited; this requires a separate owner decision."
+        )
+    raise MissionAttemptStateError(
+        f"authorization {authorization.reference} is {state}: it authorized one "
+        "result-bearing Stage-1 execution and is permanently non-reusable."
+    )
+
+
+def claim_attempt(
+    authorization: OwnerExecutionAuthorization,
+    runtime: RuntimeIdentity,
+    frozen: FrozenMissionInput,
+) -> MissionAttemptRecord:
+    """Atomically claim the single authorized attempt, or refuse.
+
+    Exclusive create is the whole mechanism: if two invocations race, exactly
+    one creates the file and the other fails here, before either reaches an
+    evaluator.
+    """
+    record = MissionAttemptRecord(
+        path=attempt_record_path(authorization),
+        state=ATTEMPT_STATE_CLAIMED,
+        owner_execution_authorization_sha256=authorization.sha256_hex,
+        implementation_commit=runtime.implementation_commit,
+        implementation_tree=runtime.implementation_tree,
+        mission_package_sha256=frozen.package_sha256,
+    )
+    payload = (json.dumps(record.as_record(), indent=2, sort_keys=True) + "\n").encode()
+    try:
+        handle = os.open(record.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+    except FileExistsError as error:
+        raise MissionAttemptStateError(
+            f"authorization {authorization.reference} was already claimed by another "
+            "attempt; automatic retry is prohibited"
+        ) from error
+    with os.fdopen(handle, "wb") as stream:
+        stream.write(payload)
+    return record
+
+
+def mark_attempt_consumed(record: MissionAttemptRecord) -> MissionAttemptRecord:
+    """Record that a governed evaluator was actually invoked.
+
+    Called whether the evaluator returned or raised: invocation is what consumes
+    the authorization, not success.
+    """
+    consumed = MissionAttemptRecord(
+        path=record.path,
+        state=ATTEMPT_STATE_CONSUMED,
+        owner_execution_authorization_sha256=record.owner_execution_authorization_sha256,
+        implementation_commit=record.implementation_commit,
+        implementation_tree=record.implementation_tree,
+        mission_package_sha256=record.mission_package_sha256,
+    )
+    record.path.write_bytes(
+        (json.dumps(consumed.as_record(), indent=2, sort_keys=True) + "\n").encode()
+    )
+    return consumed
 
 
 def require_mission_execution_authorization(authorization: object) -> OwnerExecutionAuthorization:

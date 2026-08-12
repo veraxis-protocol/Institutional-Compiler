@@ -13,6 +13,7 @@ wrong one still refuses.
 
 from __future__ import annotations
 
+import json
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -230,28 +231,57 @@ def synthetic_authorization(
     *,
     runtime: RuntimeIdentity = STUB_RUNTIME,
     package_sha256: str = FROZEN_MISSION_PACKAGE_SHA256,
-    body: str | None = None,
+    overrides: Mapping[str, Any] | None = None,
+    binding_overrides: Mapping[str, Any] | None = None,
+    raw: bytes | None = None,
+    name: str = "SYNTHETIC-TEST-AUTHORIZATION.json",
 ) -> Path:
-    """Write a synthetic, explicitly non-result-bearing authorization artifact.
+    """Write a synthetic, valid-shaped Stage-1 authorization for tests only.
 
-    This is a test fixture, not an owner authorization. It exists so the gate can
-    be observed refusing and, where a test needs the gate open, opening on
-    something whose bytes are visibly synthetic. No real owner authorization
-    exists and none is created here.
+    This is a test fixture. It is valid-shaped so the gate can be observed
+    *opening*, which is the only way to test what happens after it opens, but it
+    binds STUB_RUNTIME identities that no real run has, so it can only ever open
+    a test gate. No real owner authorization exists and none is created here.
     """
-    text = (
-        body
-        if body is not None
-        else (
-            "SYNTHETIC NON-RESULT-BEARING TEST AUTHORIZATION\n"
-            "NOT AN OWNER AUTHORIZATION\n"
-            f"implementation_commit = {runtime.implementation_commit}\n"
-            f"implementation_tree = {runtime.implementation_tree}\n"
-            f"mission_package_sha256 = {package_sha256}\n"
-        )
-    )
-    path = tmp_path / "SYNTHETIC-NON-RESULT-BEARING-AUTHORIZATION.md"
-    path.write_text(text, encoding="utf-8")
+    document: dict[str, Any] = {
+        "record_class": "OWNER_STAGE_1_EXECUTION_AUTHORIZATION",
+        "authorization_id": "SYNTHETIC-TEST-AUTHORIZATION-001",
+        "synthetic_test_fixture": True,
+        "mission_id": "CDC-TEST-MISSION-001",
+        "owner_authorized": True,
+        "authorized_stage": "STAGE_1_ONLY",
+        "authorization_scope": "ONE_RESULT_BEARING_STAGE_1_EXECUTION",
+        "single_use": True,
+        "automatic_retry_authorized": False,
+        "stage_2_authorized": False,
+        "result_bearing": True,
+        "bindings": {
+            "implementation_commit": runtime.implementation_commit,
+            "implementation_tree": runtime.implementation_tree,
+            "environment_manifest_sha256": runtime.environment_manifest_sha256,
+            "mission_package_sha256": package_sha256,
+            "stage_1_component_profile_sha256": STAGE_1_COMPONENT_PROFILE_SHA256,
+            "oracle_sha256": ORACLE_SHA256,
+            "adjudication_protocol_sha256": ADJUDICATION_PROTOCOL_SHA256,
+            "action_plan_sha256": HUMAN_ACTION_PLAN_SHA256,
+            "owner_preexecution_interpretation_sha256": (OWNER_PREEXECUTION_INTERPRETATION_SHA256),
+            "owner_semantic_preimplementation_freeze_sha256": (
+                "fa8f18cb1d890b41fd078b92238200e58cb0e7f1ff65628f2390df520e20ab2a"
+            ),
+            "owner_stage_1_seam_clarification_sha256": (
+                "a4a87ec5698416eaa9af970392070a25181df263537524e8b0fc8a91d86fec60"
+            ),
+        },
+    }
+    if overrides:
+        document.update(overrides)
+    if binding_overrides:
+        document["bindings"] = {**document["bindings"], **binding_overrides}
+    path = tmp_path / name
+    if raw is not None:
+        path.write_bytes(raw)
+    else:
+        path.write_bytes((json.dumps(document, indent=2, sort_keys=True) + "\n").encode())
     return path
 
 

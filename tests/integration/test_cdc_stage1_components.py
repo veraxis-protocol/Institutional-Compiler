@@ -931,7 +931,7 @@ def test_authorization_must_name_the_running_implementation_and_package(
         runtime=cdc_e2e_mission.RuntimeIdentity("OTHER-COMMIT", "OTHER-TREE", "OTHER-ENV"),
     )
     with pytest.raises(
-        cdc_e2e_mission.OwnerExecutionAuthorizationError, match="does not name the running"
+        cdc_e2e_mission.OwnerExecutionAuthorizationError, match="do not match the running"
     ):
         cdc_e2e_mission.verify_owner_execution_authorization(
             other,
@@ -939,23 +939,6 @@ def test_authorization_must_name_the_running_implementation_and_package(
             runtime=STUB_RUNTIME,
             frozen=frozen,
         )
-
-
-def test_a_correctly_bound_synthetic_authorization_verifies(
-    tmp_path: Path, frozen: FrozenMissionInput
-) -> None:
-    """The gate is openable without any source change -- by evidence, at runtime."""
-    artifact = synthetic_authorization(tmp_path)
-    verified = cdc_e2e_mission.verify_owner_execution_authorization(
-        artifact,
-        clearance=clearance_for_authorization(artifact),
-        runtime=STUB_RUNTIME,
-        frozen=frozen,
-    )
-    assert verified.sha256_hex == hashlib.sha256(artifact.read_bytes()).hexdigest()
-    assert verified.reference == f"sha256:{verified.sha256_hex}"
-    assert verified.authorized_stage == "STAGE_1_ONLY"
-    assert "NOT AN OWNER AUTHORIZATION" in artifact.read_text(encoding="utf-8")
 
 
 # ---------------------------------------------------------------------------
@@ -1161,3 +1144,452 @@ def test_on_unknown_changes_the_record_but_not_the_decision(
         assert record["verdict"] != "ESCALATE"
         digests.add(record["evaluation_digest"])
     assert len(digests) == 4, "the observed metadata must be recorded, so digests differ"
+
+
+# ---------------------------------------------------------------------------
+# Blocker A -- authorization semantics, not just byte identity
+# ---------------------------------------------------------------------------
+
+
+def _verify_auth(
+    path: Path, frozen: FrozenMissionInput
+) -> cdc_e2e_mission.OwnerExecutionAuthorization:
+    return cdc_e2e_mission.verify_owner_execution_authorization(
+        path,
+        clearance=clearance_for_authorization(path),
+        runtime=STUB_RUNTIME,
+        frozen=frozen,
+    )
+
+
+def test_a_digest_bound_non_authorization_file_is_refused(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """The exact defect the previous positive test proved: closed.
+
+    This file is perfectly digest-bound to its clearance and names the correct
+    commit, tree and package -- and says it is not an authorization. Under the
+    previous implementation it verified.
+    """
+    body = (
+        "NOT AN OWNER AUTHORIZATION\n"
+        f"implementation_commit = {STUB_RUNTIME.implementation_commit}\n"
+        f"implementation_tree = {STUB_RUNTIME.implementation_tree}\n"
+        f"mission_package_sha256 = {FROZEN_MISSION_PACKAGE_SHA256}\n"
+    ).encode()
+    artifact = synthetic_authorization(tmp_path, raw=body, name="not-an-authorization.md")
+    assert b"NOT AN OWNER AUTHORIZATION" in artifact.read_bytes()
+    with pytest.raises(
+        cdc_e2e_mission.OwnerExecutionAuthorizationError, match="not structured JSON"
+    ):
+        _verify_auth(artifact, frozen)
+
+
+def test_valid_json_that_declares_itself_non_authorizing_is_refused(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """Well-formed JSON with correct bindings but no authorization claim."""
+    artifact = synthetic_authorization(
+        tmp_path,
+        raw=(
+            json.dumps(
+                {
+                    "record_class": "NOT_AN_AUTHORIZATION",
+                    "note": "correctly bound, deliberately non-authorizing",
+                    "bindings": {
+                        "implementation_commit": STUB_RUNTIME.implementation_commit,
+                        "implementation_tree": STUB_RUNTIME.implementation_tree,
+                        "mission_package_sha256": FROZEN_MISSION_PACKAGE_SHA256,
+                    },
+                },
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n"
+        ).encode(),
+    )
+    with pytest.raises(
+        cdc_e2e_mission.OwnerExecutionAuthorizationError, match="authorization semantics"
+    ):
+        _verify_auth(artifact, frozen)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("record_class", "SOMETHING_ELSE"),
+        ("mission_id", "CDC-OTHER-MISSION"),
+        ("owner_authorized", False),
+        ("authorized_stage", "STAGE_1_AND_STAGE_2"),
+        ("authorized_stage", "STAGE_2_ONLY"),
+        ("authorization_scope", "UNLIMITED_EXECUTIONS"),
+        ("single_use", False),
+        ("automatic_retry_authorized", True),
+        ("stage_2_authorized", True),
+        ("result_bearing", False),
+    ],
+)
+def test_each_declaration_defect_refuses_independently(
+    tmp_path: Path, frozen: FrozenMissionInput, field: str, value: object
+) -> None:
+    """Every declared semantic is required, each one on its own."""
+    artifact = synthetic_authorization(tmp_path, overrides={field: value})
+    with pytest.raises(
+        cdc_e2e_mission.OwnerExecutionAuthorizationError, match="authorization semantics"
+    ):
+        _verify_auth(artifact, frozen)
+
+
+@pytest.mark.parametrize("binding", list(cdc_e2e_mission.OWNER_AUTHORIZATION_BINDING_FIELDS))
+def test_each_structured_binding_mismatch_refuses_independently(
+    tmp_path: Path, frozen: FrozenMissionInput, binding: str
+) -> None:
+    """All eleven bindings are checked as fields, each independently."""
+    artifact = synthetic_authorization(tmp_path, binding_overrides={binding: "WRONG"})
+    with pytest.raises(
+        cdc_e2e_mission.OwnerExecutionAuthorizationError, match="do not match the running"
+    ):
+        _verify_auth(artifact, frozen)
+
+
+def test_bindings_are_structural_not_substring(tmp_path: Path, frozen: FrozenMissionInput) -> None:
+    """Correct values present as loose text, absent as fields, are not accepted."""
+    document = json.loads(synthetic_authorization(tmp_path).read_bytes())
+    prose = document.pop("bindings")
+    document["free_text"] = json.dumps(prose)
+    artifact = synthetic_authorization(
+        tmp_path,
+        raw=(json.dumps(document, indent=2, sort_keys=True) + "\n").encode(),
+        name="substring-only.json",
+    )
+    payload = artifact.read_bytes()
+    assert STUB_RUNTIME.implementation_commit.encode() in payload
+    assert FROZEN_MISSION_PACKAGE_SHA256.encode() in payload
+    with pytest.raises(
+        cdc_e2e_mission.OwnerExecutionAuthorizationError, match="no structured 'bindings'"
+    ):
+        _verify_auth(artifact, frozen)
+
+
+def test_malformed_json_is_refused(tmp_path: Path, frozen: FrozenMissionInput) -> None:
+    """A truncated artifact is refused, not partially interpreted."""
+    artifact = synthetic_authorization(tmp_path, raw=b'{"record_class": ')
+    with pytest.raises(
+        cdc_e2e_mission.OwnerExecutionAuthorizationError, match="not structured JSON"
+    ):
+        _verify_auth(artifact, frozen)
+
+
+def test_no_authorization_digest_is_compiled_into_source() -> None:
+    """Only immutable predecessor governance digests are fixed in source."""
+    verifier = inspect.getsource(cdc_e2e_mission.verify_owner_execution_authorization)
+    assert not re.search(r"[0-9a-f]{64}", verifier)
+    assert cdc_e2e_mission.OWNER_SEMANTIC_PREIMPLEMENTATION_FREEZE_SHA256 == (
+        "fa8f18cb1d890b41fd078b92238200e58cb0e7f1ff65628f2390df520e20ab2a"
+    )
+    assert cdc_e2e_mission.OWNER_STAGE_1_SEAM_CLARIFICATION_SHA256 == (
+        "a4a87ec5698416eaa9af970392070a25181df263537524e8b0fc8a91d86fec60"
+    )
+
+
+def test_a_valid_shaped_test_artifact_opens_only_the_test_gate(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """The fixture verifies, and binds STUB identities no real run has."""
+    artifact = synthetic_authorization(tmp_path)
+    verified = _verify_auth(artifact, frozen)
+    assert verified.record_class == "OWNER_STAGE_1_EXECUTION_AUTHORIZATION"
+    assert verified.authorized_stage == "STAGE_1_ONLY"
+    assert verified.authorization_scope == "ONE_RESULT_BEARING_STAGE_1_EXECUTION"
+    document = json.loads(artifact.read_bytes())
+    assert document["synthetic_test_fixture"] is True
+    assert document["bindings"]["implementation_commit"] == "STUB-IMPLEMENTATION-COMMIT"
+    # Against a real runtime identity it authorizes nothing.
+    real = cdc_e2e_mission.RuntimeIdentity(
+        "306856ad976f4368a306e5d7f61ef90722ffc831",
+        "e21da8112d8bf14f5e4737e49cfaa4860299281b",
+        "acec86475cf9fe455410c9e56aa70f45e3f92758a57d704c416d3ac8964a01ef",
+    )
+    with pytest.raises(cdc_e2e_mission.OwnerExecutionAuthorizationError):
+        cdc_e2e_mission.verify_owner_execution_authorization(
+            artifact, clearance=clearance_for_authorization(artifact), runtime=real, frozen=frozen
+        )
+
+
+# ---------------------------------------------------------------------------
+# Blocker B -- issuance survives into the Stage-1 result
+# ---------------------------------------------------------------------------
+
+
+def _nonmission_projection(
+    projection: MissionProjection,
+    authorization: cdc_e2e_mission.OwnerExecutionAuthorization,
+) -> tuple[MissionProjection, cdc_e2e_mission.OwnerExecutionAuthorization]:
+    """A projection carrying a non-mission id, so formation is permitted."""
+    import dataclasses
+
+    return dataclasses.replace(projection, mission_id=NONMISSION_ID), authorization
+
+
+def _form_nonmission_stage_1(
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    profile: FrozenComponentProfile,
+    authorization: cdc_e2e_mission.OwnerExecutionAuthorization,
+) -> cdc_e2e_mission.Stage1Observation:
+    evaluator, warrant_builder = governed_stage_1_components(
+        profile, mission_id=NONMISSION_ID, mission_authorization=authorization
+    )
+    nonmission, _ = _nonmission_projection(projection, authorization)
+    return cdc_e2e_mission._form_stage_1(
+        nonmission,
+        frozen,
+        evaluator=evaluator,
+        warrant_builder=warrant_builder,
+        authorization=cdc_e2e_mission.STAGE_1_AUTHORIZATION_CLEARED,
+        mission_authorization=authorization,
+        attempt_claim=lambda: cdc_e2e_mission.claim_attempt(authorization, STUB_RUNTIME, frozen),
+    )
+
+
+def test_stage_1_observation_binds_exact_authorization_identity(
+    tmp_path: Path,
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    profile: FrozenComponentProfile,
+) -> None:
+    """Issuance creates the reliance, so the raw result names the issuance."""
+    artifact = synthetic_authorization(tmp_path)
+    authorization = _verify_auth(artifact, frozen)
+    observation = _form_nonmission_stage_1(projection, frozen, profile, authorization)
+    bound = observation.owner_execution_authorization
+    assert bound is not None
+    assert bound["owner_execution_authorization_sha256"] == authorization.sha256_hex
+    assert bound["owner_execution_authorization_bytes"] == len(artifact.read_bytes())
+    assert bound["owner_execution_authorization_reference"] == authorization.reference
+    assert (
+        bound["owner_execution_authorization_record_class"]
+        == "OWNER_STAGE_1_EXECUTION_AUTHORIZATION"
+    )
+    assert bound["owner_execution_authorization_scope"] == "ONE_RESULT_BEARING_STAGE_1_EXECUTION"
+    record = observation.as_record()
+    assert record["owner_execution_authorization"] == bound
+    assert record["attempt_record"]["attempt_state"] == cdc_e2e_mission.ATTEMPT_STATE_CONSUMED
+    # No authorization prose reached the candidates.
+    assert "synthetic_test_fixture" not in json.dumps(
+        [chain.as_record() for chain in observation.chains]
+    )
+
+
+def test_different_authorizations_produce_different_stage_1_identities(
+    tmp_path: Path,
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    profile: FrozenComponentProfile,
+) -> None:
+    """Identical computation under a different issuance is a different result."""
+    first_dir = tmp_path / "a"
+    second_dir = tmp_path / "b"
+    first_dir.mkdir()
+    second_dir.mkdir()
+    first = synthetic_authorization(
+        first_dir, overrides={"authorization_id": "SYNTHETIC-TEST-AUTHORIZATION-A"}
+    )
+    second = synthetic_authorization(
+        second_dir, overrides={"authorization_id": "SYNTHETIC-TEST-AUTHORIZATION-B"}
+    )
+    assert first.read_bytes() != second.read_bytes()
+    one = _form_nonmission_stage_1(projection, frozen, profile, _verify_auth(first, frozen))
+    two = _form_nonmission_stage_1(projection, frozen, profile, _verify_auth(second, frozen))
+    assert one.candidate_digests() == two.candidate_digests()
+    assert one.digest() != two.digest()
+
+
+# ---------------------------------------------------------------------------
+# Blocker C -- single use is operational
+# ---------------------------------------------------------------------------
+
+
+def test_attempt_record_location_is_derived_not_caller_selected(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """The path comes from the authorization's own digest and location."""
+    artifact = synthetic_authorization(tmp_path)
+    authorization = _verify_auth(artifact, frozen)
+    path = cdc_e2e_mission.attempt_record_path(authorization)
+    assert path.parent == artifact.parent
+    assert authorization.sha256_hex in path.name
+    signature = inspect.signature(cdc_e2e_mission.attempt_record_path)
+    assert list(signature.parameters) == ["authorization"]
+    assert "attempt_path" not in inspect.signature(execute_authorized_stage_1).parameters
+
+
+def test_precondition_failure_creates_no_attempt_claim(
+    tmp_path: Path,
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    profile: FrozenComponentProfile,
+    repo_root: Path,
+) -> None:
+    """A failure before the first evaluator must not burn the authorization."""
+    artifact = synthetic_authorization(tmp_path)
+    authorization = _verify_auth(artifact, frozen)
+    assert cdc_e2e_mission.read_attempt_state(authorization) == cdc_e2e_mission.ATTEMPT_STATE_NONE
+    # A clearance that does not match the authorization: fails at a precondition.
+    with pytest.raises(ResultBearingMissionBlockedError):
+        execute_authorized_stage_1(
+            projection,
+            frozen,
+            exact_clearance(),
+            STUB_RUNTIME,
+            owner_interpretation=cdc_e2e_mission.verify_owner_preexecution_interpretation(
+                repo_root / cdc_e2e_mission.OWNER_PREEXECUTION_INTERPRETATION_RELPATH
+            ),
+            component_profile=profile,
+            owner_execution_authorization_path=artifact,
+        )
+    assert cdc_e2e_mission.read_attempt_state(authorization) == cdc_e2e_mission.ATTEMPT_STATE_NONE
+    assert not cdc_e2e_mission.attempt_record_path(authorization).exists()
+
+
+def test_first_governed_evaluator_invocation_consumes_the_authorization(
+    tmp_path: Path,
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    profile: FrozenComponentProfile,
+) -> None:
+    """Invocation consumes; the state moves NONE -> CONSUMED."""
+    artifact = synthetic_authorization(tmp_path)
+    authorization = _verify_auth(artifact, frozen)
+    assert cdc_e2e_mission.read_attempt_state(authorization) == cdc_e2e_mission.ATTEMPT_STATE_NONE
+    _form_nonmission_stage_1(projection, frozen, profile, authorization)
+    assert (
+        cdc_e2e_mission.read_attempt_state(authorization) == cdc_e2e_mission.ATTEMPT_STATE_CONSUMED
+    )
+
+
+def test_an_evaluator_exception_still_consumes_the_authorization(
+    tmp_path: Path,
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+) -> None:
+    """Invocation, not success, is what consumes it."""
+    artifact = synthetic_authorization(tmp_path)
+    authorization = _verify_auth(artifact, frozen)
+
+    def exploding(*_args: object) -> Mapping[str, Any]:
+        raise RuntimeError("governed component failed")
+
+    def warrant(*_args: object) -> tuple[str, Mapping[str, Any]]:
+        raise AssertionError("unreachable")
+
+    import dataclasses
+
+    nonmission = dataclasses.replace(projection, mission_id=NONMISSION_ID)
+    cdc_e2e_mission._form_stage_1(
+        nonmission,
+        frozen,
+        evaluator=cast("Any", exploding),
+        warrant_builder=cast("Any", warrant),
+        authorization=cdc_e2e_mission.STAGE_1_AUTHORIZATION_CLEARED,
+        mission_authorization=authorization,
+        attempt_claim=lambda: cdc_e2e_mission.claim_attempt(authorization, STUB_RUNTIME, frozen),
+    )
+    assert (
+        cdc_e2e_mission.read_attempt_state(authorization) == cdc_e2e_mission.ATTEMPT_STATE_CONSUMED
+    )
+    with pytest.raises(cdc_e2e_mission.MissionAttemptStateError, match="non-reusable"):
+        cdc_e2e_mission.require_unclaimed_attempt(authorization)
+
+
+def test_a_consumed_authorization_refuses_before_the_evaluator(
+    tmp_path: Path,
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    profile: FrozenComponentProfile,
+) -> None:
+    """A second run on the same authorization stops at the precondition."""
+    artifact = synthetic_authorization(tmp_path)
+    authorization = _verify_auth(artifact, frozen)
+    _form_nonmission_stage_1(projection, frozen, profile, authorization)
+    with pytest.raises(cdc_e2e_mission.MissionAttemptStateError, match="non-reusable"):
+        cdc_e2e_mission.require_unclaimed_attempt(authorization)
+    # And the atomic claim itself refuses a second time.
+    with pytest.raises(cdc_e2e_mission.MissionAttemptStateError, match="already claimed"):
+        cdc_e2e_mission.claim_attempt(authorization, STUB_RUNTIME, frozen)
+
+
+def test_a_claimed_but_unconsumed_attempt_blocks_automatic_retry(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """A crash between claim and consumption is not silently released."""
+    artifact = synthetic_authorization(tmp_path)
+    authorization = _verify_auth(artifact, frozen)
+    cdc_e2e_mission.claim_attempt(authorization, STUB_RUNTIME, frozen)
+    assert (
+        cdc_e2e_mission.read_attempt_state(authorization) == cdc_e2e_mission.ATTEMPT_STATE_CLAIMED
+    )
+    with pytest.raises(cdc_e2e_mission.MissionAttemptStateError, match="separate owner decision"):
+        cdc_e2e_mission.require_unclaimed_attempt(authorization)
+    # Nothing in the module releases or deletes a claim.
+    source = inspect.getsource(cdc_e2e_mission)
+    assert ".unlink(" not in source
+    assert "release_attempt" not in source
+
+
+def test_concurrent_acquisition_cannot_permit_two_attempts(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """Exclusive create: exactly one of N racing claims wins."""
+    import threading
+
+    artifact = synthetic_authorization(tmp_path)
+    authorization = _verify_auth(artifact, frozen)
+    wins: list[str] = []
+    losses: list[str] = []
+    barrier = threading.Barrier(8)
+
+    def attempt() -> None:
+        barrier.wait()
+        try:
+            cdc_e2e_mission.claim_attempt(authorization, STUB_RUNTIME, frozen)
+            wins.append("claimed")
+        except cdc_e2e_mission.MissionAttemptStateError:
+            losses.append("refused")
+
+    threads = [threading.Thread(target=attempt) for _ in range(8)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+    assert len(wins) == 1
+    assert len(losses) == 7
+
+
+def test_the_attempt_record_binds_its_own_governed_identities(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """The record proves which authorization, implementation and package it used."""
+    artifact = synthetic_authorization(tmp_path)
+    authorization = _verify_auth(artifact, frozen)
+    record = cdc_e2e_mission.claim_attempt(authorization, STUB_RUNTIME, frozen)
+    stored = json.loads(record.path.read_bytes())
+    assert stored["owner_execution_authorization_sha256"] == authorization.sha256_hex
+    assert stored["implementation_commit"] == STUB_RUNTIME.implementation_commit
+    assert stored["implementation_tree"] == STUB_RUNTIME.implementation_tree
+    assert stored["mission_package_sha256"] == frozen.package_sha256
+    assert stored["attempt_state"] == cdc_e2e_mission.ATTEMPT_STATE_CLAIMED
+
+
+def test_no_mission_outcome_is_produced_by_any_of_these_tests(
+    projection: MissionProjection,
+) -> None:
+    """Every formation above ran under UNIT-TEST-NONMISSION."""
+    assert projection.mission_id == cdc_e2e_mission.MISSION_ID
+    import dataclasses
+
+    assert dataclasses.replace(projection, mission_id=NONMISSION_ID).mission_id == NONMISSION_ID
+    assert (
+        cdc_e2e_mission.MISSION_POPULATION_EXECUTION_STATE
+        == "REQUIRES_RUNTIME_OWNER_EXECUTION_AUTHORIZATION"
+    )
