@@ -1,0 +1,178 @@
+{
+  "artifact_id": "CDC-END-TO-END-MISSION-001-HUMAN-DISPOSITION-RUN-001-DIGEST-INVENTORY-v0.1",
+  "canonical_serialization": {
+    "encoding": "UTF-8",
+    "ensure_ascii": false,
+    "indent": null,
+    "item_separator": ",",
+    "key_separator": ":",
+    "object_keys": "LEXICOGRAPHICALLY_SORTED",
+    "trailing_newline_in_hashed_canonical_form": false
+  },
+  "claim_ceiling": "identity derivation only; a bound disposition is not an institutional transition, and no semantic or institutional claim is made here",
+  "derived_metadata_only": true,
+  "disposition_artifact_digest_rule": {
+    "excluded_keys": [
+      "disposition_artifact_digest"
+    ],
+    "recursive": false,
+    "rule": "sha256(canonical(disposition_body))",
+    "source_object": "the bound disposition record"
+  },
+  "disposition_vectors": [
+    {
+      "action": "ACCEPT_CANDIDATE",
+      "action_plan_target_id": "HA-P001-C-AWARD-01",
+      "byte_identical_to_execution_original": true,
+      "chain_id": "P001xC-AWARD-01",
+      "disposition_artifact_digest_claimed": "d5e87f97228a909336cad91638eedeb257361f3247bd1d7969de7f4d26c93074",
+      "disposition_artifact_digest_recomputed": "d5e87f97228a909336cad91638eedeb257361f3247bd1d7969de7f4d26c93074",
+      "disposition_artifact_digest_reproduced": true,
+      "file": "dispositions/DISPOSITION-P001xC-AWARD-01.json",
+      "persisted_file_bytes": 2022,
+      "persisted_file_sha256": "0c34c4ef56fd29dac93518342f07406877e1b32dee7e6774a0ea42e20300ddc7"
+    },
+    {
+      "action": "ACCEPT_CANDIDATE",
+      "action_plan_target_id": "HA-P001-C-EVAL-01",
+      "byte_identical_to_execution_original": true,
+      "chain_id": "P001xC-EVAL-01",
+      "disposition_artifact_digest_claimed": "9932bd9c0e3b00491883ef3baeec73229351505dbbbb0a851f4891cb99a811f5",
+      "disposition_artifact_digest_recomputed": "9932bd9c0e3b00491883ef3baeec73229351505dbbbb0a851f4891cb99a811f5",
+      "disposition_artifact_digest_reproduced": true,
+      "file": "dispositions/DISPOSITION-P001xC-EVAL-01.json",
+      "persisted_file_bytes": 2017,
+      "persisted_file_sha256": "42e38e9c00bfc9d09d3144defc6e083bc211113df3641f9f69070d6c82f44429"
+    },
+    {
+      "action": "ACCEPT_CANDIDATE",
+      "action_plan_target_id": "HA-P001-C-TENDER-01",
+      "byte_identical_to_execution_original": true,
+      "chain_id": "P001xC-TENDER-01",
+      "disposition_artifact_digest_claimed": "e76cef82b77970c4360a59901097934d1534ac58c0d38ba8815e1e88d63347f4",
+      "disposition_artifact_digest_recomputed": "e76cef82b77970c4360a59901097934d1534ac58c0d38ba8815e1e88d63347f4",
+      "disposition_artifact_digest_reproduced": true,
+      "file": "dispositions/DISPOSITION-P001xC-TENDER-01.json",
+      "persisted_file_bytes": 2027,
+      "persisted_file_sha256": "f8f374f18f7ae6154b778d0d1396b6353111691d066fb243decb710fd4b3f79f"
+    },
+    {
+      "action": "ACCEPT_CANDIDATE",
+      "action_plan_target_id": "HA-P002-C-AWARD-01",
+      "byte_identical_to_execution_original": true,
+      "chain_id": "P002xC-AWARD-01",
+      "disposition_artifact_digest_claimed": "b0b4622d092bfc1fe3cd391a816124f10579f85e880156fe827e267a4305964b",
+      "disposition_artifact_digest_recomputed": "b0b4622d092bfc1fe3cd391a816124f10579f85e880156fe827e267a4305964b",
+      "disposition_artifact_digest_reproduced": true,
+      "file": "dispositions/DISPOSITION-P002xC-AWARD-01.json",
+      "persisted_file_bytes": 2022,
+      "persisted_file_sha256": "36f4bbb7239c4e1a2dd7bbd934ed219cb0998fb5355c305c165c4a03309ee2c9"
+    },
+    {
+      "action": "ACCEPT_CANDIDATE",
+      "action_plan_target_id": "HA-P002-C-EVAL-01",
+      "byte_identical_to_execution_original": true,
+      "chain_id": "P002xC-EVAL-01",
+      "disposition_artifact_digest_claimed": "d759823a9d71307ba4affe47a1c4ad329f3478c010e24c5aa7806cdaf58405ab",
+      "disposition_artifact_digest_recomputed": "d759823a9d71307ba4affe47a1c4ad329f3478c010e24c5aa7806cdaf58405ab",
+      "disposition_artifact_digest_reproduced": true,
+      "file": "dispositions/DISPOSITION-P002xC-EVAL-01.json",
+      "persisted_file_bytes": 2017,
+      "persisted_file_sha256": "a240425d182ce169f8c77841d514ebbeec19c7cf22eac548a273cbc9394e55e3"
+    },
+    {
+      "action": "ACCEPT_CANDIDATE",
+      "action_plan_target_id": "HA-P002-C-TENDER-01",
+      "byte_identical_to_execution_original": true,
+      "chain_id": "P002xC-TENDER-01",
+      "disposition_artifact_digest_claimed": "ab79c7338dce09c4d1a4f9d7e2544aeab06c2c67c49a8ab12b1310ba069344b4",
+      "disposition_artifact_digest_recomputed": "ab79c7338dce09c4d1a4f9d7e2544aeab06c2c67c49a8ab12b1310ba069344b4",
+      "disposition_artifact_digest_reproduced": true,
+      "file": "dispositions/DISPOSITION-P002xC-TENDER-01.json",
+      "persisted_file_bytes": 2027,
+      "persisted_file_sha256": "84c33e1eb98c58d75bd2821437c1a7ff6baa6b52b3932a944799330b6c18bc91"
+    },
+    {
+      "action": "REQUEST_EVIDENCE",
+      "action_plan_target_id": "HA-P003-C-AWARD-01",
+      "byte_identical_to_execution_original": true,
+      "chain_id": "P003xC-AWARD-01",
+      "disposition_artifact_digest_claimed": "5851933a29274d87ca43964ddec03b4dd72739f898424536323e2c1dc00bb8ee",
+      "disposition_artifact_digest_recomputed": "5851933a29274d87ca43964ddec03b4dd72739f898424536323e2c1dc00bb8ee",
+      "disposition_artifact_digest_reproduced": true,
+      "file": "dispositions/DISPOSITION-P003xC-AWARD-01.json",
+      "persisted_file_bytes": 2022,
+      "persisted_file_sha256": "82b671515497c59c371dfd2cc73fc9e1fa83313c47ece3eafd9ab5b1bc46d603"
+    },
+    {
+      "action": "REQUEST_EVIDENCE",
+      "action_plan_target_id": "HA-P003-C-EVAL-01",
+      "byte_identical_to_execution_original": true,
+      "chain_id": "P003xC-EVAL-01",
+      "disposition_artifact_digest_claimed": "d1e9ced8cbd8da950c000ee480c1eddf8dceeb794791e16003558a108dc13947",
+      "disposition_artifact_digest_recomputed": "d1e9ced8cbd8da950c000ee480c1eddf8dceeb794791e16003558a108dc13947",
+      "disposition_artifact_digest_reproduced": true,
+      "file": "dispositions/DISPOSITION-P003xC-EVAL-01.json",
+      "persisted_file_bytes": 2017,
+      "persisted_file_sha256": "318bb3a674fe8dcc3700c1c013910cda90be5cac8d67291a2b4c0eea023c1865"
+    },
+    {
+      "action": "REQUEST_EVIDENCE",
+      "action_plan_target_id": "HA-P003-C-TENDER-01",
+      "byte_identical_to_execution_original": true,
+      "chain_id": "P003xC-TENDER-01",
+      "disposition_artifact_digest_claimed": "efc499e1ff7fb8e6fea8fdbf408dbf71b88395e65f59bad96fa1d803e7f373cb",
+      "disposition_artifact_digest_recomputed": "efc499e1ff7fb8e6fea8fdbf408dbf71b88395e65f59bad96fa1d803e7f373cb",
+      "disposition_artifact_digest_reproduced": true,
+      "file": "dispositions/DISPOSITION-P003xC-TENDER-01.json",
+      "persisted_file_bytes": 2027,
+      "persisted_file_sha256": "321ee25a973860d354294f4850215a640baa3241b10726a0e901e0627a3981f9"
+    }
+  ],
+  "mission_id": "CDC-TEST-MISSION-001",
+  "persisted_file_sha256_rule": {
+    "rule": "sha256 over the exact persisted file bytes",
+    "serialization": "json.dumps(record, indent=2, sort_keys=True, ensure_ascii=False) + \"\\n\""
+  },
+  "record_class": "HUMAN_DISPOSITION_RUN_DIGEST_INVENTORY",
+  "reproduction_method": {
+    "evaluator_invoked": false,
+    "implementation_module_imported": false,
+    "note": "recomputed with a standalone canonical serializer, independent of the implementation",
+    "stage_1_reexecuted": false
+  },
+  "result_bearing": false,
+  "run_id": "HUMAN-DISPOSITION-RUN-001",
+  "stage_1_reference": {
+    "archival_evidence_commit": "c44c9bf7d24b79990fb00274b871326f0d7617e9",
+    "note": "the Stage-1 raw result is not copied here; it is referenced immutably",
+    "raw_result_sha256": "aa32274f238d01bc9f6c6d1c67879acfb4765a34d0dc0b4ccf568f3c07353a70",
+    "stage_1_observation_digest": "0c7c9aa770aee07b7c42f9bb48ec3b13058bbaf7559d5696bc59c6eb276510be"
+  },
+  "summary": {
+    "copies_byte_identical_to_execution_originals": "12/12",
+    "disposition_artifact_digests_reproduced": "9/9",
+    "persisted_files_hashed": "9/9",
+    "refusal_records": 0
+  },
+  "top_level_artifacts": [
+    {
+      "byte_identical_to_execution_original": true,
+      "bytes": 10402,
+      "file": "CDC-END-TO-END-MISSION-001-HUMAN-DISPOSITION-BATCH-RESULT-v0.1.json",
+      "sha256": "0ce542e29e6811b12848bc8651535b643ead03b30824548ec646d54e52515670"
+    },
+    {
+      "byte_identical_to_execution_original": true,
+      "bytes": 18456,
+      "file": "CDC-END-TO-END-MISSION-001-HUMAN-DISPOSITION-EXECUTION-MANIFEST-v0.1.json",
+      "sha256": "4e4ccd5e33ad3cbd7235da30987168d7a219fb8fced6473e1ec44af0cbdaf5b2"
+    },
+    {
+      "byte_identical_to_execution_original": true,
+      "bytes": 8370,
+      "file": "CDC-END-TO-END-MISSION-001-OWNER-HUMAN-DISPOSITION-AUTHORIZATION-v0.1.json",
+      "sha256": "c86a2eab8602a20ee699ef5d4dc243fc31bb071a6793311e66787e1aed86aeb5"
+    }
+  ]
+}
