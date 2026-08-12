@@ -1,0 +1,97 @@
+{
+  "artifact_id": "CDC-END-TO-END-MISSION-001-OWNER-STAGE-1-ADJUDICATION-ACCEPTANCE-v0.1",
+  "authorization_boundary": {
+    "authorizes_correction": false,
+    "authorizes_deliverable_generation": false,
+    "authorizes_human_disposition": false,
+    "authorizes_stage_2": false,
+    "authorizes_veip_transition": false,
+    "spent_authorization_sha256": "47b97fadf9d44fdeec8359f7c582caf0269046d74cdd4b4353001b2ef7e3b240",
+    "spent_authorization_state": "PERMANENTLY_NON_REUSABLE_WITHIN_ITS_BOUND_EXECUTION_STATE_NAMESPACE",
+    "stage_1_reexecution_authorized": false
+  },
+  "decision_chain": "OBSERVATION -> ORACLE -> ADJUDICATION -> OWNER_CLAIM_DECISION",
+  "does_not_establish": [
+    "full M01-M12 PASS",
+    "CDC acceptance",
+    "Moroccan legal validity",
+    "production conformance",
+    "production readiness",
+    "institutional authority",
+    "ZTL logical warrant",
+    "human disposition validity",
+    "VEIP transition validity",
+    "Stage-2 conformance"
+  ],
+  "establishes": [
+    "a bounded synthetic Stage-1 execution occurred",
+    "the execution evidence is independently verified",
+    "M01-M07 are semantically conformant for this frozen run",
+    "no semantic violation or forbidden promotion was observed in the measured cases"
+  ],
+  "evidence_class_distinction": {
+    "accepted_implementation_commit": "2e15267194d320b54015f0c212a8041cedc22050",
+    "accepted_implementation_tree": "7e8cb3abfdb58c4334a8c0dad1a0a74dad4b0c5c",
+    "freeze_reference_note": "an independently verified owner artifact that was not part of the named adjudication set for this run",
+    "freeze_reference_status": "NONBLOCKING",
+    "note": "the semantic adjudication was implementation-blind and its author declined to make an implementation claim; the interface property is carried by the separate implementation verification, not by this adjudication",
+    "owner_semantic_preimplementation_freeze_sha256": "fa8f18cb1d890b41fd078b92238200e58cb0e7f1ff65628f2390df520e20ab2a",
+    "semantic_adjudication_proves_internal_three_argument_evaluator_call": false,
+    "three_argument_evaluator_interface": "IMPLEMENTATION_VERIFIED_SEPARATELY",
+    "vitaliy_verified_this_freeze_reference_in_run_001_adjudication": false
+  },
+  "measurement_results": {
+    "M01": "MATCH",
+    "M02": "MATCH",
+    "M03": "MATCH",
+    "M04": "MATCH",
+    "M05": "MATCH",
+    "M06": "MATCH",
+    "M07": "MATCH",
+    "M08": "INCOMPLETE_OBSERVATION",
+    "M09": "INCOMPLETE_OBSERVATION",
+    "M10": "INCOMPLETE_OBSERVATION",
+    "M11": "INCOMPLETE_OBSERVATION",
+    "M12": "INCOMPLETE_OBSERVATION"
+  },
+  "mission_id": "CDC-TEST-MISSION-001",
+  "next_gate": "OWNER_HUMAN_DISPOSITION_AUTHORIZATION",
+  "owner_decision": {
+    "bounded_stage_1_functionality": "DEMONSTRATED",
+    "bounded_stage_1_semantic_conformance": "CONFORMANT",
+    "forbidden_promotions": 0,
+    "full_e2e_pass": "NOT_ESTABLISHED",
+    "full_mission_aggregate": "INCOMPLETE",
+    "measured_match_cases": 7,
+    "measured_oracle_cases": "7/12",
+    "semantic_violations": 0,
+    "stage_1_execution_evidence": "ACCEPTED",
+    "stage_1_semantic_adjudication": "ACCEPTED"
+  },
+  "raw_evidence": {
+    "attempt_record_bytes": 416,
+    "attempt_record_sha256": "b9977ea18e0a44b0213607aa9b8e512cac3aeebd4e1871aa6b80d9a2fca6478f",
+    "attempt_state": "CONSUMED_AFTER_GOVERNED_EVALUATOR_INVOCATION",
+    "raw_result_bytes": 57970,
+    "raw_result_sha256": "aa32274f238d01bc9f6c6d1c67879acfb4765a34d0dc0b4ccf568f3c07353a70",
+    "stage_1_observation_digest": "0c7c9aa770aee07b7c42f9bb48ec3b13058bbaf7559d5696bc59c6eb276510be",
+    "veraxis_evidence_commit": "c44c9bf7d24b79990fb00274b871326f0d7617e9",
+    "veraxis_evidence_tree": "7ee4d2601e68c71bdf1f304b3e06750ec970aa15"
+  },
+  "record_class": "OWNER_STAGE_1_ADJUDICATION_ACCEPTANCE",
+  "result_bearing": false,
+  "run_id": "STAGE-1-RUN-001",
+  "vitaliy_adjudication": {
+    "adjudication_bytes": 14479,
+    "adjudication_commit": "d781196cb225c66a3d9ccdcd73fb325054777a93",
+    "adjudication_git_blob": "f0d968212df53e2350871253ee578040e145b5cc",
+    "adjudication_path": "veraxis/cdc-e2e-mission-001/CDC-END-TO-END-MISSION-001-STAGE-1-RUN-001-SEMANTIC-ADJUDICATION-001.md",
+    "adjudication_sha256": "36d9e83161925fb26806feb12c7f51220a7c05bdd413512a47cfcee0055df79a",
+    "adjudication_tree": "10ed7c8127be8687132a64bcfc15dcbc19e2a240",
+    "declared_bytes_matched": true,
+    "declared_sha256_matched": true,
+    "external_reviewer_repository": "inventor1975/ZTL",
+    "independently_recomputed": true,
+    "reinterpreted_by_owner": false
+  }
+}
