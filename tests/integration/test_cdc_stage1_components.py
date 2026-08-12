@@ -1254,13 +1254,14 @@ def test_each_structured_binding_mismatch_refuses_independently(
 
 def test_bindings_are_structural_not_substring(tmp_path: Path, frozen: FrozenMissionInput) -> None:
     """Correct values present as loose text, absent as fields, are not accepted."""
-    document = json.loads(synthetic_authorization(tmp_path).read_bytes())
+    name = "substring-only.json"
+    document = json.loads(synthetic_authorization(tmp_path, name=name).read_bytes())
     prose = document.pop("bindings")
     document["free_text"] = json.dumps(prose)
     artifact = synthetic_authorization(
         tmp_path,
         raw=(json.dumps(document, indent=2, sort_keys=True) + "\n").encode(),
-        name="substring-only.json",
+        name=name,
     )
     payload = artifact.read_bytes()
     assert STUB_RUNTIME.implementation_commit.encode() in payload
@@ -1593,3 +1594,224 @@ def test_no_mission_outcome_is_produced_by_any_of_these_tests(
         cdc_e2e_mission.MISSION_POPULATION_EXECUTION_STATE
         == "REQUIRES_RUNTIME_OWNER_EXECUTION_AUTHORIZATION"
     )
+
+
+# ---------------------------------------------------------------------------
+# Replay via relocation -- one issuance, one attempt namespace
+# ---------------------------------------------------------------------------
+
+
+def test_a_byte_identical_copy_elsewhere_does_not_buy_a_second_attempt(
+    tmp_path: Path,
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    profile: FrozenComponentProfile,
+) -> None:
+    """The exact replay this repair closes.
+
+    Consume an authorization, then present the identical bytes from another
+    directory. The digest is unchanged and every structured binding still
+    matches, so only the canonical-location check can be what refuses it -- and
+    it refuses before any attempt state is consulted, let alone an evaluator.
+    """
+    home = tmp_path / "issued"
+    elsewhere = tmp_path / "copied"
+    home.mkdir()
+    elsewhere.mkdir()
+
+    artifact = synthetic_authorization(home)
+    authorization = _verify_auth(artifact, frozen)
+    _form_nonmission_stage_1(projection, frozen, profile, authorization)
+    assert (
+        cdc_e2e_mission.read_attempt_state(authorization) == cdc_e2e_mission.ATTEMPT_STATE_CONSUMED
+    )
+
+    copy = elsewhere / artifact.name
+    shutil.copyfile(artifact, copy)
+    assert copy.read_bytes() == artifact.read_bytes()
+    assert (
+        hashlib.sha256(copy.read_bytes()).hexdigest()
+        == hashlib.sha256(artifact.read_bytes()).hexdigest()
+    )
+    # No attempt record exists beside the copy, so under the old derivation this
+    # location would have looked unused.
+    assert not (elsewhere / f".cdc-e2e-stage-1-attempt-{authorization.sha256_hex}.json").exists()
+
+    with pytest.raises(
+        cdc_e2e_mission.OwnerExecutionAuthorizationError, match="not a second issuance"
+    ):
+        cdc_e2e_mission.verify_owner_execution_authorization(
+            copy,
+            clearance=clearance_for_authorization(copy),
+            runtime=STUB_RUNTIME,
+            frozen=frozen,
+        )
+
+
+def test_a_symlink_to_the_authorization_is_not_a_second_location(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """Path resolution is canonical, so an alias is the same issuance."""
+    home = tmp_path / "issued"
+    home.mkdir()
+    artifact = synthetic_authorization(home)
+    link = tmp_path / "alias.json"
+    try:
+        link.symlink_to(artifact)
+    except (OSError, NotImplementedError):  # pragma: no cover - platform dependent
+        pytest.skip("symlinks are not available on this platform")
+
+    # The alias resolves to the canonical path, so it verifies as the same
+    # issuance and lands in the same attempt namespace rather than a new one.
+    through_link = cdc_e2e_mission.verify_owner_execution_authorization(
+        link,
+        clearance=clearance_for_authorization(link),
+        runtime=STUB_RUNTIME,
+        frozen=frozen,
+    )
+    direct = _verify_auth(artifact, frozen)
+    assert through_link.canonical_path == direct.canonical_path
+    assert cdc_e2e_mission.attempt_record_path(through_link) == cdc_e2e_mission.attempt_record_path(
+        direct
+    )
+
+
+def test_relative_and_dotdot_paths_resolve_to_the_same_namespace(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """`..` normalization cannot open a second namespace."""
+    home = tmp_path / "issued"
+    home.mkdir()
+    artifact = synthetic_authorization(home)
+    awkward = home / ".." / "issued" / artifact.name
+    verified = cdc_e2e_mission.verify_owner_execution_authorization(
+        awkward,
+        clearance=clearance_for_authorization(awkward),
+        runtime=STUB_RUNTIME,
+        frozen=frozen,
+    )
+    assert cdc_e2e_mission.attempt_record_path(verified) == cdc_e2e_mission.attempt_record_path(
+        _verify_auth(artifact, frozen)
+    )
+
+
+def test_an_authorization_without_a_declared_canonical_path_is_refused(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """The declaration is required, not optional."""
+    document = json.loads(synthetic_authorization(tmp_path).read_bytes())
+    del document["canonical_authorization_path"]
+    artifact = synthetic_authorization(
+        tmp_path,
+        raw=(json.dumps(document, indent=2, sort_keys=True) + "\n").encode(),
+    )
+    with pytest.raises(
+        cdc_e2e_mission.OwnerExecutionAuthorizationError,
+        match="declares no canonical_authorization_path",
+    ):
+        _verify_auth(artifact, frozen)
+
+
+def test_same_authorization_identity_resolves_to_one_attempt_namespace(
+    tmp_path: Path, frozen: FrozenMissionInput
+) -> None:
+    """Repeated verification of the same issuance yields the same namespace."""
+    artifact = synthetic_authorization(tmp_path)
+    first = _verify_auth(artifact, frozen)
+    second = _verify_auth(artifact, frozen)
+    assert first.sha256_hex == second.sha256_hex
+    assert cdc_e2e_mission.attempt_record_path(first) == cdc_e2e_mission.attempt_record_path(second)
+    assert cdc_e2e_mission.attempt_record_path(first).parent == artifact.parent.resolve()
+
+
+# ---------------------------------------------------------------------------
+# The persisted attempt record's exact identity is bound into Stage 1
+# ---------------------------------------------------------------------------
+
+
+def test_stage_1_binds_the_exact_persisted_attempt_record_identity(
+    tmp_path: Path,
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    profile: FrozenComponentProfile,
+) -> None:
+    """The bound digest and byte count reproduce the file on disk exactly."""
+    artifact = synthetic_authorization(tmp_path)
+    authorization = _verify_auth(artifact, frozen)
+    observation = _form_nonmission_stage_1(projection, frozen, profile, authorization)
+    bound = observation.attempt_record
+    assert bound is not None
+    persisted = cdc_e2e_mission.attempt_record_path(authorization).read_bytes()
+    assert bound["attempt_record_sha256"] == hashlib.sha256(persisted).hexdigest()
+    assert bound["attempt_record_bytes"] == len(persisted)
+    assert bound["attempt_state"] == cdc_e2e_mission.ATTEMPT_STATE_CONSUMED
+    assert bound["owner_execution_authorization_sha256"] == authorization.sha256_hex
+    assert bound["implementation_commit"] == STUB_RUNTIME.implementation_commit
+    assert bound["implementation_tree"] == STUB_RUNTIME.implementation_tree
+    assert bound["mission_package_sha256"] == frozen.package_sha256
+    assert cdc_e2e_mission.attempt_record_identity_is_intact(bound)
+    # The persisted payload does not contain its own digest.
+    assert "attempt_record_sha256" not in json.loads(persisted)
+    # And the identity is inside the Stage-1 checkpoint digest.
+    assert observation.as_record()["attempt_record"] == bound
+
+
+def test_mutating_the_persisted_attempt_record_is_detectable(
+    tmp_path: Path,
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    profile: FrozenComponentProfile,
+) -> None:
+    """Tampering and deletion are detectable, though not prevented.
+
+    This is a local filesystem, not an external immutable ledger. The claim is
+    detectability within the bound execution-state namespace, nothing stronger.
+    """
+    artifact = synthetic_authorization(tmp_path)
+    authorization = _verify_auth(artifact, frozen)
+    observation = _form_nonmission_stage_1(projection, frozen, profile, authorization)
+    bound = observation.attempt_record
+    assert bound is not None
+    assert cdc_e2e_mission.attempt_record_identity_is_intact(bound)
+
+    record_path = cdc_e2e_mission.attempt_record_path(authorization)
+    tampered = json.loads(record_path.read_bytes())
+    tampered["attempt_state"] = cdc_e2e_mission.ATTEMPT_STATE_NONE
+    record_path.write_bytes((json.dumps(tampered, indent=2, sort_keys=True) + "\n").encode())
+    assert not cdc_e2e_mission.attempt_record_identity_is_intact(bound)
+
+    record_path.unlink()
+    assert not cdc_e2e_mission.attempt_record_identity_is_intact(bound)
+
+
+def test_a_bound_identity_cannot_name_a_different_attempt_file(
+    tmp_path: Path,
+    projection: MissionProjection,
+    frozen: FrozenMissionInput,
+    profile: FrozenComponentProfile,
+) -> None:
+    """Claiming consumption while pointing at another attempt file is detectable."""
+    first_dir = tmp_path / "one"
+    second_dir = tmp_path / "two"
+    first_dir.mkdir()
+    second_dir.mkdir()
+    first = _verify_auth(synthetic_authorization(first_dir), frozen)
+    second = _verify_auth(synthetic_authorization(second_dir), frozen)
+    assert first.sha256_hex != second.sha256_hex
+
+    observation = _form_nonmission_stage_1(projection, frozen, profile, first)
+    cdc_e2e_mission.claim_attempt(second, STUB_RUNTIME, frozen)
+    bound = observation.attempt_record
+    assert bound is not None
+    swapped = {
+        **bound,
+        "attempt_record_path": str(cdc_e2e_mission.attempt_record_path(second)),
+    }
+    assert not cdc_e2e_mission.attempt_record_identity_is_intact(swapped)
+
+
+def test_single_use_claim_is_scoped_to_the_execution_state_namespace() -> None:
+    """State the boundary of the claim rather than overstating it."""
+    source = inspect.getsource(cdc_e2e_mission.attempt_record_identity_is_intact)
+    assert "not prevented" in source
+    assert "immutable external ledger" in source or "external immutable ledger" in source

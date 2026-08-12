@@ -248,6 +248,7 @@ def synthetic_authorization(
         "authorization_id": "SYNTHETIC-TEST-AUTHORIZATION-001",
         "synthetic_test_fixture": True,
         "mission_id": "CDC-TEST-MISSION-001",
+        "canonical_authorization_path": str((tmp_path / name).resolve()),
         "owner_authorized": True,
         "authorized_stage": "STAGE_1_ONLY",
         "authorization_scope": "ONE_RESULT_BEARING_STAGE_1_EXECUTION",

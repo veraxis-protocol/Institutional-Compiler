@@ -11,7 +11,7 @@ import hashlib
 import json
 import os
 from collections.abc import Callable, Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Final
@@ -1533,7 +1533,7 @@ def _form_stage_1(
             if not isinstance(mission_authorization, OwnerExecutionAuthorization)
             else mission_authorization.as_record()
         ),
-        attempt_record=None if consumed is None else consumed.as_record(),
+        attempt_record=None if consumed is None else consumed.identity(),
     )
 
 
@@ -2761,6 +2761,7 @@ class OwnerExecutionAuthorization:
     record_class: str
     authorization_scope: str
     authorization_id: str
+    canonical_path: str = ""
 
     def as_record(self) -> dict[str, Any]:
         """Identity and declared scope only; carries no authorization prose."""
@@ -2861,6 +2862,7 @@ def verify_owner_execution_authorization(
             f"clearance owner_execution_authorization is {supplied!r}, but the supplied "
             f"artifact hashes to {reference!r}; a label is not the artifact"
         )
+    observed_path = path.resolve()
     try:
         document = json.loads(payload)
     except json.JSONDecodeError as error:
@@ -2897,6 +2899,22 @@ def verify_owner_execution_authorization(
         ),
         "owner_stage_1_seam_clarification_sha256": OWNER_STAGE_1_SEAM_CLARIFICATION_SHA256,
     }
+    # A digest is location-independent, so a byte-identical copy at another path
+    # would otherwise resolve to a fresh attempt namespace and buy a second run.
+    # The owner declares the one canonical location at which the issuance is
+    # valid, and a relocated copy refuses here, before any attempt state is read.
+    declared_location = document.get("canonical_authorization_path")
+    if not isinstance(declared_location, str) or not declared_location:
+        raise OwnerExecutionAuthorizationError(
+            "owner authorization declares no canonical_authorization_path; without it "
+            "a byte-identical copy at another path would obtain a second attempt"
+        )
+    if Path(declared_location).resolve() != observed_path:
+        raise OwnerExecutionAuthorizationError(
+            f"owner authorization was presented at {observed_path}, but declares its "
+            f"canonical location as {Path(declared_location).resolve()}; a relocated or "
+            "copied issuance is not a second issuance"
+        )
     raw_bindings = document.get("bindings")
     if not isinstance(raw_bindings, Mapping):
         raise OwnerExecutionAuthorizationError(
@@ -2932,7 +2950,7 @@ def verify_owner_execution_authorization(
             f"clearance and owner authorization disagree on: {clearance_conflicts}"
         )
     return OwnerExecutionAuthorization(
-        path=path,
+        path=observed_path,
         sha256_hex=digest,
         byte_count=len(payload),
         reference=reference,
@@ -2940,6 +2958,7 @@ def verify_owner_execution_authorization(
         record_class=str(document["record_class"]),
         authorization_scope=str(document["authorization_scope"]),
         authorization_id=str(document.get("authorization_id", "UNIDENTIFIED")),
+        canonical_path=str(observed_path),
     )
 
 
@@ -2977,9 +2996,11 @@ class MissionAttemptRecord:
     implementation_commit: str
     implementation_tree: str
     mission_package_sha256: str
+    record_sha256: str = ""
+    record_bytes: int = 0
 
     def as_record(self) -> dict[str, Any]:
-        """JSON-safe record."""
+        """The persisted payload. Deliberately does not contain its own digest."""
         return {
             "attempt_state": self.state,
             "owner_execution_authorization_sha256": self.owner_execution_authorization_sha256,
@@ -2988,9 +3009,36 @@ class MissionAttemptRecord:
             "mission_package_sha256": self.mission_package_sha256,
         }
 
-    def digest(self) -> str:
-        """Identity of this attempt record."""
-        return sha256(self.as_record())
+    def identity(self) -> dict[str, Any]:
+        """Identity of the exact persisted bytes, for binding into Stage 1."""
+        return {
+            "attempt_state": self.state,
+            "attempt_record_sha256": self.record_sha256,
+            "attempt_record_bytes": self.record_bytes,
+            "attempt_record_path": str(self.path),
+            "owner_execution_authorization_sha256": self.owner_execution_authorization_sha256,
+            "implementation_commit": self.implementation_commit,
+            "implementation_tree": self.implementation_tree,
+            "mission_package_sha256": self.mission_package_sha256,
+        }
+
+
+def attempt_record_identity_is_intact(record: Mapping[str, Any]) -> bool:
+    """True when the bound identity reproduces the bytes on disk.
+
+    Deletion or tampering of the local attempt ledger is detectable this way. It
+    is not prevented: this is a filesystem, not an external immutable ledger.
+    """
+    path = Path(str(record.get("attempt_record_path")))
+    if not path.exists():
+        return False
+    payload = path.read_bytes()
+    if len(payload) != record.get("attempt_record_bytes"):
+        return False
+    if _file_sha256(payload) != record.get("attempt_record_sha256"):
+        return False
+    document = _require_mapping(json.loads(payload), "attempt record")
+    return document.get("attempt_state") == record.get("attempt_state")
 
 
 def attempt_record_path(authorization: OwnerExecutionAuthorization) -> Path:
@@ -3053,7 +3101,8 @@ def claim_attempt(
         ) from error
     with os.fdopen(handle, "wb") as stream:
         stream.write(payload)
-    return record
+    written = record.path.read_bytes()
+    return replace(record, record_sha256=_file_sha256(written), record_bytes=len(written))
 
 
 def mark_attempt_consumed(record: MissionAttemptRecord) -> MissionAttemptRecord:
@@ -3073,7 +3122,8 @@ def mark_attempt_consumed(record: MissionAttemptRecord) -> MissionAttemptRecord:
     record.path.write_bytes(
         (json.dumps(consumed.as_record(), indent=2, sort_keys=True) + "\n").encode()
     )
-    return consumed
+    written = record.path.read_bytes()
+    return replace(consumed, record_sha256=_file_sha256(written), record_bytes=len(written))
 
 
 def require_mission_execution_authorization(authorization: object) -> OwnerExecutionAuthorization:
