@@ -1,0 +1,235 @@
+{
+  "artifact_id": "CDC-END-TO-END-MISSION-001-STAGE-2-PREFLIGHT-MANIFEST-v0.3",
+  "authorizes_execution": false,
+  "blocker_a_repaired": {
+    "chains_with_derivable_prior_state": "9/9",
+    "derived_prior_state": "CANDIDATE_FORMED",
+    "frozen_input_modified": false,
+    "input_v0_6_still_omits_prior_institutional_state": true,
+    "prior_state_source": "ACTUAL_STAGE_1_OBSERVATION"
+  },
+  "changed_under_the_successor": {
+    "consequence": "a Stage-2 result produced under 50d9da82 cannot yield the same stage_2_result_digest as one produced under 2e152671. No Stage-2 result exists under either, so nothing is being compared or rewritten.",
+    "fields_added_vs_predecessor": [
+      "owner_stage_2_authorization",
+      "attempt_record"
+    ],
+    "stage_2_result_body_fields": [
+      "mission_id",
+      "package_sha256",
+      "stage_1_observation_digest",
+      "outcomes",
+      "accounting",
+      "drafts",
+      "correction",
+      "owner_stage_2_authorization",
+      "attempt_record",
+      "official_handoff"
+    ],
+    "stage_2_result_digest_body_changed": true,
+    "stage_2_result_digest_rule_changed": false
+  },
+  "claim_ceiling": {
+    "M08_compliant_path_demonstrated": true,
+    "M08_out_of_scope_refusal_path_demonstrated": false,
+    "assurance_mode": "SYNTHETIC_EVALUATION_ONLY"
+  },
+  "correction_performed": false,
+  "correction_sequencing": {
+    "correction_object_prebound": false,
+    "correction_predecessor_eligibility_at_preflight": "UNDETERMINED_BEFORE_STAGE_2_RESULT",
+    "eligibility_manufactured": false,
+    "predecessor_digest_predicted": false,
+    "predecessor_state_predicted": false
+  },
+  "creates_authority": false,
+  "drafts_generated": false,
+  "environment": {
+    "platform": "macOS-13.7.8-x86_64-i386-64bit",
+    "python_version": "3.12.2",
+    "recorded_at_utc": "2026-08-12T23:12:04Z",
+    "repository_root": "/private/tmp/claude-501/cleanroom"
+  },
+  "execution_namespace": {
+    "branch_ordinal_note": "repository branch names ending in a numeral refer to preflight passes, not to result-bearing executions; this pass is on cdc-e2e-stage2-preflight-final",
+    "future_stage_2_run_directory": "/private/tmp/cdc-e2e-stage2-run-001",
+    "future_stage_2_run_id": "CDC-E2E-STAGE2-RUN-001",
+    "future_stage_2_run_ordinal": "RUN-001",
+    "future_stage_2_trace_id": "CDC-E2E-STAGE2-RUN-001-TRACE-001",
+    "normalization_reason": "the v0.2 manifest named a run-002 workspace directory while the frozen execution identity is RUN-001. No Stage-2 execution has occurred, so no filesystem name may imply a second result-bearing run.",
+    "preflight_workspaces_carry_no_execution_standing": true,
+    "stage_2_result_bearing_execution_count": 0,
+    "workspaces_observed": [
+      {
+        "consumed_run_ordinal": false,
+        "contains": [
+          "CDC-END-TO-END-MISSION-001-STAGE-2-PREFLIGHT-MANIFEST-v0.1.json"
+        ],
+        "path": "/private/tmp/cdc-e2e-stage2-run-001",
+        "result_bearing": false
+      },
+      {
+        "archived_in_repository_at": "aca0061de6df29ebf8c573370f12d48c351ce912",
+        "consumed_run_ordinal": false,
+        "contains": [
+          "CDC-END-TO-END-MISSION-001-STAGE-2-PREFLIGHT-MANIFEST-v0.2.json"
+        ],
+        "path": "/private/tmp/cdc-e2e-stage2-run-002",
+        "result_bearing": false,
+        "status": "SUPERSEDED_PREFLIGHT_WORKSPACE_NO_STANDING"
+      }
+    ]
+  },
+  "future_owner_authorization_methodological_bindings": {
+    "distinction_that_must_remain_explicit": "the Stage-2 authorization file itself IS hashed and bound into Stage2Result by the successor implementation. That is a runtime-enforced identity. The three methodological digests inside that file are not separately verified.",
+    "experimental_integrity_doctrine_binding_class": "OWNER_AUTHORIZATION_ARTIFACT_BINDING_NOT_RUNTIME_VERIFIER_ENFORCED",
+    "experimental_integrity_doctrine_sha256": "f612f3583ee9200b28230d0950ffce517e720764f73668b606a4689a4a9291d1",
+    "runtime_verifier_enforced_binding_fields_count": 16,
+    "source_modified_to_runtime_enforce_these": false,
+    "stage_2_evidence_digest_derivation_binding_class": "OWNER_AUTHORIZATION_ARTIFACT_BINDING_NOT_RUNTIME_VERIFIER_ENFORCED",
+    "stage_2_evidence_digest_derivation_sha256": "dd3da8ba08b5b267a0788080b666fa920a2e4cf2f91dcfdd2b522da73b644155",
+    "verified_by_source_inspection": {
+      "conclusion": "the runtime verifier does NOT check these three fields. They are owner authorization artifact content, enforced by owner and operator procedure and by later independent inspection, not by the implementation.",
+      "inspected": "verify_owner_stage_2_authorization at 50d9da82",
+      "three_fields_present_in_STAGE_2_AUTHORIZATION_BINDING_FIELDS": false,
+      "three_fields_referenced_in_verifier_source": false
+    },
+    "vitaliy_pre_result_acknowledgment_binding_class": "OWNER_AUTHORIZATION_ARTIFACT_BINDING_NOT_RUNTIME_VERIFIER_ENFORCED",
+    "vitaliy_pre_result_acknowledgment_sha256": "PENDING_INDEPENDENT_VERIFICATION"
+  },
+  "governing_doctrine": {
+    "artifact": "CDC-END-TO-END-MISSION-001-EXPERIMENTAL-INTEGRITY-AND-OBSERVABILITY-DOCTRINE-v0.1.md",
+    "bytes": 8902,
+    "independently_recomputed": true,
+    "sha256": "f612f3583ee9200b28230d0950ffce517e720764f73668b606a4689a4a9291d1",
+    "status": "OWNER_FROZEN_PRE_RESULT_DOCTRINE"
+  },
+  "historical_attribution_unchanged": {
+    "human_disposition_run_001_implementation": "2e15267194d320b54015f0c212a8041cedc22050",
+    "rewritten": false,
+    "stage_1_run_001_implementation": "2e15267194d320b54015f0c212a8041cedc22050"
+  },
+  "mission_id": "CDC-TEST-MISSION-001",
+  "next_gate": "OWNER_STAGE_2_EXECUTION_AUTHORIZATION",
+  "outcome_prediction": {
+    "expected_gate_distribution_preregistered": false,
+    "expected_transition_count_preregistered": false,
+    "functions_not_called": [
+      "derive_transition_registry",
+      "derive_transition_proposal",
+      "evaluate_test_transition",
+      "emit_transition_event",
+      "integrate_correction",
+      "render_drafts",
+      "execute_authorized_stage_2"
+    ],
+    "note": "prior-state derivation was exercised; it is not a transition evaluation"
+  },
+  "owner_authorization_exists": false,
+  "predecessor_sha256": "b95b1d082f71241b0126c7beabfd5877e503594d2d2d0e092d520f1097e3cc25",
+  "prospective_owner_authorization_path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.1.json",
+  "record_class": "STAGE_2_PREFLIGHT_MANIFEST",
+  "result_bearing": false,
+  "route_observability": {
+    "external_route_observation_contract": "FROZEN",
+    "future_route_trace_id": "CDC-E2E-STAGE2-RUN-001-TRACE-001",
+    "low_level_calls_outside_public_route_authorized": false,
+    "preregistered_run_metadata": {
+      "producer": "oic.cdc_e2e_mission.execute_authorized_stage_2",
+      "producer_version": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+      "run_id": "CDC-E2E-STAGE2-RUN-001",
+      "trace_id": "CDC-E2E-STAGE2-RUN-001-TRACE-001"
+    },
+    "producer_version_now_names_the_successor": true,
+    "public_route_expected_entry_count": 1,
+    "stage_2_route_identity_in_event_supported": true,
+    "tracer_executed_during_preflight": false,
+    "transition_event_producer_field_alone_proves_route_invocation": false
+  },
+  "run_id": "STAGE-2-RUN-001-PROSPECTIVE",
+  "stage_2_authorization_requirements": {
+    "attempt_ledger_namespace": ".cdc-e2e-stage-2-attempt-<stage2-authorization-sha256>.json",
+    "attempt_states": [
+      "NO_ATTEMPT_RECORD",
+      "CLAIMED_NOT_CONSUMED",
+      "CONSUMED_AFTER_FIRST_TRANSITION_EVALUATION"
+    ],
+    "authorization_scope": "ONE_RESULT_BEARING_STAGE_2_EXECUTION",
+    "authorized_stage": "STAGE_2_ONLY",
+    "canonical_path_binding_required": true,
+    "declared_semantics": {
+      "additional_human_disposition_authorized": false,
+      "authorization_scope": "ONE_RESULT_BEARING_STAGE_2_EXECUTION",
+      "authorized_stage": "STAGE_2_ONLY",
+      "automatic_retry_authorized": false,
+      "correction_handling_authorized": "FROZEN_ACTION_PLAN_PRECONDITION_CONTROLLED",
+      "draft_rendering_authorized": "FROZEN_OUTPUT_DEFINITION_CONTROLLED",
+      "mission_id": "CDC-TEST-MISSION-001",
+      "official_handoff_authorized": false,
+      "owner_authorized": true,
+      "record_class": "OWNER_STAGE_2_EXECUTION_AUTHORIZATION",
+      "result_bearing": true,
+      "single_use": true,
+      "stage_1_reexecution_authorized": false,
+      "stage_2_transition_evaluation_authorized": true,
+      "transition_event_emission_authorized": "GATE_RESULT_CONTROLLED"
+    },
+    "plus_exact_nine_disposition_binding_digests": true,
+    "record_class": "OWNER_STAGE_2_EXECUTION_AUTHORIZATION",
+    "stage_1_ledger_reused_or_mutated": false,
+    "structured_binding_fields": [
+      "implementation_commit",
+      "implementation_tree",
+      "environment_manifest_sha256",
+      "mission_package_sha256",
+      "stage_1_component_profile_sha256",
+      "oracle_sha256",
+      "adjudication_protocol_sha256",
+      "action_plan_sha256",
+      "action_plan_provenance_token",
+      "owner_preexecution_interpretation_sha256",
+      "stage_1_raw_result_sha256",
+      "stage_1_observation_digest",
+      "human_disposition_evidence_commit",
+      "human_disposition_evidence_tree",
+      "correction_stimulus_digest",
+      "owner_m08_m09_acceptance_sha256"
+    ]
+  },
+  "stage_2_executed": false,
+  "stage_2_implementation": {
+    "branch": "cdc-e2e-stage2-seam-repair-v0.1",
+    "commit": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+    "do_not_attribute_stage_2_results_to": "2e15267194d320b54015f0c212a8041cedc22050",
+    "independently_established": true,
+    "owner_classification": "PERMISSIBLE_EXECUTION_SUBSTRATE_REACHABILITY_REPAIR",
+    "parent": "2e15267194d320b54015f0c212a8041cedc22050",
+    "remote_ref_agrees": true,
+    "tree": "86513415bca23ca20c9cb37ee2d59a5fa03c5790",
+    "working_tree_clean": true
+  },
+  "supersedes": "CDC-END-TO-END-MISSION-001-STAGE-2-PREFLIGHT-MANIFEST-v0.2",
+  "supersession_reason": "EXECUTION_NAMESPACE_NORMALIZATION",
+  "transition_evaluated": false,
+  "transition_event_emitted": false,
+  "unchanged_under_the_successor": {
+    "action_plan_provenance_token": "42e53c0c7111517bc1a8816760f58cbdfb9e78e43b7f002ba66fb3cd69cd4807",
+    "action_plan_sha256": "229a0c15d2bd2ee1db807904ff4d640f8fe39931372a002fbc3abf9e3244731e",
+    "correction_stimulus_digest": "edea71d189bde4b99e84d42267ba3e8960adcc43ff0f33c5ff1cef12c69c4efb",
+    "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+    "note": "these domains hash Stage-1 and disposition objects, not Stage2Result, so the seam repair does not move them. Verified rather than assumed.",
+    "stage_1_observation_digest": "0c7c9aa770aee07b7c42f9bb48ec3b13058bbaf7559d5696bc59c6eb276510be",
+    "stage_1_rehydrated_record_equals_archive": true,
+    "stage_2_human_disposition_binding_digests": {
+      "P001xC-AWARD-01": "9480745d4c9858b86cab7cab33705eb021deecac82647206258836ab91d37250",
+      "P001xC-EVAL-01": "516c8a98357a0db091c968f0ea42caa6420aaafae484398ee63a60dc410f0b8d",
+      "P001xC-TENDER-01": "c33812f65a976ac414ea765f0836ab03fb00ae21fe915976b2b2ccca94105736",
+      "P002xC-AWARD-01": "61ae2128afaf8dcc207905fd44d1474ec351c06c6f8d501b5e899aca4d4a6398",
+      "P002xC-EVAL-01": "4ea554b6c0fa24e2dd8e4666714f864ba67f767efa718176aba60f096653beac",
+      "P002xC-TENDER-01": "babaa05c859c92b0588c653783e8f6462cadcc7573921064dfb6410962164408",
+      "P003xC-AWARD-01": "2eabeda78c5a1de266aa4a635adb2e34e7cbc06b58e8adf43a14e3dc83757a75",
+      "P003xC-EVAL-01": "a8ac60c75a1d46410b1a3baf4a054d26146e94aea574eb6663e892354ea7d1df",
+      "P003xC-TENDER-01": "9b3899ce71d1f822657cac8dbdd1a596dc2687412d22dba7ba5bee621382c777"
+    }
+  }
+}

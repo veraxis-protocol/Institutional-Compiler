@@ -1,0 +1,176 @@
+{
+  "artifact_id": "CDC-END-TO-END-MISSION-001-VITALIY-PRE-RESULT-ACKNOWLEDGMENT-PACKAGE-v0.2",
+  "authorizes_execution": false,
+  "ci_classification": {
+    "CREDENTIAL_PATTERN_SCAN": "SKIPPED",
+    "FULL_CI_GREEN": false,
+    "RUFF_FORMAT_INHERITED_DEBT_FILES": 4,
+    "SUBSTANTIVE_JOBS_PASS": true,
+    "evidence_branch_prs_opened_for_review": false,
+    "inherited_debt_files": [
+      "src/oic/cdc_slice.py",
+      "tests/contract/test_canada_acquisition_freeze.py",
+      "tests/contract/test_canada_rights_resolution_dossier.py",
+      "tests/contract/test_warrant_contract.py"
+    ],
+    "inherited_debt_repaired": false,
+    "merged": false,
+    "pr": 25,
+    "pr_class": "IMPLEMENTATION_VERIFICATION_OBJECT_ONLY",
+    "review_method": "immutable commit and ref identities, reviewed directly"
+  },
+  "claim_ceiling": {
+    "M08_compliant_path_demonstrated": true,
+    "M08_out_of_scope_refusal_path_demonstrated": false,
+    "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+    "full_e2e_pass": "NOT_ESTABLISHED"
+  },
+  "execution_namespace": {
+    "corrected_from": "the v0.2 package referenced a run-002 workspace path; no Stage-2 execution has occurred and no preflight workspace consumes a result-bearing run ordinal",
+    "future_stage_2_authorization_path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.1.json",
+    "future_stage_2_run_directory": "/private/tmp/cdc-e2e-stage2-run-001",
+    "future_stage_2_run_id": "CDC-E2E-STAGE2-RUN-001",
+    "future_stage_2_run_ordinal": "RUN-001",
+    "future_stage_2_trace_id": "CDC-E2E-STAGE2-RUN-001-TRACE-001",
+    "stage_2_result_bearing_execution_count": 0
+  },
+  "future_owner_authorization_methodological_bindings": {
+    "authorization_file_itself_is_runtime_hashed_and_bound_into_stage_2_result": true,
+    "established_by": "source inspection of verify_owner_stage_2_authorization at 50d9da82",
+    "experimental_integrity_doctrine_binding_class": "OWNER_AUTHORIZATION_ARTIFACT_BINDING_NOT_RUNTIME_VERIFIER_ENFORCED",
+    "experimental_integrity_doctrine_bytes": 8902,
+    "experimental_integrity_doctrine_sha256": "f612f3583ee9200b28230d0950ffce517e720764f73668b606a4689a4a9291d1",
+    "runtime_verifier_checks_these_three_fields": false,
+    "runtime_verifier_enforced_binding_fields_count": 16,
+    "stage_2_evidence_digest_derivation_binding_class": "OWNER_AUTHORIZATION_ARTIFACT_BINDING_NOT_RUNTIME_VERIFIER_ENFORCED",
+    "stage_2_evidence_digest_derivation_sha256": "dd3da8ba08b5b267a0788080b666fa920a2e4cf2f91dcfdd2b522da73b644155",
+    "vitaliy_pre_result_acknowledgment_binding_class": "OWNER_AUTHORIZATION_ARTIFACT_BINDING_NOT_RUNTIME_VERIFIER_ENFORCED",
+    "vitaliy_pre_result_acknowledgment_sha256": "PENDING_INDEPENDENT_VERIFICATION"
+  },
+  "historical_attribution_preserved": {
+    "human_disposition_run_001": {
+      "batch_result_sha256": "0ce542e29e6811b12848bc8651535b643ead03b30824548ec646d54e52515670",
+      "evidence_commit": "a61fae0a94eeaf54f69c42f40af67d9e43516294",
+      "evidence_tree": "e1747b5bfa1a11f3f852a92ad13fdd975aceef9e",
+      "implementation": "2e15267194d320b54015f0c212a8041cedc22050",
+      "rewritten": false
+    },
+    "stage_1_run_001": {
+      "evidence_commit": "c44c9bf7d24b79990fb00274b871326f0d7617e9",
+      "implementation": "2e15267194d320b54015f0c212a8041cedc22050",
+      "raw_result_sha256": "aa32274f238d01bc9f6c6d1c67879acfb4765a34d0dc0b4ccf568f3c07353a70",
+      "rewritten": false,
+      "stage_1_observation_digest": "0c7c9aa770aee07b7c42f9bb48ec3b13058bbaf7559d5696bc59c6eb276510be"
+    }
+  },
+  "independence_disclosure": {
+    "adjudicator": "did not implement the mechanisms and did not author controlling semantic objects",
+    "adjudicator_findings_leading_to_owner_acts": [
+      "the on_unknown seam identified in review 001 led to an owner-issued seam clarification"
+    ],
+    "independent_weight_carried_by": [
+      "implementation-blind semantic adjudication",
+      "owner review of successors",
+      "clean-runner CI"
+    ],
+    "operator": "CLAUDE",
+    "operator_roles": [
+      "implementer",
+      "author of the implementation's own tests",
+      "execution operator for Stage 1 and the disposition batch"
+    ],
+    "operator_roles_are_independent_of_each_other": false
+  },
+  "mission_id": "CDC-TEST-MISSION-001",
+  "next_gate": "VITALIY_PRE_RESULT_ACKNOWLEDGMENT",
+  "owner_determination_on_the_stage_2_seam": {
+    "ALTERS_FROZEN_ACTION_PLAN": false,
+    "ALTERS_FROZEN_INPUTS": false,
+    "ALTERS_FROZEN_ORACLE": false,
+    "ALTERS_PRIOR_OBSERVATIONS": false,
+    "MANUFACTURES_CORRECTION_ELIGIBILITY": false,
+    "MANUFACTURES_DESIRED_ADJUDICATION_STATE": false,
+    "STAGE_2_SEAM_REPAIR_DOCTRINE_CLASSIFICATION": "PERMISSIBLE_EXECUTION_SUBSTRATE_REACHABILITY_REPAIR",
+    "adjudicator_acknowledgment": "PENDING",
+    "authored_by": "OWNER",
+    "is_the_adjudicator_determination": false,
+    "owner_rationale_summary": "the predecessor required a Stage-2 prior institutional state from input-v0.6, which correctly represents the PRE_CANDIDATE boundary and cannot contain a state produced later by actual candidate formation. The successor derives CANDIDATE_FORMED only from the actual completed, owner-cleared Stage-1 observation containing the actual formed candidate."
+  },
+  "owner_frozen_doctrine": {
+    "artifact": "CDC-END-TO-END-MISSION-001-EXPERIMENTAL-INTEGRITY-AND-OBSERVABILITY-DOCTRINE-v0.1.md",
+    "bytes": 8902,
+    "path": "veraxis/cdc-e2e-mission-001/preexecution/CDC-END-TO-END-MISSION-001-EXPERIMENTAL-INTEGRITY-AND-OBSERVABILITY-DOCTRINE-v0.1.md",
+    "persisted_byte_exact": true,
+    "recomputed_after_persistence": true,
+    "sha256": "f612f3583ee9200b28230d0950ffce517e720764f73668b606a4689a4a9291d1"
+  },
+  "predecessor_rewritten": false,
+  "predecessor_sha256": "626f1bde169c3044abdae8562fef96fddf7d01433ee242e1ba9f97f5d827697f",
+  "prior_adjudications_unchanged": {
+    "aggregate_protocol_state": "INCOMPLETE",
+    "cumulative_match": 9,
+    "cumulative_measured": "9/12",
+    "forbidden_promotions": 0,
+    "human_disposition_run_001_semantic_adjudication": {
+      "commit": "ea2d0b0ef5a231b5d77c8bed8d98453e2b623630",
+      "sha256": "487c2b13fa94c51cae29b3befe8da25949f825f3f26160701f5d9680b36763a0"
+    },
+    "semantic_violations": 0,
+    "stage_1_run_001_semantic_adjudication": {
+      "commit": "d781196cb225c66a3d9ccdcd73fb325054777a93",
+      "sha256": "36d9e83161925fb26806feb12c7f51220a7c05bdd413512a47cfcee0055df79a"
+    }
+  },
+  "purpose": "exact identities for pre-result acknowledgment before Stage-2 authorization",
+  "record_class": "VITALIY_PRE_RESULT_ACKNOWLEDGMENT_PACKAGE",
+  "requests_a_particular_adjudication_state": false,
+  "result_bearing": false,
+  "revised_preflight": {
+    "controlling_preflight_manifest": "CDC-END-TO-END-MISSION-001-STAGE-2-PREFLIGHT-MANIFEST-v0.3",
+    "derived_prior_state": "CANDIDATE_FORMED",
+    "digest_derivation_v0_2_bytes": 12110,
+    "digest_derivation_v0_2_sha256": "dd3da8ba08b5b267a0788080b666fa920a2e4cf2f91dcfdd2b522da73b644155",
+    "digest_derivation_v0_2_unchanged_by_this_normalization": true,
+    "digest_domain_changed_under_successor": [
+      "stage_2_result_digest body (rule unchanged; two fields added)"
+    ],
+    "digest_domains_unchanged_under_successor": [
+      "stage_1_observation_digest",
+      "action_plan_provenance_token",
+      "correction_stimulus_digest",
+      "stage_2_human_disposition_binding_digests"
+    ],
+    "owner_m08_m09_acceptance_sha256": "5f13fe1920be490429b9cc562bcaade38293de35e9898a4d5803f0744c29381a",
+    "preflight_manifest_v0_3_bytes": 11771,
+    "preflight_manifest_v0_3_sha256": "dcb4176a051817054267f046b6f30270e8f1c8f77bab3f095d8da30e17cd5723",
+    "prior_state_derivable_chains": "9/9",
+    "rerun_against_successor": true,
+    "superseded_preflight_manifest_v0_1_sha256": "b444de125e5409a48453658df368d72e4572a4d46c89b980aae5e0e267601623",
+    "superseded_preflight_manifest_v0_2_sha256": "b95b1d082f71241b0126c7beabfd5877e503594d2d2d0e092d520f1097e3cc25"
+  },
+  "stage_2_seam_successor": {
+    "DO_NOT_ATTRIBUTE_STAGE_2_RESULTS_TO": "2e15267194d320b54015f0c212a8041cedc22050",
+    "STAGE_2_IMPLEMENTATION": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+    "branch": "cdc-e2e-stage2-seam-repair-v0.1",
+    "commit": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+    "independently_established_from_the_repository": true,
+    "parent": "2e15267194d320b54015f0c212a8041cedc22050",
+    "remote_ref_agrees": true,
+    "tree": "86513415bca23ca20c9cb37ee2d59a5fa03c5790",
+    "verification_pr": 25
+  },
+  "state_at_packaging": {
+    "correction_performed": false,
+    "correction_predecessor_eligibility": "UNDETERMINED_BEFORE_STAGE_2_RESULT",
+    "drafts_generated": false,
+    "expected_gate_result_preregistered": false,
+    "expected_transition_count_preregistered": false,
+    "stage_2_authorization_issued": false,
+    "stage_2_executed": false,
+    "stage_2_result_bearing_execution_count": 0,
+    "transition_evaluated": false,
+    "transition_event_emitted": false
+  },
+  "supersedes": "CDC-END-TO-END-MISSION-001-VITALIY-PRE-RESULT-ACKNOWLEDGMENT-PACKAGE-v0.1",
+  "supersession_reason": "EXECUTION_NAMESPACE_NORMALIZATION"
+}
