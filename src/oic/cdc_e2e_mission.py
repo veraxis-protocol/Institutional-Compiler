@@ -22,6 +22,7 @@ from oic.cdc_slice import (
     emit_transition_event,
     evaluate_test_transition,
     make_successor,
+    refuse_stale_candidate_proposal,
 )
 
 MISSION_ID: Final = "CDC-TEST-MISSION-001"
@@ -3915,3 +3916,934 @@ def governed_stage_1_components(
         return build_fallback_warrant(evaluation, profile=verified)
 
     return evaluator, warrant_builder
+
+
+# ---------------------------------------------------------------------------
+# M12 correction-successor boundary.
+#
+# The Stage-2 authorization that produced RUN-001 is permanently consumed, and
+# its result is frozen evidence. Correction therefore cannot run through Stage 2
+# again. This boundary executes the correction over the frozen RUN-001 result
+# alone: it evaluates no transition, emits no event, renders no draft, and never
+# opens a RUN-001 artifact for writing.
+#
+# The predecessor is preserved by construction. Its supersession is recorded on a
+# separate successor-side object rather than written back, because a predecessor
+# that changed to record its own supersession would no longer be the predecessor
+# the adjudicator verified.
+# ---------------------------------------------------------------------------
+
+EXPERIMENT_ID: Final = "CDC-END-TO-END-MISSION-001"
+
+CORRECTION_SUCCESSOR_RECORD_CLASS: Final = "OWNER_CORRECTION_SUCCESSOR_EXECUTION_AUTHORIZATION"
+CORRECTION_SUCCESSOR_STAGE: Final = "CORRECTION_SUCCESSOR_ONLY"
+CORRECTION_SUCCESSOR_SCOPE: Final = "ONE_CORRECTION_SUCCESSOR_CONSTRUCTION"
+
+# Frozen RUN-001 identities. These are historical facts about an execution that
+# already happened; they cannot move because this implementation moved.
+SOURCE_RUN_ID: Final = "CDC-E2E-STAGE2-RUN-001"
+SOURCE_STAGE_2_RESULT_DIGEST: Final = (
+    "8a12b681d1f08aa47b70830a939da9d545dccdcea33643fc6f5f6ca9450b3b40"
+)
+SOURCE_STAGE_2_RAW_RESULT_SHA256: Final = (
+    "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d"
+)
+SOURCE_STAGE_2_ATTEMPT_RECORD_SHA256: Final = (
+    "0d11efa747647bf6764bb7562b3a8e7b02219ed2b10f527ce4b5e69df3ca72d2"
+)
+SOURCE_STAGE_2_ROUTE_TRACE_SHA256: Final = (
+    "481957e87f73e2fc058e0e167b6d3d82fea830b2eaad16c78bdfc39f3c952920"
+)
+STAGE_2_EVIDENCE_COMMIT: Final = "1a80aabe0f72eac8570b9827ee7545cda370cbe8"
+STAGE_2_EVIDENCE_TREE: Final = "a6216214ae5a49ffcb3448a97aadce1bb3f418e3"
+OWNER_ADJUDICATION_ACCEPTANCE_COMMIT: Final = "ceb8efe293776696d6633bc3994b23198030e5b0"
+OWNER_ADJUDICATION_ACCEPTANCE_SHA256: Final = (
+    "49435cbb6e955f4ecd6c36b3b1c0ab8b4c77c53bb564569b8708be036586f9b0"
+)
+STAGE_2_ADJUDICATION_COMMIT: Final = "a682abc7e68a3fc98c3a131c10d9ec05457e5d9c"
+STAGE_2_ADJUDICATION_SHA256: Final = (
+    "6983daf7153f3e409bcd4503d286ec116233e7b4979088c07be935dc15994eb6"
+)
+
+STAGE_2_CONSUMED_ATTEMPT_STATE: Final = ATTEMPT_STATE_STAGE_2_CONSUMED
+
+CORRECTION_SUCCESSOR_DECLARATIONS: Final[dict[str, object]] = {
+    "record_class": CORRECTION_SUCCESSOR_RECORD_CLASS,
+    "experiment_id": EXPERIMENT_ID,
+    "runtime_mission_id": MISSION_ID,
+    "owner_authorized": True,
+    "authorized_stage": CORRECTION_SUCCESSOR_STAGE,
+    "authorization_scope": CORRECTION_SUCCESSOR_SCOPE,
+    "single_use": True,
+    "automatic_retry_authorized": False,
+    "stage_1_reexecution_authorized": False,
+    "stage_2_reexecution_authorized": False,
+    "transition_evaluation_authorized": False,
+    "transition_event_emission_authorized": False,
+    "draft_rendering_authorized": False,
+    "run_001_modification_authorized": False,
+    "m11_repair_authorized": False,
+    "official_handoff_authorized": False,
+    "result_bearing": True,
+}
+
+CORRECTION_SUCCESSOR_BINDING_FIELDS: Final = (
+    "implementation_commit",
+    "implementation_tree",
+    "environment_manifest_sha256",
+    "mission_package_sha256",
+    "oracle_sha256",
+    "adjudication_protocol_sha256",
+    "action_plan_sha256",
+    "action_plan_provenance_token",
+    "correction_stimulus_digest",
+    "source_run_id",
+    "source_stage_2_result_digest",
+    "source_stage_2_raw_result_sha256",
+    "stage_2_evidence_commit",
+    "stage_2_evidence_tree",
+    "owner_acceptance_commit",
+    "owner_acceptance_sha256",
+    "adjudication_commit",
+    "adjudication_sha256",
+    "predecessor_ebawu_ref",
+    "correction_target_id",
+    "successor_id",
+)
+
+# An instrument states what is authorized. Whether it was issued is established
+# by a separate issuance record, so an instrument that asserts its own issuance
+# state is refused rather than read charitably.
+CORRECTION_SUCCESSOR_FORBIDDEN_SELF_ASSERTIONS: Final = (
+    "attempt_state",
+    "consumed",
+    "correction_executed",
+    "is_issued",
+    "issuance_observed",
+    "issuance_observed_at_utc",
+    "issued",
+    "successor_constructed",
+)
+
+CORRECTION_ATTEMPT_STATE_NONE: Final = "NO_ATTEMPT_RECORD"
+CORRECTION_ATTEMPT_STATE_CLAIMED: Final = "CLAIMED_NOT_CONSUMED"
+CORRECTION_ATTEMPT_STATE_CONSUMED: Final = "CONSUMED_AFTER_FIRST_SUCCESSOR_CONSTRUCTION"
+
+CORRECTION_INELIGIBILITY_STATE: Final = (
+    "INELIGIBLE_PENDING_REGENERATION_OR_EXPLICIT_HUMAN_RESOLUTION"
+)
+CORRECTION_IMPACT_AFFECTED: Final = "AFFECTED_BY_SUPERSESSION"
+CORRECTION_IMPACT_UNAFFECTED: Final = "NOT_AFFECTED_BY_SUPERSESSION"
+
+
+class CorrectionSuccessorAuthorizationError(ResultBearingMissionBlockedError):
+    """The correction-successor authorization is absent, wrong, unbound or relocated."""
+
+
+class CorrectionSuccessorBlockedError(ResultBearingMissionBlockedError):
+    """A correction-successor precondition failed before anything was claimed."""
+
+
+class PredecessorMutationDetectedError(ResultBearingMissionBlockedError):
+    """Frozen predecessor evidence changed across the correction."""
+
+
+class CorrectionAttemptStateError(MissionAttemptStateError):
+    """The correction-successor authorization was already claimed or consumed."""
+
+
+@dataclass(frozen=True, slots=True)
+class CorrectionExecutionClearance:
+    """Runtime clearance for the correction successor.
+
+    Deliberately separate from ExecutionClearance: a Stage-2 clearance must never
+    be reusable as authority to correct.
+    """
+
+    owner_correction_authorization: str
+    implementation_commit: str
+    implementation_tree: str
+    environment_manifest_sha256: str
+    mission_package_sha256: str
+    oracle_sha256: str
+    adjudication_protocol_sha256: str
+    action_plan_sha256: str
+    owner_acceptance_sha256: str
+    source_stage_2_result_digest: str
+
+
+@dataclass(frozen=True, slots=True)
+class OwnerCorrectionSuccessorAuthorization:
+    """A correction-successor authorization verified from exact external bytes."""
+
+    path: Path
+    sha256_hex: str
+    byte_count: int
+    reference: str
+    record_class: str
+    authorized_stage: str
+    authorization_scope: str
+    authorization_id: str
+    canonical_path: str
+    successor_id: str
+
+    def as_record(self) -> dict[str, Any]:
+        """Identity and declared scope only; carries no authorization prose."""
+        return {
+            "owner_correction_authorization_sha256": self.sha256_hex,
+            "owner_correction_authorization_bytes": self.byte_count,
+            "owner_correction_authorization_reference": self.reference,
+            "owner_correction_authorization_record_class": self.record_class,
+            "owner_correction_authorization_scope": self.authorization_scope,
+            "owner_correction_authorization_id": self.authorization_id,
+            "authorized_stage": self.authorized_stage,
+            "authorized_successor_id": self.successor_id,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class FrozenStage2Evidence:
+    """The RUN-001 result, verified from its exact frozen bytes."""
+
+    raw_result_sha256: str
+    raw_result_bytes: int
+    result_digest: str
+    runtime_mission_id: str
+    outcomes: tuple[Mapping[str, Any], ...]
+    drafts: tuple[Mapping[str, Any], ...]
+    attempt_record: Mapping[str, Any]
+
+    def outcome_for_chain(self, chain_id: str) -> Mapping[str, Any] | None:
+        """The frozen outcome for one chain, or None when the chain is absent."""
+        return next((item for item in self.outcomes if item.get("chain_id") == chain_id), None)
+
+
+@dataclass(frozen=True, slots=True)
+class CorrectionSuccessorResult:
+    """Immutable correction-successor result. Never an official CDC record."""
+
+    experiment_id: str
+    runtime_mission_id: str
+    source_run_id: str
+    source_stage_2_result_digest: str
+    source_stage_2_raw_result_sha256: str
+    owner_correction_authorization: Mapping[str, Any]
+    correction_stimulus: Mapping[str, Any]
+    predecessor: Mapping[str, Any]
+    predecessor_digest: str
+    successor: Mapping[str, Any]
+    predecessor_supersession_record: Mapping[str, Any]
+    correction_reason: str
+    changed_fact_or_control_refs: Sequence[Any]
+    affected_output_eligibility: Sequence[Mapping[str, Any]]
+    stale_proposal_refusal_observation: Mapping[str, Any]
+    predecessor_immutability: Mapping[str, Any]
+    attempt_record: Mapping[str, Any] | None
+    correction_executed: bool = True
+    stage_2_reexecuted: bool = False
+    run_001_modified: bool = False
+    m11_repaired: bool = False
+    official_handoff: str = OFFICIAL_CDC_RECORD_CREATION
+    claim_ceiling: str = ASSURANCE_MODE
+
+    def as_record(self) -> dict[str, Any]:
+        """JSON-safe record carrying its own contract digest."""
+        body = {
+            "experiment_id": self.experiment_id,
+            "runtime_mission_id": self.runtime_mission_id,
+            "source_run_id": self.source_run_id,
+            "source_stage_2_result_digest": self.source_stage_2_result_digest,
+            "source_stage_2_raw_result_sha256": self.source_stage_2_raw_result_sha256,
+            "owner_correction_authorization": dict(self.owner_correction_authorization),
+            "correction_stimulus": dict(self.correction_stimulus),
+            "predecessor": dict(self.predecessor),
+            "predecessor_digest": self.predecessor_digest,
+            "successor": dict(self.successor),
+            "predecessor_supersession_record": dict(self.predecessor_supersession_record),
+            "correction_reason": self.correction_reason,
+            "changed_fact_or_control_refs": list(self.changed_fact_or_control_refs),
+            "affected_output_eligibility": [
+                dict(item) for item in self.affected_output_eligibility
+            ],
+            "stale_proposal_refusal_observation": dict(self.stale_proposal_refusal_observation),
+            "predecessor_immutability": dict(self.predecessor_immutability),
+            "attempt_record": (None if self.attempt_record is None else dict(self.attempt_record)),
+            "correction_executed": self.correction_executed,
+            "stage_2_reexecuted": self.stage_2_reexecuted,
+            "run_001_modified": self.run_001_modified,
+            "m11_repaired": self.m11_repaired,
+            "official_handoff": self.official_handoff,
+            "claim_ceiling": self.claim_ceiling,
+        }
+        body["correction_successor_result_digest"] = sha256(body)
+        return body
+
+
+def verify_frozen_stage_2_evidence(payload: bytes) -> FrozenStage2Evidence:
+    """Verify the frozen RUN-001 result from its exact bytes.
+
+    Both identities are checked and kept distinct: the file SHA-256 of the
+    persisted bytes, and the embedded contract digest recomputed over the body
+    that excludes it.
+    """
+    observed_file_sha = _file_sha256(payload)
+    if observed_file_sha != SOURCE_STAGE_2_RAW_RESULT_SHA256:
+        raise CorrectionSuccessorBlockedError(
+            f"frozen Stage-2 raw result hashes to {observed_file_sha}, expected "
+            f"{SOURCE_STAGE_2_RAW_RESULT_SHA256}"
+        )
+    try:
+        document = json.loads(payload)
+    except json.JSONDecodeError as error:
+        raise CorrectionSuccessorBlockedError(
+            f"frozen Stage-2 raw result is not structured JSON: {error}"
+        ) from error
+    record = _require_mapping(document, "stage-2 result")
+    embedded = record.get("stage_2_result_digest")
+    recomputed = sha256({k: v for k, v in record.items() if k != "stage_2_result_digest"})
+    if embedded != recomputed:
+        raise CorrectionSuccessorBlockedError(
+            f"frozen Stage-2 result carries digest {embedded!r} but its body recomputes "
+            f"to {recomputed!r}"
+        )
+    if recomputed != SOURCE_STAGE_2_RESULT_DIGEST:
+        raise CorrectionSuccessorBlockedError(
+            f"frozen Stage-2 result digest is {recomputed}, expected {SOURCE_STAGE_2_RESULT_DIGEST}"
+        )
+    attempt = _require_mapping(record.get("attempt_record"), "stage-2 attempt record")
+    if attempt.get("attempt_state") != STAGE_2_CONSUMED_ATTEMPT_STATE:
+        raise CorrectionSuccessorBlockedError(
+            f"frozen Stage-2 attempt state is {attempt.get('attempt_state')!r}; the "
+            f"correction successor requires {STAGE_2_CONSUMED_ATTEMPT_STATE}"
+        )
+    return FrozenStage2Evidence(
+        raw_result_sha256=observed_file_sha,
+        raw_result_bytes=len(payload),
+        result_digest=recomputed,
+        runtime_mission_id=str(record.get("mission_id")),
+        outcomes=tuple(
+            _require_mapping(item, "outcome")
+            for item in _require_sequence(record.get("outcomes"), "outcomes")
+        ),
+        drafts=tuple(
+            _require_mapping(item, "draft")
+            for item in _require_sequence(record.get("drafts"), "drafts")
+        ),
+        attempt_record=attempt,
+    )
+
+
+def require_distinct_identity_namespaces(
+    evidence: FrozenStage2Evidence, stage_1: Stage1Observation
+) -> None:
+    """Keep the experiment and runtime identities separate and correctly sourced.
+
+    The owner acceptance belongs to the experiment identity; the frozen runtime
+    result and Stage-1 observation carry the runtime mission identity. Each is
+    checked against its own source, so neither can vouch for the other.
+    """
+    if evidence.runtime_mission_id != MISSION_ID:
+        raise CorrectionSuccessorBlockedError(
+            f"frozen Stage-2 result carries runtime mission {evidence.runtime_mission_id!r}, "
+            f"expected {MISSION_ID!r}"
+        )
+    if stage_1.mission_id != MISSION_ID:
+        raise CorrectionSuccessorBlockedError(
+            f"frozen Stage-1 observation carries runtime mission {stage_1.mission_id!r}, "
+            f"expected {MISSION_ID!r}"
+        )
+    if EXPERIMENT_ID in {evidence.runtime_mission_id, stage_1.mission_id}:
+        raise CorrectionSuccessorBlockedError(
+            "the experiment identity was substituted for the runtime mission identity"
+        )
+
+
+def verify_owner_correction_successor_authorization(
+    path: Path,
+    *,
+    clearance: CorrectionExecutionClearance,
+    runtime: RuntimeIdentity,
+    frozen: FrozenMissionInput,
+    action_plan: object,
+    evidence: FrozenStage2Evidence,
+) -> OwnerCorrectionSuccessorAuthorization:
+    """Verify a correction-successor authorization: identity, location, semantics, bindings.
+
+    Same three-part discipline as the Stage-2 instrument, and the same canonical
+    location rule: a byte-identical copy elsewhere is not a second issuance.
+    """
+    plan = require_verified_action_plan(action_plan)
+    try:
+        payload = path.read_bytes()
+    except OSError as error:
+        raise CorrectionSuccessorAuthorizationError(
+            f"correction-successor authorization is not readable at {path}: {error}"
+        ) from error
+    file_digest = _file_sha256(payload)
+    reference = f"{OWNER_AUTHORIZATION_REFERENCE_PREFIX}{file_digest}"
+    observed_path = path.resolve()
+    if clearance.owner_correction_authorization != reference:
+        raise CorrectionSuccessorAuthorizationError(
+            f"clearance owner_correction_authorization is "
+            f"{clearance.owner_correction_authorization!r}, but the supplied artifact "
+            f"hashes to {reference!r}; a label is not the artifact"
+        )
+    try:
+        document = json.loads(payload)
+    except json.JSONDecodeError as error:
+        raise CorrectionSuccessorAuthorizationError(
+            f"correction-successor authorization is not structured JSON: {error}"
+        ) from error
+    if not isinstance(document, Mapping):
+        raise CorrectionSuccessorAuthorizationError(
+            "correction-successor authorization must be a JSON object"
+        )
+    declared_location = document.get("canonical_authorization_path")
+    if not isinstance(declared_location, str) or not declared_location:
+        raise CorrectionSuccessorAuthorizationError(
+            "correction-successor authorization declares no canonical_authorization_path"
+        )
+    if Path(declared_location).resolve() != observed_path:
+        raise CorrectionSuccessorAuthorizationError(
+            f"correction-successor authorization was presented at {observed_path} but "
+            f"declares {Path(declared_location).resolve()}; a relocated copy is not a "
+            "second issuance"
+        )
+    self_asserted = sorted(
+        name for name in CORRECTION_SUCCESSOR_FORBIDDEN_SELF_ASSERTIONS if name in document
+    )
+    if self_asserted:
+        raise CorrectionSuccessorAuthorizationError(
+            f"the instrument asserts its own issuance or execution state: {self_asserted}; "
+            "issuance is established by the separate issuance record"
+        )
+    wrong = [
+        f"{name}={document.get(name)!r} (required {expected!r})"
+        for name, expected in CORRECTION_SUCCESSOR_DECLARATIONS.items()
+        if document.get(name) is not expected and document.get(name) != expected
+    ]
+    if wrong:
+        raise CorrectionSuccessorAuthorizationError(
+            f"the artifact does not declare correction-successor semantics: {wrong}"
+        )
+    raw_bindings = document.get("bindings")
+    if not isinstance(raw_bindings, Mapping):
+        raise CorrectionSuccessorAuthorizationError(
+            "correction-successor authorization carries no structured 'bindings' object"
+        )
+    missing = sorted(set(CORRECTION_SUCCESSOR_BINDING_FIELDS) - raw_bindings.keys())
+    if missing:
+        raise CorrectionSuccessorAuthorizationError(
+            f"correction-successor authorization bindings missing: {missing}"
+        )
+    observed_bindings = {
+        "implementation_commit": runtime.implementation_commit,
+        "implementation_tree": runtime.implementation_tree,
+        "environment_manifest_sha256": runtime.environment_manifest_sha256,
+        "mission_package_sha256": frozen.package_sha256,
+        "oracle_sha256": ORACLE_SHA256,
+        "adjudication_protocol_sha256": ADJUDICATION_PROTOCOL_SHA256,
+        "action_plan_sha256": plan.sha256_hex,
+        "action_plan_provenance_token": plan.provenance_token,
+        "correction_stimulus_digest": plan.correction.digest(),
+        "source_run_id": SOURCE_RUN_ID,
+        "source_stage_2_result_digest": evidence.result_digest,
+        "source_stage_2_raw_result_sha256": evidence.raw_result_sha256,
+        "stage_2_evidence_commit": STAGE_2_EVIDENCE_COMMIT,
+        "stage_2_evidence_tree": STAGE_2_EVIDENCE_TREE,
+        "owner_acceptance_commit": OWNER_ADJUDICATION_ACCEPTANCE_COMMIT,
+        "owner_acceptance_sha256": OWNER_ADJUDICATION_ACCEPTANCE_SHA256,
+        "adjudication_commit": STAGE_2_ADJUDICATION_COMMIT,
+        "adjudication_sha256": STAGE_2_ADJUDICATION_SHA256,
+        "predecessor_ebawu_ref": plan.correction.predecessor_ebawu_ref,
+        "correction_target_id": plan.correction.target_id,
+    }
+    mismatched = sorted(
+        name for name, value in observed_bindings.items() if raw_bindings.get(name) != value
+    )
+    if mismatched:
+        raise CorrectionSuccessorAuthorizationError(
+            f"correction-successor bindings do not match the running observation: {mismatched}"
+        )
+    successor_id = raw_bindings.get("successor_id")
+    if not isinstance(successor_id, str) or not successor_id:
+        raise CorrectionSuccessorAuthorizationError(
+            "correction-successor authorization does not bind a successor_id"
+        )
+    if clearance.source_stage_2_result_digest != evidence.result_digest:
+        raise CorrectionSuccessorAuthorizationError(
+            f"clearance binds Stage-2 result {clearance.source_stage_2_result_digest!r}, "
+            f"observed {evidence.result_digest!r}"
+        )
+    if clearance.owner_acceptance_sha256 != OWNER_ADJUDICATION_ACCEPTANCE_SHA256:
+        raise CorrectionSuccessorAuthorizationError(
+            "clearance does not carry the owner adjudication acceptance digest"
+        )
+    return OwnerCorrectionSuccessorAuthorization(
+        path=observed_path,
+        sha256_hex=file_digest,
+        byte_count=len(payload),
+        reference=reference,
+        record_class=str(document["record_class"]),
+        authorized_stage=str(document["authorized_stage"]),
+        authorization_scope=str(document["authorization_scope"]),
+        authorization_id=str(document.get("authorization_id", "UNIDENTIFIED")),
+        canonical_path=str(observed_path),
+        successor_id=successor_id,
+    )
+
+
+def correction_successor_attempt_record_path(
+    authorization: OwnerCorrectionSuccessorAuthorization,
+) -> Path:
+    """Its own namespace: the frozen Stage-2 attempt ledger is never reopened."""
+    canonical = Path(authorization.canonical_path or authorization.path).resolve()
+    return (
+        canonical.parent / f".cdc-e2e-correction-successor-attempt-{authorization.sha256_hex}.json"
+    )
+
+
+def read_correction_successor_attempt_state(
+    authorization: OwnerCorrectionSuccessorAuthorization,
+) -> str:
+    """Current correction-successor attempt state for this authorization."""
+    path = correction_successor_attempt_record_path(authorization)
+    if not path.exists():
+        return CORRECTION_ATTEMPT_STATE_NONE
+    document = _require_mapping(json.loads(path.read_bytes()), "attempt record")
+    return str(document.get("attempt_state"))
+
+
+def require_unclaimed_correction_successor_attempt(
+    authorization: OwnerCorrectionSuccessorAuthorization,
+) -> None:
+    """Refuse before any successor construction when the authorization is used."""
+    state = read_correction_successor_attempt_state(authorization)
+    if state == CORRECTION_ATTEMPT_STATE_NONE:
+        return
+    if state == CORRECTION_ATTEMPT_STATE_CLAIMED:
+        raise CorrectionAttemptStateError(
+            f"correction-successor authorization {authorization.reference} is "
+            f"{CORRECTION_ATTEMPT_STATE_CLAIMED}: a prior attempt claimed it and no "
+            "consumption was recorded. Automatic retry is prohibited; this requires a "
+            "separate owner decision."
+        )
+    raise CorrectionAttemptStateError(
+        f"correction-successor authorization {authorization.reference} is {state}: it "
+        "authorized one successor construction and is permanently non-reusable."
+    )
+
+
+def claim_correction_successor_attempt(
+    authorization: OwnerCorrectionSuccessorAuthorization,
+    runtime: RuntimeIdentity,
+    frozen: FrozenMissionInput,
+    evidence: FrozenStage2Evidence,
+    predecessor_digest: str,
+) -> MissionAttemptRecord:
+    """Atomically claim the single authorized successor construction, or refuse."""
+    record = MissionAttemptRecord(
+        path=correction_successor_attempt_record_path(authorization),
+        state=CORRECTION_ATTEMPT_STATE_CLAIMED,
+        owner_execution_authorization_sha256=authorization.sha256_hex,
+        implementation_commit=runtime.implementation_commit,
+        implementation_tree=runtime.implementation_tree,
+        mission_package_sha256=frozen.package_sha256,
+    )
+    body = {
+        **record.as_record(),
+        "stage": CORRECTION_SUCCESSOR_STAGE,
+        "source_run_id": SOURCE_RUN_ID,
+        "source_stage_2_result_digest": evidence.result_digest,
+        "predecessor_digest": predecessor_digest,
+    }
+    payload = (json.dumps(body, indent=2, sort_keys=True) + "\n").encode()
+    try:
+        handle = os.open(record.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+    except FileExistsError as error:
+        raise CorrectionAttemptStateError(
+            f"correction-successor authorization {authorization.reference} was already "
+            "claimed by another attempt; automatic retry is prohibited"
+        ) from error
+    with os.fdopen(handle, "wb") as stream:
+        stream.write(payload)
+    written = record.path.read_bytes()
+    return replace(record, record_sha256=_file_sha256(written), record_bytes=len(written))
+
+
+def mark_correction_successor_attempt_consumed(
+    record: MissionAttemptRecord,
+    evidence: FrozenStage2Evidence,
+    predecessor_digest: str,
+    successor_id: str,
+) -> MissionAttemptRecord:
+    """Record that a successor was actually constructed."""
+    consumed = replace(record, state=CORRECTION_ATTEMPT_STATE_CONSUMED)
+    body = {
+        **consumed.as_record(),
+        "stage": CORRECTION_SUCCESSOR_STAGE,
+        "source_run_id": SOURCE_RUN_ID,
+        "source_stage_2_result_digest": evidence.result_digest,
+        "predecessor_digest": predecessor_digest,
+        "successor_id": successor_id,
+    }
+    record.path.write_bytes((json.dumps(body, indent=2, sort_keys=True) + "\n").encode())
+    written = record.path.read_bytes()
+    return replace(consumed, record_sha256=_file_sha256(written), record_bytes=len(written))
+
+
+def derive_correction_predecessor(
+    stage_1: Stage1Observation, evidence: FrozenStage2Evidence, action_plan: object
+) -> dict[str, Any]:
+    """Rebuild the predecessor from frozen evidence; never accept one from a caller.
+
+    The object is built in exactly the shape ``integrate_correction`` builds it,
+    so the digest the successor binds is the digest Stage 2 would have bound.
+    """
+    plan = require_verified_action_plan(action_plan)
+    target_ebawu = plan.correction.predecessor_ebawu_ref
+    artifact = next(
+        (item for item in stage_1.artifacts().values() if item.ebawu_id == target_ebawu), None
+    )
+    if artifact is None:
+        raise CorrectionSuccessorBlockedError(
+            f"frozen Stage-1 evidence carries no artifact for {target_ebawu}"
+        )
+    outcome = evidence.outcome_for_chain(artifact.chain_id)
+    if outcome is None:
+        raise CorrectionSuccessorBlockedError(
+            f"frozen Stage-2 result carries no outcome for chain {artifact.chain_id}"
+        )
+    if outcome.get("outcome_state") != "transitioned" or outcome.get("transition_event") is None:
+        raise CorrectionSuccessorBlockedError(
+            f"chain {artifact.chain_id} is {outcome.get('outcome_state')!r} with "
+            f"transition_event present={outcome.get('transition_event') is not None}; "
+            "no eligible completed predecessor exists"
+        )
+    event = _require_mapping(outcome["transition_event"], "transition event")
+    return {
+        "ebawu_id": artifact.ebawu_id,
+        "state": str(event["new_state"]),
+        "candidate_id": artifact.candidate_id,
+        "candidate_digest": artifact.candidate_digest,
+    }
+
+
+def build_predecessor_supersession_record(
+    predecessor: Mapping[str, Any],
+    predecessor_digest: str,
+    successor_id: str,
+    correction_event_id: str,
+    *,
+    superseded_at_utc: str,
+    predecessor_mutated: bool,
+) -> dict[str, Any]:
+    """State the backward relation on a new object, never on the predecessor.
+
+    ``make_successor`` carries the forward link. The predecessor itself is frozen
+    evidence, so its supersession is recorded here rather than written into it.
+    """
+    return {
+        "record_class": "PREDECESSOR_SUPERSESSION_RECORD",
+        "predecessor_id": predecessor["ebawu_id"],
+        "predecessor_candidate_id": predecessor["candidate_id"],
+        "predecessor_digest": predecessor_digest,
+        "superseded_by": successor_id,
+        "superseded_at_utc": superseded_at_utc,
+        "superseded_by_correction_event_id": correction_event_id,
+        "predecessor_mutated": predecessor_mutated,
+        "predecessor_rewritten": False,
+        "is_successor_side_evidence": True,
+    }
+
+
+def recompute_affected_output_eligibility(
+    evidence: FrozenStage2Evidence,
+    predecessor: Mapping[str, Any],
+    successor_id: str,
+    correction_stimulus_id: str,
+) -> list[dict[str, Any]]:
+    """Determine correction-induced reliance state over the exact frozen drafts.
+
+    The frozen drafts are read, never rewritten. A draft's pre-existing
+    eligibility is carried alongside the new determination rather than replaced,
+    because provenance incompleteness and correction-induced staleness are
+    different facts about the same deliverable.
+    """
+    determinations: list[dict[str, Any]] = []
+    predecessor_ebawu = str(predecessor["ebawu_id"])
+    predecessor_candidate = str(predecessor["candidate_id"])
+    for draft in evidence.drafts:
+        provenance = _require_mapping(draft.get("provenance"), "draft provenance")
+        states = provenance.get("institutional_state_per_ebawu")
+        dispositions = provenance.get("disposition_per_candidate")
+        candidate_refs = _require_sequence(provenance.get("candidate_refs", []), "candidate refs")
+        affected = (
+            (isinstance(states, Mapping) and predecessor_ebawu in states)
+            or (isinstance(dispositions, Mapping) and predecessor_candidate in dispositions)
+            or predecessor_candidate in candidate_refs
+        )
+        determinations.append(
+            {
+                "draft_id": draft.get("draft_id"),
+                "pre_correction_frozen_eligibility": draft.get("eligibility_state"),
+                "pre_correction_eligibility_reason": "FROZEN_RUN_001_DETERMINATION",
+                "correction_impact": (
+                    CORRECTION_IMPACT_AFFECTED if affected else CORRECTION_IMPACT_UNAFFECTED
+                ),
+                "post_correction_reliance_state": (
+                    CORRECTION_INELIGIBILITY_STATE
+                    if affected
+                    else str(draft.get("eligibility_state"))
+                ),
+                "basis": {
+                    "predecessor_id": predecessor_ebawu,
+                    "predecessor_candidate_id": predecessor_candidate,
+                    "successor_id": successor_id,
+                    "correction_stimulus_id": correction_stimulus_id,
+                },
+                "frozen_draft_modified": False,
+                "determination_class": "CORRECTION_SUCCESSOR_SIDE_RELIANCE_STATUS",
+            }
+        )
+    return determinations
+
+
+def observe_stale_predecessor_proposal_refusal(
+    evidence: FrozenStage2Evidence, predecessor: Mapping[str, Any], successor_id: str
+) -> dict[str, Any]:
+    """Observe that the superseded candidate is refused as stale.
+
+    The shared gate predicate is called directly. No transition is evaluated, no
+    event is emitted and no Stage-2 attempt is touched: the refusal is a returned
+    decision over frozen values.
+    """
+    artifact_chain = next(
+        (
+            item
+            for item in evidence.outcomes
+            if isinstance(item.get("transition_event"), Mapping)
+            and item["transition_event"].get("aggregate_id") == predecessor["ebawu_id"]
+        ),
+        None,
+    )
+    if artifact_chain is None:
+        raise CorrectionSuccessorBlockedError(
+            "frozen evidence carries no transition event for the predecessor"
+        )
+    event = _require_mapping(artifact_chain["transition_event"], "transition event")
+    # Rebuilt from the frozen event rather than authored, so the refusal is
+    # observed against the candidate that actually transitioned.
+    proposal = {
+        "mission_id": event["mission_id"],
+        "assurance_mode": event["assurance_mode"],
+        "authority_scope_ref": event["authority_scope_ref"],
+        "requested_disposition": event["disposition"],
+        "candidate_id": predecessor["candidate_id"],
+        "candidate_digest": predecessor["candidate_digest"],
+        "ebawu_id": predecessor["ebawu_id"],
+    }
+    stale_candidate_ids = (str(predecessor["candidate_id"]),)
+    registry = {"stale_candidate_ids": stale_candidate_ids}
+    decision = refuse_stale_candidate_proposal(proposal, registry)
+    if decision is None:
+        raise CorrectionSuccessorBlockedError(
+            "the superseded candidate was not refused as stale; the correction "
+            "successor cannot claim supersession it cannot demonstrate"
+        )
+    return {
+        "observation_class": "STALE_PREDECESSOR_PROPOSAL_REFUSAL",
+        "candidate_id": predecessor["candidate_id"],
+        "stale_candidate_ids": list(stale_candidate_ids),
+        "superseded_by": successor_id,
+        "decision": decision.decision,
+        "reason_code": decision.reason_code,
+        "epistemic_state": decision.epistemic_state,
+        "rule_source": "oic.cdc_slice.refuse_stale_candidate_proposal",
+        "gate_invoked": False,
+        "transition_event_emitted": False,
+        "stage_2_attempt_touched": False,
+    }
+
+
+def observe_predecessor_immutability(
+    *,
+    digest_before: str,
+    digest_after: str,
+    raw_result_path: Path,
+    attempt_record_path: Path,
+    route_trace_path: Path,
+    archive_observation: Mapping[str, str] | None,
+) -> dict[str, Any]:
+    """Three independent levels of predecessor preservation, observed after construction.
+
+    Level 1 proves the correction did not mutate its own argument. Level 2 proves
+    the frozen files on disk are unchanged. Level 3 proves the published archive
+    still resolves to the same commit. Level 1 alone would not be evidence of
+    any of the others.
+    """
+    level_2 = {
+        "raw_result_sha256": _file_sha256(raw_result_path.read_bytes()),
+        "attempt_record_sha256": _file_sha256(attempt_record_path.read_bytes()),
+        "route_trace_sha256": _file_sha256(route_trace_path.read_bytes()),
+    }
+    expected_level_2 = {
+        "raw_result_sha256": SOURCE_STAGE_2_RAW_RESULT_SHA256,
+        "attempt_record_sha256": SOURCE_STAGE_2_ATTEMPT_RECORD_SHA256,
+        "route_trace_sha256": SOURCE_STAGE_2_ROUTE_TRACE_SHA256,
+    }
+    failures = sorted(name for name, value in level_2.items() if expected_level_2[name] != value)
+    level_1_preserved = digest_before == digest_after
+    if not level_1_preserved:
+        failures.append("in_memory_predecessor_digest")
+    level_3_preserved: bool | None = None
+    if archive_observation is not None:
+        level_3_preserved = (
+            archive_observation.get("commit") == STAGE_2_EVIDENCE_COMMIT
+            and archive_observation.get("tree") == STAGE_2_EVIDENCE_TREE
+        )
+        if not level_3_preserved:
+            failures.append("origin_evidence_commit")
+    if failures:
+        raise PredecessorMutationDetectedError(
+            f"PREDECESSOR_MUTATION_DETECTED: {sorted(set(failures))}"
+        )
+    return {
+        "level_1_in_memory_digest_before": digest_before,
+        "level_1_in_memory_digest_after": digest_after,
+        "level_1_preserved": level_1_preserved,
+        "level_2_observed": level_2,
+        "level_2_expected": expected_level_2,
+        "level_2_preserved": True,
+        "level_3_observed": (None if archive_observation is None else dict(archive_observation)),
+        "level_3_expected": {
+            "commit": STAGE_2_EVIDENCE_COMMIT,
+            "tree": STAGE_2_EVIDENCE_TREE,
+        },
+        "level_3_preserved": level_3_preserved,
+        "level_3_observed_after_successor_construction": archive_observation is not None,
+        "predecessor_byte_identity_preserved": True,
+    }
+
+
+def execute_authorized_correction_successor(
+    *,
+    stage_2_raw_result_bytes: bytes,
+    stage_1: Stage1Observation,
+    frozen: FrozenMissionInput,
+    action_plan: object,
+    correction: Mapping[str, Any],
+    clearance: CorrectionExecutionClearance,
+    runtime: RuntimeIdentity,
+    run_metadata: Mapping[str, Any],
+    owner_correction_authorization_path: Path,
+    raw_result_path: Path,
+    attempt_record_path: Path,
+    route_trace_path: Path,
+    archive_observer: Callable[[], Mapping[str, str]] | None = None,
+) -> CorrectionSuccessorResult:
+    """The single authorized route to correction over frozen RUN-001 evidence.
+
+    Stage 1 and Stage 2 are not re-entered, no transition is evaluated, no event
+    is emitted and no draft is rendered. The predecessor is derived from frozen
+    evidence rather than supplied, and every RUN-001 artifact is reopened only
+    for reading.
+    """
+    plan = require_verified_action_plan(action_plan)
+    evidence = verify_frozen_stage_2_evidence(stage_2_raw_result_bytes)
+    require_distinct_identity_namespaces(evidence, stage_1)
+    _event_metadata_fields(run_metadata)
+    authorization = verify_owner_correction_successor_authorization(
+        owner_correction_authorization_path,
+        clearance=clearance,
+        runtime=runtime,
+        frozen=frozen,
+        action_plan=plan,
+        evidence=evidence,
+    )
+    require_unclaimed_correction_successor_attempt(authorization)
+
+    predecessor = derive_correction_predecessor(stage_1, evidence, plan)
+    predecessor_digest = sha256(predecessor)
+    supplied = correction.get("predecessor_digest")
+    if supplied is not None and supplied != predecessor_digest:
+        raise PredecessorBindingError(
+            f"correction binds predecessor {supplied!r}, actual {predecessor_digest!r}"
+        )
+    missing = sorted(set(plan.correction.required_correction_fields) - correction.keys())
+    frozen_side = {"supersedes", "superseded_by", "prior_state", "reliance_impact_refs"}
+    missing = sorted(set(missing) - frozen_side)
+    if missing:
+        raise CorrectionSuccessorBlockedError(
+            f"correction object lacks fields the frozen plan requires: {missing}"
+        )
+    if correction.get("new_ebawu_or_successor_id") != authorization.successor_id:
+        raise CorrectionSuccessorBlockedError(
+            f"correction constructs successor "
+            f"{correction.get('new_ebawu_or_successor_id')!r}, but the authorization "
+            f"binds {authorization.successor_id!r}"
+        )
+
+    # Every structural precondition has passed; claim immediately before the
+    # first result-bearing construction.
+    claimed = claim_correction_successor_attempt(
+        authorization, runtime, frozen, evidence, predecessor_digest
+    )
+
+    bound = bind_correction(predecessor, {**correction, "predecessor_digest": predecessor_digest})
+    successor = make_successor(predecessor, correction)
+    superseded_at = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    supersession = build_predecessor_supersession_record(
+        predecessor,
+        predecessor_digest,
+        authorization.successor_id,
+        str(correction["correction_event_id"]),
+        superseded_at_utc=superseded_at,
+        predecessor_mutated=bool(bound["predecessor_mutated"]),
+    )
+    eligibility = recompute_affected_output_eligibility(
+        evidence,
+        predecessor,
+        authorization.successor_id,
+        plan.correction.correction_stimulus_id,
+    )
+    stale_observation = observe_stale_predecessor_proposal_refusal(
+        evidence, predecessor, authorization.successor_id
+    )
+    immutability = observe_predecessor_immutability(
+        digest_before=str(bound["predecessor_before_digest"]),
+        digest_after=str(bound["predecessor_after_digest"]),
+        raw_result_path=raw_result_path,
+        attempt_record_path=attempt_record_path,
+        route_trace_path=route_trace_path,
+        archive_observation=None if archive_observer is None else archive_observer(),
+    )
+    consumed = mark_correction_successor_attempt_consumed(
+        claimed, evidence, predecessor_digest, authorization.successor_id
+    )
+    return CorrectionSuccessorResult(
+        experiment_id=EXPERIMENT_ID,
+        runtime_mission_id=MISSION_ID,
+        source_run_id=SOURCE_RUN_ID,
+        source_stage_2_result_digest=evidence.result_digest,
+        source_stage_2_raw_result_sha256=evidence.raw_result_sha256,
+        owner_correction_authorization=authorization.as_record(),
+        correction_stimulus={
+            "correction_stimulus_id": plan.correction.correction_stimulus_id,
+            "correction_stimulus_digest": plan.correction.digest(),
+            "correction_target_id": plan.correction.target_id,
+            "correction_target_source": "FROZEN_ACTION_PLAN_BYTES",
+            "predecessor_ebawu_ref": plan.correction.predecessor_ebawu_ref,
+            "precondition": plan.correction.precondition,
+        },
+        predecessor=predecessor,
+        predecessor_digest=predecessor_digest,
+        successor=successor,
+        predecessor_supersession_record=supersession,
+        correction_reason=str(bound["correction_reason"]),
+        changed_fact_or_control_refs=list(bound["changed_refs"]),
+        affected_output_eligibility=eligibility,
+        stale_proposal_refusal_observation=stale_observation,
+        predecessor_immutability=immutability,
+        attempt_record=consumed.identity(),
+    )

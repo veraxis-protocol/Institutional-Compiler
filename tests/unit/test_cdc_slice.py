@@ -13,6 +13,7 @@ from oic.cdc_slice import (
     emit_transition_event,
     evaluate_test_transition,
     make_successor,
+    refuse_stale_candidate_proposal,
 )
 
 
@@ -153,3 +154,39 @@ def test_correction_preserves_predecessor_and_lineage() -> None:
     assert predecessor == frozen
     assert successor["supersedes"] == "EBAWU-001"
     assert successor["production_reliance_semantics"] == "OUT_OF_SCOPE"
+
+
+def test_stale_candidate_proposal_is_denied_through_the_gate() -> None:
+    """The extracted rule keeps its position and outcome inside the gate."""
+    proposal, registry = _case()
+    assert evaluate_test_transition(proposal, registry).decision == "ALLOW"
+    registry["stale_candidate_ids"] = [proposal["candidate_id"]]
+    decision = evaluate_test_transition(proposal, registry)
+    assert decision.decision == "DENY"
+    assert decision.reason_code == "CANDIDATE_SUPERSEDED_OR_CORRECTED"
+
+
+def test_stale_rule_is_reached_only_after_the_prior_state_check() -> None:
+    """A stale candidate whose prior state also mismatches still denies on state."""
+    proposal, registry = _case()
+    registry["stale_candidate_ids"] = [proposal["candidate_id"]]
+    registry["states"] = {"EBAWU-001": "SOMETHING_ELSE"}
+    assert evaluate_test_transition(proposal, registry).reason_code == "PRIOR_STATE_MISMATCH"
+
+
+def test_stale_predicate_refuses_and_otherwise_returns_none() -> None:
+    proposal, registry = _case()
+    assert refuse_stale_candidate_proposal(proposal, registry) is None
+    registry["stale_candidate_ids"] = [proposal["candidate_id"]]
+    decision = refuse_stale_candidate_proposal(proposal, registry)
+    assert decision is not None
+    assert (decision.decision, decision.reason_code) == (
+        "DENY",
+        "CANDIDATE_SUPERSEDED_OR_CORRECTED",
+    )
+
+
+def test_stale_predicate_tolerates_a_malformed_stale_set() -> None:
+    proposal, registry = _case()
+    registry["stale_candidate_ids"] = "not-a-collection"
+    assert refuse_stale_candidate_proposal(proposal, registry) is None

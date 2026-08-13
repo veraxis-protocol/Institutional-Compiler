@@ -44,9 +44,7 @@ class GateDecision:
     epistemic_state: str
 
 
-def _decision(
-    decision: str, reason_code: str, proposal: Mapping[str, Any]
-) -> GateDecision:
+def _decision(decision: str, reason_code: str, proposal: Mapping[str, Any]) -> GateDecision:
     """Preserve CANNOT/unresolved independently of an operational decision."""
     if proposal.get("cannot_condition") is True:
         epistemic_state = "UNRESOLVED_CANNOT"
@@ -60,6 +58,22 @@ def _decision(
 def _exists(registry: Mapping[str, object], category: str, identifier: object) -> bool:
     values = registry.get(category)
     return isinstance(values, Mapping) and isinstance(identifier, str) and identifier in values
+
+
+def refuse_stale_candidate_proposal(
+    proposal: Mapping[str, Any], registry: Mapping[str, object]
+) -> GateDecision | None:
+    """Refuse a proposal addressing a superseded or corrected candidate.
+
+    The rule lives here so the gate and the correction-successor observation
+    share one definition. Returning ``None`` means "not stale"; the caller
+    decides what happens next, and this function emits nothing.
+    """
+    stale_value = registry.get("stale_candidate_ids", ())
+    stale = stale_value if isinstance(stale_value, list | tuple | set | frozenset) else ()
+    if proposal.get("candidate_id") in stale:
+        return _decision("DENY", "CANDIDATE_SUPERSEDED_OR_CORRECTED", proposal)
+    return None
 
 
 def evaluate_test_transition(
@@ -138,10 +152,9 @@ def evaluate_test_transition(
         "prior_institutional_state"
     ):
         return _decision("DENY", "PRIOR_STATE_MISMATCH", proposal)
-    stale_value = registry.get("stale_candidate_ids", ())
-    stale = stale_value if isinstance(stale_value, list | tuple | set | frozenset) else ()
-    if proposal.get("candidate_id") in stale:
-        return _decision("DENY", "CANDIDATE_SUPERSEDED_OR_CORRECTED", proposal)
+    stale_refusal = refuse_stale_candidate_proposal(proposal, registry)
+    if stale_refusal is not None:
+        return stale_refusal
     if proposal.get("required_condition_state") == "UNKNOWN":
         return GateDecision(
             "ESCALATE", "REQUIRED_TRANSITION_CONDITION_UNKNOWN", "UNRESOLVED_CANNOT"
@@ -211,9 +224,7 @@ def emit_transition_event(
     }
 
 
-def make_successor(
-    predecessor: Mapping[str, Any], correction: Mapping[str, Any]
-) -> dict[str, Any]:
+def make_successor(predecessor: Mapping[str, Any], correction: Mapping[str, Any]) -> dict[str, Any]:
     """Create a successor without changing the predecessor value."""
     required = {
         "new_ebawu_or_successor_id",
