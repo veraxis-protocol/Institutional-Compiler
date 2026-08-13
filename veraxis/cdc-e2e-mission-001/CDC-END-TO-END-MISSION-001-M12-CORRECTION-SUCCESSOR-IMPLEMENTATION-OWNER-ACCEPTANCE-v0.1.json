@@ -1,0 +1,104 @@
+{
+  "accepted_architectural_properties": {
+    "correction_successor_public_route": "oic.cdc_e2e_mission.execute_authorized_correction_successor",
+    "draft_rendering": "PROHIBITED",
+    "m11_repair": "OUT_OF_SCOPE",
+    "official_handoff": "PROHIBITED",
+    "run_001_modification": "PROHIBITED",
+    "stage_1_reexecution": "PROHIBITED",
+    "stage_2_reexecution": "PROHIBITED",
+    "transition_evaluation": "PROHIBITED",
+    "transition_event_emission": "PROHIBITED"
+  },
+  "accepted_attempt_semantics": {
+    "automatic_retry_in_any_branch": false,
+    "failure_after_claim_before_successor_exists": "CLAIMED_NOT_CONSUMED",
+    "failure_after_successor_construction": "CONSUMED_AFTER_FIRST_SUCCESSOR_CONSTRUCTION",
+    "failure_before_claim": "NO_ATTEMPT_RECORD",
+    "first_successor_construction_completed": "CONSUMED_AFTER_FIRST_SUCCESSOR_CONSTRUCTION"
+  },
+  "accepted_authority_derived_evidence": {
+    "caller_injectable_archive_observer": false,
+    "caller_selectable_run_001_evidence_paths": false,
+    "historical_evidence_locations": "DERIVED_FROM_VERIFIED_AUTH_003_BINDINGS"
+  },
+  "accepted_implementation_lineage": {
+    "controlling_implementation": "0fa254e823bbcb876a78b18611a812d2f84ea5b3",
+    "evidence_attempt_boundary_successor": {
+      "commit": "308c628b716964f202781250bc340745c8439df4",
+      "tree": "132a706e66fb29afff27a3977bc7e0c999d5f9f1"
+    },
+    "initial_m12_implementation": {
+      "commit": "4a6a2e7019bdb65827671ef395373ad50886d557",
+      "tree": "3ac8e2ac07b3ed46bd4b52d7e83852b89187661c"
+    },
+    "may_be_amended_or_rewritten": false,
+    "origin_archive_boundary_successor": {
+      "commit": "0fa254e823bbcb876a78b18611a812d2f84ea5b3",
+      "tree": "5650133e1e665e41cefd48675ce2bfbb039c48a0"
+    }
+  },
+  "accepted_level_3_archive_observation": {
+    "local_branch_can_substitute_for_origin": false,
+    "local_branch_fallback_permitted": false,
+    "observation_source": "ORIGIN_LS_REMOTE",
+    "remote_commit_source": "git ls-remote --heads origin refs/heads/<bound-evidence-branch>",
+    "tree_derivable_only_from_origin_supplied_commit_sha": true
+  },
+  "accepted_stale_refusal_model": {
+    "correction_successor_invokes_stage_2_gate": false,
+    "expected_decision": "DENY",
+    "expected_reason_code": "CANDIDATE_SUPERSEDED_OR_CORRECTED",
+    "option": "OPTION_A",
+    "shared_rule": "oic.cdc_slice.refuse_stale_candidate_proposal"
+  },
+  "accepted_supersession_model": {
+    "frozen_predecessor_rewritten": false,
+    "predecessor_supersession_record_predecessor_id": "predecessor_id",
+    "predecessor_supersession_record_superseded_by": "successor_id",
+    "successor_supersedes": "predecessor_id"
+  },
+  "authorizes_execution": false,
+  "claim_ceiling": "SYNTHETIC_EVALUATION_ONLY",
+  "correction_executed": false,
+  "creates_AUTH_003": false,
+  "creates_correction_execution_authority": false,
+  "experiment_id": "CDC-END-TO-END-MISSION-001",
+  "frozen_predecessor_state": {
+    "m11": "SEMANTIC_VIOLATION",
+    "m12_run_001": "INCOMPLETE_OBSERVATION",
+    "run_001_aggregate": "FAIL",
+    "run_001_stage_2_attempt": "CONSUMED_AFTER_FIRST_TRANSITION_EVALUATION",
+    "successor_evidence_may_establish_a_new_m12_observation": true,
+    "successor_evidence_may_rewrite_run_001": false
+  },
+  "implementation_accepted": true,
+  "implementation_branch": "cdc-e2e-m12-correction-successor-v0.1",
+  "implementation_commit": "0fa254e823bbcb876a78b18611a812d2f84ea5b3",
+  "implementation_tree": "5650133e1e665e41cefd48675ce2bfbb039c48a0",
+  "issues_AUTH_003": false,
+  "m11_repair_authorized": false,
+  "next_gate": "M12_SUCCESSOR_EXECUTION_ENVIRONMENT_OBSERVATION",
+  "owner_acceptance_at_utc": "2026-08-13T18:45:14Z",
+  "owner_decision": "ACCEPTED_AND_FROZEN",
+  "owner_run_001_acceptance_commit": "ceb8efe293776696d6633bc3994b23198030e5b0",
+  "record_class": "OWNER_M12_CORRECTION_SUCCESSOR_IMPLEMENTATION_ACCEPTANCE",
+  "repository_wide_ci_green": false,
+  "result_bearing": false,
+  "reviewed_predecessor_commit": "308c628b716964f202781250bc340745c8439df4",
+  "run_001_modification_authorized": false,
+  "runtime_mission_id": "CDC-TEST-MISSION-001",
+  "stage_2_evidence_commit": "1a80aabe0f72eac8570b9827ee7545cda370cbe8",
+  "stage_2_rerun_authorized": false,
+  "test_and_ci_status": {
+    "changed_file_mypy": "PASS",
+    "changed_file_ruff": "PASS",
+    "full_pytest": "1577 passed, 43 skipped",
+    "inherited_ci_conditions_outside_this_acceptance": [
+      "ruff check .: 5 errors in the frozen archived AUTH-002-SHADOW-PREFLIGHT.d590de34.py (E501, S603 x2, S607 x2)",
+      "ruff format --check .: the same frozen evidence file plus three historical contract test files"
+    ],
+    "inherited_conditions_may_be_repaired_by_changing_frozen_evidence": false,
+    "repository_wide_ci_green": false
+  }
+}
