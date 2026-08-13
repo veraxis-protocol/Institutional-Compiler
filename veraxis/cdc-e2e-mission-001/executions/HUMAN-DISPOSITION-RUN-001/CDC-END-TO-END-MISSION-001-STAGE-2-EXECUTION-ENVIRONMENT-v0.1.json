@@ -1,0 +1,92 @@
+{
+  "action_plan_provenance_token": "42e53c0c7111517bc1a8816760f58cbdfb9e78e43b7f002ba66fb3cd69cd4807",
+  "action_plan_sha256": "229a0c15d2bd2ee1db807904ff4d640f8fe39931372a002fbc3abf9e3244731e",
+  "adjudication_protocol_sha256": "0e2a9f7202b2136b1edd76148da4f1c957ff86301c42ddf6f0dc1055ce20426b",
+  "artifact_id": "CDC-END-TO-END-MISSION-001-STAGE-2-EXECUTION-ENVIRONMENT-v0.1",
+  "authorizes_execution": false,
+  "claim_ceiling": "environment observation only; authorizes nothing and consumes no attempt",
+  "consumes_attempt": false,
+  "creates_authority": false,
+  "dependency_control_files": {
+    "pyproject.toml": {
+      "bytes": 3634,
+      "sha256": "be858356b8b2d519b538c79e624e0e600dbb0899802ecc636341f85b134654a2"
+    },
+    "requirements/dev.txt": {
+      "bytes": 61950,
+      "sha256": "cf211a43c0f96dfb45f00376bfa940dae9beefd8f1425d96ed6c9f8fa2cc1172"
+    },
+    "requirements/runtime.txt": {
+      "bytes": 11342,
+      "sha256": "4840856b2fae0e793b061f5bf8ba87a5b180796177bdda45240ee7b0868e2d3f"
+    }
+  },
+  "dependency_hashes_assumed_unchanged": false,
+  "dependency_hashes_recomputed_from_bytes": true,
+  "experimental_integrity_doctrine_sha256": "f612f3583ee9200b28230d0950ffce517e720764f73668b606a4689a4a9291d1",
+  "future_run_identity": {
+    "note": "the prospective authorization not existing is a historical fact about this pre-issuance observation and must not later be rewritten",
+    "prospective_authorization_exists_at_observation_time": false,
+    "prospective_owner_authorization_canonical_path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.1.json",
+    "run_directory": "/private/tmp/cdc-e2e-stage2-run-001",
+    "run_id": "CDC-E2E-STAGE2-RUN-001",
+    "trace_id": "CDC-E2E-STAGE2-RUN-001-TRACE-001"
+  },
+  "implementation_branch": "cdc-e2e-stage2-seam-repair-v0.1",
+  "implementation_commit": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+  "implementation_tree": "86513415bca23ca20c9cb37ee2d59a5fa03c5790",
+  "machine": "x86_64",
+  "mission_id": "CDC-TEST-MISSION-001",
+  "mission_manifest_sha256": "8aad5e78635b691fa2fad0336e07d9b0738b61db7b12ded2ed22149a258bdb77",
+  "mission_package_bytes": 57452,
+  "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+  "observed_implementation_commit": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+  "observed_implementation_tree": "86513415bca23ca20c9cb37ee2d59a5fa03c5790",
+  "observed_porcelain_status_lines": 0,
+  "oracle_sha256": "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9",
+  "owner_preexecution_interpretation_sha256": "8242ccf9612531dc7b3b1d648625a934c4f616d8b8565c61d958a6825d7f2f84",
+  "platform": "macOS-13.7.8-x86_64-i386-64bit",
+  "pre_execution_state_at_observation": {
+    "correction_performed": false,
+    "drafts_generated": false,
+    "human_disposition_rebound": false,
+    "stage_1_reexecuted": false,
+    "stage_2_attempt_record_exists": false,
+    "stage_2_attempt_records_observed": [],
+    "stage_2_authorization_issued": false,
+    "stage_2_executed": false,
+    "stage_2_result_bearing_execution_count": 0,
+    "transition_evaluated": false,
+    "transition_event_emitted": false
+  },
+  "python_executable_version": "3.12.2",
+  "python_implementation": "CPython",
+  "python_version": "3.12.2",
+  "record_class": "STAGE_2_EXECUTION_ENVIRONMENT_MANIFEST",
+  "recorded_at_utc": "2026-08-13T12:42:03Z",
+  "repository_root": "/private/tmp/claude-501/cleanroom",
+  "requires_python": ">=3.12,<3.13",
+  "result_bearing": false,
+  "runtime_binding_classification": {
+    "digest_may_be_typed_from_memory_or_authorization": false,
+    "environment_manifest_authorization_binding": "RUNTIME_VERIFIER_ENFORCED_EQUALITY_TO_RUNTIME_IDENTITY",
+    "on_missing_bytes_or_digest_mismatch": "PRECONDITION_MISMATCH; STOP before transition evaluation",
+    "required_future_execution_sequence": [
+      "read exact frozen Stage-2 environment manifest bytes",
+      "SHA-256 those bytes",
+      "verify observed hash equals owner-authorized environment_manifest_sha256",
+      "construct RuntimeIdentity.environment_manifest_sha256 from that observed hash",
+      "invoke the one authorized public Stage-2 route"
+    ],
+    "runtime_identity_environment_digest_source": "EXECUTION_HARNESS_EXACT_FILE_HASH_IMMEDIATELY_BEFORE_PUBLIC_ROUTE_INVOCATION",
+    "runtime_verifier_independently_hashes_environment_manifest_file": false,
+    "such_failure_is_not_a_stage_2_semantic_result": true
+  },
+  "stage_1_component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+  "stage_1_environment_manifest_reused_for_stage_2": false,
+  "stage_1_environment_manifest_status": "IMMUTABLE_HISTORICAL_EVIDENCE_DESCRIBES_STAGE_1_ONLY",
+  "stage_2_evidence_digest_derivation_v0_2_sha256": "dd3da8ba08b5b267a0788080b666fa920a2e4cf2f91dcfdd2b522da73b644155",
+  "supersedes_for_stage_2": "CDC-END-TO-END-MISSION-001-STAGE-1-EXECUTION-ENVIRONMENT-v0.1.json",
+  "vitaliy_pre_result_acknowledgment_sha256": "300113cffc8f6f373a3d4609b47ac02358f6bf4b6e0e85ee0b9847fe9f142738",
+  "working_tree_clean": true
+}
