@@ -10,6 +10,8 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import shutil
+import subprocess
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime
@@ -24,6 +26,7 @@ from oic.cdc_slice import (
     make_successor,
     refuse_stale_candidate_proposal,
 )
+from oic.paths import find_repo_root
 
 MISSION_ID: Final = "CDC-TEST-MISSION-001"
 ASSURANCE_MODE: Final = "SYNTHETIC_EVALUATION_ONLY"
@@ -3931,6 +3934,12 @@ def governed_stage_1_components(
 # separate successor-side object rather than written back, because a predecessor
 # that changed to record its own supersession would no longer be the predecessor
 # the adjudicator verified.
+#
+# The caller presents one thing: the authority instrument. Every historical fact
+# that instrument binds -- where the frozen evidence lives, what it hashes to,
+# which archive commit publishes it -- is resolved from the verified bindings.
+# An operator who could point this route at relocated copies could satisfy the
+# integrity checks against evidence of their own choosing.
 # ---------------------------------------------------------------------------
 
 EXPERIMENT_ID: Final = "CDC-END-TO-END-MISSION-001"
@@ -3954,6 +3963,8 @@ SOURCE_STAGE_2_ATTEMPT_RECORD_SHA256: Final = (
 SOURCE_STAGE_2_ROUTE_TRACE_SHA256: Final = (
     "481957e87f73e2fc058e0e167b6d3d82fea830b2eaad16c78bdfc39f3c952920"
 )
+EVIDENCE_REPOSITORY: Final = "veraxis-protocol/Institutional-Compiler"
+EVIDENCE_BRANCH: Final = "cdc-e2e-stage2-run-001-evidence"
 STAGE_2_EVIDENCE_COMMIT: Final = "1a80aabe0f72eac8570b9827ee7545cda370cbe8"
 STAGE_2_EVIDENCE_TREE: Final = "a6216214ae5a49ffcb3448a97aadce1bb3f418e3"
 OWNER_ADJUDICATION_ACCEPTANCE_COMMIT: Final = "ceb8efe293776696d6633bc3994b23198030e5b0"
@@ -3963,6 +3974,18 @@ OWNER_ADJUDICATION_ACCEPTANCE_SHA256: Final = (
 STAGE_2_ADJUDICATION_COMMIT: Final = "a682abc7e68a3fc98c3a131c10d9ec05457e5d9c"
 STAGE_2_ADJUDICATION_SHA256: Final = (
     "6983daf7153f3e409bcd4503d286ec116233e7b4979088c07be935dc15994eb6"
+)
+
+# Filenames inside the authorized evidence directory. Fixed here rather than
+# supplied, so a bound location cannot be re-aimed at a different artifact.
+SOURCE_STAGE_2_RAW_RESULT_FILENAME: Final = (
+    "CDC-END-TO-END-MISSION-001-STAGE-2-RAW-RESULT-v0.1.json"
+)
+SOURCE_STAGE_2_ROUTE_TRACE_FILENAME: Final = (
+    "CDC-END-TO-END-MISSION-001-STAGE-2-ROUTE-TRACE-v0.1.json"
+)
+SOURCE_STAGE_2_ATTEMPT_RECORD_FILENAME: Final = (
+    ".cdc-e2e-stage-2-attempt-42b3c3d1285a0fddc36558875cc9df2e90b283ec79d96a56408b0fbc6f8c5f41.json"
 )
 
 STAGE_2_CONSUMED_ATTEMPT_STATE: Final = ATTEMPT_STATE_STAGE_2_CONSUMED
@@ -3998,8 +4021,14 @@ CORRECTION_SUCCESSOR_BINDING_FIELDS: Final = (
     "action_plan_provenance_token",
     "correction_stimulus_digest",
     "source_run_id",
+    "source_evidence_root",
+    "source_stage_1_observation_digest",
     "source_stage_2_result_digest",
     "source_stage_2_raw_result_sha256",
+    "source_stage_2_attempt_record_sha256",
+    "source_stage_2_route_trace_sha256",
+    "evidence_repository",
+    "evidence_branch",
     "stage_2_evidence_commit",
     "stage_2_evidence_tree",
     "owner_acceptance_commit",
@@ -4035,6 +4064,8 @@ CORRECTION_INELIGIBILITY_STATE: Final = (
 CORRECTION_IMPACT_AFFECTED: Final = "AFFECTED_BY_SUPERSESSION"
 CORRECTION_IMPACT_UNAFFECTED: Final = "NOT_AFFECTED_BY_SUPERSESSION"
 
+RESULT_STATUS_FAILED_POST_CONSTRUCTION: Final = "FAILED_POST_CONSTRUCTION_INTEGRITY"
+
 
 class CorrectionSuccessorAuthorizationError(ResultBearingMissionBlockedError):
     """The correction-successor authorization is absent, wrong, unbound or relocated."""
@@ -4044,8 +4075,29 @@ class CorrectionSuccessorBlockedError(ResultBearingMissionBlockedError):
     """A correction-successor precondition failed before anything was claimed."""
 
 
+class CorrectionEvidenceInfrastructureError(ResultBearingMissionBlockedError):
+    """The bound archive identity could not be observed at all.
+
+    Distinct from a mismatch on purpose: an unobservable archive is an
+    infrastructure failure and must never be recorded as a match.
+    """
+
+
 class PredecessorMutationDetectedError(ResultBearingMissionBlockedError):
     """Frozen predecessor evidence changed across the correction."""
+
+
+class PostConstructionIntegrityError(ResultBearingMissionBlockedError):
+    """A successor was constructed, then an integrity observation failed.
+
+    The authority is already exercised. This carries the frozen observation so the
+    failure can be recorded without either persisting an invalid correction result
+    or pretending no successor was ever constructed.
+    """
+
+    def __init__(self, message: str, observation: Mapping[str, Any]) -> None:
+        super().__init__(message)
+        self.observation = dict(observation)
 
 
 class CorrectionAttemptStateError(MissionAttemptStateError):
@@ -4086,6 +4138,10 @@ class OwnerCorrectionSuccessorAuthorization:
     authorization_id: str
     canonical_path: str
     successor_id: str
+    evidence_root: Path
+    evidence_repository: str
+    evidence_branch: str
+    stage_1_observation_digest: str
 
     def as_record(self) -> dict[str, Any]:
         """Identity and declared scope only; carries no authorization prose."""
@@ -4098,6 +4154,30 @@ class OwnerCorrectionSuccessorAuthorization:
             "owner_correction_authorization_id": self.authorization_id,
             "authorized_stage": self.authorized_stage,
             "authorized_successor_id": self.successor_id,
+            "authorized_evidence_root": str(self.evidence_root),
+            "authorized_evidence_repository": self.evidence_repository,
+            "authorized_evidence_branch": self.evidence_branch,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class AuthorizedEvidenceLocations:
+    """The exact evidence files resolved from the verified authorization."""
+
+    root: Path
+    raw_result: Path
+    attempt_record: Path
+    route_trace: Path
+
+    def as_record(self) -> dict[str, Any]:
+        """Where the frozen bytes were actually read from."""
+        return {
+            "evidence_root": str(self.root),
+            "raw_result_path": str(self.raw_result),
+            "attempt_record_path": str(self.attempt_record),
+            "route_trace_path": str(self.route_trace),
+            "locations_derived_from": "VERIFIED_AUTH_003_BINDINGS",
+            "caller_selectable": False,
         }
 
 
@@ -4127,6 +4207,7 @@ class CorrectionSuccessorResult:
     source_run_id: str
     source_stage_2_result_digest: str
     source_stage_2_raw_result_sha256: str
+    evidence_locations: Mapping[str, Any]
     owner_correction_authorization: Mapping[str, Any]
     correction_stimulus: Mapping[str, Any]
     predecessor: Mapping[str, Any]
@@ -4138,7 +4219,10 @@ class CorrectionSuccessorResult:
     affected_output_eligibility: Sequence[Mapping[str, Any]]
     stale_proposal_refusal_observation: Mapping[str, Any]
     predecessor_immutability: Mapping[str, Any]
+    archive_identity: Mapping[str, Any]
     attempt_record: Mapping[str, Any] | None
+    successor_construction_invoked: bool = True
+    successor_constructed: bool = True
     correction_executed: bool = True
     stage_2_reexecuted: bool = False
     run_001_modified: bool = False
@@ -4154,6 +4238,7 @@ class CorrectionSuccessorResult:
             "source_run_id": self.source_run_id,
             "source_stage_2_result_digest": self.source_stage_2_result_digest,
             "source_stage_2_raw_result_sha256": self.source_stage_2_raw_result_sha256,
+            "evidence_locations": dict(self.evidence_locations),
             "owner_correction_authorization": dict(self.owner_correction_authorization),
             "correction_stimulus": dict(self.correction_stimulus),
             "predecessor": dict(self.predecessor),
@@ -4167,7 +4252,10 @@ class CorrectionSuccessorResult:
             ],
             "stale_proposal_refusal_observation": dict(self.stale_proposal_refusal_observation),
             "predecessor_immutability": dict(self.predecessor_immutability),
+            "archive_identity": dict(self.archive_identity),
             "attempt_record": (None if self.attempt_record is None else dict(self.attempt_record)),
+            "successor_construction_invoked": self.successor_construction_invoked,
+            "successor_constructed": self.successor_constructed,
             "correction_executed": self.correction_executed,
             "stage_2_reexecuted": self.stage_2_reexecuted,
             "run_001_modified": self.run_001_modified,
@@ -4265,12 +4353,13 @@ def verify_owner_correction_successor_authorization(
     runtime: RuntimeIdentity,
     frozen: FrozenMissionInput,
     action_plan: object,
-    evidence: FrozenStage2Evidence,
 ) -> OwnerCorrectionSuccessorAuthorization:
     """Verify a correction-successor authorization: identity, location, semantics, bindings.
 
     Same three-part discipline as the Stage-2 instrument, and the same canonical
-    location rule: a byte-identical copy elsewhere is not a second issuance.
+    location rule: a byte-identical copy elsewhere is not a second issuance. The
+    frozen source-run identities are compared against this module's constants
+    rather than against anything the caller supplied.
     """
     plan = require_verified_action_plan(action_plan)
     try:
@@ -4347,8 +4436,12 @@ def verify_owner_correction_successor_authorization(
         "action_plan_provenance_token": plan.provenance_token,
         "correction_stimulus_digest": plan.correction.digest(),
         "source_run_id": SOURCE_RUN_ID,
-        "source_stage_2_result_digest": evidence.result_digest,
-        "source_stage_2_raw_result_sha256": evidence.raw_result_sha256,
+        "source_stage_2_result_digest": SOURCE_STAGE_2_RESULT_DIGEST,
+        "source_stage_2_raw_result_sha256": SOURCE_STAGE_2_RAW_RESULT_SHA256,
+        "source_stage_2_attempt_record_sha256": SOURCE_STAGE_2_ATTEMPT_RECORD_SHA256,
+        "source_stage_2_route_trace_sha256": SOURCE_STAGE_2_ROUTE_TRACE_SHA256,
+        "evidence_repository": EVIDENCE_REPOSITORY,
+        "evidence_branch": EVIDENCE_BRANCH,
         "stage_2_evidence_commit": STAGE_2_EVIDENCE_COMMIT,
         "stage_2_evidence_tree": STAGE_2_EVIDENCE_TREE,
         "owner_acceptance_commit": OWNER_ADJUDICATION_ACCEPTANCE_COMMIT,
@@ -4370,10 +4463,20 @@ def verify_owner_correction_successor_authorization(
         raise CorrectionSuccessorAuthorizationError(
             "correction-successor authorization does not bind a successor_id"
         )
-    if clearance.source_stage_2_result_digest != evidence.result_digest:
+    evidence_root = raw_bindings.get("source_evidence_root")
+    if not isinstance(evidence_root, str) or not evidence_root:
+        raise CorrectionSuccessorAuthorizationError(
+            "correction-successor authorization does not bind a source_evidence_root"
+        )
+    stage_1_digest = raw_bindings.get("source_stage_1_observation_digest")
+    if not isinstance(stage_1_digest, str) or not stage_1_digest:
+        raise CorrectionSuccessorAuthorizationError(
+            "correction-successor authorization does not bind a Stage-1 observation digest"
+        )
+    if clearance.source_stage_2_result_digest != SOURCE_STAGE_2_RESULT_DIGEST:
         raise CorrectionSuccessorAuthorizationError(
             f"clearance binds Stage-2 result {clearance.source_stage_2_result_digest!r}, "
-            f"observed {evidence.result_digest!r}"
+            f"expected {SOURCE_STAGE_2_RESULT_DIGEST!r}"
         )
     if clearance.owner_acceptance_sha256 != OWNER_ADJUDICATION_ACCEPTANCE_SHA256:
         raise CorrectionSuccessorAuthorizationError(
@@ -4390,7 +4493,103 @@ def verify_owner_correction_successor_authorization(
         authorization_id=str(document.get("authorization_id", "UNIDENTIFIED")),
         canonical_path=str(observed_path),
         successor_id=successor_id,
+        evidence_root=Path(evidence_root),
+        evidence_repository=str(raw_bindings["evidence_repository"]),
+        evidence_branch=str(raw_bindings["evidence_branch"]),
+        stage_1_observation_digest=stage_1_digest,
     )
+
+
+def resolve_authorized_evidence_locations(
+    authorization: OwnerCorrectionSuccessorAuthorization,
+) -> AuthorizedEvidenceLocations:
+    """Derive the exact evidence file locations from the verified authorization."""
+    root = authorization.evidence_root
+    return AuthorizedEvidenceLocations(
+        root=root,
+        raw_result=root / SOURCE_STAGE_2_RAW_RESULT_FILENAME,
+        attempt_record=root / SOURCE_STAGE_2_ATTEMPT_RECORD_FILENAME,
+        route_trace=root / SOURCE_STAGE_2_ROUTE_TRACE_FILENAME,
+    )
+
+
+def load_authorized_stage_2_evidence(
+    locations: AuthorizedEvidenceLocations,
+) -> FrozenStage2Evidence:
+    """Read and verify the frozen Stage-2 result from the authorized location."""
+    try:
+        payload = locations.raw_result.read_bytes()
+    except OSError as error:
+        raise CorrectionSuccessorBlockedError(
+            f"authorized Stage-2 evidence is not readable at {locations.raw_result}: {error}"
+        ) from error
+    return verify_frozen_stage_2_evidence(payload)
+
+
+def _observe_git_archive_identity(repo_root: Path, branch: str) -> dict[str, str]:
+    """Observe the published archive identity from the local repository.
+
+    Isolated so tests can substitute an infrastructure seam without the public
+    route ever exposing one.
+    """
+    executable = shutil.which("git")
+    if executable is None:
+        raise CorrectionEvidenceInfrastructureError(
+            "git is unavailable, so the bound evidence archive identity cannot be observed"
+        )
+    try:
+        commit = subprocess.run(  # noqa: S603 - fixed argv, resolved executable, no shell
+            [executable, "-C", str(repo_root), "rev-parse", branch],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        tree = subprocess.run(  # noqa: S603 - fixed argv, resolved executable, no shell
+            [executable, "-C", str(repo_root), "rev-parse", f"{branch}^{{tree}}"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        remote = subprocess.run(  # noqa: S603 - fixed argv, resolved executable, no shell
+            [executable, "-C", str(repo_root), "remote", "get-url", "origin"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError) as error:
+        raise CorrectionEvidenceInfrastructureError(
+            f"the bound evidence archive identity could not be observed: {error}"
+        ) from error
+    repository = remote.removesuffix(".git").removeprefix("https://github.com/")
+    return {"repository": repository, "branch": branch, "commit": commit, "tree": tree}
+
+
+def verify_frozen_stage_2_archive_identity(
+    authorization: OwnerCorrectionSuccessorAuthorization,
+    locations: AuthorizedEvidenceLocations,
+) -> dict[str, Any]:
+    """Verify the published archive still carries the bound evidence commit.
+
+    Only the authorization's own bound identity is compared. An identity that
+    cannot be observed raises rather than degrading into a match.
+    """
+    repo_root = find_repo_root(locations.root)
+    observed = _observe_git_archive_identity(repo_root, authorization.evidence_branch)
+    expected = {
+        "repository": authorization.evidence_repository,
+        "branch": authorization.evidence_branch,
+        "commit": STAGE_2_EVIDENCE_COMMIT,
+        "tree": STAGE_2_EVIDENCE_TREE,
+    }
+    mismatched = sorted(name for name, value in expected.items() if observed.get(name) != value)
+    return {
+        "expected": expected,
+        "observed": observed,
+        "mismatched": mismatched,
+        "archive_identity_verified": not mismatched,
+        "observed_after_successor_construction": True,
+        "caller_injectable": False,
+    }
 
 
 def correction_successor_attempt_record_path(
@@ -4456,6 +4655,8 @@ def claim_correction_successor_attempt(
         "source_run_id": SOURCE_RUN_ID,
         "source_stage_2_result_digest": evidence.result_digest,
         "predecessor_digest": predecessor_digest,
+        "successor_construction_invoked": False,
+        "successor_constructed": False,
     }
     payload = (json.dumps(body, indent=2, sort_keys=True) + "\n").encode()
     try:
@@ -4477,7 +4678,11 @@ def mark_correction_successor_attempt_consumed(
     predecessor_digest: str,
     successor_id: str,
 ) -> MissionAttemptRecord:
-    """Record that a successor was actually constructed."""
+    """Record that a successor was actually constructed.
+
+    Written immediately after construction, before any later observation runs, so
+    a failure downstream cannot make the exercised authority look reusable.
+    """
     consumed = replace(record, state=CORRECTION_ATTEMPT_STATE_CONSUMED)
     body = {
         **consumed.as_record(),
@@ -4486,6 +4691,8 @@ def mark_correction_successor_attempt_consumed(
         "source_stage_2_result_digest": evidence.result_digest,
         "predecessor_digest": predecessor_digest,
         "successor_id": successor_id,
+        "successor_construction_invoked": True,
+        "successor_constructed": True,
     }
     record.path.write_bytes((json.dumps(body, indent=2, sort_keys=True) + "\n").encode())
     written = record.path.read_bytes()
@@ -4670,65 +4877,41 @@ def observe_predecessor_immutability(
     *,
     digest_before: str,
     digest_after: str,
-    raw_result_path: Path,
-    attempt_record_path: Path,
-    route_trace_path: Path,
-    archive_observation: Mapping[str, str] | None,
+    locations: AuthorizedEvidenceLocations,
 ) -> dict[str, Any]:
-    """Three independent levels of predecessor preservation, observed after construction.
+    """Two local levels of predecessor preservation, observed after construction.
 
     Level 1 proves the correction did not mutate its own argument. Level 2 proves
-    the frozen files on disk are unchanged. Level 3 proves the published archive
-    still resolves to the same commit. Level 1 alone would not be evidence of
-    any of the others.
+    the frozen files at the authorized location are unchanged. Level 1 alone would
+    not be evidence of level 2, and neither is evidence of the published archive.
     """
     level_2 = {
-        "raw_result_sha256": _file_sha256(raw_result_path.read_bytes()),
-        "attempt_record_sha256": _file_sha256(attempt_record_path.read_bytes()),
-        "route_trace_sha256": _file_sha256(route_trace_path.read_bytes()),
+        "raw_result_sha256": _file_sha256(locations.raw_result.read_bytes()),
+        "attempt_record_sha256": _file_sha256(locations.attempt_record.read_bytes()),
+        "route_trace_sha256": _file_sha256(locations.route_trace.read_bytes()),
     }
     expected_level_2 = {
         "raw_result_sha256": SOURCE_STAGE_2_RAW_RESULT_SHA256,
         "attempt_record_sha256": SOURCE_STAGE_2_ATTEMPT_RECORD_SHA256,
         "route_trace_sha256": SOURCE_STAGE_2_ROUTE_TRACE_SHA256,
     }
-    failures = sorted(name for name, value in level_2.items() if expected_level_2[name] != value)
-    level_1_preserved = digest_before == digest_after
-    if not level_1_preserved:
-        failures.append("in_memory_predecessor_digest")
-    level_3_preserved: bool | None = None
-    if archive_observation is not None:
-        level_3_preserved = (
-            archive_observation.get("commit") == STAGE_2_EVIDENCE_COMMIT
-            and archive_observation.get("tree") == STAGE_2_EVIDENCE_TREE
-        )
-        if not level_3_preserved:
-            failures.append("origin_evidence_commit")
-    if failures:
-        raise PredecessorMutationDetectedError(
-            f"PREDECESSOR_MUTATION_DETECTED: {sorted(set(failures))}"
-        )
+    mismatched = sorted(name for name, value in level_2.items() if expected_level_2[name] != value)
+    if digest_before != digest_after:
+        mismatched.append("in_memory_predecessor_digest")
     return {
         "level_1_in_memory_digest_before": digest_before,
         "level_1_in_memory_digest_after": digest_after,
-        "level_1_preserved": level_1_preserved,
+        "level_1_preserved": digest_before == digest_after,
         "level_2_observed": level_2,
         "level_2_expected": expected_level_2,
-        "level_2_preserved": True,
-        "level_3_observed": (None if archive_observation is None else dict(archive_observation)),
-        "level_3_expected": {
-            "commit": STAGE_2_EVIDENCE_COMMIT,
-            "tree": STAGE_2_EVIDENCE_TREE,
-        },
-        "level_3_preserved": level_3_preserved,
-        "level_3_observed_after_successor_construction": archive_observation is not None,
-        "predecessor_byte_identity_preserved": True,
+        "level_2_preserved": not [name for name in mismatched if name in expected_level_2],
+        "mismatched": sorted(set(mismatched)),
+        "predecessor_byte_identity_preserved": not mismatched,
     }
 
 
 def execute_authorized_correction_successor(
     *,
-    stage_2_raw_result_bytes: bytes,
     stage_1: Stage1Observation,
     frozen: FrozenMissionInput,
     action_plan: object,
@@ -4737,21 +4920,15 @@ def execute_authorized_correction_successor(
     runtime: RuntimeIdentity,
     run_metadata: Mapping[str, Any],
     owner_correction_authorization_path: Path,
-    raw_result_path: Path,
-    attempt_record_path: Path,
-    route_trace_path: Path,
-    archive_observer: Callable[[], Mapping[str, str]] | None = None,
 ) -> CorrectionSuccessorResult:
     """The single authorized route to correction over frozen RUN-001 evidence.
 
     Stage 1 and Stage 2 are not re-entered, no transition is evaluated, no event
-    is emitted and no draft is rendered. The predecessor is derived from frozen
-    evidence rather than supplied, and every RUN-001 artifact is reopened only
-    for reading.
+    is emitted and no draft is rendered. The caller presents the authority
+    instrument; the frozen evidence location, its identities and the published
+    archive identity are all resolved from that instrument's verified bindings.
     """
     plan = require_verified_action_plan(action_plan)
-    evidence = verify_frozen_stage_2_evidence(stage_2_raw_result_bytes)
-    require_distinct_identity_namespaces(evidence, stage_1)
     _event_metadata_fields(run_metadata)
     authorization = verify_owner_correction_successor_authorization(
         owner_correction_authorization_path,
@@ -4759,8 +4936,15 @@ def execute_authorized_correction_successor(
         runtime=runtime,
         frozen=frozen,
         action_plan=plan,
-        evidence=evidence,
     )
+    locations = resolve_authorized_evidence_locations(authorization)
+    evidence = load_authorized_stage_2_evidence(locations)
+    require_distinct_identity_namespaces(evidence, stage_1)
+    if stage_1.digest() != authorization.stage_1_observation_digest:
+        raise CorrectionSuccessorBlockedError(
+            f"Stage-1 observation digests to {stage_1.digest()}, but the authorization "
+            f"binds {authorization.stage_1_observation_digest}"
+        )
     require_unclaimed_correction_successor_attempt(authorization)
 
     predecessor = derive_correction_predecessor(stage_1, evidence, plan)
@@ -4790,43 +4974,76 @@ def execute_authorized_correction_successor(
         authorization, runtime, frozen, evidence, predecessor_digest
     )
 
+    # Construction. A failure here leaves the attempt CLAIMED_NOT_CONSUMED,
+    # because no successor came into existence.
     bound = bind_correction(predecessor, {**correction, "predecessor_digest": predecessor_digest})
     successor = make_successor(predecessor, correction)
-    superseded_at = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-    supersession = build_predecessor_supersession_record(
-        predecessor,
-        predecessor_digest,
-        authorization.successor_id,
-        str(correction["correction_event_id"]),
-        superseded_at_utc=superseded_at,
-        predecessor_mutated=bool(bound["predecessor_mutated"]),
-    )
-    eligibility = recompute_affected_output_eligibility(
-        evidence,
-        predecessor,
-        authorization.successor_id,
-        plan.correction.correction_stimulus_id,
-    )
-    stale_observation = observe_stale_predecessor_proposal_refusal(
-        evidence, predecessor, authorization.successor_id
-    )
-    immutability = observe_predecessor_immutability(
-        digest_before=str(bound["predecessor_before_digest"]),
-        digest_after=str(bound["predecessor_after_digest"]),
-        raw_result_path=raw_result_path,
-        attempt_record_path=attempt_record_path,
-        route_trace_path=route_trace_path,
-        archive_observation=None if archive_observer is None else archive_observer(),
-    )
+
+    # A successor now exists. The authority is exercised from this point on, so it
+    # is marked consumed before any further observation can fail.
     consumed = mark_correction_successor_attempt_consumed(
         claimed, evidence, predecessor_digest, authorization.successor_id
     )
+
+    superseded_at = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    failure_context: dict[str, Any] = {
+        "result_status": RESULT_STATUS_FAILED_POST_CONSTRUCTION,
+        "successor_construction_invoked": True,
+        "successor_constructed": True,
+        "successor_id": authorization.successor_id,
+        "attempt_state": CORRECTION_ATTEMPT_STATE_CONSUMED,
+        "attempt_record": consumed.identity(),
+        "predecessor": dict(predecessor),
+        "predecessor_digest": predecessor_digest,
+        "predecessor_before_digest": bound["predecessor_before_digest"],
+        "predecessor_after_digest": bound["predecessor_after_digest"],
+        "automatic_retry": False,
+    }
+    try:
+        supersession = build_predecessor_supersession_record(
+            predecessor,
+            predecessor_digest,
+            authorization.successor_id,
+            str(correction["correction_event_id"]),
+            superseded_at_utc=superseded_at,
+            predecessor_mutated=bool(bound["predecessor_mutated"]),
+        )
+        eligibility = recompute_affected_output_eligibility(
+            evidence,
+            predecessor,
+            authorization.successor_id,
+            plan.correction.correction_stimulus_id,
+        )
+        stale_observation = observe_stale_predecessor_proposal_refusal(
+            evidence, predecessor, authorization.successor_id
+        )
+        immutability = observe_predecessor_immutability(
+            digest_before=str(bound["predecessor_before_digest"]),
+            digest_after=str(bound["predecessor_after_digest"]),
+            locations=locations,
+        )
+        if not immutability["predecessor_byte_identity_preserved"]:
+            raise PredecessorMutationDetectedError(
+                f"PREDECESSOR_MUTATION_DETECTED: {immutability['mismatched']}"
+            )
+        archive_identity = verify_frozen_stage_2_archive_identity(authorization, locations)
+        if not archive_identity["archive_identity_verified"]:
+            raise PredecessorMutationDetectedError(
+                f"PREDECESSOR_MUTATION_DETECTED: archive identity {archive_identity['mismatched']}"
+            )
+    except Exception as error:
+        raise PostConstructionIntegrityError(
+            f"{RESULT_STATUS_FAILED_POST_CONSTRUCTION}: {error}",
+            {**failure_context, "failure": f"{type(error).__name__}: {error}"},
+        ) from error
+
     return CorrectionSuccessorResult(
         experiment_id=EXPERIMENT_ID,
         runtime_mission_id=MISSION_ID,
         source_run_id=SOURCE_RUN_ID,
         source_stage_2_result_digest=evidence.result_digest,
         source_stage_2_raw_result_sha256=evidence.raw_result_sha256,
+        evidence_locations=locations.as_record(),
         owner_correction_authorization=authorization.as_record(),
         correction_stimulus={
             "correction_stimulus_id": plan.correction.correction_stimulus_id,
@@ -4845,5 +5062,6 @@ def execute_authorized_correction_successor(
         affected_output_eligibility=eligibility,
         stale_proposal_refusal_observation=stale_observation,
         predecessor_immutability=immutability,
+        archive_identity=archive_identity,
         attempt_record=consumed.identity(),
     )

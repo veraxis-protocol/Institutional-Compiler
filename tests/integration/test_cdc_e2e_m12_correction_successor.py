@@ -1,19 +1,27 @@
 """The M12 correction-successor boundary over frozen RUN-001 evidence.
 
 Nothing here re-executes Stage 1 or Stage 2. The frozen RUN-001 result, attempt
-record and route trace are read from the archived evidence in this repository and
-must still hash to their frozen identities when each test finishes.
+record and route trace are read from the archived evidence in this repository, at
+the location the authorization binds, and must still hash to their frozen
+identities when each test finishes.
+
+The archive observation is patched at its internal seam rather than injected
+through the public route, which deliberately exposes no such parameter.
 """
 
 from __future__ import annotations
 
+import hashlib
+import inspect
 import json
-from collections.abc import Callable, Mapping
+import shutil
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any
+from typing import Any, NoReturn
 
 import pytest
 
+from oic import cdc_e2e_mission as mission
 from oic.cdc_e2e_mission import (
     ADJUDICATION_PROTOCOL_SHA256,
     CORRECTION_ATTEMPT_STATE_CLAIMED,
@@ -23,6 +31,8 @@ from oic.cdc_e2e_mission import (
     CORRECTION_INELIGIBILITY_STATE,
     CORRECTION_SUCCESSOR_BINDING_FIELDS,
     CORRECTION_SUCCESSOR_DECLARATIONS,
+    EVIDENCE_BRANCH,
+    EVIDENCE_REPOSITORY,
     EXPERIMENT_ID,
     FROZEN_MISSION_INPUT_RELPATH,
     HUMAN_ACTION_PLAN_RELPATH,
@@ -30,23 +40,30 @@ from oic.cdc_e2e_mission import (
     ORACLE_SHA256,
     OWNER_ADJUDICATION_ACCEPTANCE_COMMIT,
     OWNER_ADJUDICATION_ACCEPTANCE_SHA256,
+    RESULT_STATUS_FAILED_POST_CONSTRUCTION,
     SOURCE_RUN_ID,
+    SOURCE_STAGE_2_ATTEMPT_RECORD_FILENAME,
+    SOURCE_STAGE_2_ATTEMPT_RECORD_SHA256,
+    SOURCE_STAGE_2_RAW_RESULT_FILENAME,
     SOURCE_STAGE_2_RAW_RESULT_SHA256,
     SOURCE_STAGE_2_RESULT_DIGEST,
+    SOURCE_STAGE_2_ROUTE_TRACE_FILENAME,
+    SOURCE_STAGE_2_ROUTE_TRACE_SHA256,
     STAGE_2_ADJUDICATION_COMMIT,
     STAGE_2_ADJUDICATION_SHA256,
     STAGE_2_EVIDENCE_COMMIT,
     STAGE_2_EVIDENCE_TREE,
     CorrectionAttemptStateError,
+    CorrectionEvidenceInfrastructureError,
     CorrectionExecutionClearance,
     CorrectionSuccessorAuthorizationError,
     CorrectionSuccessorBlockedError,
     CorrectionSuccessorResult,
     FrozenActionPlan,
     FrozenMissionInput,
-    FrozenStage2Evidence,
+    OwnerCorrectionSuccessorAuthorization,
+    PostConstructionIntegrityError,
     PredecessorBindingError,
-    PredecessorMutationDetectedError,
     RuntimeIdentity,
     Stage1ChainArtifact,
     Stage1ChainObservation,
@@ -57,16 +74,10 @@ from oic.cdc_e2e_mission import (
     sha256,
     verify_frozen_action_plan,
     verify_frozen_mission_input,
-    verify_frozen_stage_2_evidence,
     verify_owner_correction_successor_authorization,
 )
 
 EVIDENCE = Path("veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001")
-RAW_RESULT_NAME = "CDC-END-TO-END-MISSION-001-STAGE-2-RAW-RESULT-v0.1.json"
-ROUTE_TRACE_NAME = "CDC-END-TO-END-MISSION-001-STAGE-2-ROUTE-TRACE-v0.1.json"
-ATTEMPT_NAME = (
-    ".cdc-e2e-stage-2-attempt-42b3c3d1285a0fddc36558875cc9df2e90b283ec79d96a56408b0fbc6f8c5f41.json"
-)
 
 PREDECESSOR_EBAWU = "EBAWU-P-001-C-TENDER-01"
 PREDECESSOR_CHAIN = "P001xC-TENDER-01"
@@ -79,15 +90,16 @@ RUNTIME_COMMIT = "0" * 40
 RUNTIME_TREE = "1" * 40
 ENVIRONMENT_SHA = "2" * 64
 
+EVIDENCE_FILENAMES = (
+    SOURCE_STAGE_2_RAW_RESULT_FILENAME,
+    SOURCE_STAGE_2_ROUTE_TRACE_FILENAME,
+    SOURCE_STAGE_2_ATTEMPT_RECORD_FILENAME,
+)
+
 
 @pytest.fixture
 def evidence_dir(repo_root: Path) -> Path:
     return repo_root / EVIDENCE
-
-
-@pytest.fixture
-def raw_result_bytes(evidence_dir: Path) -> bytes:
-    return (evidence_dir / RAW_RESULT_NAME).read_bytes()
 
 
 @pytest.fixture
@@ -98,6 +110,22 @@ def frozen_input(repo_root: Path) -> FrozenMissionInput:
 @pytest.fixture
 def action_plan(repo_root: Path) -> FrozenActionPlan:
     return verify_frozen_action_plan(repo_root / HUMAN_ACTION_PLAN_RELPATH)
+
+
+def _matching_archive(repo_root: Path, branch: str) -> dict[str, str]:
+    del repo_root
+    return {
+        "repository": EVIDENCE_REPOSITORY,
+        "branch": branch,
+        "commit": STAGE_2_EVIDENCE_COMMIT,
+        "tree": STAGE_2_EVIDENCE_TREE,
+    }
+
+
+@pytest.fixture
+def archive_seam(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Patch the internal archive observation so tests do not depend on git state."""
+    monkeypatch.setattr(mission, "_observe_git_archive_identity", _matching_archive)
 
 
 def _stage_1(mission_id: str = MISSION_ID) -> Stage1Observation:
@@ -151,8 +179,8 @@ def _stage_1(mission_id: str = MISSION_ID) -> Stage1Observation:
     )
 
 
-def _predecessor(raw_result_bytes: bytes) -> dict[str, Any]:
-    record = json.loads(raw_result_bytes)
+def _predecessor(evidence_dir: Path) -> dict[str, Any]:
+    record = json.loads((evidence_dir / SOURCE_STAGE_2_RAW_RESULT_FILENAME).read_bytes())
     outcome = next(item for item in record["outcomes"] if item["chain_id"] == PREDECESSOR_CHAIN)
     candidate = {"candidate_id": PREDECESSOR_CANDIDATE, "claim": "synthetic tender candidate"}
     return {
@@ -180,6 +208,7 @@ def _authorization_document(
     canonical: Path,
     action_plan: FrozenActionPlan,
     frozen_input: FrozenMissionInput,
+    evidence_root: Path,
     *,
     successor_id: str = SUCCESSOR_ID,
     overrides: Mapping[str, Any] | None = None,
@@ -187,8 +216,8 @@ def _authorization_document(
 ) -> dict[str, Any]:
     """A non-authoritative AUTH-003 test fixture.
 
-    It is written under a temporary path, never at a canonical runtime location,
-    and it authorizes nothing outside this test process.
+    Written under a temporary path, never at a canonical runtime location, and it
+    authorizes nothing outside this test process.
     """
     document: dict[str, Any] = {
         **CORRECTION_SUCCESSOR_DECLARATIONS,
@@ -206,8 +235,14 @@ def _authorization_document(
             "action_plan_provenance_token": action_plan.provenance_token,
             "correction_stimulus_digest": action_plan.correction.digest(),
             "source_run_id": SOURCE_RUN_ID,
+            "source_evidence_root": str(evidence_root),
+            "source_stage_1_observation_digest": _stage_1().digest(),
             "source_stage_2_result_digest": SOURCE_STAGE_2_RESULT_DIGEST,
             "source_stage_2_raw_result_sha256": SOURCE_STAGE_2_RAW_RESULT_SHA256,
+            "source_stage_2_attempt_record_sha256": SOURCE_STAGE_2_ATTEMPT_RECORD_SHA256,
+            "source_stage_2_route_trace_sha256": SOURCE_STAGE_2_ROUTE_TRACE_SHA256,
+            "evidence_repository": EVIDENCE_REPOSITORY,
+            "evidence_branch": EVIDENCE_BRANCH,
             "stage_2_evidence_commit": STAGE_2_EVIDENCE_COMMIT,
             "stage_2_evidence_tree": STAGE_2_EVIDENCE_TREE,
             "owner_acceptance_commit": OWNER_ADJUDICATION_ACCEPTANCE_COMMIT,
@@ -234,23 +269,17 @@ def _write_authorization(path: Path, document: Mapping[str, Any]) -> bytes:
 
 def _clearance(payload: bytes) -> CorrectionExecutionClearance:
     return CorrectionExecutionClearance(
-        owner_correction_authorization=f"sha256:{sha256_hex(payload)}",
+        owner_correction_authorization=f"sha256:{hashlib.sha256(payload).hexdigest()}",
         implementation_commit=RUNTIME_COMMIT,
         implementation_tree=RUNTIME_TREE,
         environment_manifest_sha256=ENVIRONMENT_SHA,
-        mission_package_sha256="unused-by-the-correction-clearance",
+        mission_package_sha256=UNUSED_IN_THIS_BOUNDARY,
         oracle_sha256=ORACLE_SHA256,
         adjudication_protocol_sha256=ADJUDICATION_PROTOCOL_SHA256,
-        action_plan_sha256="unused-by-the-correction-clearance",
+        action_plan_sha256=UNUSED_IN_THIS_BOUNDARY,
         owner_acceptance_sha256=OWNER_ADJUDICATION_ACCEPTANCE_SHA256,
         source_stage_2_result_digest=SOURCE_STAGE_2_RESULT_DIGEST,
     )
-
-
-def sha256_hex(payload: bytes) -> str:
-    import hashlib
-
-    return hashlib.sha256(payload).hexdigest()
 
 
 def _runtime() -> RuntimeIdentity:
@@ -272,14 +301,9 @@ def _run_metadata() -> dict[str, str]:
     }
 
 
-def _archive_observer() -> Mapping[str, str]:
-    return {"commit": STAGE_2_EVIDENCE_COMMIT, "tree": STAGE_2_EVIDENCE_TREE}
-
-
 def _execute(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
     *,
@@ -287,17 +311,13 @@ def _execute(
     stage_1: Stage1Observation | None = None,
     document: Mapping[str, Any] | None = None,
     authorization_path: Path | None = None,
-    raw_bytes: bytes | None = None,
-    raw_result_path: Path | None = None,
-    archive_observer: Callable[[], Mapping[str, str]] | None = _archive_observer,
 ) -> CorrectionSuccessorResult:
     canonical = authorization_path or (tmp_path / "AUTH-003.json")
     payload = _write_authorization(
         canonical,
-        document or _authorization_document(canonical, action_plan, frozen_input),
+        document or _authorization_document(canonical, action_plan, frozen_input, evidence_dir),
     )
     return execute_authorized_correction_successor(
-        stage_2_raw_result_bytes=raw_bytes if raw_bytes is not None else raw_result_bytes,
         stage_1=stage_1 or _stage_1(),
         frozen=frozen_input,
         action_plan=action_plan,
@@ -306,11 +326,164 @@ def _execute(
         runtime=_runtime(),
         run_metadata=_run_metadata(),
         owner_correction_authorization_path=canonical,
-        raw_result_path=raw_result_path or (evidence_dir / RAW_RESULT_NAME),
-        attempt_record_path=evidence_dir / ATTEMPT_NAME,
-        route_trace_path=evidence_dir / ROUTE_TRACE_NAME,
-        archive_observer=archive_observer,
     )
+
+
+def _authorization(
+    canonical: Path, action_plan: FrozenActionPlan, frozen_input: FrozenMissionInput, root: Path
+) -> OwnerCorrectionSuccessorAuthorization:
+    payload = _write_authorization(
+        canonical, _authorization_document(canonical, action_plan, frozen_input, root)
+    )
+    return verify_owner_correction_successor_authorization(
+        canonical,
+        clearance=_clearance(payload),
+        runtime=_runtime(),
+        frozen=frozen_input,
+        action_plan=action_plan,
+    )
+
+
+# ----------------------------------------------------- evidence-source authority
+
+
+def test_public_route_exposes_no_archive_observer_parameter() -> None:
+    assert (
+        "archive_observer"
+        not in inspect.signature(execute_authorized_correction_successor).parameters
+    )
+
+
+def test_public_route_exposes_no_caller_selectable_evidence_paths() -> None:
+    parameters = set(inspect.signature(execute_authorized_correction_successor).parameters)
+    forbidden = {
+        "raw_result_path",
+        "attempt_record_path",
+        "route_trace_path",
+        "stage_2_raw_result_bytes",
+        "archive_observer",
+    }
+    assert parameters & forbidden == set()
+    # The instrument presented for verification is the only path the caller supplies.
+    assert "owner_correction_authorization_path" in parameters
+
+
+def test_evidence_is_read_from_the_bound_location_only(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    empty_root = tmp_path / "elsewhere"
+    empty_root.mkdir()
+    canonical = tmp_path / "AUTH-003.json"
+    document = _authorization_document(canonical, action_plan, frozen_input, empty_root)
+    with pytest.raises(CorrectionSuccessorBlockedError, match="not readable"):
+        _execute(
+            tmp_path,
+            evidence_dir,
+            frozen_input,
+            action_plan,
+            document=document,
+            authorization_path=canonical,
+        )
+
+
+def test_relocated_but_tampered_evidence_cannot_substitute(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    relocated = tmp_path / "relocated-evidence"
+    relocated.mkdir()
+    for name in EVIDENCE_FILENAMES:
+        shutil.copyfile(evidence_dir / name, relocated / name)
+    (relocated / SOURCE_STAGE_2_RAW_RESULT_FILENAME).write_bytes(b"{}\n")
+    canonical = tmp_path / "AUTH-003.json"
+    document = _authorization_document(canonical, action_plan, frozen_input, relocated)
+    with pytest.raises(CorrectionSuccessorBlockedError, match="hashes to"):
+        _execute(
+            tmp_path,
+            evidence_dir,
+            frozen_input,
+            action_plan,
+            document=document,
+            authorization_path=canonical,
+        )
+
+
+def test_archive_verifier_observes_only_the_bound_identity(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    seen: dict[str, Any] = {}
+
+    def observed(repo_root: Path, branch: str) -> dict[str, str]:
+        seen["repo_root"] = repo_root
+        seen["branch"] = branch
+        return _matching_archive(repo_root, branch)
+
+    monkeypatch.setattr(mission, "_observe_git_archive_identity", observed)
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    assert seen["branch"] == EVIDENCE_BRANCH
+    identity = result.archive_identity
+    assert identity["expected"] == {
+        "repository": EVIDENCE_REPOSITORY,
+        "branch": EVIDENCE_BRANCH,
+        "commit": STAGE_2_EVIDENCE_COMMIT,
+        "tree": STAGE_2_EVIDENCE_TREE,
+    }
+    assert identity["archive_identity_verified"] is True
+    assert identity["caller_injectable"] is False
+
+
+def test_unobservable_archive_is_infrastructure_failure_not_a_match(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def unavailable(repo_root: Path, branch: str) -> dict[str, str]:
+        del repo_root, branch
+        raise CorrectionEvidenceInfrastructureError("git is unavailable")
+
+    monkeypatch.setattr(mission, "_observe_git_archive_identity", unavailable)
+    with pytest.raises(PostConstructionIntegrityError) as caught:
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    assert "CorrectionEvidenceInfrastructureError" in caught.value.observation["failure"]
+
+
+def test_stage_1_observation_must_match_the_bound_digest(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    canonical = tmp_path / "AUTH-003.json"
+    document = _authorization_document(
+        canonical,
+        action_plan,
+        frozen_input,
+        evidence_dir,
+        binding_overrides={"source_stage_1_observation_digest": "0" * 64},
+    )
+    with pytest.raises(CorrectionSuccessorBlockedError, match="the authorization binds"):
+        _execute(
+            tmp_path,
+            evidence_dir,
+            frozen_input,
+            action_plan,
+            document=document,
+            authorization_path=canonical,
+        )
 
 
 # --------------------------------------------------------------------- success
@@ -319,13 +492,13 @@ def _execute(
 def test_successor_supersedes_the_frozen_predecessor_both_ways(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
-    result = _execute(tmp_path, evidence_dir, raw_result_bytes, frozen_input, action_plan)
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
     record = result.as_record()
-    predecessor = _predecessor(raw_result_bytes)
+    predecessor = _predecessor(evidence_dir)
 
     assert record["successor"]["successor_id"] == SUCCESSOR_ID
     assert record["successor"]["supersedes"] == PREDECESSOR_EBAWU
@@ -341,14 +514,12 @@ def test_successor_supersedes_the_frozen_predecessor_both_ways(
 def test_correction_reason_and_changed_refs_are_carried_exactly(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
     correction = _correction()
-    result = _execute(
-        tmp_path, evidence_dir, raw_result_bytes, frozen_input, action_plan, correction=correction
-    )
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan, correction=correction)
     assert result.correction_reason == correction["correction_reason"]
     assert list(result.changed_fact_or_control_refs) == correction["changed_fact_or_control_refs"]
 
@@ -356,11 +527,11 @@ def test_correction_reason_and_changed_refs_are_carried_exactly(
 def test_predecessor_digest_is_unchanged_across_the_correction(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
-    result = _execute(tmp_path, evidence_dir, raw_result_bytes, frozen_input, action_plan)
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
     immutability = result.predecessor_immutability
     assert (
         immutability["level_1_in_memory_digest_before"]
@@ -368,37 +539,30 @@ def test_predecessor_digest_is_unchanged_across_the_correction(
     )
     assert immutability["level_1_preserved"] is True
     assert immutability["level_2_preserved"] is True
-    assert immutability["level_3_preserved"] is True
     assert immutability["predecessor_byte_identity_preserved"] is True
 
 
 def test_frozen_run_001_artifacts_are_byte_identical_afterwards(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
-    before = {
-        name: (evidence_dir / name).read_bytes()
-        for name in (RAW_RESULT_NAME, ROUTE_TRACE_NAME, ATTEMPT_NAME)
-    }
-    _execute(tmp_path, evidence_dir, raw_result_bytes, frozen_input, action_plan)
-    after = {
-        name: (evidence_dir / name).read_bytes()
-        for name in (RAW_RESULT_NAME, ROUTE_TRACE_NAME, ATTEMPT_NAME)
-    }
+    before = {name: (evidence_dir / name).read_bytes() for name in EVIDENCE_FILENAMES}
+    _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    after = {name: (evidence_dir / name).read_bytes() for name in EVIDENCE_FILENAMES}
     assert before == after
 
 
 def test_stage_2_attempt_namespace_is_never_created(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
-    _execute(tmp_path, evidence_dir, raw_result_bytes, frozen_input, action_plan)
+    _execute(tmp_path, evidence_dir, frozen_input, action_plan)
     assert not list(tmp_path.glob(".cdc-e2e-stage-2-*"))
     assert len(list(tmp_path.glob(".cdc-e2e-correction-successor-attempt-*"))) == 1
 
@@ -406,12 +570,14 @@ def test_stage_2_attempt_namespace_is_never_created(
 def test_downstream_eligibility_is_recomputed_over_the_frozen_drafts(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
-    result = _execute(tmp_path, evidence_dir, raw_result_bytes, frozen_input, action_plan)
-    frozen_drafts = json.loads(raw_result_bytes)["drafts"]
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    frozen_drafts = json.loads((evidence_dir / SOURCE_STAGE_2_RAW_RESULT_FILENAME).read_bytes())[
+        "drafts"
+    ]
     determinations = list(result.affected_output_eligibility)
     assert len(determinations) == len(frozen_drafts)
     for determination, draft in zip(determinations, frozen_drafts, strict=True):
@@ -431,11 +597,11 @@ def test_downstream_eligibility_is_recomputed_over_the_frozen_drafts(
 def test_stale_predecessor_proposal_is_refused(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
-    result = _execute(tmp_path, evidence_dir, raw_result_bytes, frozen_input, action_plan)
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
     observation = result.stale_proposal_refusal_observation
     assert observation["candidate_id"] == PREDECESSOR_CANDIDATE
     assert observation["stale_candidate_ids"] == [PREDECESSOR_CANDIDATE]
@@ -448,52 +614,194 @@ def test_stale_predecessor_proposal_is_refused(
 def test_result_carries_its_own_recomputable_digest(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
-    record = _execute(
-        tmp_path, evidence_dir, raw_result_bytes, frozen_input, action_plan
-    ).as_record()
+    record = _execute(tmp_path, evidence_dir, frozen_input, action_plan).as_record()
     embedded = record["correction_successor_result_digest"]
     body = {k: v for k, v in record.items() if k != "correction_successor_result_digest"}
     assert embedded == sha256(body)
     assert record["experiment_id"] == EXPERIMENT_ID
     assert record["runtime_mission_id"] == MISSION_ID
     assert record["experiment_id"] != record["runtime_mission_id"]
+    assert record["successor_construction_invoked"] is True
+    assert record["successor_constructed"] is True
     assert record["stage_2_reexecuted"] is False
     assert record["run_001_modified"] is False
     assert record["m11_repaired"] is False
     assert record["official_handoff"] == "PROHIBITED"
+    assert record["evidence_locations"]["caller_selectable"] is False
+
+
+# --------------------------------------------------------- attempt state machine
+
+
+def test_precondition_failure_before_claim_leaves_no_attempt_record(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    with pytest.raises(CorrectionSuccessorBlockedError):
+        _execute(
+            tmp_path,
+            evidence_dir,
+            frozen_input,
+            action_plan,
+            correction=_correction("EBAWU-SOMETHING-ELSE"),
+        )
+    assert not list(tmp_path.glob(".cdc-e2e-correction-successor-attempt-*"))
+    authorization = _authorization(tmp_path / "probe.json", action_plan, frozen_input, evidence_dir)
+    assert read_correction_successor_attempt_state(authorization) == CORRECTION_ATTEMPT_STATE_NONE
+
+
+def test_failure_after_claim_before_construction_leaves_the_attempt_claimed(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def failing_construction(*args: object, **kwargs: object) -> dict[str, Any]:
+        raise RuntimeError("construction failed before a successor existed")
+
+    monkeypatch.setattr(mission, "bind_correction", failing_construction)
+    with pytest.raises(RuntimeError, match="before a successor existed"):
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    claimed = list(tmp_path.glob(".cdc-e2e-correction-successor-attempt-*"))
+    assert len(claimed) == 1
+    document = json.loads(claimed[0].read_bytes())
+    assert document["attempt_state"] == CORRECTION_ATTEMPT_STATE_CLAIMED
+    assert document["successor_constructed"] is False
+
+
+@pytest.mark.parametrize(
+    ("seam", "failure"),
+    [
+        ("recompute_affected_output_eligibility", RuntimeError("eligibility failed")),
+        ("observe_stale_predecessor_proposal_refusal", RuntimeError("stale observation failed")),
+        ("build_predecessor_supersession_record", RuntimeError("supersession failed")),
+        ("observe_predecessor_immutability", OSError("persistence failed")),
+    ],
+)
+def test_post_construction_failures_leave_the_attempt_consumed(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+    monkeypatch: pytest.MonkeyPatch,
+    seam: str,
+    failure: Exception,
+) -> None:
+    def failing(*args: object, **kwargs: object) -> NoReturn:
+        raise failure
+
+    monkeypatch.setattr(mission, seam, failing)
+    with pytest.raises(PostConstructionIntegrityError) as caught:
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+
+    observation = caught.value.observation
+    assert observation["result_status"] == RESULT_STATUS_FAILED_POST_CONSTRUCTION
+    assert observation["successor_construction_invoked"] is True
+    assert observation["successor_constructed"] is True
+    assert observation["successor_id"] == SUCCESSOR_ID
+    assert observation["attempt_state"] == CORRECTION_ATTEMPT_STATE_CONSUMED
+    assert observation["automatic_retry"] is False
+    assert observation["predecessor_before_digest"] == observation["predecessor_after_digest"]
+
+    consumed = list(tmp_path.glob(".cdc-e2e-correction-successor-attempt-*"))
+    assert len(consumed) == 1
+    document = json.loads(consumed[0].read_bytes())
+    assert document["attempt_state"] == CORRECTION_ATTEMPT_STATE_CONSUMED
+    assert document["successor_constructed"] is True
+
+
+def test_local_integrity_failure_after_construction_consumes_the_attempt(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def mismatched(**kwargs: object) -> dict[str, Any]:
+        return {
+            "level_1_preserved": True,
+            "level_2_preserved": False,
+            "mismatched": ["raw_result_sha256"],
+            "predecessor_byte_identity_preserved": False,
+        }
+
+    monkeypatch.setattr(mission, "observe_predecessor_immutability", mismatched)
+    with pytest.raises(PostConstructionIntegrityError) as caught:
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    assert "PREDECESSOR_MUTATION_DETECTED" in caught.value.observation["failure"]
+    assert caught.value.observation["attempt_state"] == CORRECTION_ATTEMPT_STATE_CONSUMED
+
+
+def test_archive_verification_failure_after_construction_consumes_the_attempt(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def moved(repo_root: Path, branch: str) -> dict[str, str]:
+        del repo_root
+        return {
+            "repository": EVIDENCE_REPOSITORY,
+            "branch": branch,
+            "commit": "f" * 40,
+            "tree": STAGE_2_EVIDENCE_TREE,
+        }
+
+    monkeypatch.setattr(mission, "_observe_git_archive_identity", moved)
+    with pytest.raises(PostConstructionIntegrityError) as caught:
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    assert "archive identity" in caught.value.observation["failure"]
+    assert caught.value.observation["attempt_state"] == CORRECTION_ATTEMPT_STATE_CONSUMED
+
+
+def test_a_consumed_attempt_never_retries_after_a_post_construction_failure(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    canonical = tmp_path / "AUTH-003.json"
+    monkeypatch.setattr(mission, "_observe_git_archive_identity", _matching_archive)
+    working = mission.recompute_affected_output_eligibility
+
+    def failing(*args: object, **kwargs: object) -> NoReturn:
+        raise RuntimeError("eligibility failed")
+
+    monkeypatch.setattr(mission, "recompute_affected_output_eligibility", failing)
+    with pytest.raises(PostConstructionIntegrityError):
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan, authorization_path=canonical)
+
+    # Even with the transient failure gone, the exercised authority stays spent.
+    monkeypatch.setattr(mission, "recompute_affected_output_eligibility", working)
+    with pytest.raises(CorrectionAttemptStateError, match="permanently non-reusable"):
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan, authorization_path=canonical)
 
 
 def test_attempt_is_claimed_then_consumed(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
     canonical = tmp_path / "AUTH-003.json"
-    payload = _write_authorization(
-        canonical, _authorization_document(canonical, action_plan, frozen_input)
-    )
-    authorization = verify_owner_correction_successor_authorization(
-        canonical,
-        clearance=_clearance(payload),
-        runtime=_runtime(),
-        frozen=frozen_input,
-        action_plan=action_plan,
-        evidence=_evidence(raw_result_bytes),
-    )
+    authorization = _authorization(canonical, action_plan, frozen_input, evidence_dir)
     assert read_correction_successor_attempt_state(authorization) == CORRECTION_ATTEMPT_STATE_NONE
     result = _execute(
-        tmp_path,
-        evidence_dir,
-        raw_result_bytes,
-        frozen_input,
-        action_plan,
-        authorization_path=canonical,
+        tmp_path, evidence_dir, frozen_input, action_plan, authorization_path=canonical
     )
     assert (
         read_correction_successor_attempt_state(authorization) == CORRECTION_ATTEMPT_STATE_CONSUMED
@@ -503,89 +811,53 @@ def test_attempt_is_claimed_then_consumed(
     assert attempt["attempt_state"] == CORRECTION_ATTEMPT_STATE_CONSUMED
 
 
-def _evidence(payload: bytes) -> FrozenStage2Evidence:
-    return verify_frozen_stage_2_evidence(payload)
-
-
 # -------------------------------------------------------------------- refusals
 
 
 def test_second_construction_is_refused_without_automatic_retry(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
     canonical = tmp_path / "AUTH-003.json"
-    _execute(
-        tmp_path,
-        evidence_dir,
-        raw_result_bytes,
-        frozen_input,
-        action_plan,
-        authorization_path=canonical,
-    )
+    _execute(tmp_path, evidence_dir, frozen_input, action_plan, authorization_path=canonical)
     with pytest.raises(CorrectionAttemptStateError, match="permanently non-reusable"):
-        _execute(
-            tmp_path,
-            evidence_dir,
-            raw_result_bytes,
-            frozen_input,
-            action_plan,
-            authorization_path=canonical,
-        )
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan, authorization_path=canonical)
 
 
 def test_claimed_but_unconsumed_attempt_requires_a_separate_owner_decision(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
     canonical = tmp_path / "AUTH-003.json"
-    payload = _write_authorization(
-        canonical, _authorization_document(canonical, action_plan, frozen_input)
-    )
-    authorization = verify_owner_correction_successor_authorization(
-        canonical,
-        clearance=_clearance(payload),
-        runtime=_runtime(),
-        frozen=frozen_input,
-        action_plan=action_plan,
-        evidence=_evidence(raw_result_bytes),
-    )
+    authorization = _authorization(canonical, action_plan, frozen_input, evidence_dir)
     correction_successor_attempt_record_path(authorization).write_bytes(
         json.dumps({"attempt_state": CORRECTION_ATTEMPT_STATE_CLAIMED}).encode()
     )
     with pytest.raises(CorrectionAttemptStateError, match="separate owner decision"):
-        _execute(
-            tmp_path,
-            evidence_dir,
-            raw_result_bytes,
-            frozen_input,
-            action_plan,
-            authorization_path=canonical,
-        )
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan, authorization_path=canonical)
 
 
 def test_relocated_authorization_copy_is_not_a_second_issuance(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
     canonical = tmp_path / "AUTH-003.json"
-    document = _authorization_document(canonical, action_plan, frozen_input)
+    document = _authorization_document(canonical, action_plan, frozen_input, evidence_dir)
     relocated = tmp_path / "relocated" / "AUTH-003.json"
     relocated.parent.mkdir()
     with pytest.raises(CorrectionSuccessorAuthorizationError, match="not a second issuance"):
         _execute(
             tmp_path,
             evidence_dir,
-            raw_result_bytes,
             frozen_input,
             action_plan,
             document=document,
@@ -596,19 +868,18 @@ def test_relocated_authorization_copy_is_not_a_second_issuance(
 def test_instrument_asserting_its_own_issuance_state_is_refused(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
     canonical = tmp_path / "AUTH-003.json"
     document = _authorization_document(
-        canonical, action_plan, frozen_input, overrides={"issuance_observed": True}
+        canonical, action_plan, frozen_input, evidence_dir, overrides={"issuance_observed": True}
     )
     with pytest.raises(CorrectionSuccessorAuthorizationError, match="asserts its own issuance"):
         _execute(
             tmp_path,
             evidence_dir,
-            raw_result_bytes,
             frozen_input,
             action_plan,
             document=document,
@@ -631,14 +902,14 @@ def test_instrument_asserting_its_own_issuance_state_is_refused(
 def test_an_instrument_claiming_a_forbidden_scope_is_refused(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
     declaration: str,
 ) -> None:
     canonical = tmp_path / "AUTH-003.json"
     document = _authorization_document(
-        canonical, action_plan, frozen_input, overrides={declaration: True}
+        canonical, action_plan, frozen_input, evidence_dir, overrides={declaration: True}
     )
     with pytest.raises(
         CorrectionSuccessorAuthorizationError, match="correction-successor semantics"
@@ -646,7 +917,6 @@ def test_an_instrument_claiming_a_forbidden_scope_is_refused(
         _execute(
             tmp_path,
             evidence_dir,
-            raw_result_bytes,
             frozen_input,
             action_plan,
             document=document,
@@ -658,20 +928,23 @@ def test_an_instrument_claiming_a_forbidden_scope_is_refused(
 def test_every_binding_field_is_actually_compared(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
     field: str,
 ) -> None:
     canonical = tmp_path / "AUTH-003.json"
     document = _authorization_document(
-        canonical, action_plan, frozen_input, binding_overrides={field: "WRONG-VALUE"}
+        canonical,
+        action_plan,
+        frozen_input,
+        evidence_dir,
+        binding_overrides={field: "WRONG-VALUE"},
     )
     with pytest.raises((CorrectionSuccessorAuthorizationError, CorrectionSuccessorBlockedError)):
         _execute(
             tmp_path,
             evidence_dir,
-            raw_result_bytes,
             frozen_input,
             action_plan,
             document=document,
@@ -682,143 +955,44 @@ def test_every_binding_field_is_actually_compared(
 def test_successor_id_must_match_the_authorized_successor(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
     with pytest.raises(CorrectionSuccessorBlockedError, match="the authorization binds"):
         _execute(
             tmp_path,
             evidence_dir,
-            raw_result_bytes,
             frozen_input,
             action_plan,
             correction=_correction("EBAWU-SOMETHING-ELSE"),
         )
 
 
-def test_tampered_frozen_result_is_refused(
-    tmp_path: Path,
-    evidence_dir: Path,
-    raw_result_bytes: bytes,
-    frozen_input: FrozenMissionInput,
-    action_plan: FrozenActionPlan,
-) -> None:
-    tampered = json.loads(raw_result_bytes)
-    tampered["accounting"]["transitioned"] = 8
-    payload = (json.dumps(tampered, indent=2, sort_keys=True) + "\n").encode()
-    with pytest.raises(CorrectionSuccessorBlockedError, match="hashes to"):
-        _execute(
-            tmp_path,
-            evidence_dir,
-            raw_result_bytes,
-            frozen_input,
-            action_plan,
-            raw_bytes=payload,
-        )
-
-
 def test_supplied_predecessor_digest_must_match_the_derived_one(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
     correction = {**_correction(), "predecessor_digest": "0" * 64}
     with pytest.raises(PredecessorBindingError, match="correction binds predecessor"):
-        _execute(
-            tmp_path,
-            evidence_dir,
-            raw_result_bytes,
-            frozen_input,
-            action_plan,
-            correction=correction,
-        )
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan, correction=correction)
 
 
 def test_experiment_identity_may_not_stand_in_for_the_runtime_mission(
     tmp_path: Path,
     evidence_dir: Path,
-    raw_result_bytes: bytes,
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
+    archive_seam: None,
 ) -> None:
     with pytest.raises(CorrectionSuccessorBlockedError, match="runtime mission"):
         _execute(
             tmp_path,
             evidence_dir,
-            raw_result_bytes,
             frozen_input,
             action_plan,
             stage_1=_stage_1(mission_id=EXPERIMENT_ID),
         )
-
-
-def test_a_mutated_frozen_file_is_detected_after_construction(
-    tmp_path: Path,
-    evidence_dir: Path,
-    raw_result_bytes: bytes,
-    frozen_input: FrozenMissionInput,
-    action_plan: FrozenActionPlan,
-) -> None:
-    decoy = tmp_path / "mutated-raw-result.json"
-    decoy.write_bytes(raw_result_bytes + b"\n")
-    with pytest.raises(PredecessorMutationDetectedError, match="PREDECESSOR_MUTATION_DETECTED"):
-        _execute(
-            tmp_path,
-            evidence_dir,
-            raw_result_bytes,
-            frozen_input,
-            action_plan,
-            raw_result_path=decoy,
-        )
-
-
-def test_a_moved_evidence_archive_is_detected_after_construction(
-    tmp_path: Path,
-    evidence_dir: Path,
-    raw_result_bytes: bytes,
-    frozen_input: FrozenMissionInput,
-    action_plan: FrozenActionPlan,
-) -> None:
-    def moved() -> Mapping[str, str]:
-        return {"commit": "f" * 40, "tree": STAGE_2_EVIDENCE_TREE}
-
-    with pytest.raises(PredecessorMutationDetectedError, match="origin_evidence_commit"):
-        _execute(
-            tmp_path,
-            evidence_dir,
-            raw_result_bytes,
-            frozen_input,
-            action_plan,
-            archive_observer=moved,
-        )
-
-
-def test_mutation_detection_leaves_the_attempt_claimed_not_consumed(
-    tmp_path: Path,
-    evidence_dir: Path,
-    raw_result_bytes: bytes,
-    frozen_input: FrozenMissionInput,
-    action_plan: FrozenActionPlan,
-) -> None:
-    canonical = tmp_path / "AUTH-003.json"
-
-    def moved() -> Mapping[str, str]:
-        return {"commit": "f" * 40, "tree": STAGE_2_EVIDENCE_TREE}
-
-    with pytest.raises(PredecessorMutationDetectedError):
-        _execute(
-            tmp_path,
-            evidence_dir,
-            raw_result_bytes,
-            frozen_input,
-            action_plan,
-            authorization_path=canonical,
-            archive_observer=moved,
-        )
-    claimed = list(tmp_path.glob(".cdc-e2e-correction-successor-attempt-*"))
-    assert len(claimed) == 1
-    document = json.loads(claimed[0].read_bytes())
-    assert document["attempt_state"] == CORRECTION_ATTEMPT_STATE_CLAIMED
