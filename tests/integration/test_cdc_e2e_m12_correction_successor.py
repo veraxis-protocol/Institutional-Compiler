@@ -28,8 +28,12 @@ from oic.cdc_e2e_mission import (
     CORRECTION_ATTEMPT_STATE_CLAIMED,
     CORRECTION_ATTEMPT_STATE_CONSUMED,
     CORRECTION_ATTEMPT_STATE_NONE,
+    CORRECTION_FIELD_AUTHORITY,
     CORRECTION_IMPACT_AFFECTED,
     CORRECTION_INELIGIBILITY_STATE,
+    CORRECTION_INSTRUCTION_DERIVED_FIELDS,
+    CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS,
+    CORRECTION_INSTRUCTION_RECORD_CLASS,
     CORRECTION_SUCCESSOR_BINDING_FIELDS,
     CORRECTION_SUCCESSOR_DECLARATIONS,
     EVIDENCE_BRANCH,
@@ -57,6 +61,7 @@ from oic.cdc_e2e_mission import (
     CorrectionAttemptStateError,
     CorrectionEvidenceInfrastructureError,
     CorrectionExecutionClearance,
+    CorrectionInstructionError,
     CorrectionSuccessorAuthorizationError,
     CorrectionSuccessorBlockedError,
     CorrectionSuccessorResult,
@@ -183,29 +188,83 @@ def _stage_1(mission_id: str = MISSION_ID) -> Stage1Observation:
     )
 
 
-def _predecessor(evidence_dir: Path) -> dict[str, Any]:
-    record = json.loads((evidence_dir / SOURCE_STAGE_2_RAW_RESULT_FILENAME).read_bytes())
-    outcome = next(item for item in record["outcomes"] if item["chain_id"] == PREDECESSOR_CHAIN)
+PREDECESSOR_STATE = "ACCEPTED_CANDIDATE"
+
+
+def _predecessor(evidence_dir: Path | None = None) -> dict[str, Any]:
+    """The predecessor as the route rebuilds it.
+
+    When the frozen result is readable its transitioned state is used, so the
+    fixture cannot drift from the evidence; otherwise the frozen state constant
+    stands in, which lets a test bind an unreadable evidence root on purpose.
+    """
+    state = PREDECESSOR_STATE
+    if evidence_dir is not None:
+        source = evidence_dir / SOURCE_STAGE_2_RAW_RESULT_FILENAME
+        if source.exists():
+            record = json.loads(source.read_bytes())
+            outcome = next(
+                (
+                    item
+                    for item in record.get("outcomes", [])
+                    if item["chain_id"] == PREDECESSOR_CHAIN
+                ),
+                None,
+            )
+            if outcome is not None:
+                state = outcome["transition_event"]["new_state"]
     candidate = {"candidate_id": PREDECESSOR_CANDIDATE, "claim": "synthetic tender candidate"}
     return {
         "ebawu_id": PREDECESSOR_EBAWU,
-        "state": outcome["transition_event"]["new_state"],
+        "state": state,
         "candidate_id": PREDECESSOR_CANDIDATE,
         "candidate_digest": sha256(candidate),
     }
 
 
-def _correction(successor_id: str = SUCCESSOR_ID) -> dict[str, Any]:
-    return {
+INSTRUCTION_ID = "TEST-FIXTURE-CORRECTION-INSTRUCTION-NOT-OWNER-ISSUED"
+
+
+def _instruction_document(
+    evidence_dir: Path,
+    action_plan: FrozenActionPlan,
+    *,
+    successor_id: str = SUCCESSOR_ID,
+    overrides: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """A non-authoritative correction-instruction fixture.
+
+    Written under a temporary path and labelled as a fixture; it authorizes
+    nothing and is never placed at a canonical runtime location.
+    """
+    document: dict[str, Any] = {
+        "record_class": CORRECTION_INSTRUCTION_RECORD_CLASS,
+        "correction_instruction_id": INSTRUCTION_ID,
+        "fixture": "NON_AUTHORITATIVE_TEST_FIXTURE",
+        "creates_execution_authority": False,
+        "experiment_id": EXPERIMENT_ID,
+        "runtime_mission_id": MISSION_ID,
+        "correction_stimulus_id": action_plan.correction.correction_stimulus_id,
+        "correction_target_id": action_plan.correction.target_id,
+        "predecessor_ebawu_ref": action_plan.correction.predecessor_ebawu_ref,
+        "predecessor_digest": sha256(_predecessor(evidence_dir)),
         "new_ebawu_or_successor_id": successor_id,
         "new_candidate_digest": sha256({"candidate_id": successor_id}),
         "correction_reason": "tender condition restated after the corrected control reference",
         "changed_fact_or_control_refs": ["CTRL-C-TENDER-01", "EVID-P001-C-TENDER-01"],
         "new_state": "CANDIDATE_FORMED",
         "correction_event_id": "CDC-E2E-CORRECTION-EVT-001",
-        "correction_stimulus_id": "HA-CORRECTION-001",
         "affected_output_refs": ["CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"],
     }
+    if overrides:
+        document.update(overrides)
+    return document
+
+
+def _write_instruction(path: Path, document: Mapping[str, Any]) -> bytes:
+    payload = (json.dumps(document, indent=2, sort_keys=True) + "\n").encode()
+    path.write_bytes(payload)
+    return payload
 
 
 def _authorization_document(
@@ -213,6 +272,8 @@ def _authorization_document(
     action_plan: FrozenActionPlan,
     frozen_input: FrozenMissionInput,
     evidence_root: Path,
+    instruction_path: Path,
+    instruction_payload: bytes,
     *,
     successor_id: str = SUCCESSOR_ID,
     overrides: Mapping[str, Any] | None = None,
@@ -256,6 +317,10 @@ def _authorization_document(
             "predecessor_ebawu_ref": action_plan.correction.predecessor_ebawu_ref,
             "correction_target_id": action_plan.correction.target_id,
             "successor_id": successor_id,
+            "correction_instruction_id": INSTRUCTION_ID,
+            "correction_instruction_path": str(instruction_path),
+            "correction_instruction_sha256": hashlib.sha256(instruction_payload).hexdigest(),
+            "correction_instruction_bytes": len(instruction_payload),
         },
     }
     if binding_overrides:
@@ -263,6 +328,36 @@ def _authorization_document(
     if overrides:
         document.update(overrides)
     return document
+
+
+def _document_with_instruction(
+    canonical: Path,
+    action_plan: FrozenActionPlan,
+    frozen_input: FrozenMissionInput,
+    evidence_root: Path,
+    *,
+    instruction_overrides: Mapping[str, Any] | None = None,
+    successor_id: str = SUCCESSOR_ID,
+    overrides: Mapping[str, Any] | None = None,
+    binding_overrides: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Authorization fixture with its correction instruction written beside it."""
+    instruction_path = canonical.parent / "CORRECTION-INSTRUCTION-001.json"
+    instruction_payload = _write_instruction(
+        instruction_path,
+        _instruction_document(evidence_root, action_plan, overrides=instruction_overrides),
+    )
+    return _authorization_document(
+        canonical,
+        action_plan,
+        frozen_input,
+        evidence_root,
+        instruction_path,
+        instruction_payload,
+        successor_id=successor_id,
+        overrides=overrides,
+        binding_overrides=binding_overrides,
+    )
 
 
 def _write_authorization(path: Path, document: Mapping[str, Any]) -> bytes:
@@ -311,21 +406,42 @@ def _execute(
     frozen_input: FrozenMissionInput,
     action_plan: FrozenActionPlan,
     *,
-    correction: Mapping[str, Any] | None = None,
     stage_1: Stage1Observation | None = None,
     document: Mapping[str, Any] | None = None,
     authorization_path: Path | None = None,
+    instruction: Mapping[str, Any] | None = None,
+    instruction_path: Path | None = None,
+    tamper_instruction_after_issuance: Mapping[str, Any] | None = None,
 ) -> CorrectionSuccessorResult:
     canonical = authorization_path or (tmp_path / "AUTH-003.json")
+    written_instruction = instruction_path or (tmp_path / "CORRECTION-INSTRUCTION-001.json")
+    instruction_payload = _write_instruction(
+        written_instruction,
+        instruction or _instruction_document(evidence_dir, action_plan),
+    )
     payload = _write_authorization(
         canonical,
-        document or _authorization_document(canonical, action_plan, frozen_input, evidence_dir),
+        document
+        or _authorization_document(
+            canonical,
+            action_plan,
+            frozen_input,
+            evidence_dir,
+            written_instruction,
+            instruction_payload,
+        ),
     )
+    if tamper_instruction_after_issuance is not None:
+        # The authorization is already issued against the reviewed bytes.
+        tampered = {
+            **_instruction_document(evidence_dir, action_plan),
+            **tamper_instruction_after_issuance,
+        }
+        _write_instruction(written_instruction, tampered)
     return execute_authorized_correction_successor(
         stage_1=stage_1 or _stage_1(),
         frozen=frozen_input,
         action_plan=action_plan,
-        correction=correction or _correction(),
         clearance=_clearance(payload),
         runtime=_runtime(),
         run_metadata=_run_metadata(),
@@ -336,8 +452,15 @@ def _execute(
 def _authorization(
     canonical: Path, action_plan: FrozenActionPlan, frozen_input: FrozenMissionInput, root: Path
 ) -> OwnerCorrectionSuccessorAuthorization:
+    instruction_path = canonical.parent / "CORRECTION-INSTRUCTION-001.json"
+    instruction_payload = _write_instruction(
+        instruction_path, _instruction_document(root, action_plan)
+    )
     payload = _write_authorization(
-        canonical, _authorization_document(canonical, action_plan, frozen_input, root)
+        canonical,
+        _authorization_document(
+            canonical, action_plan, frozen_input, root, instruction_path, instruction_payload
+        ),
     )
     return verify_owner_correction_successor_authorization(
         canonical,
@@ -382,7 +505,7 @@ def test_evidence_is_read_from_the_bound_location_only(
     empty_root = tmp_path / "elsewhere"
     empty_root.mkdir()
     canonical = tmp_path / "AUTH-003.json"
-    document = _authorization_document(canonical, action_plan, frozen_input, empty_root)
+    document = _document_with_instruction(canonical, action_plan, frozen_input, empty_root)
     with pytest.raises(CorrectionSuccessorBlockedError, match="not readable"):
         _execute(
             tmp_path,
@@ -407,7 +530,7 @@ def test_relocated_but_tampered_evidence_cannot_substitute(
         shutil.copyfile(evidence_dir / name, relocated / name)
     (relocated / SOURCE_STAGE_2_RAW_RESULT_FILENAME).write_bytes(b"{}\n")
     canonical = tmp_path / "AUTH-003.json"
-    document = _authorization_document(canonical, action_plan, frozen_input, relocated)
+    document = _document_with_instruction(canonical, action_plan, frozen_input, relocated)
     with pytest.raises(CorrectionSuccessorBlockedError, match="hashes to"):
         _execute(
             tmp_path,
@@ -474,7 +597,7 @@ def test_stage_1_observation_must_match_the_bound_digest(
     archive_seam: None,
 ) -> None:
     canonical = tmp_path / "AUTH-003.json"
-    document = _authorization_document(
+    document = _document_with_instruction(
         canonical,
         action_plan,
         frozen_input,
@@ -524,10 +647,12 @@ def test_correction_reason_and_changed_refs_are_carried_exactly(
     action_plan: FrozenActionPlan,
     archive_seam: None,
 ) -> None:
-    correction = _correction()
-    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan, correction=correction)
-    assert result.correction_reason == correction["correction_reason"]
-    assert list(result.changed_fact_or_control_refs) == correction["changed_fact_or_control_refs"]
+    instruction = _instruction_document(evidence_dir, action_plan)
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    assert result.correction_reason == instruction["correction_reason"]
+    assert (
+        list(result.changed_fact_or_control_refs) == (instruction["changed_fact_or_control_refs"])
+    )
 
 
 def test_predecessor_digest_is_unchanged_across_the_correction(
@@ -656,7 +781,9 @@ def test_precondition_failure_before_claim_leaves_no_attempt_record(
             evidence_dir,
             frozen_input,
             action_plan,
-            correction=_correction("EBAWU-SOMETHING-ELSE"),
+            instruction=_instruction_document(
+                evidence_dir, action_plan, overrides={"new_ebawu_or_successor_id": "EBAWU-OTHER"}
+            ),
         )
     assert not list(tmp_path.glob(".cdc-e2e-correction-successor-attempt-*"))
     authorization = _authorization(tmp_path / "probe.json", action_plan, frozen_input, evidence_dir)
@@ -851,7 +978,7 @@ def test_relocated_authorization_copy_is_not_a_second_issuance(
     archive_seam: None,
 ) -> None:
     canonical = tmp_path / "AUTH-003.json"
-    document = _authorization_document(canonical, action_plan, frozen_input, evidence_dir)
+    document = _document_with_instruction(canonical, action_plan, frozen_input, evidence_dir)
     relocated = tmp_path / "relocated" / "AUTH-003.json"
     relocated.parent.mkdir()
     with pytest.raises(CorrectionSuccessorAuthorizationError, match="not a second issuance"):
@@ -873,7 +1000,7 @@ def test_instrument_asserting_its_own_issuance_state_is_refused(
     archive_seam: None,
 ) -> None:
     canonical = tmp_path / "AUTH-003.json"
-    document = _authorization_document(
+    document = _document_with_instruction(
         canonical, action_plan, frozen_input, evidence_dir, overrides={"issuance_observed": True}
     )
     with pytest.raises(CorrectionSuccessorAuthorizationError, match="asserts its own issuance"):
@@ -908,7 +1035,7 @@ def test_an_instrument_claiming_a_forbidden_scope_is_refused(
     declaration: str,
 ) -> None:
     canonical = tmp_path / "AUTH-003.json"
-    document = _authorization_document(
+    document = _document_with_instruction(
         canonical, action_plan, frozen_input, evidence_dir, overrides={declaration: True}
     )
     with pytest.raises(
@@ -934,14 +1061,20 @@ def test_every_binding_field_is_actually_compared(
     field: str,
 ) -> None:
     canonical = tmp_path / "AUTH-003.json"
-    document = _authorization_document(
+    document = _document_with_instruction(
         canonical,
         action_plan,
         frozen_input,
         evidence_dir,
         binding_overrides={field: "WRONG-VALUE"},
     )
-    with pytest.raises((CorrectionSuccessorAuthorizationError, CorrectionSuccessorBlockedError)):
+    with pytest.raises(
+        (
+            CorrectionSuccessorAuthorizationError,
+            CorrectionSuccessorBlockedError,
+            CorrectionInstructionError,
+        )
+    ):
         _execute(
             tmp_path,
             evidence_dir,
@@ -965,7 +1098,9 @@ def test_successor_id_must_match_the_authorized_successor(
             evidence_dir,
             frozen_input,
             action_plan,
-            correction=_correction("EBAWU-SOMETHING-ELSE"),
+            instruction=_instruction_document(
+                evidence_dir, action_plan, overrides={"new_ebawu_or_successor_id": "EBAWU-OTHER"}
+            ),
         )
 
 
@@ -976,9 +1111,16 @@ def test_supplied_predecessor_digest_must_match_the_derived_one(
     action_plan: FrozenActionPlan,
     archive_seam: None,
 ) -> None:
-    correction = {**_correction(), "predecessor_digest": "0" * 64}
     with pytest.raises(PredecessorBindingError, match="correction binds predecessor"):
-        _execute(tmp_path, evidence_dir, frozen_input, action_plan, correction=correction)
+        _execute(
+            tmp_path,
+            evidence_dir,
+            frozen_input,
+            action_plan,
+            instruction=_instruction_document(
+                evidence_dir, action_plan, overrides={"predecessor_digest": "0" * 64}
+            ),
+        )
 
 
 def test_experiment_identity_may_not_stand_in_for_the_runtime_mission(
@@ -1202,3 +1344,219 @@ def test_a_non_sha_origin_response_is_refused(
     with pytest.raises(PostConstructionIntegrityError) as caught:
         _execute(tmp_path, evidence_dir, frozen_input, action_plan)
     assert "not a commit SHA" in caught.value.observation["failure"]
+
+
+# --------------------------------------------- exact correction authority seam
+
+
+def test_public_route_accepts_no_caller_controlled_correction_mapping() -> None:
+    parameters = inspect.signature(execute_authorized_correction_successor).parameters
+    assert "correction" not in parameters
+    assert "correction_instruction" not in parameters
+
+
+def test_authorization_without_an_instruction_digest_is_refused(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    canonical = tmp_path / "AUTH-003.json"
+    document = _document_with_instruction(canonical, action_plan, frozen_input, evidence_dir)
+    del document["bindings"]["correction_instruction_sha256"]
+    with pytest.raises(CorrectionSuccessorAuthorizationError, match="bindings missing"):
+        _execute(
+            tmp_path,
+            evidence_dir,
+            frozen_input,
+            action_plan,
+            document=document,
+            authorization_path=canonical,
+        )
+
+
+@pytest.mark.parametrize(
+    "field", ["new_candidate_digest", "correction_reason", "new_state", "correction_event_id"]
+)
+def test_a_mismatched_instruction_digest_is_refused(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+    field: str,
+) -> None:
+    """Editing the reviewed semantics after issuance breaks the bound digest."""
+    with pytest.raises(CorrectionInstructionError, match="hashes to"):
+        _execute(
+            tmp_path,
+            evidence_dir,
+            frozen_input,
+            action_plan,
+            tamper_instruction_after_issuance={field: "ALTERED-AFTER-AUTHORIZATION"},
+        )
+
+
+@pytest.mark.parametrize(
+    "field",
+    ["changed_fact_or_control_refs", "affected_output_refs"],
+)
+def test_altering_authored_lists_after_issuance_is_refused(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+    field: str,
+) -> None:
+    with pytest.raises(CorrectionInstructionError, match="hashes to"):
+        _execute(
+            tmp_path,
+            evidence_dir,
+            frozen_input,
+            action_plan,
+            tamper_instruction_after_issuance={field: ["ALTERED-AFTER-AUTHORIZATION"]},
+        )
+
+
+def test_altering_the_successor_id_after_issuance_is_refused(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    with pytest.raises(CorrectionInstructionError, match="hashes to"):
+        _execute(
+            tmp_path,
+            evidence_dir,
+            frozen_input,
+            action_plan,
+            tamper_instruction_after_issuance={
+                "new_ebawu_or_successor_id": "EBAWU-SUBSTITUTED-SUCCESSOR"
+            },
+        )
+
+
+def test_a_relocated_instruction_cannot_substitute(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    """The location is bound, so an identical copy elsewhere is not readable as authorized."""
+    canonical = tmp_path / "AUTH-003.json"
+    elsewhere = tmp_path / "elsewhere"
+    elsewhere.mkdir()
+    instruction_path = elsewhere / "CORRECTION-INSTRUCTION-001.json"
+    payload = _write_instruction(instruction_path, _instruction_document(evidence_dir, action_plan))
+    document = _authorization_document(
+        canonical, action_plan, frozen_input, evidence_dir, instruction_path, payload
+    )
+    instruction_path.unlink()
+    # A byte-identical copy at the operator's chosen location is not the bound one.
+    (tmp_path / "CORRECTION-INSTRUCTION-001.json").write_bytes(payload)
+    with pytest.raises(CorrectionInstructionError, match="not readable"):
+        _execute(
+            tmp_path,
+            evidence_dir,
+            frozen_input,
+            action_plan,
+            document=document,
+            authorization_path=canonical,
+            instruction_path=tmp_path / "unused-fixture.json",
+        )
+
+
+def test_an_instruction_of_the_wrong_record_class_is_refused(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    instruction = _instruction_document(
+        evidence_dir, action_plan, overrides={"record_class": "SOMETHING_ELSE"}
+    )
+    with pytest.raises(CorrectionInstructionError, match="does not declare the authorized"):
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan, instruction=instruction)
+
+
+@pytest.mark.parametrize("field", sorted(CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS))
+def test_an_instruction_omitting_an_owner_authored_field_is_refused(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+    field: str,
+) -> None:
+    instruction = _instruction_document(evidence_dir, action_plan)
+    del instruction[field]
+    with pytest.raises(CorrectionInstructionError):
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan, instruction=instruction)
+
+
+@pytest.mark.parametrize("field", sorted(CORRECTION_INSTRUCTION_DERIVED_FIELDS))
+def test_an_instruction_asserting_a_derived_field_is_refused(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+    field: str,
+) -> None:
+    """A field the owner does not author may not be asserted by the instruction."""
+    instruction = _instruction_document(
+        evidence_dir, action_plan, overrides={field: "OPERATOR-CHOSEN"}
+    )
+    with pytest.raises(CorrectionInstructionError, match="derived fields it does not author"):
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan, instruction=instruction)
+
+
+def test_stimulus_digest_and_instruction_digest_stay_distinct(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    stimulus = result.correction_stimulus
+    instruction = result.correction_instruction
+    assert stimulus["correction_stimulus_digest"] == action_plan.correction.digest()
+    assert instruction["correction_instruction_sha256"] != (stimulus["correction_stimulus_digest"])
+    assert stimulus["stimulus_is_not_the_instruction"] is True
+    assert instruction["caller_selectable"] is False
+
+
+def test_the_result_records_the_field_authority_classification(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    authority = result.correction_instruction["field_authority"]
+    assert authority == dict(CORRECTION_FIELD_AUTHORITY)
+    for field in CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS:
+        assert authority[field] == "OWNER_AUTHORED"
+    assert authority["supersedes"] == "FROZEN_PREDECESSOR_DERIVED"
+    assert authority["prior_state"] == "FROZEN_PREDECESSOR_DERIVED"
+    assert authority["superseded_by"] == "SYSTEM_DERIVED_AFTER_AUTHORIZATION"
+    assert authority["reliance_impact_refs"] == "SYSTEM_DERIVED_AFTER_AUTHORIZATION"
+
+
+def test_the_instruction_fixture_creates_no_execution_authority(
+    tmp_path: Path, evidence_dir: Path, action_plan: FrozenActionPlan
+) -> None:
+    """Preparing an instruction is not authority to execute one."""
+    path = tmp_path / "CORRECTION-INSTRUCTION-001.json"
+    _write_instruction(path, _instruction_document(evidence_dir, action_plan))
+    document = json.loads(path.read_bytes())
+    assert document["fixture"] == "NON_AUTHORITATIVE_TEST_FIXTURE"
+    assert document["creates_execution_authority"] is False
+    assert not list(tmp_path.glob(".cdc-e2e-correction-successor-attempt-*"))

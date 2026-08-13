@@ -4010,7 +4010,52 @@ CORRECTION_SUCCESSOR_DECLARATIONS: Final[dict[str, object]] = {
     "result_bearing": True,
 }
 
+CORRECTION_INSTRUCTION_RECORD_CLASS: Final = "OWNER_CORRECTION_INSTRUCTION"
+
+# What the owner authors, and therefore what the authorization must fix exactly.
+CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS: Final = (
+    "new_ebawu_or_successor_id",
+    "new_candidate_digest",
+    "correction_reason",
+    "changed_fact_or_control_refs",
+    "new_state",
+    "correction_event_id",
+    "affected_output_refs",
+)
+
+# Derived from the frozen predecessor or produced after authorization. An
+# instruction that carried these would be asserting values it does not get to
+# choose, so their presence is refused rather than ignored.
+CORRECTION_INSTRUCTION_DERIVED_FIELDS: Final = (
+    "prior_state",
+    "reliance_impact_refs",
+    "superseded_at_utc",
+    "superseded_by",
+    "supersedes",
+)
+
+CORRECTION_FIELD_AUTHORITY: Final[dict[str, str]] = {
+    "new_ebawu_or_successor_id": "OWNER_AUTHORED",
+    "new_candidate_digest": "OWNER_AUTHORED",
+    "correction_reason": "OWNER_AUTHORED",
+    "changed_fact_or_control_refs": "OWNER_AUTHORED",
+    "new_state": "OWNER_AUTHORED",
+    "correction_event_id": "OWNER_AUTHORED",
+    "affected_output_refs": "OWNER_AUTHORED",
+    "predecessor_digest": "FROZEN_PREDECESSOR_DERIVED",
+    "supersedes": "FROZEN_PREDECESSOR_DERIVED",
+    "prior_state": "FROZEN_PREDECESSOR_DERIVED",
+    "superseded_by": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
+    "reliance_impact_refs": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
+    "superseded_at_utc": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
+    "affected_output_eligibility": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
+}
+
 CORRECTION_SUCCESSOR_BINDING_FIELDS: Final = (
+    "correction_instruction_id",
+    "correction_instruction_path",
+    "correction_instruction_sha256",
+    "correction_instruction_bytes",
     "implementation_commit",
     "implementation_tree",
     "environment_manifest_sha256",
@@ -4083,6 +4128,10 @@ class CorrectionEvidenceInfrastructureError(ResultBearingMissionBlockedError):
     """
 
 
+class CorrectionInstructionError(ResultBearingMissionBlockedError):
+    """The authorized correction instruction is absent, wrong or relocated."""
+
+
 class PredecessorMutationDetectedError(ResultBearingMissionBlockedError):
     """Frozen predecessor evidence changed across the correction."""
 
@@ -4142,6 +4191,10 @@ class OwnerCorrectionSuccessorAuthorization:
     evidence_repository: str
     evidence_branch: str
     stage_1_observation_digest: str
+    correction_instruction_id: str
+    correction_instruction_path: Path
+    correction_instruction_sha256: str
+    correction_instruction_bytes: int
 
     def as_record(self) -> dict[str, Any]:
         """Identity and declared scope only; carries no authorization prose."""
@@ -4157,6 +4210,43 @@ class OwnerCorrectionSuccessorAuthorization:
             "authorized_evidence_root": str(self.evidence_root),
             "authorized_evidence_repository": self.evidence_repository,
             "authorized_evidence_branch": self.evidence_branch,
+            "authorized_correction_instruction_id": self.correction_instruction_id,
+            "authorized_correction_instruction_sha256": self.correction_instruction_sha256,
+            "authorized_correction_instruction_bytes": self.correction_instruction_bytes,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class OwnerCorrectionInstruction:
+    """The exact correction semantics one authorization permits.
+
+    Authority to execute a correction is not authority to execute *this*
+    correction, so the payload is an owner-reviewed artifact bound by digest
+    rather than a mapping the operator supplies at call time.
+    """
+
+    path: Path
+    sha256_hex: str
+    byte_count: int
+    instruction_id: str
+    declared_predecessor_digest: str
+    owner_authored: Mapping[str, Any]
+
+    def as_correction(self, predecessor_digest: str) -> dict[str, Any]:
+        """The correction payload, carrying only owner-authored values."""
+        return {**dict(self.owner_authored), "predecessor_digest": predecessor_digest}
+
+    def as_record(self) -> dict[str, Any]:
+        """Identity and authored semantics; no derived value appears here."""
+        return {
+            "correction_instruction_id": self.instruction_id,
+            "correction_instruction_sha256": self.sha256_hex,
+            "correction_instruction_bytes": self.byte_count,
+            "correction_instruction_path": str(self.path),
+            "owner_authored_fields": sorted(self.owner_authored),
+            "declared_predecessor_digest": self.declared_predecessor_digest,
+            "field_authority": dict(CORRECTION_FIELD_AUTHORITY),
+            "caller_selectable": False,
         }
 
 
@@ -4209,6 +4299,7 @@ class CorrectionSuccessorResult:
     source_stage_2_raw_result_sha256: str
     evidence_locations: Mapping[str, Any]
     owner_correction_authorization: Mapping[str, Any]
+    correction_instruction: Mapping[str, Any]
     correction_stimulus: Mapping[str, Any]
     predecessor: Mapping[str, Any]
     predecessor_digest: str
@@ -4240,6 +4331,7 @@ class CorrectionSuccessorResult:
             "source_stage_2_raw_result_sha256": self.source_stage_2_raw_result_sha256,
             "evidence_locations": dict(self.evidence_locations),
             "owner_correction_authorization": dict(self.owner_correction_authorization),
+            "correction_instruction": dict(self.correction_instruction),
             "correction_stimulus": dict(self.correction_stimulus),
             "predecessor": dict(self.predecessor),
             "predecessor_digest": self.predecessor_digest,
@@ -4473,6 +4565,26 @@ def verify_owner_correction_successor_authorization(
         raise CorrectionSuccessorAuthorizationError(
             "correction-successor authorization does not bind a Stage-1 observation digest"
         )
+    instruction_id = raw_bindings.get("correction_instruction_id")
+    instruction_path = raw_bindings.get("correction_instruction_path")
+    instruction_sha256 = raw_bindings.get("correction_instruction_sha256")
+    instruction_bytes = raw_bindings.get("correction_instruction_bytes")
+    if not isinstance(instruction_id, str) or not instruction_id:
+        raise CorrectionSuccessorAuthorizationError(
+            "correction-successor authorization does not bind a correction_instruction_id"
+        )
+    if not isinstance(instruction_path, str) or not instruction_path:
+        raise CorrectionSuccessorAuthorizationError(
+            "correction-successor authorization does not bind a correction_instruction_path"
+        )
+    if not isinstance(instruction_sha256, str) or len(instruction_sha256) != 64:
+        raise CorrectionSuccessorAuthorizationError(
+            "correction-successor authorization does not bind a correction_instruction_sha256"
+        )
+    if not isinstance(instruction_bytes, int) or isinstance(instruction_bytes, bool):
+        raise CorrectionSuccessorAuthorizationError(
+            "correction-successor authorization does not bind correction_instruction_bytes"
+        )
     if clearance.source_stage_2_result_digest != SOURCE_STAGE_2_RESULT_DIGEST:
         raise CorrectionSuccessorAuthorizationError(
             f"clearance binds Stage-2 result {clearance.source_stage_2_result_digest!r}, "
@@ -4497,6 +4609,95 @@ def verify_owner_correction_successor_authorization(
         evidence_repository=str(raw_bindings["evidence_repository"]),
         evidence_branch=str(raw_bindings["evidence_branch"]),
         stage_1_observation_digest=stage_1_digest,
+        correction_instruction_id=instruction_id,
+        correction_instruction_path=Path(instruction_path),
+        correction_instruction_sha256=instruction_sha256,
+        correction_instruction_bytes=instruction_bytes,
+    )
+
+
+def verify_owner_correction_instruction(
+    authorization: OwnerCorrectionSuccessorAuthorization, action_plan: object
+) -> OwnerCorrectionInstruction:
+    """Read the exact correction instruction the authorization binds.
+
+    The location, the identifier and the digest all come from the verified
+    authorization, so the operator cannot present different semantics under an
+    issued authority.
+    """
+    plan = require_verified_action_plan(action_plan)
+    path = authorization.correction_instruction_path
+    try:
+        payload = path.read_bytes()
+    except OSError as error:
+        raise CorrectionInstructionError(
+            f"the authorized correction instruction is not readable at {path}: {error}"
+        ) from error
+    observed_sha = _file_sha256(payload)
+    if observed_sha != authorization.correction_instruction_sha256:
+        raise CorrectionInstructionError(
+            f"the correction instruction at {path} hashes to {observed_sha}, but the "
+            f"authorization binds {authorization.correction_instruction_sha256}; a "
+            "substituted instruction is not the authorized correction"
+        )
+    if len(payload) != authorization.correction_instruction_bytes:
+        raise CorrectionInstructionError(
+            f"the correction instruction is {len(payload)} bytes, but the authorization "
+            f"binds {authorization.correction_instruction_bytes}"
+        )
+    try:
+        document = json.loads(payload)
+    except json.JSONDecodeError as error:
+        raise CorrectionInstructionError(
+            f"the correction instruction is not structured JSON: {error}"
+        ) from error
+    if not isinstance(document, Mapping):
+        raise CorrectionInstructionError("the correction instruction must be a JSON object")
+    declarations = {
+        "record_class": CORRECTION_INSTRUCTION_RECORD_CLASS,
+        "experiment_id": EXPERIMENT_ID,
+        "runtime_mission_id": MISSION_ID,
+        "correction_stimulus_id": plan.correction.correction_stimulus_id,
+        "correction_target_id": plan.correction.target_id,
+        "predecessor_ebawu_ref": plan.correction.predecessor_ebawu_ref,
+        "correction_instruction_id": authorization.correction_instruction_id,
+    }
+    wrong = sorted(
+        f"{name}={document.get(name)!r} (required {expected!r})"
+        for name, expected in declarations.items()
+        if document.get(name) != expected
+    )
+    if wrong:
+        raise CorrectionInstructionError(
+            f"the correction instruction does not declare the authorized correction: {wrong}"
+        )
+    missing = sorted(set(CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS) - document.keys())
+    if missing:
+        raise CorrectionInstructionError(
+            f"the correction instruction omits owner-authored fields: {missing}"
+        )
+    derived_present = sorted(
+        name for name in CORRECTION_INSTRUCTION_DERIVED_FIELDS if name in document
+    )
+    if derived_present:
+        raise CorrectionInstructionError(
+            f"the correction instruction asserts derived fields it does not author: "
+            f"{derived_present}"
+        )
+    declared_predecessor = document.get("predecessor_digest")
+    if not isinstance(declared_predecessor, str) or not declared_predecessor:
+        raise CorrectionInstructionError(
+            "the correction instruction declares no predecessor_digest"
+        )
+    return OwnerCorrectionInstruction(
+        path=path.resolve(),
+        sha256_hex=observed_sha,
+        byte_count=len(payload),
+        instruction_id=str(document["correction_instruction_id"]),
+        declared_predecessor_digest=declared_predecessor,
+        owner_authored={
+            name: document[name] for name in CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS
+        },
     )
 
 
@@ -4966,7 +5167,6 @@ def execute_authorized_correction_successor(
     stage_1: Stage1Observation,
     frozen: FrozenMissionInput,
     action_plan: object,
-    correction: Mapping[str, Any],
     clearance: CorrectionExecutionClearance,
     runtime: RuntimeIdentity,
     run_metadata: Mapping[str, Any],
@@ -4976,8 +5176,10 @@ def execute_authorized_correction_successor(
 
     Stage 1 and Stage 2 are not re-entered, no transition is evaluated, no event
     is emitted and no draft is rendered. The caller presents the authority
-    instrument; the frozen evidence location, its identities and the published
-    archive identity are all resolved from that instrument's verified bindings.
+    instrument; the correction semantics, the frozen evidence location, its
+    identities and the published archive identity are all resolved from that
+    instrument's verified bindings. There is no parameter through which an
+    operator can vary what correction an issued authorization executes.
     """
     plan = require_verified_action_plan(action_plan)
     _event_metadata_fields(run_metadata)
@@ -4988,6 +5190,7 @@ def execute_authorized_correction_successor(
         frozen=frozen,
         action_plan=plan,
     )
+    instruction = verify_owner_correction_instruction(authorization, plan)
     locations = resolve_authorized_evidence_locations(authorization)
     evidence = load_authorized_stage_2_evidence(locations)
     require_distinct_identity_namespaces(evidence, stage_1)
@@ -5000,22 +5203,23 @@ def execute_authorized_correction_successor(
 
     predecessor = derive_correction_predecessor(stage_1, evidence, plan)
     predecessor_digest = sha256(predecessor)
-    supplied = correction.get("predecessor_digest")
-    if supplied is not None and supplied != predecessor_digest:
+    if instruction.declared_predecessor_digest != predecessor_digest:
         raise PredecessorBindingError(
-            f"correction binds predecessor {supplied!r}, actual {predecessor_digest!r}"
+            f"correction binds predecessor {instruction.declared_predecessor_digest!r}, "
+            f"actual {predecessor_digest!r}"
         )
+    correction = instruction.as_correction(predecessor_digest)
     missing = sorted(set(plan.correction.required_correction_fields) - correction.keys())
-    frozen_side = {"supersedes", "superseded_by", "prior_state", "reliance_impact_refs"}
+    frozen_side = set(CORRECTION_INSTRUCTION_DERIVED_FIELDS)
     missing = sorted(set(missing) - frozen_side)
     if missing:
         raise CorrectionSuccessorBlockedError(
             f"correction object lacks fields the frozen plan requires: {missing}"
         )
-    if correction.get("new_ebawu_or_successor_id") != authorization.successor_id:
+    if correction["new_ebawu_or_successor_id"] != authorization.successor_id:
         raise CorrectionSuccessorBlockedError(
-            f"correction constructs successor "
-            f"{correction.get('new_ebawu_or_successor_id')!r}, but the authorization "
+            f"the correction instruction constructs successor "
+            f"{correction['new_ebawu_or_successor_id']!r}, but the authorization "
             f"binds {authorization.successor_id!r}"
         )
 
@@ -5096,6 +5300,7 @@ def execute_authorized_correction_successor(
         source_stage_2_raw_result_sha256=evidence.raw_result_sha256,
         evidence_locations=locations.as_record(),
         owner_correction_authorization=authorization.as_record(),
+        correction_instruction=instruction.as_record(),
         correction_stimulus={
             "correction_stimulus_id": plan.correction.correction_stimulus_id,
             "correction_stimulus_digest": plan.correction.digest(),
@@ -5103,6 +5308,7 @@ def execute_authorized_correction_successor(
             "correction_target_source": "FROZEN_ACTION_PLAN_BYTES",
             "predecessor_ebawu_ref": plan.correction.predecessor_ebawu_ref,
             "precondition": plan.correction.precondition,
+            "stimulus_is_not_the_instruction": True,
         },
         predecessor=predecessor,
         predecessor_digest=predecessor_digest,
