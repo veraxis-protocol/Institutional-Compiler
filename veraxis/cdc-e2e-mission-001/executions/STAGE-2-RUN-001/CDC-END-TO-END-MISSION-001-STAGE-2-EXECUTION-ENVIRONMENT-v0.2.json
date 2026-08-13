@@ -1,0 +1,129 @@
+{
+  "action_plan_provenance_token": "42e53c0c7111517bc1a8816760f58cbdfb9e78e43b7f002ba66fb3cd69cd4807",
+  "action_plan_sha256": "229a0c15d2bd2ee1db807904ff4d640f8fe39931372a002fbc3abf9e3244731e",
+  "adjudication_protocol_sha256": "0e2a9f7202b2136b1edd76148da4f1c957ff86301c42ddf6f0dc1055ce20426b",
+  "artifact_id": "CDC-END-TO-END-MISSION-001-STAGE-2-EXECUTION-ENVIRONMENT-v0.2",
+  "authorization_history_at_observation": {
+    "authorization_v0_1_consumed": false,
+    "authorization_v0_1_id": "CDC-E2E-MISSION-001-STAGE2-AUTH-001",
+    "authorization_v0_1_issued": true,
+    "authorization_v0_1_present_at_canonical_path": false,
+    "authorization_v0_1_preservation_path": "/private/tmp/cdc-e2e-stage2-run-001/withdrawn/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.1.8996b7bc.WITHDRAWN.json",
+    "authorization_v0_1_sha256": "8996b7bcc2fd077f0d5a35799df430616e3f632b429d2dd6453c45e4246a0333",
+    "authorization_v0_1_withdrawn_before_use": true,
+    "replacement_authorization_id": "CDC-E2E-MISSION-001-STAGE2-AUTH-002",
+    "replacement_authorization_issued": false,
+    "withdrawal_record_sha256": "d9bfef1f81316d2169c06d0dfb169b383a59e4e0aaa0e8da82ac6507ca05e7d3"
+  },
+  "authorizes_execution": false,
+  "claim_ceiling": "environment observation only; authorizes nothing and consumes no attempt",
+  "consumes_attempt": false,
+  "creates_authority": false,
+  "dependency_control_files": {
+    "pyproject.toml": {
+      "bytes": 3634,
+      "sha256": "be858356b8b2d519b538c79e624e0e600dbb0899802ecc636341f85b134654a2"
+    },
+    "requirements/dev.txt": {
+      "bytes": 61950,
+      "sha256": "cf211a43c0f96dfb45f00376bfa940dae9beefd8f1425d96ed6c9f8fa2cc1172"
+    },
+    "requirements/runtime.txt": {
+      "bytes": 11342,
+      "sha256": "4840856b2fae0e793b061f5bf8ba87a5b180796177bdda45240ee7b0868e2d3f"
+    }
+  },
+  "dependency_hashes_assumed_unchanged": false,
+  "dependency_hashes_recomputed_from_bytes": true,
+  "dependency_identities_unchanged_vs_v0_1": true,
+  "experimental_integrity_doctrine_sha256": "f612f3583ee9200b28230d0950ffce517e720764f73668b606a4689a4a9291d1",
+  "future_run_identity": {
+    "note": "the replacement authorization not existing is a historical fact about this observation and must not later be rewritten",
+    "prospective_authorization_exists_at_observation_time": false,
+    "prospective_owner_authorization_canonical_path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.2.json",
+    "run_directory": "/private/tmp/cdc-e2e-stage2-run-001",
+    "run_id": "CDC-E2E-STAGE2-RUN-001",
+    "run_ordinal_consumed_by_v0_1": false,
+    "trace_id": "CDC-E2E-STAGE2-RUN-001-TRACE-001"
+  },
+  "implementation_branch": "cdc-e2e-stage2-seam-repair-v0.1",
+  "implementation_commit": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+  "implementation_tree": "86513415bca23ca20c9cb37ee2d59a5fa03c5790",
+  "interpreter_selection_hazard": {
+    "class": "OPERATOR_HARNESS_OBSERVATION_NOT_A_STAGE_2_RESULT",
+    "detail": "The interpreter on PATH as python3 in this operator shell is CPython 3.9.6 at the system location, not the project environment. The implementation at 50d9da82 requires >=3.12,<3.13 and uses syntax and attributes unavailable in 3.9. A launch through bare python3 would fail during preconditions, before any attempt could be claimed, but it must not be relied on to fail: the harness must name the project interpreter explicitly.",
+    "path_python3_version": "3.9.6",
+    "required_interpreter": "/private/tmp/claude-501/cleanroom/.venv/bin/python",
+    "required_interpreter_version_source": "/private/tmp/claude-501/cleanroom/.venv/pyvenv.cfg",
+    "resolution": "the authorized Stage-2 launch must invoke the project virtual environment interpreter explicitly"
+  },
+  "machine": "x86_64",
+  "mission_id": "CDC-TEST-MISSION-001",
+  "mission_manifest_sha256": "8aad5e78635b691fa2fad0336e07d9b0738b61db7b12ded2ed22149a258bdb77",
+  "mission_package_bytes": 57452,
+  "mission_package_digest_provenance": "CARRIED_FROM_THE_FROZEN_CONSTANTS_AND_v0_1_OBSERVATION; NOT_RECOMPUTED_IN_THIS_PASS",
+  "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+  "observation_method": {
+    "dependency_digests": "shasum -a 256 over the exact files",
+    "implementation_identity": "git rev-parse HEAD and HEAD^{tree} in the repository root",
+    "not_observed_this_pass": [
+      "platform.platform() string, because interpreter launches are denied in this operator environment; the v0.1 value macOS-13.7.8-x86_64-i386-64bit is not restated as a fresh observation",
+      "the project interpreter's own --version banner, because that launch was denied; the version below is read from pyvenv.cfg",
+      "the mission package aggregate digest, which requires the implementation to recompute"
+    ],
+    "os_identity": "uname -srm",
+    "working_tree": "git status --short --untracked-files=all, empty output"
+  },
+  "observed_implementation_commit": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+  "observed_implementation_tree": "86513415bca23ca20c9cb37ee2d59a5fa03c5790",
+  "observed_porcelain_status_lines": 0,
+  "oracle_sha256": "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9",
+  "owner_preexecution_interpretation_sha256": "8242ccf9612531dc7b3b1d648625a934c4f616d8b8565c61d958a6825d7f2f84",
+  "platform_uname": "Darwin 22.6.0 x86_64",
+  "pre_execution_state_at_observation": {
+    "correction_performed": false,
+    "drafts_generated": false,
+    "human_disposition_rebound": false,
+    "public_route_invocation_count": 0,
+    "stage_1_reexecuted": false,
+    "stage_2_attempt_record_exists": false,
+    "stage_2_attempt_records_observed": [],
+    "stage_2_authorization_issued": true,
+    "stage_2_executed": false,
+    "stage_2_result_bearing_execution_count": 0,
+    "transition_evaluated": false,
+    "transition_event_emitted": false
+  },
+  "python_implementation": "CPython",
+  "python_version": "3.12.2",
+  "python_version_source": "/private/tmp/claude-501/cleanroom/.venv/pyvenv.cfg",
+  "record_class": "STAGE_2_EXECUTION_ENVIRONMENT_MANIFEST",
+  "recorded_at_utc": "2026-08-13T13:29:08Z",
+  "repository_root": "/private/tmp/claude-501/cleanroom",
+  "requires_python": ">=3.12,<3.13",
+  "result_bearing": false,
+  "runtime_binding_classification": {
+    "digest_may_be_typed_from_memory_or_authorization": false,
+    "environment_manifest_authorization_binding": "RUNTIME_VERIFIER_ENFORCED_EQUALITY_TO_RUNTIME_IDENTITY",
+    "on_missing_bytes_or_digest_mismatch": "PRECONDITION_MISMATCH; STOP before transition evaluation",
+    "required_future_execution_sequence": [
+      "read exact frozen Stage-2 environment manifest v0.2 bytes",
+      "SHA-256 those bytes",
+      "verify observed hash equals owner-authorized environment_manifest_sha256",
+      "construct RuntimeIdentity.environment_manifest_sha256 from that observed hash",
+      "invoke the one authorized public Stage-2 route"
+    ],
+    "runtime_identity_environment_digest_source": "EXECUTION_HARNESS_EXACT_FILE_HASH_IMMEDIATELY_BEFORE_PUBLIC_ROUTE_INVOCATION",
+    "runtime_verifier_independently_hashes_environment_manifest_file": false,
+    "such_failure_is_not_a_stage_2_semantic_result": true
+  },
+  "stage_1_component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+  "stage_1_environment_manifest_reused_for_stage_2": false,
+  "stage_1_environment_manifest_status": "IMMUTABLE_HISTORICAL_EVIDENCE_DESCRIBES_STAGE_1_ONLY",
+  "stage_2_evidence_digest_derivation_v0_2_sha256": "dd3da8ba08b5b267a0788080b666fa920a2e4cf2f91dcfdd2b522da73b644155",
+  "superseded_manifest_sha256": "ce31a1ba85d49e86747c604dd1abe2af6ad622c2807a8a7731d638149d807149",
+  "supersedes_for_stage_2": "CDC-END-TO-END-MISSION-001-STAGE-2-EXECUTION-ENVIRONMENT-v0.1.json",
+  "supersession_reason": "v0.1 correctly records the world before AUTH-001 was issued. AUTH-001 has since been issued and withdrawn before use, so v0.1 is no longer a current description of the substrate. v0.1 is retained unchanged as immutable historical evidence.",
+  "vitaliy_pre_result_acknowledgment_sha256": "300113cffc8f6f373a3d4609b47ac02358f6bf4b6e0e85ee0b9847fe9f142738",
+  "working_tree_clean": true
+}

@@ -1,0 +1,20 @@
+{
+  "attempt_state": "CONSUMED_AFTER_FIRST_TRANSITION_EVALUATION",
+  "human_disposition_binding_digests": [
+    "2eabeda78c5a1de266aa4a635adb2e34e7cbc06b58e8adf43a14e3dc83757a75",
+    "4ea554b6c0fa24e2dd8e4666714f864ba67f767efa718176aba60f096653beac",
+    "516c8a98357a0db091c968f0ea42caa6420aaafae484398ee63a60dc410f0b8d",
+    "61ae2128afaf8dcc207905fd44d1474ec351c06c6f8d501b5e899aca4d4a6398",
+    "9480745d4c9858b86cab7cab33705eb021deecac82647206258836ab91d37250",
+    "9b3899ce71d1f822657cac8dbdd1a596dc2687412d22dba7ba5bee621382c777",
+    "a8ac60c75a1d46410b1a3baf4a054d26146e94aea574eb6663e892354ea7d1df",
+    "babaa05c859c92b0588c653783e8f6462cadcc7573921064dfb6410962164408",
+    "c33812f65a976ac414ea765f0836ab03fb00ae21fe915976b2b2ccca94105736"
+  ],
+  "implementation_commit": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+  "implementation_tree": "86513415bca23ca20c9cb37ee2d59a5fa03c5790",
+  "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+  "owner_execution_authorization_sha256": "42b3c3d1285a0fddc36558875cc9df2e90b283ec79d96a56408b0fbc6f8c5f41",
+  "stage": "STAGE_2_ONLY",
+  "stage_1_observation_digest": "0c7c9aa770aee07b7c42f9bb48ec3b13058bbaf7559d5696bc59c6eb276510be"
+}

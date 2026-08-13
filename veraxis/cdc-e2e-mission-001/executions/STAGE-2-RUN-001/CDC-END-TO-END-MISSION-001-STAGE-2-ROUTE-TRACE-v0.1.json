@@ -1,0 +1,254 @@
+{
+  "authorization_class": "EXTERNAL_EXECUTION_OBSERVATION_NOT_AUTHORITY",
+  "events": [
+    {
+      "active_parent_stack": [
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "execute_authorized_stage_2",
+      "immediate_parent": "stage_2_run_001.py:<module>",
+      "is_public_route": true,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": false
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_registry",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_proposal",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_registry",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_proposal",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_registry",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_proposal",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_registry",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_proposal",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_registry",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_proposal",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_registry",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_proposal",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_registry",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_proposal",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_registry",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_proposal",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_registry",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "derive_transition_proposal",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "integrate_correction",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    },
+    {
+      "active_parent_stack": [
+        "cdc_e2e_mission.py:execute_authorized_stage_2",
+        "stage_2_run_001.py:<module>"
+      ],
+      "function": "render_drafts",
+      "immediate_parent": "cdc_e2e_mission.py:execute_authorized_stage_2",
+      "is_public_route": false,
+      "observed_at_utc": "2026-08-13T14:28:58Z",
+      "under_public_route": true
+    }
+  ],
+  "expected_public_route_entry_count": 1,
+  "low_level_calls_observed_outside_public_route": false,
+  "low_level_calls_outside_public_route": [],
+  "mission_id": "CDC-TEST-MISSION-001",
+  "observation_target": "oic.cdc_e2e_mission.execute_authorized_stage_2",
+  "observed_call_counts": {
+    "derive_transition_proposal": 9,
+    "derive_transition_registry": 9,
+    "execute_authorized_stage_2": 1,
+    "integrate_correction": 1,
+    "render_drafts": 1
+  },
+  "observed_public_route_entry_count": 1,
+  "record_class": "STAGE_2_EXTERNAL_ROUTE_TRACE",
+  "recorded_at_utc": "2026-08-13T14:28:58Z",
+  "result_bearing": false,
+  "run_id": "CDC-E2E-STAGE2-RUN-001",
+  "trace_id": "CDC-E2E-STAGE2-RUN-001-TRACE-001",
+  "tracer_method": "sys.setprofile passive call observation; no behavior modification"
+}

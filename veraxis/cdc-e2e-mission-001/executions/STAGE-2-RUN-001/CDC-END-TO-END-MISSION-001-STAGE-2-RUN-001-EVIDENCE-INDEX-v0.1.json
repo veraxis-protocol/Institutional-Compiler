@@ -1,0 +1,118 @@
+{
+  "M10_M11_M12": "NOT_ADJUDICATED_BY_OPERATOR",
+  "accounting_read_back_from_archived_result": {
+    "blocked": 0,
+    "non_evaluable": 0,
+    "refused": 0,
+    "transitioned": 9,
+    "unresolved": 0
+  },
+  "additional_human_disposition_created": false,
+  "archived_authorization_is_evidence_not_issuance": true,
+  "archived_authorization_will_not_verify_from_this_path": true,
+  "artifacts": [
+    {
+      "archived": "/private/tmp/claude-501/cleanroom/veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001/CDC-END-TO-END-MISSION-001-STAGE-2-OPERATOR-ENVIRONMENT-BLOCK-001.json",
+      "byte_identical_to_source": true,
+      "bytes": 6055,
+      "sha256": "3b4d74869657ceb85e5af6632c4345075eb5a6792426e4124c1486161e778a6e",
+      "source": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-STAGE-2-OPERATOR-ENVIRONMENT-BLOCK-001.json"
+    },
+    {
+      "archived": "/private/tmp/claude-501/cleanroom/veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.1.8996b7bc.WITHDRAWN.json",
+      "byte_identical_to_source": true,
+      "bytes": 8844,
+      "sha256": "8996b7bcc2fd077f0d5a35799df430616e3f632b429d2dd6453c45e4246a0333",
+      "source": "/private/tmp/cdc-e2e-stage2-run-001/withdrawn/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.1.8996b7bc.WITHDRAWN.json"
+    },
+    {
+      "archived": "/private/tmp/claude-501/cleanroom/veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-AUTHORIZATION-WITHDRAWAL-v0.1.json",
+      "byte_identical_to_source": true,
+      "bytes": 4249,
+      "sha256": "d9bfef1f81316d2169c06d0dfb169b383a59e4e0aaa0e8da82ac6507ca05e7d3",
+      "source": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-AUTHORIZATION-WITHDRAWAL-v0.1.json"
+    },
+    {
+      "archived": "/private/tmp/claude-501/cleanroom/veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001/CDC-END-TO-END-MISSION-001-STAGE-2-EXECUTION-ENVIRONMENT-v0.2.json",
+      "byte_identical_to_source": true,
+      "bytes": 8233,
+      "sha256": "da57daaaa090a6a115797daa50c12baadbe40d0f69f5af394ecb833b12842ecb",
+      "source": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-STAGE-2-EXECUTION-ENVIRONMENT-v0.2.json"
+    },
+    {
+      "archived": "/private/tmp/claude-501/cleanroom/veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.2.json",
+      "byte_identical_to_source": true,
+      "bytes": 8991,
+      "sha256": "42b3c3d1285a0fddc36558875cc9df2e90b283ec79d96a56408b0fbc6f8c5f41",
+      "source": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.2.json"
+    },
+    {
+      "archived": "/private/tmp/claude-501/cleanroom/veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-AUTHORIZATION-ISSUANCE-002.json",
+      "byte_identical_to_source": true,
+      "bytes": 1036,
+      "sha256": "2dbe16f78f790db3325e43fc0538e991793524049788bee3b77b4372013ebc4c",
+      "source": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-AUTHORIZATION-ISSUANCE-002.json"
+    },
+    {
+      "archived": "/private/tmp/claude-501/cleanroom/veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001/AUTH-002-SHADOW-PREFLIGHT.d590de34.py",
+      "byte_identical_to_source": true,
+      "bytes": 12060,
+      "sha256": "d590de3442c77665117bd16c576cdfa5120750ae344c22048686a13a4ffc8cb7",
+      "source": "/private/tmp/cdc-e2e-stage2-run-001/preflight/AUTH-002-SHADOW-PREFLIGHT.d590de34.py"
+    },
+    {
+      "archived": "/private/tmp/claude-501/cleanroom/veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001/CDC-END-TO-END-MISSION-001-STAGE-2-RAW-RESULT-v0.1.json",
+      "byte_identical_to_source": true,
+      "bytes": 72999,
+      "sha256": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+      "source": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-STAGE-2-RAW-RESULT-v0.1.json"
+    },
+    {
+      "archived": "/private/tmp/claude-501/cleanroom/veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001/.cdc-e2e-stage-2-attempt-42b3c3d1285a0fddc36558875cc9df2e90b283ec79d96a56408b0fbc6f8c5f41.json",
+      "byte_identical_to_source": true,
+      "bytes": 1234,
+      "sha256": "0d11efa747647bf6764bb7562b3a8e7b02219ed2b10f527ce4b5e69df3ca72d2",
+      "source": "/private/tmp/cdc-e2e-stage2-run-001/.cdc-e2e-stage-2-attempt-42b3c3d1285a0fddc36558875cc9df2e90b283ec79d96a56408b0fbc6f8c5f41.json"
+    },
+    {
+      "archived": "/private/tmp/claude-501/cleanroom/veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001/CDC-END-TO-END-MISSION-001-STAGE-2-ROUTE-TRACE-v0.1.json",
+      "byte_identical_to_source": true,
+      "bytes": 8883,
+      "sha256": "481957e87f73e2fc058e0e167b6d3d82fea830b2eaad16c78bdfc39f3c952920",
+      "source": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-STAGE-2-ROUTE-TRACE-v0.1.json"
+    },
+    {
+      "archived": "/private/tmp/claude-501/cleanroom/veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001/CDC-END-TO-END-MISSION-001-STAGE-2-ROUTE-TRACE-COVERAGE-DEFECT-v0.1.json",
+      "byte_identical_to_source": true,
+      "bytes": 1724,
+      "sha256": "317820ab313d500841752b2f78b05abd2cc3be58234431f90eb1679b2c5b9842",
+      "source": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-STAGE-2-ROUTE-TRACE-COVERAGE-DEFECT-v0.1.json"
+    }
+  ],
+  "attempt_state_read_back": "CONSUMED_AFTER_FIRST_TRANSITION_EVALUATION",
+  "authorization_id": "CDC-E2E-MISSION-001-STAGE2-AUTH-002",
+  "automatic_retry_performed": false,
+  "claim_ceiling": "SYNTHETIC_EVALUATION_ONLY",
+  "correction_executed_read_back": false,
+  "draft_count_read_back": 5,
+  "eligible_completed_predecessor_read_back": true,
+  "implementation_commit": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+  "implementation_tree": "86513415bca23ca20c9cb37ee2d59a5fa03c5790",
+  "mission_id": "CDC-TEST-MISSION-001",
+  "observed_public_route_entry_count": 1,
+  "official_handoff_read_back": "PROHIBITED",
+  "record_class": "STAGE_2_RUN_001_EVIDENCE_INDEX",
+  "relocated_copy_is_not_a_second_issuance": true,
+  "route_trace_coverage_incomplete": true,
+  "route_trace_uncovered_functions": [
+    "emit_transition_event",
+    "evaluate_test_transition"
+  ],
+  "run_id": "CDC-E2E-STAGE2-RUN-001",
+  "semantic_adjudication_performed": false,
+  "source_changed": false,
+  "stage_1_reexecuted": false,
+  "stage_2_result_digest_read_back": "8a12b681d1f08aa47b70830a939da9d545dccdcea33643fc6f5f6ca9450b3b40",
+  "tests_changed": false,
+  "trace_id": "CDC-E2E-STAGE2-RUN-001-TRACE-001"
+}

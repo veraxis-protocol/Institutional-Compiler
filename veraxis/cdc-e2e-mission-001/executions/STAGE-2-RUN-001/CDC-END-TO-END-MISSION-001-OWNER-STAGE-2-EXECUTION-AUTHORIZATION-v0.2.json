@@ -1,0 +1,140 @@
+{
+  "additional_human_disposition_authorized": false,
+  "authorization_id": "CDC-E2E-MISSION-001-STAGE2-AUTH-002",
+  "authorization_model": {
+    "instrument_asserts_its_own_issuance_state": false,
+    "issuance_established_by": "canonical placement of these exact bytes, plus a separate issuance record created after placement is observed",
+    "rule": "AUTHORIZATION_INSTRUMENT_DOES_NOT_SELF_ASSERT_ISSUANCE_STATE",
+    "separate_issuance_record": "CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-AUTHORIZATION-ISSUANCE-002.json"
+  },
+  "authorization_scope": "ONE_RESULT_BEARING_STAGE_2_EXECUTION",
+  "authorized_stage": "STAGE_2_ONLY",
+  "automatic_retry_authorized": false,
+  "bindings": {
+    "action_plan_provenance_token": "42e53c0c7111517bc1a8816760f58cbdfb9e78e43b7f002ba66fb3cd69cd4807",
+    "action_plan_sha256": "229a0c15d2bd2ee1db807904ff4d640f8fe39931372a002fbc3abf9e3244731e",
+    "adjudication_protocol_sha256": "0e2a9f7202b2136b1edd76148da4f1c957ff86301c42ddf6f0dc1055ce20426b",
+    "correction_stimulus_digest": "edea71d189bde4b99e84d42267ba3e8960adcc43ff0f33c5ff1cef12c69c4efb",
+    "environment_manifest_sha256": "da57daaaa090a6a115797daa50c12baadbe40d0f69f5af394ecb833b12842ecb",
+    "human_disposition_evidence_commit": "a61fae0a94eeaf54f69c42f40af67d9e43516294",
+    "human_disposition_evidence_tree": "e1747b5bfa1a11f3f852a92ad13fdd975aceef9e",
+    "implementation_commit": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+    "implementation_tree": "86513415bca23ca20c9cb37ee2d59a5fa03c5790",
+    "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+    "oracle_sha256": "72b554e6c3ac25b8785805e57f2d0b3f0167a30d7fb9d62b61977b07a364d0d9",
+    "owner_m08_m09_acceptance_sha256": "5f13fe1920be490429b9cc562bcaade38293de35e9898a4d5803f0744c29381a",
+    "owner_preexecution_interpretation_sha256": "8242ccf9612531dc7b3b1d648625a934c4f616d8b8565c61d958a6825d7f2f84",
+    "stage_1_component_profile_sha256": "03eb25effa77af830faafdb49db8318c2adcb20619c6f580a853255334a30a57",
+    "stage_1_observation_digest": "0c7c9aa770aee07b7c42f9bb48ec3b13058bbaf7559d5696bc59c6eb276510be",
+    "stage_1_raw_result_sha256": "aa32274f238d01bc9f6c6d1c67879acfb4765a34d0dc0b4ccf568f3c07353a70",
+    "stage_2_human_disposition_binding_digests": [
+      "2eabeda78c5a1de266aa4a635adb2e34e7cbc06b58e8adf43a14e3dc83757a75",
+      "4ea554b6c0fa24e2dd8e4666714f864ba67f767efa718176aba60f096653beac",
+      "516c8a98357a0db091c968f0ea42caa6420aaafae484398ee63a60dc410f0b8d",
+      "61ae2128afaf8dcc207905fd44d1474ec351c06c6f8d501b5e899aca4d4a6398",
+      "9480745d4c9858b86cab7cab33705eb021deecac82647206258836ab91d37250",
+      "9b3899ce71d1f822657cac8dbdd1a596dc2687412d22dba7ba5bee621382c777",
+      "a8ac60c75a1d46410b1a3baf4a054d26146e94aea574eb6663e892354ea7d1df",
+      "babaa05c859c92b0588c653783e8f6462cadcc7573921064dfb6410962164408",
+      "c33812f65a976ac414ea765f0836ab03fb00ae21fe915976b2b2ccca94105736"
+    ]
+  },
+  "canonical_authorization_path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.2.json",
+  "claim_ceiling": {
+    "M08_compliant_path_demonstrated": true,
+    "M08_out_of_scope_refusal_path_demonstrated": false,
+    "assurance_mode": "SYNTHETIC_EVALUATION_ONLY",
+    "full_e2e_pass": "NOT_ESTABLISHED"
+  },
+  "correction_discipline": {
+    "correction_execution_in_stage_2_run_001": "PROHIBITED_BY_OWNER_DOCTRINE",
+    "correction_object_supplied_to_stage_2_run_001": false,
+    "enforcement_class": "OWNER_EXECUTION_DISCIPLINE_NOT_IMPLEMENTATION_ENFORCED",
+    "if_prerequisite_arises": "RUN-001 reports eligibility honestly and returns without correction; that eligibility may support a separately authorized successor observation and must not be consumed inside RUN-001",
+    "reason": "the frozen doctrine requires an eligible completed predecessor to exist as frozen Stage-2 evidence before any correction. The successor route can execute correction inside the same call when an object is supplied, so the owner withholds the object rather than relying on the route to abstain.",
+    "source_changed_to_enforce_this": false,
+    "stage_2_call_correction_argument": null
+  },
+  "correction_handling_authorized": "FROZEN_ACTION_PLAN_PRECONDITION_CONTROLLED",
+  "draft_rendering_authorized": "FROZEN_OUTPUT_DEFINITION_CONTROLLED",
+  "environment_manifest": {
+    "artifact": "CDC-END-TO-END-MISSION-001-STAGE-2-EXECUTION-ENVIRONMENT-v0.2.json",
+    "bytes": 8233,
+    "describes_implementation": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+    "future_execution_sequence": [
+      "read exact frozen Stage-2 environment manifest v0.2 bytes",
+      "SHA-256 those bytes",
+      "verify observed hash equals this authorized environment_manifest_sha256",
+      "construct RuntimeIdentity.environment_manifest_sha256 from that observed hash",
+      "invoke the one authorized public Stage-2 route"
+    ],
+    "on_mismatch": "PRECONDITION_MISMATCH; STOP before transition evaluation",
+    "path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-STAGE-2-EXECUTION-ENVIRONMENT-v0.2.json",
+    "runtime_identity_environment_digest_source": "EXECUTION_HARNESS_EXACT_FILE_HASH_IMMEDIATELY_BEFORE_PUBLIC_ROUTE_INVOCATION",
+    "runtime_verifier_independently_hashes_this_file": false,
+    "sha256": "da57daaaa090a6a115797daa50c12baadbe40d0f69f5af394ecb833b12842ecb",
+    "stage_1_environment_manifest_reused": false,
+    "such_failure_is_not_a_stage_2_semantic_result": true,
+    "supersedes": "CDC-END-TO-END-MISSION-001-STAGE-2-EXECUTION-ENVIRONMENT-v0.1.json"
+  },
+  "execution_identity": {
+    "additional_human_disposition_authorized": false,
+    "automatic_retry_authorized": false,
+    "do_not_attribute_stage_2_results_to": "2e15267194d320b54015f0c212a8041cedc22050",
+    "official_handoff_authorized": false,
+    "producer": "oic.cdc_e2e_mission.execute_authorized_stage_2",
+    "producer_version": "50d9da82f6a8d66b2077ef3df6bb839e71c9dc79",
+    "result_bearing_executions_authorized": 1,
+    "run_id": "CDC-E2E-STAGE2-RUN-001",
+    "stage_1_rerun_authorized": false,
+    "trace_id": "CDC-E2E-STAGE2-RUN-001-TRACE-001"
+  },
+  "external_route_observation": {
+    "authority_class": "EXTERNAL_EXECUTION_OBSERVATION_NOT_AUTHORITY",
+    "expected_public_route_entry_count": 1,
+    "external_route_observation_required": true,
+    "observation_target": "oic.cdc_e2e_mission.execute_authorized_stage_2",
+    "on_tracer_failure": "the route-method claim remains bounded by the evidence actually preserved; Stage 2 is not rerun to obtain route evidence",
+    "record_active_parent_stack_for": [
+      "derive_transition_registry",
+      "derive_transition_proposal",
+      "evaluate_test_transition",
+      "emit_transition_event",
+      "integrate_correction",
+      "render_drafts"
+    ],
+    "trace_id": "CDC-E2E-STAGE2-RUN-001-TRACE-001",
+    "tracer_failure_does_not_authorize_rerun": true
+  },
+  "methodological_owner_bindings": {
+    "binding_class": "OWNER_AUTHORIZATION_ARTIFACT_BINDING_NOT_RUNTIME_VERIFIER_ENFORCED",
+    "distinction": "this authorization FILE, once present at the canonical path, is runtime-hashed and bound into Stage2Result. The three digests inside it are not separately verified by the implementation.",
+    "established_by": "source inspection of verify_owner_stage_2_authorization at 50d9da82",
+    "experimental_integrity_doctrine_sha256": "f612f3583ee9200b28230d0950ffce517e720764f73668b606a4689a4a9291d1",
+    "runtime_verifier_checks_these": false,
+    "stage_2_evidence_digest_derivation_sha256": "dd3da8ba08b5b267a0788080b666fa920a2e4cf2f91dcfdd2b522da73b644155",
+    "vitaliy_pre_result_acknowledgment_sha256": "300113cffc8f6f373a3d4609b47ac02358f6bf4b6e0e85ee0b9847fe9f142738"
+  },
+  "mission_id": "CDC-TEST-MISSION-001",
+  "official_handoff_authorized": false,
+  "owner_authorized": true,
+  "predecessor_authorization": {
+    "authorization_id": "CDC-E2E-MISSION-001-STAGE2-AUTH-001",
+    "bytes": 8844,
+    "consumed": false,
+    "exercised": false,
+    "historical_scope_note": "every statement in this object is historical and refers to AUTH-001, a different artifact. Nothing here describes the state of AUTH-002.",
+    "present_at_canonical_path": false,
+    "preservation_path": "/private/tmp/cdc-e2e-stage2-run-001/withdrawn/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.1.8996b7bc.WITHDRAWN.json",
+    "sha256": "8996b7bcc2fd077f0d5a35799df430616e3f632b429d2dd6453c45e4246a0333",
+    "status": "ISSUED_SEMANTICALLY_DEFECTIVE_UNEXERCISED_WITHDRAWN_BEFORE_FIRST_USE",
+    "withdrawal_record_sha256": "d9bfef1f81316d2169c06d0dfb169b383a59e4e0aaa0e8da82ac6507ca05e7d3"
+  },
+  "record_class": "OWNER_STAGE_2_EXECUTION_AUTHORIZATION",
+  "result_bearing": true,
+  "single_use": true,
+  "stage_1_reexecution_authorized": false,
+  "stage_2_transition_evaluation_authorized": true,
+  "transition_event_emission_authorized": "GATE_RESULT_CONTROLLED",
+  "valid_only_when_present_at_canonical_path": true
+}

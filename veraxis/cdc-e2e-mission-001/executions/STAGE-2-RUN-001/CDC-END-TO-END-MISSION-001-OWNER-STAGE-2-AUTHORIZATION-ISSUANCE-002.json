@@ -1,0 +1,21 @@
+{
+  "attempt_state_at_issuance": "NO_ATTEMPT_RECORD",
+  "authorization_bytes": 8991,
+  "authorization_id": "CDC-E2E-MISSION-001-STAGE2-AUTH-002",
+  "authorization_sha256": "42b3c3d1285a0fddc36558875cc9df2e90b283ec79d96a56408b0fbc6f8c5f41",
+  "authorization_valid_at_canonical_path": true,
+  "authorization_version": "v0.2",
+  "canonical_authorization_path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.2.json",
+  "creates_additional_execution_scope": false,
+  "is_authorization_instrument": false,
+  "is_execution_attempt": false,
+  "issuance_observed": true,
+  "issuance_observed_at_utc": "2026-08-13T14:22:08Z",
+  "mission_id": "CDC-TEST-MISSION-001",
+  "predecessor_authorization_id": "CDC-E2E-MISSION-001-STAGE2-AUTH-001",
+  "predecessor_status": "WITHDRAWN_BEFORE_FIRST_USE",
+  "public_route_invocation_count_at_issuance": 0,
+  "record_class": "OWNER_STAGE_2_AUTHORIZATION_ISSUANCE_RECORD",
+  "result_bearing": false,
+  "result_bearing_execution_count_at_issuance": 0
+}

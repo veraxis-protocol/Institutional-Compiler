@@ -1,0 +1,71 @@
+{
+  "artifact_id": "CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-AUTHORIZATION-WITHDRAWAL-v0.1",
+  "attempt_record_existed_at_withdrawal": false,
+  "authorization_instrument_model_defect": {
+    "corrected_rule": "AUTHORIZATION_INSTRUMENT_DOES_NOT_SELF_ASSERT_ISSUANCE_STATE",
+    "defect_class": "AUTHORIZATION_INSTRUMENT_SELF_ASSERTED_ITS_OWN_ISSUANCE_STATE",
+    "distinction": "An authorization instrument states what the owner authorizes. Whether that instrument has been issued is established externally, by canonical placement plus a separate issuance record. The withdrawn artifact conflated the two, so the act of issuing it falsified its own text."
+  },
+  "canonical_authorization_path_declared_by_withdrawn_artifact": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.1.json",
+  "consumes_attempt": false,
+  "contradictory_fields_in_withdrawn_artifact": [
+    {
+      "json_path": "$.issued",
+      "observed_value": false,
+      "why_false_now": "unscoped current-state assertion at the root of the record; the identical bytes now exist at the declared canonical path"
+    },
+    {
+      "json_path": "$.candidate_status",
+      "observed_value": "CANDIDATE_NOT_ISSUED",
+      "why_false_now": "unscoped and describes this record rather than a predecessor; the artifact scopes predecessor status separately at $.supersedes_candidate.status, so the absence of scoping here is meaningful"
+    },
+    {
+      "json_path": "$.authorization_version_note",
+      "observed_value": "the intended final authorization version remains v0.1 because no Stage-2 authorization v0.1 has ever been issued; only unissued candidates were superseded",
+      "why_false_now": "present-perfect claim reaching the present moment; a Stage-2 authorization v0.1 has now been issued"
+    },
+    {
+      "json_path": "$.physically_stored_at_review_path",
+      "observed_value": "/private/tmp/cdc-e2e-stage2-authorization-review/CDC-END-TO-END-MISSION-001-OWNER-STAGE-2-EXECUTION-AUTHORIZATION-v0.1.CANDIDATE.json",
+      "why_false_now": "asserts the bytes physically live at the review path; they now also exist at the canonical path"
+    }
+  ],
+  "creates_authority": false,
+  "mission_id": "CDC-TEST-MISSION-001",
+  "observed_at_utc": "2026-08-13T13:26:04Z",
+  "owner_authority_withdrawn": true,
+  "owner_determination": {
+    "authorization_v0_1_execution_permitted": false,
+    "authorization_v0_1_semantic_status": "ISSUED_SEMANTICALLY_DEFECTIVE_UNEXERCISED",
+    "authorization_v0_1_withdrawal_decision": "WITHDRAW_BEFORE_USE"
+  },
+  "predecessor_preservation": {
+    "attempt_state": "NO_ATTEMPT_RECORD",
+    "bytes_modified": false,
+    "canonical_file_overwritten": false,
+    "classification": "ISSUED_BUT_SEMANTICALLY_DEFECTIVE / WITHDRAWN_BEFORE_FIRST_USE",
+    "defect_is_evidence": "The defective bytes are preserved exactly. The contradiction is the finding and must survive; repairing the artifact in place would destroy it.",
+    "result_bearing_execution_count": 0,
+    "sha256_unchanged": "8996b7bcc2fd077f0d5a35799df430616e3f632b429d2dd6453c45e4246a0333"
+  },
+  "public_route_invocation_count_at_withdrawal": 0,
+  "record_class": "OWNER_STAGE_2_AUTHORIZATION_WITHDRAWAL",
+  "replacement": {
+    "authorization_instrument_rule": "AUTHORIZATION_INSTRUMENT_DOES_NOT_SELF_ASSERT_ISSUANCE_STATE",
+    "environment_manifest": "CDC-END-TO-END-MISSION-001-STAGE-2-EXECUTION-ENVIRONMENT-v0.2.json",
+    "replacement_authorization_id": "CDC-E2E-MISSION-001-STAGE2-AUTH-002",
+    "replacement_authorization_version": "v0.2",
+    "replacement_issued": false
+  },
+  "result_bearing": false,
+  "result_bearing_execution_count_at_withdrawal": 0,
+  "run_id": "CDC-E2E-STAGE2-RUN-001",
+  "runtime_revocation_check_present_in_stage_2_verifier": false,
+  "transition_evaluated": false,
+  "withdrawal_reason": "ISSUED_ARTIFACT_SELF_REPRESENTATION_CONTRADICTS_CANONICAL_ISSUANCE_FACT",
+  "withdrawal_requires_operational_deactivation": true,
+  "withdrawn_authorization_bytes": 8844,
+  "withdrawn_authorization_id": "CDC-E2E-MISSION-001-STAGE2-AUTH-001",
+  "withdrawn_authorization_sha256": "8996b7bcc2fd077f0d5a35799df430616e3f632b429d2dd6453c45e4246a0333",
+  "withdrawn_before_first_result_bearing_use": true
+}
