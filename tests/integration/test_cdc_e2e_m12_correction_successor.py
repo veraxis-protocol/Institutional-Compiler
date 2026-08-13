@@ -31,6 +31,7 @@ from oic.cdc_e2e_mission import (
     CORRECTION_FIELD_AUTHORITY,
     CORRECTION_IMPACT_AFFECTED,
     CORRECTION_INELIGIBILITY_STATE,
+    CORRECTION_INSTRUCTION_ALLOWED_FIELDS,
     CORRECTION_INSTRUCTION_DERIVED_FIELDS,
     CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS,
     CORRECTION_INSTRUCTION_RECORD_CLASS,
@@ -240,8 +241,6 @@ def _instruction_document(
     document: dict[str, Any] = {
         "record_class": CORRECTION_INSTRUCTION_RECORD_CLASS,
         "correction_instruction_id": INSTRUCTION_ID,
-        "fixture": "NON_AUTHORITATIVE_TEST_FIXTURE",
-        "creates_execution_authority": False,
         "experiment_id": EXPERIMENT_ID,
         "runtime_mission_id": MISSION_ID,
         "correction_stimulus_id": action_plan.correction.correction_stimulus_id,
@@ -254,7 +253,6 @@ def _instruction_document(
         "changed_fact_or_control_refs": ["CTRL-C-TENDER-01", "EVID-P001-C-TENDER-01"],
         "new_state": "CANDIDATE_FORMED",
         "correction_event_id": "CDC-E2E-CORRECTION-EVT-001",
-        "affected_output_refs": ["CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"],
     }
     if overrides:
         document.update(overrides)
@@ -413,6 +411,7 @@ def _execute(
     instruction_path: Path | None = None,
     tamper_instruction_after_issuance: Mapping[str, Any] | None = None,
 ) -> CorrectionSuccessorResult:
+    tmp_path.mkdir(parents=True, exist_ok=True)
     canonical = authorization_path or (tmp_path / "AUTH-003.json")
     written_instruction = instruction_path or (tmp_path / "CORRECTION-INSTRUCTION-001.json")
     instruction_payload = _write_instruction(
@@ -1398,10 +1397,7 @@ def test_a_mismatched_instruction_digest_is_refused(
         )
 
 
-@pytest.mark.parametrize(
-    "field",
-    ["changed_fact_or_control_refs", "affected_output_refs"],
-)
+@pytest.mark.parametrize("field", ["changed_fact_or_control_refs"])
 def test_altering_authored_lists_after_issuance_is_refused(
     tmp_path: Path,
     evidence_dir: Path,
@@ -1556,7 +1552,195 @@ def test_the_instruction_fixture_creates_no_execution_authority(
     """Preparing an instruction is not authority to execute one."""
     path = tmp_path / "CORRECTION-INSTRUCTION-001.json"
     _write_instruction(path, _instruction_document(evidence_dir, action_plan))
-    document = json.loads(path.read_bytes())
-    assert document["fixture"] == "NON_AUTHORITATIVE_TEST_FIXTURE"
-    assert document["creates_execution_authority"] is False
+    assert path.exists()
+    # Preparing semantics is not authority: nothing was authorized, claimed or run.
     assert not list(tmp_path.glob(".cdc-e2e-correction-successor-attempt-*"))
+    assert not list(tmp_path.glob("AUTH-003*.json"))
+
+
+# ------------------------------------- closed schema and derived affected set
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "official_effect",
+        "override",
+        "reliance_authorized",
+        "notes_that_change_semantics",
+        "arbitrary_future_field",
+    ],
+)
+def test_an_instruction_carrying_an_unknown_field_is_refused(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+    field: str,
+) -> None:
+    """A field with no defined treatment makes the exact-byte binding meaningless."""
+    instruction = _instruction_document(evidence_dir, action_plan, overrides={field: "APPROVED"})
+    with pytest.raises(CorrectionInstructionError, match="no defined treatment"):
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan, instruction=instruction)
+
+
+def test_the_allowed_schema_is_exactly_the_frozen_field_set() -> None:
+    assert set(CORRECTION_INSTRUCTION_ALLOWED_FIELDS) == {
+        "record_class",
+        "experiment_id",
+        "runtime_mission_id",
+        "correction_instruction_id",
+        "correction_stimulus_id",
+        "correction_target_id",
+        "predecessor_ebawu_ref",
+        "predecessor_digest",
+        "new_ebawu_or_successor_id",
+        "new_candidate_digest",
+        "correction_reason",
+        "changed_fact_or_control_refs",
+        "new_state",
+        "correction_event_id",
+    }
+    assert set(CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS) <= set(
+        CORRECTION_INSTRUCTION_ALLOWED_FIELDS
+    )
+    assert not set(CORRECTION_INSTRUCTION_DERIVED_FIELDS) & set(
+        CORRECTION_INSTRUCTION_ALLOWED_FIELDS
+    )
+
+
+def test_owner_authored_field_set_is_exactly_six_fields() -> None:
+    assert len(CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS) == 6
+    assert set(CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS) == {
+        "new_ebawu_or_successor_id",
+        "new_candidate_digest",
+        "correction_reason",
+        "changed_fact_or_control_refs",
+        "new_state",
+        "correction_event_id",
+    }
+    assert "affected_output_refs" not in CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS
+    assert CORRECTION_FIELD_AUTHORITY["affected_output_refs"] == "FROZEN_PREDECESSOR_DERIVED"
+
+
+def test_an_instruction_asserting_affected_output_refs_is_refused(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    instruction = _instruction_document(
+        evidence_dir,
+        action_plan,
+        overrides={"affected_output_refs": ["CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"]},
+    )
+    with pytest.raises(CorrectionInstructionError, match="derived fields it does not author"):
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan, instruction=instruction)
+
+
+def test_affected_output_refs_are_derived_from_the_frozen_drafts(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    frozen_drafts = json.loads((evidence_dir / SOURCE_STAGE_2_RAW_RESULT_FILENAME).read_bytes())[
+        "drafts"
+    ]
+    expected = [
+        draft["draft_id"]
+        for draft in frozen_drafts
+        if PREDECESSOR_EBAWU in draft["provenance"]["institutional_state_per_ebawu"]
+    ]
+    assert list(result.affected_output_refs) == expected
+    assert expected  # the predecessor is genuinely referenced by frozen outputs
+
+
+def test_derived_affected_refs_match_the_eligibility_determinations(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    marked = {
+        item["draft_id"]
+        for item in result.affected_output_eligibility
+        if item["correction_impact"] == CORRECTION_IMPACT_AFFECTED
+    }
+    assert set(result.affected_output_refs) == marked
+
+
+def test_derivation_is_deterministic_across_runs(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    first = _execute(tmp_path / "a", evidence_dir, frozen_input, action_plan)
+    second = _execute(tmp_path / "b", evidence_dir, frozen_input, action_plan)
+    assert list(first.affected_output_refs) == list(second.affected_output_refs)
+
+
+def test_the_operator_cannot_change_the_affected_output_set_through_instruction_bytes(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    """Neither adding nor removing an output is expressible in the instruction."""
+    baseline = _execute(tmp_path / "baseline", evidence_dir, frozen_input, action_plan)
+
+    # Adding the field at all is refused, so no addition or removal is expressible.
+    for attempt in ([], ["CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-99"]):
+        instruction = _instruction_document(
+            evidence_dir, action_plan, overrides={"affected_output_refs": attempt}
+        )
+        with pytest.raises(CorrectionInstructionError):
+            _execute(
+                tmp_path / f"attempt-{len(attempt)}",
+                evidence_dir,
+                frozen_input,
+                action_plan,
+                instruction=instruction,
+            )
+
+    # Changing an authored field instead leaves the derived set untouched.
+    varied = _execute(
+        tmp_path / "varied",
+        evidence_dir,
+        frozen_input,
+        action_plan,
+        instruction=_instruction_document(
+            evidence_dir, action_plan, overrides={"correction_reason": "a different reason"}
+        ),
+    )
+    assert list(varied.affected_output_refs) == list(baseline.affected_output_refs)
+
+
+def test_result_carries_the_authorized_semantics_as_evidence(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    instruction = result.correction_instruction
+    authored = instruction["owner_authored_semantics"]
+    expected = _instruction_document(evidence_dir, action_plan)
+
+    assert set(authored) == set(CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS)
+    for field in CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS:
+        assert authored[field] == expected[field]
+    assert instruction["correction_instruction_id"] == INSTRUCTION_ID
+    assert len(instruction["correction_instruction_sha256"]) == 64
+    assert instruction["correction_instruction_bytes"] > 0
+    assert instruction["field_authority"] == dict(CORRECTION_FIELD_AUTHORITY)

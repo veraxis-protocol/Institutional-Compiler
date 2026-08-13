@@ -4020,18 +4020,40 @@ CORRECTION_INSTRUCTION_OWNER_AUTHORED_FIELDS: Final = (
     "changed_fact_or_control_refs",
     "new_state",
     "correction_event_id",
-    "affected_output_refs",
 )
 
 # Derived from the frozen predecessor or produced after authorization. An
 # instruction that carried these would be asserting values it does not get to
-# choose, so their presence is refused rather than ignored.
+# choose, so their presence is refused rather than ignored. Which frozen outputs
+# reference the corrected predecessor is a fact about the frozen drafts, not an
+# owner selection.
 CORRECTION_INSTRUCTION_DERIVED_FIELDS: Final = (
+    "affected_output_refs",
     "prior_state",
     "reliance_impact_refs",
     "superseded_at_utc",
     "superseded_by",
     "supersedes",
+)
+
+# The complete top-level schema. An exact-byte authorization over a document is
+# meaningful only if every semantic field in that document has defined treatment,
+# so an unknown field is refused rather than carried along unread.
+CORRECTION_INSTRUCTION_ALLOWED_FIELDS: Final = (
+    "changed_fact_or_control_refs",
+    "correction_event_id",
+    "correction_instruction_id",
+    "correction_reason",
+    "correction_stimulus_id",
+    "correction_target_id",
+    "experiment_id",
+    "new_candidate_digest",
+    "new_ebawu_or_successor_id",
+    "new_state",
+    "predecessor_digest",
+    "predecessor_ebawu_ref",
+    "record_class",
+    "runtime_mission_id",
 )
 
 CORRECTION_FIELD_AUTHORITY: Final[dict[str, str]] = {
@@ -4041,10 +4063,10 @@ CORRECTION_FIELD_AUTHORITY: Final[dict[str, str]] = {
     "changed_fact_or_control_refs": "OWNER_AUTHORED",
     "new_state": "OWNER_AUTHORED",
     "correction_event_id": "OWNER_AUTHORED",
-    "affected_output_refs": "OWNER_AUTHORED",
     "predecessor_digest": "FROZEN_PREDECESSOR_DERIVED",
     "supersedes": "FROZEN_PREDECESSOR_DERIVED",
     "prior_state": "FROZEN_PREDECESSOR_DERIVED",
+    "affected_output_refs": "FROZEN_PREDECESSOR_DERIVED",
     "superseded_by": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
     "reliance_impact_refs": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
     "superseded_at_utc": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
@@ -4232,9 +4254,15 @@ class OwnerCorrectionInstruction:
     declared_predecessor_digest: str
     owner_authored: Mapping[str, Any]
 
-    def as_correction(self, predecessor_digest: str) -> dict[str, Any]:
-        """The correction payload, carrying only owner-authored values."""
-        return {**dict(self.owner_authored), "predecessor_digest": predecessor_digest}
+    def as_correction(
+        self, predecessor_digest: str, affected_output_refs: Sequence[str]
+    ) -> dict[str, Any]:
+        """The correction payload: authored values plus the derived ones."""
+        return {
+            **dict(self.owner_authored),
+            "predecessor_digest": predecessor_digest,
+            "affected_output_refs": list(affected_output_refs),
+        }
 
     def as_record(self) -> dict[str, Any]:
         """Identity and authored semantics; no derived value appears here."""
@@ -4244,6 +4272,7 @@ class OwnerCorrectionInstruction:
             "correction_instruction_bytes": self.byte_count,
             "correction_instruction_path": str(self.path),
             "owner_authored_fields": sorted(self.owner_authored),
+            "owner_authored_semantics": dict(self.owner_authored),
             "declared_predecessor_digest": self.declared_predecessor_digest,
             "field_authority": dict(CORRECTION_FIELD_AUTHORITY),
             "caller_selectable": False,
@@ -4307,6 +4336,7 @@ class CorrectionSuccessorResult:
     predecessor_supersession_record: Mapping[str, Any]
     correction_reason: str
     changed_fact_or_control_refs: Sequence[Any]
+    affected_output_refs: Sequence[str]
     affected_output_eligibility: Sequence[Mapping[str, Any]]
     stale_proposal_refusal_observation: Mapping[str, Any]
     predecessor_immutability: Mapping[str, Any]
@@ -4339,6 +4369,7 @@ class CorrectionSuccessorResult:
             "predecessor_supersession_record": dict(self.predecessor_supersession_record),
             "correction_reason": self.correction_reason,
             "changed_fact_or_control_refs": list(self.changed_fact_or_control_refs),
+            "affected_output_refs": list(self.affected_output_refs),
             "affected_output_eligibility": [
                 dict(item) for item in self.affected_output_eligibility
             ],
@@ -4684,6 +4715,13 @@ def verify_owner_correction_instruction(
             f"the correction instruction asserts derived fields it does not author: "
             f"{derived_present}"
         )
+
+    unknown = sorted(document.keys() - set(CORRECTION_INSTRUCTION_ALLOWED_FIELDS))
+    if unknown:
+        raise CorrectionInstructionError(
+            f"the correction instruction carries fields with no defined treatment: {unknown}; "
+            "an exact-byte authorization is meaningful only over a closed schema"
+        )
     declared_predecessor = document.get("predecessor_digest")
     if not isinstance(declared_predecessor, str) or not declared_predecessor:
         raise CorrectionInstructionError(
@@ -5016,6 +5054,37 @@ def build_predecessor_supersession_record(
     }
 
 
+def _draft_references_predecessor(draft: Mapping[str, Any], predecessor: Mapping[str, Any]) -> bool:
+    """Whether one frozen draft's provenance references the corrected predecessor."""
+    provenance = _require_mapping(draft.get("provenance"), "draft provenance")
+    states = provenance.get("institutional_state_per_ebawu")
+    dispositions = provenance.get("disposition_per_candidate")
+    candidate_refs = _require_sequence(provenance.get("candidate_refs", []), "candidate refs")
+    predecessor_ebawu = str(predecessor["ebawu_id"])
+    predecessor_candidate = str(predecessor["candidate_id"])
+    return (
+        (isinstance(states, Mapping) and predecessor_ebawu in states)
+        or (isinstance(dispositions, Mapping) and predecessor_candidate in dispositions)
+        or predecessor_candidate in candidate_refs
+    )
+
+
+def derive_affected_output_refs(
+    evidence: FrozenStage2Evidence, predecessor: Mapping[str, Any]
+) -> tuple[str, ...]:
+    """Which frozen outputs reference the corrected predecessor.
+
+    A fact about the frozen drafts, derived before any owner or operator choice
+    could bear on it. The order is the frozen draft order, so the set is exact
+    and reproducible.
+    """
+    return tuple(
+        str(draft.get("draft_id"))
+        for draft in evidence.drafts
+        if _draft_references_predecessor(draft, predecessor)
+    )
+
+
 def recompute_affected_output_eligibility(
     evidence: FrozenStage2Evidence,
     predecessor: Mapping[str, Any],
@@ -5033,15 +5102,7 @@ def recompute_affected_output_eligibility(
     predecessor_ebawu = str(predecessor["ebawu_id"])
     predecessor_candidate = str(predecessor["candidate_id"])
     for draft in evidence.drafts:
-        provenance = _require_mapping(draft.get("provenance"), "draft provenance")
-        states = provenance.get("institutional_state_per_ebawu")
-        dispositions = provenance.get("disposition_per_candidate")
-        candidate_refs = _require_sequence(provenance.get("candidate_refs", []), "candidate refs")
-        affected = (
-            (isinstance(states, Mapping) and predecessor_ebawu in states)
-            or (isinstance(dispositions, Mapping) and predecessor_candidate in dispositions)
-            or predecessor_candidate in candidate_refs
-        )
+        affected = _draft_references_predecessor(draft, predecessor)
         determinations.append(
             {
                 "draft_id": draft.get("draft_id"),
@@ -5208,7 +5269,8 @@ def execute_authorized_correction_successor(
             f"correction binds predecessor {instruction.declared_predecessor_digest!r}, "
             f"actual {predecessor_digest!r}"
         )
-    correction = instruction.as_correction(predecessor_digest)
+    affected_output_refs = derive_affected_output_refs(evidence, predecessor)
+    correction = instruction.as_correction(predecessor_digest, affected_output_refs)
     missing = sorted(set(plan.correction.required_correction_fields) - correction.keys())
     frozen_side = set(CORRECTION_INSTRUCTION_DERIVED_FIELDS)
     missing = sorted(set(missing) - frozen_side)
@@ -5269,6 +5331,16 @@ def execute_authorized_correction_successor(
             authorization.successor_id,
             plan.correction.correction_stimulus_id,
         )
+        marked_affected = {
+            str(item["draft_id"])
+            for item in eligibility
+            if item["correction_impact"] == CORRECTION_IMPACT_AFFECTED
+        }
+        if marked_affected != set(affected_output_refs):
+            raise MissionContractError(
+                "the derived affected-output set and the per-output determinations "
+                f"disagree: {sorted(set(affected_output_refs) ^ marked_affected)}"
+            )
         stale_observation = observe_stale_predecessor_proposal_refusal(
             evidence, predecessor, authorization.successor_id
         )
@@ -5316,6 +5388,7 @@ def execute_authorized_correction_successor(
         predecessor_supersession_record=supersession,
         correction_reason=str(bound["correction_reason"]),
         changed_fact_or_control_refs=list(bound["changed_refs"]),
+        affected_output_refs=list(affected_output_refs),
         affected_output_eligibility=eligibility,
         stale_proposal_refusal_observation=stale_observation,
         predecessor_immutability=immutability,
