@@ -1,0 +1,155 @@
+{
+  "affected_output_refs_authority": "FROZEN_PREDECESSOR_DERIVED",
+  "affected_output_scope": {
+    "computed_from": "FROZEN_RUN_001_DRAFTS_AND_FROZEN_PREDECESSOR_ONLY",
+    "invariant_violation_is_a_contract_failure": true,
+    "owner_may_add_or_remove_an_affected_output": false,
+    "required_invariant": "set(affected_output_refs) == set(draft_id where correction_impact == AFFECTED_BY_SUPERSESSION)"
+  },
+  "auth_003_binding_model": {
+    "bound_separately": "correction_stimulus_digest",
+    "correction_instruction_sha256_meaning": "the exact consequential correction semantics authorized",
+    "correction_stimulus_digest_meaning": "frozen provenance that permits entry into the correction scenario",
+    "may_substitute_for_one_another": false,
+    "must_bind_instruction": [
+      "correction_instruction_id",
+      "correction_instruction_path",
+      "correction_instruction_sha256",
+      "correction_instruction_bytes"
+    ]
+  },
+  "authorizes_execution": false,
+  "caller_can_change_correction_semantics_after_AUTH_003_issuance": false,
+  "claim_ceiling": "SYNTHETIC_EVALUATION_ONLY",
+  "controlling_implementation_after_this_acceptance": "e01ab40c0ae63d5420248c8f950d3ca9fd8e618d",
+  "correction_executed": false,
+  "correction_instruction_allowed_field_count": 14,
+  "correction_instruction_allowed_fields": [
+    "changed_fact_or_control_refs",
+    "correction_event_id",
+    "correction_instruction_id",
+    "correction_reason",
+    "correction_stimulus_id",
+    "correction_target_id",
+    "experiment_id",
+    "new_candidate_digest",
+    "new_ebawu_or_successor_id",
+    "new_state",
+    "predecessor_digest",
+    "predecessor_ebawu_ref",
+    "record_class",
+    "runtime_mission_id"
+  ],
+  "correction_instruction_record_class": "OWNER_CORRECTION_INSTRUCTION",
+  "correction_instruction_schema": "CLOSED",
+  "creates_AUTH_003": false,
+  "creates_correction_execution_authority": false,
+  "creates_correction_instruction": false,
+  "experiment_id": "CDC-END-TO-END-MISSION-001",
+  "field_authority": {
+    "affected_output_eligibility": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
+    "affected_output_refs": "FROZEN_PREDECESSOR_DERIVED",
+    "changed_fact_or_control_refs": "OWNER_AUTHORED",
+    "correction_event_id": "OWNER_AUTHORED",
+    "correction_reason": "OWNER_AUTHORED",
+    "new_candidate_digest": "OWNER_AUTHORED",
+    "new_ebawu_or_successor_id": "OWNER_AUTHORED",
+    "new_state": "OWNER_AUTHORED",
+    "predecessor_digest": "FROZEN_PREDECESSOR_DERIVED",
+    "prior_state": "FROZEN_PREDECESSOR_DERIVED",
+    "reliance_impact_refs": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
+    "superseded_at_utc": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
+    "superseded_by": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
+    "supersedes": "FROZEN_PREDECESSOR_DERIVED"
+  },
+  "field_authority_classes": {
+    "FROZEN_PREDECESSOR_DERIVED": [
+      "affected_output_refs",
+      "predecessor_digest",
+      "prior_state",
+      "supersedes"
+    ],
+    "OWNER_AUTHORED": [
+      "changed_fact_or_control_refs",
+      "correction_event_id",
+      "correction_reason",
+      "new_candidate_digest",
+      "new_ebawu_or_successor_id",
+      "new_state"
+    ],
+    "SYSTEM_DERIVED_AFTER_AUTHORIZATION": [
+      "affected_output_eligibility",
+      "reliance_impact_refs",
+      "superseded_at_utc",
+      "superseded_by"
+    ]
+  },
+  "frozen_principle": {
+    "authority_to_execute_a_correction_is_not_authority_to_execute_this_exact_correction": true,
+    "byte_exact_authority_is_insufficient_without_meaning_exact_authority": true
+  },
+  "frozen_run_001_state": {
+    "m11": "SEMANTIC_VIOLATION",
+    "m11_scope": "OUT_OF_SCOPE",
+    "m12_run_001": "INCOMPLETE_OBSERVATION",
+    "modified_by_this_acceptance": false,
+    "run_001_aggregate": "FAIL",
+    "stage_2_attempt": "CONSUMED_AFTER_FIRST_TRANSITION_EVALUATION"
+  },
+  "historical_lineage_preserved_unamended": [
+    "0fa254e823bbcb876a78b18611a812d2f84ea5b3",
+    "312918523b5706238e64c337b326152141f32af1",
+    "b6e071f07b4a7b7c2b686e5aa77c256a8d8309b1",
+    "8bc92cf58f81702cb8515c2f3d707dfe3993d6a6",
+    "e01ab40c0ae63d5420248c8f950d3ca9fd8e618d"
+  ],
+  "implementation_accepted": true,
+  "implementation_branch": "cdc-e2e-m12-exact-correction-authority-v0.1",
+  "implementation_commit": "e01ab40c0ae63d5420248c8f950d3ca9fd8e618d",
+  "implementation_tree": "9278028471b055e724c25f226800caeb26e205db",
+  "issues_AUTH_003": false,
+  "m11_repair_authorized": false,
+  "next_gate": "M12_EXACT_CORRECTION_EXECUTION_ENVIRONMENT_OBSERVATION",
+  "owner_acceptance_at_utc": "2026-08-13T19:23:08Z",
+  "owner_authored_field_count": 6,
+  "owner_authored_fields": [
+    "new_ebawu_or_successor_id",
+    "new_candidate_digest",
+    "correction_reason",
+    "changed_fact_or_control_refs",
+    "new_state",
+    "correction_event_id"
+  ],
+  "owner_decision": "ACCEPTED_AND_FROZEN",
+  "owner_may_assert_derived_fields": false,
+  "predecessor_digest_declared_not_chosen": true,
+  "prior_environment_observation_commit": "b6e071f07b4a7b7c2b686e5aa77c256a8d8309b1",
+  "prior_owner_implementation_acceptance": "312918523b5706238e64c337b326152141f32af1",
+  "public_route": "oic.cdc_e2e_mission.execute_authorized_correction_successor",
+  "public_route_accepts_caller_correction_mapping": false,
+  "record_class": "OWNER_M12_EXACT_CORRECTION_AUTHORITY_IMPLEMENTATION_ACCEPTANCE",
+  "repository_wide_ci_green": false,
+  "required_result_observability": [
+    "affected_output_eligibility",
+    "affected_output_refs",
+    "correction_instruction_bytes",
+    "correction_instruction_id",
+    "correction_instruction_sha256",
+    "field_authority",
+    "owner_authored_semantics"
+  ],
+  "result_bearing": false,
+  "result_values_are_evidence_not_a_second_authority_object": true,
+  "reviewed_parent_commit": "8bc92cf58f81702cb8515c2f3d707dfe3993d6a6",
+  "run_001_modification_authorized": false,
+  "runtime_mission_id": "CDC-TEST-MISSION-001",
+  "test_status": {
+    "changed_file_mypy": "PASS",
+    "changed_file_ruff": "PASS",
+    "full_pytest": "1619 passed, 43 skipped",
+    "inherited_ci_conditions_altered_by_this_acceptance": false,
+    "repository_wide_ci_green": false,
+    "stage_2_regression": "PASS"
+  },
+  "unknown_instruction_fields_permitted": false
+}
