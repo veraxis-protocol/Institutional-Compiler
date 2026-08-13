@@ -1,0 +1,18 @@
+{
+  "changed_fact_or_control_refs": [
+    "C-TENDER-01"
+  ],
+  "correction_event_id": "CDC-E2E-M12-CORRECTION-EVT-001",
+  "correction_instruction_id": "CDC-END-TO-END-MISSION-001-M12-CORRECTION-INSTRUCTION-001",
+  "correction_reason": "Synthetic owner correction of C-TENDER-01 after the completed predecessor transition; the predecessor is preserved and the corrected successor does not inherit the predecessor's prior ACCEPTED_CANDIDATE disposition.",
+  "correction_stimulus_id": "HA-CORRECTION-001",
+  "correction_target_id": "HA-P001-C-TENDER-01",
+  "experiment_id": "CDC-END-TO-END-MISSION-001",
+  "new_candidate_digest": "d9fb749c59b3da5ddacfcf846fc89aaeb569fa3ada846150ee26f0ed7bac7eb1",
+  "new_ebawu_or_successor_id": "EBAWU-P-001-C-TENDER-01-CORR-001",
+  "new_state": "CANDIDATE_FORMED",
+  "predecessor_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+  "predecessor_ebawu_ref": "EBAWU-P-001-C-TENDER-01",
+  "record_class": "OWNER_CORRECTION_INSTRUCTION",
+  "runtime_mission_id": "CDC-TEST-MISSION-001"
+}
