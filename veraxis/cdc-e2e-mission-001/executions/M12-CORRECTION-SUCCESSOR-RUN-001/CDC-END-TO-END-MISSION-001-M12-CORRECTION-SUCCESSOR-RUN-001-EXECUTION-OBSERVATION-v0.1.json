@@ -1,0 +1,123 @@
+{
+  "affected_output_observations": "NOT_PRODUCED: execution failed before result assembly",
+  "archive_observation": "NOT_OBSERVABLE: repository root could not be resolved from the bound evidence root",
+  "attempt_record": {
+    "attempt_state": "CONSUMED_AFTER_FIRST_SUCCESSOR_CONSTRUCTION",
+    "bytes": 823,
+    "path": "/private/tmp/cdc-e2e-stage2-run-001/.cdc-e2e-correction-successor-attempt-ee8b80921c704b165ab6482187cbbb1eab4fa315d7e89b468b98b83ac86f34ff.json",
+    "sha256": "7a5ff7eabaa103e1b0d682683a6bba478fa279908cf47e649d2b4edee2ce1472"
+  },
+  "attempt_record_deleted_or_rewritten": false,
+  "attempt_state": "CONSUMED_AFTER_FIRST_SUCCESSOR_CONSTRUCTION",
+  "auth_003": {
+    "bytes": 3631,
+    "path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-OWNER-CORRECTION-SUCCESSOR-EXECUTION-AUTHORIZATION-v0.1.json",
+    "sha256": "ee8b80921c704b165ab6482187cbbb1eab4fa315d7e89b468b98b83ac86f34ff"
+  },
+  "auth_003_issuance_record": {
+    "bytes": 3128,
+    "path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-M12-AUTH-003-ISSUANCE-RECORD-v0.1.json",
+    "sha256": "40383b4ed2b7faceed71126854816371592fc4ad7cc90082c21b9ef980e4c7ec"
+  },
+  "authority_exercised": true,
+  "authorized_run_procedure": "CANONICAL_FROZEN_HARNESS",
+  "automatic_retry": false,
+  "claim_ceiling": "SYNTHETIC_EVALUATION_ONLY",
+  "controlling_executable_implementation_commit": "e01ab40c0ae63d5420248c8f950d3ca9fd8e618d",
+  "controlling_executable_implementation_tree": "9278028471b055e724c25f226800caeb26e205db",
+  "converted_to_no_attempt_record": false,
+  "correction_executed": false,
+  "correction_instruction": {
+    "bytes": 1042,
+    "path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-M12-CORRECTION-INSTRUCTION-001.json",
+    "sha256": "b8b4cfcb73df1db0f1fc057f2a445355f34d3bd02cd6b28a6136a27cadc53dfd"
+  },
+  "correction_successor_result_persisted": false,
+  "direct_core_invocation": false,
+  "environment_manifest": {
+    "bytes": 8823,
+    "path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-M12-EXACT-CORRECTION-EXECUTION-ENVIRONMENT-v0.4.json",
+    "sha256": "b5912183cb351e900887eaec3b34361cce0f02c3fbc63d9bec1c009e7e85f6ad"
+  },
+  "exception_class": "PostConstructionIntegrityError",
+  "exception_text": "FAILED_POST_CONSTRUCTION_INTEGRITY: [OIC-1001] could not locate an OIC repository root (no BOOTSTRAP_MANIFEST.json found at or above /private/tmp/cdc-e2e-stage2-run-001)",
+  "execution_gate_acceptance_commit": "f9afeea6f820391de18e9182f2eda763038ea94e",
+  "execution_gate_acceptance_tree": "2a046fcadad3e85bcc1437ee1349d633597a7b28",
+  "execution_invocation_count": 1,
+  "execution_order_effective": true,
+  "execution_status": "FAILED_POST_CONSTRUCTION",
+  "experiment_id": "CDC-END-TO-END-MISSION-001",
+  "failure_cause": "verify_frozen_stage_2_archive_identity resolves the repository root from the bound evidence root; the authorized evidence root is the runtime run directory, which lies outside any repository, so the archive identity could not be observed",
+  "failure_is_infrastructure_not_semantic": true,
+  "failure_observation": {
+    "bytes": 4264,
+    "path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-M12-CORRECTION-SUCCESSOR-RUN-001-FAILURE-OBSERVATION-v0.1.json",
+    "sha256": "602cb62fe875f27e62cf304cdd1f7a39365d9f7a761a691fc8e1e59de26f38de"
+  },
+  "failure_phase": "ARCHIVE_IDENTITY_VERIFICATION_AFTER_SUCCESSOR_CONSTRUCTION",
+  "harness": {
+    "bytes": 24638,
+    "path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-M12-EXECUTION-HARNESS-v0.2.py",
+    "sha256": "23edb7aed5cf2b2b5d0001eda21feb3a489d7b7b538e75845cf381bf54832925"
+  },
+  "immutability_observation": "NOT_PRODUCED_IN_RESULT; predecessor digests preserved in the failure context",
+  "m11_repaired": false,
+  "m12_adjudication_in_this_record": "NONE_OBSERVATION_IS_NOT_ADJUDICATION",
+  "official_handoff": "PROHIBITED",
+  "owner_command_issued": true,
+  "owner_execution_decision": {
+    "bytes": 1357,
+    "path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-M12-CORRECTION-EXECUTION-DECISION-001.json",
+    "sha256": "7589fc6f7557e538da6eb467d0d35257ec7058e6f555f9bcebadce47bec43e03"
+  },
+  "owner_execution_decision_issuance_record": {
+    "bytes": 2117,
+    "path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-M12-CORRECTION-EXECUTION-DECISION-001-ISSUANCE-RECORD-v0.1.json",
+    "sha256": "0fd2814437c23f5a304845bac54d31c89b45a5f276fb46c89f562ba136af5a0a"
+  },
+  "post_issuance_preflight": {
+    "checks_passed": 18,
+    "checks_total": 18,
+    "execution_allowed": true,
+    "unrelated_failures": []
+  },
+  "predecessor": {
+    "candidate_digest": "207c317cb47aada8d7782b2df5691bf4367b9a3b9fd1720f0732f37279050c12",
+    "candidate_id": "CAND-P-001-C-TENDER-01",
+    "ebawu_id": "EBAWU-P-001-C-TENDER-01",
+    "state": "ACCEPTED_CANDIDATE"
+  },
+  "predecessor_after_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+  "predecessor_before_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+  "predecessor_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+  "predecessor_digest_unchanged_across_correction": true,
+  "raw_successor_result_exists": false,
+  "record_class": "M12_CORRECTION_SUCCESSOR_EXECUTION_OBSERVATION",
+  "result_status": "FAILED_POST_CONSTRUCTION_INTEGRITY",
+  "run_001_adjudication_rewritten": false,
+  "run_001_aggregate": "FAIL",
+  "run_001_historical_m12": "INCOMPLETE_OBSERVATION",
+  "run_001_m11": "SEMANTIC_VIOLATION",
+  "run_001_modified": false,
+  "run_001_post_execution_identity": {
+    "attempt_record_sha256": "0d11efa747647bf6764bb7562b3a8e7b02219ed2b10f527ce4b5e69df3ca72d2",
+    "raw_result_sha256": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+    "route_trace_sha256": "481957e87f73e2fc058e0e167b6d3d82fea830b2eaad16c78bdfc39f3c952920"
+  },
+  "run_metadata": {
+    "occurred_at": "2026-08-13T23:01:24Z",
+    "producer": "CDC-END-TO-END-MISSION-001-M12-EXECUTION-HARNESS-v0.2",
+    "producer_version": "sha256:23edb7aed5cf2b2b5d0001eda21feb3a489d7b7b538e75845cf381bf54832925",
+    "recorded_at": "2026-08-13T23:01:24Z",
+    "run_id": "CDC-E2E-M12-CORRECTION-SUCCESSOR-RUN-001",
+    "trace_id": "CDC-E2E-M12-CORRECTION-SUCCESSOR-TRACE-001"
+  },
+  "runtime_mission_id": "CDC-TEST-MISSION-001",
+  "source_run_id": "CDC-E2E-STAGE2-RUN-001",
+  "stage_1_reexecuted": false,
+  "stage_2_reexecuted": false,
+  "stale_refusal_observation": "NOT_PRODUCED: execution failed before result assembly",
+  "successor_constructed": true,
+  "successor_construction_invoked": true,
+  "successor_id": "EBAWU-P-001-C-TENDER-01-CORR-001"
+}

@@ -1,0 +1,137 @@
+{
+  "auth_003_valid": true,
+  "authority_exercised": false,
+  "authority_exists": true,
+  "authorized_run_procedure_requires_execution_decision": true,
+  "checks": {
+    "A1_decision_exact_identity": {
+      "detail": "MATCH",
+      "passed": true
+    },
+    "A_execution_decision_present": {
+      "detail": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-M12-CORRECTION-EXECUTION-DECISION-001.json",
+      "passed": true
+    },
+    "B1_decision_semantics_19_of_19": {
+      "detail": {
+        "mismatches": [],
+        "semantic_bindings": "19/19"
+      },
+      "passed": true
+    },
+    "B_decision_schema_exact_19_fields": {
+      "detail": {
+        "missing": [],
+        "schema": "EXACT_19_FIELDS",
+        "unknown": []
+      },
+      "passed": true
+    },
+    "C_decision_binds_auth_003": {
+      "detail": "ee8b80921c704b165ab6482187cbbb1eab4fa315d7e89b468b98b83ac86f34ff",
+      "passed": true
+    },
+    "D1_auth_003_present_and_exact": {
+      "detail": "ee8b80921c704b165ab6482187cbbb1eab4fa315d7e89b468b98b83ac86f34ff",
+      "passed": true
+    },
+    "D2_auth_003_verifies_at_canonical_path": {
+      "detail": null,
+      "passed": true
+    },
+    "E_issuance_record_exact": {
+      "detail": "40383b4ed2b7faceed71126854816371592fc4ad7cc90082c21b9ef980e4c7ec",
+      "passed": true
+    },
+    "F_issuance_record_state": {
+      "detail": {
+        "authority_exercised": false,
+        "execution_eligibility": "ELIGIBLE_PENDING_SEPARATE_OWNER_EXECUTION_DECISION",
+        "successor_attempt_created": false
+      },
+      "passed": true
+    },
+    "G_correction_instruction_verifies": {
+      "detail": "b8b4cfcb73df1db0f1fc057f2a445355f34d3bd02cd6b28a6136a27cadc53dfd",
+      "passed": true
+    },
+    "H_single_successor_id": {
+      "detail": {
+        "authorization": "EBAWU-P-001-C-TENDER-01-CORR-001",
+        "decision": "EBAWU-P-001-C-TENDER-01-CORR-001",
+        "instruction": "EBAWU-P-001-C-TENDER-01-CORR-001"
+      },
+      "passed": true
+    },
+    "I_executable_identity": {
+      "detail": {
+        "commit": "e01ab40c0ae63d5420248c8f950d3ca9fd8e618d",
+        "tree": "9278028471b055e724c25f226800caeb26e205db"
+      },
+      "passed": true
+    },
+    "J_environment_manifest": {
+      "detail": "b5912183cb351e900887eaec3b34361cce0f02c3fbc63d9bec1c009e7e85f6ad",
+      "passed": true
+    },
+    "K_correction_attempt_state": {
+      "detail": "NO_ATTEMPT_RECORD",
+      "passed": true
+    },
+    "L_stage_2_attempt_consumed": {
+      "detail": "CONSUMED_AFTER_FIRST_TRANSITION_EVALUATION",
+      "passed": true
+    },
+    "M_run_001_evidence_unchanged": {
+      "detail": {
+        "attempt_record": "0d11efa747647bf6764bb7562b3a8e7b02219ed2b10f527ce4b5e69df3ca72d2",
+        "raw_result": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+        "route_trace": "481957e87f73e2fc058e0e167b6d3d82fea830b2eaad16c78bdfc39f3c952920"
+      },
+      "passed": true
+    },
+    "N_origin_evidence_identity": {
+      "detail": {
+        "commit": "1a80aabe0f72eac8570b9827ee7545cda370cbe8",
+        "tree": "a6216214ae5a49ffcb3448a97aadce1bb3f418e3"
+      },
+      "passed": true
+    },
+    "SOURCE_runtime_matches_controlling_implementation": {
+      "detail": {
+        "accepted_implementation_commit": "e01ab40c0ae63d5420248c8f950d3ca9fd8e618d",
+        "head_equality_required": false,
+        "matches": true,
+        "property_checked": "CURRENT_EXECUTABLE_SOURCE_TREE == SOURCE_TREE_OF_ACCEPTED_IMPLEMENTATION",
+        "repo": "/private/tmp/claude-501/cleanroom",
+        "tracked_src_differences": [],
+        "untracked_src_files": []
+      },
+      "passed": true
+    }
+  },
+  "core_library_direct_call_requires_execution_decision": false,
+  "core_module_file": "/private/tmp/claude-501/cleanroom/src/oic/cdc_e2e_mission.py",
+  "correction_attempt_state": "NO_ATTEMPT_RECORD",
+  "direct_call_bypassing_harness": "OUTSIDE_AUTHORIZED_RUN_PROCEDURE",
+  "enforcement_class": "RUN_LEVEL_GOVERNED_EXECUTION_HARNESS",
+  "execution_allowed": true,
+  "execution_decision_canonical_path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-M12-CORRECTION-EXECUTION-DECISION-001.json",
+  "execution_decision_canonical_path_present": true,
+  "execution_decision_exact_identity": "MATCH",
+  "execution_decision_expected_bytes": 1357,
+  "execution_decision_expected_sha256": "7589fc6f7557e538da6eb467d0d35257ec7058e6f555f9bcebadce47bec43e03",
+  "execution_decision_schema": "EXACT_19_FIELDS",
+  "execution_decision_semantic_bindings": "19/19",
+  "harness_version": "v0.2",
+  "production_hardening_question": "MOVE_OWNER_EXECUTION_DECISION_VERIFICATION_INTO_CORE_RUNTIME_GATE",
+  "production_hardening_status": "OUT_OF_SCOPE_FOR_FROZEN_M12_SUCCESSOR",
+  "refusal_reason": null,
+  "refusals": [],
+  "result_bearing_functions_invoked": [],
+  "runtime_source_matches_controlling_implementation": true,
+  "runtime_source_verified_before_core_import": true,
+  "tracked_src_differences": [],
+  "unrelated_failures": [],
+  "untracked_src_files": []
+}

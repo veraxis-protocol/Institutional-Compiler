@@ -1,0 +1,44 @@
+{
+  "automatic_retry": false,
+  "exception_class": "PostConstructionIntegrityError",
+  "exception_text": "FAILED_POST_CONSTRUCTION_INTEGRITY: [OIC-1001] could not locate an OIC repository root (no BOOTSTRAP_MANIFEST.json found at or above /private/tmp/cdc-e2e-stage2-run-001)",
+  "execution_invocation_count": 1,
+  "observation": {
+    "attempt_record": {
+      "attempt_record_bytes": 823,
+      "attempt_record_path": "/private/tmp/cdc-e2e-stage2-run-001/.cdc-e2e-correction-successor-attempt-ee8b80921c704b165ab6482187cbbb1eab4fa315d7e89b468b98b83ac86f34ff.json",
+      "attempt_record_sha256": "7a5ff7eabaa103e1b0d682683a6bba478fa279908cf47e649d2b4edee2ce1472",
+      "attempt_state": "CONSUMED_AFTER_FIRST_SUCCESSOR_CONSTRUCTION",
+      "implementation_commit": "e01ab40c0ae63d5420248c8f950d3ca9fd8e618d",
+      "implementation_tree": "9278028471b055e724c25f226800caeb26e205db",
+      "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+      "owner_execution_authorization_sha256": "ee8b80921c704b165ab6482187cbbb1eab4fa315d7e89b468b98b83ac86f34ff"
+    },
+    "attempt_state": "CONSUMED_AFTER_FIRST_SUCCESSOR_CONSTRUCTION",
+    "automatic_retry": false,
+    "failure": "ConfigurationError: [OIC-1001] could not locate an OIC repository root (no BOOTSTRAP_MANIFEST.json found at or above /private/tmp/cdc-e2e-stage2-run-001)",
+    "predecessor": {
+      "candidate_digest": "207c317cb47aada8d7782b2df5691bf4367b9a3b9fd1720f0732f37279050c12",
+      "candidate_id": "CAND-P-001-C-TENDER-01",
+      "ebawu_id": "EBAWU-P-001-C-TENDER-01",
+      "state": "ACCEPTED_CANDIDATE"
+    },
+    "predecessor_after_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+    "predecessor_before_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+    "predecessor_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+    "result_status": "FAILED_POST_CONSTRUCTION_INTEGRITY",
+    "successor_constructed": true,
+    "successor_construction_invoked": true,
+    "successor_id": "EBAWU-P-001-C-TENDER-01-CORR-001"
+  },
+  "record_class": "M12_CORRECTION_SUCCESSOR_EXECUTION_FAILURE_OBSERVATION",
+  "run_metadata": {
+    "occurred_at": "2026-08-13T23:01:24Z",
+    "producer": "CDC-END-TO-END-MISSION-001-M12-EXECUTION-HARNESS-v0.2",
+    "producer_version": "sha256:23edb7aed5cf2b2b5d0001eda21feb3a489d7b7b538e75845cf381bf54832925",
+    "recorded_at": "2026-08-13T23:01:24Z",
+    "run_id": "CDC-E2E-M12-CORRECTION-SUCCESSOR-RUN-001",
+    "trace_id": "CDC-E2E-M12-CORRECTION-SUCCESSOR-TRACE-001"
+  },
+  "traceback": "Traceback (most recent call last):\n  File \"/private/tmp/claude-501/cleanroom/src/oic/cdc_e2e_mission.py\", line 5356, in execute_authorized_correction_successor\n    archive_identity = verify_frozen_stage_2_archive_identity(authorization, locations)\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/private/tmp/claude-501/cleanroom/src/oic/cdc_e2e_mission.py\", line 4862, in verify_frozen_stage_2_archive_identity\n    repo_root = find_repo_root(locations.root)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/private/tmp/claude-501/cleanroom/src/oic/paths.py\", line 62, in find_repo_root\n    raise ConfigurationError(\noic.errors.ConfigurationError: [OIC-1001] could not locate an OIC repository root (no BOOTSTRAP_MANIFEST.json found at or above /private/tmp/cdc-e2e-stage2-run-001)\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"<stdin>\", line 29, in <module>\n  File \"/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-M12-EXECUTION-HARNESS-v0.2.py\", line 541, in execute\n    return mission.execute_authorized_correction_successor(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/private/tmp/claude-501/cleanroom/src/oic/cdc_e2e_mission.py\", line 5362, in execute_authorized_correction_successor\n    raise PostConstructionIntegrityError(\noic.cdc_e2e_mission.PostConstructionIntegrityError: FAILED_POST_CONSTRUCTION_INTEGRITY: [OIC-1001] could not locate an OIC repository root (no BOOTSTRAP_MANIFEST.json found at or above /private/tmp/cdc-e2e-stage2-run-001)\n"
+}
