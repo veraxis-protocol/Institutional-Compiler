@@ -1,0 +1,81 @@
+{
+  "acceptance_converts_derived_values_into_owner_assertions": false,
+  "accepted_without_semantic_or_byte_modification": true,
+  "alterable_under_auth_003": false,
+  "candidate_formed_semantics": {
+    "new_human_disposition_created_by_this_instruction": false,
+    "note": "this instruction creates a corrected successor state; it does not adjudicate or approve that successor",
+    "officiality_created": false,
+    "predecessor_acceptance_preserved": true,
+    "predecessor_historical_state": "ACCEPTED_CANDIDATE",
+    "reliance_created": false,
+    "successor_inherits_predecessor_acceptance": false,
+    "successor_initial_state": "CANDIDATE_FORMED"
+  },
+  "canonical_runtime_instruction_path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-M12-CORRECTION-INSTRUCTION-001.json",
+  "claim_ceiling": "SYNTHETIC_EVALUATION_ONLY",
+  "controlling_implementation_commit": "e01ab40c0ae63d5420248c8f950d3ca9fd8e618d",
+  "correction_executed": false,
+  "correction_instruction_bytes": 1042,
+  "correction_instruction_id": "CDC-END-TO-END-MISSION-001-M12-CORRECTION-INSTRUCTION-001",
+  "correction_instruction_sha256": "b8b4cfcb73df1db0f1fc057f2a445355f34d3bd02cd6b28a6136a27cadc53dfd",
+  "creates_AUTH_003": false,
+  "creates_execution_authority": false,
+  "creates_successor_attempt": false,
+  "derived_affected_output_refs_remain_derived": true,
+  "environment_evidence_commit": "e8d5fb015a1e210664ee4ff626cfaa66bace2ffa",
+  "environment_sha256": "b5912183cb351e900887eaec3b34361cce0f02c3fbc63d9bec1c009e7e85f6ad",
+  "experiment_id": "CDC-END-TO-END-MISSION-001",
+  "fields_not_authored_by_this_instruction": [
+    "affected_output_eligibility",
+    "affected_output_refs",
+    "prior_state",
+    "reliance_impact_refs",
+    "superseded_at_utc",
+    "superseded_by",
+    "supersedes"
+  ],
+  "instruction_frozen": true,
+  "instruction_regenerated_or_reserialized": false,
+  "instruction_schema": "CLOSED",
+  "instruction_schema_field_count": 14,
+  "issues_AUTH_003": false,
+  "m11_repair_authorized": false,
+  "new_candidate_digest_binding": {
+    "corrected_candidate_object_required_by_frozen_M12": false,
+    "new_candidate_digest": "d9fb749c59b3da5ddacfcf846fc89aaeb569fa3ada846150ee26f0ed7bac7eb1",
+    "new_candidate_digest_authority": "OWNER_AUTHORED",
+    "new_candidate_digest_semantics": "OWNER_SELECTED_SYNTHETIC_IDENTIFIER",
+    "prospective_architecture_question_status": "OUTSIDE_THIS_OBSERVATION",
+    "separately_addressable_corrected_candidate_object_exists": false
+  },
+  "next_gate": "AUTH_003_CANDIDATE_PREPARATION",
+  "owner_acceptance_at_utc": "2026-08-13T19:46:05Z",
+  "owner_authored_field_count": 6,
+  "owner_authored_semantics": {
+    "changed_fact_or_control_refs": [
+      "C-TENDER-01"
+    ],
+    "correction_event_id": "CDC-E2E-M12-CORRECTION-EVT-001",
+    "correction_reason": "Synthetic owner correction of C-TENDER-01 after the completed predecessor transition; the predecessor is preserved and the corrected successor does not inherit the predecessor's prior ACCEPTED_CANDIDATE disposition.",
+    "new_candidate_digest": "d9fb749c59b3da5ddacfcf846fc89aaeb569fa3ada846150ee26f0ed7bac7eb1",
+    "new_ebawu_or_successor_id": "EBAWU-P-001-C-TENDER-01-CORR-001",
+    "new_state": "CANDIDATE_FORMED"
+  },
+  "owner_decision": "ACCEPTED_AND_FROZEN",
+  "owner_semantics_accepted": true,
+  "predecessor_binding": {
+    "declared_by_instruction": true,
+    "owner_selected_fact": false,
+    "predecessor_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+    "predecessor_ebawu_ref": "EBAWU-P-001-C-TENDER-01",
+    "runtime_must_independently_derive_and_match_before_any_attempt_claim": true
+  },
+  "record_class": "OWNER_CORRECTION_INSTRUCTION_ACCEPTANCE",
+  "result_bearing": false,
+  "review_candidate_commit": "d2ac3d9a2dd9ab316463cb7a34aacef85a629004",
+  "review_candidate_tree": "23b667faec926152228efb8708b756d3109eb09b",
+  "run_001_modified": false,
+  "runtime_mission_id": "CDC-TEST-MISSION-001",
+  "semantic_change_requires_a_new_instruction_and_owner_decision": true
+}
