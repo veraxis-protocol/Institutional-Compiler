@@ -1,0 +1,136 @@
+{
+  "AUTH_003_issuance_record_present": false,
+  "AUTH_003_present": false,
+  "action_plan_provenance_token": "42e53c0c7111517bc1a8816760f58cbdfb9e78e43b7f002ba66fb3cd69cd4807",
+  "action_plan_sha256": "229a0c15d2bd2ee1db807904ff4d640f8fe39931372a002fbc3abf9e3244731e",
+  "archive_observation_consumes_attempt": false,
+  "archive_observation_source": "ORIGIN_LS_REMOTE",
+  "artifact_id": "CDC-END-TO-END-MISSION-001-M12-CORRECTION-SUCCESSOR-EXECUTION-ENVIRONMENT-v0.3",
+  "authorizes_AUTH_003_issuance": false,
+  "authorizes_AUTH_003_preparation": false,
+  "authorizes_correction_execution": false,
+  "claim_ceiling": "SYNTHETIC_EVALUATION_ONLY",
+  "consumes_successor_attempt": false,
+  "correction_executed": false,
+  "correction_stimulus_digest": "edea71d189bde4b99e84d42267ba3e8960adcc43ff0f33c5ff1cef12c69c4efb",
+  "correction_stimulus_id": "HA-CORRECTION-001",
+  "correction_successor_attempt_record_count": 0,
+  "correction_successor_result_count": 0,
+  "correction_target_id": "HA-P001-C-TENDER-01",
+  "dependency_file_identities": {
+    ".pre-commit-config.yaml": {
+      "bytes": 1675,
+      "path": "/private/tmp/claude-501/cleanroom/.pre-commit-config.yaml",
+      "sha256": "0f3b345e6804f9e1ca358714e9b020057c8bcdc3c6e63db5c545327d6b176fab"
+    },
+    "pyproject.toml": {
+      "bytes": 3634,
+      "path": "/private/tmp/claude-501/cleanroom/pyproject.toml",
+      "sha256": "be858356b8b2d519b538c79e624e0e600dbb0899802ecc636341f85b134654a2"
+    },
+    "requirements/dev.txt": {
+      "bytes": 61950,
+      "path": "/private/tmp/claude-501/cleanroom/requirements/dev.txt",
+      "sha256": "cf211a43c0f96dfb45f00376bfa940dae9beefd8f1425d96ed6c9f8fa2cc1172"
+    },
+    "requirements/runtime.txt": {
+      "bytes": 11342,
+      "path": "/private/tmp/claude-501/cleanroom/requirements/runtime.txt",
+      "sha256": "4840856b2fae0e793b061f5bf8ba87a5b180796177bdda45240ee7b0868e2d3f"
+    }
+  },
+  "evidence_branch": "cdc-e2e-stage2-run-001-evidence",
+  "evidence_remote_commit": "1a80aabe0f72eac8570b9827ee7545cda370cbe8",
+  "evidence_remote_tree": "a6216214ae5a49ffcb3448a97aadce1bb3f418e3",
+  "evidence_repository": "veraxis-protocol/Institutional-Compiler",
+  "experiment_id": "CDC-END-TO-END-MISSION-001",
+  "identity_namespace_separation": "MATCH",
+  "immutable_predecessor_identities": {
+    "adjudication_commit": {
+      "available_locally": false,
+      "commit": "a682abc7e68a3fc98c3a131c10d9ec05457e5d9c",
+      "repository": "inventor1975/ZTL",
+      "verified_previously_by_depth_1_fetch": true
+    },
+    "m12_implementation_owner_acceptance_commit": {
+      "available_locally": true,
+      "commit": "312918523b5706238e64c337b326152141f32af1",
+      "repository": "veraxis-protocol/Institutional-Compiler"
+    },
+    "run_001_owner_acceptance_commit": {
+      "available_locally": true,
+      "commit": "ceb8efe293776696d6633bc3994b23198030e5b0",
+      "repository": "veraxis-protocol/Institutional-Compiler"
+    },
+    "stage_2_evidence_commit": {
+      "available_locally": true,
+      "commit": "1a80aabe0f72eac8570b9827ee7545cda370cbe8",
+      "repository": "veraxis-protocol/Institutional-Compiler"
+    }
+  },
+  "implementation_branch": "cdc-e2e-m12-correction-successor-v0.1",
+  "implementation_commit": "0fa254e823bbcb876a78b18611a812d2f84ea5b3",
+  "implementation_tree": "5650133e1e665e41cefd48675ce2bfbb039c48a0",
+  "local_branch_used_as_remote_evidence": false,
+  "modifies_RUN_001": false,
+  "modifies_frozen_evidence": false,
+  "next_gate": "OWNER_REVIEW_FOR_AUTH_003_CANDIDATE_PREPARATION",
+  "observation_method": "READ_AND_HASH_OF_ACTUAL_FILES_AND_ACTUAL_REMOTE_QUERY",
+  "observed_at_utc": "2026-08-13T18:54:25Z",
+  "owner_implementation_acceptance_bytes": 4766,
+  "owner_implementation_acceptance_commit": "312918523b5706238e64c337b326152141f32af1",
+  "owner_implementation_acceptance_creates_execution_authority": false,
+  "owner_implementation_acceptance_sha256": "69c86b5c21bd874f30cba50560d5fd10e6726545960714a74d978e9cd9c2ce52",
+  "owner_implementation_acceptance_tree": "99949526679e543586d93be36cca7f544db9d009",
+  "predecessor_ebawu_ref": "EBAWU-P-001-C-TENDER-01",
+  "project_venv_identity": "MATCH",
+  "python_version": "3.12.2 | packaged by conda-forge | (main, Feb 16 2024, 21:00:12) [Clang 16.0.6 ]",
+  "python_version_info": [
+    3,
+    12,
+    2
+  ],
+  "record_class": "M12_CORRECTION_SUCCESSOR_EXECUTION_ENVIRONMENT_OBSERVATION",
+  "repository_normalized": "veraxis-protocol/Institutional-Compiler",
+  "repository_remote_url": "https://github.com/veraxis-protocol/Institutional-Compiler.git",
+  "repository_wide_ci_condition": "inherited and separately disclosed; no governed CI repair has occurred",
+  "repository_wide_ci_green": false,
+  "resolved_sys_base_prefix": "/opt/anaconda3",
+  "resolved_sys_executable": "/opt/anaconda3/bin/python3.12",
+  "resolved_sys_executable_alone_proves_venv_activation": false,
+  "resolved_sys_prefix": "/private/tmp/claude-501/cleanroom/.venv",
+  "result_bearing": false,
+  "runtime_mission_id": "CDC-TEST-MISSION-001",
+  "source_evidence_filenames": {
+    "attempt_record": ".cdc-e2e-stage-2-attempt-42b3c3d1285a0fddc36558875cc9df2e90b283ec79d96a56408b0fbc6f8c5f41.json",
+    "raw_result": "CDC-END-TO-END-MISSION-001-STAGE-2-RAW-RESULT-v0.1.json",
+    "route_trace": "CDC-END-TO-END-MISSION-001-STAGE-2-ROUTE-TRACE-v0.1.json"
+  },
+  "source_evidence_root": "/private/tmp/cdc-e2e-stage2-run-001",
+  "source_stage_2_attempt_record_sha256": "0d11efa747647bf6764bb7562b3a8e7b02219ed2b10f527ce4b5e69df3ca72d2",
+  "source_stage_2_attempt_state": "CONSUMED_AFTER_FIRST_TRANSITION_EVALUATION",
+  "source_stage_2_raw_result_bytes": 72999,
+  "source_stage_2_raw_result_sha256": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+  "source_stage_2_result_digest": "8a12b681d1f08aa47b70830a939da9d545dccdcea33643fc6f5f6ca9450b3b40",
+  "source_stage_2_result_digest_source": "RECOMPUTED_BY_FROZEN_v0_2_RULE_NOT_TRUSTED_FIELD",
+  "source_stage_2_route_trace_sha256": "481957e87f73e2fc058e0e167b6d3d82fea830b2eaad16c78bdfc39f3c952920",
+  "stage_1_observation_digest": "0c7c9aa770aee07b7c42f9bb48ec3b13058bbaf7559d5696bc59c6eb276510be",
+  "stage_1_rehydrated_record_equals_archive": true,
+  "sys_base_prefix": "/opt/anaconda3",
+  "sys_executable": "/private/tmp/claude-501/cleanroom/.venv/bin/python",
+  "sys_prefix": "/private/tmp/claude-501/cleanroom/.venv",
+  "tool_versions": {
+    "git": "git version 2.39.2 (Apple Git-143)",
+    "mypy": "mypy 1.20.2 (compiled: yes)",
+    "pytest": "pytest 8.4.2",
+    "python": "3.12.2",
+    "ruff": "ruff 0.12.12"
+  },
+  "venv_conditions": {
+    "base_prefix_differs_from_prefix": true,
+    "sys_prefix_is_project_venv": true,
+    "version_major_is_3": true,
+    "version_minor_is_12": true
+  },
+  "working_tree_clean": true
+}
