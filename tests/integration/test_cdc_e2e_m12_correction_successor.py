@@ -24,6 +24,7 @@ import pytest
 from oic import cdc_e2e_mission as mission
 from oic.cdc_e2e_mission import (
     ADJUDICATION_PROTOCOL_SHA256,
+    ARCHIVE_OBSERVATION_SOURCE,
     CORRECTION_ATTEMPT_STATE_CLAIMED,
     CORRECTION_ATTEMPT_STATE_CONSUMED,
     CORRECTION_ATTEMPT_STATE_NONE,
@@ -115,10 +116,13 @@ def action_plan(repo_root: Path) -> FrozenActionPlan:
 def _matching_archive(repo_root: Path, branch: str) -> dict[str, str]:
     del repo_root
     return {
-        "repository": EVIDENCE_REPOSITORY,
+        "repository_remote_url": f"https://github.com/{EVIDENCE_REPOSITORY}.git",
+        "repository_normalized": EVIDENCE_REPOSITORY,
         "branch": branch,
-        "commit": STAGE_2_EVIDENCE_COMMIT,
-        "tree": STAGE_2_EVIDENCE_TREE,
+        "observation_source": ARCHIVE_OBSERVATION_SOURCE,
+        "remote_commit": STAGE_2_EVIDENCE_COMMIT,
+        "remote_commit_tree": STAGE_2_EVIDENCE_TREE,
+        "remote_commit_tree_source": "LOCAL_OBJECT_FOR_ORIGIN_SUPPLIED_SHA",
     }
 
 
@@ -433,13 +437,15 @@ def test_archive_verifier_observes_only_the_bound_identity(
     result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
     assert seen["branch"] == EVIDENCE_BRANCH
     identity = result.archive_identity
-    assert identity["expected"] == {
-        "repository": EVIDENCE_REPOSITORY,
-        "branch": EVIDENCE_BRANCH,
-        "commit": STAGE_2_EVIDENCE_COMMIT,
-        "tree": STAGE_2_EVIDENCE_TREE,
-    }
+    assert identity["expected_commit"] == STAGE_2_EVIDENCE_COMMIT
+    assert identity["expected_tree"] == STAGE_2_EVIDENCE_TREE
+    assert identity["expected_repository"] == EVIDENCE_REPOSITORY
+    assert identity["expected_branch"] == EVIDENCE_BRANCH
+    assert identity["observation_source"] == ARCHIVE_OBSERVATION_SOURCE
+    assert identity["remote_commit"] == STAGE_2_EVIDENCE_COMMIT
+    assert identity["remote_commit_tree"] == STAGE_2_EVIDENCE_TREE
     assert identity["archive_identity_verified"] is True
+    assert identity["local_branch_consulted"] is False
     assert identity["caller_injectable"] is False
 
 
@@ -751,13 +757,7 @@ def test_archive_verification_failure_after_construction_consumes_the_attempt(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     def moved(repo_root: Path, branch: str) -> dict[str, str]:
-        del repo_root
-        return {
-            "repository": EVIDENCE_REPOSITORY,
-            "branch": branch,
-            "commit": "f" * 40,
-            "tree": STAGE_2_EVIDENCE_TREE,
-        }
+        return {**_matching_archive(repo_root, branch), "remote_commit": "f" * 40}
 
     monkeypatch.setattr(mission, "_observe_git_archive_identity", moved)
     with pytest.raises(PostConstructionIntegrityError) as caught:
@@ -996,3 +996,209 @@ def test_experiment_identity_may_not_stand_in_for_the_runtime_mission(
             action_plan,
             stage_1=_stage_1(mission_id=EXPERIMENT_ID),
         )
+
+
+# ------------------------------------------------- origin archive observation
+
+
+class _FakeGit:
+    """Drives the real observer through its single git seam.
+
+    The observer's own parsing, ambiguity handling and tree derivation run for
+    real; only the git process is replaced.
+    """
+
+    def __init__(
+        self,
+        *,
+        ls_remote: str | Exception,
+        local_branch_commit: str = "d" * 40,
+        objects: tuple[str, ...] = (STAGE_2_EVIDENCE_COMMIT,),
+        trees: Mapping[str, str] | None = None,
+    ) -> None:
+        self.ls_remote = ls_remote
+        self.local_branch_commit = local_branch_commit
+        self.objects = set(objects)
+        self.trees = dict(
+            trees if trees is not None else {STAGE_2_EVIDENCE_COMMIT: STAGE_2_EVIDENCE_TREE}
+        )
+        self.calls: list[tuple[str, ...]] = []
+
+    def __call__(self, repo_root: Path, *arguments: str) -> str:
+        del repo_root
+        self.calls.append(arguments)
+        if arguments[0] == "ls-remote":
+            if isinstance(self.ls_remote, Exception):
+                raise self.ls_remote
+            return self.ls_remote
+        if arguments[0] == "remote":
+            return f"https://github.com/{EVIDENCE_REPOSITORY}.git"
+        if arguments[0] == "cat-file":
+            sha = arguments[2].removesuffix("^{commit}")
+            if sha not in self.objects:
+                raise CorrectionEvidenceInfrastructureError(f"missing object {sha}")
+            return ""
+        if arguments[0] == "fetch":
+            self.objects.add(arguments[-1])
+            return ""
+        if arguments[0] == "rev-parse":
+            target = arguments[1]
+            if target.endswith("^{tree}"):
+                sha = target.removesuffix("^{tree}")
+                if sha not in self.trees:
+                    raise CorrectionEvidenceInfrastructureError(f"no tree for {sha}")
+                return self.trees[sha]
+            # A local branch ref. Reaching this at all would be the defect.
+            return self.local_branch_commit
+        raise AssertionError(f"unexpected git call: {arguments}")
+
+
+def _ref_line(commit: str, branch: str = EVIDENCE_BRANCH) -> str:
+    return f"{commit}\trefs/heads/{branch}\n"
+
+
+def test_archive_identity_is_read_from_origin_not_the_local_branch(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # The local branch disagrees with origin; origin must control.
+    git = _FakeGit(ls_remote=_ref_line(STAGE_2_EVIDENCE_COMMIT), local_branch_commit="a" * 40)
+    monkeypatch.setattr(mission, "_git", git)
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    identity = result.archive_identity
+
+    assert identity["archive_identity_verified"] is True
+    assert identity["observation_source"] == ARCHIVE_OBSERVATION_SOURCE
+    assert identity["remote_commit"] == STAGE_2_EVIDENCE_COMMIT
+    assert identity["remote_commit_tree"] == STAGE_2_EVIDENCE_TREE
+    assert identity["remote_commit"] != git.local_branch_commit
+
+    assert any(call[0] == "ls-remote" for call in git.calls)
+    # No remote_* value may come from resolving a local branch ref.
+    assert not any(call[0] == "rev-parse" and not call[1].endswith("^{tree}") for call in git.calls)
+    assert not any(EVIDENCE_BRANCH in call[1:] for call in git.calls if call[0] == "rev-parse")
+
+
+def test_local_branch_correct_but_origin_wrong_fails_after_construction(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    moved = "b" * 40
+    git = _FakeGit(
+        ls_remote=_ref_line(moved),
+        local_branch_commit=STAGE_2_EVIDENCE_COMMIT,
+        objects=(moved,),
+        trees={moved: STAGE_2_EVIDENCE_TREE},
+    )
+    monkeypatch.setattr(mission, "_git", git)
+    with pytest.raises(PostConstructionIntegrityError) as caught:
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    observation = caught.value.observation
+    assert "archive identity" in observation["failure"]
+    assert observation["attempt_state"] == CORRECTION_ATTEMPT_STATE_CONSUMED
+    assert observation["result_status"] == RESULT_STATUS_FAILED_POST_CONSTRUCTION
+    assert observation["automatic_retry"] is False
+
+
+def test_absent_origin_branch_is_an_infrastructure_failure(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(mission, "_git", _FakeGit(ls_remote=""))
+    with pytest.raises(PostConstructionIntegrityError) as caught:
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    assert "publishes no branch" in caught.value.observation["failure"]
+    assert caught.value.observation["attempt_state"] == CORRECTION_ATTEMPT_STATE_CONSUMED
+
+
+def test_ambiguous_origin_refs_are_an_infrastructure_failure(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    ambiguous = _ref_line(STAGE_2_EVIDENCE_COMMIT) + _ref_line("c" * 40)
+    monkeypatch.setattr(mission, "_git", _FakeGit(ls_remote=ambiguous))
+    with pytest.raises(PostConstructionIntegrityError) as caught:
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    assert "ambiguous" in caught.value.observation["failure"]
+    assert caught.value.observation["attempt_state"] == CORRECTION_ATTEMPT_STATE_CONSUMED
+
+
+def test_unreachable_origin_never_degrades_to_local_verification(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    git = _FakeGit(
+        ls_remote=CorrectionEvidenceInfrastructureError("could not read from remote repository"),
+        local_branch_commit=STAGE_2_EVIDENCE_COMMIT,
+    )
+    monkeypatch.setattr(mission, "_git", git)
+    with pytest.raises(PostConstructionIntegrityError) as caught:
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    assert "CorrectionEvidenceInfrastructureError" in caught.value.observation["failure"]
+    assert caught.value.observation["attempt_state"] == CORRECTION_ATTEMPT_STATE_CONSUMED
+    assert not any(call[0] == "rev-parse" and not call[1].endswith("^{tree}") for call in git.calls)
+
+
+def test_missing_commit_object_is_fetched_narrowly_before_the_tree_is_derived(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    git = _FakeGit(ls_remote=_ref_line(STAGE_2_EVIDENCE_COMMIT), objects=())
+    monkeypatch.setattr(mission, "_git", git)
+    result = _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    assert result.archive_identity["archive_identity_verified"] is True
+    assert result.archive_identity["remote_commit_tree_source"] == (
+        "FETCHED_OBJECT_FOR_ORIGIN_SUPPLIED_SHA"
+    )
+    fetches = [call for call in git.calls if call[0] == "fetch"]
+    assert len(fetches) == 1
+    assert fetches[0][-1] == STAGE_2_EVIDENCE_COMMIT
+    assert "--depth" in fetches[0]
+
+
+def test_an_underivable_tree_is_an_infrastructure_failure(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    git = _FakeGit(ls_remote=_ref_line(STAGE_2_EVIDENCE_COMMIT), trees={})
+    monkeypatch.setattr(mission, "_git", git)
+    with pytest.raises(PostConstructionIntegrityError) as caught:
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    assert "no tree for" in caught.value.observation["failure"]
+    assert caught.value.observation["attempt_state"] == CORRECTION_ATTEMPT_STATE_CONSUMED
+
+
+def test_a_non_sha_origin_response_is_refused(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        mission, "_git", _FakeGit(ls_remote=f"not-a-sha\trefs/heads/{EVIDENCE_BRANCH}\n")
+    )
+    with pytest.raises(PostConstructionIntegrityError) as caught:
+        _execute(tmp_path, evidence_dir, frozen_input, action_plan)
+    assert "not a commit SHA" in caught.value.observation["failure"]

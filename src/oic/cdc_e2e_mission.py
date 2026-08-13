@@ -4526,11 +4526,15 @@ def load_authorized_stage_2_evidence(
     return verify_frozen_stage_2_evidence(payload)
 
 
-def _observe_git_archive_identity(repo_root: Path, branch: str) -> dict[str, str]:
-    """Observe the published archive identity from the local repository.
+ARCHIVE_OBSERVATION_SOURCE: Final = "ORIGIN_LS_REMOTE"
+_COMMIT_SHA_LENGTH: Final = 40
 
-    Isolated so tests can substitute an infrastructure seam without the public
-    route ever exposing one.
+
+def _git(repo_root: Path, *arguments: str) -> str:
+    """Run one git command, or report an infrastructure failure.
+
+    The single seam through which the archive observation reaches git, so tests
+    can drive it without the public route ever exposing an injection point.
     """
     executable = shutil.which("git")
     if executable is None:
@@ -4538,30 +4542,72 @@ def _observe_git_archive_identity(repo_root: Path, branch: str) -> dict[str, str
             "git is unavailable, so the bound evidence archive identity cannot be observed"
         )
     try:
-        commit = subprocess.run(  # noqa: S603 - fixed argv, resolved executable, no shell
-            [executable, "-C", str(repo_root), "rev-parse", branch],
+        completed = subprocess.run(  # noqa: S603 - fixed argv, resolved executable, no shell
+            [executable, "-C", str(repo_root), *arguments],
             check=True,
             capture_output=True,
             text=True,
-        ).stdout.strip()
-        tree = subprocess.run(  # noqa: S603 - fixed argv, resolved executable, no shell
-            [executable, "-C", str(repo_root), "rev-parse", f"{branch}^{{tree}}"],
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-        remote = subprocess.run(  # noqa: S603 - fixed argv, resolved executable, no shell
-            [executable, "-C", str(repo_root), "remote", "get-url", "origin"],
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
+        )
     except (OSError, subprocess.CalledProcessError) as error:
         raise CorrectionEvidenceInfrastructureError(
-            f"the bound evidence archive identity could not be observed: {error}"
+            f"git {' '.join(arguments)} failed: {error}"
         ) from error
-    repository = remote.removesuffix(".git").removeprefix("https://github.com/")
-    return {"repository": repository, "branch": branch, "commit": commit, "tree": tree}
+    return completed.stdout.strip()
+
+
+def _normalize_repository(remote_url: str) -> str:
+    """Reduce an origin URL to its owner/name form."""
+    trimmed = remote_url.removesuffix(".git")
+    for prefix in ("https://github.com/", "git@github.com:", "ssh://git@github.com/"):
+        trimmed = trimmed.removeprefix(prefix)
+    return trimmed
+
+
+def _observe_git_archive_identity(repo_root: Path, branch: str) -> dict[str, str]:
+    """Observe the published archive identity from origin itself.
+
+    The commit comes from ``git ls-remote``, never from a local branch ref: a
+    local ref says only what this working copy believes, which is exactly what an
+    archive observation must not rely on. The tree is derived from the commit
+    object only after origin has supplied that exact SHA, because the SHA fixes
+    the commit's contents.
+    """
+    listed = _git(repo_root, "ls-remote", "--heads", "origin", f"refs/heads/{branch}")
+    rows = [line for line in listed.splitlines() if line.strip()]
+    if not rows:
+        raise CorrectionEvidenceInfrastructureError(
+            f"origin publishes no branch {branch!r}; the bound archive identity cannot be observed"
+        )
+    if len(rows) > 1:
+        raise CorrectionEvidenceInfrastructureError(
+            f"origin returned {len(rows)} refs for {branch!r}; the archive identity is ambiguous"
+        )
+    remote_commit = rows[0].split()[0].strip()
+    if len(remote_commit) != _COMMIT_SHA_LENGTH or not all(
+        character in "0123456789abcdef" for character in remote_commit
+    ):
+        raise CorrectionEvidenceInfrastructureError(
+            f"origin returned {remote_commit!r}, which is not a commit SHA"
+        )
+    remote_url = _git(repo_root, "remote", "get-url", "origin")
+    try:
+        _git(repo_root, "cat-file", "-e", f"{remote_commit}^{{commit}}")
+        tree_source = "LOCAL_OBJECT_FOR_ORIGIN_SUPPLIED_SHA"
+    except CorrectionEvidenceInfrastructureError:
+        # Narrow, non-mutating: fetch only the object origin just named.
+        _git(repo_root, "fetch", "--depth", "1", "--no-write-fetch-head", "origin", remote_commit)
+        _git(repo_root, "cat-file", "-e", f"{remote_commit}^{{commit}}")
+        tree_source = "FETCHED_OBJECT_FOR_ORIGIN_SUPPLIED_SHA"
+    remote_commit_tree = _git(repo_root, "rev-parse", f"{remote_commit}^{{tree}}")
+    return {
+        "repository_remote_url": remote_url,
+        "repository_normalized": _normalize_repository(remote_url),
+        "branch": branch,
+        "observation_source": ARCHIVE_OBSERVATION_SOURCE,
+        "remote_commit": remote_commit,
+        "remote_commit_tree": remote_commit_tree,
+        "remote_commit_tree_source": tree_source,
+    }
 
 
 def verify_frozen_stage_2_archive_identity(
@@ -4570,24 +4616,29 @@ def verify_frozen_stage_2_archive_identity(
 ) -> dict[str, Any]:
     """Verify the published archive still carries the bound evidence commit.
 
-    Only the authorization's own bound identity is compared. An identity that
-    cannot be observed raises rather than degrading into a match.
+    The comparison is against what origin publishes now, not against any local
+    ref, and only the authorization's own bound identity is compared. An identity
+    that cannot be observed raises rather than degrading into a match.
     """
     repo_root = find_repo_root(locations.root)
     observed = _observe_git_archive_identity(repo_root, authorization.evidence_branch)
-    expected = {
-        "repository": authorization.evidence_repository,
+    comparison = {
+        "repository_normalized": authorization.evidence_repository,
         "branch": authorization.evidence_branch,
-        "commit": STAGE_2_EVIDENCE_COMMIT,
-        "tree": STAGE_2_EVIDENCE_TREE,
+        "remote_commit": STAGE_2_EVIDENCE_COMMIT,
+        "remote_commit_tree": STAGE_2_EVIDENCE_TREE,
     }
-    mismatched = sorted(name for name, value in expected.items() if observed.get(name) != value)
+    mismatched = sorted(name for name, value in comparison.items() if observed.get(name) != value)
     return {
-        "expected": expected,
-        "observed": observed,
+        **observed,
+        "expected_commit": STAGE_2_EVIDENCE_COMMIT,
+        "expected_tree": STAGE_2_EVIDENCE_TREE,
+        "expected_repository": authorization.evidence_repository,
+        "expected_branch": authorization.evidence_branch,
         "mismatched": mismatched,
         "archive_identity_verified": not mismatched,
         "observed_after_successor_construction": True,
+        "local_branch_consulted": False,
         "caller_injectable": False,
     }
 
