@@ -1744,3 +1744,158 @@ def test_result_carries_the_authorized_semantics_as_evidence(
     assert len(instruction["correction_instruction_sha256"]) == 64
     assert instruction["correction_instruction_bytes"] > 0
     assert instruction["field_authority"] == dict(CORRECTION_FIELD_AUTHORITY)
+
+
+# ------------------------------- archive-identity root separation (RUN-001 defect)
+
+
+def _external_evidence_root(tmp_path: Path, evidence_dir: Path) -> Path:
+    """Frozen evidence copied outside any repository, as the real binding had it."""
+    external = tmp_path / "runtime-evidence-root"
+    external.mkdir(parents=True, exist_ok=True)
+    for name in EVIDENCE_FILENAMES:
+        shutil.copyfile(evidence_dir / name, external / name)
+    assert not (external / "BOOTSTRAP_MANIFEST.json").exists()
+    return external
+
+
+def test_repository_root_is_derived_from_the_loaded_implementation(
+    tmp_path: Path, evidence_dir: Path
+) -> None:
+    """The observation root comes from this module's location, not from evidence."""
+    root = mission._repository_observation_root()
+    assert (root / "BOOTSTRAP_MANIFEST.json").is_file()
+    assert Path(mission.__file__ or "").resolve().is_relative_to(root)
+    external = _external_evidence_root(tmp_path, evidence_dir)
+    assert root.resolve() != external.resolve()
+
+
+def test_historical_defect_is_reproduced_by_the_old_behaviour(
+    tmp_path: Path, evidence_dir: Path
+) -> None:
+    """RUN-001 failed because the evidence root was used as the repository root.
+
+    Kept executable so the reason this change exists cannot quietly rot.
+    """
+    from oic.errors import ConfigurationError
+    from oic.paths import find_repo_root
+
+    external = _external_evidence_root(tmp_path, evidence_dir)
+    with pytest.raises(ConfigurationError):
+        find_repo_root(external)  # the old verify_frozen_stage_2_archive_identity did this
+    # The repaired derivation succeeds under the identical topology.
+    assert mission._repository_observation_root().is_dir()
+
+
+def test_archive_identity_verifies_with_evidence_outside_any_repository(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The decisive topology: implementation in a repo, evidence outside it."""
+    external = _external_evidence_root(tmp_path, evidence_dir)
+    seen: dict[str, Any] = {}
+
+    def observed(repo_root: Path, branch: str) -> dict[str, str]:
+        seen["repo_root"] = repo_root
+        return _matching_archive(repo_root, branch)
+
+    monkeypatch.setattr(mission, "_observe_git_archive_identity", observed)
+    canonical = tmp_path / "AUTH-003.json"
+    document = _document_with_instruction(canonical, action_plan, frozen_input, external)
+    result = _execute(
+        tmp_path,
+        external,
+        frozen_input,
+        action_plan,
+        document=document,
+        authorization_path=canonical,
+    )
+    identity = result.archive_identity
+
+    # 1. frozen evidence was read from the external runtime evidence root
+    assert identity["runtime_evidence_root"] == str(external)
+    assert identity["runtime_evidence_root_source"] == "VERIFIED_AUTH_003_BINDING"
+    assert result.evidence_locations["evidence_root"] == str(external)
+    # 2/3. repository identity came from the implementation, not the evidence root
+    assert identity["repository_observation_root"] == str(mission._repository_observation_root())
+    assert identity["repository_observation_root_source"] == "LOADED_IMPLEMENTATION_LOCATION"
+    assert identity["runtime_evidence_root_equals_repository_observation_root"] is False
+    assert seen["repo_root"] != external
+    # 4. verification succeeds
+    assert identity["archive_identity_verified"] is True
+    assert identity["repository_observation_root_caller_injectable"] is False
+    assert identity["repository_observation_root_environment_override_used"] is False
+
+
+@pytest.mark.parametrize(
+    ("field", "wrong"),
+    [
+        ("repository_normalized", "someone-else/other-repo"),
+        ("branch", "not-the-evidence-branch"),
+        ("remote_commit", "f" * 40),
+        ("remote_commit_tree", "e" * 40),
+    ],
+)
+def test_wrong_archive_identity_refuses_under_the_external_topology(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+    field: str,
+    wrong: str,
+) -> None:
+    external = _external_evidence_root(tmp_path, evidence_dir)
+
+    def observed(repo_root: Path, branch: str) -> dict[str, str]:
+        return {**_matching_archive(repo_root, branch), field: wrong}
+
+    monkeypatch.setattr(mission, "_observe_git_archive_identity", observed)
+    canonical = tmp_path / "AUTH-003.json"
+    document = _document_with_instruction(canonical, action_plan, frozen_input, external)
+    with pytest.raises(PostConstructionIntegrityError) as caught:
+        _execute(
+            tmp_path,
+            external,
+            frozen_input,
+            action_plan,
+            document=document,
+            authorization_path=canonical,
+        )
+    assert "archive identity" in caught.value.observation["failure"]
+    assert caught.value.observation["attempt_state"] == CORRECTION_ATTEMPT_STATE_CONSUMED
+
+
+def test_absent_implementation_repository_root_refuses_explicitly(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    orphan = tmp_path / "orphan" / "oic"
+    orphan.mkdir(parents=True)
+    monkeypatch.setattr(mission, "__file__", str(orphan / "cdc_e2e_mission.py"))
+    with pytest.raises(CorrectionEvidenceInfrastructureError, match="no repository root"):
+        mission._repository_observation_root()
+
+
+def test_oic_repo_root_cannot_redirect_the_archive_observation(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """An environment override must not choose which repository vouches."""
+    decoy = tmp_path / "decoy-repo"
+    decoy.mkdir()
+    (decoy / "BOOTSTRAP_MANIFEST.json").write_text("{}\n")
+    monkeypatch.setenv("OIC_REPO_ROOT", str(decoy))
+    assert mission._repository_observation_root().resolve() != decoy.resolve()
+    assert (
+        mission._repository_observation_root() == Path(mission.__file__ or "").resolve().parents[2]
+    )
+
+
+def test_no_caller_parameter_can_select_the_repository_observation_root() -> None:
+    parameters = set(inspect.signature(mission.verify_frozen_stage_2_archive_identity).parameters)
+    assert parameters == {"authorization", "locations"}
+    assert inspect.signature(mission._repository_observation_root).parameters == {}
+    route = set(inspect.signature(execute_authorized_correction_successor).parameters)
+    assert not {"repository_root", "repository_observation_root", "repo_root"} & route

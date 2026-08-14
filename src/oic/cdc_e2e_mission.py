@@ -26,7 +26,6 @@ from oic.cdc_slice import (
     make_successor,
     refuse_stale_candidate_proposal,
 )
-from oic.paths import find_repo_root
 
 MISSION_ID: Final = "CDC-TEST-MISSION-001"
 ASSURANCE_MODE: Final = "SYNTHETIC_EVALUATION_ONLY"
@@ -4849,18 +4848,47 @@ def _observe_git_archive_identity(repo_root: Path, branch: str) -> dict[str, str
     }
 
 
+REPOSITORY_ROOT_MARKER: Final = "BOOTSTRAP_MANIFEST.json"
+
+
+def _repository_observation_root() -> Path:
+    """The repository containing the loaded implementation module.
+
+    Deliberately derived from this module's own resolved location and nothing
+    else. The runtime evidence root says where the frozen evidence lives; it does
+    not get to say which repository vouches for the published archive, and an
+    environment override must not be able to choose that either -- so
+    OIC_REPO_ROOT is not consulted here.
+    """
+    start = Path(__file__).resolve().parent
+    for candidate in (start, *start.parents):
+        if (candidate / REPOSITORY_ROOT_MARKER).is_file():
+            return candidate
+    raise CorrectionEvidenceInfrastructureError(
+        "no repository root containing the loaded implementation could be established; "
+        "the published archive identity cannot be observed"
+    )
+
+
 def verify_frozen_stage_2_archive_identity(
     authorization: OwnerCorrectionSuccessorAuthorization,
     locations: AuthorizedEvidenceLocations,
 ) -> dict[str, Any]:
     """Verify the published archive still carries the bound evidence commit.
 
+    Two roots are involved and they are not the same thing. The runtime evidence
+    root comes from the verified authorization and is only ever used to read the
+    frozen RUN-001 evidence. The repository observation root is derived from where
+    this implementation is actually loaded from, and is the only root used to ask
+    git what origin publishes. Conflating them made this check unobservable
+    whenever the authorized evidence lived outside a repository.
+
     The comparison is against what origin publishes now, not against any local
     ref, and only the authorization's own bound identity is compared. An identity
     that cannot be observed raises rather than degrading into a match.
     """
-    repo_root = find_repo_root(locations.root)
-    observed = _observe_git_archive_identity(repo_root, authorization.evidence_branch)
+    repository_root = _repository_observation_root()
+    observed = _observe_git_archive_identity(repository_root, authorization.evidence_branch)
     comparison = {
         "repository_normalized": authorization.evidence_repository,
         "branch": authorization.evidence_branch,
@@ -4879,6 +4907,15 @@ def verify_frozen_stage_2_archive_identity(
         "observed_after_successor_construction": True,
         "local_branch_consulted": False,
         "caller_injectable": False,
+        "runtime_evidence_root": str(locations.root),
+        "runtime_evidence_root_source": "VERIFIED_AUTH_003_BINDING",
+        "repository_observation_root": str(repository_root),
+        "repository_observation_root_source": "LOADED_IMPLEMENTATION_LOCATION",
+        "repository_observation_root_caller_injectable": False,
+        "repository_observation_root_environment_override_used": False,
+        "runtime_evidence_root_equals_repository_observation_root": (
+            Path(locations.root).resolve() == repository_root.resolve()
+        ),
     }
 
 
