@@ -4278,23 +4278,39 @@ class OwnerCorrectionInstruction:
         }
 
 
+AUTHORIZATION_BINDING_PROVENANCE: Final = "VERIFIED_CORRECTION_SUCCESSOR_AUTHORIZATION_BINDINGS"
+AUTHORIZATION_BINDING_PROVENANCE_SINGULAR: Final = (
+    "VERIFIED_CORRECTION_SUCCESSOR_AUTHORIZATION_BINDING"
+)
+
+
 @dataclass(frozen=True, slots=True)
 class AuthorizedEvidenceLocations:
-    """The exact evidence files resolved from the verified authorization."""
+    """The exact evidence files resolved from the verified authorization.
+
+    The provenance is classified by *kind* of authority rather than by one
+    numbered instrument, so the core stays reusable across separately issued
+    correction-successor authorizations. Which instrument actually supplied the
+    binding travels alongside it as an exact identity.
+    """
 
     root: Path
     raw_result: Path
     attempt_record: Path
     route_trace: Path
+    authorization_id: str
+    authorization_sha256: str
 
     def as_record(self) -> dict[str, Any]:
-        """Where the frozen bytes were actually read from."""
+        """Where the frozen bytes were actually read from, and on whose authority."""
         return {
             "evidence_root": str(self.root),
             "raw_result_path": str(self.raw_result),
             "attempt_record_path": str(self.attempt_record),
             "route_trace_path": str(self.route_trace),
-            "locations_derived_from": "VERIFIED_AUTH_003_BINDINGS",
+            "authorization_id": self.authorization_id,
+            "authorization_sha256": self.authorization_sha256,
+            "locations_derived_from": AUTHORIZATION_BINDING_PROVENANCE,
             "caller_selectable": False,
         }
 
@@ -4624,6 +4640,14 @@ def verify_owner_correction_successor_authorization(
         raise CorrectionSuccessorAuthorizationError(
             "clearance does not carry the owner adjudication acceptance digest"
         )
+    authorization_id = document.get("authorization_id")
+    if not isinstance(authorization_id, str) or not authorization_id:
+        # A result-bearing correction authority must say which authorization it is;
+        # substituting a placeholder would make the resulting evidence unattributable.
+        raise CorrectionSuccessorAuthorizationError(
+            f"correction-successor authorization carries no usable authorization_id: "
+            f"{authorization_id!r}"
+        )
     return OwnerCorrectionSuccessorAuthorization(
         path=observed_path,
         sha256_hex=file_digest,
@@ -4632,7 +4656,7 @@ def verify_owner_correction_successor_authorization(
         record_class=str(document["record_class"]),
         authorized_stage=str(document["authorized_stage"]),
         authorization_scope=str(document["authorization_scope"]),
-        authorization_id=str(document.get("authorization_id", "UNIDENTIFIED")),
+        authorization_id=authorization_id,
         canonical_path=str(observed_path),
         successor_id=successor_id,
         evidence_root=Path(evidence_root),
@@ -4748,6 +4772,8 @@ def resolve_authorized_evidence_locations(
         raw_result=root / SOURCE_STAGE_2_RAW_RESULT_FILENAME,
         attempt_record=root / SOURCE_STAGE_2_ATTEMPT_RECORD_FILENAME,
         route_trace=root / SOURCE_STAGE_2_ROUTE_TRACE_FILENAME,
+        authorization_id=authorization.authorization_id,
+        authorization_sha256=authorization.sha256_hex,
     )
 
 
@@ -4908,7 +4934,9 @@ def verify_frozen_stage_2_archive_identity(
         "local_branch_consulted": False,
         "caller_injectable": False,
         "runtime_evidence_root": str(locations.root),
-        "runtime_evidence_root_source": "VERIFIED_AUTH_003_BINDING",
+        "runtime_evidence_root_source": AUTHORIZATION_BINDING_PROVENANCE_SINGULAR,
+        "runtime_evidence_root_authorization_id": authorization.authorization_id,
+        "runtime_evidence_root_authorization_sha256": authorization.sha256_hex,
         "repository_observation_root": str(repository_root),
         "repository_observation_root_source": "LOADED_IMPLEMENTATION_LOCATION",
         "repository_observation_root_caller_injectable": False,

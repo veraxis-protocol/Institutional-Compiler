@@ -26,6 +26,8 @@ from oic import cdc_e2e_mission as mission
 from oic.cdc_e2e_mission import (
     ADJUDICATION_PROTOCOL_SHA256,
     ARCHIVE_OBSERVATION_SOURCE,
+    AUTHORIZATION_BINDING_PROVENANCE,
+    AUTHORIZATION_BINDING_PROVENANCE_SINGULAR,
     CORRECTION_ATTEMPT_STATE_CLAIMED,
     CORRECTION_ATTEMPT_STATE_CONSUMED,
     CORRECTION_ATTEMPT_STATE_NONE,
@@ -1818,7 +1820,7 @@ def test_archive_identity_verifies_with_evidence_outside_any_repository(
 
     # 1. frozen evidence was read from the external runtime evidence root
     assert identity["runtime_evidence_root"] == str(external)
-    assert identity["runtime_evidence_root_source"] == "VERIFIED_AUTH_003_BINDING"
+    assert identity["runtime_evidence_root_source"] == AUTHORIZATION_BINDING_PROVENANCE_SINGULAR
     assert result.evidence_locations["evidence_root"] == str(external)
     # 2/3. repository identity came from the implementation, not the evidence root
     assert identity["repository_observation_root"] == str(mission._repository_observation_root())
@@ -1966,7 +1968,7 @@ def test_real_origin_archive_observation_with_external_evidence_root(
     assert observation_root == mission._repository_observation_root()
 
     assert identity["runtime_evidence_root"] == str(external)
-    assert identity["runtime_evidence_root_source"] == "VERIFIED_AUTH_003_BINDING"
+    assert identity["runtime_evidence_root_source"] == AUTHORIZATION_BINDING_PROVENANCE_SINGULAR
     assert identity["runtime_evidence_root_equals_repository_observation_root"] is False
     assert result.evidence_locations["evidence_root"] == str(external)
     assert result.source_stage_2_raw_result_sha256 == SOURCE_STAGE_2_RAW_RESULT_SHA256
@@ -2067,3 +2069,130 @@ def test_hermetic_real_git_archive_observation(
 
     # the decoy never became the observation root
     assert mission._repository_observation_root().resolve() != decoy.resolve()
+
+
+# --------------------------- authorization-provenance generalization (RUN-002)
+
+
+AUTH_004_FIXTURE_ID = "CDC-E2E-MISSION-001-M12-AUTH-004"
+CORR_002_FIXTURE_ID = "EBAWU-P-001-C-TENDER-01-CORR-002"
+
+
+def test_a_later_authorization_is_accepted_and_propagated_exactly(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    """A disposable AUTH-004 / CORR-002 fixture: no real artifact, tmp_path only."""
+    canonical = tmp_path / "AUTH-004-FIXTURE.json"
+    document = _document_with_instruction(
+        canonical,
+        action_plan,
+        frozen_input,
+        evidence_dir,
+        successor_id=CORR_002_FIXTURE_ID,
+        instruction_overrides={"new_ebawu_or_successor_id": CORR_002_FIXTURE_ID},
+        overrides={"authorization_id": AUTH_004_FIXTURE_ID},
+    )
+    result = _execute(
+        tmp_path,
+        evidence_dir,
+        frozen_input,
+        action_plan,
+        document=document,
+        authorization_path=canonical,
+        instruction=_instruction_document(
+            evidence_dir,
+            action_plan,
+            overrides={"new_ebawu_or_successor_id": CORR_002_FIXTURE_ID},
+        ),
+    )
+    record = result.as_record()
+    fixture_digest = hashlib.sha256(canonical.read_bytes()).hexdigest()
+
+    assert (
+        record["owner_correction_authorization"]["owner_correction_authorization_id"]
+        == AUTH_004_FIXTURE_ID
+    )
+    locations = record["evidence_locations"]
+    assert locations["authorization_id"] == AUTH_004_FIXTURE_ID
+    assert locations["authorization_sha256"] == fixture_digest
+    assert locations["locations_derived_from"] == AUTHORIZATION_BINDING_PROVENANCE
+    assert locations["caller_selectable"] is False
+
+    identity = record["archive_identity"]
+    assert identity["runtime_evidence_root_authorization_id"] == AUTH_004_FIXTURE_ID
+    assert identity["runtime_evidence_root_authorization_sha256"] == fixture_digest
+    assert identity["runtime_evidence_root_source"] == AUTHORIZATION_BINDING_PROVENANCE_SINGULAR
+    assert record["successor"]["successor_id"] == CORR_002_FIXTURE_ID
+
+    # No emitted provenance field may claim AUTH-003 as the binding source.
+    emitted = json.dumps(record)
+    assert "VERIFIED_AUTH_003_BINDING" not in emitted
+    assert "CDC-E2E-MISSION-001-M12-AUTH-003" not in json.dumps(
+        {"locations": locations, "archive": identity}
+    )
+
+
+@pytest.mark.parametrize(
+    ("label", "value"),
+    [("empty", ""), ("null", None), ("non_string", 1234), ("wrong_type", ["id"])],
+)
+def test_an_unusable_authorization_id_is_refused(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+    label: str,
+    value: object,
+) -> None:
+    canonical = tmp_path / "AUTH-003.json"
+    document = _document_with_instruction(
+        canonical, action_plan, frozen_input, evidence_dir, overrides={"authorization_id": value}
+    )
+    with pytest.raises(CorrectionSuccessorAuthorizationError, match="no usable authorization_id"):
+        _execute(
+            tmp_path,
+            evidence_dir,
+            frozen_input,
+            action_plan,
+            document=document,
+            authorization_path=canonical,
+        )
+
+
+def test_an_absent_authorization_id_is_refused_not_unidentified(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    archive_seam: None,
+) -> None:
+    canonical = tmp_path / "AUTH-003.json"
+    document = _document_with_instruction(canonical, action_plan, frozen_input, evidence_dir)
+    del document["authorization_id"]
+    with pytest.raises(CorrectionSuccessorAuthorizationError, match="no usable authorization_id"):
+        _execute(
+            tmp_path,
+            evidence_dir,
+            frozen_input,
+            action_plan,
+            document=document,
+            authorization_path=canonical,
+        )
+
+
+def test_no_stale_auth_003_provenance_literal_remains_in_the_source() -> None:
+    source = Path(mission.__file__ or "").read_text()
+    assert "VERIFIED_AUTH_003_BINDING" not in source
+    assert "VERIFIED_AUTH_003_BINDINGS" not in source
+    assert AUTHORIZATION_BINDING_PROVENANCE in source
+    assert AUTHORIZATION_BINDING_PROVENANCE_SINGULAR in source
+    # Scoped to the correction-successor verifier: the frozen Stage-1 and Stage-2
+    # verifiers keep their own historical behaviour and are not in scope here.
+    verifier = inspect.getsource(mission.verify_owner_correction_successor_authorization)
+    assert "UNIDENTIFIED" not in verifier
+    assert "no usable authorization_id" in verifier
