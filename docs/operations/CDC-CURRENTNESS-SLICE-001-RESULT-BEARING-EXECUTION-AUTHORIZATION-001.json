@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "authorization_id": "OWNER-AUTHORIZATION-CURRENTNESS-SLICE-001-EXEC-001",
+  "scope": "CDC-CURRENTNESS-PROPAGATION-VERTICAL-SLICE-001",
+  "authorization_class": "SINGLE_USE_RESULT_BEARING_EXECUTION",
+  "implementation_commit": "6cade50a8ee041cc941eb91fd7295c42b9a8a3e9",
+  "implementation_tree": "c196dd43816cdf10661e598f3901ed7e369792bd",
+  "implementation_base_commit": "806490b659520a351e81ccb4d1d3f3ab214af70d",
+  "semantic_design_sha256": "82ac78f51439e438eafb31565369f73ba58e530ad1a18b75688f4dcb91ffe0e8",
+  "digest_derivation_sha256": "8b398291a657ab97e8e9e52b345051e257069c3532b49a8826207315b5c4c5dd",
+  "synthetic_control_sha256": "2a9158e0561d3ab1886f3f4f52c0b828a76979aadccc66b58c95ccb84914a45d",
+  "source_delta_authorization_sha256": "c2230134550eb6409191d5ebbd91dad9f28d6d6ffd7721cae9445ce2cd60737c",
+  "run_id": "CDC-CURRENTNESS-SLICE-001-RUN-001",
+  "trace_id": "CDC-CURRENTNESS-SLICE-001-TRACE-001",
+  "single_use": true,
+  "automatic_retry": false,
+  "result_bearing_execution_authorized": true,
+  "official_handoff_authorized": false,
+  "institutional_reliance_authorized": false,
+  "production_claim_authorized": false
+}

@@ -1,0 +1,185 @@
+{
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "authorization_id": "OWNER-AUTHORIZATION-CURRENTNESS-SLICE-001-EXEC-001",
+  "decisions": [
+    {
+      "consequential": true,
+      "consequential_gate_reached": false,
+      "controlling_evidence_pointer": {
+        "basis_record_digests": [
+          "943affbf3e86d8a1b6831eb3deafb2efeac902989d8ee75fe85daea6f82e1e3c",
+          "65afce022fea4047dff93aa17092dda01c996d99c1fa4b972ffe21ba3255bc6a"
+        ],
+        "basis_record_refs": [
+          "EBAWU-P-001-C-TENDER-01-CORR-002#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01",
+          "ELIGIBILITY#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+        ],
+        "correction_event_ref": "CDC-E2E-M12-CORRECTION-EVT-002",
+        "index_digest": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+        "resolution_digest": "b47f352f93aabe1cae2df540dcdad560e4510d491ff2ebdbb76d2ddc188dbf9f",
+        "successor_ref": "EBAWU-P-001-C-TENDER-01-CORR-002"
+      },
+      "controlling_successor_ref": "EBAWU-P-001-C-TENDER-01-CORR-002",
+      "gate_decision": "DENY",
+      "gate_reason_code": "DENY_OUTPUT_SUPERSEDED",
+      "gate_reason_code_id": "G2",
+      "institutional_event_emitted": false,
+      "next_gate": null,
+      "output_ref": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01",
+      "requested_operation_class": "PRESENT_USE_OF_HISTORICAL_OUTPUT",
+      "requested_use": "cite the historical output in a new present operation",
+      "use_gate_decision_digest": "3041929bea5b466eb2c5cfe1253e94dcca73c0dd09f4a6e64e0f14ce34d25ce7"
+    },
+    {
+      "consequential": true,
+      "consequential_gate_reached": false,
+      "controlling_evidence_pointer": {
+        "basis_record_digests": [
+          "595111e9307cb22179697d9a9c9a8a8a12e408dda838ad911faf1569b550c42f",
+          "65802a08b814bdd8120dd41167c74c39f29360fc034337b251cb0a6cc8b454f4"
+        ],
+        "basis_record_refs": [
+          "EBAWU-P-001-C-TENDER-01-CORR-002#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02",
+          "ELIGIBILITY#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02"
+        ],
+        "correction_event_ref": "CDC-E2E-M12-CORRECTION-EVT-002",
+        "index_digest": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+        "resolution_digest": "5cd629489a25d348285f752a1301b6d6d9fbda5bd2ef62028d8af11d752e65bd",
+        "successor_ref": "EBAWU-P-001-C-TENDER-01-CORR-002"
+      },
+      "controlling_successor_ref": "EBAWU-P-001-C-TENDER-01-CORR-002",
+      "gate_decision": "DENY",
+      "gate_reason_code": "DENY_OUTPUT_SUPERSEDED",
+      "gate_reason_code_id": "G2",
+      "institutional_event_emitted": false,
+      "next_gate": null,
+      "output_ref": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02",
+      "requested_operation_class": "PRESENT_USE_OF_HISTORICAL_OUTPUT",
+      "requested_use": "cite the historical output in a new present operation",
+      "use_gate_decision_digest": "c52343d2a5d8770c6782f36f06d1302c4c4850bb73c0d3f0a209c7ce460e4acc"
+    },
+    {
+      "consequential": true,
+      "consequential_gate_reached": false,
+      "controlling_evidence_pointer": {
+        "basis_record_digests": [
+          "29bd84f15d772fc4eccb352e16f234b24173b767739db34cbe14b3a6cc0ceab5",
+          "8e91436d90fa545490234010362e846c2c9055eea40f0d8a789b9db6e39a33f2"
+        ],
+        "basis_record_refs": [
+          "EBAWU-P-001-C-TENDER-01-CORR-002#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-03",
+          "ELIGIBILITY#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-03"
+        ],
+        "correction_event_ref": "CDC-E2E-M12-CORRECTION-EVT-002",
+        "index_digest": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+        "resolution_digest": "507b77cc6900b5862bd4c731f71b1ce3280be0ab7ab24796ccdefe18026ea74f",
+        "successor_ref": "EBAWU-P-001-C-TENDER-01-CORR-002"
+      },
+      "controlling_successor_ref": "EBAWU-P-001-C-TENDER-01-CORR-002",
+      "gate_decision": "DENY",
+      "gate_reason_code": "DENY_OUTPUT_SUPERSEDED",
+      "gate_reason_code_id": "G2",
+      "institutional_event_emitted": false,
+      "next_gate": null,
+      "output_ref": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-03",
+      "requested_operation_class": "PRESENT_USE_OF_HISTORICAL_OUTPUT",
+      "requested_use": "cite the historical output in a new present operation",
+      "use_gate_decision_digest": "a2ad72a8cda31ecd31f0d732e2de47537a7d0879bd38afd0d86c97171335b03d"
+    },
+    {
+      "consequential": true,
+      "consequential_gate_reached": false,
+      "controlling_evidence_pointer": {
+        "basis_record_digests": [
+          "cd4acec323ba530ba59d334a2a48dd75eecb686bf65782cbb73442e4146a4e36",
+          "9c6d7dadb8fca31af257988a097ab40a926597ebe506de0c8dc31ec8303ce173"
+        ],
+        "basis_record_refs": [
+          "EBAWU-P-001-C-TENDER-01-CORR-002#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04",
+          "ELIGIBILITY#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04"
+        ],
+        "correction_event_ref": "CDC-E2E-M12-CORRECTION-EVT-002",
+        "index_digest": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+        "resolution_digest": "65468dddbeed5ce80bc2e9d8f5313bb2a4264460acc54d23ed20eddfe1deb1ee",
+        "successor_ref": "EBAWU-P-001-C-TENDER-01-CORR-002"
+      },
+      "controlling_successor_ref": "EBAWU-P-001-C-TENDER-01-CORR-002",
+      "gate_decision": "DENY",
+      "gate_reason_code": "DENY_OUTPUT_SUPERSEDED",
+      "gate_reason_code_id": "G2",
+      "institutional_event_emitted": false,
+      "next_gate": null,
+      "output_ref": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04",
+      "requested_operation_class": "PRESENT_USE_OF_HISTORICAL_OUTPUT",
+      "requested_use": "cite the historical output in a new present operation",
+      "use_gate_decision_digest": "3d145cf6b87a95b3715125237a1a81903f90553bad66d9ecb988330fffe98122"
+    },
+    {
+      "consequential": true,
+      "consequential_gate_reached": false,
+      "controlling_evidence_pointer": {
+        "basis_record_digests": [
+          "451b959b9437b5b59b2fcee679afe92646509b11d3df1db771e9c5e16eec9f24",
+          "22f02f3928e98ca0a4eab93325bf9ed8e096a7b9e6339c152bddbf5eacc53173"
+        ],
+        "basis_record_refs": [
+          "EBAWU-P-001-C-TENDER-01-CORR-002#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-05",
+          "ELIGIBILITY#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-05"
+        ],
+        "correction_event_ref": "CDC-E2E-M12-CORRECTION-EVT-002",
+        "index_digest": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+        "resolution_digest": "0801f2758523cd284538c07989d567730ea04c2f5e7ccae7d70931de378d453d",
+        "successor_ref": "EBAWU-P-001-C-TENDER-01-CORR-002"
+      },
+      "controlling_successor_ref": "EBAWU-P-001-C-TENDER-01-CORR-002",
+      "gate_decision": "DENY",
+      "gate_reason_code": "DENY_OUTPUT_SUPERSEDED",
+      "gate_reason_code_id": "G2",
+      "institutional_event_emitted": false,
+      "next_gate": null,
+      "output_ref": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-05",
+      "requested_operation_class": "PRESENT_USE_OF_HISTORICAL_OUTPUT",
+      "requested_use": "cite the historical output in a new present operation",
+      "use_gate_decision_digest": "87d1f348dd29de5712a7012b10fe92422f5b829d9aa4b4c056049460fcd41afa"
+    },
+    {
+      "consequential": true,
+      "consequential_gate_reached": true,
+      "controlling_evidence_pointer": {
+        "basis_record_digests": [
+          "a9ffff71467a0880f77e3fec8b4740a0cdb74953e8fb9d743b1fdd7617ce66c6"
+        ],
+        "basis_record_refs": [
+          "ATTESTATION#CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01"
+        ],
+        "correction_event_ref": null,
+        "index_digest": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+        "resolution_digest": "5b885b2140628050a5b21afcd5aec5b0b83d19c30405d82cd4d47d85805406e9",
+        "successor_ref": null
+      },
+      "controlling_successor_ref": null,
+      "gate_decision": "PROCEED",
+      "gate_reason_code": "PROCEED_TO_NEXT_GATE",
+      "gate_reason_code_id": "G1",
+      "institutional_event_emitted": false,
+      "next_gate": "AUTHORITY_AND_ADMISSIBILITY_GATE",
+      "output_ref": "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01",
+      "requested_operation_class": "PRESENT_USE_OF_HISTORICAL_OUTPUT",
+      "requested_use": "cite the historical output in a new present operation",
+      "use_gate_decision_digest": "314cf28c81a1528dc33353a93be132bf7ad4522732473c1425edfdf73b629317"
+    }
+  ],
+  "execution_authorization_sha256": "8657729a8bfa381fbf790bdb4eb6ec5621774c07b88264692e15f30342ff2f94",
+  "implementation_commit": "6cade50a8ee041cc941eb91fd7295c42b9a8a3e9",
+  "implementation_tree": "c196dd43816cdf10661e598f3901ed7e369792bd",
+  "profile": {
+    "max_resolution_age_seconds": 300,
+    "next_gate_on_current": "AUTHORITY_AND_ADMISSIBILITY_GATE",
+    "profile_id": "CDC-CURRENTNESS-USE-PROFILE-001",
+    "unknown_disposition": "DENY"
+  },
+  "record_class": "CDC_CURRENTNESS_SLICE_001_USE_GATE_OBSERVATIONS",
+  "run_id": "CDC-CURRENTNESS-SLICE-001-RUN-001",
+  "semantic_adjudication_performed": false,
+  "trace_id": "CDC-CURRENTNESS-SLICE-001-TRACE-001"
+}

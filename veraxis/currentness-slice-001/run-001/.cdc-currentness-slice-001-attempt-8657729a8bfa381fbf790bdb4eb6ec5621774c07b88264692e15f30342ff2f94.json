@@ -1,0 +1,11 @@
+{
+  "attempt_class": "CDC_CURRENTNESS_SLICE_001_RESULT_BEARING_ATTEMPT",
+  "attempt_state": "CONSUMED_AFTER_FIRST_EXECUTION",
+  "authorization_id": "OWNER-AUTHORIZATION-CURRENTNESS-SLICE-001-EXEC-001",
+  "claimed_at": "2026-08-14T23:08:39Z",
+  "execution_authorization_sha256": "8657729a8bfa381fbf790bdb4eb6ec5621774c07b88264692e15f30342ff2f94",
+  "implementation_commit": "6cade50a8ee041cc941eb91fd7295c42b9a8a3e9",
+  "implementation_tree": "c196dd43816cdf10661e598f3901ed7e369792bd",
+  "run_id": "CDC-CURRENTNESS-SLICE-001-RUN-001",
+  "trace_id": "CDC-CURRENTNESS-SLICE-001-TRACE-001"
+}

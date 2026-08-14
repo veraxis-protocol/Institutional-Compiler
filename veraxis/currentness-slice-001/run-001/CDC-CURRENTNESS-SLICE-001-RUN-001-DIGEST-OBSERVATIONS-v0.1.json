@@ -1,0 +1,199 @@
+{
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "authorization_id": "OWNER-AUTHORIZATION-CURRENTNESS-SLICE-001-EXEC-001",
+  "cases": [
+    {
+      "case_id": "T-DIG-01",
+      "checks": [
+        {
+          "actual": "{\"a\":\"é\",\"b\":2}",
+          "expected": "{\"a\":\"é\",\"b\":2}",
+          "name": "canonical micro-vector bytes"
+        },
+        {
+          "actual": "06c264c46ad5ada9493abd3aa2383fb205ae99d7d0bad40b03a43bfec8a1b8de",
+          "expected": "06c264c46ad5ada9493abd3aa2383fb205ae99d7d0bad40b03a43bfec8a1b8de",
+          "name": "canonical micro-vector sha256"
+        },
+        {
+          "actual": 341,
+          "expected": 341,
+          "name": "control body canonical bytes"
+        },
+        {
+          "actual": "6f9fe1ccbabd6195d474f09a365a5ca4cc32f7ed8cf1f41e8acddd22e592eed0",
+          "expected": "6f9fe1ccbabd6195d474f09a365a5ca4cc32f7ed8cf1f41e8acddd22e592eed0",
+          "name": "control body sha256"
+        }
+      ],
+      "digest_class": "historical_artifact_digest",
+      "match": true
+    },
+    {
+      "case_id": "T-DIG-02",
+      "checks": [
+        {
+          "actual": "e5a4199b9468601a5705d1fedeb522576ed73312feae7a5bcc655ab29adc788c",
+          "expected": "e5a4199b9468601a5705d1fedeb522576ed73312feae7a5bcc655ab29adc788c",
+          "name": "record hashed exactly as stored"
+        },
+        {
+          "actual": true,
+          "expected": true,
+          "name": "no field excluded"
+        }
+      ],
+      "digest_class": "basis_record_digest",
+      "match": true
+    },
+    {
+      "case_id": "T-DIG-03",
+      "checks": [
+        {
+          "actual": 617,
+          "expected": 617,
+          "name": "attestation canonical bytes"
+        },
+        {
+          "actual": "a9ffff71467a0880f77e3fec8b4740a0cdb74953e8fb9d743b1fdd7617ce66c6",
+          "expected": "a9ffff71467a0880f77e3fec8b4740a0cdb74953e8fb9d743b1fdd7617ce66c6",
+          "name": "attestation sha256"
+        },
+        {
+          "actual": true,
+          "expected": true,
+          "name": "paired arrays are not independently sorted"
+        }
+      ],
+      "digest_class": "completeness_digest",
+      "match": true
+    },
+    {
+      "case_id": "T-DIG-04",
+      "checks": [
+        {
+          "actual": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+          "expected": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+          "name": "insertion order independence"
+        },
+        {
+          "actual": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+          "expected": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+          "name": "recomputed from reduced entries"
+        },
+        {
+          "actual": true,
+          "expected": true,
+          "name": "record bodies not embedded"
+        }
+      ],
+      "digest_class": "currentness_index_digest",
+      "match": true
+    },
+    {
+      "case_id": "T-DIG-05",
+      "checks": [
+        {
+          "actual": "b47f352f93aabe1cae2df540dcdad560e4510d491ff2ebdbb76d2ddc188dbf9f",
+          "expected": "b47f352f93aabe1cae2df540dcdad560e4510d491ff2ebdbb76d2ddc188dbf9f",
+          "name": "self-exclusion reproduces"
+        },
+        {
+          "actual": true,
+          "expected": true,
+          "name": "evaluation time inside the domain"
+        },
+        {
+          "actual": true,
+          "expected": true,
+          "name": "same state at both instants"
+        }
+      ],
+      "digest_class": "resolution_digest",
+      "match": true
+    },
+    {
+      "case_id": "T-DIG-06",
+      "checks": [
+        {
+          "actual": "3041929bea5b466eb2c5cfe1253e94dcca73c0dd09f4a6e64e0f14ce34d25ce7",
+          "expected": "3041929bea5b466eb2c5cfe1253e94dcca73c0dd09f4a6e64e0f14ce34d25ce7",
+          "name": "self-exclusion reproduces"
+        },
+        {
+          "actual": "b47f352f93aabe1cae2df540dcdad560e4510d491ff2ebdbb76d2ddc188dbf9f",
+          "expected": "b47f352f93aabe1cae2df540dcdad560e4510d491ff2ebdbb76d2ddc188dbf9f",
+          "name": "binds the resolution digest"
+        },
+        {
+          "actual": "239f0d675faeb7cf6b3e5cb879763800d36189f644d1c2623f921da3d10d497b",
+          "expected": "239f0d675faeb7cf6b3e5cb879763800d36189f644d1c2623f921da3d10d497b",
+          "name": "binds the observed artifact digest"
+        }
+      ],
+      "digest_class": "use_gate_decision_digest",
+      "match": true
+    },
+    {
+      "case_id": "T-DIG-07",
+      "checks": [
+        {
+          "actual": "810bf802dea0d7ba7b4c5565c4ae5b87ecc34ebc1ece06ee27937d7904c8a4bf",
+          "expected": "810bf802dea0d7ba7b4c5565c4ae5b87ecc34ebc1ece06ee27937d7904c8a4bf",
+          "name": "seven-field domain"
+        },
+        {
+          "actual": "810bf802dea0d7ba7b4c5565c4ae5b87ecc34ebc1ece06ee27937d7904c8a4bf",
+          "expected": "810bf802dea0d7ba7b4c5565c4ae5b87ecc34ebc1ece06ee27937d7904c8a4bf",
+          "name": "extra fields excluded from the domain"
+        }
+      ],
+      "digest_class": "observation_digest",
+      "match": true
+    },
+    {
+      "case_id": "T-DIG-08",
+      "checks": [
+        {
+          "actual": "d1e3b8ff6c983125fe797321ac5ef1f3568c600481c43a464934c9aa0aaa1528",
+          "expected": "d1e3b8ff6c983125fe797321ac5ef1f3568c600481c43a464934c9aa0aaa1528",
+          "name": "self-exclusion, member identities only"
+        }
+      ],
+      "digest_class": "package_digest",
+      "match": true
+    },
+    {
+      "case_id": "T-DIG-09",
+      "checks": [
+        {
+          "actual": 2275,
+          "expected": 2275,
+          "name": "persisted bytes"
+        },
+        {
+          "actual": "2a9158e0561d3ab1886f3f4f52c0b828a76979aadccc66b58c95ccb84914a45d",
+          "expected": "2a9158e0561d3ab1886f3f4f52c0b828a76979aadccc66b58c95ccb84914a45d",
+          "name": "persisted file sha256"
+        },
+        {
+          "actual": true,
+          "expected": true,
+          "name": "distinct from the canonical-form digest"
+        }
+      ],
+      "digest_class": "persisted_file_sha256",
+      "match": true
+    }
+  ],
+  "digest_classes_expected": 9,
+  "digest_classes_matching": 9,
+  "digest_classes_observed": 9,
+  "execution_authorization_sha256": "8657729a8bfa381fbf790bdb4eb6ec5621774c07b88264692e15f30342ff2f94",
+  "implementation_commit": "6cade50a8ee041cc941eb91fd7295c42b9a8a3e9",
+  "implementation_tree": "c196dd43816cdf10661e598f3901ed7e369792bd",
+  "record_class": "CDC_CURRENTNESS_SLICE_001_DIGEST_OBSERVATIONS",
+  "run_id": "CDC-CURRENTNESS-SLICE-001-RUN-001",
+  "semantic_adjudication_performed": false,
+  "trace_id": "CDC-CURRENTNESS-SLICE-001-TRACE-001"
+}

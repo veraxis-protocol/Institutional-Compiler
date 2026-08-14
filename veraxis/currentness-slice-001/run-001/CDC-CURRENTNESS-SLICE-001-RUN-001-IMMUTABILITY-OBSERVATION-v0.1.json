@@ -1,0 +1,47 @@
+{
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "authorization_id": "OWNER-AUTHORIZATION-CURRENTNESS-SLICE-001-EXEC-001",
+  "byte_identity_preserved": true,
+  "execution_authorization_sha256": "8657729a8bfa381fbf790bdb4eb6ec5621774c07b88264692e15f30342ff2f94",
+  "expected_correction_result_sha256": "8b81e62a1a5e65f14e86ced9f7b3c1f506f4dd4ccaa1c4375e4fb76d41fee246",
+  "expected_frozen_artifact_digests": {
+    "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01": "239f0d675faeb7cf6b3e5cb879763800d36189f644d1c2623f921da3d10d497b",
+    "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02": "66dd4f15c23fdbfeca27ece970b122c668a9c3a3180f0ee3ce80c85da901ee89",
+    "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-03": "a6f24f7171a80850b45ca3b73284ab35126e63d51018e9f4874959b5acc3f91c",
+    "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04": "17595a4235f0860490c6ccfbccc91b682f6ea15da956eed08a8104394c10d8ff",
+    "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-05": "6d211ed3e283ff6bd28f0751d2bd6bcf1da9c6cb7b6d5f61206bdce29d410891"
+  },
+  "expected_stage_2_raw_result_sha256": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+  "historical_evidence_cleaned_or_rewritten": false,
+  "identities_after": {
+    "artifact::CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01": "239f0d675faeb7cf6b3e5cb879763800d36189f644d1c2623f921da3d10d497b",
+    "artifact::CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02": "66dd4f15c23fdbfeca27ece970b122c668a9c3a3180f0ee3ce80c85da901ee89",
+    "artifact::CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-03": "a6f24f7171a80850b45ca3b73284ab35126e63d51018e9f4874959b5acc3f91c",
+    "artifact::CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04": "17595a4235f0860490c6ccfbccc91b682f6ea15da956eed08a8104394c10d8ff",
+    "artifact::CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-05": "6d211ed3e283ff6bd28f0751d2bd6bcf1da9c6cb7b6d5f61206bdce29d410891",
+    "file::correction_successor_result": "8b81e62a1a5e65f14e86ced9f7b3c1f506f4dd4ccaa1c4375e4fb76d41fee246",
+    "file::stage_2_raw_result": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+    "file::synthetic_control": "2a9158e0561d3ab1886f3f4f52c0b828a76979aadccc66b58c95ccb84914a45d"
+  },
+  "identities_before": {
+    "artifact::CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01": "239f0d675faeb7cf6b3e5cb879763800d36189f644d1c2623f921da3d10d497b",
+    "artifact::CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02": "66dd4f15c23fdbfeca27ece970b122c668a9c3a3180f0ee3ce80c85da901ee89",
+    "artifact::CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-03": "a6f24f7171a80850b45ca3b73284ab35126e63d51018e9f4874959b5acc3f91c",
+    "artifact::CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04": "17595a4235f0860490c6ccfbccc91b682f6ea15da956eed08a8104394c10d8ff",
+    "artifact::CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-05": "6d211ed3e283ff6bd28f0751d2bd6bcf1da9c6cb7b6d5f61206bdce29d410891",
+    "file::correction_successor_result": "8b81e62a1a5e65f14e86ced9f7b3c1f506f4dd4ccaa1c4375e4fb76d41fee246",
+    "file::stage_2_raw_result": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+    "file::synthetic_control": "2a9158e0561d3ab1886f3f4f52c0b828a76979aadccc66b58c95ccb84914a45d"
+  },
+  "implementation_commit": "6cade50a8ee041cc941eb91fd7295c42b9a8a3e9",
+  "implementation_tree": "c196dd43816cdf10661e598f3901ed7e369792bd",
+  "mismatched": [],
+  "record_class": "CDC_CURRENTNESS_SLICE_001_IMMUTABILITY_OBSERVATION",
+  "run_id": "CDC-CURRENTNESS-SLICE-001-RUN-001",
+  "semantic_adjudication_performed": false,
+  "sources": {
+    "correction_result_path": "/private/tmp/cdc-e2e-m12-correction-successor-run-002/CDC-END-TO-END-MISSION-001-M12-CORRECTION-SUCCESSOR-RUN-002-RAW-RESULT-v0.1.json",
+    "stage_2_raw_result_path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-STAGE-2-RAW-RESULT-v0.1.json"
+  },
+  "trace_id": "CDC-CURRENTNESS-SLICE-001-TRACE-001"
+}

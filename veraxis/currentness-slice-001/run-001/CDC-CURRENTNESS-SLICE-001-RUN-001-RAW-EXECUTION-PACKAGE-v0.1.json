@@ -1,0 +1,99 @@
+{
+  "adversarial_cases_matching": 18,
+  "adversarial_cases_observed": 18,
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "attempt_record": {
+    "bytes": 589,
+    "path": "/private/tmp/cdc-currentness-slice-001-run-001/.cdc-currentness-slice-001-attempt-8657729a8bfa381fbf790bdb4eb6ec5621774c07b88264692e15f30342ff2f94.json",
+    "sha256": "38e2ea100547574973ced4d06f0180574449195b383a6ef4b3d950dafd5c691d"
+  },
+  "attempt_state": "CONSUMED_AFTER_FIRST_EXECUTION",
+  "authorization_id": "OWNER-AUTHORIZATION-CURRENTNESS-SLICE-001-EXEC-001",
+  "automatic_retry_performed": false,
+  "basis_source_identities": {
+    "correction_successor_result_sha256": "8b81e62a1a5e65f14e86ced9f7b3c1f506f4dd4ccaa1c4375e4fb76d41fee246",
+    "stage_2_raw_result_sha256": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+    "synthetic_control_sha256": "2a9158e0561d3ab1886f3f4f52c0b828a76979aadccc66b58c95ccb84914a45d"
+  },
+  "byte_identity_preserved": true,
+  "claim_ceiling_if_supported": {
+    "EXECUTABLE_CURRENTNESS_RESOLUTION": "MEASURED_INTERNAL_TECHNICAL_DEMONSTRATION",
+    "HISTORICAL_ARTIFACT_PRESERVATION_DURING_CURRENTNESS_CHANGE": "MEASURED_INTERNAL_TECHNICAL_DEMONSTRATION",
+    "STALE_OUTPUT_PRESENT_USE_REFUSAL": "MEASURED_INTERNAL_TECHNICAL_DEMONSTRATION"
+  },
+  "completed_at": "2026-08-14T23:08:39Z",
+  "digest_cases_matching": 9,
+  "digest_cases_observed": 9,
+  "execution_authorization_bytes": 1205,
+  "execution_authorization_path": "/private/tmp/claude-501/cleanroom/docs/operations/CDC-CURRENTNESS-SLICE-001-RESULT-BEARING-EXECUTION-AUTHORIZATION-001.json",
+  "execution_authorization_sha256": "8657729a8bfa381fbf790bdb4eb6ec5621774c07b88264692e15f30342ff2f94",
+  "implementation_commit": "6cade50a8ee041cc941eb91fd7295c42b9a8a3e9",
+  "implementation_tree": "c196dd43816cdf10661e598f3901ed7e369792bd",
+  "independent_review_claim": false,
+  "index_digest": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+  "institutional_events_emitted": 0,
+  "members": [
+    {
+      "bytes": 18477,
+      "path": "/private/tmp/cdc-currentness-slice-001-run-001/CDC-CURRENTNESS-SLICE-001-RUN-001-RESOLUTION-OBSERVATIONS-v0.1.json",
+      "sha256": "d342b73f0533bfe047f29210bfec6be4bc81bb1fc94283a14e041e213657666a"
+    },
+    {
+      "bytes": 9083,
+      "path": "/private/tmp/cdc-currentness-slice-001-run-001/CDC-CURRENTNESS-SLICE-001-RUN-001-USE-GATE-OBSERVATIONS-v0.1.json",
+      "sha256": "d3df1993de5247c71275436b924e3f40c7f2d8062abccdf1ff3ac17e86a7cb53"
+    },
+    {
+      "bytes": 12875,
+      "path": "/private/tmp/cdc-currentness-slice-001-run-001/CDC-CURRENTNESS-SLICE-001-RUN-001-ADVERSARIAL-OBSERVATIONS-v0.1.json",
+      "sha256": "e72f61f546b94f89e8acabb4574c611c10fa9212d5363b5a1be81634cd9b4b4e"
+    },
+    {
+      "bytes": 6653,
+      "path": "/private/tmp/cdc-currentness-slice-001-run-001/CDC-CURRENTNESS-SLICE-001-RUN-001-DIGEST-OBSERVATIONS-v0.1.json",
+      "sha256": "68cce00c5136fa51f207836b84b75e339fc15a632116765f5dd15c2186c6cb3a"
+    },
+    {
+      "bytes": 3761,
+      "path": "/private/tmp/cdc-currentness-slice-001-run-001/CDC-CURRENTNESS-SLICE-001-RUN-001-IMMUTABILITY-OBSERVATION-v0.1.json",
+      "sha256": "2fc25f7ee3e81661f17ad186482c036a498423657b299d78f66b58cdaf41d7d6"
+    }
+  ],
+  "not_established": [
+    "real_unaffected_CDC_output_resolves_CURRENT",
+    "consumer_bypass_resistance",
+    "institutional_currentness_propagation",
+    "institutional_reliance",
+    "official_CDC_issuance",
+    "legal_effect",
+    "production_conformance",
+    "CDC_acceptance",
+    "general_rollback_resistance",
+    "distributed_consistency_across_institutions"
+  ],
+  "official_handoff": "PROHIBITED",
+  "package_digest": "2636c60b6d9e43741399ea449569017e408720cc98eb48521c672a2dbed13517",
+  "real_outputs_gate_deny_g2": 5,
+  "real_outputs_observed": 5,
+  "real_outputs_resolved_superseded": 5,
+  "record_class": "CDC_CURRENTNESS_SLICE_001_RAW_EXECUTION_PACKAGE",
+  "result_bearing_execution_invocations": 1,
+  "run_id": "CDC-CURRENTNESS-SLICE-001-RUN-001",
+  "run_metadata": {
+    "occurred_at": "2026-08-14T22:05:00Z",
+    "producer": "CDC-CURRENTNESS-SLICE-001-RUN-001-EXECUTION-HARNESS-v0.1.py",
+    "producer_version": "359ae1a26edb57e410cb29b282062bf2eb2479d34aa314cc2cf66c5b27a1b643",
+    "recorded_at": "2026-08-14T22:05:00Z",
+    "run_id": "CDC-CURRENTNESS-SLICE-001-RUN-001",
+    "trace_id": "CDC-CURRENTNESS-SLICE-001-TRACE-001"
+  },
+  "runtime_root": "/private/tmp/cdc-currentness-slice-001-run-001",
+  "schema_version": "CDC-CURRENTNESS-SLICE-001-RAW-EXECUTION-PACKAGE-v0.1",
+  "second_result_bearing_execution": false,
+  "self_designed_and_self_adjudicated": true,
+  "semantic_adjudication_performed": false,
+  "started_at": "2026-08-14T23:08:39Z",
+  "synthetic_control_current_r1": true,
+  "synthetic_control_proceed_g1": true,
+  "trace_id": "CDC-CURRENTNESS-SLICE-001-TRACE-001"
+}

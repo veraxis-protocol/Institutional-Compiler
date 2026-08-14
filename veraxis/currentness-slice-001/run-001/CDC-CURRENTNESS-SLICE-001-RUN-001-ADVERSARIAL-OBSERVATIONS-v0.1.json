@@ -1,0 +1,357 @@
+{
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "authorization_id": "OWNER-AUTHORIZATION-CURRENTNESS-SLICE-001-EXEC-001",
+  "cases": [
+    {
+      "case_id": "T-ADV-A",
+      "detail": {},
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": null,
+      "expected_reason_code": "R5",
+      "expected_state": "UNKNOWN",
+      "match": true,
+      "mutation_applied": "every currentness record for the output removed from the index",
+      "observation_digest": "aaa18d004952e84e10d43150ecc27974c0601347c507b98fe846b99b153dbc78",
+      "observed_decision": null,
+      "observed_reason_code": "R5",
+      "observed_state": "UNKNOWN",
+      "subject_refs": [
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-B",
+      "detail": {},
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": null,
+      "expected_reason_code": "R9",
+      "expected_state": "UNKNOWN",
+      "match": true,
+      "mutation_applied": "successor bound to a predecessor the artifact never referenced",
+      "observation_digest": "89cf22c23990194a896c6c4fec6b556b5bb34bf4829f39fd4ff723f031130890",
+      "observed_decision": null,
+      "observed_reason_code": "R9",
+      "observed_state": "UNKNOWN",
+      "subject_refs": [
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-C",
+      "detail": {},
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": "DENY",
+      "expected_reason_code": "G5",
+      "expected_state": "UNKNOWN",
+      "match": true,
+      "mutation_applied": "output_ref of OUTPUT-01 presented with the artifact of OUTPUT-02",
+      "observation_digest": "ee83361a8c7d623756c05cf27875c730f32966322316461f857a835b6d29e186",
+      "observed_decision": "DENY",
+      "observed_reason_code": "G5",
+      "observed_state": "UNKNOWN",
+      "subject_refs": [
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01",
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02"
+      ]
+    },
+    {
+      "case_id": "T-ADV-D",
+      "detail": {},
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": "DENY",
+      "expected_reason_code": "G7",
+      "expected_state": "SUPERSEDED",
+      "match": true,
+      "mutation_applied": "precomputed resolution older than the frozen profile window",
+      "observation_digest": "3fadf0207d40437c8dbd48d1ff284d5daf232fbb7146dde8317a087448c2945c",
+      "observed_decision": "DENY",
+      "observed_reason_code": "G7",
+      "observed_state": "SUPERSEDED",
+      "subject_refs": [
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-E",
+      "detail": {},
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": "DENY",
+      "expected_reason_code": "G8",
+      "expected_state": "SUPERSEDED",
+      "match": true,
+      "mutation_applied": "caller asserts CURRENT through the request",
+      "observation_digest": "20e725a64fe6934d9fa030a28ddaa5232cd28789b00389fa2c319bd98ad85e47",
+      "observed_decision": "DENY",
+      "observed_reason_code": "G8",
+      "observed_state": "SUPERSEDED",
+      "subject_refs": [
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-F",
+      "detail": {
+        "frozen_artifact_digest_unchanged": true
+      },
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": "DENY",
+      "expected_reason_code": "G5",
+      "expected_state": "UNKNOWN",
+      "match": true,
+      "mutation_applied": "historical artifact bytes modified in an isolated copy",
+      "observation_digest": "6c5379bdf48bdd9698b42b03e3256163e4d80411b1decfa595dbb87ec9bb8cdb",
+      "observed_decision": "DENY",
+      "observed_reason_code": "G5",
+      "observed_state": "UNKNOWN",
+      "subject_refs": [
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-G",
+      "detail": {
+        "completeness_attestation_admission_refused": true,
+        "current_returned": false
+      },
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": null,
+      "expected_reason_code": "R5",
+      "expected_state": "UNKNOWN",
+      "match": true,
+      "mutation_applied": "successor hidden; only the predecessor identity presented",
+      "observation_digest": "7d0357371ddc100d9cecb5b4226d0d79a762bea1ad55184555bb98e2c3799cac",
+      "observed_decision": null,
+      "observed_reason_code": "R5",
+      "observed_state": "UNKNOWN",
+      "subject_refs": [
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-H",
+      "detail": {},
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": null,
+      "expected_reason_code": "R8",
+      "expected_state": "UNKNOWN",
+      "match": true,
+      "mutation_applied": "another output's valid successor asserted as controlling",
+      "observation_digest": "ad05f26fbbeaf74498a729734ab15157d92523a2070ef94e58ca6c4dfa81f120",
+      "observed_decision": null,
+      "observed_reason_code": "R8",
+      "observed_state": "UNKNOWN",
+      "subject_refs": [
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01",
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02"
+      ]
+    },
+    {
+      "case_id": "T-ADV-I",
+      "detail": {
+        "future_supersession_scheduled": true,
+        "labelled_superseded_before_effective_instant": false,
+        "scheduled_supersession": {
+          "effective_at": "2026-09-01T00:00:00Z",
+          "set_aside_reason_code": "EFFECTIVE_TIME_NOT_YET_REACHED",
+          "set_aside_reason_code_id": "R11",
+          "successor_ref": "SYNTH-SUCCESSOR-FUTURE"
+        },
+        "secondary_states": [
+          "FUTURE_SUPERSESSION_SCHEDULED"
+        ]
+      },
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": null,
+      "expected_reason_code": "R1",
+      "expected_state": "CURRENT",
+      "match": true,
+      "mutation_applied": "successor effective in the future",
+      "observation_digest": "ea414da2a7ea101cc984724daeae0d1b93d3d939e597495d0ba1fbdece659b51",
+      "observed_decision": null,
+      "observed_reason_code": "R1",
+      "observed_state": "CURRENT",
+      "subject_refs": [
+        "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-J",
+      "detail": {
+        "competing_refs": [
+          "EBAWU-P-001-C-TENDER-01-CORR-002#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01",
+          "EBAWU-P-001-C-TENDER-01-CORR-999#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+        ],
+        "controlling_successor_ref": null,
+        "resolver_reason_code_expected": "R7",
+        "resolver_reason_code_id": "R7"
+      },
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": "DENY",
+      "expected_reason_code": "G4",
+      "expected_state": "UNKNOWN",
+      "match": true,
+      "mutation_applied": "two simultaneously operative successors claim the same output",
+      "observation_digest": "7d711e15bb0e8ae98001a341731981a3db1a3fdb19695eb79f9bf6265f40e52b",
+      "observed_decision": "DENY",
+      "observed_reason_code": "G4",
+      "observed_state": "UNKNOWN",
+      "subject_refs": [
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-K",
+      "detail": {},
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": null,
+      "expected_reason_code": "R5",
+      "expected_state": "UNKNOWN",
+      "match": true,
+      "mutation_applied": "basis completeness attestation removed",
+      "observation_digest": "d3d302075e957c20bc8aea8a4a7b2280435ede8a99ce65dfc0a7c1abd1eeab7d",
+      "observed_decision": null,
+      "observed_reason_code": "R5",
+      "observed_state": "UNKNOWN",
+      "subject_refs": [
+        "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-L",
+      "detail": {},
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": null,
+      "expected_reason_code": "R6",
+      "expected_state": "UNKNOWN",
+      "match": true,
+      "mutation_applied": "attestation whose scope does not cover the queried output",
+      "observation_digest": "ea8d0a4bef422faa6e6d1f650aacd96c19efbcca8f980c34cd32b4f33eac0f3e",
+      "observed_decision": null,
+      "observed_reason_code": "R6",
+      "observed_state": "UNKNOWN",
+      "subject_refs": [
+        "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-M",
+      "detail": {
+        "admission_parse_refused_forged_digest": true
+      },
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": null,
+      "expected_reason_code": "R6",
+      "expected_state": "UNKNOWN",
+      "match": true,
+      "mutation_applied": "attestation carrying a forged completeness digest",
+      "observation_digest": "eabfed3d6d5dae51b4797f5156f623e3036d5335614a28d06bb5190b8e586e39",
+      "observed_decision": null,
+      "observed_reason_code": "R6",
+      "observed_state": "UNKNOWN",
+      "subject_refs": [
+        "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-N",
+      "detail": {
+        "foreign_supersession_records_present": 5
+      },
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": null,
+      "expected_reason_code": "R1",
+      "expected_state": "CURRENT",
+      "match": true,
+      "mutation_applied": "valid successor records for other outputs merely present in the corpus",
+      "observation_digest": "42f238d8d631b2da501e998ddb4819cf6cd79ac7801712eea8f852a6980cd472",
+      "observed_decision": null,
+      "observed_reason_code": "R1",
+      "observed_state": "CURRENT",
+      "subject_refs": [
+        "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-O",
+      "detail": {
+        "hint_accepted": true
+      },
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": "DENY",
+      "expected_reason_code": "G2",
+      "expected_state": "SUPERSEDED",
+      "match": true,
+      "mutation_applied": "precomputed resolution whose digest equals the governed recomputation",
+      "observation_digest": "bac572862cb644817357e188719f0b8330061357d088df451774377a1feab590",
+      "observed_decision": "DENY",
+      "observed_reason_code": "G2",
+      "observed_state": "SUPERSEDED",
+      "subject_refs": [
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-P",
+      "detail": {},
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": "DENY",
+      "expected_reason_code": "G9",
+      "expected_state": "SUPERSEDED",
+      "match": true,
+      "mutation_applied": "precomputed resolution body mutated to CURRENT, digest field left stale",
+      "observation_digest": "01b7a5ef5108ee4dc77d5a825ec155cb014b52151576b87652980db792d9ea9e",
+      "observed_decision": "DENY",
+      "observed_reason_code": "G9",
+      "observed_state": "SUPERSEDED",
+      "subject_refs": [
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-Q",
+      "detail": {},
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": "DENY",
+      "expected_reason_code": "G10",
+      "expected_state": "SUPERSEDED",
+      "match": true,
+      "mutation_applied": "caller's expected index identity does not match the index",
+      "observation_digest": "f165d584e0d2600ca264edcb149a2cba3ff77904b0d160ff6cd17c5c4042e726",
+      "observed_decision": "DENY",
+      "observed_reason_code": "G10",
+      "observed_state": "SUPERSEDED",
+      "subject_refs": [
+        "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+      ]
+    },
+    {
+      "case_id": "T-ADV-R",
+      "detail": {
+        "profile_unknown_disposition": "DENY"
+      },
+      "evaluated_at": "2026-08-14T22:05:00Z",
+      "expected_decision": "DENY",
+      "expected_reason_code": "G4",
+      "expected_state": "UNKNOWN",
+      "match": true,
+      "mutation_applied": "UNKNOWN currentness under explicitly non-consequential use",
+      "observation_digest": "1da381785d7aae7c3d819397e38dc79c78f6896415c7941fe512779ea7b42263",
+      "observed_decision": "DENY",
+      "observed_reason_code": "G4",
+      "observed_state": "UNKNOWN",
+      "subject_refs": [
+        "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01"
+      ]
+    }
+  ],
+  "cases_expected": 18,
+  "cases_matching_frozen_expectation": 18,
+  "cases_observed": 18,
+  "execution_authorization_sha256": "8657729a8bfa381fbf790bdb4eb6ec5621774c07b88264692e15f30342ff2f94",
+  "implementation_commit": "6cade50a8ee041cc941eb91fd7295c42b9a8a3e9",
+  "implementation_tree": "c196dd43816cdf10661e598f3901ed7e369792bd",
+  "record_class": "CDC_CURRENTNESS_SLICE_001_ADVERSARIAL_OBSERVATIONS",
+  "run_id": "CDC-CURRENTNESS-SLICE-001-RUN-001",
+  "semantic_adjudication_performed": false,
+  "trace_id": "CDC-CURRENTNESS-SLICE-001-TRACE-001"
+}
