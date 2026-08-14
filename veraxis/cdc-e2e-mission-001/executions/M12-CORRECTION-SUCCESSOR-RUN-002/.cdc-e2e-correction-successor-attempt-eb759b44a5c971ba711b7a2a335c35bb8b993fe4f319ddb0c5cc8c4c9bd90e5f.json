@@ -1,0 +1,14 @@
+{
+  "attempt_state": "CONSUMED_AFTER_FIRST_SUCCESSOR_CONSTRUCTION",
+  "implementation_commit": "97f814e3d4ff40db6cdd55197a48e15c57b2ad49",
+  "implementation_tree": "ff6d864a9b8db7c4c301271b5e7c9b29b5cd0ab5",
+  "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+  "owner_execution_authorization_sha256": "eb759b44a5c971ba711b7a2a335c35bb8b993fe4f319ddb0c5cc8c4c9bd90e5f",
+  "predecessor_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+  "source_run_id": "CDC-E2E-STAGE2-RUN-001",
+  "source_stage_2_result_digest": "8a12b681d1f08aa47b70830a939da9d545dccdcea33643fc6f5f6ca9450b3b40",
+  "stage": "CORRECTION_SUCCESSOR_ONLY",
+  "successor_constructed": true,
+  "successor_construction_invoked": true,
+  "successor_id": "EBAWU-P-001-C-TENDER-01-CORR-002"
+}

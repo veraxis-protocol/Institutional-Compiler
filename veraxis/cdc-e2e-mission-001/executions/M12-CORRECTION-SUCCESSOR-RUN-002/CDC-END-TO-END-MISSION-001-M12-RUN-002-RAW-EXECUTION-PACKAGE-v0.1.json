@@ -1,0 +1,115 @@
+{
+  "attempt_record": {
+    "attempt_state": "CONSUMED_AFTER_FIRST_SUCCESSOR_CONSTRUCTION",
+    "bytes": 823,
+    "path": "/private/tmp/cdc-e2e-m12-correction-successor-run-002/.cdc-e2e-correction-successor-attempt-eb759b44a5c971ba711b7a2a335c35bb8b993fe4f319ddb0c5cc8c4c9bd90e5f.json",
+    "sha256": "a73b402e5612630e9ebce0248b2f475c1cd97b0ca57d7692e376169aa3c4dd40"
+  },
+  "automatic_retry_performed": false,
+  "canonical_auth_004": {
+    "bytes": 3624,
+    "path": "/private/tmp/cdc-e2e-m12-correction-successor-run-002/CDC-END-TO-END-MISSION-001-M12-AUTH-004.json",
+    "sha256": "eb759b44a5c971ba711b7a2a335c35bb8b993fe4f319ddb0c5cc8c4c9bd90e5f"
+  },
+  "canonical_decision_002": {
+    "bytes": 1375,
+    "path": "/private/tmp/cdc-e2e-m12-correction-successor-run-002/CDC-END-TO-END-MISSION-001-M12-CORRECTION-EXECUTION-DECISION-002.json",
+    "sha256": "8dabd04971466a4235803118b499122b694ed7fe9e2e0cfc139b0563dee543e0"
+  },
+  "canonical_harness": {
+    "bytes": 29929,
+    "path": "/private/tmp/cdc-e2e-m12-correction-successor-run-002/CDC-END-TO-END-MISSION-001-M12-RUN-002-EXECUTION-HARNESS-v0.2.py",
+    "sha256": "6d5c91c8adc0dea7b833a90c84204c62595da7cc08874100a5ef29362e878a35"
+  },
+  "canonical_instruction_002": {
+    "bytes": 1042,
+    "path": "/private/tmp/cdc-e2e-m12-correction-successor-run-002/CDC-END-TO-END-MISSION-001-M12-CORRECTION-INSTRUCTION-002.json",
+    "sha256": "e33e075c8364f96c999072f12e8dd1f396ba85ad6085c13f5c1e85923a8fd703"
+  },
+  "claim_ceiling": "SYNTHETIC_EVALUATION_ONLY",
+  "core_implementation_commit": "97f814e3d4ff40db6cdd55197a48e15c57b2ad49",
+  "core_implementation_tree": "ff6d864a9b8db7c4c301271b5e7c9b29b5cd0ab5",
+  "corr_002_durable_result": {
+    "bytes": 15756,
+    "path": "/private/tmp/cdc-e2e-m12-correction-successor-run-002/CDC-END-TO-END-MISSION-001-M12-CORRECTION-SUCCESSOR-RUN-002-RAW-RESULT-v0.1.json",
+    "sha256": "8b81e62a1a5e65f14e86ced9f7b3c1f506f4dd4ccaa1c4375e4fb76d41fee246"
+  },
+  "embedded_correction_successor_result_digest": "f5af7424bc58addba6bf1a12a78a6f7fb5979fd730d045ca7ca06f739b5cffc7",
+  "environment_changed_during_execution": false,
+  "environment_manifest": {
+    "bytes": 3933,
+    "path": "/private/tmp/cdc-e2e-m12-correction-successor-run-002/CDC-END-TO-END-MISSION-001-M12-RUN-002-EXECUTION-ENVIRONMENT-v0.1.json",
+    "sha256": "e34729d3c953a84a3362b11906ca7dbb7d4c8fb03b3a7f07d13938cf1e129ea4"
+  },
+  "exception": "NONE",
+  "execute_invocations": 1,
+  "execute_return_class": "CorrectionSuccessorResult",
+  "execute_return_digest": "f5af7424bc58addba6bf1a12a78a6f7fb5979fd730d045ca7ca06f739b5cffc7",
+  "execution_completed_at_utc": "2026-08-14T18:10:55Z",
+  "execution_started_at_utc": "2026-08-14T18:10:54Z",
+  "experiment_id": "CDC-END-TO-END-MISSION-001",
+  "housekeeping_performed_before_evidence_freeze": false,
+  "interpretation_note": "machine-observable state only; no experimental verdict is recorded here",
+  "measurement_run_id": "CDC-E2E-M12-CORRECTION-SUCCESSOR-RUN-002",
+  "next_gate": "VITALIY_INDEPENDENT_ADJUDICATION_OF_FROZEN_RUN_002_EVIDENCE",
+  "observed_result_fields": {
+    "affected_output_count": 5,
+    "affected_output_refs": [
+      "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01",
+      "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02",
+      "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-03",
+      "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04",
+      "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-05"
+    ],
+    "archive_identity_verified": true,
+    "correction_executed": true,
+    "m11_repaired": false,
+    "official_handoff": "PROHIBITED",
+    "predecessor_byte_identity_preserved": true,
+    "predecessor_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+    "predecessor_id": "EBAWU-P-001-C-TENDER-01",
+    "predecessor_supersession_record_superseded_by": "EBAWU-P-001-C-TENDER-01-CORR-002",
+    "run_001_modified": false,
+    "stage_2_reexecuted": false,
+    "stale_refusal_decision": "DENY",
+    "stale_refusal_reason_code": "CANDIDATE_SUPERSEDED_OR_CORRECTED",
+    "successor_constructed": true,
+    "successor_id": "EBAWU-P-001-C-TENDER-01-CORR-002",
+    "successor_new_state": "CANDIDATE_FORMED",
+    "successor_supersedes": "EBAWU-P-001-C-TENDER-01"
+  },
+  "post_call_source_integrity": {
+    "source_changed_during_execution": false,
+    "tracked_src_differences": [],
+    "untracked_src_files": []
+  },
+  "record_class": "M12_RUN_002_RAW_EXECUTION_PACKAGE",
+  "result_bearing": true,
+  "result_bearing_core_invocations": 1,
+  "route_trace_produced_by_this_route": false,
+  "run_001_identity_after_execution": {
+    "raw_result": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+    "route_trace": "481957e87f73e2fc058e0e167b6d3d82fea830b2eaad16c78bdfc39f3c952920",
+    "run_001_modified": false,
+    "stage_2_attempt": "0d11efa747647bf6764bb7562b3a8e7b02219ed2b10f527ce4b5e69df3ca72d2"
+  },
+  "run_metadata": {
+    "occurred_at": "2026-08-14T18:10:54Z",
+    "producer": "CDC-END-TO-END-MISSION-001-M12-RUN-002-EXECUTION-HARNESS-v0.2",
+    "producer_version": "sha256:6d5c91c8adc0dea7b833a90c84204c62595da7cc08874100a5ef29362e878a35",
+    "recorded_at": "2026-08-14T18:10:54Z",
+    "run_id": "CDC-E2E-M12-CORRECTION-SUCCESSOR-RUN-002",
+    "trace_id": "CDC-E2E-M12-CORRECTION-SUCCESSOR-TRACE-002"
+  },
+  "run_metadata_frozen_copy": "/private/tmp/claude-501/-Users-arkadiymiteiko-Desktop/540f4c52-89b6-48cf-b88b-6350b662a23d/scratchpad/run_002_metadata.json",
+  "run_metadata_sha256": "dcb89d261205a145678873f711703075645c9868569c9cb0f7fdd4ff1aad82b4",
+  "runtime_byproducts_are_authority_or_evidence": false,
+  "runtime_byproducts_present": [
+    "__pycache__/CDC-END-TO-END-MISSION-001-M12-RUN-002-EXECUTION-HARNESS-v0.2.cpython-312.pyc"
+  ],
+  "runtime_mission_id": "CDC-TEST-MISSION-001",
+  "second_execute_invocation": false,
+  "semantic_adjudication_performed": false,
+  "stdout_stderr_note": "the invocation emitted no stdout or stderr beyond the harness report captured here",
+  "transition_event_emitted_by_this_route": false
+}

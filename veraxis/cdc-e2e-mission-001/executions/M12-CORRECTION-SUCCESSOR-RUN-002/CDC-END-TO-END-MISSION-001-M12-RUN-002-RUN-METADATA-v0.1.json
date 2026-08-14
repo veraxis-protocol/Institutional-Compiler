@@ -1,0 +1,8 @@
+{
+  "occurred_at": "2026-08-14T18:10:54Z",
+  "producer": "CDC-END-TO-END-MISSION-001-M12-RUN-002-EXECUTION-HARNESS-v0.2",
+  "producer_version": "sha256:6d5c91c8adc0dea7b833a90c84204c62595da7cc08874100a5ef29362e878a35",
+  "recorded_at": "2026-08-14T18:10:54Z",
+  "run_id": "CDC-E2E-M12-CORRECTION-SUCCESSOR-RUN-002",
+  "trace_id": "CDC-E2E-M12-CORRECTION-SUCCESSOR-TRACE-002"
+}
