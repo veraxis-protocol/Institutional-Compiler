@@ -1,0 +1,64 @@
+{
+  "AUTH_004_created": false,
+  "accepted_properties": {
+    "CORR_001_reusable": false,
+    "CORR_002_compatible": true,
+    "OIC_REPO_ROOT_can_redirect_repository_observation": false,
+    "archive_root_conflation_repaired": true,
+    "authorization_id_hardcoded": false,
+    "authorization_id_required": true,
+    "authorization_provenance_generalized": true,
+    "exact_authorization_identity_propagated": true,
+    "repository_observation_root_source": "LOADED_IMPLEMENTATION_LOCATION",
+    "runtime_evidence_root_separate_from_repository_observation_root": true
+  },
+  "authorizes_execution": false,
+  "claim_ceiling": "SYNTHETIC_EVALUATION_ONLY",
+  "correction_instruction_002_created": false,
+  "creates_execution_authority": false,
+  "execution_decision_002_created": false,
+  "experiment_id": "CDC-END-TO-END-MISSION-001",
+  "identity_class_separation": {
+    "EXECUTABLE_IMPLEMENTATION_IDENTITY": {
+      "commit": "97f814e3d4ff40db6cdd55197a48e15c57b2ad49",
+      "tree": "ff6d864a9b8db7c4c301271b5e7c9b29b5cd0ab5"
+    },
+    "VERIFICATION_EVIDENCE_IDENTITY": {
+      "commit": "d778268d50c58a840202a63434169c5e9b882ff5",
+      "tree": "636d006b3d7fbb57ca04ab9353c433d715a16636"
+    },
+    "equivalence_demonstrated_by": "SOURCE_IDENTITY_NOT_HEAD_POSITION",
+    "later_governance_commits_may_be_substituted_for_the_executable_identity": false
+  },
+  "implementation_commit": "97f814e3d4ff40db6cdd55197a48e15c57b2ad49",
+  "implementation_tree": "ff6d864a9b8db7c4c301271b5e7c9b29b5cd0ab5",
+  "loaded_core_module_bytes": 236812,
+  "loaded_core_module_sha256": "28c1fbc36690db4b5a612c6b982e49842802682c501f1ef771014f901357fdbe",
+  "next_gate": "OWNER_CREATION_AND_FREEZE_OF_EXACT_CORR_002_INSTRUCTION",
+  "owner_acceptance_at_utc": "2026-08-14T13:44:07Z",
+  "owner_adjudication_acceptance_commit": "fbbedcfd068808f3440bf25d40b1be73a4d0d128",
+  "owner_decision": "ACCEPTED_AND_FROZEN",
+  "predecessor_remediation_commit": "d294d407a323498f13667f864d5079ac66fa8ab1",
+  "real_topology_verification_commit": "d778268d50c58a840202a63434169c5e9b882ff5",
+  "real_topology_verification_tree": "636d006b3d7fbb57ca04ab9353c433d715a16636",
+  "record_class": "OWNER_M12_RUN_002_IMPLEMENTATION_ACCEPTANCE",
+  "result_bearing": false,
+  "runtime_mission_id": "CDC-TEST-MISSION-001",
+  "verification_at_freeze": {
+    "auth_004_corr_002_fixture_compatibility": "PASS",
+    "authorization_id_negative_tests": "PASS",
+    "canonical_auth_004_path_used": false,
+    "changed_source_mypy": "PASS",
+    "changed_source_ruff": "PASS",
+    "changed_source_ruff_format": "PASS",
+    "full_suite": "1638 passed, 43 skipped",
+    "hermetic_real_git_regression": "PASS",
+    "m12_boundary_suite": "135 passed",
+    "real_origin_topology_test": "PASS",
+    "real_run_002_attempt_record_created": false,
+    "repository_wide_ruff_green": false,
+    "repository_wide_ruff_inherited_errors": 5,
+    "result_bearing_production_execution": false,
+    "source_modified_by_verification": false
+  }
+}
