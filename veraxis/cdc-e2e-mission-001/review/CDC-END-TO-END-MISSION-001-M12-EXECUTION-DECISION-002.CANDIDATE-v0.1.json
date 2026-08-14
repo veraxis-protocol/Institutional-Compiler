@@ -1,0 +1,21 @@
+{
+  "authority_scope": "ONE_CORRECTION_SUCCESSOR_CONSTRUCTION",
+  "authorization_id": "CDC-E2E-MISSION-001-M12-AUTH-004",
+  "authorization_issuance_record_sha256": "76d847195ec10d2556c79f6bbb945bc93cfca5f130f761f0834dcb4ea9b9940c",
+  "authorization_sha256": "eb759b44a5c971ba711b7a2a335c35bb8b993fe4f319ddb0c5cc8c4c9bd90e5f",
+  "automatic_retry_authorized": false,
+  "canonical_execution_decision_path": "/private/tmp/cdc-e2e-m12-correction-successor-run-002/CDC-END-TO-END-MISSION-001-M12-CORRECTION-EXECUTION-DECISION-002.json",
+  "claim_ceiling": "SYNTHETIC_EVALUATION_ONLY",
+  "correction_instruction_id": "CDC-END-TO-END-MISSION-001-M12-CORRECTION-INSTRUCTION-002",
+  "correction_instruction_sha256": "e33e075c8364f96c999072f12e8dd1f396ba85ad6085c13f5c1e85923a8fd703",
+  "decision": "EXECUTE_AUTHORIZED_CORRECTION_ONCE",
+  "environment_manifest_sha256": "e34729d3c953a84a3362b11906ca7dbb7d4c8fb03b3a7f07d13938cf1e129ea4",
+  "execution_decision_id": "CDC-E2E-MISSION-001-M12-EXECUTION-DECISION-002",
+  "experiment_id": "CDC-END-TO-END-MISSION-001",
+  "implementation_commit": "97f814e3d4ff40db6cdd55197a48e15c57b2ad49",
+  "implementation_tree": "ff6d864a9b8db7c4c301271b5e7c9b29b5cd0ab5",
+  "record_class": "OWNER_CORRECTION_EXECUTION_DECISION",
+  "runtime_mission_id": "CDC-TEST-MISSION-001",
+  "single_use": true,
+  "successor_id": "EBAWU-P-001-C-TENDER-01-CORR-002"
+}
