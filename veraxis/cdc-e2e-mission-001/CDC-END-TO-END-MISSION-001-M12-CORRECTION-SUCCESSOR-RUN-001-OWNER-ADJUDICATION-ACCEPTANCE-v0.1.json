@@ -1,0 +1,66 @@
+{
+  "accepted_adjudication": {
+    "M12_MATCH_ESTABLISHED": false,
+    "RUN_001_HISTORY_PRESERVED": true,
+    "adjudication_state": "INFRASTRUCTURE_BLOCKED",
+    "authority_consumed": true,
+    "automatic_retry_occurred": false,
+    "predecessor_preservation_observed": true,
+    "successor_construction_observed": true,
+    "successor_durable_record_persisted": false
+  },
+  "authorizes_new_correction_authority": false,
+  "authorizes_new_execution": false,
+  "authorizes_remediation_execution": false,
+  "automatic_retry_authorized": false,
+  "claim_ceiling": "SYNTHETIC_EVALUATION_ONLY",
+  "corrigendum": {
+    "artifact_path": "veraxis/cdc-e2e-mission-001/CDC-END-TO-END-MISSION-001-M12-CORRECTION-SUCCESSOR-RUN-001-SEMANTIC-ADJUDICATION-001-CORRIGENDUM-001.md",
+    "commit": "76f2eafe9a2bf386cb1a1ac2181f48d3b47e23da",
+    "git_blob": "50fd89bbe302e333be46c5b16ad6806f4d1cdb2b",
+    "independently_verified_by_depth_1_fetch": true,
+    "reported_sha256": "f3eb918f16d2dc9bda030d98f4f024156da7243b0a6fe29998b0d6e80a475c77",
+    "tree": "933fa8245b97c7276669e6f4ab83d059759d1c19"
+  },
+  "execution_evidence_commit": "b6dca9153cb8496b8147019e8f6074bf73cb14f7",
+  "execution_evidence_tree": "c77b8901f064a3598f2340fb26fac925d79f8cc0",
+  "experiment_id": "CDC-END-TO-END-MISSION-001",
+  "governance_only": true,
+  "independent_adjudication": {
+    "artifact_path": "veraxis/cdc-e2e-mission-001/CDC-END-TO-END-MISSION-001-M12-CORRECTION-SUCCESSOR-RUN-001-SEMANTIC-ADJUDICATION-001.md",
+    "artifact_sha256": "82eff4c8f24ac4192f34ae651b13255be2898ca03f5b6292d6b4d9ac49b6fbc3",
+    "commit": "91910d0c6d1d4ca505fb7f1e8514932c48195dfd",
+    "independently_verified_by_depth_1_fetch": true,
+    "repository": "inventor1975/ZTL",
+    "tree": "f325b162eb745754f4b07b244383df1dbe7442d3"
+  },
+  "measurement_run_id": "CDC-E2E-M12-CORRECTION-SUCCESSOR-RUN-001",
+  "next_gate": "IMPLEMENTATION_REMEDIATION_ONLY",
+  "owner_acceptance_at_utc": "2026-08-14T13:09:48Z",
+  "owner_decision": "ACCEPTED_AND_FROZEN",
+  "owner_interpretation_of_corr_001": {
+    "completed_result_persisted": false,
+    "constructed_in_memory_under_valid_consumed_authority": true,
+    "durable_successor_record_persisted": false,
+    "historical_identity_may_be_reused": false,
+    "identity": "EBAWU-P-001-C-TENDER-01-CORR-001",
+    "status": "HISTORICALLY_CONSTRUCTED_IN_MEMORY_NOT_DURABLY_PERSISTED"
+  },
+  "record_class": "OWNER_M12_RUN_001_ADJUDICATION_ACCEPTANCE",
+  "result_bearing": false,
+  "run_001_stage_2_history": {
+    "aggregate": "FAIL",
+    "historical_m12": "INCOMPLETE_OBSERVATION",
+    "m11": "SEMANTIC_VIOLATION",
+    "rewritten_by_this_acceptance": false,
+    "stage_2_attempt": "CONSUMED_AFTER_FIRST_TRANSITION_EVALUATION"
+  },
+  "runtime_mission_id": "CDC-TEST-MISSION-001",
+  "spent_authorities": {
+    "AUTH_003": "SPENT",
+    "AUTH_003_sha256": "ee8b80921c704b165ab6482187cbbb1eab4fa315d7e89b468b98b83ac86f34ff",
+    "EXECUTION_DECISION_001": "SPENT",
+    "correction_successor_attempt_state": "CONSUMED_AFTER_FIRST_SUCCESSOR_CONSTRUCTION",
+    "execution_decision_sha256": "7589fc6f7557e538da6eb467d0d35257ec7058e6f555f9bcebadce47bec43e03"
+  }
+}
