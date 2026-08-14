@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "authorization_id": "OWNER-AUTHORIZATION-CURRENTNESS-SLICE-001-001",
+  "scope": "CDC-CURRENTNESS-PROPAGATION-VERTICAL-SLICE-001",
+  "historical_baseline": "29daa374b7e5cdc30ca7788310fbabb85f19912b",
+  "implementation_base_commit": "806490b659520a351e81ccb4d1d3f3ab214af70d",
+  "preserves_owner_authorization": "OWNER-AUTHORIZATION-004",
+  "authorized_post_baseline_source_modules": [
+    "src/oic/cdc_currentness.py"
+  ],
+  "additional_source_modules_authorized": false,
+  "result_bearing_slice_execution_authorized": false
+}

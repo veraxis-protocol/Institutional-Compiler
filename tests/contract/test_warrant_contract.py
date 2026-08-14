@@ -40,6 +40,9 @@ PROPOSED = "schemas/proposed"
 CDC_SOURCE_DELTA_AUTHORIZATION = (
     "docs/operations/CDC-END-TO-END-MISSION-001-SOURCE-DELTA-AUTHORIZATION-004.json"
 )
+CURRENTNESS_SOURCE_DELTA_AUTHORIZATION = (
+    "docs/operations/CDC-CURRENTNESS-SLICE-001-SOURCE-DELTA-AUTHORIZATION-001.json"
+)
 
 EXPECTED_CASES = (
     "01-earned-hereditary-current",
@@ -1378,12 +1381,74 @@ def test_cdc_slice_is_an_owner_authorized_post_baseline_source_delta(repo_root: 
     current_modules = {path.name for path in (repo_root / "src" / "oic").glob("*.py")}
     authorization = json.loads((repo_root / CDC_SOURCE_DELTA_AUTHORIZATION).read_bytes())
     assert authorization["authorization_id"] == "OWNER-AUTHORIZATION-004"
+    assert authorization["scope"] == "CDC-END-TO-END-MISSION-001"
     assert authorization["historical_baseline"] == historical_baseline
+    assert authorization["additional_source_modules_authorized"] is False
     authorized = {
         Path(path).name for path in authorization["authorized_post_baseline_source_modules"]
     }
+    # The Mission-001 authorized set is a historical fact and does not widen when
+    # a later series authorizes its own modules.
     assert authorized == {"cdc_slice.py", "cdc_e2e_mission.py"}
-    _assert_exact_authorized_source_delta(current_modules, baseline_modules, authorized)
+    assert baseline_modules <= current_modules
+    assert authorized <= current_modules - baseline_modules
+
+
+def test_currentness_slice_source_delta_is_separately_authorized(repo_root: Path) -> None:
+    """The slice's modules are authorized by its own instrument, not by AUTH-004."""
+    authorization = json.loads((repo_root / CURRENTNESS_SOURCE_DELTA_AUTHORIZATION).read_bytes())
+    assert authorization["authorization_id"] == "OWNER-AUTHORIZATION-CURRENTNESS-SLICE-001-001"
+    assert authorization["scope"] == "CDC-CURRENTNESS-PROPAGATION-VERTICAL-SLICE-001"
+    assert authorization["preserves_owner_authorization"] == "OWNER-AUTHORIZATION-004"
+    assert authorization["additional_source_modules_authorized"] is False
+    assert authorization["result_bearing_slice_execution_authorized"] is False
+    assert authorization["authorized_post_baseline_source_modules"] == [
+        "src/oic/cdc_currentness.py"
+    ]
+
+
+def test_post_baseline_source_delta_is_jointly_accounted_for(repo_root: Path) -> None:
+    """Two separately scoped instruments must jointly account for the whole delta.
+
+    Neither instrument is widened.  The union is compared exactly, so a module
+    named by no owner instrument still fails.
+    """
+    historical_baseline = "29daa374b7e5cdc30ca7788310fbabb85f19912b"
+    historical = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(repo_root),
+            "ls-tree",
+            "-r",
+            "--name-only",
+            historical_baseline,
+            "src/oic",
+        ],
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    baseline_modules = {
+        Path(path).name for path in historical.stdout.splitlines() if path.endswith(".py")
+    }
+    current_modules = {path.name for path in (repo_root / "src" / "oic").glob("*.py")}
+    union: set[str] = set()
+    for relative, expected_scope in (
+        (CDC_SOURCE_DELTA_AUTHORIZATION, "CDC-END-TO-END-MISSION-001"),
+        (
+            CURRENTNESS_SOURCE_DELTA_AUTHORIZATION,
+            "CDC-CURRENTNESS-PROPAGATION-VERTICAL-SLICE-001",
+        ),
+    ):
+        authorization = json.loads((repo_root / relative).read_bytes())
+        assert authorization["scope"] == expected_scope
+        assert authorization["historical_baseline"] == historical_baseline
+        union |= {
+            Path(path).name for path in authorization["authorized_post_baseline_source_modules"]
+        }
+    assert union == {"cdc_slice.py", "cdc_e2e_mission.py", "cdc_currentness.py"}
+    _assert_exact_authorized_source_delta(current_modules, baseline_modules, union)
 
 
 def test_cdc_source_delta_guard_rejects_a_third_module(repo_root: Path) -> None:
