@@ -1,0 +1,90 @@
+{
+  "actual_origin_observation": {
+    "archive_identity_verified": true,
+    "branch": "cdc-e2e-stage2-run-001-evidence",
+    "exercised_through_the_production_correction_successor_path": true,
+    "local_branch_consulted": false,
+    "matches_bound_expectation": true,
+    "observation_source": "ORIGIN_LS_REMOTE",
+    "remote_commit": "1a80aabe0f72eac8570b9827ee7545cda370cbe8",
+    "remote_commit_tree": "a6216214ae5a49ffcb3448a97aadce1bb3f418e3",
+    "remote_commit_tree_source": "LOCAL_OBJECT_FOR_ORIGIN_SUPPLIED_SHA",
+    "repository_normalized": "veraxis-protocol/Institutional-Compiler",
+    "repository_remote_url": "https://github.com/veraxis-protocol/Institutional-Compiler.git",
+    "runtime_evidence_read_from_external_root": true,
+    "status": "PASS"
+  },
+  "candidate_executable_implementation_commit": "d294d407a323498f13667f864d5079ac66fa8ab1",
+  "candidate_executable_implementation_tree": "f2b7c33524f9fc759bcaeb460b58ece39f7b99de",
+  "claim_ceiling": "SYNTHETIC_EVALUATION_ONLY",
+  "correction_instruction_002_created": false,
+  "executable_implementation_identity_is_not_this_verification_commit": true,
+  "experiment_id": "CDC-END-TO-END-MISSION-001",
+  "frozen_untouched": {
+    "blocked_run_001_attempt": true,
+    "corr_001": true,
+    "corrigendum": true,
+    "independent_adjudication": true,
+    "run_001_evidence": true,
+    "spent_authorities": true
+  },
+  "hermetic_real_git_regression": {
+    "observer_or_git_mocked": false,
+    "real_branch_commit_tree_observed": true,
+    "real_remote_url_observed": true,
+    "refusals_proved_with_actual_git_state": [
+      "wrong/missing branch -> publishes no branch",
+      "origin advanced -> observed commit and tree differ from the earlier real values",
+      "wrong remote repository identity -> observation refuses"
+    ],
+    "status": "PASS",
+    "topology": "temp implementation repo + BOOTSTRAP_MANIFEST.json + real bare origin + pushed evidence branch"
+  },
+  "identified_test_gap": "the earlier external-evidence-root success test monkeypatched _observe_git_archive_identity, so it never exercised the real git path; it is retained and two non-mocking verifications were added",
+  "mocking_used_in_these_verifications": [],
+  "new_authorization_created": false,
+  "new_execution_decision_created": false,
+  "new_execution_performed": false,
+  "next_gate": "OWNER_FREEZE_OF_REMEDIATED_IMPLEMENTATION_AND_RUN_002_ENVIRONMENT",
+  "oic_repo_root_decoy": {
+    "decoy_ignored": true,
+    "decoy_set": true,
+    "observation_root_after_decoy": "/private/tmp/claude-501/cleanroom",
+    "repository_observation_root_environment_override_used": false
+  },
+  "real_git_observer_mocked": false,
+  "record_class": "M12_ARCHIVE_IDENTITY_REMEDIATION_REAL_TOPOLOGY_VERIFICATION",
+  "result_bearing": false,
+  "run_002_reservation": {
+    "corr_001_reused": false,
+    "correction_event_id": "CDC-E2E-M12-CORRECTION-EVT-002",
+    "measurement_run_id": "CDC-E2E-M12-CORRECTION-SUCCESSOR-RUN-002",
+    "successor_id": "EBAWU-P-001-C-TENDER-01-CORR-002"
+  },
+  "runtime_mission_id": "CDC-TEST-MISSION-001",
+  "source_changed_after_candidate": false,
+  "test_fixture_discipline": {
+    "canonical_runtime_authority_path_used": false,
+    "disposable_fixture_authorization_used": true,
+    "real_correction_successor_attempt_namespace_touched": false,
+    "result_bearing_production_authority_exercised": false
+  },
+  "tests": {
+    "changed_file_mypy": "PASS",
+    "changed_file_ruff": "PASS",
+    "changed_file_ruff_format": "PASS",
+    "full_suite": "1631 passed, 43 skipped",
+    "m12_boundary_file_tests": 128,
+    "repository_wide_ci_green": false
+  },
+  "topology": {
+    "bootstrap_manifest_at_or_above_external_root": [],
+    "external_runtime_evidence_root_example": "/var/folders/47/n7bpzp2d3f35z35vskk5l2fh0000gn/T/tmpxp0n4_cx/runtime-evidence-root",
+    "loaded_implementation": "inside the actual OIC repository checkout",
+    "repository_observation_root": "/private/tmp/claude-501/cleanroom",
+    "repository_observation_root_source": "LOADED_IMPLEMENTATION_LOCATION",
+    "roots_distinct": true,
+    "runtime_evidence_root_source": "VERIFIED_AUTH_003_BINDING"
+  },
+  "verified_at_utc": "2026-08-14T13:23:07Z"
+}

@@ -15,6 +15,7 @@ import hashlib
 import inspect
 import json
 import shutil
+import subprocess
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, NoReturn
@@ -1899,3 +1900,170 @@ def test_no_caller_parameter_can_select_the_repository_observation_root() -> Non
     assert inspect.signature(mission._repository_observation_root).parameters == {}
     route = set(inspect.signature(execute_authorized_correction_successor).parameters)
     assert not {"repository_root", "repository_observation_root", "repo_root"} & route
+
+
+# ------------------------------ real-git archive observation (no observer mocking)
+
+
+def _run_git(repo: Path, *arguments: str) -> str:
+    executable = shutil.which("git")
+    assert executable is not None
+    return subprocess.run(
+        [executable, "-C", str(repo), *arguments], check=True, capture_output=True, text=True
+    ).stdout.strip()
+
+
+def test_real_origin_archive_observation_with_external_evidence_root(
+    tmp_path: Path,
+    evidence_dir: Path,
+    frozen_input: FrozenMissionInput,
+    action_plan: FrozenActionPlan,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The production path end to end, with the real git observer.
+
+    Nothing is monkeypatched here: _observe_git_archive_identity, _git and
+    subprocess all run for real against origin. Only a disposable fixture
+    authorization is used; no canonical runtime authority path is touched.
+    """
+    external = _external_evidence_root(tmp_path, evidence_dir)
+    decoy = tmp_path / "decoy-repo"
+    decoy.mkdir()
+    (decoy / "BOOTSTRAP_MANIFEST.json").write_text("{}\n")
+    monkeypatch.setenv("OIC_REPO_ROOT", str(decoy))
+
+    canonical = tmp_path / "AUTH-003.json"
+    document = _document_with_instruction(canonical, action_plan, frozen_input, external)
+    try:
+        result = _execute(
+            tmp_path,
+            external,
+            frozen_input,
+            action_plan,
+            document=document,
+            authorization_path=canonical,
+        )
+    except PostConstructionIntegrityError as error:
+        failure = error.observation["failure"]
+        if "CorrectionEvidenceInfrastructureError" in failure:
+            pytest.skip(f"origin is not observable from this environment: {failure}")
+        raise
+
+    identity = result.archive_identity
+    assert identity["observation_source"] == "ORIGIN_LS_REMOTE"
+    assert identity["repository_normalized"] == EVIDENCE_REPOSITORY
+    assert identity["branch"] == EVIDENCE_BRANCH
+    assert identity["remote_commit"] == STAGE_2_EVIDENCE_COMMIT
+    assert identity["remote_commit_tree"] == STAGE_2_EVIDENCE_TREE
+    assert identity["archive_identity_verified"] is True
+    assert identity["local_branch_consulted"] is False
+
+    observation_root = Path(identity["repository_observation_root"])
+    assert identity["repository_observation_root_source"] == "LOADED_IMPLEMENTATION_LOCATION"
+    assert identity["repository_observation_root_environment_override_used"] is False
+    assert identity["repository_observation_root_caller_injectable"] is False
+    assert observation_root.resolve() != decoy.resolve()
+    assert observation_root == mission._repository_observation_root()
+
+    assert identity["runtime_evidence_root"] == str(external)
+    assert identity["runtime_evidence_root_source"] == "VERIFIED_AUTH_003_BINDING"
+    assert identity["runtime_evidence_root_equals_repository_observation_root"] is False
+    assert result.evidence_locations["evidence_root"] == str(external)
+    assert result.source_stage_2_raw_result_sha256 == SOURCE_STAGE_2_RAW_RESULT_SHA256
+
+
+def _hermetic_repository(tmp_path: Path) -> tuple[Path, Path, str, str]:
+    """A real implementation repo with a real bare origin and a pushed branch."""
+    origin = tmp_path / "origin.git"
+    work = tmp_path / "implementation"
+    executable = shutil.which("git")
+    assert executable is not None
+    subprocess.run(
+        [executable, "init", "--bare", "-q", str(origin)], check=True, capture_output=True
+    )
+    (work / "src" / "oic").mkdir(parents=True)
+    (work / "BOOTSTRAP_MANIFEST.json").write_text("{}\n")
+    (work / "src" / "oic" / "module.py").write_text("VALUE = 1\n")
+    for command in (
+        ["init", "-q"],
+        ["config", "user.email", "hermetic@example.invalid"],
+        ["config", "user.name", "hermetic"],
+        ["remote", "add", "origin", f"https://github.com/{EVIDENCE_REPOSITORY}.git"],
+        ["add", "-A"],
+        ["commit", "-q", "-m", "hermetic evidence"],
+        ["branch", "-f", EVIDENCE_BRANCH],
+    ):
+        subprocess.run([executable, "-C", str(work), *command], check=True, capture_output=True)
+    # Push the branch to the real bare origin, then point origin at the GitHub-style
+    # URL so the normalized repository identity is exercised too.
+    subprocess.run(
+        [executable, "-C", str(work), "push", "-q", str(origin), f"{EVIDENCE_BRANCH}"],
+        check=True,
+        capture_output=True,
+    )
+    commit = _run_git(work, "rev-parse", EVIDENCE_BRANCH)
+    tree = _run_git(work, "rev-parse", f"{EVIDENCE_BRANCH}^{{tree}}")
+    return work, origin, commit, tree
+
+
+def test_hermetic_real_git_archive_observation(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Real git processes throughout: no observer, _git or subprocess mocking."""
+    work, origin, commit, tree = _hermetic_repository(tmp_path)
+    executable = shutil.which("git")
+    assert executable is not None
+    # origin must be the real bare repository for ls-remote to resolve.
+    subprocess.run(
+        [executable, "-C", str(work), "remote", "set-url", "origin", str(origin)],
+        check=True,
+        capture_output=True,
+    )
+    decoy = tmp_path / "decoy"
+    decoy.mkdir()
+    (decoy / "BOOTSTRAP_MANIFEST.json").write_text("{}\n")
+    monkeypatch.setenv("OIC_REPO_ROOT", str(decoy))
+
+    observed = mission._observe_git_archive_identity(work, EVIDENCE_BRANCH)
+    assert observed["observation_source"] == "ORIGIN_LS_REMOTE"
+    assert observed["branch"] == EVIDENCE_BRANCH
+    assert observed["remote_commit"] == commit
+    assert observed["remote_commit_tree"] == tree
+    assert observed["repository_remote_url"] == str(origin)
+
+    # wrong / missing branch
+    with pytest.raises(CorrectionEvidenceInfrastructureError, match="publishes no branch"):
+        mission._observe_git_archive_identity(work, "no-such-branch")
+
+    # origin advanced to an unexpected commit
+    (work / "src" / "oic" / "module.py").write_text("VALUE = 2\n")
+    for command in (["add", "-A"], ["commit", "-q", "-m", "advanced"]):
+        subprocess.run([executable, "-C", str(work), *command], check=True, capture_output=True)
+    subprocess.run(
+        [executable, "-C", str(work), "push", "-q", "-f", str(origin), f"HEAD:{EVIDENCE_BRANCH}"],
+        check=True,
+        capture_output=True,
+    )
+    advanced = mission._observe_git_archive_identity(work, EVIDENCE_BRANCH)
+    assert advanced["remote_commit"] != commit
+    assert advanced["remote_commit_tree"] != tree
+
+    # wrong remote repository identity
+    subprocess.run(
+        [
+            executable,
+            "-C",
+            str(work),
+            "remote",
+            "set-url",
+            "origin",
+            "https://github.com/someone-else/other-repo.git",
+        ],
+        check=True,
+        capture_output=True,
+    )
+    with pytest.raises(CorrectionEvidenceInfrastructureError):
+        mission._observe_git_archive_identity(work, EVIDENCE_BRANCH)
+
+    # the decoy never became the observation root
+    assert mission._repository_observation_root().resolve() != decoy.resolve()
