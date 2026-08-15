@@ -43,6 +43,9 @@ CDC_SOURCE_DELTA_AUTHORIZATION = (
 CURRENTNESS_SOURCE_DELTA_AUTHORIZATION = (
     "docs/operations/CDC-CURRENTNESS-SLICE-001-SOURCE-DELTA-AUTHORIZATION-001.json"
 )
+INTEGRATION_SOURCE_DELTA_AUTHORIZATION = (
+    "docs/operations/CDC-INTEGRATION-SLICE-001-SOURCE-DELTA-AUTHORIZATION-001.json"
+)
 
 EXPECTED_CASES = (
     "01-earned-hereditary-current",
@@ -1407,6 +1410,27 @@ def test_currentness_slice_source_delta_is_separately_authorized(repo_root: Path
     ]
 
 
+def test_integration_slice_source_delta_is_separately_authorized(repo_root: Path) -> None:
+    """The integration slice's modules are authorized by its own instrument."""
+    authorization = json.loads((repo_root / INTEGRATION_SOURCE_DELTA_AUTHORIZATION).read_bytes())
+    assert authorization["authorization_id"] == "OWNER-AUTHORIZATION-INTEGRATION-SLICE-001-001"
+    assert authorization["scope"] == "CDC-CURRENTNESS-TO-RELIANCE-INTEGRATION-SLICE-001"
+    assert authorization["preserves"] == [
+        "OWNER-AUTHORIZATION-004",
+        "OWNER-AUTHORIZATION-CURRENTNESS-SLICE-001-001",
+    ]
+    assert authorization["additional_source_modules_authorized"] is False
+    assert authorization["result_bearing_slice_execution_authorized"] is False
+    assert authorization["official_CDC_handoff_authorized"] is False
+    assert authorization["institutional_reliance_authorized"] is False
+    assert authorization["production_claim_authorized"] is False
+    assert authorization["authorized_post_baseline_source_modules"] == [
+        "src/oic/cdc_authority.py",
+        "src/oic/cdc_propagation.py",
+        "src/oic/cdc_reliance.py",
+    ]
+
+
 def test_post_baseline_source_delta_is_jointly_accounted_for(repo_root: Path) -> None:
     """Two separately scoped instruments must jointly account for the whole delta.
 
@@ -1440,6 +1464,10 @@ def test_post_baseline_source_delta_is_jointly_accounted_for(repo_root: Path) ->
             CURRENTNESS_SOURCE_DELTA_AUTHORIZATION,
             "CDC-CURRENTNESS-PROPAGATION-VERTICAL-SLICE-001",
         ),
+        (
+            INTEGRATION_SOURCE_DELTA_AUTHORIZATION,
+            "CDC-CURRENTNESS-TO-RELIANCE-INTEGRATION-SLICE-001",
+        ),
     ):
         authorization = json.loads((repo_root / relative).read_bytes())
         assert authorization["scope"] == expected_scope
@@ -1447,7 +1475,14 @@ def test_post_baseline_source_delta_is_jointly_accounted_for(repo_root: Path) ->
         union |= {
             Path(path).name for path in authorization["authorized_post_baseline_source_modules"]
         }
-    assert union == {"cdc_slice.py", "cdc_e2e_mission.py", "cdc_currentness.py"}
+    assert union == {
+        "cdc_slice.py",
+        "cdc_e2e_mission.py",
+        "cdc_currentness.py",
+        "cdc_authority.py",
+        "cdc_propagation.py",
+        "cdc_reliance.py",
+    }
     _assert_exact_authorized_source_delta(current_modules, baseline_modules, union)
 
 

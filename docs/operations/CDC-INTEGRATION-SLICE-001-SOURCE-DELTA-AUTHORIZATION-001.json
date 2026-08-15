@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "authorization_id": "OWNER-AUTHORIZATION-INTEGRATION-SLICE-001-001",
+  "scope": "CDC-CURRENTNESS-TO-RELIANCE-INTEGRATION-SLICE-001",
+  "historical_baseline": "29daa374b7e5cdc30ca7788310fbabb85f19912b",
+  "implementation_base_commit": "6cade50a8ee041cc941eb91fd7295c42b9a8a3e9",
+  "preserves": [
+    "OWNER-AUTHORIZATION-004",
+    "OWNER-AUTHORIZATION-CURRENTNESS-SLICE-001-001"
+  ],
+  "authorized_post_baseline_source_modules": [
+    "src/oic/cdc_authority.py",
+    "src/oic/cdc_propagation.py",
+    "src/oic/cdc_reliance.py"
+  ],
+  "additional_source_modules_authorized": false,
+  "result_bearing_slice_execution_authorized": false,
+  "official_CDC_handoff_authorized": false,
+  "institutional_reliance_authorized": false,
+  "production_claim_authorized": false
+}
