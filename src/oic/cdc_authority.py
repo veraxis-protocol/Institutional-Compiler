@@ -4,8 +4,10 @@ Implements the frozen contract:
 
 ``CURRENTNESS-TO-RELIANCE-INTEGRATION-SLICE-001-SEMANTIC-DESIGN-v0.4.md``
     sha256 03ca22e960fa677af0328d2c9595c7842015cf68ca525f8e94c2564dc4afc173
-``INTEGRATION-SLICE-001-DIGEST-DERIVATION-v0.3.md``
-    sha256 600a8f19eef3bba635ba4349ee1b46e0f23baa66dfe0b87c0d84223d6b686bfd
+``INTEGRATION-SLICE-001-DIGEST-DERIVATION-v0.4.md``
+    sha256 494c91ace109ba050c40b72cc2f0f1cc64366386376212d50edbb3b9a418d1e7
+    (supersedes v0.3 600a8f19…, which published the epoch vector results without
+    the successor record_digest that enters EPOCH-B)
 
 v0.4 is a narrow successor that incorporates its predecessors by digest.  The
 thirteen-step procedure, the object shapes and the epoch definition come out of
@@ -38,7 +40,10 @@ from typing import Any, Final
 from oic.errors import OICError
 
 SEMANTIC_DESIGN_SHA256: Final = "03ca22e960fa677af0328d2c9595c7842015cf68ca525f8e94c2564dc4afc173"
-DIGEST_DERIVATION_SHA256: Final = "600a8f19eef3bba635ba4349ee1b46e0f23baa66dfe0b87c0d84223d6b686bfd"
+DIGEST_DERIVATION_SHA256: Final = "494c91ace109ba050c40b72cc2f0f1cc64366386376212d50edbb3b9a418d1e7"
+DIGEST_DERIVATION_V0_3_SHA256: Final = (
+    "600a8f19eef3bba635ba4349ee1b46e0f23baa66dfe0b87c0d84223d6b686bfd"
+)
 
 ASSURANCE_CLASS: Final = "INTERNAL_TECHNICAL_DEMONSTRATION"
 AUTHORITY_CLASS: Final = "SYNTHETIC_BOUNDED_DEMONSTRATION_AUTHORITY"

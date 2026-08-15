@@ -3,8 +3,8 @@
 Identities are reconstructed from the frozen contract chain, verified from Git
 objects: ``…SEMANTIC-DESIGN-v0.4.md`` (03ca22e9…) and its incorporated
 predecessors v0.3 (1c07a24c…), v0.2 (8e02820d…) and v0.1 (f0f250ed…), with
-digest behaviour from ``INTEGRATION-SLICE-001-DIGEST-DERIVATION-v0.3.md``
-(600a8f19…) and its predecessors.
+digest behaviour from ``INTEGRATION-SLICE-001-DIGEST-DERIVATION-v0.4.md``
+(494c91ac…), which completes the epoch vector inputs its predecessors omitted.
 
 One pytest node id is exactly one semantic criterion.  The four development-only
 authority-branch tests live in a separate module and are never counted here.
@@ -56,6 +56,7 @@ from tests.integration.cdc_integration_fixtures import (
 from oic.cdc_authority import (
     AUTHORITY_REASON_CODES,
     CONSUMER_PRINCIPAL,
+    EPOCH_RECORD_FIELDS,
     PRODUCER_PRINCIPAL,
     SUBJECT_PRINCIPAL,
     AuthorityRequest,
@@ -667,18 +668,40 @@ def test_case_s_admissibility_basis_revoked(tmp_path: Path) -> None:
 
 
 def test_dig_01_currentness_epoch_digest() -> None:
-    """T-DIG-01 — Class 1, with the published EPOCH-A vector."""
+    """T-DIG-01 — Class 1: all three published vectors, from the published inputs.
+
+    Derivation v0.4 publishes the complete input for every vector, including the
+    successor's ``record_digest`` that v0.1-v0.3 omitted.  Nothing here is
+    inferred and nothing is locally generated: the exact frozen digests must come
+    back out.
+    """
     assert canonical_bytes({"b": 2, "a": "é"}) == b'{"a":"\xc3\xa9","b":2}'
-    attestation = "eb450545e966f2763da2a49f404f96a0624786925b276b5c83428908453237e7"
+    assert (
+        canonical_digest({"b": 2, "a": "é"})
+        == "06c264c46ad5ada9493abd3aa2383fb205ae99d7d0bad40b03a43bfec8a1b8de"
+    )
+
     output_ref = "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01"
+    attestation = "eb450545e966f2763da2a49f404f96a0624786925b276b5c83428908453237e7"
     successor = {
         "output_ref": output_ref,
         "record_ref": "EBAWU-P-001-C-TENDER-01-CORR-002#" + output_ref,
-        "record_digest": "0" * 64,
+        "record_digest": (
+            "943affbf3e86d8a1b6831eb3deafb2efeac902989d8ee75fe85daea6f82e1e3c"
+        ),
         "record_class": "CORRECTION_SUCCESSOR_RECORD",
         "effective_at": "2026-08-15T12:00:00Z",
         "admitted_at": "2026-08-15T09:00:00Z",
     }
+    reduced = {key: successor[key] for key in EPOCH_RECORD_FIELDS}
+
+    # EPOCH-A — admitted but not operative at 10:00, so excluded; state CURRENT.
+    epoch_a_object = {
+        "output_ref": output_ref,
+        "completeness_attestation_digest": attestation,
+        "operative_basis_records": [],
+    }
+    assert len(canonical_bytes(epoch_a_object)) == 185
     epoch_a = currentness_epoch_digest(
         output_ref=output_ref,
         as_of="2026-08-15T10:00:00Z",
@@ -686,18 +709,43 @@ def test_dig_01_currentness_epoch_digest() -> None:
         completeness_attestation_digest=attestation,
     )
     assert epoch_a == "407a7c8fb4db1797d6e252ba22f24b4afd73b06b408e4751b4d401d709041b46"
+    assert epoch_a == canonical_digest(epoch_a_object)
+
+    # EPOCH-B — the same successor operative at 13:00; attestation null.
+    epoch_b_object = {
+        "output_ref": output_ref,
+        "completeness_attestation_digest": None,
+        "operative_basis_records": [reduced],
+    }
+    assert len(canonical_bytes(epoch_b_object)) == 414
     epoch_b = currentness_epoch_digest(
         output_ref=output_ref,
         as_of="2026-08-15T13:00:00Z",
         governing_records=[successor],
         completeness_attestation_digest=None,
     )
+    assert epoch_b == "6858b71d2940bbc0d8e5f20023f772435d282fad1d47201a3fdc72d8b80ef7ac"
+    assert epoch_b == canonical_digest(epoch_b_object)
+
+    # EPOCH-C — control: an unrelated output's operative successor never enters.
+    unrelated = {
+        **successor,
+        "output_ref": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02",
+        "record_ref": "EBAWU-OTHER#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02",
+        "effective_at": "2026-08-15T08:00:00Z",
+    }
+    epoch_c = currentness_epoch_digest(
+        output_ref=output_ref,
+        as_of="2026-08-15T10:00:00Z",
+        governing_records=[successor, unrelated],
+        completeness_attestation_digest=attestation,
+    )
+    assert epoch_c == "407a7c8fb4db1797d6e252ba22f24b4afd73b06b408e4751b4d401d709041b46"
+    assert len(canonical_bytes(epoch_a_object)) == 185
+
+    # The two frozen required properties.
     assert epoch_a != epoch_b
-    assert len(canonical_bytes({"output_ref": output_ref, "completeness_attestation_digest": None,
-                                "operative_basis_records": [
-                                    {k: successor[k] for k in
-                                     ("record_ref", "record_digest", "record_class",
-                                      "effective_at", "admitted_at")}]})) == 414
+    assert epoch_c == epoch_a
 
 
 def test_dig_02_authority_basis_record_digest() -> None:

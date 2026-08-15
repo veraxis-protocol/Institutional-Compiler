@@ -2,7 +2,7 @@
 
 Implements the sixteen frozen consumer checks of
 ``…SEMANTIC-DESIGN-v0.4.md`` §2 (03ca22e9…) and digest Classes 5, 6 and 7 of
-``INTEGRATION-SLICE-001-DIGEST-DERIVATION-v0.3.md`` (600a8f19…).
+``INTEGRATION-SLICE-001-DIGEST-DERIVATION-v0.4.md`` (494c91ac…).
 
 The rule the whole module exists to hold:
 
@@ -67,7 +67,7 @@ RELIANCE_REASON_CODES: Final[dict[str, str]] = {
 }
 RELIANCE_REASON_CODE_COUNT: Final = len(RELIANCE_REASON_CODES)
 
-# Frozen order 1..16 — derivation v0.3 §6.  Never re-sorted, never shortened.
+# Frozen order 1..16 — derivation v0.4 §6, unchanged from v0.3.  Never re-sorted, never shortened.
 CONSUMER_CHECKS: Final[tuple[tuple[int, str], ...]] = (
     (1, "envelope_integrity"),
     (2, "schema_closure"),

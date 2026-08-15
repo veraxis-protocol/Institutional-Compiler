@@ -2,7 +2,7 @@
 
 Implements the closed ``GovernedPropagationEnvelope`` frozen by
 ``…SEMANTIC-DESIGN-v0.4.md`` (03ca22e9…) and digest Class 4 of
-``INTEGRATION-SLICE-001-DIGEST-DERIVATION-v0.3.md`` (600a8f19…).
+``INTEGRATION-SLICE-001-DIGEST-DERIVATION-v0.4.md`` (494c91ac…).
 
 Propagation is not a return value.  The producer serializes a closed envelope,
 materializes it durably with an fsync, and only then publishes a ready marker by
