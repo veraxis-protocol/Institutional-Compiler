@@ -1,0 +1,268 @@
+{
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "authorization_id": "OWNER-AUTHORIZATION-INTEGRATION-SLICE-001-EXEC-001",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-001",
+  "execution_issuance_digest": "0ed920c1a1ba090c366fb1939d5d9bdb716f48150b6c8609afd6b8bdd17bfe4f",
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "junit_reported_errors": "0",
+  "junit_reported_failures": "0",
+  "junit_reported_skipped": "0",
+  "junit_reported_tests": "41",
+  "observations": [
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_early_termination[T-EARLY-01]",
+      "time": "0.004"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_early_termination[T-EARLY-02]",
+      "time": "0.003"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_early_termination[T-EARLY-03]",
+      "time": "0.004"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_early_termination[T-EARLY-04]",
+      "time": "0.003"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_early_termination[T-EARLY-05]",
+      "time": "0.005"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_pos_01_currentness_current",
+      "time": "0.136"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_pos_02_authority_proceed",
+      "time": "0.001"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_pos_03_envelope_materialized",
+      "time": "0.001"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_pos_04_separate_consumer_process",
+      "time": "0.001"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_pos_05_consumer_revalidates",
+      "time": "0.000"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_pos_06_reliance_issued",
+      "time": "0.000"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_a_authority_deny",
+      "time": "0.004"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_b_authority_escalate",
+      "time": "0.005"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_c_tampered_envelope",
+      "time": "0.123"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_d_wrong_artifact",
+      "time": "0.125"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_e_wrong_scope",
+      "time": "0.124"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_f_wrong_principal",
+      "time": "0.125"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_g_expired_authority_decision",
+      "time": "0.121"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_h_expired_envelope",
+      "time": "0.124"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_i_direct_assertion",
+      "time": "0.121"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_j_replayed_authorization",
+      "time": "0.268"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_k_currentness_toctou",
+      "time": "0.128"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_l_historical_reliance_preserved",
+      "time": "0.260"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_m_currentness_basis_unreachable",
+      "time": "0.121"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_n_competing_authority_basis",
+      "time": "0.004"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_o_wrong_intended_consumer",
+      "time": "0.135"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_p_authority_toctou",
+      "time": "0.174"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_q_authority_basis_missing",
+      "time": "0.004"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_r_authority_basis_invalid",
+      "time": "0.004"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_case_s_admissibility_basis_revoked",
+      "time": "0.003"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_dig_01_currentness_epoch_digest",
+      "time": "0.001"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_dig_02_authority_basis_record_digest",
+      "time": "0.001"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_dig_03_authority_decision_digest",
+      "time": "0.004"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_dig_04_envelope_digest",
+      "time": "0.125"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_dig_05_consumer_validation_digest",
+      "time": "0.142"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_dig_06_reliance_record_digest",
+      "time": "0.132"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_dig_07_integration_package_digest",
+      "time": "0.000"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_dig_08_synthetic_profile_digest",
+      "time": "0.000"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_epoch_a_future_successor_excluded",
+      "time": "0.006"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_epoch_b_boundary_crossing_moves_epoch",
+      "time": "0.003"
+    },
+    {
+      "classname": "tests.integration.test_cdc_integration_slice_001",
+      "gate_outcome": "PASS",
+      "node_name": "test_epoch_c_unrelated_output_control",
+      "time": "0.005"
+    }
+  ],
+  "observations_total": 41,
+  "outcome_counts": {
+    "PASS": 41
+  },
+  "record_class": "CDC_INTEGRATION_SLICE_001_CRITERIA_LEDGER",
+  "semantic_adjudication_performed": false,
+  "source": "pytest junit-xml emitted by harness v0.2 during the consumed run",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-001-TRACE"
+}

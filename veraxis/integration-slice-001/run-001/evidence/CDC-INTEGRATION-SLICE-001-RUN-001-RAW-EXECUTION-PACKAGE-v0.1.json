@@ -1,0 +1,50 @@
+{
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "attempt_state": "CONSUMED_BEFORE_RESULT_BEARING_INVOCATION",
+  "authorization_id": "OWNER-AUTHORIZATION-INTEGRATION-SLICE-001-EXEC-001",
+  "automatic_retry_performed": false,
+  "criteria_phase_completed": true,
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-001",
+  "execution_issuance_digest": "0ed920c1a1ba090c366fb1939d5d9bdb716f48150b6c8609afd6b8bdd17bfe4f",
+  "execution_outcome": "RAISED_AFTER_ORDINAL_CONSUMPTION",
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "members": [
+    {
+      "bytes": 3615,
+      "path": "/private/tmp/cdc-integration-slice-001-run-001/CDC-INTEGRATION-SLICE-001-RUN-001-EXECUTION-FAILURE-OBSERVATION-v0.1.json",
+      "sha256": "27934b5c5903a7c902949d548e10ef6142937dfd1d8f37aa5c5fd9dd498bbc7b"
+    },
+    {
+      "bytes": 8791,
+      "path": "/private/tmp/cdc-integration-slice-001-run-001/CDC-INTEGRATION-SLICE-001-RUN-001-CRITERIA-LEDGER-v0.1.json",
+      "sha256": "b43c33a345219ca2d8c39ed8003aaccb0af58a7c6f6964ad6af1151335ec2999"
+    },
+    {
+      "bytes": 960,
+      "path": "/private/tmp/cdc-integration-slice-001-run-001/CDC-INTEGRATION-SLICE-001-RUN-001-PRESERVATION-OBSERVATION-v0.1.json",
+      "sha256": "648af12e7bed7ff3b1e0c94803facf25cf401f07a52ab0d9065b37239ced9eee"
+    },
+    {
+      "bytes": 600,
+      "path": "/private/tmp/cdc-integration-slice-001-run-001/.cdc-integration-slice-001-attempt-0ed920c1a1ba090c366fb1939d5d9bdb716f48150b6c8609afd6b8bdd17bfe4f.json",
+      "sha256": "8aa61e5283db15baf7f33b8be55506ebf57de5bbf7cf3b923d2cea14f20a4096"
+    },
+    {
+      "bytes": 5473,
+      "path": "/private/tmp/cdc-integration-slice-001-run-001/pytest-criteria-report.xml",
+      "sha256": "7adbeb8703bf6629b2a81ff171765cf24d95cdcee6658dc3578182233b1244d6"
+    }
+  ],
+  "official_handoff": "PROHIBITED",
+  "package_digest": "b2cb951b2a8d709209568ffff29d286f73bbe974c0f594eab105645cd949fed7",
+  "package_state": "FROZEN_AFTER_EXECUTION_RAISED_POST_CONSUMPTION",
+  "pipeline_phase_completed": false,
+  "record_class": "CDC_INTEGRATION_SLICE_001_RAW_EXECUTION_PACKAGE",
+  "result_bearing_criteria_total": 41,
+  "runtime_evidence_root": "/private/tmp/cdc-integration-slice-001-run-001",
+  "schema_version": "CDC-INTEGRATION-SLICE-001-RAW-EXECUTION-PACKAGE-v0.1",
+  "second_result_bearing_execution": false,
+  "semantic_adjudication_performed": false,
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-001-TRACE"
+}

@@ -1,0 +1,17 @@
+{
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "authorization_id": "OWNER-AUTHORIZATION-INTEGRATION-SLICE-001-EXEC-001",
+  "control_head_after_run": "a28f4a95b2e9272e8bc85f747bd7b734355c8db5",
+  "control_worktree_porcelain_after_run": "",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-001",
+  "execution_issuance_digest": "0ed920c1a1ba090c366fb1939d5d9bdb716f48150b6c8609afd6b8bdd17bfe4f",
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_head_after_run": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "implementation_tree_after_run": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "implementation_worktree_porcelain_after_run": "",
+  "record_class": "CDC_INTEGRATION_SLICE_001_PRESERVATION_OBSERVATION",
+  "semantic_adjudication_performed": false,
+  "source_modified": false,
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-001-TRACE"
+}

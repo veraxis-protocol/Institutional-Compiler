@@ -1,0 +1,81 @@
+{
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "attempt_record_modified_after_consumption": false,
+  "attempt_state_marked_completed": false,
+  "attempt_state_observed": "CONSUMED_BEFORE_RESULT_BEARING_INVOCATION",
+  "authorization_id": "OWNER-AUTHORIZATION-INTEGRATION-SLICE-001-EXEC-001",
+  "automatic_retry_performed": false,
+  "defect_location": {
+    "artifact": "CDC-INTEGRATION-SLICE-001-RUN-001-EXECUTION-HARNESS-v0.2.py",
+    "defect_class": "HARNESS_SCAFFOLDING_DEFECT",
+    "description": "the harness created the shared 'pipeline' directory but not the per-scenario subdirectories it then passed to _run_pipeline, which writes into a directory it expects to already exist",
+    "function": "_pipeline_observations",
+    "implementation_source_implicated": false
+  },
+  "exception_class": "FileNotFoundError",
+  "exception_message": "[Errno 2] No such file or directory: '/private/tmp/cdc-integration-slice-001-run-001/pipeline/positive/control.json'",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-001",
+  "execution_issuance_digest": "0ed920c1a1ba090c366fb1939d5d9bdb716f48150b6c8609afd6b8bdd17bfe4f",
+  "execution_outcome": "RAISED_AFTER_ORDINAL_CONSUMPTION",
+  "harness_modified_after_consumption": false,
+  "historical_reliance_observation_produced": false,
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "ordinal_consumed": true,
+  "phases": [
+    {
+      "outcome": "VALID",
+      "phase": "verify_execution_authority",
+      "reached": true
+    },
+    {
+      "outcome": "PASS_45_OF_45",
+      "phase": "preflight",
+      "reached": true
+    },
+    {
+      "outcome": "0_RESULT_BEARING_INVOCATIONS",
+      "phase": "preflight_zero_invocation_check",
+      "reached": true
+    },
+    {
+      "outcome": "NO_ATTEMPT_RECORD",
+      "phase": "attempt_state_check",
+      "reached": true
+    },
+    {
+      "outcome": "CONSUMED",
+      "phase": "consume_ordinal",
+      "reached": true
+    },
+    {
+      "outcome": "COMPLETED_41_OF_41",
+      "phase": "run_criteria",
+      "reached": true
+    },
+    {
+      "outcome": "RAISED",
+      "phase": "pipeline_observations",
+      "reached": true
+    },
+    {
+      "outcome": "NOT_REACHED",
+      "phase": "complete_attempt",
+      "reached": false
+    },
+    {
+      "outcome": "NOT_REACHED",
+      "phase": "persist",
+      "reached": false
+    }
+  ],
+  "pipeline_observations_produced": false,
+  "positive_path_observations_produced": false,
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_001_EXECUTION_FAILURE_OBSERVATION",
+  "rerun_performed": false,
+  "second_result_bearing_execution": false,
+  "semantic_adjudication_performed": false,
+  "toctou_observations_produced": false,
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-001-TRACE",
+  "traceback": "Traceback (most recent call last):\n  File \".../CDC-INTEGRATION-SLICE-001-RUN-001-EXECUTION-HARNESS-v0.2.py\", line 1242, in <module>\n    outcome = execute_run()\n  File \".../CDC-INTEGRATION-SLICE-001-RUN-001-EXECUTION-HARNESS-v0.2.py\", line 1068, in execute_run\n    pipeline = _pipeline_observations()\n  File \".../CDC-INTEGRATION-SLICE-001-RUN-001-EXECUTION-HARNESS-v0.2.py\", line 895, in _pipeline_observations\n    positive = _run_pipeline(scratch / \"positive\")\n  File \"/private/tmp/cdc-integration-slice-001-impl/tests/integration/test_cdc_integration_slice_001.py\", line 189, in _run_pipeline\n    control_path.write_bytes(\nFileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/cdc-integration-slice-001-run-001/pipeline/positive/control.json'"
+}

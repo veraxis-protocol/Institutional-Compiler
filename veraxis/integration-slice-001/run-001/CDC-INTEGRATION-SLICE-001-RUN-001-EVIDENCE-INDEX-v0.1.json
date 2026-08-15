@@ -1,0 +1,60 @@
+{
+  "archived_byte_for_byte": true,
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "attempt_record_archived_under_renamed_path": {
+    "archived_path": "veraxis/integration-slice-001/run-001/evidence/attempt-record-0ed920c1.json",
+    "bytes_identical": true,
+    "note": "leading dot dropped so the file is tracked; contents unmodified",
+    "runtime_path": "/private/tmp/cdc-integration-slice-001-run-001/.cdc-integration-slice-001-attempt-0ed920c1a1ba090c366fb1939d5d9bdb716f48150b6c8609afd6b8bdd17bfe4f.json"
+  },
+  "authorization_id": "OWNER-AUTHORIZATION-INTEGRATION-SLICE-001-EXEC-001",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-001",
+  "execution_issuance_digest": "0ed920c1a1ba090c366fb1939d5d9bdb716f48150b6c8609afd6b8bdd17bfe4f",
+  "members": [
+    {
+      "archived_path": "veraxis/integration-slice-001/run-001/evidence/.cdc-integration-slice-001-attempt-0ed920c1a1ba090c366fb1939d5d9bdb716f48150b6c8609afd6b8bdd17bfe4f.json",
+      "bytes": 600,
+      "sha256": "8aa61e5283db15baf7f33b8be55506ebf57de5bbf7cf3b923d2cea14f20a4096"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-001/evidence/CDC-INTEGRATION-SLICE-001-RUN-001-CRITERIA-LEDGER-v0.1.json",
+      "bytes": 8791,
+      "sha256": "b43c33a345219ca2d8c39ed8003aaccb0af58a7c6f6964ad6af1151335ec2999"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-001/evidence/CDC-INTEGRATION-SLICE-001-RUN-001-EVIDENCE-FREEZER-v0.1.py",
+      "bytes": 10929,
+      "sha256": "875da73d51b2ec4e8dde019f649c474cf7ac0d183c61c558bfd4292f91e72e2a"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-001/evidence/CDC-INTEGRATION-SLICE-001-RUN-001-EXECUTION-FAILURE-OBSERVATION-v0.1.json",
+      "bytes": 3615,
+      "sha256": "27934b5c5903a7c902949d548e10ef6142937dfd1d8f37aa5c5fd9dd498bbc7b"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-001/evidence/CDC-INTEGRATION-SLICE-001-RUN-001-PRESERVATION-OBSERVATION-v0.1.json",
+      "bytes": 960,
+      "sha256": "648af12e7bed7ff3b1e0c94803facf25cf401f07a52ab0d9065b37239ced9eee"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-001/evidence/CDC-INTEGRATION-SLICE-001-RUN-001-RAW-EXECUTION-PACKAGE-v0.1.json",
+      "bytes": 2520,
+      "sha256": "e52d498a18191ab9235b4266e1a4a98537144c3d965f0141ebbdd6808dc01256"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-001/evidence/attempt-record-0ed920c1.json",
+      "bytes": 600,
+      "sha256": "8aa61e5283db15baf7f33b8be55506ebf57de5bbf7cf3b923d2cea14f20a4096"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-001/evidence/pytest-criteria-report.xml",
+      "bytes": 5473,
+      "sha256": "7adbeb8703bf6629b2a81ff171765cf24d95cdcee6658dc3578182233b1244d6"
+    }
+  ],
+  "members_total": 8,
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_001_EVIDENCE_INDEX",
+  "reserialized": false,
+  "runtime_evidence_root": "/private/tmp/cdc-integration-slice-001-run-001/",
+  "semantic_adjudication_performed": false
+}
