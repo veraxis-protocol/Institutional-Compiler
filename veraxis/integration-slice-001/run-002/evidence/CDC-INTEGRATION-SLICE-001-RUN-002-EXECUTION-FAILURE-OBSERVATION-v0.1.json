@@ -1,0 +1,183 @@
+{
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "attempt_record_modified_after_consumption": false,
+  "attempt_state_marked_completed": false,
+  "attempt_state_observed": "CONSUMED_BEFORE_RESULT_BEARING_INVOCATION",
+  "authorization_id": "OWNER-AUTHORIZATION-INTEGRATION-SLICE-001-EXEC-002",
+  "automatic_retry_performed": false,
+  "criteria_never_reached": [
+    "T-CASE-A",
+    "T-CASE-B",
+    "T-CASE-C",
+    "T-CASE-D",
+    "T-CASE-E",
+    "T-CASE-F",
+    "T-CASE-G",
+    "T-CASE-H",
+    "T-CASE-I",
+    "T-CASE-J",
+    "T-CASE-K",
+    "T-CASE-L",
+    "T-CASE-M",
+    "T-CASE-N",
+    "T-CASE-O",
+    "T-CASE-P",
+    "T-CASE-Q",
+    "T-CASE-R",
+    "T-CASE-S",
+    "T-DIG-01",
+    "T-DIG-02",
+    "T-DIG-03",
+    "T-DIG-04",
+    "T-DIG-05",
+    "T-DIG-06",
+    "T-DIG-07",
+    "T-DIG-08",
+    "T-EPOCH-A",
+    "T-EPOCH-B",
+    "T-EPOCH-C"
+  ],
+  "criteria_reached_before_failure": [
+    "T-EARLY-01",
+    "T-EARLY-02",
+    "T-EARLY-03",
+    "T-EARLY-04",
+    "T-EARLY-05",
+    "T-POS-01",
+    "T-POS-02",
+    "T-POS-03",
+    "T-POS-04",
+    "T-POS-05",
+    "T-POS-06"
+  ],
+  "criteria_reached_count": 11,
+  "criterion_evidence_projection_v0_3_sha256": "7adcc39f5656fa3fdc837bf3049a7a4a1be38947aed41b2fc0ccc23cc4781298",
+  "criterion_observations_persisted": 0,
+  "criterion_observations_produced_in_memory": 11,
+  "criterion_observations_recoverable": false,
+  "criterion_observations_recoverable_reason": "the in-memory observations were lost when the process exited; persist() is reached only after all 41 execute, and nothing is reconstructed here",
+  "criterion_that_raised": "T-CASE-A",
+  "declared_scenario_directories": [
+    "pipeline/positive",
+    "pipeline/toctou-currentness",
+    "pipeline/toctou-authority",
+    "pipeline/historical",
+    "pipeline/case-c",
+    "pipeline/case-d",
+    "pipeline/case-e",
+    "pipeline/case-f",
+    "pipeline/case-g",
+    "pipeline/case-h",
+    "pipeline/case-i",
+    "pipeline/case-j",
+    "pipeline/case-m",
+    "pipeline/case-o",
+    "pipeline/dig-04",
+    "pipeline/dig-05",
+    "pipeline/dig-06",
+    "observations",
+    "accounting"
+  ],
+  "defect_location": {
+    "artifact": "CDC-INTEGRATION-SLICE-001-RUN-002-EXECUTION-HARNESS-v0.4.py",
+    "defect_class": "INCOMPLETE_SCENARIO_DECLARATION",
+    "description": "the declared scenario tree omitted the six authority-only case directories that _authority_only_case() resolves: case-a, case-b, case-n, case-q, case-r, case-s",
+    "implementation_source_implicated": false,
+    "refusal_mechanism_behaved_as_designed": true,
+    "symbol": "SCENARIO_DIRECTORIES"
+  },
+  "development_evidence_substituted": false,
+  "digest_derivation_sha256": "dc3613ece70ffd9c3c816750ccb41d0df7e8683a81377f3fa2f419c344f9f6a0",
+  "exception_class": "HarnessRefusalError",
+  "exception_message": "scenario directory absent: /private/tmp/cdc-integration-slice-001-run-002/pipeline/case-a; prepare_scenario_tree() must create every declared directory before any scenario writer runs",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-002",
+  "execution_issuance_digest": "baf4cc9ee6200d2f2e236847557fa8e2160a025b377c9d155113c9dc776c7901",
+  "execution_outcome": "RAISED_AFTER_ORDINAL_CONSUMPTION",
+  "harness_modified_after_consumption": false,
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "observations_mutated_to_satisfy_conformance": false,
+  "ordinal_consumed": true,
+  "phases": [
+    {
+      "outcome": "VALID",
+      "phase": "verify_execution_authority",
+      "reached": true
+    },
+    {
+      "outcome": "PASS_50_OF_50",
+      "phase": "preflight",
+      "reached": true
+    },
+    {
+      "outcome": "0",
+      "phase": "preflight_zero_invocation_check",
+      "reached": true
+    },
+    {
+      "outcome": "NO_ATTEMPT_RECORD",
+      "phase": "attempt_state_check",
+      "reached": true
+    },
+    {
+      "outcome": "CONSUMED",
+      "phase": "consume_ordinal",
+      "reached": true
+    },
+    {
+      "outcome": "19_DECLARED_DIRECTORIES_CREATED",
+      "phase": "prepare_scenario_tree",
+      "reached": true
+    },
+    {
+      "outcome": "RAISED_AT_T-CASE-A_AFTER_11_CRITERIA",
+      "phase": "run_criteria",
+      "reached": true
+    },
+    {
+      "outcome": "NOT_REACHED",
+      "phase": "runner_accounting",
+      "reached": false
+    },
+    {
+      "outcome": "NOT_REACHED",
+      "phase": "raw_views",
+      "reached": false
+    },
+    {
+      "outcome": "NOT_REACHED",
+      "phase": "supporting_artifact_inventory",
+      "reached": false
+    },
+    {
+      "outcome": "NOT_REACHED",
+      "phase": "observation_structural_conformance",
+      "reached": false
+    },
+    {
+      "outcome": "NOT_REACHED",
+      "phase": "complete_attempt",
+      "reached": false
+    },
+    {
+      "outcome": "NOT_REACHED",
+      "phase": "persist",
+      "reached": false
+    }
+  ],
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_002_EXECUTION_FAILURE_OBSERVATION",
+  "required_but_undeclared_directories": [
+    "pipeline/case-a",
+    "pipeline/case-b",
+    "pipeline/case-n",
+    "pipeline/case-q",
+    "pipeline/case-r",
+    "pipeline/case-s"
+  ],
+  "rerun_performed": false,
+  "second_result_bearing_execution": false,
+  "semantic_adjudication_performed": false,
+  "semantic_design_sha256": "03ca22e960fa677af0328d2c9595c7842015cf68ca525f8e94c2564dc4afc173",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-002-TRACE",
+  "traceback": "Traceback (most recent call last):\n  File \".../CDC-INTEGRATION-SLICE-001-RUN-002-EXECUTION-HARNESS-v0.4.py\", line 3261, in <module>\n    outcome = execute_run()\n  File \".../CDC-INTEGRATION-SLICE-001-RUN-002-EXECUTION-HARNESS-v0.4.py\", line 3017, in execute_run\n    observations = _run_criteria()\n  File \".../CDC-INTEGRATION-SLICE-001-RUN-002-EXECUTION-HARNESS-v0.4.py\", line 2922, in _run_criteria\n    produced = executor(criterion_id)\n  File \".../CDC-INTEGRATION-SLICE-001-RUN-002-EXECUTION-HARNESS-v0.4.py\", line 2176, in <lambda>\n    EXECUTORS[\"T-CASE-A\"] = lambda cid: _authority_only_case(\n  File \".../CDC-INTEGRATION-SLICE-001-RUN-002-EXECUTION-HARNESS-v0.4.py\", line 2078, in _authority_only_case\n    scenario = _scenario(criterion_id.lower().replace(\"t-case-\", \"case-\"))\n  File \".../CDC-INTEGRATION-SLICE-001-RUN-002-EXECUTION-HARNESS-v0.4.py\", line 1425, in _scenario\n    raise HarnessRefusalError(\nHarnessRefusalError: scenario directory absent: /private/tmp/cdc-integration-slice-001-run-002/pipeline/case-a; prepare_scenario_tree() must create every declared directory before any scenario writer runs"
+}

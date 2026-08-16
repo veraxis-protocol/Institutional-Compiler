@@ -1,0 +1,21 @@
+{
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "authorization_id": "OWNER-AUTHORIZATION-INTEGRATION-SLICE-001-EXEC-002",
+  "control_head_after_run": "7614b0613da7b1b4d8b2723414f50d05aa84e92a",
+  "control_worktree_porcelain_after_run": "",
+  "criterion_evidence_projection_v0_3_sha256": "7adcc39f5656fa3fdc837bf3049a7a4a1be38947aed41b2fc0ccc23cc4781298",
+  "digest_derivation_sha256": "dc3613ece70ffd9c3c816750ccb41d0df7e8683a81377f3fa2f419c344f9f6a0",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-002",
+  "execution_issuance_digest": "baf4cc9ee6200d2f2e236847557fa8e2160a025b377c9d155113c9dc776c7901",
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_head_after_run": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "implementation_tree_after_run": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "implementation_worktree_porcelain_after_run": "",
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_002_PRESERVATION_OBSERVATION",
+  "run_001_untouched_by_this_run": true,
+  "semantic_adjudication_performed": false,
+  "semantic_design_sha256": "03ca22e960fa677af0328d2c9595c7842015cf68ca525f8e94c2564dc4afc173",
+  "source_modified": false,
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-002-TRACE"
+}

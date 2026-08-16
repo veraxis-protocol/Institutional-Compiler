@@ -1,0 +1,120 @@
+{
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "attempt_completed": false,
+  "attempt_state": "CONSUMED_BEFORE_RESULT_BEARING_INVOCATION",
+  "authorization_id": "OWNER-AUTHORIZATION-INTEGRATION-SLICE-001-EXEC-002",
+  "automatic_retry_performed": false,
+  "criteria_reached_before_failure": 11,
+  "criteria_total": 41,
+  "criterion_evidence_ledger_produced": false,
+  "criterion_evidence_projection_v0_3_sha256": "7adcc39f5656fa3fdc837bf3049a7a4a1be38947aed41b2fc0ccc23cc4781298",
+  "criterion_ledger_digest": null,
+  "criterion_observations_persisted": 0,
+  "digest_derivation_sha256": "dc3613ece70ffd9c3c816750ccb41d0df7e8683a81377f3fa2f419c344f9f6a0",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-002",
+  "execution_issuance_digest": "baf4cc9ee6200d2f2e236847557fa8e2160a025b377c9d155113c9dc776c7901",
+  "execution_outcome": "RAISED_AFTER_ORDINAL_CONSUMPTION",
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "members": [
+    {
+      "bytes": 608,
+      "relative_path": ".cdc-integration-slice-001-run-002-attempt-baf4cc9ee6200d2f2e236847557fa8e2160a025b377c9d155113c9dc776c7901.json",
+      "sha256": "ed1a461af8f566861bb264c43f1fdbf6996a583db8ded6776b3b1a5ca8c31a80"
+    },
+    {
+      "bytes": 6588,
+      "relative_path": "CDC-INTEGRATION-SLICE-001-RUN-002-EXECUTION-FAILURE-OBSERVATION-v0.1.json",
+      "sha256": "9460f94388ad764321964c10443e33870dcf14dda3e0e069407b49b4aa011066"
+    },
+    {
+      "bytes": 6588,
+      "relative_path": "CDC-INTEGRATION-SLICE-001-RUN-002-EXECUTION-FAILURE-OBSERVATION-v0.1.json",
+      "sha256": "9460f94388ad764321964c10443e33870dcf14dda3e0e069407b49b4aa011066"
+    },
+    {
+      "bytes": 1318,
+      "relative_path": "CDC-INTEGRATION-SLICE-001-RUN-002-PRESERVATION-OBSERVATION-v0.1.json",
+      "sha256": "24a914062c31c61e8fbb74a9c87860848089a34a1315d39ad597d2ddea252e78"
+    },
+    {
+      "bytes": 1318,
+      "relative_path": "CDC-INTEGRATION-SLICE-001-RUN-002-PRESERVATION-OBSERVATION-v0.1.json",
+      "sha256": "24a914062c31c61e8fbb74a9c87860848089a34a1315d39ad597d2ddea252e78"
+    },
+    {
+      "bytes": 548,
+      "relative_path": "pipeline/positive/admissibility-bases.json",
+      "sha256": "3f281feca74344d5fcaf2912abd4f6b24deb1a6d941ed5811a3c63d12a4a8295"
+    },
+    {
+      "bytes": 493,
+      "relative_path": "pipeline/positive/attempt.json",
+      "sha256": "0678637ed4d692743f043bddbe3d2a581f349cc0f78aafb47f345209eaf84335"
+    },
+    {
+      "bytes": 614,
+      "relative_path": "pipeline/positive/authority-bases.json",
+      "sha256": "0a22291d2c21ca40efdcf66726e075ba88757d4466fcfe79b169cee03bcfbd75"
+    },
+    {
+      "bytes": 554,
+      "relative_path": "pipeline/positive/consumer-profile.json",
+      "sha256": "04fbde618f39eca5560f72659935c8198fd1644ac825833aef88fffa6d67e633"
+    },
+    {
+      "bytes": 10558,
+      "relative_path": "pipeline/positive/consumer-result-SYNTH-RELIANCE-001.json",
+      "sha256": "05dfaca0bec34bfbdb1486eb484b1d26d102df281a53322d4a93580d8cfcbdff"
+    },
+    {
+      "bytes": 2275,
+      "relative_path": "pipeline/positive/control.json",
+      "sha256": "2a9158e0561d3ab1886f3f4f52c0b828a76979aadccc66b58c95ccb84914a45d"
+    },
+    {
+      "bytes": 1463,
+      "relative_path": "pipeline/positive/decision.json",
+      "sha256": "5d2f2f3a25163e87bdc83ef1d5c3f0319f518e04cf9fa6079a4c71bf7f2d3c34"
+    },
+    {
+      "bytes": 2012,
+      "relative_path": "pipeline/positive/envelope.json",
+      "sha256": "c8ce2d10d8b9b9a420410b7e2ae24f87378342d37f9fe1c36367b8b3286af72c"
+    },
+    {
+      "bytes": 284,
+      "relative_path": "pipeline/positive/envelope.json.ready",
+      "sha256": "77cc2659eaf881b8c766070d3723a0e836a8190c79861c4a47c3785819540801"
+    },
+    {
+      "bytes": 177,
+      "relative_path": "pipeline/positive/issuance-authorization.json",
+      "sha256": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0"
+    },
+    {
+      "bytes": 1603,
+      "relative_path": "pipeline/positive/job-SYNTH-RELIANCE-001.json",
+      "sha256": "8d1de3f5e27c5c0d89503ff61cc0aa15375ff86424b04022e690c1e3693f300c"
+    },
+    {
+      "bytes": 536,
+      "relative_path": "pipeline/positive/producer-profile.json",
+      "sha256": "792b8b658212fa7b9cd48a2bcf39136f8b54e777d509622d6e0371d1053135cb"
+    }
+  ],
+  "members_total": 17,
+  "observation_conformance_produced": false,
+  "official_handoff": "PROHIBITED",
+  "package_digest": "a970b6779a8e92340f49e7aa9d498f63be347f6fc482940a53a5d4972d0f63cc",
+  "package_state": "FROZEN_AFTER_EXECUTION_RAISED_POST_CONSUMPTION",
+  "raw_views_produced": false,
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_002_RAW_EXECUTION_PACKAGE",
+  "runner_accounting_produced": false,
+  "runtime_evidence_root": "/private/tmp/cdc-integration-slice-001-run-002",
+  "schema_version": "CDC-INTEGRATION-SLICE-001-RUN-002-RAW-EXECUTION-PACKAGE-v0.1",
+  "second_result_bearing_execution": false,
+  "semantic_adjudication_performed": false,
+  "semantic_design_sha256": "03ca22e960fa677af0328d2c9595c7842015cf68ca525f8e94c2564dc4afc173",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-002-TRACE"
+}

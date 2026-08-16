@@ -1,0 +1,111 @@
+{
+  "archived_byte_for_byte": true,
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "attempt_record_renamed_copy": {
+    "archived_path": "veraxis/integration-slice-001/run-002/evidence/attempt-record-baf4cc9e.json",
+    "bytes_identical": true,
+    "note": "leading dot dropped so the file is tracked; contents unmodified",
+    "runtime_path": "/private/tmp/cdc-integration-slice-001-run-002/.cdc-integration-slice-001-run-002-attempt-baf4cc9ee6200d2f2e236847557fa8e2160a025b377c9d155113c9dc776c7901.json"
+  },
+  "authorization_id": "OWNER-AUTHORIZATION-INTEGRATION-SLICE-001-EXEC-002",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-002",
+  "execution_issuance_digest": "baf4cc9ee6200d2f2e236847557fa8e2160a025b377c9d155113c9dc776c7901",
+  "execution_outcome": "RAISED_AFTER_ORDINAL_CONSUMPTION",
+  "members": [
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/.cdc-integration-slice-001-run-002-attempt-baf4cc9ee6200d2f2e236847557fa8e2160a025b377c9d155113c9dc776c7901.json",
+      "bytes": 608,
+      "sha256": "ed1a461af8f566861bb264c43f1fdbf6996a583db8ded6776b3b1a5ca8c31a80"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/CDC-INTEGRATION-SLICE-001-RUN-002-EVIDENCE-FREEZER-v0.1.py",
+      "bytes": 13242,
+      "sha256": "631ed74dece2443b31371df233ab6ee2d6df5ef0309ec01f04978c4fc820bd46"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/CDC-INTEGRATION-SLICE-001-RUN-002-EXECUTION-FAILURE-OBSERVATION-v0.1.json",
+      "bytes": 6588,
+      "sha256": "9460f94388ad764321964c10443e33870dcf14dda3e0e069407b49b4aa011066"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/CDC-INTEGRATION-SLICE-001-RUN-002-PRESERVATION-OBSERVATION-v0.1.json",
+      "bytes": 1318,
+      "sha256": "24a914062c31c61e8fbb74a9c87860848089a34a1315d39ad597d2ddea252e78"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/CDC-INTEGRATION-SLICE-001-RUN-002-RAW-EXECUTION-PACKAGE-v0.1.json",
+      "bytes": 5150,
+      "sha256": "4dd8b76c76b6b6fe38ae5d8512fbcdf81bac038e076971107065ae7563ca21f1"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/attempt-record-baf4cc9e.json",
+      "bytes": 608,
+      "sha256": "ed1a461af8f566861bb264c43f1fdbf6996a583db8ded6776b3b1a5ca8c31a80"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/pipeline/positive/admissibility-bases.json",
+      "bytes": 548,
+      "sha256": "3f281feca74344d5fcaf2912abd4f6b24deb1a6d941ed5811a3c63d12a4a8295"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/pipeline/positive/attempt.json",
+      "bytes": 493,
+      "sha256": "0678637ed4d692743f043bddbe3d2a581f349cc0f78aafb47f345209eaf84335"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/pipeline/positive/authority-bases.json",
+      "bytes": 614,
+      "sha256": "0a22291d2c21ca40efdcf66726e075ba88757d4466fcfe79b169cee03bcfbd75"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/pipeline/positive/consumer-profile.json",
+      "bytes": 554,
+      "sha256": "04fbde618f39eca5560f72659935c8198fd1644ac825833aef88fffa6d67e633"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/pipeline/positive/consumer-result-SYNTH-RELIANCE-001.json",
+      "bytes": 10558,
+      "sha256": "05dfaca0bec34bfbdb1486eb484b1d26d102df281a53322d4a93580d8cfcbdff"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/pipeline/positive/control.json",
+      "bytes": 2275,
+      "sha256": "2a9158e0561d3ab1886f3f4f52c0b828a76979aadccc66b58c95ccb84914a45d"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/pipeline/positive/decision.json",
+      "bytes": 1463,
+      "sha256": "5d2f2f3a25163e87bdc83ef1d5c3f0319f518e04cf9fa6079a4c71bf7f2d3c34"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/pipeline/positive/envelope.json",
+      "bytes": 2012,
+      "sha256": "c8ce2d10d8b9b9a420410b7e2ae24f87378342d37f9fe1c36367b8b3286af72c"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/pipeline/positive/envelope.json.ready",
+      "bytes": 284,
+      "sha256": "77cc2659eaf881b8c766070d3723a0e836a8190c79861c4a47c3785819540801"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/pipeline/positive/issuance-authorization.json",
+      "bytes": 177,
+      "sha256": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/pipeline/positive/job-SYNTH-RELIANCE-001.json",
+      "bytes": 1603,
+      "sha256": "8d1de3f5e27c5c0d89503ff61cc0aa15375ff86424b04022e690c1e3693f300c"
+    },
+    {
+      "archived_path": "veraxis/integration-slice-001/run-002/evidence/pipeline/positive/producer-profile.json",
+      "bytes": 536,
+      "sha256": "792b8b658212fa7b9cd48a2bcf39136f8b54e777d509622d6e0371d1053135cb"
+    }
+  ],
+  "members_total": 18,
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_002_EVIDENCE_INDEX",
+  "reserialized": false,
+  "runtime_evidence_root": "/private/tmp/cdc-integration-slice-001-run-002/",
+  "semantic_adjudication_performed": false
+}
