@@ -1,0 +1,29 @@
+{
+  "adjudicates": false,
+  "byte_identity_preserved": true,
+  "derived_from": "the same authorized invocation; no scenario was re-executed",
+  "downstream_not_produced": [
+    "reliance_issuance_for_later_attempt"
+  ],
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "expected_reason_code": "I2",
+  "issued_persisted_file_sha256_after": "4c3f94b33fd1b701b442c1c8a5ab6f1f339d2e041e6fa12cba500ce714f294a2",
+  "issued_persisted_file_sha256_before": "4c3f94b33fd1b701b442c1c8a5ab6f1f339d2e041e6fa12cba500ce714f294a2",
+  "issued_record_mentions_supersession": false,
+  "issued_reliance_record_digest": "d5066aa20d4fd245ab5394ca6dbac09de2d5e2caf3a3c637ac5e572b60674b10",
+  "later_attempt_disposition": "REFUSED",
+  "later_attempt_reason_code": "I2",
+  "mutated_object": {
+    "digest_after": "4c3f94b33fd1b701b442c1c8a5ab6f1f339d2e041e6fa12cba500ce714f294a2",
+    "digest_before": "4c3f94b33fd1b701b442c1c8a5ab6f1f339d2e041e6fa12cba500ce714f294a2",
+    "ref": "issued_reliance_record"
+  },
+  "mutation_applied": "a later correction becomes operative after a reliance was issued",
+  "observed_reason_code": {
+    "id": "I2",
+    "name": "RELIANCE_REFUSED_CURRENTNESS_NOT_CURRENT"
+  },
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_003_HISTORICAL_RELIANCE_OBSERVATION",
+  "terminating_layer": "CONSUMER",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

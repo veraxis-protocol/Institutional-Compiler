@@ -1,0 +1,45 @@
+{
+  "admissibility_basis_refs": [
+    {
+      "basis_id": "SYNTH-ADM-BASIS-001",
+      "record_class": "SYNTHETIC_ADMISSIBILITY_BASIS",
+      "record_digest": "bf29f3d75a313301c223fd12183f6f7c134cb1683c8d388d7377fb401d2219e3"
+    }
+  ],
+  "artifact_digest": "6f9fe1ccbabd6195d474f09a365a5ca4cc32f7ed8cf1f41e8acddd22e592eed0",
+  "artifact_ref": "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01",
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "authority_basis_refs": [
+    {
+      "basis_id": "SYNTH-AUTH-BASIS-001",
+      "record_class": "SYNTHETIC_AUTHORITY_BASIS",
+      "record_digest": "7ad84cfb124b794b67ebdcfc6ca4282a86a228cb95c5a1a7bd8c4448232f310e"
+    }
+  ],
+  "authority_decision_digest": "68928de270211de081f1ae44e57604659c62cbb61166e8af25047d8eab57fee4",
+  "currentness_epoch_digest": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90",
+  "currentness_index_digest": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+  "currentness_resolution_digest": "e2866c020328ac6c0b5bcf6fb11becf8a53926a5572d95641fc4553a21630ca1",
+  "envelope_digest": "728424d06831c41dde83b3ab052bc943ef8976b25af48b3cf0c91318bff9bb9e",
+  "envelope_id": "SYNTH-ENVELOPE-001",
+  "evidence_refs": [
+    {
+      "path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/dig-04/control.json",
+      "ref": "SYNTHETIC_CONTROL"
+    }
+  ],
+  "intended_consumer_principal": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+  "produced_at": "2026-08-15T10:00:00Z",
+  "producer_identity": {
+    "process_id": 66048,
+    "producer_principal": "SYNTHETIC-PRODUCER-PRINCIPAL-001",
+    "run_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT",
+    "trace_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT-TRACE"
+  },
+  "record_class": "GOVERNED_PROPAGATION_ENVELOPE",
+  "requested_use": "DEMONSTRATION_READ",
+  "requesting_subject_principal": "SYNTHETIC-SUBJECT-PRINCIPAL-001",
+  "schema_version": "CDC-INTEGRATION-SLICE-001-ENVELOPE-v0.4",
+  "scope": "CDC-DEMO-SCOPE-001",
+  "valid_until": "2026-08-15T23:00:00Z"
+}

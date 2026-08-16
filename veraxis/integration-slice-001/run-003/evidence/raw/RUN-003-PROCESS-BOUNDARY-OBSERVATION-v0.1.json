@@ -1,0 +1,44 @@
+{
+  "adjudicates": false,
+  "consumer_inputs": [
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/admissibility-bases.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/attempt.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/authority-bases.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/consumer-profile.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/decision.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/envelope.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/issuance-authorization.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/producer-profile.json"
+  ],
+  "consumer_inputs_were_paths_only": true,
+  "consumer_process_identity": {
+    "consumer_principal": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+    "process_id": 66058,
+    "source": "emitted by the consumer process in its own result"
+  },
+  "consumer_read_record": {
+    "consumer_job_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/job-SYNTH-RELIANCE-001.json",
+    "consumer_job_persisted_bytes": 1603,
+    "consumer_job_persisted_sha256": "f08f8426bf3ee89b7e0cb4ff8c7f1e4aad2e8b9c8491d1a3802fdaef6f94c99d",
+    "consumer_validation_envelope_digest": "e3ad590497f2b7ffee3989e8205e9dd83dfca00c76e181dbf12d56ebe8c1ad39",
+    "digest_matches_persisted_envelope": true,
+    "envelope_digest_recorded_in_envelope": "e3ad590497f2b7ffee3989e8205e9dd83dfca00c76e181dbf12d56ebe8c1ad39",
+    "job_envelope_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/envelope.json",
+    "job_run_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT",
+    "job_trace_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT-TRACE",
+    "persisted_envelope_path": "None",
+    "persisted_envelope_sha256": null
+  },
+  "derived_from": "the same authorized invocation; no scenario was re-executed",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "processes_distinct": true,
+  "producer_process_identity": {
+    "process_id": 66048,
+    "run_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT",
+    "source": "producer, this process",
+    "trace_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT-TRACE"
+  },
+  "producer_state_shared": false,
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_003_PROCESS_BOUNDARY_OBSERVATION",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

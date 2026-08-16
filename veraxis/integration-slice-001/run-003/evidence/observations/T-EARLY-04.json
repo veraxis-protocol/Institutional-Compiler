@@ -1,0 +1,105 @@
+{
+  "criterion_evidence_projection_sha256": "7adcc39f5656fa3fdc837bf3049a7a4a1be38947aed41b2fc0ccc23cc4781298",
+  "criterion_id": "T-EARLY-04",
+  "evidence_refs": [
+    "observations/T-EARLY-04.json"
+  ],
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "expected_condition": "currentness refuses; authority gate never invoked; no authority decision, no envelope, no reliance",
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "inputs": [
+    {
+      "digest": "17595a4235f0860490c6ccfbccc91b682f6ea15da956eed08a8104394c10d8ff",
+      "ref": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04",
+      "role": "historical_artifact"
+    },
+    {
+      "digest": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+      "ref": "governed_index",
+      "role": "currentness_index"
+    }
+  ],
+  "node_accounting": {
+    "duration_seconds": 0.003876,
+    "non_load_bearing": true,
+    "outcome": "executed",
+    "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+  },
+  "node_id": "test_early_termination[T-EARLY-04]",
+  "not_produced": [
+    "authority_decision",
+    "propagation_envelope",
+    "consumer_validation",
+    "reliance_record"
+  ],
+  "observation_digest": "8d0fec4bcab56dd43648b8e9ad05aab851add78e695d18f9c3435a9657de4d3e",
+  "observed_at": "2026-08-16T17:07:19Z",
+  "observed_decision": "DENY",
+  "observed_reason_code": {
+    "id": "R2",
+    "name": "OUTPUT_SUPERSEDED"
+  },
+  "observed_value": {
+    "artifact_digest_expected": "17595a4235f0860490c6ccfbccc91b682f6ea15da956eed08a8104394c10d8ff",
+    "artifact_digest_observed": "17595a4235f0860490c6ccfbccc91b682f6ea15da956eed08a8104394c10d8ff",
+    "artifact_ref": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04",
+    "authority_gate_invoked": false,
+    "basis_records": [
+      {
+        "admitted_at": "2026-08-14T22:00:00Z",
+        "effective_at": null,
+        "record_class": "HISTORICAL_ARTIFACT_IDENTITY_RECORD",
+        "record_digest": "7115993bac1856b21058ad63bb50a40e7dd7f60ccb598e005508e6833bcdd49c",
+        "record_ref": "ARTIFACT-IDENTITY#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04"
+      },
+      {
+        "admitted_at": "2026-08-14T22:00:00Z",
+        "effective_at": "2026-08-14T18:10:54Z",
+        "record_class": "SUPERSESSION_RECORD",
+        "record_digest": "cd4acec323ba530ba59d334a2a48dd75eecb686bf65782cbb73442e4146a4e36",
+        "record_ref": "EBAWU-P-001-C-TENDER-01-CORR-002#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04"
+      },
+      {
+        "admitted_at": "2026-08-14T22:00:00Z",
+        "effective_at": "2026-08-14T18:10:54Z",
+        "record_class": "ELIGIBILITY_DETERMINATION_RECORD",
+        "record_digest": "9c6d7dadb8fca31af257988a097ab40a926597ebe506de0c8dc31ec8303ce173",
+        "record_ref": "ELIGIBILITY#CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04"
+      }
+    ],
+    "completeness_attestation_digest": null,
+    "controlling_successor_ref": "EBAWU-P-001-C-TENDER-01-CORR-002",
+    "correction_event_ref": "CDC-E2E-M12-CORRECTION-EVT-002",
+    "currentness_epoch_digest": "3f2653914eb77d42c4decbf018924eeb489aecc758fb2075dec8ab257739b8eb",
+    "currentness_index_digest": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+    "currentness_state": "SUPERSEDED",
+    "epoch_as_of": "2026-08-15T10:00:00Z",
+    "gate_decision": "DENY",
+    "gate_reason_code": {
+      "id": "G2",
+      "name": "DENY_OUTPUT_SUPERSEDED"
+    },
+    "historical_state": "INELIGIBLE_PROVENANCE_INCOMPLETE",
+    "resolution_record_digest": "999654a2c7c69f2fd21a2e34c56a41d44e546580374446d1b021ce31865b15b1",
+    "use_gate_decision_digest": "1ffa89b9fdc94d56704621e5747a0c76300ce73f087d8188f8daa5bfafcc8b4f"
+  },
+  "outputs": [
+    {
+      "digest": "999654a2c7c69f2fd21a2e34c56a41d44e546580374446d1b021ce31865b15b1",
+      "ref": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04",
+      "role": "currentness_resolution"
+    },
+    {
+      "digest": "1ffa89b9fdc94d56704621e5747a0c76300ce73f087d8188f8daa5bfafcc8b4f",
+      "ref": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04",
+      "role": "use_gate_decision"
+    }
+  ],
+  "record_class": "CDC_INTEGRATION_SLICE_001_CRITERION_OBSERVATION",
+  "scenario_id": "REAL-OUTPUT-04",
+  "schema_version": "INTEGRATION-SLICE-001-CRITERION-OBSERVATION-v0.1",
+  "semantic_design_sha256": "03ca22e960fa677af0328d2c9595c7842015cf68ca525f8e94c2564dc4afc173",
+  "semantic_reference": "SEMANTIC-DESIGN-v0.4 §10 / PROJECTION-v0.1 §3.1",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

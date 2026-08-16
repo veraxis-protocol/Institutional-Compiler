@@ -1,0 +1,382 @@
+{
+  "adjudicates_values": false,
+  "all_digests_reproduce": true,
+  "exact_frozen_order": true,
+  "non_conformant": [],
+  "observations_expected": 41,
+  "observations_total": 41,
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_003_OBSERVATION_CONFORMANCE",
+  "rows": [
+    {
+      "criterion_id": "T-EARLY-01",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "4e016f3ae4f354a0cc08b3e9fbbca7c6398cc9167cdf60425139a29b971e88d6",
+      "observation_digest_recorded": "4e016f3ae4f354a0cc08b3e9fbbca7c6398cc9167cdf60425139a29b971e88d6",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-EARLY-02",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "ae1f04da681d3d0ae0f10bf5f52873f0f19b240533c47b025cf9821ee69fd149",
+      "observation_digest_recorded": "ae1f04da681d3d0ae0f10bf5f52873f0f19b240533c47b025cf9821ee69fd149",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-EARLY-03",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "291bd6ba87243e03a37133cd07bab567952091e9f343bf7606eaa4ac899de333",
+      "observation_digest_recorded": "291bd6ba87243e03a37133cd07bab567952091e9f343bf7606eaa4ac899de333",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-EARLY-04",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "8d0fec4bcab56dd43648b8e9ad05aab851add78e695d18f9c3435a9657de4d3e",
+      "observation_digest_recorded": "8d0fec4bcab56dd43648b8e9ad05aab851add78e695d18f9c3435a9657de4d3e",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-EARLY-05",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "70133c477a5ac9dadd2164e4d091df8f2360ba27212a86b57a22128204b01418",
+      "observation_digest_recorded": "70133c477a5ac9dadd2164e4d091df8f2360ba27212a86b57a22128204b01418",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-POS-01",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "a61d14b1810655dfaaf20cadf572cf1132f229354e2f2242c5a971c7d2ff89f1",
+      "observation_digest_recorded": "a61d14b1810655dfaaf20cadf572cf1132f229354e2f2242c5a971c7d2ff89f1",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-POS-02",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "da6858ca38c9454ee9e35e4de573ed8307abfa26a320e8ef0e35c4a9a2665a96",
+      "observation_digest_recorded": "da6858ca38c9454ee9e35e4de573ed8307abfa26a320e8ef0e35c4a9a2665a96",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-POS-03",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "ce7941e5fdba4a0a6bf2f9c32bd6e5521f87cb76843e0bdd2774de5af9dfaa04",
+      "observation_digest_recorded": "ce7941e5fdba4a0a6bf2f9c32bd6e5521f87cb76843e0bdd2774de5af9dfaa04",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-POS-04",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "d09521a545bd66dfb04ddc5a5ffd742d1ab83efa73e9975a604c0cb104751543",
+      "observation_digest_recorded": "d09521a545bd66dfb04ddc5a5ffd742d1ab83efa73e9975a604c0cb104751543",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-POS-05",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "c21943b4a89b54cd05ab0e3d9ed93931e5c6bf3e0d4c676facd875c1f440f78b",
+      "observation_digest_recorded": "c21943b4a89b54cd05ab0e3d9ed93931e5c6bf3e0d4c676facd875c1f440f78b",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-POS-06",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "e6195e7a1546600008dc9dfc606086f365d4cb289e3962d3e93bf1889e40dd9f",
+      "observation_digest_recorded": "e6195e7a1546600008dc9dfc606086f365d4cb289e3962d3e93bf1889e40dd9f",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-A",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "75a943be4c9ee481962d298e85caa6a32b6c4702abc913b67df9d07d9b044e14",
+      "observation_digest_recorded": "75a943be4c9ee481962d298e85caa6a32b6c4702abc913b67df9d07d9b044e14",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-B",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "b80b4c41bdd968cf46d20c98419d750e7619c9e03e10c842942d9719d65b7796",
+      "observation_digest_recorded": "b80b4c41bdd968cf46d20c98419d750e7619c9e03e10c842942d9719d65b7796",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-C",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "6bed445ce722bdcab6ffdf133b6c6bac7baa28ecfea0ae1b685ef9da8d59a0ea",
+      "observation_digest_recorded": "6bed445ce722bdcab6ffdf133b6c6bac7baa28ecfea0ae1b685ef9da8d59a0ea",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-D",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "c5ebae3f1c115ccfd7c832e22054f39e234e3e89192fd580c225be578179c33b",
+      "observation_digest_recorded": "c5ebae3f1c115ccfd7c832e22054f39e234e3e89192fd580c225be578179c33b",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-E",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "9f7b33b6918052f3fa02e84660401754663a2e8e1be864d9d607411f949d9d44",
+      "observation_digest_recorded": "9f7b33b6918052f3fa02e84660401754663a2e8e1be864d9d607411f949d9d44",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-F",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "9d92c0e164adca0899427647b3130e22f3015db8a7e54d9edbadde9066b195c7",
+      "observation_digest_recorded": "9d92c0e164adca0899427647b3130e22f3015db8a7e54d9edbadde9066b195c7",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-G",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "a0cc00247c93dadc2630aaf0fe5c2c3cad41fd7957cb5bc44970fc07e6e1d82f",
+      "observation_digest_recorded": "a0cc00247c93dadc2630aaf0fe5c2c3cad41fd7957cb5bc44970fc07e6e1d82f",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-H",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "e78294ca25d62711b160c2cdacde32b3b5648d976ed9cbd8341b92def04bb05d",
+      "observation_digest_recorded": "e78294ca25d62711b160c2cdacde32b3b5648d976ed9cbd8341b92def04bb05d",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-I",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "26e5f79b2ef8cb44e9abb3ea35f4658a2903c21073fb9fd2027ce4d255b68073",
+      "observation_digest_recorded": "26e5f79b2ef8cb44e9abb3ea35f4658a2903c21073fb9fd2027ce4d255b68073",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-J",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "ea39719ce9c09e9d6f31f252d12cc4d46cc656088f24c6e2f25a3de6f72929b1",
+      "observation_digest_recorded": "ea39719ce9c09e9d6f31f252d12cc4d46cc656088f24c6e2f25a3de6f72929b1",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-K",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "7a60bba7f7cf9e7ca2fed847c93a10890174ca1dd1750776dee921d82d62b9de",
+      "observation_digest_recorded": "7a60bba7f7cf9e7ca2fed847c93a10890174ca1dd1750776dee921d82d62b9de",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-L",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "31b5e5f6b8555722cb7a5a65776cb5fad71aab3a840726a94d904e28361a1d04",
+      "observation_digest_recorded": "31b5e5f6b8555722cb7a5a65776cb5fad71aab3a840726a94d904e28361a1d04",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-M",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "43c34ddc99ad355d3fb69314f05ce048e2342a159fc4cc2bf6a7a4d00ba62be6",
+      "observation_digest_recorded": "43c34ddc99ad355d3fb69314f05ce048e2342a159fc4cc2bf6a7a4d00ba62be6",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-N",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "db7b3e047853c39dded5f44764cdb5af0059405a59fffd8130c98abba9f3e89d",
+      "observation_digest_recorded": "db7b3e047853c39dded5f44764cdb5af0059405a59fffd8130c98abba9f3e89d",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-O",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "41e312e8e06e2c25f201b65ba406ef8cac905c2be26d117059d857aa4a9e4a37",
+      "observation_digest_recorded": "41e312e8e06e2c25f201b65ba406ef8cac905c2be26d117059d857aa4a9e4a37",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-P",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "8037cf054ed245824bf92d6dd4729fbb05b54e70bac545e41fc722e79a707a05",
+      "observation_digest_recorded": "8037cf054ed245824bf92d6dd4729fbb05b54e70bac545e41fc722e79a707a05",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-Q",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "efa37acf483781bd8e188782689864f9672e9ae708f7b008f8619acf4f75cb8b",
+      "observation_digest_recorded": "efa37acf483781bd8e188782689864f9672e9ae708f7b008f8619acf4f75cb8b",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-R",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "365bda106ae90cdfea3602210b33bdd068a92209c4729bd62b59954afb96e084",
+      "observation_digest_recorded": "365bda106ae90cdfea3602210b33bdd068a92209c4729bd62b59954afb96e084",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-CASE-S",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "60490bb556cfcb64d533dfa8a6a053945dff063c14aa003842fff668feb3953a",
+      "observation_digest_recorded": "60490bb556cfcb64d533dfa8a6a053945dff063c14aa003842fff668feb3953a",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-DIG-01",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "063da19ec6b501bec2d2e634358f452830d91ba59870596388651fa007d609bc",
+      "observation_digest_recorded": "063da19ec6b501bec2d2e634358f452830d91ba59870596388651fa007d609bc",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-DIG-02",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "686e54479f1bbf40120129c836dc3e62257a14472a06e2926a9213ebf3d23b97",
+      "observation_digest_recorded": "686e54479f1bbf40120129c836dc3e62257a14472a06e2926a9213ebf3d23b97",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-DIG-03",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "df6f1ad7ff1547a7b7e96c4f89ab9a003f86b81ea302487324077170c0958af1",
+      "observation_digest_recorded": "df6f1ad7ff1547a7b7e96c4f89ab9a003f86b81ea302487324077170c0958af1",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-DIG-04",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "71d826da17adc3625363fccf56f4491f1e56ca7605537110765b8723d23e9a41",
+      "observation_digest_recorded": "71d826da17adc3625363fccf56f4491f1e56ca7605537110765b8723d23e9a41",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-DIG-05",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "0431a72e559a67dc2b2dda28a19892dde2c0530c7d6cfdea06b712304ebaa45b",
+      "observation_digest_recorded": "0431a72e559a67dc2b2dda28a19892dde2c0530c7d6cfdea06b712304ebaa45b",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-DIG-06",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "c2d324f2595102b8d0d6a316b3715be3f3c9f8c666f1cfed256a8e4c49e98055",
+      "observation_digest_recorded": "c2d324f2595102b8d0d6a316b3715be3f3c9f8c666f1cfed256a8e4c49e98055",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-DIG-07",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "22d65ebfacb41a464dfc2c3732e73a5f38f23128e335dcdce17f3ae919fbe012",
+      "observation_digest_recorded": "22d65ebfacb41a464dfc2c3732e73a5f38f23128e335dcdce17f3ae919fbe012",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-DIG-08",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "1c7cf38851366608301a42c0288cd64f32afc751f35e0d6b1f8782a7252b897d",
+      "observation_digest_recorded": "1c7cf38851366608301a42c0288cd64f32afc751f35e0d6b1f8782a7252b897d",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-EPOCH-A",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "e1c904455d13d8cd41d9509477141770702935cc12b1525cec7a99acd0bb9735",
+      "observation_digest_recorded": "e1c904455d13d8cd41d9509477141770702935cc12b1525cec7a99acd0bb9735",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-EPOCH-B",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "6c4304fd2fdf454bda20271c8b1a82501f54b85136ce25bf0ba69e1cb59d136e",
+      "observation_digest_recorded": "6c4304fd2fdf454bda20271c8b1a82501f54b85136ce25bf0ba69e1cb59d136e",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    },
+    {
+      "criterion_id": "T-EPOCH-C",
+      "missing_criterion_fields": [],
+      "missing_universal_fields": [],
+      "observation_digest_recomputed": "1b80ffaaa6151f15a6be0d733b7fb8be0a3c79cdb90120f23f9799b1f43196f3",
+      "observation_digest_recorded": "1b80ffaaa6151f15a6be0d733b7fb8be0a3c79cdb90120f23f9799b1f43196f3",
+      "observation_digest_reproduces": true,
+      "structurally_conformant": true
+    }
+  ],
+  "structurally_conformant": true,
+  "unique_criterion_ids": 41
+}

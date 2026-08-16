@@ -1,0 +1,23 @@
+{
+  "admissibility_bases_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/admissibility-bases.json",
+  "attempt_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/attempt.json",
+  "authority_bases_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/authority-bases.json",
+  "authorization_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/issuance-authorization.json",
+  "consumer_profile_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/consumer-profile.json",
+  "decision_valid_until": "2026-08-15T23:00:00Z",
+  "direct_assertion_attempted": false,
+  "envelope_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/envelope.json",
+  "expected_artifact_ref": "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01",
+  "expected_requested_use": "DEMONSTRATION_READ",
+  "expected_scope": "CDC-DEMO-SCOPE-001",
+  "expected_subject_principal": "SYNTHETIC-SUBJECT-PRINCIPAL-001",
+  "now": "2026-08-15T13:00:00Z",
+  "output_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/consumer-result-SYNTH-RELIANCE-001.json",
+  "producer_profile_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/producer-profile.json",
+  "propagated_decision_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/decision.json",
+  "reliance_id": "SYNTH-RELIANCE-001",
+  "run_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT-TRACE",
+  "with_future_successor": false,
+  "without_control": false
+}

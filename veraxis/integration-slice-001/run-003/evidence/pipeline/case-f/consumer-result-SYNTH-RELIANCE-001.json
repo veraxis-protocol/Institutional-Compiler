@@ -1,0 +1,209 @@
+{
+  "attempt": {
+    "attempt_record": {
+      "attempt_state": "CONSUMED_AT_FIRST_ISSUANCE_ATTEMPT",
+      "claimed_at": "2026-08-15T10:00:00Z",
+      "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+      "issuance_authorization_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-f/issuance-authorization.json",
+      "record_class": "RELIANCE_ISSUANCE_ATTEMPT",
+      "run_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT",
+      "trace_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT-TRACE"
+    },
+    "attempt_record_bytes": 491,
+    "attempt_record_digest": "1f657c3a90f9c1d0c254a365d9da4ebf64bab3398bc7313eeb1f0ae992143e56",
+    "attempt_record_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-f/attempt.json",
+    "issuance_authorization_bytes": 177,
+    "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0"
+  },
+  "consumer_input_paths": [
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-f/admissibility-bases.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-f/attempt.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-f/authority-bases.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-f/consumer-profile.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-f/decision.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-f/envelope.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-f/issuance-authorization.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-f/producer-profile.json"
+  ],
+  "consumer_inputs_were_paths_only": true,
+  "consumer_principal": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+  "consumer_process_id": 66062,
+  "currentness_current_constant": "CURRENT",
+  "gate_open": false,
+  "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+  "now": "2026-08-15T10:00:00Z",
+  "producer_state_shared": false,
+  "re_resolved_currentness_state": null,
+  "record_class": "CDC_INTEGRATION_SLICE_001_CONSUMER_RESULT",
+  "reliance_record": {
+    "artifact_digest": "6f9fe1ccbabd6195d474f09a365a5ca4cc32f7ed8cf1f41e8acddd22e592eed0",
+    "artifact_ref": "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01",
+    "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+    "attempt_record_digest": "1f657c3a90f9c1d0c254a365d9da4ebf64bab3398bc7313eeb1f0ae992143e56",
+    "consumer_id": "SYNTH-CONSUMER-PROFILE-001",
+    "consumer_principal": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+    "consumer_validation_digest": "1b2ff6fa22c562d0cfefce9b78edd076041335406b592cbe4b300b6ae78415d2",
+    "currentness_epoch_digest": null,
+    "currentness_resolution_digest": null,
+    "evidence_refs": [
+      {
+        "path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-f/control.json",
+        "ref": "SYNTHETIC_CONTROL"
+      }
+    ],
+    "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+    "issued_at": "2026-08-15T10:00:00Z",
+    "propagated_authority_decision_digest": "68928de270211de081f1ae44e57604659c62cbb61166e8af25047d8eab57fee4",
+    "propagation_envelope_digest": "1dcc980e3201bfe903acb8338b1c5be68ebcdaa018871815101b53fb52670150",
+    "reason_code": "RELIANCE_REFUSED_ENVELOPE_INVALID",
+    "reason_code_id": "I6",
+    "record_class": "RELIANCE_ISSUANCE",
+    "reliance_class": "SYNTHETIC_BOUNDED_DEMONSTRATION_RELIANCE",
+    "reliance_disposition": "REFUSED",
+    "reliance_id": "SYNTH-RELIANCE-001",
+    "reliance_record_digest": "eb56092b201244c69c1b1c649ec12bab71f968a08cf485dfa454a5ad71ef7b92",
+    "reliance_time_authority_decision_digest": null,
+    "requested_use": "DEMONSTRATION_READ",
+    "requesting_subject_principal": "SYNTHETIC-OTHER-001",
+    "scope": "CDC-DEMO-SCOPE-001"
+  },
+  "reliance_time_authority_decision": null,
+  "validation": {
+    "checks": [
+      {
+        "check_id": 1,
+        "check_name": "envelope_integrity",
+        "expected": "envelope_digest reproduces",
+        "observed": "P1",
+        "passed": true
+      },
+      {
+        "check_id": 2,
+        "check_name": "schema_closure",
+        "expected": "no unknown or missing fields",
+        "observed": "P1",
+        "passed": true
+      },
+      {
+        "check_id": 3,
+        "check_name": "envelope_freshness",
+        "expected": "produced_at <= now <= valid_until",
+        "observed": {
+          "now": "2026-08-15T10:00:00Z",
+          "produced_at": "2026-08-15T10:00:00Z",
+          "valid_until": "2026-08-15T23:00:00Z"
+        },
+        "passed": true
+      },
+      {
+        "check_id": 4,
+        "check_name": "artifact_identity",
+        "expected": "recomputed digest equals bound digest",
+        "observed": {
+          "bound": "6f9fe1ccbabd6195d474f09a365a5ca4cc32f7ed8cf1f41e8acddd22e592eed0",
+          "recomputed": "6f9fe1ccbabd6195d474f09a365a5ca4cc32f7ed8cf1f41e8acddd22e592eed0"
+        },
+        "passed": true
+      },
+      {
+        "check_id": 5,
+        "check_name": "scope_binding",
+        "expected": "CDC-DEMO-SCOPE-001",
+        "observed": "CDC-DEMO-SCOPE-001",
+        "passed": true
+      },
+      {
+        "check_id": 6,
+        "check_name": "subject_principal_binding",
+        "expected": "SYNTHETIC-SUBJECT-PRINCIPAL-001",
+        "observed": "SYNTHETIC-OTHER-001",
+        "passed": false
+      },
+      {
+        "check_id": 7,
+        "check_name": "requested_use_binding",
+        "expected": "DEMONSTRATION_READ",
+        "observed": "NOT_EVALUATED_TERMINAL_REFUSAL_EARLIER_IN_FROZEN_ORDER",
+        "passed": false
+      },
+      {
+        "check_id": 8,
+        "check_name": "intended_consumer_binding",
+        "expected": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+        "observed": "NOT_EVALUATED_TERMINAL_REFUSAL_EARLIER_IN_FROZEN_ORDER",
+        "passed": false
+      },
+      {
+        "check_id": 9,
+        "check_name": "evidence_resolvability",
+        "expected": "every evidence_ref resolves",
+        "observed": "NOT_EVALUATED_TERMINAL_REFUSAL_EARLIER_IN_FROZEN_ORDER",
+        "passed": false
+      },
+      {
+        "check_id": 10,
+        "check_name": "producer_identity",
+        "expected": "SYNTHETIC-PRODUCER-PRINCIPAL-001",
+        "observed": "NOT_EVALUATED_TERMINAL_REFUSAL_EARLIER_IN_FROZEN_ORDER",
+        "passed": false
+      },
+      {
+        "check_id": 11,
+        "check_name": "propagated_authority_decision_identity",
+        "expected": "digest reproduces and PROCEED",
+        "observed": "NOT_EVALUATED_TERMINAL_REFUSAL_EARLIER_IN_FROZEN_ORDER",
+        "passed": false
+      },
+      {
+        "check_id": 12,
+        "check_name": "propagated_authority_decision_freshness",
+        "expected": "now <= decision.valid_until",
+        "observed": "NOT_EVALUATED_TERMINAL_REFUSAL_EARLIER_IN_FROZEN_ORDER",
+        "passed": false
+      },
+      {
+        "check_id": 13,
+        "check_name": "currentness_re_resolution",
+        "expected": "CURRENT",
+        "observed": "NOT_EVALUATED_TERMINAL_REFUSAL_EARLIER_IN_FROZEN_ORDER",
+        "passed": false
+      },
+      {
+        "check_id": 14,
+        "check_name": "epoch_applicability",
+        "expected": "epoch_now == epoch bound in decision",
+        "observed": "NOT_EVALUATED_TERMINAL_REFUSAL_EARLIER_IN_FROZEN_ORDER",
+        "passed": false
+      },
+      {
+        "check_id": 15,
+        "check_name": "authority_admissibility_re_evaluation",
+        "expected": "PROCEED",
+        "observed": "NOT_EVALUATED_TERMINAL_REFUSAL_EARLIER_IN_FROZEN_ORDER",
+        "passed": false
+      },
+      {
+        "check_id": 16,
+        "check_name": "issuance_gate",
+        "expected": "all required checks passed",
+        "observed": "CLOSED_I6",
+        "passed": false
+      }
+    ],
+    "consumer_identity": {
+      "consumer_principal": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+      "process_id": 66062,
+      "run_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT",
+      "trace_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT-TRACE"
+    },
+    "consumer_validation_digest": "1b2ff6fa22c562d0cfefce9b78edd076041335406b592cbe4b300b6ae78415d2",
+    "decision": "REFUSE",
+    "envelope_digest": "1dcc980e3201bfe903acb8338b1c5be68ebcdaa018871815101b53fb52670150",
+    "evaluated_at": "2026-08-15T10:00:00Z",
+    "observed_currentness_epoch_digest": null,
+    "re_resolved_currentness_resolution_digest": null,
+    "reason_code": "RELIANCE_REFUSED_ENVELOPE_INVALID",
+    "record_class": "CONSUMER_VALIDATION",
+    "reliance_time_authority_decision_digest": null
+  }
+}

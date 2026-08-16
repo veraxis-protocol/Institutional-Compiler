@@ -1,0 +1,12 @@
+{
+  "attempt_state": "COMPLETED_AFTER_SINGLE_RESULT_BEARING_EXECUTION",
+  "authorization_id": "OWNER-AUTHORIZATION-INTEGRATION-SLICE-001-EXEC-003",
+  "completed_at": "2026-08-16T17:07:23Z",
+  "consumed_at": "2026-08-16T17:07:19Z",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "execution_issuance_digest": "8384217cf97d3c6a836685c9c278c216f0d25238ab345fd12565a9383f0f387c",
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_003_EXECUTION_ATTEMPT",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

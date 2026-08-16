@@ -1,0 +1,13 @@
+{
+  "adjudicates": false,
+  "derived_from": "the same authorized invocation; no scenario was re-executed",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "implementation_head_after_run": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_source_modified": true,
+  "implementation_tree_after_run": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "implementation_worktree_porcelain_after_run": "",
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_003_PRESERVATION_OBSERVATION",
+  "run_001_runtime_root": "/private/tmp/cdc-integration-slice-001-run-001",
+  "run_001_untouched_by_this_run": true,
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

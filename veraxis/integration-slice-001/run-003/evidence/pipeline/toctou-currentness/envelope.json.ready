@@ -1,0 +1,6 @@
+{
+  "commit_discipline": "FSYNC_THEN_EXCLUSIVE_READY_MARKER",
+  "envelope_bytes": 2022,
+  "envelope_file_sha256": "3b7bdc2a9869976f13c74125eef1a686603477989f745bc7636d89d24f4c044c",
+  "envelope_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-currentness/envelope.json"
+}

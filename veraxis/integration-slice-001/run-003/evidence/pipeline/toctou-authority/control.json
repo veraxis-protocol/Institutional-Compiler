@@ -1,0 +1,50 @@
+{
+  "admitted_at": "2026-08-14T22:00:00Z",
+  "artifact_class": "CDC_CURRENTNESS_SLICE_001_SYNTHETIC_UNAFFECTED_CONTROL",
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "basis_completeness_attestation": {
+    "admitted_at": "2026-08-14T22:00:00Z",
+    "basis_snapshot_digests": [],
+    "basis_snapshot_refs": [],
+    "completeness_as_of": "2026-08-14T22:00:00Z",
+    "covered_output_ref": "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01",
+    "fixture_class": "SYNTHETIC_UNAFFECTED_CONTROL",
+    "record_kinds_covered": [
+      "CORRECTION_SUCCESSOR_RECORD",
+      "SUPERSESSION_RECORD",
+      "ELIGIBILITY_DETERMINATION_RECORD"
+    ],
+    "scope_ref": "CDC-SYNTHETIC-UNAFFECTED-001",
+    "semantics": "the governing basis for this synthetic output is attested complete and contains zero operative controlling records of any covered kind; emptiness here is an attested fact, not an unsearched absence"
+  },
+  "claim_ceiling": [
+    "liveness fixture only",
+    "not derived from any real Mission-001 output",
+    "not a CDC deliverable",
+    "not evidence that any real unaffected CDC output resolves CURRENT",
+    "no institutional reliance, issuance, legitimacy or currentness propagation"
+  ],
+  "derived_from_real_mission_001_output": false,
+  "effective_at": "2026-08-14T22:00:00Z",
+  "fixture_class": "SYNTHETIC_UNAFFECTED_CONTROL",
+  "historical_artifact": {
+    "body": {
+      "content_state_rule": "SYNTHETIC_FIXTURE_CONTENT",
+      "draft_id": "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01",
+      "label_en": "synthetic unaffected control output",
+      "nonclaims": [
+        "not an official record",
+        "not a real deliverable",
+        "not derived from Mission-001"
+      ],
+      "official_status": "NOT_AUTHORIZED_AS_OFFICIAL",
+      "status": "SYNTHETIC_FIXTURE_NOT_OFFICIAL"
+    },
+    "historical_state": "SYNTHETIC_FROZEN_FIXTURE_DETERMINATION"
+  },
+  "index_admission_path": "SYNTHETIC_CONTROL_PATH_ONLY",
+  "observed_at": "2026-08-14T22:00:00Z",
+  "output_ref": "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01",
+  "result_bearing": false,
+  "usage_constraint": "admissible to the currentness index only through the separately identified synthetic-control path; no arbitrary caller-provided index entry may reference this fixture_class"
+}

@@ -1,0 +1,342 @@
+{
+  "NON_LOAD_BEARING": true,
+  "derived_from": "the same 41 invocations that produced the criterion observations",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "non_load_bearing": true,
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_003_RUNNER_ACCOUNTING",
+  "rows": [
+    {
+      "criterion_id": "T-EARLY-01",
+      "duration_seconds": 0.040338,
+      "machine_execution_status": "executed",
+      "node_id": "test_early_termination[T-EARLY-01]",
+      "observed_at": "2026-08-16T17:07:19Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-EARLY-02",
+      "duration_seconds": 0.005106,
+      "machine_execution_status": "executed",
+      "node_id": "test_early_termination[T-EARLY-02]",
+      "observed_at": "2026-08-16T17:07:19Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-EARLY-03",
+      "duration_seconds": 0.007055,
+      "machine_execution_status": "executed",
+      "node_id": "test_early_termination[T-EARLY-03]",
+      "observed_at": "2026-08-16T17:07:19Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-EARLY-04",
+      "duration_seconds": 0.003876,
+      "machine_execution_status": "executed",
+      "node_id": "test_early_termination[T-EARLY-04]",
+      "observed_at": "2026-08-16T17:07:19Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-EARLY-05",
+      "duration_seconds": 0.006031,
+      "machine_execution_status": "executed",
+      "node_id": "test_early_termination[T-EARLY-05]",
+      "observed_at": "2026-08-16T17:07:19Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-POS-01",
+      "duration_seconds": 0.64985,
+      "machine_execution_status": "executed",
+      "node_id": "test_pos_01_currentness_current",
+      "observed_at": "2026-08-16T17:07:20Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-POS-02",
+      "duration_seconds": 0.000122,
+      "machine_execution_status": "executed",
+      "node_id": "test_pos_02_authority_proceed",
+      "observed_at": "2026-08-16T17:07:20Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-POS-03",
+      "duration_seconds": 8.9e-05,
+      "machine_execution_status": "executed",
+      "node_id": "test_pos_03_envelope_materialized",
+      "observed_at": "2026-08-16T17:07:20Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-POS-04",
+      "duration_seconds": 0.00019,
+      "machine_execution_status": "executed",
+      "node_id": "test_pos_04_separate_consumer_process",
+      "observed_at": "2026-08-16T17:07:20Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-POS-05",
+      "duration_seconds": 1.3e-05,
+      "machine_execution_status": "executed",
+      "node_id": "test_pos_05_consumer_revalidates",
+      "observed_at": "2026-08-16T17:07:20Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-POS-06",
+      "duration_seconds": 0.000333,
+      "machine_execution_status": "executed",
+      "node_id": "test_pos_06_reliance_issued",
+      "observed_at": "2026-08-16T17:07:20Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-A",
+      "duration_seconds": 0.006462,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_a_authority_deny",
+      "observed_at": "2026-08-16T17:07:20Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-B",
+      "duration_seconds": 0.003929,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_b_authority_escalate",
+      "observed_at": "2026-08-16T17:07:20Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-C",
+      "duration_seconds": 0.12958,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_c_tampered_envelope",
+      "observed_at": "2026-08-16T17:07:20Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-D",
+      "duration_seconds": 0.169287,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_d_wrong_artifact",
+      "observed_at": "2026-08-16T17:07:20Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-E",
+      "duration_seconds": 0.272785,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_e_wrong_scope",
+      "observed_at": "2026-08-16T17:07:21Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-F",
+      "duration_seconds": 0.263833,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_f_wrong_principal",
+      "observed_at": "2026-08-16T17:07:21Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-G",
+      "duration_seconds": 0.249171,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_g_expired_authority_decision",
+      "observed_at": "2026-08-16T17:07:21Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-H",
+      "duration_seconds": 0.170511,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_h_expired_envelope",
+      "observed_at": "2026-08-16T17:07:21Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-I",
+      "duration_seconds": 0.14615,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_i_direct_assertion",
+      "observed_at": "2026-08-16T17:07:21Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-J",
+      "duration_seconds": 0.488057,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_j_replayed_authorization",
+      "observed_at": "2026-08-16T17:07:22Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-K",
+      "duration_seconds": 0.171823,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_k_currentness_toctou",
+      "observed_at": "2026-08-16T17:07:22Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-L",
+      "duration_seconds": 0.414329,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_l_historical_reliance_preserved",
+      "observed_at": "2026-08-16T17:07:22Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-M",
+      "duration_seconds": 0.149592,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_m_currentness_basis_unreachable",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-N",
+      "duration_seconds": 0.004784,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_n_competing_authority_basis",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-O",
+      "duration_seconds": 0.132181,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_o_wrong_intended_consumer",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-P",
+      "duration_seconds": 0.136183,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_p_authority_toctou",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-Q",
+      "duration_seconds": 0.004571,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_q_authority_basis_missing",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-R",
+      "duration_seconds": 0.005322,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_r_authority_basis_invalid",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-CASE-S",
+      "duration_seconds": 0.004017,
+      "machine_execution_status": "executed",
+      "node_id": "test_case_s_admissibility_basis_revoked",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-DIG-01",
+      "duration_seconds": 7.5e-05,
+      "machine_execution_status": "executed",
+      "node_id": "test_dig_01_currentness_epoch_digest",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-DIG-02",
+      "duration_seconds": 0.000102,
+      "machine_execution_status": "executed",
+      "node_id": "test_dig_02_authority_basis_record_digest",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-DIG-03",
+      "duration_seconds": 8.4e-05,
+      "machine_execution_status": "executed",
+      "node_id": "test_dig_03_authority_decision_digest",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-DIG-04",
+      "duration_seconds": 0.131569,
+      "machine_execution_status": "executed",
+      "node_id": "test_dig_04_envelope_digest",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-DIG-05",
+      "duration_seconds": 0.124719,
+      "machine_execution_status": "executed",
+      "node_id": "test_dig_05_consumer_validation_digest",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-DIG-06",
+      "duration_seconds": 0.123264,
+      "machine_execution_status": "executed",
+      "node_id": "test_dig_06_reliance_record_digest",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-DIG-07",
+      "duration_seconds": 6.9e-05,
+      "machine_execution_status": "executed",
+      "node_id": "test_dig_07_integration_package_digest",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-DIG-08",
+      "duration_seconds": 0.000108,
+      "machine_execution_status": "executed",
+      "node_id": "test_dig_08_synthetic_profile_digest",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-EPOCH-A",
+      "duration_seconds": 5.7e-05,
+      "machine_execution_status": "executed",
+      "node_id": "test_epoch_a_future_successor_excluded",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-EPOCH-B",
+      "duration_seconds": 6e-05,
+      "machine_execution_status": "executed",
+      "node_id": "test_epoch_b_boundary_crossing_moves_epoch",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    },
+    {
+      "criterion_id": "T-EPOCH-C",
+      "duration_seconds": 3.9e-05,
+      "machine_execution_status": "executed",
+      "node_id": "test_epoch_c_unrelated_output_control",
+      "observed_at": "2026-08-16T17:07:23Z",
+      "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+    }
+  ],
+  "rows_total": 41,
+  "schema_version": "RUN-003-RUNNER-ACCOUNTING-v0.1",
+  "second_population_execution_performed": false,
+  "total_duration_seconds": 4.015716,
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

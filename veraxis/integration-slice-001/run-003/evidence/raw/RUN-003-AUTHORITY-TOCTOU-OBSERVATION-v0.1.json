@@ -1,0 +1,90 @@
+{
+  "adjudicates": false,
+  "artifact_remains_current": true,
+  "authority_basis_revocation_after": "REVOKED",
+  "authority_basis_revocation_before": "NOT_REVOKED",
+  "check_12_freshness": {
+    "check_id": 12,
+    "check_name": "propagated_authority_decision_freshness",
+    "expected": "now <= decision.valid_until",
+    "observed": {
+      "decision_valid_until": "2026-08-15T23:00:00Z",
+      "now": "2026-08-15T13:00:00Z"
+    },
+    "passed": true
+  },
+  "check_14_epoch_applicability": {
+    "check_id": 14,
+    "check_name": "epoch_applicability",
+    "expected": "epoch_now == epoch bound in decision",
+    "observed": {
+      "epoch_bound": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90",
+      "epoch_now": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90"
+    },
+    "passed": true
+  },
+  "check_15_authority_re_evaluation": {
+    "check_id": 15,
+    "check_name": "authority_admissibility_re_evaluation",
+    "expected": "PROCEED",
+    "observed": "A10",
+    "passed": false
+  },
+  "check_15_reached": true,
+  "derived_from": "the same authorized invocation; no scenario was re-executed",
+  "downstream_not_produced": [
+    "reliance_issuance"
+  ],
+  "evaluation_time": "2026-08-15T13:00:00Z",
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "expected_reason_code": "I11",
+  "mutated_object": {
+    "digest_after": "6ed757b191485401453734947653cceadfa6b84c8a32f1c72b492c89834c23fb",
+    "digest_before": "7ad84cfb124b794b67ebdcfc6ca4282a86a228cb95c5a1a7bd8c4448232f310e",
+    "ref": "authority_basis"
+  },
+  "mutation_applied": "authority standing revoked between t1 and t2; artifact untouched",
+  "observed_reason_code": {
+    "id": "I11",
+    "name": "RELIANCE_REFUSED_AUTHORITY_NOT_CURRENT_AT_RELIANCE"
+  },
+  "propagated_decision_expired": false,
+  "propagated_decision_valid_until": "2026-08-15T23:00:00Z",
+  "re_resolved_currentness_state": "CURRENT",
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_003_AUTHORITY_TOCTOU_OBSERVATION",
+  "reliance_time_authority_decision": {
+    "admissibility_basis_refs": [
+      {
+        "basis_id": "SYNTH-ADM-BASIS-001",
+        "record_class": "SYNTHETIC_ADMISSIBILITY_BASIS",
+        "record_digest": "bf29f3d75a313301c223fd12183f6f7c134cb1683c8d388d7377fb401d2219e3"
+      }
+    ],
+    "artifact_digest": "6f9fe1ccbabd6195d474f09a365a5ca4cc32f7ed8cf1f41e8acddd22e592eed0",
+    "artifact_ref": "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01",
+    "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+    "authority_basis_refs": [
+      {
+        "basis_id": "SYNTH-AUTH-BASIS-001",
+        "record_class": "SYNTHETIC_AUTHORITY_BASIS",
+        "record_digest": "6ed757b191485401453734947653cceadfa6b84c8a32f1c72b492c89834c23fb"
+      }
+    ],
+    "authority_class": "SYNTHETIC_BOUNDED_DEMONSTRATION_AUTHORITY",
+    "authority_decision_digest": "d22c06734ac6092dc76ddfb01a2d16209d7d9deac94390438e79d302780d8cd1",
+    "currentness_epoch_digest": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90",
+    "currentness_resolution_digest": "79f85db322d0aac3aa6e72b0f798f1694e8756b16e1b1bb5e2c7683003da899b",
+    "decision": "DENY",
+    "decision_id": "SYNTH-RELIANCE-001-RELIANCE-TIME-AUTHORITY",
+    "evaluation_time": "2026-08-15T13:00:00Z",
+    "reason_code": "AUTHORITY_BASIS_REVOKED",
+    "reason_code_id": "A10",
+    "record_class": "AUTHORITY_DECISION",
+    "requested_use": "DEMONSTRATION_READ",
+    "requesting_principal": "SYNTHETIC-SUBJECT-PRINCIPAL-001",
+    "scope": "CDC-DEMO-SCOPE-001",
+    "valid_until": "2026-08-15T23:00:00Z"
+  },
+  "terminating_layer": "CONSUMER",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

@@ -1,0 +1,19 @@
+[
+  {
+    "admitted_at": "2026-08-15T00:00:00Z",
+    "basis_id": "SYNTH-AUTH-BASIS-001",
+    "effective_at": "2026-08-15T00:00:00Z",
+    "permitted_requested_use": [
+      "DEMONSTRATION_READ"
+    ],
+    "principal_id": "SYNTHETIC-SUBJECT-PRINCIPAL-001",
+    "record_class": "SYNTHETIC_AUTHORITY_BASIS",
+    "record_digest": "7ad84cfb124b794b67ebdcfc6ca4282a86a228cb95c5a1a7bd8c4448232f310e",
+    "revocation_state": "NOT_REVOKED",
+    "scope": "CDC-DEMO-SCOPE-001",
+    "superseded_by": null,
+    "supersedes": null,
+    "validity_from": "2026-08-15T00:00:00Z",
+    "validity_until": "2026-08-22T00:00:00Z"
+  }
+]

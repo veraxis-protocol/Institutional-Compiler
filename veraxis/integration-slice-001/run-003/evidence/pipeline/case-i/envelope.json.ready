@@ -1,0 +1,6 @@
+{
+  "commit_discipline": "FSYNC_THEN_EXCLUSIVE_READY_MARKER",
+  "envelope_bytes": 2010,
+  "envelope_file_sha256": "a2fa5e13dd2477f2347594baa85df2e15cb15e0167a9b996012a80da78cafabd",
+  "envelope_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-i/envelope.json"
+}

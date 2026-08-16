@@ -1,0 +1,145 @@
+{
+  "criterion_evidence_projection_sha256": "7adcc39f5656fa3fdc837bf3049a7a4a1be38947aed41b2fc0ccc23cc4781298",
+  "criterion_id": "T-POS-06",
+  "evidence_refs": [
+    "observations/T-POS-06.json",
+    "pipeline/positive/issuance-authorization.json",
+    "pipeline/positive/attempt.json",
+    "pipeline/positive/consumer-result-SYNTH-RELIANCE-001.json"
+  ],
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "expected_condition": "bounded synthetic reliance is issued as a separate transition",
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "inputs": [
+    {
+      "digest": "e767753645e86d003e24c932f8b69692f0cb3cca7d5dd41622ab093fc8f4d4df",
+      "ref": "positive",
+      "role": "consumer_validation"
+    }
+  ],
+  "node_accounting": {
+    "duration_seconds": 0.000333,
+    "non_load_bearing": true,
+    "outcome": "executed",
+    "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+  },
+  "node_id": "test_pos_06_reliance_issued",
+  "not_produced": [],
+  "observation_digest": "e6195e7a1546600008dc9dfc606086f365d4cb289e3962d3e93bf1889e40dd9f",
+  "observed_at": "2026-08-16T17:07:20Z",
+  "observed_decision": "ISSUED",
+  "observed_reason_code": {
+    "id": "I1",
+    "name": "RELIANCE_ISSUED"
+  },
+  "observed_value": {
+    "attempt_record_digest": "c2c350e078713f9be411cb64195a5002afef5288ecc65653c18482cd5a8447a4",
+    "attempt_state": null,
+    "currentness_epoch_digest": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90",
+    "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+    "propagated_authority_decision_digest": "68928de270211de081f1ae44e57604659c62cbb61166e8af25047d8eab57fee4",
+    "re_resolved_currentness_resolution_digest": "e2866c020328ac6c0b5bcf6fb11becf8a53926a5572d95641fc4553a21630ca1",
+    "re_resolved_currentness_resolution_digest_source": "consumer validation record",
+    "reason_code": {
+      "id": "I1",
+      "name": "RELIANCE_ISSUED"
+    },
+    "reliance_disposition": "ISSUED",
+    "reliance_record_digest": "8379cf085b1ebe5af992333c26ad7cb4f445e4f9b70ab28b65c3cfda60b3a3f9",
+    "reliance_time_authority_decision_digest": "2d0a64d94f5852179ffd5a666854a1b6f2bf723c64c790773d7b450f02cb2bb7",
+    "write_order": {
+      "attempt": {
+        "attempt_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/attempt.json",
+        "attempt_persisted_file_bytes": 493,
+        "attempt_persisted_file_sha256": "c2c350e078713f9be411cb64195a5002afef5288ecc65653c18482cd5a8447a4",
+        "claimed_at": null,
+        "claimed_at_status": "ABSENT_IN_GOVERNED_RECORD",
+        "comparison": {
+          "comparison_result": "EQUAL",
+          "left": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+          "left_field": "issuance_authorization_digest_bound_in_attempt",
+          "right": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+          "right_field": "authorization_persisted_file_sha256"
+        },
+        "issuance_authorization_digest_bound_in_attempt": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0"
+      },
+      "authorization": {
+        "authorization_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/issuance-authorization.json",
+        "authorization_persisted_file_bytes": 177,
+        "authorization_persisted_file_sha256": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+        "authorization_timestamp": null,
+        "authorization_timestamp_status": "ABSENT_IN_GOVERNED_RECORD",
+        "fields_present": [
+          "assurance_class",
+          "authorization_id",
+          "automatic_retry",
+          "single_use"
+        ]
+      },
+      "declared_order": [
+        "issuance_authorization",
+        "attempt_record",
+        "reliance_record"
+      ],
+      "evidence_basis": "DIGEST_CHAIN",
+      "filesystem_timestamp_consulted": false,
+      "governed_sources_consulted": [
+        "attempt_record.claimed_at",
+        "reliance_record.issued_at",
+        "attempt_record.issuance_authorization_digest",
+        "reliance_record.issuance_authorization_digest",
+        "reliance_record.attempt_record_digest",
+        "persisted_file_sha256(authorization bytes)",
+        "persisted_file_sha256(attempt bytes)",
+        "persisted_file_sha256(reliance bytes)"
+      ],
+      "reliance": {
+        "attempt_record_digest_bound_in_reliance": "c2c350e078713f9be411cb64195a5002afef5288ecc65653c18482cd5a8447a4",
+        "comparisons": [
+          {
+            "comparison_result": "EQUAL",
+            "left": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+            "left_field": "issuance_authorization_digest_bound_in_reliance",
+            "right": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+            "right_field": "authorization_persisted_file_sha256"
+          },
+          {
+            "comparison_result": "EQUAL",
+            "left": "c2c350e078713f9be411cb64195a5002afef5288ecc65653c18482cd5a8447a4",
+            "left_field": "attempt_record_digest_bound_in_reliance",
+            "right": "c2c350e078713f9be411cb64195a5002afef5288ecc65653c18482cd5a8447a4",
+            "right_field": "attempt_persisted_file_sha256"
+          }
+        ],
+        "issuance_authorization_digest_bound_in_reliance": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+        "issued_at": "2026-08-15T10:00:00Z",
+        "issued_at_status": "PRESENT_IN_GOVERNED_RECORD",
+        "reliance_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/consumer-result-SYNTH-RELIANCE-001.json",
+        "reliance_persisted_file_bytes": 10558,
+        "reliance_persisted_file_sha256": "34a727ae257e174c8cd372f7bd80f34e9c665392b3f5ec0d3e8c022727cabd5c"
+      },
+      "temporal_corroboration": {
+        "claimed_at": null,
+        "comparison": "claimed_at <= issued_at",
+        "comparison_result": "NOT_EVALUABLE",
+        "issued_at": "2026-08-15T10:00:00Z",
+        "reason": "claimed_at absent from the governed attempt record"
+      },
+      "timestamps_are": "CORROBORATING_ONLY"
+    }
+  },
+  "outputs": [
+    {
+      "digest": "8379cf085b1ebe5af992333c26ad7cb4f445e4f9b70ab28b65c3cfda60b3a3f9",
+      "ref": "SYNTH-RELIANCE-001",
+      "role": "reliance_record"
+    }
+  ],
+  "record_class": "CDC_INTEGRATION_SLICE_001_CRITERION_OBSERVATION",
+  "scenario_id": "POSITIVE-PATH",
+  "schema_version": "INTEGRATION-SLICE-001-CRITERION-OBSERVATION-v0.1",
+  "semantic_design_sha256": "03ca22e960fa677af0328d2c9595c7842015cf68ca525f8e94c2564dc4afc173",
+  "semantic_reference": "SEMANTIC-DESIGN-v0.4 §9 / PROJECTION-v0.1 §3.2",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

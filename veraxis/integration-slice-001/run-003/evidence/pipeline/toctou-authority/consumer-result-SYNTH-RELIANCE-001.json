@@ -1,0 +1,250 @@
+{
+  "attempt": {
+    "attempt_record": {
+      "attempt_state": "CONSUMED_AT_FIRST_ISSUANCE_ATTEMPT",
+      "claimed_at": "2026-08-15T13:00:00Z",
+      "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+      "issuance_authorization_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/issuance-authorization.json",
+      "record_class": "RELIANCE_ISSUANCE_ATTEMPT",
+      "run_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT",
+      "trace_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT-TRACE"
+    },
+    "attempt_record_bytes": 501,
+    "attempt_record_digest": "c75de34f2a68784b251217076f5e81fc0361dbb702b14e71ccf691ef6859df82",
+    "attempt_record_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/attempt.json",
+    "issuance_authorization_bytes": 177,
+    "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0"
+  },
+  "consumer_input_paths": [
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/admissibility-bases.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/attempt.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/authority-bases.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/consumer-profile.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/decision.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/envelope.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/issuance-authorization.json",
+    "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/producer-profile.json"
+  ],
+  "consumer_inputs_were_paths_only": true,
+  "consumer_principal": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+  "consumer_process_id": 66074,
+  "currentness_current_constant": "CURRENT",
+  "gate_open": false,
+  "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+  "now": "2026-08-15T13:00:00Z",
+  "producer_state_shared": false,
+  "re_resolved_currentness_state": "CURRENT",
+  "record_class": "CDC_INTEGRATION_SLICE_001_CONSUMER_RESULT",
+  "reliance_record": {
+    "artifact_digest": "6f9fe1ccbabd6195d474f09a365a5ca4cc32f7ed8cf1f41e8acddd22e592eed0",
+    "artifact_ref": "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01",
+    "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+    "attempt_record_digest": "c75de34f2a68784b251217076f5e81fc0361dbb702b14e71ccf691ef6859df82",
+    "consumer_id": "SYNTH-CONSUMER-PROFILE-001",
+    "consumer_principal": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+    "consumer_validation_digest": "6afa7cef5a455aa2723f0096c1b88fa8d5a3dbd919418049b6aaf6c77d897be7",
+    "currentness_epoch_digest": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90",
+    "currentness_resolution_digest": "79f85db322d0aac3aa6e72b0f798f1694e8756b16e1b1bb5e2c7683003da899b",
+    "evidence_refs": [
+      {
+        "path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/toctou-authority/control.json",
+        "ref": "SYNTHETIC_CONTROL"
+      }
+    ],
+    "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+    "issued_at": "2026-08-15T13:00:00Z",
+    "propagated_authority_decision_digest": "68928de270211de081f1ae44e57604659c62cbb61166e8af25047d8eab57fee4",
+    "propagation_envelope_digest": "fd3156c7aad2110f6f55101ac241cc08e7aa33b966c99d5739885e4d5c622d24",
+    "reason_code": "RELIANCE_REFUSED_AUTHORITY_NOT_CURRENT_AT_RELIANCE",
+    "reason_code_id": "I11",
+    "record_class": "RELIANCE_ISSUANCE",
+    "reliance_class": "SYNTHETIC_BOUNDED_DEMONSTRATION_RELIANCE",
+    "reliance_disposition": "REFUSED",
+    "reliance_id": "SYNTH-RELIANCE-001",
+    "reliance_record_digest": "42fb3448999f60186b2978cbea9afabb10e434271c7164b8c921cdf478cce949",
+    "reliance_time_authority_decision_digest": "d22c06734ac6092dc76ddfb01a2d16209d7d9deac94390438e79d302780d8cd1",
+    "requested_use": "DEMONSTRATION_READ",
+    "requesting_subject_principal": "SYNTHETIC-SUBJECT-PRINCIPAL-001",
+    "scope": "CDC-DEMO-SCOPE-001"
+  },
+  "reliance_time_authority_decision": {
+    "admissibility_basis_refs": [
+      {
+        "basis_id": "SYNTH-ADM-BASIS-001",
+        "record_class": "SYNTHETIC_ADMISSIBILITY_BASIS",
+        "record_digest": "bf29f3d75a313301c223fd12183f6f7c134cb1683c8d388d7377fb401d2219e3"
+      }
+    ],
+    "artifact_digest": "6f9fe1ccbabd6195d474f09a365a5ca4cc32f7ed8cf1f41e8acddd22e592eed0",
+    "artifact_ref": "CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01",
+    "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+    "authority_basis_refs": [
+      {
+        "basis_id": "SYNTH-AUTH-BASIS-001",
+        "record_class": "SYNTHETIC_AUTHORITY_BASIS",
+        "record_digest": "6ed757b191485401453734947653cceadfa6b84c8a32f1c72b492c89834c23fb"
+      }
+    ],
+    "authority_class": "SYNTHETIC_BOUNDED_DEMONSTRATION_AUTHORITY",
+    "authority_decision_digest": "d22c06734ac6092dc76ddfb01a2d16209d7d9deac94390438e79d302780d8cd1",
+    "currentness_epoch_digest": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90",
+    "currentness_resolution_digest": "79f85db322d0aac3aa6e72b0f798f1694e8756b16e1b1bb5e2c7683003da899b",
+    "decision": "DENY",
+    "decision_id": "SYNTH-RELIANCE-001-RELIANCE-TIME-AUTHORITY",
+    "evaluation_time": "2026-08-15T13:00:00Z",
+    "reason_code": "AUTHORITY_BASIS_REVOKED",
+    "reason_code_id": "A10",
+    "record_class": "AUTHORITY_DECISION",
+    "requested_use": "DEMONSTRATION_READ",
+    "requesting_principal": "SYNTHETIC-SUBJECT-PRINCIPAL-001",
+    "scope": "CDC-DEMO-SCOPE-001",
+    "valid_until": "2026-08-15T23:00:00Z"
+  },
+  "validation": {
+    "checks": [
+      {
+        "check_id": 1,
+        "check_name": "envelope_integrity",
+        "expected": "envelope_digest reproduces",
+        "observed": "P1",
+        "passed": true
+      },
+      {
+        "check_id": 2,
+        "check_name": "schema_closure",
+        "expected": "no unknown or missing fields",
+        "observed": "P1",
+        "passed": true
+      },
+      {
+        "check_id": 3,
+        "check_name": "envelope_freshness",
+        "expected": "produced_at <= now <= valid_until",
+        "observed": {
+          "now": "2026-08-15T13:00:00Z",
+          "produced_at": "2026-08-15T10:00:00Z",
+          "valid_until": "2026-08-15T23:00:00Z"
+        },
+        "passed": true
+      },
+      {
+        "check_id": 4,
+        "check_name": "artifact_identity",
+        "expected": "recomputed digest equals bound digest",
+        "observed": {
+          "bound": "6f9fe1ccbabd6195d474f09a365a5ca4cc32f7ed8cf1f41e8acddd22e592eed0",
+          "recomputed": "6f9fe1ccbabd6195d474f09a365a5ca4cc32f7ed8cf1f41e8acddd22e592eed0"
+        },
+        "passed": true
+      },
+      {
+        "check_id": 5,
+        "check_name": "scope_binding",
+        "expected": "CDC-DEMO-SCOPE-001",
+        "observed": "CDC-DEMO-SCOPE-001",
+        "passed": true
+      },
+      {
+        "check_id": 6,
+        "check_name": "subject_principal_binding",
+        "expected": "SYNTHETIC-SUBJECT-PRINCIPAL-001",
+        "observed": "SYNTHETIC-SUBJECT-PRINCIPAL-001",
+        "passed": true
+      },
+      {
+        "check_id": 7,
+        "check_name": "requested_use_binding",
+        "expected": "DEMONSTRATION_READ",
+        "observed": "DEMONSTRATION_READ",
+        "passed": true
+      },
+      {
+        "check_id": 8,
+        "check_name": "intended_consumer_binding",
+        "expected": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+        "observed": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+        "passed": true
+      },
+      {
+        "check_id": 9,
+        "check_name": "evidence_resolvability",
+        "expected": "every evidence_ref resolves",
+        "observed": {
+          "count": 1,
+          "unresolved": 0
+        },
+        "passed": true
+      },
+      {
+        "check_id": 10,
+        "check_name": "producer_identity",
+        "expected": "SYNTHETIC-PRODUCER-PRINCIPAL-001",
+        "observed": "SYNTHETIC-PRODUCER-PRINCIPAL-001",
+        "passed": true
+      },
+      {
+        "check_id": 11,
+        "check_name": "propagated_authority_decision_identity",
+        "expected": "digest reproduces and PROCEED",
+        "observed": "68928de270211de081f1ae44e57604659c62cbb61166e8af25047d8eab57fee4",
+        "passed": true
+      },
+      {
+        "check_id": 12,
+        "check_name": "propagated_authority_decision_freshness",
+        "expected": "now <= decision.valid_until",
+        "observed": {
+          "decision_valid_until": "2026-08-15T23:00:00Z",
+          "now": "2026-08-15T13:00:00Z"
+        },
+        "passed": true
+      },
+      {
+        "check_id": 13,
+        "check_name": "currentness_re_resolution",
+        "expected": "CURRENT",
+        "observed": "CURRENT",
+        "passed": true
+      },
+      {
+        "check_id": 14,
+        "check_name": "epoch_applicability",
+        "expected": "epoch_now == epoch bound in decision",
+        "observed": {
+          "epoch_bound": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90",
+          "epoch_now": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90"
+        },
+        "passed": true
+      },
+      {
+        "check_id": 15,
+        "check_name": "authority_admissibility_re_evaluation",
+        "expected": "PROCEED",
+        "observed": "A10",
+        "passed": false
+      },
+      {
+        "check_id": 16,
+        "check_name": "issuance_gate",
+        "expected": "all required checks passed",
+        "observed": "CLOSED_I11",
+        "passed": false
+      }
+    ],
+    "consumer_identity": {
+      "consumer_principal": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+      "process_id": 66074,
+      "run_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT",
+      "trace_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT-TRACE"
+    },
+    "consumer_validation_digest": "6afa7cef5a455aa2723f0096c1b88fa8d5a3dbd919418049b6aaf6c77d897be7",
+    "decision": "REFUSE",
+    "envelope_digest": "fd3156c7aad2110f6f55101ac241cc08e7aa33b966c99d5739885e4d5c622d24",
+    "evaluated_at": "2026-08-15T13:00:00Z",
+    "observed_currentness_epoch_digest": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90",
+    "re_resolved_currentness_resolution_digest": "79f85db322d0aac3aa6e72b0f798f1694e8756b16e1b1bb5e2c7683003da899b",
+    "reason_code": "RELIANCE_REFUSED_AUTHORITY_NOT_CURRENT_AT_RELIANCE",
+    "record_class": "CONSUMER_VALIDATION",
+    "reliance_time_authority_decision_digest": "d22c06734ac6092dc76ddfb01a2d16209d7d9deac94390438e79d302780d8cd1"
+  }
+}

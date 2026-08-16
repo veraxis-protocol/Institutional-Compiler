@@ -1,0 +1,9 @@
+{
+  "attempt_state": "CONSUMED_AT_FIRST_ISSUANCE_ATTEMPT",
+  "claimed_at": "2026-08-15T10:00:00Z",
+  "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+  "issuance_authorization_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/historical/issuance-authorization.json",
+  "record_class": "RELIANCE_ISSUANCE_ATTEMPT",
+  "run_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT-TRACE"
+}

@@ -1,0 +1,86 @@
+{
+  "criterion_evidence_projection_sha256": "7adcc39f5656fa3fdc837bf3049a7a4a1be38947aed41b2fc0ccc23cc4781298",
+  "criterion_id": "T-CASE-A",
+  "evidence_refs": [
+    "observations/T-CASE-A.json"
+  ],
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "expected_condition": "CURRENT artifact, authority DENY, no propagation",
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "inputs": [
+    {
+      "digest": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+      "ref": "index_without_successor",
+      "role": "currentness_index"
+    }
+  ],
+  "node_accounting": {
+    "duration_seconds": 0.006462,
+    "non_load_bearing": true,
+    "outcome": "executed",
+    "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+  },
+  "node_id": "test_case_a_authority_deny",
+  "not_produced": [
+    "propagation_envelope",
+    "consumer_validation",
+    "reliance_record"
+  ],
+  "observation_digest": "75a943be4c9ee481962d298e85caa6a32b6c4702abc913b67df9d07d9b044e14",
+  "observed_at": "2026-08-16T17:07:20Z",
+  "observed_decision": "DENY",
+  "observed_reason_code": {
+    "id": "A10",
+    "name": "AUTHORITY_BASIS_REVOKED"
+  },
+  "observed_value": {
+    "admissibility_basis_refs": [
+      {
+        "basis_id": "SYNTH-ADM-BASIS-001",
+        "record_class": "SYNTHETIC_ADMISSIBILITY_BASIS",
+        "record_digest": "bf29f3d75a313301c223fd12183f6f7c134cb1683c8d388d7377fb401d2219e3"
+      }
+    ],
+    "authority_basis_refs": [
+      {
+        "basis_id": "SYNTH-AUTH-BASIS-001",
+        "record_class": "SYNTHETIC_AUTHORITY_BASIS",
+        "record_digest": "6ed757b191485401453734947653cceadfa6b84c8a32f1c72b492c89834c23fb"
+      }
+    ],
+    "authority_decision_digest": "664141c0ee03959a11d4c680833e6149720b61908399130737748aba351cb3bc",
+    "decision": "DENY",
+    "downstream_not_produced": [
+      "propagation_envelope",
+      "consumer_validation",
+      "reliance_record"
+    ],
+    "envelope_files_present": [],
+    "expected_reason_code": "A10",
+    "mutated_object": {
+      "digest_after": null,
+      "digest_before": null,
+      "ref": "authority_or_admissibility_basis"
+    },
+    "mutation_applied": "authority basis revocation_state set to REVOKED",
+    "observed_reason_code": {
+      "id": "A10",
+      "name": "AUTHORITY_BASIS_REVOKED"
+    },
+    "terminating_layer": "AUTHORITY"
+  },
+  "outputs": [
+    {
+      "digest": "664141c0ee03959a11d4c680833e6149720b61908399130737748aba351cb3bc",
+      "ref": "T-CASE-A",
+      "role": "authority_decision"
+    }
+  ],
+  "record_class": "CDC_INTEGRATION_SLICE_001_CRITERION_OBSERVATION",
+  "scenario_id": "T-CASE-A",
+  "schema_version": "INTEGRATION-SLICE-001-CRITERION-OBSERVATION-v0.1",
+  "semantic_design_sha256": "03ca22e960fa677af0328d2c9595c7842015cf68ca525f8e94c2564dc4afc173",
+  "semantic_reference": "SEMANTIC-DESIGN-v0.4 §8 / PROJECTION-v0.1 §3.3",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

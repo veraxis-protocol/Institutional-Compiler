@@ -1,0 +1,18 @@
+[
+  {
+    "admitted_at": "2026-08-15T00:00:00Z",
+    "artifact_class_admitted": [
+      "SYNTHETIC_FIXTURE_OUTPUT"
+    ],
+    "basis_id": "SYNTH-ADM-BASIS-001",
+    "effective_at": "2026-08-15T00:00:00Z",
+    "record_class": "SYNTHETIC_ADMISSIBILITY_BASIS",
+    "record_digest": "bf29f3d75a313301c223fd12183f6f7c134cb1683c8d388d7377fb401d2219e3",
+    "requested_use_admitted": [
+      "DEMONSTRATION_READ"
+    ],
+    "revocation_state": "NOT_REVOKED",
+    "validity_from": "2026-08-15T00:00:00Z",
+    "validity_until": "2026-08-22T00:00:00Z"
+  }
+]

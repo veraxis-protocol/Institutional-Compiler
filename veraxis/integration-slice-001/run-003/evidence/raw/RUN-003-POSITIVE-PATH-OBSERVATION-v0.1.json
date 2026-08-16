@@ -1,0 +1,176 @@
+{
+  "adjudicates": false,
+  "authority": {
+    "admissibility_basis_refs": [
+      {
+        "basis_id": "SYNTH-ADM-BASIS-001",
+        "record_class": "SYNTHETIC_ADMISSIBILITY_BASIS",
+        "record_digest": "bf29f3d75a313301c223fd12183f6f7c134cb1683c8d388d7377fb401d2219e3"
+      }
+    ],
+    "authority_basis_refs": [
+      {
+        "basis_id": "SYNTH-AUTH-BASIS-001",
+        "record_class": "SYNTHETIC_AUTHORITY_BASIS",
+        "record_digest": "7ad84cfb124b794b67ebdcfc6ca4282a86a228cb95c5a1a7bd8c4448232f310e"
+      }
+    ],
+    "authority_decision_digest": "68928de270211de081f1ae44e57604659c62cbb61166e8af25047d8eab57fee4",
+    "bound_currentness_epoch_digest": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90",
+    "bound_currentness_resolution_digest": "e2866c020328ac6c0b5bcf6fb11becf8a53926a5572d95641fc4553a21630ca1",
+    "decision": "PROCEED",
+    "principal": "SYNTHETIC-SUBJECT-PRINCIPAL-001",
+    "reason_code": {
+      "id": "A1",
+      "name": "AUTHORITY_AND_ADMISSIBILITY_SATISFIED"
+    },
+    "requested_use": "DEMONSTRATION_READ",
+    "scope": "CDC-DEMO-SCOPE-001",
+    "valid_until": "2026-08-15T23:00:00Z"
+  },
+  "currentness": {
+    "basis_records": [
+      {
+        "admitted_at": "2026-08-14T22:00:00Z",
+        "effective_at": null,
+        "record_class": "HISTORICAL_ARTIFACT_IDENTITY_RECORD",
+        "record_digest": "9f8bc5c8997e5a34cb1dea09674f60a0f36ccc714572fa62b87d2c2fddd72e37",
+        "record_ref": "ARTIFACT-IDENTITY#CDC-SYNTHETIC-UNAFFECTED-001/SYNTH-OUTPUT-01"
+      }
+    ],
+    "completeness_attestation_digest": "a9ffff71467a0880f77e3fec8b4740a0cdb74953e8fb9d743b1fdd7617ce66c6",
+    "completeness_attestation_reproduced": true,
+    "currentness_epoch_digest": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90",
+    "currentness_state": "CURRENT",
+    "epoch_as_of": "2026-08-15T10:00:00Z",
+    "reason_code": {
+      "id": "R1",
+      "name": "NO_OPERATIVE_CONTROLLING_RECORD"
+    },
+    "resolution_digest": "e2866c020328ac6c0b5bcf6fb11becf8a53926a5572d95641fc4553a21630ca1"
+  },
+  "derived_from": "the same authorized invocation; no scenario was re-executed",
+  "envelope": {
+    "envelope_digest_recomputed": "e3ad590497f2b7ffee3989e8205e9dd83dfca00c76e181dbf12d56ebe8c1ad39",
+    "envelope_digest_recorded": "e3ad590497f2b7ffee3989e8205e9dd83dfca00c76e181dbf12d56ebe8c1ad39",
+    "envelope_path": "None",
+    "envelope_persisted_file_sha256": null,
+    "intended_consumer_principal": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+    "materialization": {
+      "durably_materialized": true,
+      "envelope_bytes": 2012,
+      "envelope_file_sha256": "d58eb91afa460af0cba13d9c74ffa5de5373de1e140019636c4103e33b04e065",
+      "envelope_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/envelope.json",
+      "fsync_performed": true,
+      "ready_marker_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/envelope.json.ready"
+    },
+    "produced_at": "2026-08-15T10:00:00Z",
+    "producer_identity": {
+      "process_id": 66048,
+      "producer_principal": "SYNTHETIC-PRODUCER-PRINCIPAL-001",
+      "run_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT",
+      "trace_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT-TRACE"
+    },
+    "requesting_subject_principal": "SYNTHETIC-SUBJECT-PRINCIPAL-001",
+    "valid_until": "2026-08-15T23:00:00Z"
+  },
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "record_class": "CDC_INTEGRATION_SLICE_001_RUN_003_POSITIVE_PATH_OBSERVATION",
+  "reliance": {
+    "attempt_record_digest": "c2c350e078713f9be411cb64195a5002afef5288ecc65653c18482cd5a8447a4",
+    "attempt_state": null,
+    "currentness_epoch_digest": "92dc18d23aa8fd3ff223ae34b1f05f17e62d9e90bb37f0a00667e7532e696f90",
+    "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+    "propagated_authority_decision_digest": "68928de270211de081f1ae44e57604659c62cbb61166e8af25047d8eab57fee4",
+    "re_resolved_currentness_resolution_digest": "e2866c020328ac6c0b5bcf6fb11becf8a53926a5572d95641fc4553a21630ca1",
+    "re_resolved_currentness_resolution_digest_source": "consumer validation record",
+    "reason_code": {
+      "id": "I1",
+      "name": "RELIANCE_ISSUED"
+    },
+    "reliance_disposition": "ISSUED",
+    "reliance_record_digest": "8379cf085b1ebe5af992333c26ad7cb4f445e4f9b70ab28b65c3cfda60b3a3f9",
+    "reliance_time_authority_decision_digest": "2d0a64d94f5852179ffd5a666854a1b6f2bf723c64c790773d7b450f02cb2bb7",
+    "write_order": {
+      "attempt": {
+        "attempt_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/attempt.json",
+        "attempt_persisted_file_bytes": 493,
+        "attempt_persisted_file_sha256": "c2c350e078713f9be411cb64195a5002afef5288ecc65653c18482cd5a8447a4",
+        "claimed_at": null,
+        "claimed_at_status": "ABSENT_IN_GOVERNED_RECORD",
+        "comparison": {
+          "comparison_result": "EQUAL",
+          "left": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+          "left_field": "issuance_authorization_digest_bound_in_attempt",
+          "right": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+          "right_field": "authorization_persisted_file_sha256"
+        },
+        "issuance_authorization_digest_bound_in_attempt": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0"
+      },
+      "authorization": {
+        "authorization_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/issuance-authorization.json",
+        "authorization_persisted_file_bytes": 177,
+        "authorization_persisted_file_sha256": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+        "authorization_timestamp": null,
+        "authorization_timestamp_status": "ABSENT_IN_GOVERNED_RECORD",
+        "fields_present": [
+          "assurance_class",
+          "authorization_id",
+          "automatic_retry",
+          "single_use"
+        ]
+      },
+      "declared_order": [
+        "issuance_authorization",
+        "attempt_record",
+        "reliance_record"
+      ],
+      "evidence_basis": "DIGEST_CHAIN",
+      "filesystem_timestamp_consulted": false,
+      "governed_sources_consulted": [
+        "attempt_record.claimed_at",
+        "reliance_record.issued_at",
+        "attempt_record.issuance_authorization_digest",
+        "reliance_record.issuance_authorization_digest",
+        "reliance_record.attempt_record_digest",
+        "persisted_file_sha256(authorization bytes)",
+        "persisted_file_sha256(attempt bytes)",
+        "persisted_file_sha256(reliance bytes)"
+      ],
+      "reliance": {
+        "attempt_record_digest_bound_in_reliance": "c2c350e078713f9be411cb64195a5002afef5288ecc65653c18482cd5a8447a4",
+        "comparisons": [
+          {
+            "comparison_result": "EQUAL",
+            "left": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+            "left_field": "issuance_authorization_digest_bound_in_reliance",
+            "right": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+            "right_field": "authorization_persisted_file_sha256"
+          },
+          {
+            "comparison_result": "EQUAL",
+            "left": "c2c350e078713f9be411cb64195a5002afef5288ecc65653c18482cd5a8447a4",
+            "left_field": "attempt_record_digest_bound_in_reliance",
+            "right": "c2c350e078713f9be411cb64195a5002afef5288ecc65653c18482cd5a8447a4",
+            "right_field": "attempt_persisted_file_sha256"
+          }
+        ],
+        "issuance_authorization_digest_bound_in_reliance": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+        "issued_at": "2026-08-15T10:00:00Z",
+        "issued_at_status": "PRESENT_IN_GOVERNED_RECORD",
+        "reliance_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/positive/consumer-result-SYNTH-RELIANCE-001.json",
+        "reliance_persisted_file_bytes": 10558,
+        "reliance_persisted_file_sha256": "34a727ae257e174c8cd372f7bd80f34e9c665392b3f5ec0d3e8c022727cabd5c"
+      },
+      "temporal_corroboration": {
+        "claimed_at": null,
+        "comparison": "claimed_at <= issued_at",
+        "comparison_result": "NOT_EVALUABLE",
+        "issued_at": "2026-08-15T10:00:00Z",
+        "reason": "claimed_at absent from the governed attempt record"
+      },
+      "timestamps_are": "CORROBORATING_ONLY"
+    }
+  },
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

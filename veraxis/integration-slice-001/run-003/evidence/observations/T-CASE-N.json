@@ -1,0 +1,91 @@
+{
+  "criterion_evidence_projection_sha256": "7adcc39f5656fa3fdc837bf3049a7a4a1be38947aed41b2fc0ccc23cc4781298",
+  "criterion_id": "T-CASE-N",
+  "evidence_refs": [
+    "observations/T-CASE-N.json"
+  ],
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "expected_condition": "competing operative bases deny with A6; no precedence is invented",
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "inputs": [
+    {
+      "digest": "31c1f966d64620ae18efdb1bb2d4056ac146edad2d9430570c69dfdf27a62667",
+      "ref": "index_without_successor",
+      "role": "currentness_index"
+    }
+  ],
+  "node_accounting": {
+    "duration_seconds": 0.004784,
+    "non_load_bearing": true,
+    "outcome": "executed",
+    "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+  },
+  "node_id": "test_case_n_competing_authority_basis",
+  "not_produced": [
+    "propagation_envelope",
+    "consumer_validation",
+    "reliance_record"
+  ],
+  "observation_digest": "db7b3e047853c39dded5f44764cdb5af0059405a59fffd8130c98abba9f3e89d",
+  "observed_at": "2026-08-16T17:07:23Z",
+  "observed_decision": "DENY",
+  "observed_reason_code": {
+    "id": "A6",
+    "name": "AUTHORITY_BASIS_AMBIGUOUS_COMPETING"
+  },
+  "observed_value": {
+    "admissibility_basis_refs": [
+      {
+        "basis_id": "SYNTH-ADM-BASIS-001",
+        "record_class": "SYNTHETIC_ADMISSIBILITY_BASIS",
+        "record_digest": "bf29f3d75a313301c223fd12183f6f7c134cb1683c8d388d7377fb401d2219e3"
+      }
+    ],
+    "authority_basis_refs": [
+      {
+        "basis_id": "SYNTH-AUTH-BASIS-001",
+        "record_class": "SYNTHETIC_AUTHORITY_BASIS",
+        "record_digest": "7ad84cfb124b794b67ebdcfc6ca4282a86a228cb95c5a1a7bd8c4448232f310e"
+      },
+      {
+        "basis_id": "SYNTH-AUTH-BASIS-002",
+        "record_class": "SYNTHETIC_AUTHORITY_BASIS",
+        "record_digest": "71889bf09bc0f24359ac3299c0a291256516ca8ce89b936b977c88ab7972fad5"
+      }
+    ],
+    "authority_decision_digest": "e48e72df37017f3edd60f79a2b5d0119551a0175d0e97bc89bf0a29ff188a96a",
+    "decision": "DENY",
+    "downstream_not_produced": [
+      "propagation_envelope",
+      "consumer_validation",
+      "reliance_record"
+    ],
+    "envelope_files_present": [],
+    "expected_reason_code": "A6",
+    "mutated_object": {
+      "digest_after": null,
+      "digest_before": null,
+      "ref": "authority_or_admissibility_basis"
+    },
+    "mutation_applied": "two operative authority bases for the same principal and scope",
+    "observed_reason_code": {
+      "id": "A6",
+      "name": "AUTHORITY_BASIS_AMBIGUOUS_COMPETING"
+    },
+    "terminating_layer": "AUTHORITY"
+  },
+  "outputs": [
+    {
+      "digest": "e48e72df37017f3edd60f79a2b5d0119551a0175d0e97bc89bf0a29ff188a96a",
+      "ref": "T-CASE-N",
+      "role": "authority_decision"
+    }
+  ],
+  "record_class": "CDC_INTEGRATION_SLICE_001_CRITERION_OBSERVATION",
+  "scenario_id": "T-CASE-N",
+  "schema_version": "INTEGRATION-SLICE-001-CRITERION-OBSERVATION-v0.1",
+  "semantic_design_sha256": "03ca22e960fa677af0328d2c9595c7842015cf68ca525f8e94c2564dc4afc173",
+  "semantic_reference": "SEMANTIC-DESIGN-v0.4 §8 / PROJECTION-v0.1 §3.3",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

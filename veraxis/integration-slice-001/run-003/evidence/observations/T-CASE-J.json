@@ -1,0 +1,86 @@
+{
+  "criterion_evidence_projection_sha256": "7adcc39f5656fa3fdc837bf3049a7a4a1be38947aed41b2fc0ccc23cc4781298",
+  "criterion_id": "T-CASE-J",
+  "evidence_refs": [
+    "observations/T-CASE-J.json"
+  ],
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "expected_condition": "a replayed issuance authorization is refused with I8",
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "inputs": [
+    {
+      "digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+      "ref": "SYNTH-RELIANCE-ISSUANCE-AUTHORIZATION-001",
+      "role": "issuance_authorization"
+    }
+  ],
+  "node_accounting": {
+    "duration_seconds": 0.488057,
+    "non_load_bearing": true,
+    "outcome": "executed",
+    "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+  },
+  "node_id": "test_case_j_replayed_authorization",
+  "not_produced": [
+    "second_reliance_issuance"
+  ],
+  "observation_digest": "ea39719ce9c09e9d6f31f252d12cc4d46cc656088f24c6e2f25a3de6f72929b1",
+  "observed_at": "2026-08-16T17:07:22Z",
+  "observed_decision": "REFUSED",
+  "observed_reason_code": {
+    "id": "I8",
+    "name": "RELIANCE_REFUSED_ISSUANCE_AUTHORIZATION_ALREADY_CONSUMED"
+  },
+  "observed_value": {
+    "downstream_not_produced": [
+      "second_reliance_issuance"
+    ],
+    "expected_reason_code": "I8",
+    "first_use_attempt": {
+      "attempt_record": {
+        "attempt_state": "CONSUMED_AT_FIRST_ISSUANCE_ATTEMPT",
+        "claimed_at": "2026-08-15T10:00:00Z",
+        "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+        "issuance_authorization_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-j/issuance-authorization.json",
+        "record_class": "RELIANCE_ISSUANCE_ATTEMPT",
+        "run_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT",
+        "trace_id": "CDC-INTEGRATION-SLICE-001-DEVELOPMENT-TRACE"
+      },
+      "attempt_record_bytes": 491,
+      "attempt_record_digest": "dec7c1eea90a219e28622f1f55ceaa78c418eb65193e503ea42ae8e5ad1373b9",
+      "attempt_record_path": "/private/tmp/cdc-integration-slice-001-run-003/pipeline/case-j/attempt.json",
+      "issuance_authorization_bytes": 177,
+      "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0"
+    },
+    "first_use_disposition": "ISSUED",
+    "first_use_reliance_record_digest": "1a5bc0912f0e8fb49c4891dbfee8728e4722c1154dc9fc4bb01ec5953069f923",
+    "issuance_authorization_digest": "943194222a22b137dbf3c4536f515811e69c660c7dc3981c0438703d4322d9a0",
+    "mutated_object": {
+      "digest_after": null,
+      "digest_before": null,
+      "ref": "issuance_authorization"
+    },
+    "mutation_applied": "the same issuance authorization is presented a second time",
+    "observed_reason_code": {
+      "id": "I8",
+      "name": "RELIANCE_REFUSED_ISSUANCE_AUTHORIZATION_ALREADY_CONSUMED"
+    },
+    "replay_attempt": null,
+    "replay_disposition": "REFUSED",
+    "terminating_layer": "ISSUANCE"
+  },
+  "outputs": [
+    {
+      "digest": "470e76aa672a46cd89ef3f89af396a67f13444b9001a07bd4ebdbfb01adee1ce",
+      "ref": "SYNTH-RELIANCE-J2",
+      "role": "reliance_record"
+    }
+  ],
+  "record_class": "CDC_INTEGRATION_SLICE_001_CRITERION_OBSERVATION",
+  "scenario_id": "T-CASE-J",
+  "schema_version": "INTEGRATION-SLICE-001-CRITERION-OBSERVATION-v0.1",
+  "semantic_design_sha256": "03ca22e960fa677af0328d2c9595c7842015cf68ca525f8e94c2564dc4afc173",
+  "semantic_reference": "SEMANTIC-DESIGN-v0.4 §8 / PROJECTION-v0.1 §3.3",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

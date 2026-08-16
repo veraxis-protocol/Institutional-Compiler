@@ -1,0 +1,72 @@
+{
+  "criterion_evidence_projection_sha256": "7adcc39f5656fa3fdc837bf3049a7a4a1be38947aed41b2fc0ccc23cc4781298",
+  "criterion_id": "T-CASE-L",
+  "evidence_refs": [
+    "observations/T-CASE-L.json"
+  ],
+  "execution_id": "CDC-INTEGRATION-SLICE-001-RUN-003",
+  "expected_condition": "the historical reliance record is unchanged and carries no marker of its own obsolescence; the later attempt is refused",
+  "implementation_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "inputs": [
+    {
+      "digest": "d5066aa20d4fd245ab5394ca6dbac09de2d5e2caf3a3c637ac5e572b60674b10",
+      "ref": "SYNTH-RELIANCE-L1",
+      "role": "issued_reliance_record"
+    }
+  ],
+  "node_accounting": {
+    "duration_seconds": 0.414329,
+    "non_load_bearing": true,
+    "outcome": "executed",
+    "runner": "CDC-INTEGRATION-SLICE-001-RUN-003-EXECUTION-HARNESS-v0.1"
+  },
+  "node_id": "test_case_l_historical_reliance_preserved",
+  "not_produced": [
+    "reliance_issuance_for_later_attempt"
+  ],
+  "observation_digest": "31b5e5f6b8555722cb7a5a65776cb5fad71aab3a840726a94d904e28361a1d04",
+  "observed_at": "2026-08-16T17:07:22Z",
+  "observed_decision": "REFUSED",
+  "observed_reason_code": {
+    "id": "I2",
+    "name": "RELIANCE_REFUSED_CURRENTNESS_NOT_CURRENT"
+  },
+  "observed_value": {
+    "byte_identity_preserved": true,
+    "downstream_not_produced": [
+      "reliance_issuance_for_later_attempt"
+    ],
+    "expected_reason_code": "I2",
+    "issued_persisted_file_sha256_after": "4c3f94b33fd1b701b442c1c8a5ab6f1f339d2e041e6fa12cba500ce714f294a2",
+    "issued_persisted_file_sha256_before": "4c3f94b33fd1b701b442c1c8a5ab6f1f339d2e041e6fa12cba500ce714f294a2",
+    "issued_record_mentions_supersession": false,
+    "issued_reliance_record_digest": "d5066aa20d4fd245ab5394ca6dbac09de2d5e2caf3a3c637ac5e572b60674b10",
+    "later_attempt_disposition": "REFUSED",
+    "later_attempt_reason_code": "I2",
+    "mutated_object": {
+      "digest_after": "4c3f94b33fd1b701b442c1c8a5ab6f1f339d2e041e6fa12cba500ce714f294a2",
+      "digest_before": "4c3f94b33fd1b701b442c1c8a5ab6f1f339d2e041e6fa12cba500ce714f294a2",
+      "ref": "issued_reliance_record"
+    },
+    "mutation_applied": "a later correction becomes operative after a reliance was issued",
+    "observed_reason_code": {
+      "id": "I2",
+      "name": "RELIANCE_REFUSED_CURRENTNESS_NOT_CURRENT"
+    },
+    "terminating_layer": "CONSUMER"
+  },
+  "outputs": [
+    {
+      "digest": "54ec738e4712b32779509ed7514e812a4ce185eb6c5fad59fc42e8716b2a3cb9",
+      "ref": "SYNTH-RELIANCE-L2",
+      "role": "reliance_record"
+    }
+  ],
+  "record_class": "CDC_INTEGRATION_SLICE_001_CRITERION_OBSERVATION",
+  "scenario_id": "T-CASE-L",
+  "schema_version": "INTEGRATION-SLICE-001-CRITERION-OBSERVATION-v0.1",
+  "semantic_design_sha256": "03ca22e960fa677af0328d2c9595c7842015cf68ca525f8e94c2564dc4afc173",
+  "semantic_reference": "SEMANTIC-DESIGN-v0.4 §8 / PROJECTION-v0.1 §3.3",
+  "trace_id": "CDC-INTEGRATION-SLICE-001-RUN-003-TRACE"
+}

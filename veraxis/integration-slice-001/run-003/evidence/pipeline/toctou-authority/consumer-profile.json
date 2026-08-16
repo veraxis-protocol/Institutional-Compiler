@@ -1,0 +1,15 @@
+{
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION",
+  "permitted_requested_use": [
+    "DEMONSTRATION_READ"
+  ],
+  "principal_id": "SYNTHETIC-CONSUMER-PRINCIPAL-001",
+  "profile_digest": "889ab97b43b110cf738bb2954dcc0ca19ed352f14a05207437dbb92192d0d5ec",
+  "profile_id": "SYNTH-CONSUMER-PROFILE-001",
+  "record_class": "SYNTHETIC_RELIANCE_CONSUMER_PROFILE",
+  "revocation_state": "NOT_REVOKED",
+  "role": "RELIANCE_CONSUMER",
+  "scope": "CDC-DEMO-SCOPE-001",
+  "validity_from": "2026-08-15T00:00:00Z",
+  "validity_until": "2026-08-22T00:00:00Z"
+}
