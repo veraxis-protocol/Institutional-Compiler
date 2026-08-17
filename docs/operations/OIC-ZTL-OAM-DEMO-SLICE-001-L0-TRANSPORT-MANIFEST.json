@@ -1,11 +1,47 @@
 {
   "RUNTIME_AST_EQUIVALENCE_TO_FA96F5": true,
-  "all_exact_byte_match": true,
   "ci_carveout_added": false,
   "committed": true,
   "contract_guard_change_class": "SOURCE_DELTA_GOVERNANCE_ONLY",
   "contract_guard_modified_path": "tests/contract/test_warrant_contract.py",
   "current_runtime_byte_identity_to_fa96f5": false,
+  "current_runtime_state": {
+    "current_runtime_byte_identity_to_fa96f5": false,
+    "historical_source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+    "initial_runtime_exact_byte_transport": true,
+    "modules": {
+      "cdc_authority": {
+        "ast_equivalent_to_fa96f5": true,
+        "byte_identical_to_fa96f5": true,
+        "historical_source_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a",
+        "normalized_successor_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a",
+        "path": "src/oic/cdc_authority.py"
+      },
+      "cdc_currentness": {
+        "ast_equivalent_to_fa96f5": true,
+        "byte_identical_to_fa96f5": false,
+        "historical_source_sha256": "b16c885a29c76b349b76f989858b5a277962642a038da905730fcc2818321ac1",
+        "normalized_successor_sha256": "862937060a422cdc524fc9d107eedd7e4c066b373cfe9b46dd499bc74c4d026a",
+        "path": "src/oic/cdc_currentness.py"
+      },
+      "cdc_propagation": {
+        "ast_equivalent_to_fa96f5": true,
+        "byte_identical_to_fa96f5": false,
+        "historical_source_sha256": "c5accebbf91dea648c48aebe0849a431da1a87a1cd75bc62794fe20783396c4e",
+        "normalized_successor_sha256": "e2855f16fc213fc7f8a1cc1adb5cacb7baf13aac8db7643bea2dbe36b74800d1",
+        "path": "src/oic/cdc_propagation.py"
+      },
+      "cdc_reliance": {
+        "ast_equivalent_to_fa96f5": true,
+        "byte_identical_to_fa96f5": false,
+        "historical_source_sha256": "be3365536de50753a731384f3241d8cf7a72e0ec5dd80226dc1d6c55fd60f920",
+        "normalized_successor_sha256": "52561c29e435dc9fbe786f33e05e5eccc5bca1ac8f92d4b42830a584fdb34ecc",
+        "path": "src/oic/cdc_reliance.py"
+      }
+    },
+    "note": "Three of four runtime modules were changed by repository-format normalization and no longer carry the fa96f5c3 blob ids. All four remain AST-equivalent.",
+    "runtime_ast_equivalence_to_fa96f5": true
+  },
   "errors_py_modified": false,
   "excluded_paths_confirmed_absent": [
     "src/oic/cdc_slice.py",
@@ -13,76 +49,105 @@
   ],
   "files": [
     {
-      "exact_byte_match": true,
+      "initial_transport_exact_byte_match": true,
+      "initial_transport_sha256": "b16c885a29c76b349b76f989858b5a277962642a038da905730fcc2818321ac1",
       "path": "src/oic/cdc_currentness.py",
       "source_git_blob_sha": "fdf902540788eccae9560701f9999738248f0a98",
-      "source_sha256": "b16c885a29c76b349b76f989858b5a277962642a038da905730fcc2818321ac1",
-      "transported_sha256": "b16c885a29c76b349b76f989858b5a277962642a038da905730fcc2818321ac1"
+      "source_sha256": "b16c885a29c76b349b76f989858b5a277962642a038da905730fcc2818321ac1"
     },
     {
-      "exact_byte_match": true,
+      "initial_transport_exact_byte_match": true,
+      "initial_transport_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a",
       "path": "src/oic/cdc_authority.py",
       "source_git_blob_sha": "6c0471e2c18e1aeeb65eacbcee222d0e55740472",
-      "source_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a",
-      "transported_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a"
+      "source_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a"
     },
     {
-      "exact_byte_match": true,
+      "initial_transport_exact_byte_match": true,
+      "initial_transport_sha256": "c5accebbf91dea648c48aebe0849a431da1a87a1cd75bc62794fe20783396c4e",
       "path": "src/oic/cdc_propagation.py",
       "source_git_blob_sha": "4bb9e8e536cca5122fa64d37b3c099f1f3d6145c",
-      "source_sha256": "c5accebbf91dea648c48aebe0849a431da1a87a1cd75bc62794fe20783396c4e",
-      "transported_sha256": "c5accebbf91dea648c48aebe0849a431da1a87a1cd75bc62794fe20783396c4e"
+      "source_sha256": "c5accebbf91dea648c48aebe0849a431da1a87a1cd75bc62794fe20783396c4e"
     },
     {
-      "exact_byte_match": true,
+      "initial_transport_exact_byte_match": true,
+      "initial_transport_sha256": "be3365536de50753a731384f3241d8cf7a72e0ec5dd80226dc1d6c55fd60f920",
       "path": "src/oic/cdc_reliance.py",
       "source_git_blob_sha": "aaf451bdaddf7824d8de2864dd792c536864f806",
-      "source_sha256": "be3365536de50753a731384f3241d8cf7a72e0ec5dd80226dc1d6c55fd60f920",
-      "transported_sha256": "be3365536de50753a731384f3241d8cf7a72e0ec5dd80226dc1d6c55fd60f920"
+      "source_sha256": "be3365536de50753a731384f3241d8cf7a72e0ec5dd80226dc1d6c55fd60f920"
     },
     {
-      "exact_byte_match": true,
+      "initial_transport_exact_byte_match": true,
+      "initial_transport_sha256": "e6acaa8e61b1637a6c35a2ba0f26bb439b83c51f515573fec7a22fa59ce8139e",
       "path": "tests/integration/cdc_currentness_fixtures.py",
       "source_git_blob_sha": "b34a6acfae5957b966f7329a35613e29a3105509",
-      "source_sha256": "e6acaa8e61b1637a6c35a2ba0f26bb439b83c51f515573fec7a22fa59ce8139e",
-      "transported_sha256": "e6acaa8e61b1637a6c35a2ba0f26bb439b83c51f515573fec7a22fa59ce8139e"
+      "source_sha256": "e6acaa8e61b1637a6c35a2ba0f26bb439b83c51f515573fec7a22fa59ce8139e"
     },
     {
-      "exact_byte_match": true,
+      "initial_transport_exact_byte_match": true,
+      "initial_transport_sha256": "88dcad87df8f39c457bc086daf257469f07a492e97a2127971ee16d48c396d32",
       "path": "tests/integration/cdc_integration_fixtures.py",
       "source_git_blob_sha": "82d4d3759bd5c805d2094ecce7423b9e6686881b",
-      "source_sha256": "88dcad87df8f39c457bc086daf257469f07a492e97a2127971ee16d48c396d32",
-      "transported_sha256": "88dcad87df8f39c457bc086daf257469f07a492e97a2127971ee16d48c396d32"
+      "source_sha256": "88dcad87df8f39c457bc086daf257469f07a492e97a2127971ee16d48c396d32"
     },
     {
-      "exact_byte_match": true,
+      "initial_transport_exact_byte_match": true,
+      "initial_transport_sha256": "99fe3bfb43f851c5fc603bdaa1b344643f9668fdf1d6467555b32334e60322e1",
       "path": "tests/integration/cdc_integration_consumer.py",
       "source_git_blob_sha": "b8c98420a9a22f7c4a4d8a96f29a01de892a1435",
-      "source_sha256": "99fe3bfb43f851c5fc603bdaa1b344643f9668fdf1d6467555b32334e60322e1",
-      "transported_sha256": "99fe3bfb43f851c5fc603bdaa1b344643f9668fdf1d6467555b32334e60322e1"
+      "source_sha256": "99fe3bfb43f851c5fc603bdaa1b344643f9668fdf1d6467555b32334e60322e1"
     },
     {
-      "exact_byte_match": true,
+      "initial_transport_exact_byte_match": true,
+      "initial_transport_sha256": "d7dc00e792af0b76a8580c3a89b96d42782d56e56f46ab1aec40e757e6a649fb",
       "path": "tests/integration/test_cdc_currentness_slice_001.py",
       "source_git_blob_sha": "bf304605b37196e383545e3e895b7ee3754e6cd6",
-      "source_sha256": "d7dc00e792af0b76a8580c3a89b96d42782d56e56f46ab1aec40e757e6a649fb",
-      "transported_sha256": "d7dc00e792af0b76a8580c3a89b96d42782d56e56f46ab1aec40e757e6a649fb"
+      "source_sha256": "d7dc00e792af0b76a8580c3a89b96d42782d56e56f46ab1aec40e757e6a649fb"
     },
     {
-      "exact_byte_match": true,
+      "initial_transport_exact_byte_match": true,
+      "initial_transport_sha256": "071dc2931a1082edf942fe5768a812ba7e7b6b3171e2c940f7f7c03b40ee4b61",
       "path": "tests/integration/test_cdc_integration_authority_branches.py",
       "source_git_blob_sha": "4afaa691cb8d5ee38d5c745679704b7b006803aa",
-      "source_sha256": "071dc2931a1082edf942fe5768a812ba7e7b6b3171e2c940f7f7c03b40ee4b61",
-      "transported_sha256": "071dc2931a1082edf942fe5768a812ba7e7b6b3171e2c940f7f7c03b40ee4b61"
+      "source_sha256": "071dc2931a1082edf942fe5768a812ba7e7b6b3171e2c940f7f7c03b40ee4b61"
     },
     {
-      "exact_byte_match": true,
+      "initial_transport_exact_byte_match": true,
+      "initial_transport_sha256": "7037ed13098915d29f9e52675f43ce63d5c910679f8d862cafef12e637771b16",
       "path": "tests/integration/test_cdc_integration_slice_001.py",
       "source_git_blob_sha": "23d6bf6f043706f4455d5a52fe049a7fa9356255",
-      "source_sha256": "7037ed13098915d29f9e52675f43ce63d5c910679f8d862cafef12e637771b16",
-      "transported_sha256": "7037ed13098915d29f9e52675f43ce63d5c910679f8d862cafef12e637771b16"
+      "source_sha256": "7037ed13098915d29f9e52675f43ce63d5c910679f8d862cafef12e637771b16"
     }
   ],
+  "final_validation": {
+    "ci_carveouts_added": false,
+    "ci_green": true,
+    "local_full_pytest": {
+      "failed": 0,
+      "passed": 1333,
+      "skipped": 1
+    },
+    "local_integration_tests": {
+      "failed": 0,
+      "passed": 103
+    },
+    "mypy_exclusions_added": false,
+    "remote_ci": {
+      "bootstrap-integrity": "success",
+      "compose-validation": "success",
+      "lint": "success",
+      "sbom": "success",
+      "schema-validation": "success",
+      "test": "success",
+      "typecheck": "success"
+    },
+    "remote_ci_run": "32061467105",
+    "semantic_conformance_tests": {
+      "failed": 0,
+      "passed": 72
+    },
+    "successor_commit": "05c787a5fcd7abe897c48b04d1203e68c143e7d5"
+  },
   "fixture_portability": {
     "all_exact_byte_match": true,
     "authorization": "OIC-ZTL-OAM-DEMO-SLICE-001-L0-FIXTURE-PORTABILITY-001",
@@ -217,16 +282,26 @@
     }
   },
   "historical_predecessor_byte_identity_preserved": true,
-  "implementation_ast_changed": false,
   "import_order_normalization": {
     "affects_runtime_modules": false,
+    "authorization": "OIC-ZTL-OAM-DEMO-SLICE-001-L0-FINAL-EVIDENCE-RECONCILIATION-001",
     "class": "PACKAGE_IDENTITY_CONSEQUENCE",
+    "classification": "PACKAGE_IDENTITY_CONSEQUENCE",
     "files": 5,
+    "owner_ratified": true,
     "reason": "tests/ became a package, so ruff isort reclassified tests.* imports as first-party",
+    "result_bearing_execution": false,
     "rule": "I001",
-    "test_ast_changed": true
+    "runtime_modules_affected": false,
+    "runtime_semantics_affected": false,
+    "scope": "TEST_IMPORT_ORDER_ONLY",
+    "test_assertions_changed": false,
+    "test_ast_changed": true,
+    "test_expected_results_changed": false
   },
-  "l0_state": "NORMALIZATION_AND_TYPING_SUCCESSOR_CANDIDATE",
+  "initial_transport_all_exact_byte_match": true,
+  "initial_transport_note": "These fields describe the ORIGINAL exact-byte transport from fa96f5c3 at commit df76b441. They are historical. For the CURRENT state of each runtime module see runtime_lineage and current_runtime_state below.",
+  "l0_state": "FINAL_EVIDENCE_RECONCILED",
   "normalization_class": "FORMAT_ONLY",
   "normalization_successor_id": "OIC-ZTL-OAM-DEMO-SLICE-001-L0-NORMALIZATION-SUCCESSOR-001",
   "normalization_tool": "ruff 0.12.12",
@@ -236,6 +311,7 @@
     "tests/integration/__init__.py"
   ],
   "result_bearing_execution": false,
+  "runtime_ast_changed": false,
   "runtime_lineage": {
     "src/oic/cdc_authority.py": {
       "ast_equivalent": true,
@@ -278,7 +354,7 @@
       "successor_ast_sha256": "37567cd2f621d5697074ee425438413abc01f8060a94fe312e41e121caa53e64"
     }
   },
-  "semantic_modification": false,
+  "runtime_semantic_modification": false,
   "source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
   "source_delta_authorization_id": "OWNER-AUTHORIZATION-OIC-ZTL-OAM-DEMO-SLICE-001-L0-001",
   "source_delta_authorization_path": "docs/operations/OIC-ZTL-OAM-DEMO-SLICE-001-L0-SOURCE-DELTA-AUTHORIZATION-001.json",
@@ -287,6 +363,18 @@
   "source_module_guard_preserved": true,
   "source_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
   "target_parent": "857a21d47b76c58a511fe2955356db794ca80ab0",
+  "terminology_note": "runtime_semantic_modification/runtime_ast_changed describe src/oic only. Test-harness AST changes are intentional, enumerated in test_harness_change_classes, and changed no expected result, assertion or reason code.",
+  "test_ast_changed": true,
+  "test_harness_change_classes": [
+    "TEST_FIXTURE_PORTABILITY_ONLY",
+    "SOURCE_DELTA_GOVERNANCE_ONLY",
+    "TEST_PACKAGE_IDENTITY_ONLY",
+    "INHERITED_TEST_TYPING_REPAIR",
+    "INHERITED_MYPY_FALSE_POSITIVE_SUPPRESSION",
+    "TEST_IMPORT_IDENTITY_REPAIR",
+    "PACKAGE_IDENTITY_CONSEQUENCE"
+  ],
+  "test_harness_changes_present": true,
   "transport_method": "path-scoped git restore from the exact source commit; no merge, no cherry-pick",
   "transported_path_count": 10,
   "transported_paths": [
