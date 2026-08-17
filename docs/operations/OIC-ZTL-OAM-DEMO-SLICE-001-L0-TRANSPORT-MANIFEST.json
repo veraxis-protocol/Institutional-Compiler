@@ -1,0 +1,144 @@
+{
+  "all_exact_byte_match": true,
+  "committed": true,
+  "contract_guard_change_class": "SOURCE_DELTA_GOVERNANCE_ONLY",
+  "contract_guard_modified_path": "tests/contract/test_warrant_contract.py",
+  "errors_py_modified": false,
+  "excluded_paths_confirmed_absent": [
+    "src/oic/cdc_slice.py",
+    "src/oic/cdc_e2e_mission.py"
+  ],
+  "files": [
+    {
+      "exact_byte_match": true,
+      "path": "src/oic/cdc_currentness.py",
+      "source_git_blob_sha": "fdf902540788eccae9560701f9999738248f0a98",
+      "source_sha256": "b16c885a29c76b349b76f989858b5a277962642a038da905730fcc2818321ac1",
+      "transported_sha256": "b16c885a29c76b349b76f989858b5a277962642a038da905730fcc2818321ac1"
+    },
+    {
+      "exact_byte_match": true,
+      "path": "src/oic/cdc_authority.py",
+      "source_git_blob_sha": "6c0471e2c18e1aeeb65eacbcee222d0e55740472",
+      "source_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a",
+      "transported_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a"
+    },
+    {
+      "exact_byte_match": true,
+      "path": "src/oic/cdc_propagation.py",
+      "source_git_blob_sha": "4bb9e8e536cca5122fa64d37b3c099f1f3d6145c",
+      "source_sha256": "c5accebbf91dea648c48aebe0849a431da1a87a1cd75bc62794fe20783396c4e",
+      "transported_sha256": "c5accebbf91dea648c48aebe0849a431da1a87a1cd75bc62794fe20783396c4e"
+    },
+    {
+      "exact_byte_match": true,
+      "path": "src/oic/cdc_reliance.py",
+      "source_git_blob_sha": "aaf451bdaddf7824d8de2864dd792c536864f806",
+      "source_sha256": "be3365536de50753a731384f3241d8cf7a72e0ec5dd80226dc1d6c55fd60f920",
+      "transported_sha256": "be3365536de50753a731384f3241d8cf7a72e0ec5dd80226dc1d6c55fd60f920"
+    },
+    {
+      "exact_byte_match": true,
+      "path": "tests/integration/cdc_currentness_fixtures.py",
+      "source_git_blob_sha": "b34a6acfae5957b966f7329a35613e29a3105509",
+      "source_sha256": "e6acaa8e61b1637a6c35a2ba0f26bb439b83c51f515573fec7a22fa59ce8139e",
+      "transported_sha256": "e6acaa8e61b1637a6c35a2ba0f26bb439b83c51f515573fec7a22fa59ce8139e"
+    },
+    {
+      "exact_byte_match": true,
+      "path": "tests/integration/cdc_integration_fixtures.py",
+      "source_git_blob_sha": "82d4d3759bd5c805d2094ecce7423b9e6686881b",
+      "source_sha256": "88dcad87df8f39c457bc086daf257469f07a492e97a2127971ee16d48c396d32",
+      "transported_sha256": "88dcad87df8f39c457bc086daf257469f07a492e97a2127971ee16d48c396d32"
+    },
+    {
+      "exact_byte_match": true,
+      "path": "tests/integration/cdc_integration_consumer.py",
+      "source_git_blob_sha": "b8c98420a9a22f7c4a4d8a96f29a01de892a1435",
+      "source_sha256": "99fe3bfb43f851c5fc603bdaa1b344643f9668fdf1d6467555b32334e60322e1",
+      "transported_sha256": "99fe3bfb43f851c5fc603bdaa1b344643f9668fdf1d6467555b32334e60322e1"
+    },
+    {
+      "exact_byte_match": true,
+      "path": "tests/integration/test_cdc_currentness_slice_001.py",
+      "source_git_blob_sha": "bf304605b37196e383545e3e895b7ee3754e6cd6",
+      "source_sha256": "d7dc00e792af0b76a8580c3a89b96d42782d56e56f46ab1aec40e757e6a649fb",
+      "transported_sha256": "d7dc00e792af0b76a8580c3a89b96d42782d56e56f46ab1aec40e757e6a649fb"
+    },
+    {
+      "exact_byte_match": true,
+      "path": "tests/integration/test_cdc_integration_authority_branches.py",
+      "source_git_blob_sha": "4afaa691cb8d5ee38d5c745679704b7b006803aa",
+      "source_sha256": "071dc2931a1082edf942fe5768a812ba7e7b6b3171e2c940f7f7c03b40ee4b61",
+      "transported_sha256": "071dc2931a1082edf942fe5768a812ba7e7b6b3171e2c940f7f7c03b40ee4b61"
+    },
+    {
+      "exact_byte_match": true,
+      "path": "tests/integration/test_cdc_integration_slice_001.py",
+      "source_git_blob_sha": "23d6bf6f043706f4455d5a52fe049a7fa9356255",
+      "source_sha256": "7037ed13098915d29f9e52675f43ce63d5c910679f8d862cafef12e637771b16",
+      "transported_sha256": "7037ed13098915d29f9e52675f43ce63d5c910679f8d862cafef12e637771b16"
+    }
+  ],
+  "fixture_portability": {
+    "all_exact_byte_match": true,
+    "authorization": "OIC-ZTL-OAM-DEMO-SLICE-001-L0-FIXTURE-PORTABILITY-001",
+    "evidence": [
+      {
+        "evidence": "A",
+        "exact_byte_match": true,
+        "historical_source_commit": "1a80aabe0f72eac8570b9827ee7545cda370cbe8",
+        "historical_source_path": "veraxis/cdc-e2e-mission-001/executions/STAGE-2-RUN-001/CDC-END-TO-END-MISSION-001-STAGE-2-RAW-RESULT-v0.1.json",
+        "repository_fixture_path": "tests/fixtures/cdc-currentness-evidence/CDC-END-TO-END-MISSION-001-STAGE-2-RAW-RESULT-v0.1.json",
+        "repository_fixture_sha256": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+        "source_git_blob_sha": "eda5a0f883328f0ad4751037b3f0b27c4ac1a19b",
+        "source_sha256": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d"
+      },
+      {
+        "evidence": "B",
+        "exact_byte_match": true,
+        "historical_source_commit": "806490b659520a351e81ccb4d1d3f3ab214af70d",
+        "historical_source_path": "veraxis/cdc-e2e-mission-001/executions/M12-CORRECTION-SUCCESSOR-RUN-002/CDC-END-TO-END-MISSION-001-M12-CORRECTION-SUCCESSOR-RUN-002-RAW-RESULT-v0.1.json",
+        "repository_fixture_path": "tests/fixtures/cdc-currentness-evidence/CDC-END-TO-END-MISSION-001-M12-CORRECTION-SUCCESSOR-RUN-002-RAW-RESULT-v0.1.json",
+        "repository_fixture_sha256": "8b81e62a1a5e65f14e86ced9f7b3c1f506f4dd4ccaa1c4375e4fb76d41fee246",
+        "source_git_blob_sha": "1abb79cbed296d8002fbeeca0c30afcfcfb98283",
+        "source_sha256": "8b81e62a1a5e65f14e86ced9f7b3c1f506f4dd4ccaa1c4375e4fb76d41fee246"
+      }
+    ],
+    "fixture_loader_change_class": "TEST_FIXTURE_PORTABILITY_ONLY",
+    "fixture_loader_modified": true,
+    "fixture_loader_path": "tests/integration/cdc_currentness_fixtures.py",
+    "implementation_modules_modified": false,
+    "pinned_sha256_values_changed": false,
+    "result_bearing_execution": false,
+    "semantic_change": false
+  },
+  "l0_state": "LOCAL_CONSOLIDATION_CANDIDATE",
+  "owner_directive_id": "OIC-ZTL-OAM-DEMO-SLICE-001-L0",
+  "result_bearing_execution": false,
+  "semantic_modification": false,
+  "source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "source_delta_authorization_id": "OWNER-AUTHORIZATION-OIC-ZTL-OAM-DEMO-SLICE-001-L0-001",
+  "source_delta_authorization_path": "docs/operations/OIC-ZTL-OAM-DEMO-SLICE-001-L0-SOURCE-DELTA-AUTHORIZATION-001.json",
+  "source_delta_authorization_sha256": "c6d984e461531ea4a955cb28d2e3c1c5fbe4a36d76d1e250d149188608ab023e",
+  "source_delta_exactly_accounted": true,
+  "source_module_guard_preserved": true,
+  "source_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "target_parent": "857a21d47b76c58a511fe2955356db794ca80ab0",
+  "transport_method": "path-scoped git restore from the exact source commit; no merge, no cherry-pick",
+  "transported_path_count": 10,
+  "transported_paths": [
+    "src/oic/cdc_currentness.py",
+    "src/oic/cdc_authority.py",
+    "src/oic/cdc_propagation.py",
+    "src/oic/cdc_reliance.py",
+    "tests/integration/cdc_currentness_fixtures.py",
+    "tests/integration/cdc_integration_fixtures.py",
+    "tests/integration/cdc_integration_consumer.py",
+    "tests/integration/test_cdc_currentness_slice_001.py",
+    "tests/integration/test_cdc_integration_authority_branches.py",
+    "tests/integration/test_cdc_integration_slice_001.py"
+  ],
+  "unauthorized_fifth_module_negative_test": "pass",
+  "whole_branch_merge": false
+}
