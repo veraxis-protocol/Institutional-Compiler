@@ -32,6 +32,7 @@ from oic.demo_runtime import (
     load_scenario,
     run_all_cases,
     run_case,
+    verify_evidence_graph,
     write_evidence_graph,
 )
 from oic.demo_ztl import KERNEL_COMMIT
@@ -166,6 +167,33 @@ def test_case_2_blocks_on_currentness_while_the_logic_still_holds(
     assert projection["decision_basis"] == "PROCEDURAL"
 
 
+def test_case_2_never_evaluated_authority_at_all(outcomes: dict[str, Any]) -> None:
+    """The gate refused, so authority was not asked — and an A1 was not invented.
+
+    Evaluating authority anyway would put a PROCEED on the record for an operation
+    that had already been stopped, and a PROCEED that meant nothing is
+    indistinguishable from one that did.
+    """
+    outcome = outcomes["case-2"]
+    assert outcome.authority_decision is None
+    observation = outcome.oam_decision["authority_observation"]
+    assert observation["authority_evaluated"] is False
+    assert observation["authority_not_evaluated_reason"] == "CURRENTNESS_GATE_DID_NOT_PROCEED"
+    assert observation["decision"] == "NOT_EVALUATED"
+    assert _projection(outcomes, "case-2")["authority_reason_code_id"] == "NOT_EVALUATED"
+
+
+def test_cases_3_and_4_still_reach_authority_because_currentness_is_g1(
+    outcomes: dict[str, Any],
+) -> None:
+    for case_id, expected in (("case-3", "A10"), ("case-4", "A6")):
+        outcome = outcomes[case_id]
+        assert outcome.gate_decision.reason_code_id == "G1"
+        assert outcome.authority_decision is not None
+        assert outcome.authority_decision.reason_code_id == expected
+        assert outcome.oam_decision["authority_observation"]["authority_evaluated"] is True
+
+
 def test_case_2_issued_no_reliance_and_said_why(outcomes: dict[str, Any]) -> None:
     outcome = outcomes["case-2"]
     assert outcome.reliance is None
@@ -260,6 +288,36 @@ def test_future_v1_use_is_refused_by_currentness_after_the_change(
     assert _projection(outcomes, "case-1")["currentness_state"] == "CURRENT"
 
 
+def test_every_case_established_evidence_from_an_observation(outcomes: dict[str, Any]) -> None:
+    """Satisfaction came from opened bytes, not from the requirement existing."""
+    for outcome in outcomes.values():
+        observation = outcome.oam_decision["evidence_observation"]
+        assert observation["observed_digest"].startswith("sha256:")
+        assert observation["observed_evidence_id"] == "signed_eligibility_evidence"
+        assert observation["evidence_state"] == "SIGNED"
+        assert observation["satisfaction"] is True
+        assert observation["findings"] == []
+
+
+def test_every_warrant_binding_was_validated_at_runtime(outcomes: dict[str, Any]) -> None:
+    for outcome in outcomes.values():
+        validation = outcome.oam_decision["warrant_binding_validation"]
+        assert validation["validated"] is True, validation["findings"]
+        assert outcome.warrant_findings == ()
+
+
+def test_case_1_evidence_refs_are_byte_resolvable(outcomes: dict[str, Any]) -> None:
+    """A consumer can check each reference, not merely read an identifier off it."""
+    validation = outcomes["case-1"].consumer_validation
+    assert validation is not None
+    resolvability = next(
+        check for check in validation["checks"] if check["check_name"] == "evidence_resolvability"
+    )
+    assert resolvability["passed"]
+    assert resolvability["observed"]["unresolved"] == 0
+    assert resolvability["observed"]["count"] >= 2
+
+
 # --- determinism -----------------------------------------------------------
 
 
@@ -311,9 +369,9 @@ def test_a_declared_operational_observation_does_not_change_the_decision(
 
 
 def test_the_evidence_graph_is_traversable_and_records_absences(
-    outcomes: dict[str, Any], tmp_path: Path
+    outcomes: dict[str, Any], tmp_path: Path, repo_root: Path
 ) -> None:
-    manifest = write_evidence_graph(outcomes, tmp_path)
+    manifest = write_evidence_graph(outcomes, tmp_path, scenario=load_scenario(repo_root))
     for name in ("00-source", "01-oic", "02-ztl", "03-runtime", "04-reliance", "05-evidence"):
         assert (tmp_path / name).is_dir()
     for case_id, entry in manifest["cases"].items():
@@ -321,6 +379,48 @@ def test_the_evidence_graph_is_traversable_and_records_absences(
         if entry["semantic_projection"]["reliance_disposition"] is None:
             assert entry["absent_artifacts"], f"{case_id} records no reason for the absence"
     assert manifest["measured_end_to_end_claim"] is False
+    assert manifest["claim_ceiling"] == "SYNTHETIC_END_TO_END_PIPELINE_IMPLEMENTED_AND_TESTED"
+
+    # 05-evidence must carry the causal chain, the manifest and the digests.
+    for name in ("causal-chain.json", "MANIFEST.json", "SHA256SUMS"):
+        assert (tmp_path / "05-evidence" / name).is_file(), name
+
+
+def test_the_written_package_verifies_against_its_own_digests(
+    outcomes: dict[str, Any], tmp_path: Path, repo_root: Path
+) -> None:
+    write_evidence_graph(outcomes, tmp_path, scenario=load_scenario(repo_root))
+    verification = verify_evidence_graph(tmp_path)
+    assert verification["verified"] is True, verification["failures"]
+    assert verification["checked"] >= 21
+
+
+def test_a_tampered_package_fails_self_verification(
+    outcomes: dict[str, Any], tmp_path: Path, repo_root: Path
+) -> None:
+    """Self-verification that cannot fail would prove nothing about the package."""
+    write_evidence_graph(outcomes, tmp_path, scenario=load_scenario(repo_root))
+    target = tmp_path / "03-runtime" / "case-1-runtime.json"
+    target.write_bytes(target.read_bytes() + b"\n")
+    verification = verify_evidence_graph(tmp_path)
+    assert verification["verified"] is False
+    assert any("case-1-runtime.json" in failure for failure in verification["failures"])
+
+
+def test_the_causal_chain_resolves_to_persisted_bytes(
+    outcomes: dict[str, Any], tmp_path: Path, repo_root: Path
+) -> None:
+    write_evidence_graph(outcomes, tmp_path, scenario=load_scenario(repo_root))
+    chain = json.loads((tmp_path / "05-evidence" / "causal-chain.json").read_text(encoding="utf-8"))
+    from oic.cdc_reliance import persisted_file_sha256
+
+    for case_id, entry in chain["cases"].items():
+        assert entry["source_content_hash"].startswith("sha256:")
+        assert entry["warrant_output_hash"].startswith("sha256:")
+        for stage, artifact in entry["artifacts"].items():
+            path = tmp_path / stage / artifact["path"]
+            assert path.is_file(), f"{case_id}/{stage}"
+            assert persisted_file_sha256(path.read_bytes()) == artifact["sha256"]
 
 
 def test_every_oam_decision_validates_against_the_demo_schema(
@@ -360,3 +460,62 @@ def test_every_warrant_passes_the_existing_semantic_conformance_rules(
             rendered_formula=outcome.kernel_result.rendered_formula,
         )
         assert findings == [], f"{outcome.case_id}: {[str(f) for f in findings]}"
+
+
+# --- evidence byte resolution, from the consumer's side ---------------------
+
+
+def test_the_consumer_refuses_an_unresolvable_evidence_reference(tmp_path: Path) -> None:
+    """Each mutation must be caught. A check that cannot fail is not a check.
+
+    The consumer opens the referenced bytes and recomputes the digest, so a
+    substituted, corrupted or absent artifact resolves differently from the real
+    one rather than equally well.
+    """
+    from oic.cdc_reliance import persisted_file_sha256
+
+    def resolve(reference: dict[str, Any]) -> bool:
+        location = reference.get("path")
+        bound = reference.get("sha256")
+        if not isinstance(location, str) or not isinstance(bound, str) or not bound:
+            return False
+        target = Path(location)
+        if not target.is_file():
+            return False
+        if persisted_file_sha256(target.read_bytes()) != bound:
+            return False
+        return bool(reference.get("evidence_id")) and bool(reference.get("evidence_class"))
+
+    for index, mutation in enumerate(("wrong_digest", "missing_file", "substituted_bytes")):
+        payload = b'{"evidence_id": "signed_eligibility_evidence"}\n'
+        path = tmp_path / f"evidence-{index}.json"
+        path.write_bytes(payload)
+        ref: dict[str, Any] = {
+            "evidence_id": "signed_eligibility_evidence",
+            "evidence_class": "SYNTHETIC_ELIGIBILITY_EVIDENCE",
+            "path": str(path),
+            "sha256": persisted_file_sha256(payload),
+        }
+        assert resolve(ref) is True, mutation
+
+        if mutation == "wrong_digest":
+            ref["sha256"] = "0" * 64
+        elif mutation == "missing_file":
+            path.unlink()
+        else:
+            path.write_bytes(payload + b"tampered\n")
+        assert resolve(ref) is False, mutation
+
+
+def test_the_propagated_evidence_refs_carry_locators_and_digests(
+    outcomes: dict[str, Any],
+) -> None:
+    """An identifier alone gives a consumer nothing it can verify."""
+    validation = outcomes["case-1"].consumer_validation
+    assert validation is not None
+    envelope_check = next(
+        check for check in validation["checks"] if check["check_name"] == "evidence_resolvability"
+    )
+    assert envelope_check["passed"]
+    assert envelope_check["observed"]["count"] >= 2
+    assert envelope_check["observed"]["unresolved"] == 0

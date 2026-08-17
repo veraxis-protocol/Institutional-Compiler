@@ -70,7 +70,7 @@ from oic.demo_runtime import (
     RESULT_BEARING_EXECUTION_NOT_AUTHORIZED,
     SCENARIO_ID,
     DemoRuntimeError,
-    load_result_bearing_authorization,
+    execute_result_bearing_run,
     validate_scenario,
 )
 from oic.doctor import DoctorReport, run_doctor
@@ -309,6 +309,14 @@ def _render_demo_validation(report: dict[str, Any], stream: TextIO) -> None:
     stream.write(f"Demo scenario: {report['scenario_id']}\n")
     stream.write(f"  scope:               {report['scope_ref']}\n")
     stream.write(f"  currentness index:   {report['currentness_index_digest']}\n")
+    stream.write(f"  implementation:      {report['implementation_commit']}\n")
+    stream.write(f"  scenario bundle:     {report['scenario_bundle_digest']}\n")
+    stream.write(f"  expected ZTL commit: {report['expected_ztl_commit']}\n")
+    evidence = report["evidence_observation"]
+    stream.write(
+        f"  evidence:            {evidence['observed_evidence_id']} "
+        f"[{evidence['evidence_state']}] satisfaction={evidence['satisfaction']}\n"
+    )
     for version, detail in sorted(report["versions"].items()):
         stream.write(f"\n  {version}\n")
         stream.write(f"    source            {detail['source_content_hash']}\n")
@@ -318,7 +326,9 @@ def _render_demo_validation(report: dict[str, Any], stream: TextIO) -> None:
         stream.write(f"    envelope          {detail['envelope_id']}\n")
         stream.write(f"    envelope digest   {detail['envelope_digest']}\n")
     stream.write(f"\n  claim ceiling: {report['claim_ceiling']}\n")
-    stream.write("  Nothing was executed and no result-bearing claim is made.\n")
+    stream.write(
+        "  Nothing was executed, ZTL was not invoked, and no result-bearing claim is made.\n"
+    )
 
 
 def _command_demo_validate(args: argparse.Namespace, stream: TextIO) -> ExitCode:
@@ -332,20 +342,42 @@ def _command_demo_validate(args: argparse.Namespace, stream: TextIO) -> ExitCode
 
 
 def _command_demo_run(args: argparse.Namespace, stream: TextIO) -> ExitCode:
-    # The gate, and the whole of it. `demo run` is the claim-bearing path, so it
-    # opens only for an owner-issued artifact that says so in as many words.
-    # Reaching the execution below without one is not possible from here.
+    """The claim-bearing path. It opens only for a validated owner authorization.
+
+    The full positive run is implemented in ``oic.demo_runtime`` and is reached
+    only after every binding the authorization carries has been checked against
+    observed state: the implementation commit, the scenario bundle digest, the
+    kernel commit, the output directory, the claim ceiling and a clean worktree.
+    Without such an artifact this exits FAIL and writes nothing.
+    """
+    root = _resolve_root(args.repo_root)
+    if args.out is None:
+        stream.write(
+            f"{RESULT_BEARING_EXECUTION_NOT_AUTHORIZED}: no output directory was supplied\n"
+        )
+        return ExitCode.FAIL
     try:
-        load_result_bearing_authorization(args.authorization)
+        report = execute_result_bearing_run(
+            repo_root=root,
+            authorization_path=args.authorization,
+            output_directory=args.out,
+            ztl_path=args.ztl,
+            scenario_id=args.scenario,
+            claimed_at=args.claimed_at,
+        )
     except DemoRuntimeError as error:
         stream.write(f"{error}\n")
         return ExitCode.FAIL
-    stream.write(
-        f"{RESULT_BEARING_EXECUTION_NOT_AUTHORIZED}: an authorization artifact was supplied, "
-        "but no result-bearing execution has been implemented behind this gate in this "
-        "work order.\n"
+    if args.format == "json":
+        _dump_json(report, stream)
+    else:
+        stream.write(f"{report['status']}\n")
+        stream.write(f"  authorization: {report['authorization_id']}\n")
+        stream.write(f"  cases:         {', '.join(report['cases'])}\n")
+        stream.write(f"  package:       {report['package_verification']}\n")
+    return (
+        ExitCode.PASS if report["status"] == "RESULT_BEARING_EXECUTION_COMPLETE" else ExitCode.FAIL
     )
-    return ExitCode.FAIL
 
 
 # ---------------------------------------------------------------------------
@@ -558,6 +590,19 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         metavar="PATH",
         help="owner-issued result-bearing execution authorization artifact",
+    )
+    demo_run.add_argument(
+        "--ztl",
+        type=Path,
+        default=None,
+        metavar="DIR",
+        help="local ZTL checkout at the pinned commit (default: $OIC_DEMO_ZTL_PATH)",
+    )
+    demo_run.add_argument(
+        "--claimed-at",
+        default="1970-01-01T00:00:00Z",
+        metavar="INSTANT",
+        help="declared instant recorded on the single-use consumption record",
     )
     demo_run.set_defaults(handler=_command_demo_run)
 

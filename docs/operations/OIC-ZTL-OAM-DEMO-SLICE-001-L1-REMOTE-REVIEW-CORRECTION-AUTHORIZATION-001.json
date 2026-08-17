@@ -1,0 +1,42 @@
+{
+  "record_class": "OWNER_CORRECTIVE_SUCCESSOR_AUTHORIZATION",
+  "authorization_id": "OWNER-AUTHORIZATION-OIC-ZTL-OAM-DEMO-SLICE-001-L1-REMOTE-REVIEW-CORRECTION-001",
+  "scope": "OIC-ZTL-OAM-DEMO-SLICE-001-L1-CORRECTIVE-SUCCESSOR",
+  "owner": "ARKADIY_MITEIKO",
+  "historical_baseline": "a59b885423b984b2eb8c20751833926b888e6b95",
+  "corrective_predecessor": "3e3436600c5ee886f83d854f86a07317818d806c",
+  "pull_request": 31,
+  "branch": "demo/oic-ztl-oam-slice-001-l1-implementation",
+  "result_bearing_execution_authorized": false,
+  "measured_end_to_end_claim_authorized": false,
+  "production_claim_authorized": false,
+  "institutional_validity_claim_authorized": false,
+  "independent_assurance_claim_authorized": false,
+  "RUN004_authorized": false,
+  "global_semantic_implementation_gate_opened": false,
+  "live_ztl_workflow_change_authorized": false,
+  "authorized_new_paths": [
+    "docs/operations/OIC-ZTL-OAM-DEMO-SLICE-001-L1-REMOTE-REVIEW-CORRECTION-AUTHORIZATION-001.json",
+    "demo/oic-ztl-oam-slice-001/scenarios/synthetic-grant-authority/evidence-eligibility-signed.json",
+    "tests/contract/test_canada_acquisition_freeze.py",
+    "tests/contract/test_canada_rights_resolution_dossier.py"
+  ],
+  "canada_guard_reconciliation": {
+    "correction_class": "HISTORICAL_SCOPING_NOT_EXEMPTION",
+    "upper_comparison_boundary": "a59b885423b984b2eb8c20751833926b888e6b95",
+    "lower_bounds_preserved": true,
+    "forbidden_path_set_weakened": false,
+    "allowlist_carve_out_added": false,
+    "demo_bridge_exempted_by_name": false,
+    "canada_artifacts_changed": false
+  },
+  "strongest_state_after_this_correction": "SYNTHETIC_END_TO_END_PIPELINE_IMPLEMENTED_AND_TESTED",
+  "not_established": [
+    "MEASURED_INTERNAL_END_TO_END_TECHNICAL_DEMONSTRATION",
+    "OIC_ZTL_OAM_END_TO_END_DEMONSTRATION",
+    "REMOTE_LIVE_ZTL_VALIDATION",
+    "PRODUCTION_READINESS",
+    "INSTITUTIONAL_VALIDITY",
+    "INDEPENDENT_ASSURANCE"
+  ]
+}

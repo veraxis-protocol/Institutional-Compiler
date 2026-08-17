@@ -17,10 +17,12 @@ from referencing import Registry, Resource
 
 from oic.demo_compiler import (
     COMPILER_VERSION,
+    EVIDENCE_STATE_TO_MARK,
     GROUND_ATOMS,
     GROUND_IDS,
     SYNTHETIC_GRAMMAR_ID,
     CompilationError,
+    EvidenceState,
     canonical_json_digest,
     compile_policy,
     ground_marking,
@@ -256,11 +258,44 @@ def test_the_amount_limit_differs_between_the_two_versions(compiled: dict[str, A
 
 
 def test_ground_marking_reflects_the_admitted_limit(compiled: dict[str, Any]) -> None:
-    assert ground_marking(compiled["v1"], amount=40000, evidence_signed=True) == {
+    assert ground_marking(compiled["v1"], amount=40000, evidence_state=EvidenceState.SIGNED) == {
         "g_amount_within_limit": "T",
         "g_eligibility_evidence_present": "T",
     }
-    assert ground_marking(compiled["v2"], amount=40000, evidence_signed=True) == {
+    assert ground_marking(compiled["v2"], amount=40000, evidence_state=EvidenceState.SIGNED) == {
         "g_amount_within_limit": "F",
         "g_eligibility_evidence_present": "T",
     }
+
+
+# --- evidence semantics: absence is not falsity ----------------------------
+
+
+def test_missing_evidence_produces_no_mark_at_all(compiled: dict[str, Any]) -> None:
+    """Not observed must not become F merely because Python held ``False``.
+
+    The kernel already distinguishes "false" from "unverified"; throwing that
+    away in the compiler would make an absence indistinguishable from a finding.
+    """
+    for state in (EvidenceState.NOT_OBSERVED, EvidenceState.UNKNOWN):
+        marks = ground_marking(compiled["v1"], amount=40000, evidence_state=state)
+        assert "g_eligibility_evidence_present" not in marks
+        assert marks == {"g_amount_within_limit": "T"}
+
+
+def test_only_an_observed_negative_falsifies_the_evidence_ground(
+    compiled: dict[str, Any],
+) -> None:
+    for state, expected in (
+        (EvidenceState.SIGNED, "T"),
+        (EvidenceState.UNSIGNED, "F"),
+        (EvidenceState.INVALID, "F"),
+    ):
+        marks = ground_marking(compiled["v1"], amount=40000, evidence_state=state)
+        assert marks["g_eligibility_evidence_present"] == expected
+
+
+def test_the_evidence_state_mapping_is_total_and_explicit() -> None:
+    assert set(EVIDENCE_STATE_TO_MARK) == set(EvidenceState)
+    assert EVIDENCE_STATE_TO_MARK[EvidenceState.UNKNOWN] is None
+    assert EVIDENCE_STATE_TO_MARK[EvidenceState.NOT_OBSERVED] is None

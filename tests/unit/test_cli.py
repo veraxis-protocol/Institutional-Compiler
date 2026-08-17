@@ -431,6 +431,12 @@ def test_demo_validate_compiles_and_executes_nothing(
     assert report["result_bearing_execution"] is False
     assert report["claim_ceiling"] == "SYNTHETIC_END_TO_END_PIPELINE_IMPLEMENTED_AND_TESTED"
     assert set(report["versions"]) == {"v1", "v2"}
+    assert report["ztl_invoked"] is False
+    # The three identities an owner needs to issue a result-bearing authorization.
+    assert len(report["implementation_commit"]) == 40
+    assert report["scenario_bundle_digest"].startswith("sha256:")
+    assert report["expected_ztl_commit"] == "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b"
+    assert report["evidence_observation"]["evidence_state"] == "SIGNED"
 
 
 def test_demo_validate_is_deterministic(
@@ -477,7 +483,76 @@ def test_demo_run_refuses_an_authorization_that_does_not_authorize(
         encoding="utf-8",
     )
     code, out, _ = run(
-        capsys, "--repo-root", str(repo_root), "demo", "run", "--authorization", str(path)
+        capsys,
+        "--repo-root",
+        str(repo_root),
+        "demo",
+        "run",
+        "--authorization",
+        str(path),
+        "--out",
+        str(tmp_path / "evidence"),
     )
     assert code == ExitCode.FAIL
     assert "RESULT_BEARING_EXECUTION_NOT_AUTHORIZED" in out
+    assert not (tmp_path / "evidence").exists()
+
+
+def test_demo_run_refuses_an_authorization_bound_to_another_commit(
+    capsys: pytest.CaptureFixture[str], repo_root: Path, tmp_path: Path
+) -> None:
+    """Every binding is checked, and the refusal names the specific mismatch."""
+    from oic.demo_runtime import load_scenario, scenario_bundle_digest
+
+    path = tmp_path / "authorization.json"
+    path.write_text(
+        json.dumps(
+            {
+                "record_class": "OWNER_DEMO_RESULT_BEARING_EXECUTION_AUTHORIZATION",
+                "schema_version": "OIC-DEMO-EXECUTION-AUTHORIZATION-v0.1",
+                "authorization_id": "OWNER-DEMO-EXEC-WRONG-COMMIT",
+                "slice_id": "OIC-ZTL-OAM-DEMO-SLICE-001",
+                "scenario_id": "synthetic-grant-authority",
+                "owner": "ARKADIY_MITEIKO",
+                "issued_at": "2027-05-15T00:00:00Z",
+                "implementation_commit": "0" * 40,
+                "scenario_bundle_digest": scenario_bundle_digest(load_scenario(repo_root)),
+                "ztl_commit": "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b",
+                "allowed_output_directory": str(tmp_path / "evidence"),
+                "claim_ceiling": "MEASURED_INTERNAL_END_TO_END_TECHNICAL_DEMONSTRATION",
+                "authorized_case_ids": ["case-1", "case-2", "case-3", "case-4", "case-5"],
+                "authorized_reliance_case_ids": ["case-1"],
+                "single_use": True,
+                "result_bearing_execution_authorized": True,
+                "measured_claim_authorized": True,
+                "production_claim_authorized": False,
+                "institutional_validity_claim_authorized": False,
+                "independent_assurance_claim_authorized": False,
+                "RUN004_authorized": False,
+            }
+        ),
+        encoding="utf-8",
+    )
+    code, out, _ = run(
+        capsys,
+        "--repo-root",
+        str(repo_root),
+        "demo",
+        "run",
+        "--authorization",
+        str(path),
+        "--out",
+        str(tmp_path / "evidence"),
+    )
+    assert code == ExitCode.FAIL
+    assert "RESULT_BEARING_EXECUTION_NOT_AUTHORIZED" in out
+    assert "is not the current HEAD" in out
+    assert not (tmp_path / "evidence").exists()
+
+
+def test_demo_run_refuses_without_an_output_directory(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    code, out, _ = run(capsys, "--repo-root", str(repo_root), "demo", "run")
+    assert code == ExitCode.FAIL
+    assert "no output directory was supplied" in out

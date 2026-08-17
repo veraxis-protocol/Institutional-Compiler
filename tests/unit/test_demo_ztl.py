@@ -31,6 +31,7 @@ from oic.demo_ztl import (
     expected_output_hash,
     invoke_kernel,
     resolve_ztl_path,
+    validate_warrant_binding,
 )
 
 ZTL_ENV = "OIC_DEMO_ZTL_PATH"
@@ -294,3 +295,103 @@ def test_live_kernel_reproduces_the_three_reachable_dispositions(repo_root: Path
     assert unmarked.disposition == "OPEN"
     assert unmarked.unverified == ("g_eligibility_evidence_present",)
     assert epistemic_status_for(unmarked.disposition) == "UNRESOLVED"
+
+
+# --- runtime warrant-binding validation ------------------------------------
+
+
+@pytest.fixture
+def binding_inputs(repo_root: Path) -> dict[str, Any]:
+    """A warrant and the bindings it legitimately satisfies."""
+    from oic.demo_compiler import canonical_json_digest
+    from oic.demo_runtime import compile_scenario, load_scenario
+
+    scenario = load_scenario(repo_root)
+    policy = compile_scenario(scenario)["v1"]
+    marking = {"g_amount_within_limit": "T", "g_eligibility_evidence_present": "T"}
+    warrant = build_warrant(
+        _result(marking=marking),
+        warrant_artifact_id="warrant:binding",
+        claim_id="claim:binding",
+        ground_epoch={"scope_id": scenario.scope_ref, "sequence": 1, "authority_id": "a"},
+        ground_set_hash=canonical_json_digest(sorted(marking)),
+        source_anchor_ids=[str(a["anchor_id"]) for a in policy.control_envelope["source_anchors"]],
+        admission_ids=[str(i) for i in policy.control_envelope["admission_ids"]],
+        generated_at="2027-05-15T00:00:00Z",
+        valid_from="2027-05-15T00:00:00Z",
+        valid_until=None,
+        revocation_references=[],
+    )
+    schema = json.loads(
+        (repo_root / "schemas" / "proposed" / "warrant-artifact.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    return {
+        "warrant": warrant,
+        "kwargs": {
+            "runtime_binding": policy.runtime_binding,
+            "control_envelope": policy.control_envelope,
+            "envelope_digest": policy.envelope_digest,
+            "source_version_set_hash": canonical_json_digest([policy.source.content_hash]),
+            "admission_version": canonical_json_digest(
+                [r["admission_id"] for r in policy.admission_records]
+            ),
+            "ground_set_hash": canonical_json_digest(sorted(marking)),
+            "evaluated_at": "2027-05-15T00:00:00Z",
+            "schema": schema,
+        },
+    }
+
+
+def test_a_legitimate_warrant_binding_validates(binding_inputs: dict[str, Any]) -> None:
+    findings = validate_warrant_binding(binding_inputs["warrant"], **binding_inputs["kwargs"])
+    assert findings == [], [str(f) for f in findings]
+
+
+def test_a_mutated_warrant_fails_closed(binding_inputs: dict[str, Any]) -> None:
+    """One mutation, one finding — and no other component can repair it."""
+    mutations: tuple[tuple[str, Any, str], ...] = (
+        ("kernel_profile_id", "some-other-kernel-v9", "WB-002"),
+        ("canonicalization_profile_id", "not-the-bound-profile", "WB-002"),
+        ("formula_hash", "sha384:" + "0" * 96, "WB-003"),
+        ("kernel_commit", "0" * 40, "WB-004"),
+        ("admission_ids", ["adm:invented"], "WB-005"),
+        ("source_anchor_ids", ["anchor:invented"], "WB-005"),
+        ("ground_set_hash", "sha256:" + "0" * 64, "WB-008"),
+        ("warranty_grade", "sound", "WB-009"),
+        ("output_hash", "sha256:" + "0" * 64, "WB-011"),
+    )
+    for field, value, rule in mutations:
+        mutated = {**binding_inputs["warrant"], field: value}
+        findings = validate_warrant_binding(mutated, **binding_inputs["kwargs"])
+        assert findings, f"mutating {field} produced no finding"
+        assert rule in {finding.rule_id for finding in findings}, field
+
+
+def test_a_warrant_outside_its_validity_interval_fails(binding_inputs: dict[str, Any]) -> None:
+    kwargs = {**binding_inputs["kwargs"], "evaluated_at": "2026-01-01T00:00:00Z"}
+    findings = validate_warrant_binding(binding_inputs["warrant"], **kwargs)
+    assert "WB-007" in {finding.rule_id for finding in findings}
+
+
+def test_a_recomputed_version_binding_mismatch_fails(binding_inputs: dict[str, Any]) -> None:
+    kwargs = {**binding_inputs["kwargs"], "source_version_set_hash": "sha256:" + "0" * 64}
+    findings = validate_warrant_binding(binding_inputs["warrant"], **kwargs)
+    assert "WB-006" in {finding.rule_id for finding in findings}
+
+
+def test_the_runtime_validator_does_not_import_the_test_helper() -> None:
+    """A runtime whose contract lives in tests/ has no contract when tests are absent."""
+    import ast
+    import inspect
+
+    import oic.demo_ztl as module
+
+    tree = ast.parse(inspect.getsource(module))
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module:
+            assert "semantic_conformance" not in node.module
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                assert "semantic_conformance" not in alias.name

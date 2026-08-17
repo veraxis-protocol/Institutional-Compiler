@@ -10,6 +10,13 @@
   "action": "DISBURSE_GRANT",
   "test_amount": 40000,
   "delegation_id": "DELEG-2027-014",
+  "evidence": {
+    "$comment": "The observation the runtime must open, verify and read a state from. Declaring it here does not satisfy anything: the policy source states the requirement, this file states the observation, and the runtime establishes satisfaction only by comparing the two.",
+    "required_evidence_id": "signed_eligibility_evidence",
+    "observation_path": "evidence-eligibility-signed.json",
+    "expected_evidence_class": "SYNTHETIC_ELIGIBILITY_EVIDENCE",
+    "required_signature_state": "SIGNED"
+  },
   "versions": {
     "v1": {
       "source_path": "policy-v1.src.txt",
@@ -59,5 +66,13 @@
     "PRODUCTION_READINESS",
     "INSTITUTIONAL_VALIDITY",
     "INDEPENDENT_ASSURANCE"
+  ],
+  "scenario_bundle_paths": [
+    "SCENARIO.json",
+    "admission-v1.json",
+    "admission-v2.json",
+    "evidence-eligibility-signed.json",
+    "policy-v1.src.txt",
+    "policy-v2.src.txt"
   ]
 }

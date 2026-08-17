@@ -75,9 +75,29 @@ def _load(repo_root: Path, name: str) -> dict[str, Any]:
     )
 
 
+#: The upper bound of this Canada work order's interval. It was HEAD, which let a
+#: completed historical proposition drift forward and become a standing prohibition on
+#: later lanes. Pinned to the frozen pre-L1 state, the assertion again says only what this
+#: work order did not do. The forbidden path set is unchanged and nothing is exempted.
+FROZEN_TERMINAL_SHA = "a59b885423b984b2eb8c20751833926b888e6b95"
+
+
+def test_the_frozen_comparison_boundaries_resolve_exactly(repo_root: Path) -> None:
+    """Both ends of the interval must be real commits, or the guard proves nothing."""
+    for sha in (BASE_SHA, FROZEN_TERMINAL_SHA):
+        resolved = subprocess.run(
+            ["git", "rev-parse", sha],
+            cwd=repo_root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        assert resolved == sha
+
+
 def _changed_files(repo_root: Path) -> list[str]:
     return subprocess.run(
-        ["git", "diff", "--name-only", f"{BASE_SHA}...HEAD"],
+        ["git", "diff", "--name-only", f"{BASE_SHA}...{FROZEN_TERMINAL_SHA}"],
         cwd=repo_root,
         check=True,
         capture_output=True,

@@ -2,30 +2,79 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinstitutionalcompiler.org/schemas/demo/execution-authorization.schema.json",
   "title": "DemoExecutionAuthorization",
-  "$comment": "DEMONSTRATION LANE ONLY. The single artifact that can open the result-bearing execution gate. Absent one, `oic demo run` refuses with RESULT_BEARING_EXECUTION_NOT_AUTHORIZED. No flag, environment variable or default is an alternative route.",
+  "$comment": "DEMONSTRATION LANE ONLY. The single artifact that can open the result-bearing execution gate. It binds the exact implementation commit, the exact scenario input bytes, the exact kernel commit and the exact output directory, so an authorization cannot be re-aimed at a different tree, a different scenario, a different kernel or a different destination. Absent a conforming artifact whose bindings match observed state, `oic demo run` refuses with RESULT_BEARING_EXECUTION_NOT_AUTHORIZED. No flag, environment variable or default is an alternative route. This schema DESCRIBES a future artifact; no such artifact exists in this work order.",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "record_class",
     "schema_version",
     "authorization_id",
+    "slice_id",
     "scenario_id",
     "owner",
-    "result_bearing_execution_authorized",
+    "issued_at",
+    "implementation_commit",
+    "scenario_bundle_digest",
+    "ztl_commit",
+    "allowed_output_directory",
+    "claim_ceiling",
+    "authorized_case_ids",
+    "authorized_reliance_case_ids",
     "single_use",
-    "issued_at"
+    "result_bearing_execution_authorized",
+    "measured_claim_authorized",
+    "production_claim_authorized",
+    "institutional_validity_claim_authorized",
+    "independent_assurance_claim_authorized",
+    "RUN004_authorized"
   ],
   "properties": {
     "record_class": { "const": "OWNER_DEMO_RESULT_BEARING_EXECUTION_AUTHORIZATION" },
     "schema_version": { "const": "OIC-DEMO-EXECUTION-AUTHORIZATION-v0.1" },
     "authorization_id": { "type": "string", "minLength": 1 },
-    "scenario_id": { "type": "string", "minLength": 1 },
+    "slice_id": { "const": "OIC-ZTL-OAM-DEMO-SLICE-001" },
+    "scenario_id": { "const": "synthetic-grant-authority" },
     "owner": { "type": "string", "minLength": 1 },
-    "result_bearing_execution_authorized": { "type": "boolean" },
-    "single_use": { "type": "boolean" },
     "issued_at": { "type": "string", "format": "date-time" },
+    "implementation_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "The exact Git commit this authorization is issued against. A run from any other tree is not the run that was authorized."
+    },
+    "scenario_bundle_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "Deterministic identity over the exact scenario input bytes: sorted relative path plus SHA-256 per file, canonically serialized, then digested."
+    },
+    "ztl_commit": { "const": "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b" },
+    "allowed_output_directory": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The only destination this authorization permits an evidence package to be written to."
+    },
+    "claim_ceiling": { "const": "MEASURED_INTERNAL_END_TO_END_TECHNICAL_DEMONSTRATION" },
+    "authorized_case_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "const": ["case-1", "case-2", "case-3", "case-4", "case-5"]
+    },
+    "authorized_reliance_case_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "const": ["case-1"],
+      "description": "Only case-1 reaches ALLOW, so only case-1 may receive reliance authorization. Evaluation establishes the property; issuance creates the reliance, and no evaluation result creates one by itself."
+    },
+    "single_use": { "const": true },
+    "result_bearing_execution_authorized": { "const": true },
     "measured_claim_authorized": { "type": "boolean" },
-    "production_claim_authorized": { "type": "boolean" },
+    "production_claim_authorized": { "const": false },
+    "institutional_validity_claim_authorized": { "const": false },
+    "independent_assurance_claim_authorized": { "const": false },
+    "RUN004_authorized": { "const": false },
     "notes": { "type": "string" }
   }
 }

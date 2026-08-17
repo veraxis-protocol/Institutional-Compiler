@@ -309,12 +309,169 @@ def test_no_demo_artifact_claims_production_or_assurance(repo_root: Path) -> Non
             if not path.is_file():
                 continue
             text = path.read_text(encoding="utf-8")
-            for token in forbidden:
-                assert token not in text, f"{path}: {token}"
+            for measured in forbidden:
+                assert measured not in text, f"{path}: {measured}"
 
 
 def test_status_md_was_not_touched_by_this_lane(repo_root: Path) -> None:
     changed = _git(
         repo_root, "diff", "--name-only", L1_HISTORICAL_BASELINE, "--", "STATUS.md"
+    ).strip()
+    assert changed == ""
+
+
+# --- the corrective successor -----------------------------------------------
+
+L1_CORRECTION_AUTHORIZATION = (
+    "docs/operations/OIC-ZTL-OAM-DEMO-SLICE-001-L1-REMOTE-REVIEW-CORRECTION-AUTHORIZATION-001.json"
+)
+
+
+@pytest.fixture(scope="module")
+def correction(repo_root: Path) -> dict[str, Any]:
+    document: dict[str, Any] = json.loads((repo_root / L1_CORRECTION_AUTHORIZATION).read_bytes())
+    return document
+
+
+def test_the_correction_authorization_says_what_it_corrects(correction: dict[str, Any]) -> None:
+    assert correction["authorization_id"] == (
+        "OWNER-AUTHORIZATION-OIC-ZTL-OAM-DEMO-SLICE-001-L1-REMOTE-REVIEW-CORRECTION-001"
+    )
+    assert correction["scope"] == "OIC-ZTL-OAM-DEMO-SLICE-001-L1-CORRECTIVE-SUCCESSOR"
+    assert correction["historical_baseline"] == L1_HISTORICAL_BASELINE
+    assert correction["corrective_predecessor"] == "3e3436600c5ee886f83d854f86a07317818d806c"
+
+
+def test_the_correction_authorization_opens_no_wider_gate(correction: dict[str, Any]) -> None:
+    for flag in (
+        "result_bearing_execution_authorized",
+        "measured_end_to_end_claim_authorized",
+        "production_claim_authorized",
+        "institutional_validity_claim_authorized",
+        "independent_assurance_claim_authorized",
+        "RUN004_authorized",
+        "global_semantic_implementation_gate_opened",
+        "live_ztl_workflow_change_authorized",
+    ):
+        assert correction[flag] is False, flag
+
+
+def test_the_canada_guards_were_rescoped_and_not_exempted(repo_root: Path) -> None:
+    """Historical scoping, not an allowlist. The forbidden set is untouched.
+
+    A guard repaired by naming the file that tripped it would stop being a guard.
+    These two now assert what their own work order did, over the interval it
+    actually covered, and still forbid every path they always forbade.
+    """
+    for name in (
+        "test_canada_acquisition_freeze.py",
+        "test_canada_rights_resolution_dossier.py",
+    ):
+        text = (repo_root / "tests" / "contract" / name).read_text(encoding="utf-8")
+        assert "demo_bridge" not in text, f"{name} names the file that tripped it"
+        assert L1_HISTORICAL_BASELINE in text, f"{name} does not pin the frozen terminal state"
+        assert '...HEAD"' not in text, f"{name} still compares against a moving HEAD"
+        # The forbidden path set survives intact.
+        for forbidden in ('"STATUS.md"', "schemas/draft/", "docs/contracts/", "adapters/ztl/"):
+            assert forbidden in text, f"{name} no longer forbids {forbidden}"
+
+
+def test_no_canada_artifact_changed_in_this_lane(repo_root: Path) -> None:
+    changed = _git(
+        repo_root, "diff", "--name-only", L1_HISTORICAL_BASELINE, "--", "benchmarks/"
+    ).strip()
+    assert changed == ""
+
+
+# --- result-bearing boundaries ----------------------------------------------
+
+
+def test_no_result_bearing_authorization_artifact_was_created(repo_root: Path) -> None:
+    """The schema describes a future artifact. This lane created none."""
+    changed = _git(repo_root, "diff", "--name-only", L1_HISTORICAL_BASELINE).splitlines()
+    for path in changed:
+        if not path.endswith(".json") or path.startswith("schemas/"):
+            continue
+        text = (repo_root / path).read_text(encoding="utf-8", errors="ignore")
+        assert "OWNER_DEMO_RESULT_BEARING_EXECUTION_AUTHORIZATION" not in text, path
+
+
+def test_no_changed_json_artifact_asserts_the_measured_claim(repo_root: Path) -> None:
+    """The measured may be disclaimed or described; it may not be asserted.
+
+    Listing it under ``not_established`` is the opposite of claiming it, and the
+    authorization schema describes a future artifact rather than being one. What
+    is prohibited is a document that *carries* the ceiling as its own — that is
+    the difference between naming a limit and exceeding it.
+    """
+    measured = "MEASURED_INTERNAL_END_TO_END_TECHNICAL_DEMONSTRATION"
+    schema_path = "schemas/demo/execution-authorization.schema.json"
+    changed = _git(repo_root, "diff", "--name-only", L1_HISTORICAL_BASELINE).splitlines()
+
+    for path in changed:
+        if not path.endswith(".json") or path == schema_path:
+            continue
+        full = repo_root / path
+        if not full.is_file():
+            continue
+        document = json.loads(full.read_text(encoding="utf-8"))
+        if not isinstance(document, dict):
+            continue
+        # Wherever it appears, it must be a disclaimer, never a value the
+        # document claims for itself.
+        assert document.get("claim_ceiling") != measured, path
+        assert document.get("implementation_claim_ceiling") != measured, path
+        assert document.get("measured_end_to_end_claim") is not True, path
+        disclaimed = set(document.get("not_established") or ())
+        for key, value in document.items():
+            if value == measured:
+                assert key in {"not_established"}, f"{path}: {key} asserts the measured ceiling"
+        if measured in json.dumps(document):
+            assert measured in disclaimed or measured in json.dumps(
+                document.get("not_established", [])
+            ), f"{path}: the measured appears outside a disclaimer"
+
+
+def test_no_source_file_asserts_the_measured_claim_as_its_ceiling(repo_root: Path) -> None:
+    """Runtime code may name the allowed future ceiling; it may not claim it."""
+    runtime = (repo_root / "src" / "oic" / "demo_runtime.py").read_text(encoding="utf-8")
+    assert 'DEVELOPMENT_CLAIM_CEILING: Final = "SYNTHETIC_END_TO_END' in runtime
+    assert 'MEASURED_INTERNAL_CEILING: Final = "MEASURED_INTERNAL_END_TO_END' in runtime
+    # The measured ceiling is reachable only behind a validated authorization.
+    assert "if (complete and result_bearing)" in runtime
+
+
+def test_the_positive_run_path_exists_and_is_reached_only_through_validation(
+    repo_root: Path,
+) -> None:
+    """The CLI must not be a stub, and must not be openable without validation."""
+    import ast
+
+    source = (repo_root / "src" / "oic" / "demo_runtime.py").read_text(encoding="utf-8")
+    tree = ast.parse(source)
+    functions = {node.name for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)}
+    assert "execute_result_bearing_run" in functions
+
+    body = source[source.index("def execute_result_bearing_run(") :]
+    body = body[: body.index("\ndef ", 1)]
+    # The order is the interlock: validate, then consume, then resolve, then run.
+    for step in (
+        "load_result_bearing_authorization(",
+        "claim_execution_authorization(",
+        "resolve_ztl_path(",
+        "run_all_cases(",
+        "write_evidence_graph(",
+        "verify_evidence_graph(",
+    ):
+        assert step in body, step
+    assert body.index("load_result_bearing_authorization(") < body.index(
+        "claim_execution_authorization("
+    )
+    assert body.index("claim_execution_authorization(") < body.index("run_all_cases(")
+
+
+def test_no_workflow_file_changed(repo_root: Path) -> None:
+    changed = _git(
+        repo_root, "diff", "--name-only", L1_HISTORICAL_BASELINE, "--", ".github/"
     ).strip()
     assert changed == ""

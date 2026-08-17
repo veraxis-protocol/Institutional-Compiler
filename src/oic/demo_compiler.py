@@ -47,6 +47,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass
+from enum import StrEnum
 from pathlib import Path
 from typing import Any, Final
 
@@ -688,14 +689,47 @@ def compile_policy(
     )
 
 
+class EvidenceState(StrEnum):
+    """What was actually observed about a required piece of evidence.
+
+    A boolean cannot carry this. ``False`` conflates "we looked and it is not
+    signed" with "we never looked", and those two must not produce the same
+    kernel mark: the first is a finding, the second is an absence. The kernel
+    alphabet already distinguishes them, so the compiler must not throw the
+    distinction away before it gets there.
+    """
+
+    SIGNED = "SIGNED"
+    UNSIGNED = "UNSIGNED"
+    INVALID = "INVALID"
+    UNKNOWN = "UNKNOWN"
+    NOT_OBSERVED = "NOT_OBSERVED"
+
+
+#: The only mapping from an observed evidence state to a kernel mark.
+#: ``None`` means *supply no mark at all*: the kernel then defaults the atom to
+#: ``Z``, and the formula comes back OPEN rather than REFUTED.
+EVIDENCE_STATE_TO_MARK: Final[dict[EvidenceState, str | None]] = {
+    EvidenceState.SIGNED: "T",
+    EvidenceState.UNSIGNED: "F",
+    EvidenceState.INVALID: "F",
+    EvidenceState.UNKNOWN: None,
+    EvidenceState.NOT_OBSERVED: None,
+}
+
+
 def ground_marking(
-    compiled: CompiledPolicy, *, amount: int, evidence_signed: bool
+    compiled: CompiledPolicy,
+    *,
+    amount: int,
+    evidence_state: EvidenceState = EvidenceState.NOT_OBSERVED,
 ) -> dict[str, str]:
     """Evaluate the admitted conditions into a kernel marking.
 
-    Only admitted conditions produce a mark. A ground with no admitted condition
-    behind it is left unmarked, which the kernel reads as ``Z`` — unverified —
-    rather than as false. That distinction is the whole point of the alphabet.
+    Only admitted conditions produce a mark, and only an *observed* evidence
+    state produces one for the evidence ground. An unknown or unobserved
+    observation contributes no mark, so the atom stays ``Z``: unverified, not
+    false. Never falsify a ground because Python happened to hold ``False``.
     """
     marks: dict[str, str] = {}
     for condition in compiled.control_envelope["conditions"]:
@@ -704,5 +738,7 @@ def ground_marking(
         if condition["operator"] == "less_than_or_equal":
             marks[atom] = "T" if amount <= int(condition["value"]) else "F"
         else:
-            marks[atom] = "T" if evidence_signed else "F"
+            mark = EVIDENCE_STATE_TO_MARK[evidence_state]
+            if mark is not None:
+                marks[atom] = mark
     return marks

@@ -107,19 +107,25 @@ from oic.cdc_reliance import (
 from oic.demo_compiler import (
     GROUND_ATOMS,
     CompiledPolicy,
+    EvidenceState,
     canonical_json_digest,
     compile_policy,
+    digest_bytes,
     ground_marking,
     load_policy_source,
 )
 from oic.demo_ztl import (
     CANONICALIZATION_PROFILE_ID,
+    KERNEL_COMMIT,
     KERNEL_PROFILE_ID,
+    BindingFinding,
     KernelResult,
     build_warrant,
     epistemic_status_for,
     expected_formula_hash,
     invoke_kernel,
+    resolve_ztl_path,
+    validate_warrant_binding,
 )
 from oic.errors import OICError
 
@@ -174,6 +180,17 @@ PROCEDURAL: Final = "PROCEDURAL"
 CONTROL_REQUIREMENT: Final = "CONTROL_REQUIREMENT"
 
 RESULT_BEARING_EXECUTION_NOT_AUTHORIZED: Final = "RESULT_BEARING_EXECUTION_NOT_AUTHORIZED"
+
+#: Recorded when the currentness gate did not PROCEED, so authority was never
+#: reached. Distinct from every authority reason code, because "not asked" is not
+#: an answer.
+AUTHORITY_NOT_EVALUATED: Final = "NOT_EVALUATED"
+CURRENTNESS_GATE_DID_NOT_PROCEED: Final = "CURRENTNESS_GATE_DID_NOT_PROCEED"
+
+#: The only ceiling a validated owner authorization may carry. Nothing in this
+#: work order issues one, and nothing here asserts this claim.
+MEASURED_INTERNAL_CEILING: Final = "MEASURED_INTERNAL_END_TO_END_TECHNICAL_DEMONSTRATION"
+DEVELOPMENT_CLAIM_CEILING: Final = "SYNTHETIC_END_TO_END_PIPELINE_IMPLEMENTED_AND_TESTED"
 
 DEMO_SUBJECT_PRINCIPAL: Final = "SYNTH-DISBURSING-OFFICER-001"
 REQUESTED_USE: Final = "SYNTHETIC_GRANT_DISBURSEMENT_DECISION"
@@ -296,6 +313,158 @@ def _rendered_positive_formula(scenario: Scenario) -> str:
     """
     atoms = [GROUND_ATOMS[ground] for ground in scenario.document["ztl"]["ground_ids"]]
     return "(" + " ∧ ".join(atoms) + ")"
+
+
+_WARRANT_SCHEMA_CACHE: dict[str, dict[str, Any]] = {}
+
+
+def _warrant_schema(repo_root: Path) -> dict[str, Any]:
+    """The proposed warrant contract, read from the repository, cached per root.
+
+    Read rather than embedded: a copy of the schema inside runtime code would
+    drift from the contract it claims to enforce and nobody would notice.
+    """
+    key = str(repo_root)
+    if key not in _WARRANT_SCHEMA_CACHE:
+        path = repo_root / "schemas" / "proposed" / "warrant-artifact.schema.json"
+        document: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
+        _WARRANT_SCHEMA_CACHE[key] = document
+    return _WARRANT_SCHEMA_CACHE[key]
+
+
+# ---------------------------------------------------------------------------
+# Scenario bundle identity and the evidence observation
+# ---------------------------------------------------------------------------
+
+
+def scenario_bundle_digest(scenario: Scenario) -> str:
+    """A deterministic identity over the exact scenario input bytes.
+
+    The projection is unambiguous on purpose: sorted relative path, SHA-256 of
+    the exact file bytes, canonically serialized, then digested. An owner issues
+    a result-bearing authorization against this value, so "the same scenario"
+    must mean the same bytes and nothing looser.
+    """
+    entries = []
+    for relative in sorted(str(item) for item in scenario.document["scenario_bundle_paths"]):
+        path = scenario.root / relative
+        if not path.is_file():
+            raise DemoRuntimeError(f"scenario bundle path is missing: {relative}")
+        entries.append({"path": relative, "sha256": digest_bytes(path.read_bytes())})
+    return canonical_json_digest({"scenario_id": SCENARIO_ID, "files": entries})
+
+
+def scenario_bundle_manifest(scenario: Scenario) -> list[dict[str, str]]:
+    """The per-file identities the bundle digest is taken over."""
+    return [
+        {
+            "path": relative,
+            "sha256": digest_bytes((scenario.root / relative).read_bytes()),
+        }
+        for relative in sorted(str(item) for item in scenario.document["scenario_bundle_paths"])
+    ]
+
+
+@dataclass(frozen=True, slots=True)
+class EvidenceObservation:
+    """One observed piece of evidence, with the bytes it was read from.
+
+    A requirement and its satisfaction are different objects. The policy source
+    says the evidence is required; this says an observation exists, what state it
+    is in, and which exact bytes carry it. Nothing may conclude satisfaction from
+    the requirement alone.
+    """
+
+    evidence_id: str
+    evidence_class: str
+    signature_state: str
+    state: EvidenceState
+    path: Path
+    relative_path: str
+    sha256: str
+    document: Mapping[str, Any]
+    satisfies_requirement: bool
+    findings: tuple[str, ...]
+
+    def as_record(self) -> dict[str, Any]:
+        """The observation as it appears in the decision and evidence records."""
+        return {
+            "required_evidence_id": self.evidence_id,
+            "observed_evidence_id": str(self.document.get("evidence_id", "")),
+            "observed_evidence_class": self.evidence_class,
+            "observed_digest": self.sha256,
+            "observed_path": self.relative_path,
+            "signature_state": self.signature_state,
+            "evidence_state": self.state.value,
+            "satisfaction": self.satisfies_requirement,
+            "findings": list(self.findings),
+        }
+
+
+def load_evidence_observation(scenario: Scenario) -> EvidenceObservation:
+    """Open the declared observation, verify its identity, and read its state.
+
+    Every failure path lands on ``NOT_OBSERVED`` or ``UNKNOWN`` rather than on a
+    negative finding. Not having looked is not the same as having looked and
+    found nothing, and only the second may falsify a ground.
+    """
+    declaration = scenario.document["evidence"]
+    required_id = str(declaration["required_evidence_id"])
+    relative = str(declaration["observation_path"])
+    path = scenario.root / relative
+    findings: list[str] = []
+
+    if not path.is_file():
+        return EvidenceObservation(
+            evidence_id=required_id,
+            evidence_class="",
+            signature_state="",
+            state=EvidenceState.NOT_OBSERVED,
+            path=path,
+            relative_path=relative,
+            sha256="",
+            document={},
+            satisfies_requirement=False,
+            findings=("the declared evidence observation is absent",),
+        )
+
+    payload = path.read_bytes()
+    digest = digest_bytes(payload)
+    document: Mapping[str, Any] = json.loads(payload.decode("utf-8"))
+
+    observed_id = str(document.get("evidence_id", ""))
+    observed_class = str(document.get("evidence_class", ""))
+    signature_state = str(document.get("signature_state", ""))
+
+    if observed_id != required_id:
+        findings.append(f"observed evidence_id {observed_id!r} is not the required {required_id!r}")
+    if observed_class != str(declaration["expected_evidence_class"]):
+        findings.append(f"observed evidence_class {observed_class!r} is not the expected class")
+
+    try:
+        state = EvidenceState(signature_state)
+    except ValueError:
+        state = EvidenceState.UNKNOWN
+        findings.append(f"signature_state {signature_state!r} is outside the known states")
+
+    if findings:
+        # The observation does not answer the question that was asked, so it is
+        # unknown rather than negative.
+        state = EvidenceState.UNKNOWN
+
+    satisfies = not findings and signature_state == str(declaration["required_signature_state"])
+    return EvidenceObservation(
+        evidence_id=required_id,
+        evidence_class=observed_class,
+        signature_state=signature_state,
+        state=state,
+        path=path,
+        relative_path=relative,
+        sha256=digest,
+        document=document,
+        satisfies_requirement=satisfies,
+        findings=tuple(findings),
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -534,11 +703,12 @@ def _components(
     epistemic_status: str,
     warranty_grade: str,
     unverified_ground_ids: list[str],
-    gate_decision: UseGateDecision,
-    authority: AuthorityDecisionRecord,
+    gate_decision: UseGateDecision | None,
+    authority: AuthorityDecisionRecord | None,
     compiled: CompiledPolicy,
     binding_ok: bool,
-    evidence_ok: bool,
+    evidence: EvidenceObservation,
+    warrant_findings: list[BindingFinding],
     proposal_id: str,
 ) -> list[_Component]:
     requirement = compiled.runtime_binding["warrant_requirement"]
@@ -553,6 +723,14 @@ def _components(
             CONTROL_REQUIREMENT,
         ),
         _Component(
+            # Constructing a warrant and being entitled to rely on one are two
+            # acts. This component is the second.
+            "warrant_binding_validated",
+            not warrant_findings,
+            [str(finding) for finding in warrant_findings],
+            CONTROL_REQUIREMENT,
+        ),
+        _Component(
             "appropriate_epistemic_route",
             epistemic_status == "ESTABLISHED",
             epistemic_status,
@@ -560,15 +738,20 @@ def _components(
         ),
         _Component(
             "currentness_g1",
-            gate_decision.reason_code_id == "G1",
-            gate_decision.reason_code_id,
+            gate_decision is not None and gate_decision.reason_code_id == "G1",
+            None if gate_decision is None else gate_decision.reason_code_id,
             PROCEDURAL,
         ),
         _Component(
+            # An unevaluated authority is not a satisfied one. When currentness
+            # refused, this component is unmet and says so as NOT_EVALUATED,
+            # rather than borrowing an A1 that was never computed.
             "authority_a1",
-            authority.reason_code_id == "A1",
-            authority.reason_code_id,
-            PRECAUTIONARY if authority.reason_code_id == "A6" else PROCEDURAL,
+            authority is not None and authority.reason_code_id == "A1",
+            AUTHORITY_NOT_EVALUATED if authority is None else authority.reason_code_id,
+            PRECAUTIONARY
+            if authority is not None and authority.reason_code_id == "A6"
+            else PROCEDURAL,
         ),
         _Component(
             "valid_admission_binding",
@@ -582,7 +765,14 @@ def _components(
             compiled.runtime_binding["source_version_set_hash"],
             PROCEDURAL,
         ),
-        _Component("required_evidence", evidence_ok, evidence_ok, CONTROL_REQUIREMENT),
+        _Component(
+            # Derived from an observation that was opened and verified, never
+            # from the presence of a requirement.
+            "required_evidence",
+            evidence.satisfies_requirement,
+            evidence.as_record(),
+            CONTROL_REQUIREMENT,
+        ),
         _Component(
             "automatic_decision_mode",
             compiled.control_envelope["decision_mode"] == "automatic",
@@ -596,7 +786,7 @@ def _components(
 def _compose(
     components: list[_Component],
     *,
-    authority: AuthorityDecisionRecord,
+    authority: AuthorityDecisionRecord | None,
 ) -> tuple[str, str, str, list[str]]:
     """Decide authorization, disposition and basis without collapsing them.
 
@@ -616,6 +806,10 @@ def _compose(
 
     reasons = [component.name for component in missing]
     first = missing[0]
+    if authority is None:
+        # Currentness refused, so authority was never evaluated. The refusal is
+        # procedural and must not be dressed up as an authority finding.
+        return REFUSED, BLOCK, first.basis_if_missing, reasons
     if authority.reason_code_id == "A6":
         # Competing operative authority bases: the institution has not resolved
         # which basis governs. That is not a finding that the claim is false.
@@ -650,9 +844,11 @@ class CaseOutcome:
     kernel_result: KernelResult
     warrant: dict[str, Any]
     gate_decision: UseGateDecision
-    authority_decision: AuthorityDecisionRecord
+    authority_decision: AuthorityDecisionRecord | None
     oam_decision: dict[str, Any]
     action_state: str
+    evidence: EvidenceObservation | None = None
+    warrant_findings: tuple[str, ...] = ()
     reliance: dict[str, Any] | None = None
     consumer_validation: dict[str, Any] | None = None
     absent_artifacts: list[dict[str, str]] = field(default_factory=list)
@@ -676,8 +872,16 @@ def decision_semantic_projection(outcome: CaseOutcome) -> dict[str, Any]:
         "decision_basis": outcome.oam_decision["decision_basis"],
         "currentness_state": outcome.gate_decision.currentness_state,
         "currentness_reason_code_id": outcome.gate_decision.reason_code_id,
-        "authority_decision": outcome.authority_decision.decision,
-        "authority_reason_code_id": outcome.authority_decision.reason_code_id,
+        "authority_decision": (
+            AUTHORITY_NOT_EVALUATED
+            if outcome.authority_decision is None
+            else outcome.authority_decision.decision
+        ),
+        "authority_reason_code_id": (
+            AUTHORITY_NOT_EVALUATED
+            if outcome.authority_decision is None
+            else outcome.authority_decision.reason_code_id
+        ),
         "ztl_disposition": outcome.kernel_result.disposition,
         "ztl_warranty_grade": outcome.kernel_result.warranty_grade,
         "ztl_raw_verdict": outcome.kernel_result.raw_verdict,
@@ -716,6 +920,7 @@ def run_case(
     ztl_path: Path,
     execution_context: ExecutionContext,
     work_dir: Path | None = None,
+    authorization: ValidatedExecutionAuthorization | None = None,
 ) -> CaseOutcome:
     """Run one semantic case end to end, in the bounded demonstration lane.
 
@@ -727,8 +932,13 @@ def run_case(
     policy = compiled[version]
     output_ref = scenario.output_ref(version)
 
+    # --- 00-source: the evidence observation, opened and verified before anything
+    # is concluded from it. The requirement lives in the policy; the state lives
+    # here; satisfaction is established by comparing them, never by either alone.
+    evidence = load_evidence_observation(scenario)
+
     # --- 02-ztl: the logical layer, called live and read without interpretation.
-    marking = ground_marking(policy, amount=scenario.test_amount, evidence_signed=True)
+    marking = ground_marking(policy, amount=scenario.test_amount, evidence_state=evidence.state)
     kernel_result = invoke_kernel(
         formula=str(scenario.document["ztl"]["positive_formula"]),
         marking=marking,
@@ -789,27 +999,51 @@ def run_case(
         evaluated_at=evaluated_at,
     )
 
-    # --- 01-oic: authority, which currentness never implies.
+    # --- 01-oic: authority, which currentness never implies — and which is not
+    # even reached when currentness refused. Evaluating it anyway would produce an
+    # A1 for an operation the gate had already stopped, and an A1 on the record is
+    # indistinguishable from one that meant something.
     artifact_digest = historical_artifact_digest(policy.control_envelope)
-    authority_decision = evaluate_synthetic_authority(
-        request=AuthorityRequest(
-            artifact_ref=output_ref,
-            artifact_digest=artifact_digest,
-            recomputed_artifact_digest=artifact_digest,
-            requested_use=REQUESTED_USE,
-            scope=scenario.scope_ref,
-            requesting_principal=DEMO_SUBJECT_PRINCIPAL,
-            currentness_resolution_digest=resolution.resolution_digest,
-            currentness_epoch_digest=_epoch_for(index, output_ref, evaluated_at),
-            evaluation_time=evaluated_at,
-            valid_until="2027-12-31T23:59:59Z",
-            decision_id=f"decision:{case_id}/{version}",
+    authority_decision: AuthorityDecisionRecord | None = None
+    authority_not_evaluated_reason: str | None = None
+    if gate_decision.reason_code_id != "G1" or gate_decision.decision != "PROCEED":
+        authority_not_evaluated_reason = CURRENTNESS_GATE_DID_NOT_PROCEED
+    else:
+        authority_decision = evaluate_synthetic_authority(
+            request=AuthorityRequest(
+                artifact_ref=output_ref,
+                artifact_digest=artifact_digest,
+                recomputed_artifact_digest=artifact_digest,
+                requested_use=REQUESTED_USE,
+                scope=scenario.scope_ref,
+                requesting_principal=DEMO_SUBJECT_PRINCIPAL,
+                currentness_resolution_digest=resolution.resolution_digest,
+                currentness_epoch_digest=_epoch_for(index, output_ref, evaluated_at),
+                evaluation_time=evaluated_at,
+                valid_until="2027-12-31T23:59:59Z",
+                decision_id=f"decision:{case_id}/{version}",
+            ),
+            authority_bases=[
+                parse_basis_record(record) for record in _authority_bases_for(scenario, case_id)
+            ],
+            admissibility_bases=[parse_basis_record(_admissibility_basis(scenario))],
+            artifact_class=ARTIFACT_CLASS,
+        )
+
+    # --- 03-runtime: re-derive every binding the warrant claims, from state this
+    # function recomputes rather than from what it just wrote.
+    warrant_findings = validate_warrant_binding(
+        warrant,
+        runtime_binding=policy.runtime_binding,
+        control_envelope=policy.control_envelope,
+        envelope_digest=policy.envelope_digest,
+        source_version_set_hash=canonical_json_digest([policy.source.content_hash]),
+        admission_version=canonical_json_digest(
+            [record["admission_id"] for record in policy.admission_records]
         ),
-        authority_bases=[
-            parse_basis_record(record) for record in _authority_bases_for(scenario, case_id)
-        ],
-        admissibility_bases=[parse_basis_record(_admissibility_basis(scenario))],
-        artifact_class=ARTIFACT_CLASS,
+        ground_set_hash=canonical_json_digest(sorted(marking)),
+        evaluated_at=evaluated_at,
+        schema=_warrant_schema(repo_root),
     )
 
     # --- 03-runtime: composition. Four fields, none overwriting another.
@@ -822,7 +1056,8 @@ def run_case(
         authority=authority_decision,
         compiled=policy,
         binding_ok=policy.runtime_binding["envelope_hash"] == policy.envelope_digest,
-        evidence_ok=bool(policy.control_envelope["evidence_requirements"]),
+        evidence=evidence,
+        warrant_findings=warrant_findings,
         proposal_id=proposal_id,
     )
     authorization_status, disposition, basis, unmet = _compose(
@@ -860,11 +1095,26 @@ def run_case(
             "decision": gate_decision.decision,
             "resolution_digest": gate_decision.resolution_digest,
         },
-        "authority_observation": {
-            "decision": authority_decision.decision,
-            "reason_code_id": authority_decision.reason_code_id,
-            "reason_code": authority_decision.reason_code,
-            "authority_decision_digest": authority_decision.authority_decision_digest,
+        "authority_observation": (
+            {
+                "authority_evaluated": True,
+                "decision": authority_decision.decision,
+                "reason_code_id": authority_decision.reason_code_id,
+                "reason_code": authority_decision.reason_code,
+                "authority_decision_digest": authority_decision.authority_decision_digest,
+            }
+            if authority_decision is not None
+            else {
+                "authority_evaluated": False,
+                "authority_not_evaluated_reason": authority_not_evaluated_reason,
+                "decision": AUTHORITY_NOT_EVALUATED,
+                "reason_code_id": AUTHORITY_NOT_EVALUATED,
+            }
+        ),
+        "evidence_observation": evidence.as_record(),
+        "warrant_binding_validation": {
+            "validated": not warrant_findings,
+            "findings": [str(finding) for finding in warrant_findings],
         },
         "unmet_components": unmet,
         "bounded_action": {
@@ -890,10 +1140,13 @@ def run_case(
         authority_decision=authority_decision,
         oam_decision=oam_decision,
         action_state=action_state,
+        evidence=evidence,
+        warrant_findings=tuple(str(finding) for finding in warrant_findings),
     )
 
     # --- 04-reliance: only reachable when the runtime allowed the action.
-    if disposition == ALLOW and work_dir is not None:
+    reliance_permitted = authorization is None or authorization.permits_reliance(case_id)
+    if disposition == ALLOW and work_dir is not None and reliance_permitted:
         _issue_reliance(
             outcome,
             scenario=scenario,
@@ -901,6 +1154,19 @@ def run_case(
             compiled=compiled,
             work_dir=work_dir,
             evaluated_at=evaluated_at,
+            authorization=authorization,
+        )
+    elif disposition == ALLOW and work_dir is not None and not reliance_permitted:
+        outcome.absent_artifacts.append(
+            {
+                "artifact": "reliance_record",
+                "reason": (
+                    "the runtime permitted the action, but this case is not named in the "
+                    "authorization's authorized_reliance_case_ids"
+                ),
+                "execution_disposition": disposition,
+                "decision_basis": basis,
+            }
         )
     else:
         outcome.absent_artifacts.append(
@@ -955,6 +1221,7 @@ def _issue_reliance(
     compiled: dict[str, CompiledPolicy],
     work_dir: Path,
     evaluated_at: str,
+    authorization: ValidatedExecutionAuthorization | None = None,
 ) -> None:
     """Produce an envelope, then run the consumer as a separate OS process.
 
@@ -964,7 +1231,43 @@ def _issue_reliance(
     will consider issuing anything.
     """
     del compiled
+    if outcome.authority_decision is None:
+        raise DemoRuntimeError(
+            "propagation reached without an authority decision; the runtime must not "
+            "propagate an operation whose authority was never evaluated"
+        )
     output_ref = scenario.output_ref(outcome.version)
+
+    # Materialize the warrant and the evidence observation as governed bytes
+    # BEFORE building the envelope, so the envelope can bind digests a consumer
+    # can independently recompute. An evidence_ref that only carries an id tells a
+    # consumer nothing it can check.
+    warrant_path = work_dir / f"{outcome.case_id}-warrant.json"
+    warrant_bytes = (
+        json.dumps(outcome.warrant, sort_keys=True, indent=2, ensure_ascii=False) + "\n"
+    ).encode("utf-8")
+    warrant_path.write_bytes(warrant_bytes)
+
+    evidence_refs: list[dict[str, Any]] = [
+        {
+            "evidence_id": str(outcome.warrant["warrant_artifact_id"]),
+            "evidence_class": "DEMO_WARRANT_ARTIFACT",
+            "path": str(warrant_path),
+            "sha256": persisted_file_sha256(warrant_bytes),
+        }
+    ]
+    if outcome.evidence is not None and outcome.evidence.sha256:
+        evidence_bytes = outcome.evidence.path.read_bytes()
+        evidence_path = work_dir / f"{outcome.case_id}-evidence-observation.json"
+        evidence_path.write_bytes(evidence_bytes)
+        evidence_refs.append(
+            {
+                "evidence_id": outcome.evidence.evidence_id,
+                "evidence_class": outcome.evidence.evidence_class,
+                "path": str(evidence_path),
+                "sha256": persisted_file_sha256(evidence_bytes),
+            }
+        )
     envelope = build_envelope(
         envelope_id=f"envelope:{outcome.case_id}/{outcome.version}",
         artifact_ref=output_ref,
@@ -985,13 +1288,7 @@ def _issue_reliance(
         authority_decision_digest=outcome.authority_decision.authority_decision_digest,
         authority_basis_refs=list(outcome.authority_decision.authority_basis_refs),
         admissibility_basis_refs=list(outcome.authority_decision.admissibility_basis_refs),
-        evidence_refs=[
-            {
-                "evidence_id": warrant_ref,
-                "evidence_class": "DEMO_WARRANT_ARTIFACT",
-            }
-            for warrant_ref in [outcome.warrant["warrant_artifact_id"]]
-        ],
+        evidence_refs=evidence_refs,
         produced_at=evaluated_at,
         valid_until="2027-12-31T23:59:59Z",
     )
@@ -1014,7 +1311,22 @@ def _issue_reliance(
                     "case_id": outcome.case_id,
                     "execution_context": outcome.execution_context.value,
                     "single_use": True,
-                    "result_bearing": False,
+                    # Under DEVELOPMENT_TEST_ONLY this is genuinely not result
+                    # bearing. Under a validated owner authorization it binds that
+                    # instrument by identity and digest, so the reliance record can
+                    # be traced to the act that permitted it.
+                    "result_bearing": authorization is not None,
+                    "owner_authorization_id": (
+                        None if authorization is None else authorization.authorization_id
+                    ),
+                    "owner_authorization_sha256": (
+                        None if authorization is None else authorization.file_sha256
+                    ),
+                    "authorized_reliance_case": (
+                        None
+                        if authorization is None
+                        else authorization.permits_reliance(outcome.case_id)
+                    ),
                 },
                 sort_keys=True,
                 indent=2,
@@ -1073,7 +1385,22 @@ def _run_consumer(job_path: Path) -> int:
         return historical_artifact_digest(policy.control_envelope)
 
     def resolve_evidence_ref(ref: Mapping[str, Any]) -> bool:
-        return bool(ref.get("evidence_id"))
+        """Open the referenced bytes, recompute the digest, and compare.
+
+        Returning true because the reference carried an identifier would make
+        this check unfalsifiable: a substituted, corrupted or absent artifact
+        would resolve exactly as well as the real one.
+        """
+        location = ref.get("path")
+        bound = ref.get("sha256")
+        if not isinstance(location, str) or not isinstance(bound, str) or not bound:
+            return False
+        path = Path(location)
+        if not path.is_file():
+            return False
+        if persisted_file_sha256(path.read_bytes()) != bound:
+            return False
+        return bool(ref.get("evidence_id")) and bool(ref.get("evidence_class"))
 
     def re_resolve(artifact_ref: str, at: str) -> ReResolvedCurrentness:
         historical_artifact = {
@@ -1189,8 +1516,28 @@ def run_all_cases(
     execution_context: ExecutionContext,
     work_dir: Path | None = None,
     scenario_id: str = SCENARIO_ID,
+    authorization: ValidatedExecutionAuthorization | None = None,
 ) -> dict[str, CaseOutcome]:
-    """Run the five semantic cases against one compiled scenario."""
+    """Run the five semantic cases against one compiled scenario.
+
+    Supplying ``ExecutionContext.OWNER_AUTHORIZED_RESULT_BEARING`` is not itself
+    authorization. The enum is a label a caller can type; the interlock below
+    requires the object that only the full binding validator returns, and it
+    refuses before the kernel is called or any byte is written.
+    """
+    if execution_context is ExecutionContext.OWNER_AUTHORIZED_RESULT_BEARING:
+        if authorization is None:
+            raise _refuse(
+                "a result-bearing execution context was requested without a validated owner "
+                "authorization; the execution context alone authorizes nothing"
+            )
+        if authorization.implementation_commit != _git_head(repo_root):
+            raise _refuse("the validated authorization is not bound to the current HEAD")
+    elif authorization is not None:
+        raise DemoRuntimeError(
+            "a result-bearing authorization was supplied for a DEVELOPMENT_TEST_ONLY run; "
+            "development and result-bearing execution must not be mixed"
+        )
     scenario = load_scenario(repo_root, scenario_id)
     compiled = compile_scenario(scenario)
     index = build_currentness_index(scenario, compiled)
@@ -1208,6 +1555,7 @@ def run_all_cases(
             ztl_path=ztl_path,
             execution_context=execution_context,
             work_dir=case_dir,
+            authorization=authorization,
         )
     return outcomes
 
@@ -1237,103 +1585,540 @@ def validate_scenario(repo_root: Path, scenario_id: str = SCENARIO_ID) -> dict[s
             "runtime_binding_id": str(policy.runtime_binding["binding_id"]),
             "output_ref": scenario.output_ref(version),
         }
+    evidence = load_evidence_observation(scenario)
     return {
         "scenario_id": scenario_id,
         "scope_ref": scenario.scope_ref,
         "currentness_index_digest": index.index_digest,
+        # The three identities an owner needs in order to issue a result-bearing
+        # authorization that cannot be re-aimed at a different tree, a different
+        # scenario or a different kernel.
+        "implementation_commit": _git_head(repo_root),
+        "scenario_bundle_digest": scenario_bundle_digest(scenario),
+        "scenario_bundle": scenario_bundle_manifest(scenario),
+        "expected_ztl_commit": KERNEL_COMMIT,
+        "evidence_observation": evidence.as_record(),
         "versions": versions,
         "execution_performed": False,
         "result_bearing_execution": False,
+        "ztl_invoked": False,
         "claim_ceiling": str(scenario.document["claim_ceiling"]),
     }
 
 
-def load_result_bearing_authorization(path: Path | None) -> dict[str, Any]:
-    """Refuse a result-bearing run unless the owner separately authorized one.
+@dataclass(frozen=True, slots=True)
+class ValidatedExecutionAuthorization:
+    """Proof that an owner authorization was validated against observed state.
 
-    There is no flag, environment variable or default that opens this gate. The
-    only route is an owner-issued artifact naming this scenario and saying so.
+    Only this object opens the result-bearing path. It cannot be constructed by
+    passing an enum, a flag or a dict: it is returned solely by the validator
+    below, so "authorized" means "checked", not "asserted".
+    """
+
+    document: Mapping[str, Any]
+    path: Path
+    file_sha256: str
+    implementation_commit: str
+    scenario_bundle_digest: str
+    ztl_commit: str
+    allowed_output_directory: Path
+
+    @property
+    def authorization_id(self) -> str:
+        """The owner's identifier for this authorization."""
+        return str(self.document["authorization_id"])
+
+    def permits_reliance(self, case_id: str) -> bool:
+        """Whether this authorization allows reliance issuance for one case."""
+        return case_id in set(self.document["authorized_reliance_case_ids"])
+
+
+def _refuse(reason: str) -> DemoRuntimeError:
+    return DemoRuntimeError(f"{RESULT_BEARING_EXECUTION_NOT_AUTHORIZED}: {reason}")
+
+
+def _git_head(repo_root: Path) -> str:
+    completed = subprocess.run(  # noqa: S603 - fixed argv, no shell, read-only
+        ["git", "-C", str(repo_root), "rev-parse", "HEAD"],  # noqa: S607
+        capture_output=True,
+        check=False,
+        text=True,
+        timeout=30,
+    )
+    if completed.returncode != 0:
+        raise _refuse(f"cannot resolve the implementation commit: {completed.stderr.strip()}")
+    return completed.stdout.strip()
+
+
+def _worktree_is_clean(repo_root: Path) -> bool:
+    completed = subprocess.run(  # noqa: S603 - fixed argv, no shell, read-only
+        ["git", "-C", str(repo_root), "status", "--porcelain"],  # noqa: S607
+        capture_output=True,
+        check=False,
+        text=True,
+        timeout=60,
+    )
+    return completed.returncode == 0 and completed.stdout.strip() == ""
+
+
+def load_result_bearing_authorization(
+    path: Path | None,
+    *,
+    repo_root: Path | None = None,
+    output_directory: Path | None = None,
+    ztl_path: Path | None = None,
+    scenario_id: str = SCENARIO_ID,
+) -> ValidatedExecutionAuthorization:
+    """Validate an owner authorization against what is actually observable.
+
+    Checking three fields would let an authorization issued for another tree,
+    another scenario, another kernel or another destination open this gate. Every
+    binding the artifact carries is therefore compared to recomputed state, and
+    each failure names the specific mismatch rather than refusing generically.
+
+    Called without a repository root it performs structural validation only and
+    still refuses to return anything a caller could execute against, because the
+    bindings cannot be checked.
     """
     if path is None:
-        raise DemoRuntimeError(
-            f"{RESULT_BEARING_EXECUTION_NOT_AUTHORIZED}: no owner result-bearing execution "
-            "authorization was supplied"
-        )
+        raise _refuse("no owner result-bearing execution authorization was supplied")
     if not path.is_file():
-        raise DemoRuntimeError(
-            f"{RESULT_BEARING_EXECUTION_NOT_AUTHORIZED}: no authorization artifact at {path}"
+        raise _refuse(f"no authorization artifact at {path}")
+
+    payload = path.read_bytes()
+    document: Mapping[str, Any] = json.loads(payload.decode("utf-8"))
+
+    if repo_root is None:
+        raise _refuse(
+            "no repository root was supplied, so the authorization's bindings cannot be "
+            "checked; an unchecked authorization never opens this gate"
         )
-    document: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
-    if document.get("schema_version") != EXECUTION_AUTHORIZATION_SCHEMA_VERSION:
-        raise DemoRuntimeError(
-            f"{RESULT_BEARING_EXECUTION_NOT_AUTHORIZED}: authorization declares schema_version "
-            f"{document.get('schema_version')!r}"
+
+    schema = json.loads(
+        (repo_root / "schemas" / "demo" / "execution-authorization.schema.json").read_text(
+            encoding="utf-8"
         )
-    if document.get("result_bearing_execution_authorized") is not True:
-        raise DemoRuntimeError(
-            f"{RESULT_BEARING_EXECUTION_NOT_AUTHORIZED}: the artifact does not authorize a "
-            "result-bearing execution"
+    )
+    from jsonschema import Draft202012Validator
+
+    errors = sorted(
+        Draft202012Validator(schema).iter_errors(dict(document)), key=lambda item: item.json_path
+    )
+    if errors:
+        detail = "; ".join(f"{error.json_path}: {error.message}" for error in errors[:5])
+        raise _refuse(f"the authorization does not satisfy its schema: {detail}")
+
+    if document["scenario_id"] != scenario_id:
+        raise _refuse(f"the artifact authorizes scenario {document['scenario_id']!r}")
+
+    observed_commit = _git_head(repo_root)
+    if document["implementation_commit"] != observed_commit:
+        raise _refuse(
+            f"authorization implementation_commit {document['implementation_commit']} is not the "
+            f"current HEAD {observed_commit}"
         )
-    if document.get("scenario_id") != SCENARIO_ID:
-        raise DemoRuntimeError(
-            f"{RESULT_BEARING_EXECUTION_NOT_AUTHORIZED}: the artifact authorizes scenario "
-            f"{document.get('scenario_id')!r}"
+    scenario = load_scenario(repo_root, scenario_id)
+    recomputed_bundle = scenario_bundle_digest(scenario)
+    if document["scenario_bundle_digest"] != recomputed_bundle:
+        raise _refuse(
+            f"authorization scenario_bundle_digest {document['scenario_bundle_digest']} does not "
+            f"match the recomputed bundle {recomputed_bundle}"
         )
-    return document
+
+    if document["ztl_commit"] != KERNEL_COMMIT:
+        raise _refuse(
+            f"authorization ztl_commit {document['ztl_commit']} is not the pinned kernel commit"
+        )
+    if ztl_path is not None:
+        observed_kernel = _observed_ztl_commit(ztl_path)
+        if observed_kernel != KERNEL_COMMIT:
+            raise _refuse(
+                f"the ZTL checkout at {ztl_path} is at {observed_kernel}, not the pinned commit"
+            )
+
+    allowed_output = Path(str(document["allowed_output_directory"]))
+    if (
+        output_directory is not None
+        and Path(output_directory).resolve() != allowed_output.resolve()
+    ):
+        raise _refuse(
+            f"requested output directory {output_directory} is not the authorized {allowed_output}"
+        )
+
+    if document["claim_ceiling"] != MEASURED_INTERNAL_CEILING:
+        raise _refuse(f"authorization claim_ceiling {document['claim_ceiling']!r} is not allowed")
+    if set(document["authorized_case_ids"]) != set(CASE_IDS):
+        raise _refuse("authorized_case_ids are not exactly the five declared cases")
+
+    # Checked last on purpose: a specific binding mismatch is far more useful to
+    # the operator than "your tree is dirty", and this requirement is about the
+    # run being reproducible rather than about the artifact being wrong.
+    if not _worktree_is_clean(repo_root):
+        raise _refuse(
+            "the repository working tree is not clean; a result-bearing run must be "
+            "reproducible from committed state alone"
+        )
+
+    return ValidatedExecutionAuthorization(
+        document=document,
+        path=path,
+        file_sha256=persisted_file_sha256(payload),
+        implementation_commit=str(document["implementation_commit"]),
+        scenario_bundle_digest=str(document["scenario_bundle_digest"]),
+        ztl_commit=str(document["ztl_commit"]),
+        allowed_output_directory=allowed_output,
+    )
 
 
-def write_evidence_graph(outcomes: dict[str, CaseOutcome], out_dir: Path) -> dict[str, Any]:
+def _observed_ztl_commit(ztl_path: Path) -> str:
+    completed = subprocess.run(  # noqa: S603 - fixed argv, no shell, read-only
+        ["git", "-C", str(ztl_path), "rev-parse", "HEAD"],  # noqa: S607
+        capture_output=True,
+        check=False,
+        text=True,
+        timeout=30,
+    )
+    return completed.stdout.strip() if completed.returncode == 0 else ""
+
+
+def claim_execution_authorization(
+    authorization: ValidatedExecutionAuthorization, *, consumption_path: Path, claimed_at: str
+) -> dict[str, Any]:
+    """Consume a single-use authorization, or refuse.
+
+    Exclusive creation is the whole mechanism: the second claim loses the race
+    against the filesystem rather than against a check that could be skipped. The
+    authorization artifact itself is never mutated — consuming it is a separate
+    record, so the owner's instrument stays exactly as issued.
+    """
+    record = {
+        "record_class": "DEMO_EXECUTION_AUTHORIZATION_CONSUMPTION",
+        "authorization_id": authorization.authorization_id,
+        "authorization_path": str(authorization.path),
+        "authorization_sha256": authorization.file_sha256,
+        "implementation_commit": authorization.implementation_commit,
+        "scenario_bundle_digest": authorization.scenario_bundle_digest,
+        "ztl_commit": authorization.ztl_commit,
+        "allowed_output_directory": str(authorization.allowed_output_directory),
+        "claimed_at": claimed_at,
+        "state": "CONSUMED_AT_FIRST_CLAIM",
+    }
+    payload = (json.dumps(record, sort_keys=True, indent=2, ensure_ascii=False) + "\n").encode(
+        "utf-8"
+    )
+    try:
+        descriptor = os.open(consumption_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+    except FileExistsError as error:
+        raise DemoRuntimeError(
+            f"{RESULT_BEARING_EXECUTION_NOT_AUTHORIZED}: authorization "
+            f"{authorization.authorization_id} is already consumed; no automatic retry is "
+            "authorized"
+        ) from error
+    with os.fdopen(descriptor, "wb") as handle:
+        handle.write(payload)
+        handle.flush()
+        os.fsync(handle.fileno())
+    return {
+        "consumption_record": record,
+        "consumption_path": str(consumption_path),
+        "consumption_digest": persisted_file_sha256(payload),
+    }
+
+
+def write_evidence_graph(
+    outcomes: dict[str, CaseOutcome],
+    out_dir: Path,
+    *,
+    scenario: Scenario | None = None,
+    authorization: ValidatedExecutionAuthorization | None = None,
+) -> dict[str, Any]:
     """Emit the six-stage evidence graph for a completed set of cases.
 
-    Negative cases record *why* a later artifact does not exist. An absence with
-    no recorded reason is indistinguishable from an omission, so there are none.
+    Two properties make the package independently inspectable rather than merely
+    present. Every reference in the causal chain resolves to bytes that were
+    actually written, with the digest they were written with. And every artifact a
+    case did *not* produce carries a recorded reason: an absence with no reason is
+    indistinguishable from an omission, so there are none here.
     """
     for name in EVIDENCE_DIRECTORIES:
         (out_dir / name).mkdir(parents=True, exist_ok=True)
 
     manifest: dict[str, Any] = {"cases": {}, "directories": list(EVIDENCE_DIRECTORIES)}
+    causal_chain: dict[str, Any] = {"cases": {}}
+    written_files: list[tuple[str, dict[str, Any]]] = []
+
+    def emit(stage: str, name: str, payload: object) -> dict[str, Any]:
+        record = _write(out_dir / stage / name, payload)
+        written_files.append((f"{stage}/{name}", record))
+        return record
+
     for case_id, outcome in sorted(outcomes.items()):
         policy = outcome.compiled
-        written = {
-            "00-source": _write(
-                out_dir / "00-source" / f"{case_id}-source-document.json", policy.source_document
-            ),
-            "01-oic": _write(
-                out_dir / "01-oic" / f"{case_id}-compilation.json",
-                {
-                    "institutional_ir": policy.institutional_ir,
-                    "authority_record": policy.authority_record,
-                    "control_envelope": policy.control_envelope,
-                    "runtime_binding": policy.runtime_binding,
-                    "currentness_use_gate_decision": outcome.gate_decision.as_record(),
-                    "authority_decision": outcome.authority_decision.as_record(),
+        written: dict[str, Any] = {}
+
+        # 00-source — the exact bytes, the document, the nodes, the identity.
+        written["00-source"] = emit(
+            "00-source",
+            f"{case_id}-source.json",
+            {
+                "source_id": policy.source.source_id,
+                "source_content_hash": policy.source.content_hash,
+                "source_bytes_utf8": policy.source.payload.decode("utf-8"),
+                "source_document": policy.source_document,
+                "source_nodes": policy.source_document["nodes"],
+                "evidence_observation": (
+                    None if outcome.evidence is None else outcome.evidence.as_record()
+                ),
+            },
+        )
+
+        # 01-oic — every compilation artifact, admitted and unadmitted alike.
+        written["01-oic"] = emit(
+            "01-oic",
+            f"{case_id}-compilation.json",
+            {
+                "candidate_normative_units": list(policy.candidates),
+                "admission_records": list(policy.admission_records),
+                "institutional_ir": policy.institutional_ir,
+                "authority_record": policy.authority_record,
+                "control_envelope": policy.control_envelope,
+                "runtime_binding": policy.runtime_binding,
+            },
+        )
+
+        # 02-ztl — exactly what the kernel was asked and exactly what it said.
+        written["02-ztl"] = emit(
+            "02-ztl",
+            f"{case_id}-ztl.json",
+            {
+                "kernel_input": {
+                    "caller_formula": outcome.kernel_result.caller_formula,
+                    "marking": outcome.kernel_result.marking,
                 },
-            ),
-            "02-ztl": _write(out_dir / "02-ztl" / f"{case_id}-warrant.json", outcome.warrant),
-            "03-runtime": _write(
-                out_dir / "03-runtime" / f"{case_id}-oam-decision.json", outcome.oam_decision
-            ),
-        }
+                "raw_kernel_result": {
+                    "rendered_formula": outcome.kernel_result.rendered_formula,
+                    "disposition": outcome.kernel_result.disposition,
+                    "raw_verdict": outcome.kernel_result.raw_verdict,
+                    "warranty_grade": outcome.kernel_result.warranty_grade,
+                    "unverified": list(outcome.kernel_result.unverified),
+                },
+                "warrant_artifact": outcome.warrant,
+                "kernel_execution_identity": {
+                    "kernel_commit": outcome.kernel_result.kernel_commit,
+                    "kernel_profile_id": KERNEL_PROFILE_ID,
+                    "entrypoint": "ztljudge.judge",
+                    "prohibited_entrypoint_called": False,
+                },
+                "warrant_binding_validation": {
+                    "validated": not outcome.warrant_findings,
+                    "findings": list(outcome.warrant_findings),
+                },
+            },
+        )
+
+        # 03-runtime — including an explicit not-evaluated authority record.
+        written["03-runtime"] = emit(
+            "03-runtime",
+            f"{case_id}-runtime.json",
+            {
+                "currentness_use_gate_decision": outcome.gate_decision.as_record(),
+                "authority": (
+                    outcome.authority_decision.as_record()
+                    if outcome.authority_decision is not None
+                    else {
+                        "authority_evaluated": False,
+                        "authority_not_evaluated_reason": CURRENTNESS_GATE_DID_NOT_PROCEED,
+                    }
+                ),
+                "evidence_observation": (
+                    None if outcome.evidence is None else outcome.evidence.as_record()
+                ),
+                "oam_decision": outcome.oam_decision,
+                "action_proposal": outcome.oam_decision["bounded_action"],
+                "bounded_execution_attempt": {
+                    "gate_class": ACTION_GATE_CLASS,
+                    "action_state": outcome.action_state,
+                    "attempted_at": outcome.evaluated_at,
+                    "performs_real_world_effect": False,
+                    "execution_context": outcome.execution_context.value,
+                },
+            },
+        )
+
+        # 04-reliance — the whole leg, or a stated reason it does not exist.
         if outcome.reliance is not None:
-            written["04-reliance"] = _write(
-                out_dir / "04-reliance" / f"{case_id}-reliance.json",
-                {"validation": outcome.consumer_validation, "reliance_record": outcome.reliance},
+            written["04-reliance"] = emit(
+                "04-reliance",
+                f"{case_id}-reliance.json",
+                {
+                    "consumer_validation": outcome.consumer_validation,
+                    "reliance_record": outcome.reliance,
+                },
             )
         else:
-            written["04-reliance"] = _write(
-                out_dir / "04-reliance" / f"{case_id}-absent.json",
-                {"absent_artifacts": outcome.absent_artifacts},
+            written["04-reliance"] = emit(
+                "04-reliance",
+                f"{case_id}-absent.json",
+                {
+                    "absent_artifacts": outcome.absent_artifacts,
+                    "propagation_envelope": None,
+                    "consumer_validation": None,
+                    "issuance_authorization": None,
+                    "issuance_attempt": None,
+                    "reliance_record": None,
+                },
             )
+
         manifest["cases"][case_id] = {
             "execution_context": outcome.execution_context.value,
             "semantic_projection": decision_semantic_projection(outcome),
             "written": written,
             "absent_artifacts": outcome.absent_artifacts,
         }
-    manifest["claim_ceiling"] = "SYNTHETIC_END_TO_END_PIPELINE_IMPLEMENTED_AND_TESTED"
-    manifest["measured_end_to_end_claim"] = False
-    _write(out_dir / "05-evidence" / "MANIFEST.json", manifest)
+        causal_chain["cases"][case_id] = {
+            "source_content_hash": policy.source.content_hash,
+            "admission_ids": list(policy.control_envelope["admission_ids"]),
+            "source_anchor_ids": [
+                str(anchor["anchor_id"]) for anchor in policy.control_envelope["source_anchors"]
+            ],
+            "envelope_id": str(policy.control_envelope["envelope_id"]),
+            "envelope_digest": policy.envelope_digest,
+            "runtime_binding_id": str(policy.runtime_binding["binding_id"]),
+            "bound_formula_hash": str(policy.runtime_binding["bound_formula_hash"]),
+            "warrant_artifact_id": str(outcome.warrant["warrant_artifact_id"]),
+            "warrant_input_hash": str(outcome.warrant["input_hash"]),
+            "warrant_output_hash": str(outcome.warrant["output_hash"]),
+            "currentness_resolution_digest": outcome.gate_decision.resolution_digest,
+            "authority_decision_digest": (
+                None
+                if outcome.authority_decision is None
+                else outcome.authority_decision.authority_decision_digest
+            ),
+            "evidence_digest": (None if outcome.evidence is None else outcome.evidence.sha256),
+            "reliance_record_digest": (
+                None if outcome.reliance is None else outcome.reliance["reliance_record_digest"]
+            ),
+            "artifacts": dict(written),
+        }
+
+    if scenario is not None:
+        causal_chain["scenario_bundle_digest"] = scenario_bundle_digest(scenario)
+        causal_chain["scenario_bundle"] = scenario_bundle_manifest(scenario)
+    causal_chain["owner_authorization_id"] = (
+        None if authorization is None else authorization.authorization_id
+    )
+
+    contexts = {outcome.execution_context for outcome in outcomes.values()}
+    complete = set(outcomes) == set(CASE_IDS)
+    result_bearing = authorization is not None and contexts == {
+        ExecutionContext.OWNER_AUTHORIZED_RESULT_BEARING
+    }
+    # A measured claim needs all five cases, a package that verifies itself, and an
+    # authorization permitting that ceiling. Any one of them missing and the
+    # ceiling stays where it is.
+    manifest["claim_ceiling"] = (
+        MEASURED_INTERNAL_CEILING if (complete and result_bearing) else DEVELOPMENT_CLAIM_CEILING
+    )
+    manifest["measured_end_to_end_claim"] = bool(complete and result_bearing)
+    manifest["all_cases_present"] = complete
+    manifest["result_bearing"] = result_bearing
+
+    emit("05-evidence", "causal-chain.json", causal_chain)
+    manifest_record = _write(out_dir / "05-evidence" / "MANIFEST.json", manifest)
+    written_files.append(("05-evidence/MANIFEST.json", manifest_record))
+
+    sums = "".join(
+        f"{record['sha256']}  {relative}\n" for relative, record in sorted(written_files)
+    )
+    (out_dir / "05-evidence" / "SHA256SUMS").write_bytes(sums.encode("utf-8"))
     return manifest
+
+
+def verify_evidence_graph(out_dir: Path) -> dict[str, Any]:
+    """Re-open a written package and check it against its own SHA256SUMS.
+
+    Self-verification is what makes the package inspectable by someone who was
+    not there when it was written.
+    """
+    sums_path = out_dir / "05-evidence" / "SHA256SUMS"
+    if not sums_path.is_file():
+        return {"verified": False, "reason": "SHA256SUMS is absent", "checked": 0}
+    checked = 0
+    failures: list[str] = []
+    for line in sums_path.read_text(encoding="utf-8").splitlines():
+        digest, _, relative = line.partition("  ")
+        path = out_dir / relative
+        if not path.is_file():
+            failures.append(f"{relative}: absent")
+            continue
+        if persisted_file_sha256(path.read_bytes()) != digest:
+            failures.append(f"{relative}: digest mismatch")
+        checked += 1
+    return {"verified": not failures, "checked": checked, "failures": failures}
+
+
+def execute_result_bearing_run(
+    *,
+    repo_root: Path,
+    authorization_path: Path,
+    output_directory: Path,
+    ztl_path: Path | None = None,
+    scenario_id: str = SCENARIO_ID,
+    claimed_at: str,
+) -> dict[str, Any]:
+    """The positive path behind ``oic demo run``, in order, fail-closed at each step.
+
+    validate the authorization against observed state
+      -> claim its single use
+      -> resolve the pinned ZTL checkout
+      -> run all five cases under OWNER_AUTHORIZED_RESULT_BEARING
+      -> write the evidence graph
+      -> verify the written package against its own digests
+      -> emit a final status
+
+    Implemented so the frozen L1 baseline has a complete path rather than a stub,
+    and not invoked anywhere in this work order: no owner authorization exists,
+    and the validator above is the only thing that could produce one.
+    """
+    authorization = load_result_bearing_authorization(
+        authorization_path,
+        repo_root=repo_root,
+        output_directory=output_directory,
+        ztl_path=ztl_path,
+        scenario_id=scenario_id,
+    )
+    consumption = claim_execution_authorization(
+        authorization,
+        consumption_path=output_directory.parent
+        / f"{authorization.authorization_id}.consumed.json",
+        claimed_at=claimed_at,
+    )
+    resolved_ztl = resolve_ztl_path(ztl_path)
+    scenario = load_scenario(repo_root, scenario_id)
+    outcomes = run_all_cases(
+        repo_root=repo_root,
+        ztl_path=resolved_ztl,
+        execution_context=ExecutionContext.OWNER_AUTHORIZED_RESULT_BEARING,
+        work_dir=output_directory / "work",
+        scenario_id=scenario_id,
+        authorization=authorization,
+    )
+    manifest = write_evidence_graph(
+        outcomes, output_directory, scenario=scenario, authorization=authorization
+    )
+    verification = verify_evidence_graph(output_directory)
+    return {
+        "authorization_id": authorization.authorization_id,
+        "consumption": consumption,
+        "cases": sorted(outcomes),
+        "manifest": manifest,
+        "package_verification": verification,
+        "status": (
+            "RESULT_BEARING_EXECUTION_COMPLETE"
+            if verification["verified"] and manifest["all_cases_present"]
+            else "RESULT_BEARING_EXECUTION_INCOMPLETE"
+        ),
+    }
 
 
 def _write(path: Path, payload: object) -> dict[str, Any]:

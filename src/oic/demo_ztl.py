@@ -39,6 +39,7 @@ import hashlib
 import json
 import subprocess
 import sys
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Final
@@ -53,7 +54,9 @@ __all__ = [
     "KERNEL_NAME",
     "KERNEL_PROFILE_ID",
     "KERNEL_VERSION",
+    "PERMITTED_DISPOSITION_GRADES",
     "PROHIBITED_TRANSITIONS",
+    "BindingFinding",
     "KernelResult",
     "WarrantError",
     "build_warrant",
@@ -62,6 +65,7 @@ __all__ = [
     "expected_output_hash",
     "invoke_kernel",
     "resolve_ztl_path",
+    "validate_warrant_binding",
 ]
 
 KERNEL_PROFILE_ID: Final = "ztl-v0.1"
@@ -328,3 +332,159 @@ def build_warrant(
             "raw_verdict is retained for replay and is operationally inert.",
         ],
     }
+
+
+# ---------------------------------------------------------------------------
+# Runtime warrant-binding validation
+# ---------------------------------------------------------------------------
+
+#: Disposition/grade pairs the pinned profile declares reachable. EARNED requires
+#: hereditary by construction; a T verdict that is only sound is ON CREDIT. A pair
+#: outside this table is not a stricter result, it is an impossible one.
+PERMITTED_DISPOSITION_GRADES: Final[frozenset[tuple[str, str]]] = frozenset(
+    {
+        ("EARNED", "hereditary"),
+        ("REFUTED", "hereditary"),
+        ("ON CREDIT", "sound"),
+        ("ON CREDIT", "until-verification"),
+        ("OPEN", "hereditary"),
+        ("OPEN", "sound"),
+        ("OPEN", "until-verification"),
+    }
+)
+
+
+@dataclass(frozen=True, slots=True)
+class BindingFinding:
+    """One reason a warrant is not usable against this runtime binding."""
+
+    rule_id: str
+    detail: str
+
+    def __str__(self) -> str:
+        return f"{self.rule_id}: {self.detail}"
+
+
+def validate_warrant_binding(
+    warrant: Mapping[str, Any],
+    *,
+    runtime_binding: Mapping[str, Any],
+    control_envelope: Mapping[str, Any],
+    envelope_digest: str,
+    source_version_set_hash: str,
+    admission_version: str,
+    ground_set_hash: str,
+    evaluated_at: str,
+    schema: Mapping[str, Any],
+) -> list[BindingFinding]:
+    """Re-derive every binding a warrant claims, and report what does not hold.
+
+    The runtime must not treat a warrant as usable merely because this same
+    process just built it. Constructing an artifact and being entitled to rely on
+    one are different acts, and if the second is skipped whenever the first
+    happened locally then nothing is ever actually checked.
+
+    This validator lives in the demo source lane deliberately. The repository's
+    conformance validator under ``tests/contract/`` is a test-only helper and must
+    not be imported by runtime code: a runtime whose contract lives in the test
+    tree has no contract at all wherever the tests are not installed.
+    """
+    findings: list[BindingFinding] = []
+
+    def fail(rule_id: str, detail: str) -> None:
+        findings.append(BindingFinding(rule_id, detail))
+
+    # WB-001 structural validity against the proposed contract.
+    try:
+        from jsonschema import Draft202012Validator
+
+        Draft202012Validator(dict(schema)).validate(dict(warrant))
+    except ImportError:  # pragma: no cover - jsonschema is a declared dependency
+        fail("WB-001", "jsonschema is unavailable, so structural validity is unproven")
+    except Exception as error:
+        fail("WB-001", f"warrant does not validate against the proposed contract: {error}")
+
+    # WB-002 profile identity. Dispositions and grades are not portable across
+    # kernels, so a profile mismatch is a misbinding, not a detail.
+    if warrant.get("kernel_profile_id") != runtime_binding.get("kernel_profile_id"):
+        fail(
+            "WB-002",
+            f"kernel_profile_id {warrant.get('kernel_profile_id')!r} does not match the "
+            f"binding's {runtime_binding.get('kernel_profile_id')!r}",
+        )
+    if warrant.get("canonicalization_profile_id") != runtime_binding.get(
+        "canonicalization_profile_id"
+    ):
+        fail(
+            "WB-002",
+            "canonicalization_profile_id does not match the runtime binding",
+        )
+
+    # WB-003 the warrant must be about the formula this control bound.
+    if warrant.get("formula_hash") != runtime_binding.get("bound_formula_hash"):
+        fail(
+            "WB-003",
+            f"formula_hash {warrant.get('formula_hash')!r} is not the bound formula "
+            f"{runtime_binding.get('bound_formula_hash')!r}",
+        )
+    if warrant.get("formula_hash") != expected_formula_hash(str(warrant.get("formula", ""))):
+        fail("WB-003", "formula_hash does not recompute from the recorded rendered formula")
+
+    # WB-004 kernel identity.
+    if warrant.get("kernel_commit") != KERNEL_COMMIT:
+        fail("WB-004", f"kernel_commit {warrant.get('kernel_commit')!r} is not the pinned commit")
+
+    # WB-005 the warrant's anchors and admissions must be the ones that made the
+    # grounds executable — not a superset, and not something else entirely.
+    expected_anchors = {
+        str(anchor["anchor_id"]) for anchor in control_envelope.get("source_anchors", [])
+    }
+    if set(warrant.get("source_anchor_ids") or ()) != expected_anchors:
+        fail("WB-005", "source_anchor_ids are not exactly the admitted executable anchors")
+    if set(warrant.get("admission_ids") or ()) != set(control_envelope.get("admission_ids") or ()):
+        fail("WB-005", "admission_ids are not exactly the control's admissions")
+
+    # WB-006 version bindings must recompute rather than be asserted.
+    if runtime_binding.get("source_version_set_hash") != source_version_set_hash:
+        fail("WB-006", "source version binding does not recompute")
+    if runtime_binding.get("admission_version") != admission_version:
+        fail("WB-006", "admission version binding does not recompute")
+    if runtime_binding.get("envelope_hash") != envelope_digest:
+        fail("WB-006", "envelope identity does not recompute")
+
+    # WB-007 validity interval.
+    valid_from = str(warrant.get("valid_from", ""))
+    valid_until = warrant.get("valid_until")
+    if valid_from and evaluated_at < valid_from:
+        fail("WB-007", f"warrant is not yet valid at {evaluated_at}")
+    if valid_until is not None and evaluated_at > str(valid_until):
+        fail("WB-007", f"warrant expired before {evaluated_at}")
+
+    # WB-008 ground-set identity.
+    if warrant.get("ground_set_hash") != ground_set_hash:
+        fail("WB-008", "ground_set_hash does not recompute from the evaluated grounds")
+
+    # WB-009 the disposition/grade pair must be one the pinned profile can produce.
+    pair = (str(warrant.get("disposition")), str(warrant.get("warranty_grade")))
+    if pair not in PERMITTED_DISPOSITION_GRADES:
+        fail("WB-009", f"disposition/grade pair {pair} is not reachable under {KERNEL_PROFILE_ID}")
+
+    # WB-010 the ground partition must be a partition.
+    dependencies = list(warrant.get("dependency_ids") or ())
+    unverified = list(warrant.get("unverified_ground_ids") or ())
+    overlap = set(dependencies) & set(unverified)
+    if overlap:
+        fail("WB-010", f"dependency_ids and unverified_ground_ids overlap: {sorted(overlap)}")
+
+    # WB-011 the output projection must recompute from the recorded fields.
+    recomputed = expected_output_hash(
+        rendered_formula=str(warrant.get("formula", "")),
+        disposition=str(warrant.get("disposition", "")),
+        raw_verdict=str(warrant.get("raw_verdict", "")),
+        warranty_grade=str(warrant.get("warranty_grade", "")),
+        unverified_ground_ids=unverified,
+    )
+    if warrant.get("output_hash") != recomputed:
+        fail("WB-011", "output_hash does not recompute from the recorded kernel output")
+
+    return findings

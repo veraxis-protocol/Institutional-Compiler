@@ -7,6 +7,7 @@ separations they check are checked even where no ZTL checkout exists.
 from __future__ import annotations
 
 import json
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +16,7 @@ from jsonschema import Draft202012Validator
 
 from oic.cdc_authority import AuthorityRequest, evaluate_synthetic_authority, parse_basis_record
 from oic.cdc_currentness import CURRENT, SUPERSEDED, resolve_currentness
+from oic.demo_compiler import EvidenceState
 from oic.demo_runtime import (
     ACTION_BLOCKED,
     ACTION_ESCALATED,
@@ -35,17 +37,26 @@ from oic.demo_runtime import (
     UNRESOLVED,
     DemoRuntimeError,
     ExecutionContext,
+    Scenario,
     _action_state,
     _admissibility_basis,
     _authority_bases_for,
     _components,
     _compose,
+    _git_head,
+    _worktree_is_clean,
     build_currentness_index,
+    claim_execution_authorization,
     compile_scenario,
+    load_evidence_observation,
     load_result_bearing_authorization,
     load_scenario,
+    run_all_cases,
+    scenario_bundle_digest,
+    scenario_bundle_manifest,
     validate_scenario,
 )
+from oic.demo_ztl import KERNEL_COMMIT
 
 
 @pytest.fixture(scope="module")
@@ -111,7 +122,9 @@ def test_a_result_bearing_run_refuses_a_missing_artifact(tmp_path: Path) -> None
         load_result_bearing_authorization(tmp_path / "absent.json")
 
 
-def test_a_result_bearing_run_refuses_an_artifact_that_does_not_authorize(tmp_path: Path) -> None:
+def test_a_result_bearing_run_refuses_an_artifact_that_does_not_authorize(
+    repo_root: Path, tmp_path: Path
+) -> None:
     """Presenting an artifact is not the same as being authorized by one."""
     path = tmp_path / "auth.json"
     path.write_text(
@@ -124,24 +137,20 @@ def test_a_result_bearing_run_refuses_an_artifact_that_does_not_authorize(tmp_pa
         ),
         encoding="utf-8",
     )
-    with pytest.raises(DemoRuntimeError, match="does not authorize a result-bearing execution"):
-        load_result_bearing_authorization(path)
+    with pytest.raises(DemoRuntimeError, match="does not satisfy its schema"):
+        load_result_bearing_authorization(path, repo_root=repo_root)
 
 
-def test_a_result_bearing_run_refuses_an_authorization_for_another_scenario(tmp_path: Path) -> None:
+def test_a_result_bearing_run_refuses_an_authorization_for_another_scenario(
+    repo_root: Path, tmp_path: Path, authorization_template: dict[str, Any]
+) -> None:
     path = tmp_path / "auth.json"
     path.write_text(
-        json.dumps(
-            {
-                "schema_version": "OIC-DEMO-EXECUTION-AUTHORIZATION-v0.1",
-                "scenario_id": "some-other-scenario",
-                "result_bearing_execution_authorized": True,
-            }
-        ),
+        json.dumps({**authorization_template, "scenario_id": "some-other-scenario"}),
         encoding="utf-8",
     )
-    with pytest.raises(DemoRuntimeError, match="authorizes scenario"):
-        load_result_bearing_authorization(path)
+    with pytest.raises(DemoRuntimeError, match="does not satisfy its schema"):
+        load_result_bearing_authorization(path, repo_root=repo_root)
 
 
 # --- currentness -----------------------------------------------------------
@@ -220,7 +229,8 @@ def _compose_for(state: dict[str, Any], **overrides: Any) -> tuple[str, str, str
         "authority": authority,
         "compiled": policy,
         "binding_ok": True,
-        "evidence_ok": True,
+        "evidence": load_evidence_observation(scenario),
+        "warrant_findings": [],
         "proposal_id": "proposal:x",
     }
     arguments.update(overrides)
@@ -289,8 +299,12 @@ def test_authority_refusal_does_not_rewrite_the_epistemic_status(state: dict[str
     assert (status, disposition, basis) == (REFUSED, BLOCK, PROCEDURAL)
 
 
-def test_missing_evidence_blocks(state: dict[str, Any]) -> None:
-    status, disposition, _, reasons = _compose_for(state, evidence_ok=False)
+def test_missing_evidence_blocks(state: dict[str, Any], repo_root: Path, tmp_path: Path) -> None:
+    """An unobserved requirement is unmet; it is never satisfied by default."""
+    absent = load_evidence_observation(
+        Scenario(root=tmp_path, document=load_scenario(repo_root).document)
+    )
+    status, disposition, _, reasons = _compose_for(state, evidence=absent)
     assert (status, disposition) == (REFUSED, BLOCK)
     assert "required_evidence" in reasons
 
@@ -340,3 +354,296 @@ def test_the_demo_schemas_are_valid_draft_2020_12(repo_root: Path) -> None:
             (repo_root / "schemas" / "demo" / f"{name}.schema.json").read_text(encoding="utf-8")
         )
         Draft202012Validator.check_schema(document)
+
+
+# --- the result-bearing authorization contract ------------------------------
+
+
+@pytest.fixture
+def authorization_template(repo_root: Path) -> dict[str, Any]:
+    """A conforming authorization bound to the state actually observable here."""
+    scenario = load_scenario(repo_root)
+    return {
+        "record_class": "OWNER_DEMO_RESULT_BEARING_EXECUTION_AUTHORIZATION",
+        "schema_version": "OIC-DEMO-EXECUTION-AUTHORIZATION-v0.1",
+        "authorization_id": "OWNER-DEMO-EXEC-TEST-001",
+        "slice_id": "OIC-ZTL-OAM-DEMO-SLICE-001",
+        "scenario_id": "synthetic-grant-authority",
+        "owner": "ARKADIY_MITEIKO",
+        "issued_at": "2027-05-15T00:00:00Z",
+        "implementation_commit": _git_head(repo_root),
+        "scenario_bundle_digest": scenario_bundle_digest(scenario),
+        "ztl_commit": KERNEL_COMMIT,
+        "allowed_output_directory": str(Path(tempfile.gettempdir()) / "authorized-output"),
+        "claim_ceiling": "MEASURED_INTERNAL_END_TO_END_TECHNICAL_DEMONSTRATION",
+        "authorized_case_ids": ["case-1", "case-2", "case-3", "case-4", "case-5"],
+        "authorized_reliance_case_ids": ["case-1"],
+        "single_use": True,
+        "result_bearing_execution_authorized": True,
+        "measured_claim_authorized": True,
+        "production_claim_authorized": False,
+        "institutional_validity_claim_authorized": False,
+        "independent_assurance_claim_authorized": False,
+        "RUN004_authorized": False,
+    }
+
+
+def _write_authorization(tmp_path: Path, document: dict[str, Any]) -> Path:
+    path = tmp_path / "authorization.json"
+    path.write_text(json.dumps(document, indent=2, sort_keys=True), encoding="utf-8")
+    return path
+
+
+def test_the_authorization_schema_binds_every_required_field(repo_root: Path) -> None:
+    schema = json.loads(
+        (repo_root / "schemas" / "demo" / "execution-authorization.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert set(schema["required"]) >= {
+        "record_class",
+        "schema_version",
+        "authorization_id",
+        "slice_id",
+        "scenario_id",
+        "owner",
+        "issued_at",
+        "implementation_commit",
+        "scenario_bundle_digest",
+        "ztl_commit",
+        "allowed_output_directory",
+        "claim_ceiling",
+        "authorized_case_ids",
+        "authorized_reliance_case_ids",
+        "single_use",
+        "result_bearing_execution_authorized",
+        "measured_claim_authorized",
+        "production_claim_authorized",
+        "institutional_validity_claim_authorized",
+        "independent_assurance_claim_authorized",
+        "RUN004_authorized",
+    }
+    properties = schema["properties"]
+    assert properties["ztl_commit"]["const"] == "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b"
+    assert properties["authorized_reliance_case_ids"]["const"] == ["case-1"]
+    assert properties["single_use"]["const"] is True
+    assert properties["production_claim_authorized"]["const"] is False
+    assert properties["RUN004_authorized"]["const"] is False
+
+
+def test_no_actual_authorization_artifact_exists_in_the_repository(repo_root: Path) -> None:
+    """The schema describes a future artifact. None was created by this lane."""
+    matches = [
+        path
+        for path in repo_root.rglob("*.json")
+        if ".git" not in path.parts
+        and '"OWNER_DEMO_RESULT_BEARING_EXECUTION_AUTHORIZATION"'
+        in path.read_text(encoding="utf-8", errors="ignore")
+        and "schemas/demo" not in path.as_posix()
+    ]
+    assert matches == []
+
+
+def test_an_authorization_without_a_repository_root_cannot_open_the_gate(
+    tmp_path: Path, authorization_template: dict[str, Any]
+) -> None:
+    path = _write_authorization(tmp_path, authorization_template)
+    with pytest.raises(DemoRuntimeError, match="bindings cannot be checked"):
+        load_result_bearing_authorization(path)
+
+
+def test_a_wrong_implementation_commit_is_refused(
+    repo_root: Path, tmp_path: Path, authorization_template: dict[str, Any]
+) -> None:
+    path = _write_authorization(
+        tmp_path, {**authorization_template, "implementation_commit": "0" * 40}
+    )
+    with pytest.raises(DemoRuntimeError, match="is not the current HEAD"):
+        load_result_bearing_authorization(path, repo_root=repo_root)
+
+
+def test_a_wrong_scenario_bundle_digest_is_refused(
+    repo_root: Path, tmp_path: Path, authorization_template: dict[str, Any]
+) -> None:
+    path = _write_authorization(
+        tmp_path,
+        {**authorization_template, "scenario_bundle_digest": "sha256:" + "0" * 64},
+    )
+    with pytest.raises(DemoRuntimeError, match="does not match the recomputed bundle"):
+        load_result_bearing_authorization(path, repo_root=repo_root)
+
+
+def test_a_wrong_ztl_checkout_is_refused(
+    repo_root: Path, tmp_path: Path, authorization_template: dict[str, Any]
+) -> None:
+    path = _write_authorization(tmp_path, authorization_template)
+    with pytest.raises(DemoRuntimeError, match="not the pinned commit"):
+        load_result_bearing_authorization(path, repo_root=repo_root, ztl_path=tmp_path)
+
+
+def test_a_wrong_output_directory_is_refused(
+    repo_root: Path, tmp_path: Path, authorization_template: dict[str, Any]
+) -> None:
+    path = _write_authorization(tmp_path, authorization_template)
+    with pytest.raises(DemoRuntimeError, match="is not the authorized"):
+        load_result_bearing_authorization(
+            path, repo_root=repo_root, output_directory=tmp_path / "somewhere-else"
+        )
+
+
+def test_a_non_conforming_authorization_is_refused(
+    repo_root: Path, tmp_path: Path, authorization_template: dict[str, Any]
+) -> None:
+    path = _write_authorization(
+        tmp_path, {**authorization_template, "authorized_reliance_case_ids": ["case-1", "case-2"]}
+    )
+    with pytest.raises(DemoRuntimeError, match="does not satisfy its schema"):
+        load_result_bearing_authorization(path, repo_root=repo_root)
+
+
+# --- the internal interlock -------------------------------------------------
+
+
+def test_the_execution_context_enum_alone_authorizes_nothing(repo_root: Path) -> None:
+    """Typing the enum is not authorization, and the refusal comes first.
+
+    It must land before the kernel is reached and before any byte is written, so
+    an unauthorized caller cannot leave artifacts behind on the way to being
+    refused.
+    """
+    with pytest.raises(DemoRuntimeError, match=RESULT_BEARING_EXECUTION_NOT_AUTHORIZED):
+        run_all_cases(
+            repo_root=repo_root,
+            ztl_path=Path("/nonexistent-ztl-checkout"),
+            execution_context=ExecutionContext.OWNER_AUTHORIZED_RESULT_BEARING,
+            work_dir=None,
+        )
+
+
+def _require_clean_worktree(repo_root: Path) -> None:
+    """Skip loudly rather than fail when the tree has uncommitted changes.
+
+    A validated authorization cannot exist over a dirty tree by design, so these
+    tests have nothing to assert until the work is committed.
+    """
+    if not _worktree_is_clean(repo_root):
+        pytest.skip(
+            "a validated authorization requires a clean worktree; this run has uncommitted "
+            "changes, so the validator refuses before it can return one"
+        )
+
+
+def test_a_development_run_rejects_a_result_bearing_authorization(
+    repo_root: Path, tmp_path: Path, authorization_template: dict[str, Any]
+) -> None:
+    _require_clean_worktree(repo_root)
+    path = _write_authorization(
+        tmp_path, {**authorization_template, "allowed_output_directory": str(tmp_path)}
+    )
+    authorization = load_result_bearing_authorization(
+        path, repo_root=repo_root, output_directory=tmp_path
+    )
+    with pytest.raises(DemoRuntimeError, match="must not be mixed"):
+        run_all_cases(
+            repo_root=repo_root,
+            ztl_path=Path("/nonexistent-ztl-checkout"),
+            execution_context=ExecutionContext.DEVELOPMENT_TEST_ONLY,
+            work_dir=None,
+            authorization=authorization,
+        )
+
+
+# --- single use -------------------------------------------------------------
+
+
+def test_a_second_claim_of_the_same_authorization_is_refused(
+    repo_root: Path, tmp_path: Path, authorization_template: dict[str, Any]
+) -> None:
+    """Exclusive creation, so the second claim loses to the filesystem."""
+    _require_clean_worktree(repo_root)
+    path = _write_authorization(
+        tmp_path, {**authorization_template, "allowed_output_directory": str(tmp_path)}
+    )
+    authorization = load_result_bearing_authorization(
+        path, repo_root=repo_root, output_directory=tmp_path
+    )
+    consumption_path = tmp_path / "consumed.json"
+    first = claim_execution_authorization(
+        authorization, consumption_path=consumption_path, claimed_at="2027-05-15T00:00:00Z"
+    )
+    assert first["consumption_record"]["state"] == "CONSUMED_AT_FIRST_CLAIM"
+    assert first["consumption_record"]["authorization_sha256"] == authorization.file_sha256
+    with pytest.raises(DemoRuntimeError, match="already consumed"):
+        claim_execution_authorization(
+            authorization, consumption_path=consumption_path, claimed_at="2027-05-15T00:01:00Z"
+        )
+
+
+def test_consuming_an_authorization_does_not_mutate_it(
+    repo_root: Path, tmp_path: Path, authorization_template: dict[str, Any]
+) -> None:
+    _require_clean_worktree(repo_root)
+    path = _write_authorization(
+        tmp_path, {**authorization_template, "allowed_output_directory": str(tmp_path)}
+    )
+    before = path.read_bytes()
+    authorization = load_result_bearing_authorization(
+        path, repo_root=repo_root, output_directory=tmp_path
+    )
+    claim_execution_authorization(
+        authorization,
+        consumption_path=tmp_path / "consumed.json",
+        claimed_at="2027-05-15T00:00:00Z",
+    )
+    assert path.read_bytes() == before
+
+
+# --- scenario bundle identity ----------------------------------------------
+
+
+def test_the_scenario_bundle_digest_is_deterministic_and_covers_every_input(
+    repo_root: Path,
+) -> None:
+    scenario = load_scenario(repo_root)
+    assert scenario_bundle_digest(scenario) == scenario_bundle_digest(scenario)
+    paths = {entry["path"] for entry in scenario_bundle_manifest(scenario)}
+    assert paths == {
+        "SCENARIO.json",
+        "admission-v1.json",
+        "admission-v2.json",
+        "evidence-eligibility-signed.json",
+        "policy-v1.src.txt",
+        "policy-v2.src.txt",
+    }
+
+
+def test_validate_reports_the_identities_an_owner_authorizes_against(
+    repo_root: Path,
+) -> None:
+    report = validate_scenario(repo_root)
+    assert report["implementation_commit"] == _git_head(repo_root)
+    assert report["scenario_bundle_digest"] == scenario_bundle_digest(load_scenario(repo_root))
+    assert report["expected_ztl_commit"] == KERNEL_COMMIT
+    assert report["ztl_invoked"] is False
+
+
+# --- the evidence observation -----------------------------------------------
+
+
+def test_the_evidence_observation_is_opened_and_verified(repo_root: Path) -> None:
+    observation = load_evidence_observation(load_scenario(repo_root))
+    assert observation.state is EvidenceState.SIGNED
+    assert observation.satisfies_requirement is True
+    assert observation.sha256.startswith("sha256:")
+    assert observation.findings == ()
+
+
+def test_an_absent_observation_is_not_observed_rather_than_negative(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    """Never having looked must not read as having looked and found nothing."""
+    scenario = load_scenario(repo_root)
+    moved = Scenario(root=tmp_path, document=scenario.document)
+    observation = load_evidence_observation(moved)
+    assert observation.state is EvidenceState.NOT_OBSERVED
+    assert observation.satisfies_requirement is False
