@@ -470,8 +470,50 @@ def test_the_positive_run_path_exists_and_is_reached_only_through_validation(
     assert body.index("claim_execution_authorization(") < body.index("run_all_cases(")
 
 
-def test_no_workflow_file_changed(repo_root: Path) -> None:
-    changed = _git(
-        repo_root, "diff", "--name-only", L1_HISTORICAL_BASELINE, "--", ".github/"
-    ).strip()
-    assert changed == ""
+def test_the_only_workflow_change_is_the_authorized_live_gate(repo_root: Path) -> None:
+    """The workflow delta is exactly one authorized file, and no more.
+
+    This previously asserted that ``.github/`` was untouched full stop. That was
+    true of the work order that wrote it and false as a permanent rule — the same
+    drift the two Canada guards had, where a proposition about one interval
+    silently becomes a prohibition on later authorized work. It now names what is
+    authorized (`OIC-ZTL-OAM-DEMO-SLICE-001-L1-REMOTE-LIVE-ZTL-GATE-001`, one
+    workflow file) and still fails on anything else: a second workflow, a new
+    workflow file, or any other path under ``.github/``.
+    """
+    changed = [
+        path
+        for path in _git(
+            repo_root, "diff", "--name-only", L1_HISTORICAL_BASELINE, "--", ".github/"
+        ).splitlines()
+        if path.strip()
+    ]
+    assert changed == [".github/workflows/ci.yml"], changed
+
+    authorization = json.loads(
+        (
+            repo_root
+            / "docs"
+            / "operations"
+            / "OIC-ZTL-OAM-DEMO-SLICE-001-L1-REMOTE-LIVE-ZTL-GATE-AUTHORIZATION-001.json"
+        ).read_bytes()
+    )
+    assert authorization["authorized_workflow_path"] == ".github/workflows/ci.yml"
+    assert authorization["authorizes"] == "CI_VALIDATION_ONLY"
+    for flag in (
+        "result_bearing_execution_authorized",
+        "measured_end_to_end_claim_authorized",
+        "production_claim_authorized",
+        "institutional_validity_claim_authorized",
+        "independent_assurance_claim_authorized",
+        "RUN004_authorized",
+        "global_semantic_implementation_gate_opened",
+        "proposed_contract_globally_admitted",
+    ):
+        assert authorization[flag] is False, flag
+
+
+def test_no_second_workflow_file_was_added(repo_root: Path) -> None:
+    """One job in the existing workflow, not a new workflow of its own."""
+    workflows = sorted(path.name for path in (repo_root / ".github" / "workflows").glob("*.yml"))
+    assert workflows == ["ci.yml"]

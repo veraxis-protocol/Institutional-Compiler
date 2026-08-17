@@ -395,3 +395,154 @@ jobs:
             --env-file docker/.env.example \
             -f docker/compose.yaml \
             down -v --remove-orphans
+
+  # ---------------------------------------------------------------------------
+  # 8. Live ZTL demonstration gate
+  #
+  # The other jobs prove the repository is internally consistent. This one proves
+  # the OIC->ZTL->OAM lane actually reaches the kernel: the external checkout is
+  # fetched at an immutable commit, the frozen fixture set is reproduced against
+  # it, and the demo suite runs with zero skips. A skip is not a pass here — the
+  # whole point of the job is that fixture replay is not accepted as a substitute
+  # for calling the kernel, so a missing dependency fails rather than degrading
+  # into a green run that proved nothing.
+  #
+  # DEVELOPMENT_TEST_ONLY. No result-bearing execution, no `oic demo run`, no
+  # execution authorization. A green result here is remote execution of this
+  # project's own test contract; it is not independent assurance.
+  # ---------------------------------------------------------------------------
+  live-ztl-demo:
+    name: live-ztl-demo
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --require-hashes -r requirements/dev.txt
+          python -m pip install --no-deps --no-build-isolation -e .
+          python -m pip check
+
+      - name: Provision the pinned ZTL checkout outside the OIC worktree
+        # Outside the working tree on purpose: remote live validation must not
+        # depend on contaminating the repository it is validating. ZTL is never
+        # installed into site-packages — it stays an external checkout reached
+        # only through the one authorized bridge.
+        env:
+          ZTL_REMOTE: https://github.com/inventor1975/ZTL
+          ZTL_COMMIT: 56e1ff0510c62b04dbd85bbe08b7a6deacbf276b
+        run: |
+          set -euo pipefail
+          mkdir -p "${RUNNER_TEMP}/oic-ztl-pin"
+          git -C "${RUNNER_TEMP}/oic-ztl-pin" init
+          git -C "${RUNNER_TEMP}/oic-ztl-pin" remote add origin "${ZTL_REMOTE}"
+          git -C "${RUNNER_TEMP}/oic-ztl-pin" fetch --depth=1 origin "${ZTL_COMMIT}"
+          git -C "${RUNNER_TEMP}/oic-ztl-pin" checkout --detach FETCH_HEAD
+          observed="$(git -C "${RUNNER_TEMP}/oic-ztl-pin" rev-parse HEAD)"
+          echo "observed ZTL HEAD: ${observed}"
+          if [ "${observed}" != "${ZTL_COMMIT}" ]; then
+            echo "FAIL: checkout is at ${observed}, pinned commit is ${ZTL_COMMIT}"
+            exit 1
+          fi
+          echo "OIC_DEMO_ZTL_PATH=${RUNNER_TEMP}/oic-ztl-pin" >> "${GITHUB_ENV}"
+
+      - name: Prove the OIC worktree is still clean
+        run: |
+          set -euo pipefail
+          status="$(git status --porcelain --untracked-files=all)"
+          if [ -n "${status}" ]; then
+            echo "FAIL: provisioning contaminated the OIC worktree:"
+            echo "${status}"
+            exit 1
+          fi
+          echo "OIC worktree clean"
+
+      - name: Verify the frozen fixture identity
+        env:
+          EXPECTED_INDEX_SHA256: ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145
+        run: |
+          set -euo pipefail
+          observed="$(sha256sum adapters/ztl/fixtures/interface-freeze-v0.2/INDEX.json | cut -d' ' -f1)"
+          echo "fixture INDEX.json sha256: ${observed}"
+          if [ "${observed}" != "${EXPECTED_INDEX_SHA256}" ]; then
+            echo "FAIL: expected ${EXPECTED_INDEX_SHA256}"
+            exit 1
+          fi
+
+      - name: Run live kernel conformance
+        # Exit code 0 alone is not accepted: the verifier's own counts are
+        # asserted, so a future version that reported success while reproducing
+        # nothing would fail here. The three not-reachable combinations stay
+        # not-reachable and are never relabelled as passes.
+        run: |
+          set -euo pipefail
+          python \
+            adapters/ztl/fixtures/interface-freeze-v0.2/verify_fixtures.py \
+            --ztl "${OIC_DEMO_ZTL_PATH}" \
+            --dir adapters/ztl/fixtures/interface-freeze-v0.2 \
+            | tee "${RUNNER_TEMP}/conformance.txt"
+          grep -qx "fixtures reproduced : 13" "${RUNNER_TEMP}/conformance.txt"
+          grep -qx "not-reachable (skip): 3" "${RUNNER_TEMP}/conformance.txt"
+          grep -qx "mismatches          : 0" "${RUNNER_TEMP}/conformance.txt"
+          grep -qx "hash problems       : 0" "${RUNNER_TEMP}/conformance.txt"
+          grep -q "CONFORMANCE: PASS" "${RUNNER_TEMP}/conformance.txt"
+
+      - name: Run the live OIC to ZTL to OAM test path
+        # DEVELOPMENT_TEST_ONLY. `oic demo run` is not invoked and no execution
+        # authorization is created.
+        run: |
+          set -euo pipefail
+          pytest \
+            tests/unit/test_demo_ztl.py \
+            tests/integration/test_oic_ztl_oam_demo_slice_001.py \
+            --junitxml="${RUNNER_TEMP}/live-ztl-junit.xml" \
+            -ra
+
+      - name: Assert the live suite ran with zero skips
+        # A skipped live test in this job means the kernel was not reached, which
+        # is the one thing this job exists to rule out.
+        run: |
+          set -euo pipefail
+          python - "${RUNNER_TEMP}/live-ztl-junit.xml" <<'PY'
+          import sys
+          import xml.etree.ElementTree as ET
+
+          root = ET.parse(sys.argv[1]).getroot()
+          suites = root.iter("testsuite")
+          totals = {"tests": 0, "failures": 0, "errors": 0, "skipped": 0}
+          for suite in suites:
+              for key in totals:
+                  totals[key] += int(suite.get(key, 0))
+          passed = totals["tests"] - totals["failures"] - totals["errors"] - totals["skipped"]
+          print(f"live suite: {passed} passed, {totals['skipped']} skipped, "
+                f"{totals['failures']} failed, {totals['errors']} errors")
+          problems = []
+          if totals["skipped"]:
+              problems.append("a skip is not a pass in this job")
+          if totals["failures"] or totals["errors"]:
+              problems.append("the live suite did not pass")
+          if passed != 52:
+              problems.append(f"expected 52 passed, observed {passed}")
+          if problems:
+              raise SystemExit("FAIL: " + "; ".join(problems))
+          PY
+
+      - name: Upload live gate evidence
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: live-ztl-demo
+          path: |
+            ${{ runner.temp }}/conformance.txt
+            ${{ runner.temp }}/live-ztl-junit.xml
+          if-no-files-found: warn
