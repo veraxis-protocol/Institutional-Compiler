@@ -26,16 +26,6 @@ if str(REPO_ROOT / "src") not in sys.path:
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from tests.integration.cdc_currentness_fixtures import control_artifact  # noqa: E402
-from tests.integration.cdc_integration_fixtures import (  # noqa: E402
-    ARTIFACT_CLASS,
-    control_body_digest,
-    epoch_for,
-    index_with_future_successor,
-    index_without_control,
-    index_without_successor,
-)
-
 from oic.cdc_authority import (  # noqa: E402
     AuthorityRequest,
     evaluate_synthetic_authority,
@@ -57,6 +47,15 @@ from oic.cdc_reliance import (  # noqa: E402
     persisted_file_sha256,
     run_consumer_validation,
 )
+from tests.integration.cdc_currentness_fixtures import control_artifact  # noqa: E402
+from tests.integration.cdc_integration_fixtures import (  # noqa: E402
+    ARTIFACT_CLASS,
+    control_body_digest,
+    epoch_for,
+    index_with_future_successor,
+    index_without_control,
+    index_without_successor,
+)
 
 
 def main(job_path: Path) -> Path:
@@ -77,9 +76,7 @@ def main(job_path: Path) -> Path:
     ]
     admissibility_bases = [
         parse_basis_record(item)
-        for item in json.loads(
-            Path(job["admissibility_bases_path"]).read_bytes().decode("utf-8")
-        )
+        for item in json.loads(Path(job["admissibility_bases_path"]).read_bytes().decode("utf-8"))
     ]
 
     # The consumer builds its own index from governed bytes it reads itself.
@@ -180,9 +177,7 @@ def main(job_path: Path) -> Path:
         propagated_decision=decision,
         context=context,
         issuance_authorization_digest=authorization_digest,
-        attempt_record_digest=(
-            "" if attempt is None else str(attempt["attempt_record_digest"])
-        ),
+        attempt_record_digest=("" if attempt is None else str(attempt["attempt_record_digest"])),
         evidence_refs=outcome["envelope_record"].get("evidence_refs", []),
         issued_at=now,
         direct_assertion_attempted=direct,

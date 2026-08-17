@@ -1,8 +1,11 @@
 {
+  "RUNTIME_AST_EQUIVALENCE_TO_FA96F5": true,
   "all_exact_byte_match": true,
+  "ci_carveout_added": false,
   "committed": true,
   "contract_guard_change_class": "SOURCE_DELTA_GOVERNANCE_ONLY",
   "contract_guard_modified_path": "tests/contract/test_warrant_contract.py",
+  "current_runtime_byte_identity_to_fa96f5": false,
   "errors_py_modified": false,
   "excluded_paths_confirmed_absent": [
     "src/oic/cdc_slice.py",
@@ -113,9 +116,168 @@
     "result_bearing_execution": false,
     "semantic_change": false
   },
-  "l0_state": "LOCAL_CONSOLIDATION_CANDIDATE",
+  "format_normalization": {
+    "src/oic/cdc_authority.py": {
+      "ast_equivalent": true,
+      "bytes_changed": false,
+      "normalized_successor_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a",
+      "original_source_blob": "6c0471e2c18e1aeeb65eacbcee222d0e55740472",
+      "original_source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+      "original_source_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a",
+      "path": "src/oic/cdc_authority.py",
+      "post_format_ast_sha256": "14439aaede9d40a0b78a7533c449ec655b2dbf35947f5eb88a6422638e96f537",
+      "post_format_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a",
+      "pre_format_ast_sha256": "14439aaede9d40a0b78a7533c449ec655b2dbf35947f5eb88a6422638e96f537",
+      "pre_format_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a",
+      "reformatted": false
+    },
+    "src/oic/cdc_currentness.py": {
+      "ast_equivalent": true,
+      "bytes_changed": true,
+      "normalized_successor_sha256": "862937060a422cdc524fc9d107eedd7e4c066b373cfe9b46dd499bc74c4d026a",
+      "original_source_blob": "fdf902540788eccae9560701f9999738248f0a98",
+      "original_source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+      "original_source_sha256": "b16c885a29c76b349b76f989858b5a277962642a038da905730fcc2818321ac1",
+      "path": "src/oic/cdc_currentness.py",
+      "post_format_ast_sha256": "2fb74a059992e0344f722e34037d74f93da2a1d91de4f3416ae3a9b0a36273e7",
+      "post_format_sha256": "862937060a422cdc524fc9d107eedd7e4c066b373cfe9b46dd499bc74c4d026a",
+      "pre_format_ast_sha256": "2fb74a059992e0344f722e34037d74f93da2a1d91de4f3416ae3a9b0a36273e7",
+      "pre_format_sha256": "b16c885a29c76b349b76f989858b5a277962642a038da905730fcc2818321ac1"
+    },
+    "src/oic/cdc_propagation.py": {
+      "ast_equivalent": true,
+      "bytes_changed": true,
+      "normalized_successor_sha256": "e2855f16fc213fc7f8a1cc1adb5cacb7baf13aac8db7643bea2dbe36b74800d1",
+      "original_source_blob": "4bb9e8e536cca5122fa64d37b3c099f1f3d6145c",
+      "original_source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+      "original_source_sha256": "c5accebbf91dea648c48aebe0849a431da1a87a1cd75bc62794fe20783396c4e",
+      "path": "src/oic/cdc_propagation.py",
+      "post_format_ast_sha256": "d3ddf98e82197a89ef9285a919e905251fa154d960af1181e0ed263b4c275308",
+      "post_format_sha256": "e2855f16fc213fc7f8a1cc1adb5cacb7baf13aac8db7643bea2dbe36b74800d1",
+      "pre_format_ast_sha256": "d3ddf98e82197a89ef9285a919e905251fa154d960af1181e0ed263b4c275308",
+      "pre_format_sha256": "c5accebbf91dea648c48aebe0849a431da1a87a1cd75bc62794fe20783396c4e"
+    },
+    "src/oic/cdc_reliance.py": {
+      "ast_equivalent": true,
+      "bytes_changed": true,
+      "normalized_successor_sha256": "52561c29e435dc9fbe786f33e05e5eccc5bca1ac8f92d4b42830a584fdb34ecc",
+      "original_source_blob": "aaf451bdaddf7824d8de2864dd792c536864f806",
+      "original_source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+      "original_source_sha256": "be3365536de50753a731384f3241d8cf7a72e0ec5dd80226dc1d6c55fd60f920",
+      "path": "src/oic/cdc_reliance.py",
+      "post_format_ast_sha256": "37567cd2f621d5697074ee425438413abc01f8060a94fe312e41e121caa53e64",
+      "post_format_sha256": "52561c29e435dc9fbe786f33e05e5eccc5bca1ac8f92d4b42830a584fdb34ecc",
+      "pre_format_ast_sha256": "37567cd2f621d5697074ee425438413abc01f8060a94fe312e41e121caa53e64",
+      "pre_format_sha256": "be3365536de50753a731384f3241d8cf7a72e0ec5dd80226dc1d6c55fd60f920"
+    },
+    "tests/contract/test_warrant_contract.py": {
+      "ast_equivalent": true,
+      "bytes_changed": true,
+      "path": "tests/contract/test_warrant_contract.py",
+      "post_format_ast_sha256": "532192b5b12a955854d915d7106e8877d998452a8a33d2d00cc0c130fd73db3c",
+      "post_format_sha256": "9217c5b576082d6a07d76d072d3789badbd25676091279253fe5160279b02396",
+      "pre_format_ast_sha256": "532192b5b12a955854d915d7106e8877d998452a8a33d2d00cc0c130fd73db3c",
+      "pre_format_sha256": "216156dfae6bcab4e047270dbd307dc01ea9d91c9132599afeeafe42ccefb13a"
+    },
+    "tests/integration/cdc_currentness_fixtures.py": {
+      "ast_equivalent": true,
+      "bytes_changed": true,
+      "path": "tests/integration/cdc_currentness_fixtures.py",
+      "post_format_ast_sha256": "a00c2770681a14705fed5462fd8b78dfdf15c53329c86c14c6d6766df2229406",
+      "post_format_sha256": "d30487259c072d35c8514c7a25feecc1bb63ab55a50623dddfc9970f4f8c68b4",
+      "pre_format_ast_sha256": "a00c2770681a14705fed5462fd8b78dfdf15c53329c86c14c6d6766df2229406",
+      "pre_format_sha256": "0f4cd5e9fffe44710cca0627ac18ac07905007a09e0b39e0d61e563fd6ba6004"
+    },
+    "tests/integration/cdc_integration_consumer.py": {
+      "ast_equivalent": true,
+      "bytes_changed": true,
+      "path": "tests/integration/cdc_integration_consumer.py",
+      "post_format_ast_sha256": "dd65ba4f5f5847d83a253cc054de5e249a5e4810f7fdf6873ac11510370ee768",
+      "post_format_sha256": "cf65e6390d3f9af452d593913a02ec42da7a463c640499e0d04295b99363533b",
+      "pre_format_ast_sha256": "dd65ba4f5f5847d83a253cc054de5e249a5e4810f7fdf6873ac11510370ee768",
+      "pre_format_sha256": "99fe3bfb43f851c5fc603bdaa1b344643f9668fdf1d6467555b32334e60322e1"
+    },
+    "tests/integration/test_cdc_currentness_slice_001.py": {
+      "ast_equivalent": true,
+      "bytes_changed": true,
+      "path": "tests/integration/test_cdc_currentness_slice_001.py",
+      "post_format_ast_sha256": "ce6f68ef356fc08037d0458a24bafad13931f5dc635a8e7f8b41e809a1fd3660",
+      "post_format_sha256": "8182d1f404eccde52d3bdd019a99f95a7909a9c851d47f88bd9b94e96478f321",
+      "pre_format_ast_sha256": "ce6f68ef356fc08037d0458a24bafad13931f5dc635a8e7f8b41e809a1fd3660",
+      "pre_format_sha256": "d7dc00e792af0b76a8580c3a89b96d42782d56e56f46ab1aec40e757e6a649fb"
+    },
+    "tests/integration/test_cdc_integration_slice_001.py": {
+      "ast_equivalent": true,
+      "bytes_changed": true,
+      "path": "tests/integration/test_cdc_integration_slice_001.py",
+      "post_format_ast_sha256": "4db99ff9aa98fe465d05f5140a00a76323e242344659b7434fefd90117b39bae",
+      "post_format_sha256": "0b4403ce5fe16d086f5cf32d43ecf0eadbff95a99340a6194e65eaa03520b3e9",
+      "pre_format_ast_sha256": "4db99ff9aa98fe465d05f5140a00a76323e242344659b7434fefd90117b39bae",
+      "pre_format_sha256": "7037ed13098915d29f9e52675f43ce63d5c910679f8d862cafef12e637771b16"
+    }
+  },
+  "historical_predecessor_byte_identity_preserved": true,
+  "implementation_ast_changed": false,
+  "import_order_normalization": {
+    "affects_runtime_modules": false,
+    "class": "PACKAGE_IDENTITY_CONSEQUENCE",
+    "files": 5,
+    "reason": "tests/ became a package, so ruff isort reclassified tests.* imports as first-party",
+    "rule": "I001",
+    "test_ast_changed": true
+  },
+  "l0_state": "NORMALIZATION_AND_TYPING_SUCCESSOR_CANDIDATE",
+  "normalization_class": "FORMAT_ONLY",
+  "normalization_successor_id": "OIC-ZTL-OAM-DEMO-SLICE-001-L0-NORMALIZATION-SUCCESSOR-001",
+  "normalization_tool": "ruff 0.12.12",
   "owner_directive_id": "OIC-ZTL-OAM-DEMO-SLICE-001-L0",
+  "package_identity_paths": [
+    "tests/__init__.py",
+    "tests/integration/__init__.py"
+  ],
   "result_bearing_execution": false,
+  "runtime_lineage": {
+    "src/oic/cdc_authority.py": {
+      "ast_equivalent": true,
+      "byte_identical_to_fa96f5": true,
+      "historical_source_blob": "6c0471e2c18e1aeeb65eacbcee222d0e55740472",
+      "historical_source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+      "historical_source_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a",
+      "normalized_successor_sha256": "ea42c23ec9c76f5ff3c88218d5e8dfc98c3fd91a75a085c5dcbeb9f88168be8a",
+      "predecessor_ast_sha256": "14439aaede9d40a0b78a7533c449ec655b2dbf35947f5eb88a6422638e96f537",
+      "successor_ast_sha256": "14439aaede9d40a0b78a7533c449ec655b2dbf35947f5eb88a6422638e96f537"
+    },
+    "src/oic/cdc_currentness.py": {
+      "ast_equivalent": true,
+      "byte_identical_to_fa96f5": false,
+      "historical_source_blob": "fdf902540788eccae9560701f9999738248f0a98",
+      "historical_source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+      "historical_source_sha256": "b16c885a29c76b349b76f989858b5a277962642a038da905730fcc2818321ac1",
+      "normalized_successor_sha256": "862937060a422cdc524fc9d107eedd7e4c066b373cfe9b46dd499bc74c4d026a",
+      "predecessor_ast_sha256": "2fb74a059992e0344f722e34037d74f93da2a1d91de4f3416ae3a9b0a36273e7",
+      "successor_ast_sha256": "2fb74a059992e0344f722e34037d74f93da2a1d91de4f3416ae3a9b0a36273e7"
+    },
+    "src/oic/cdc_propagation.py": {
+      "ast_equivalent": true,
+      "byte_identical_to_fa96f5": false,
+      "historical_source_blob": "4bb9e8e536cca5122fa64d37b3c099f1f3d6145c",
+      "historical_source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+      "historical_source_sha256": "c5accebbf91dea648c48aebe0849a431da1a87a1cd75bc62794fe20783396c4e",
+      "normalized_successor_sha256": "e2855f16fc213fc7f8a1cc1adb5cacb7baf13aac8db7643bea2dbe36b74800d1",
+      "predecessor_ast_sha256": "d3ddf98e82197a89ef9285a919e905251fa154d960af1181e0ed263b4c275308",
+      "successor_ast_sha256": "d3ddf98e82197a89ef9285a919e905251fa154d960af1181e0ed263b4c275308"
+    },
+    "src/oic/cdc_reliance.py": {
+      "ast_equivalent": true,
+      "byte_identical_to_fa96f5": false,
+      "historical_source_blob": "aaf451bdaddf7824d8de2864dd792c536864f806",
+      "historical_source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+      "historical_source_sha256": "be3365536de50753a731384f3241d8cf7a72e0ec5dd80226dc1d6c55fd60f920",
+      "normalized_successor_sha256": "52561c29e435dc9fbe786f33e05e5eccc5bca1ac8f92d4b42830a584fdb34ecc",
+      "predecessor_ast_sha256": "37567cd2f621d5697074ee425438413abc01f8060a94fe312e41e121caa53e64",
+      "successor_ast_sha256": "37567cd2f621d5697074ee425438413abc01f8060a94fe312e41e121caa53e64"
+    }
+  },
   "semantic_modification": false,
   "source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
   "source_delta_authorization_id": "OWNER-AUTHORIZATION-OIC-ZTL-OAM-DEMO-SLICE-001-L0-001",
@@ -138,6 +300,37 @@
     "tests/integration/test_cdc_currentness_slice_001.py",
     "tests/integration/test_cdc_integration_authority_branches.py",
     "tests/integration/test_cdc_integration_slice_001.py"
+  ],
+  "typing_repair_environment": {
+    "install": "--require-hashes -r requirements/dev.txt",
+    "locked_dev_dependencies_installed": true,
+    "mypy": "1.20.2",
+    "pip_check_passed": true,
+    "python": "3.12.2"
+  },
+  "typing_repair_id": "OIC-ZTL-OAM-DEMO-SLICE-001-L0-TYPING-REPAIR-001",
+  "typing_repairs": [
+    {
+      "classification": "INHERITED_TEST_TYPING_REPAIR",
+      "fixture_canonical_sha256": "3b35304bdca21f4a420ec60d978459ede1834171fded5c4d9a621fcf1d8651fd",
+      "fixture_output_equivalent": true,
+      "original_error": "no-any-return",
+      "path": "tests/integration/cdc_currentness_fixtures.py"
+    },
+    {
+      "ast_equivalent": true,
+      "classification": "INHERITED_MYPY_FALSE_POSITIVE_SUPPRESSION",
+      "note": "type: ignore comment only; strict unused-ignore checking will fail if it stops being necessary",
+      "original_error": "comparison-overlap",
+      "path": "tests/integration/test_cdc_integration_slice_001.py"
+    },
+    {
+      "classification": "TEST_IMPORT_IDENTITY_REPAIR",
+      "original_error": "import-not-found",
+      "path": "tests/contract/test_semantic_conformance.py",
+      "semantic_conformance_tests_equivalent": true,
+      "semantic_conformance_tests_passed": 72
+    }
   ],
   "unauthorized_fifth_module_negative_test": "pass",
   "whole_branch_merge": false

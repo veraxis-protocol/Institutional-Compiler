@@ -17,14 +17,6 @@ import json
 from pathlib import Path
 from typing import Any, Final
 
-from tests.integration.cdc_currentness_fixtures import (
-    AFFECTED_OUTPUT_REFS,
-    CONTROL_OUTPUT_REF,
-    control_artifact,
-    control_document,
-    governed_index,
-)
-
 from oic.cdc_authority import (
     ADMISSIBILITY_BASIS_CLASS,
     AUTHORITY_BASIS_CLASS,
@@ -44,6 +36,13 @@ from oic.cdc_currentness import (
     basis_record_digest,
     derive_index_variant,
     historical_artifact_digest,
+)
+from tests.integration.cdc_currentness_fixtures import (
+    AFFECTED_OUTPUT_REFS,
+    CONTROL_OUTPUT_REF,
+    control_artifact,
+    control_document,
+    governed_index,
 )
 
 SCOPE: Final = "CDC-DEMO-SCOPE-001"

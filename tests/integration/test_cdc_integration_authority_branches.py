@@ -16,6 +16,13 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
+
+from oic.cdc_authority import (
+    AuthorityRequest,
+    evaluate_synthetic_authority,
+    parse_basis_record,
+)
+from oic.cdc_currentness import resolve_currentness
 from tests.integration.cdc_currentness_fixtures import CONTROL_OUTPUT_REF, control_artifact
 from tests.integration.cdc_integration_fixtures import (
     ARTIFACT_CLASS,
@@ -29,13 +36,6 @@ from tests.integration.cdc_integration_fixtures import (
     epoch_for,
     index_without_successor,
 )
-
-from oic.cdc_authority import (
-    AuthorityRequest,
-    evaluate_synthetic_authority,
-    parse_basis_record,
-)
-from oic.cdc_currentness import resolve_currentness
 
 
 def _decide(

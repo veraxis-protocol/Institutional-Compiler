@@ -18,33 +18,6 @@ from collections.abc import Mapping
 from typing import Any
 
 import pytest
-from tests.integration.cdc_currentness_fixtures import (
-    AFFECTED_OUTPUT_REFS,
-    CONTROL_OUTPUT_REF,
-    CONTROLLING_SUCCESSOR_ID,
-    CORRECTION_EVENT_ID,
-    CORRECTION_RESULT_SHA256,
-    EVALUATED_AT,
-    FROZEN_ARTIFACT_DIGESTS,
-    INDEX_ADMITTED_AT,
-    INDEX_OBSERVED_AT,
-    MISSION_SCOPE_REF,
-    PREDECESSOR_CANDIDATE_ID,
-    RUN_METADATA,
-    SESSION_START_ARTIFACT_DIGESTS,
-    SESSION_START_IDENTITIES,
-    STAGE_2_RAW_RESULT_SHA256,
-    SUPERSEDED_AT,
-    SYNTHETIC_CONTROL_SHA256,
-    control_artifact,
-    control_bytes,
-    control_document,
-    correction_bytes,
-    frozen_drafts,
-    governed_index,
-    historical_artifact,
-    stage_2_bytes,
-)
 
 from oic.cdc_currentness import (
     CURRENT,
@@ -85,6 +58,33 @@ from oic.cdc_currentness import (
     resolution_digest,
     resolve_currentness,
     use_gate_decision_digest,
+)
+from tests.integration.cdc_currentness_fixtures import (
+    AFFECTED_OUTPUT_REFS,
+    CONTROL_OUTPUT_REF,
+    CONTROLLING_SUCCESSOR_ID,
+    CORRECTION_EVENT_ID,
+    CORRECTION_RESULT_SHA256,
+    EVALUATED_AT,
+    FROZEN_ARTIFACT_DIGESTS,
+    INDEX_ADMITTED_AT,
+    INDEX_OBSERVED_AT,
+    MISSION_SCOPE_REF,
+    PREDECESSOR_CANDIDATE_ID,
+    RUN_METADATA,
+    SESSION_START_ARTIFACT_DIGESTS,
+    SESSION_START_IDENTITIES,
+    STAGE_2_RAW_RESULT_SHA256,
+    SUPERSEDED_AT,
+    SYNTHETIC_CONTROL_SHA256,
+    control_artifact,
+    control_bytes,
+    control_document,
+    correction_bytes,
+    frozen_drafts,
+    governed_index,
+    historical_artifact,
+    stage_2_bytes,
 )
 
 PROFILE = UseGateProfile()
@@ -421,9 +421,7 @@ def test_adv_h_successor_for_another_output_asserted() -> None:
     index = governed_index()
     target = AFFECTED_OUTPUT_REFS[0]
     other = index.entries_for(AFFECTED_OUTPUT_REFS[1])
-    asserted = next(
-        entry.record for entry in other if entry.record_class == SUPERSESSION_RECORD
-    )
+    asserted = next(entry.record for entry in other if entry.record_class == SUPERSESSION_RECORD)
     resolution = resolve_currentness(
         output_ref=target,
         historical_artifact=historical_artifact(target),
@@ -438,12 +436,15 @@ def test_adv_h_successor_for_another_output_asserted() -> None:
 def test_adv_i_future_effective_successor() -> None:
     """T-ADV-I — a scheduled successor does not make the artifact superseded."""
     index = governed_index()
-    entries = [*index.entries, _supersession_entry(
-        CONTROL_OUTPUT_REF,
-        successor_id="SYNTH-SUCCESSOR-FUTURE",
-        effective_at=FUTURE_EFFECTIVE_AT,
-        predecessor_candidate_id="SYNTH-CANDIDATE",
-    )]
+    entries = [
+        *index.entries,
+        _supersession_entry(
+            CONTROL_OUTPUT_REF,
+            successor_id="SYNTH-SUCCESSOR-FUTURE",
+            effective_at=FUTURE_EFFECTIVE_AT,
+            predecessor_candidate_id="SYNTH-CANDIDATE",
+        ),
+    ]
     variant = derive_index_variant(
         index, entries=entries, governed_controlling_output_refs=AFFECTED_OUTPUT_REFS
     )
@@ -606,9 +607,7 @@ def test_adv_p_precomputed_resolution_digest_differs() -> None:
         ttl_seconds=PROFILE.max_resolution_age_seconds,
     ).as_record()
     precomputed["currentness_state"] = CURRENT
-    decision = _gate(
-        target, historical_artifact(target), index, precomputed_resolution=precomputed
-    )
+    decision = _gate(target, historical_artifact(target), index, precomputed_resolution=precomputed)
     assert decision.decision == DENY
     assert decision.reason_code_id == "G9"
 

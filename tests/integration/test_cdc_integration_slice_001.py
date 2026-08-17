@@ -24,34 +24,6 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from tests.integration.cdc_currentness_fixtures import (
-    AFFECTED_OUTPUT_REFS,
-    CONTROL_OUTPUT_REF,
-    RUN_METADATA,
-    control_artifact,
-    control_document,
-    governed_index,
-    historical_artifact,
-)
-from tests.integration.cdc_integration_fixtures import (
-    ARTIFACT_CLASS,
-    DECISION_VALID_UNTIL,
-    ENVELOPE_VALID_UNTIL,
-    REQUESTED_USE,
-    RUN_ID,
-    SCOPE,
-    T1,
-    T2,
-    TRACE_ID,
-    admissibility_basis,
-    authority_basis,
-    consumer_profile,
-    control_body_digest,
-    epoch_for,
-    index_with_future_successor,
-    index_without_successor,
-    producer_profile,
-)
 
 from oic.cdc_authority import (
     AUTHORITY_REASON_CODES,
@@ -95,6 +67,34 @@ from oic.cdc_reliance import (
     integration_package_digest,
     persisted_file_sha256,
     reliance_record_digest,
+)
+from tests.integration.cdc_currentness_fixtures import (
+    AFFECTED_OUTPUT_REFS,
+    CONTROL_OUTPUT_REF,
+    RUN_METADATA,
+    control_artifact,
+    control_document,
+    governed_index,
+    historical_artifact,
+)
+from tests.integration.cdc_integration_fixtures import (
+    ARTIFACT_CLASS,
+    DECISION_VALID_UNTIL,
+    ENVELOPE_VALID_UNTIL,
+    REQUESTED_USE,
+    RUN_ID,
+    SCOPE,
+    T1,
+    T2,
+    TRACE_ID,
+    admissibility_basis,
+    authority_basis,
+    consumer_profile,
+    control_body_digest,
+    epoch_for,
+    index_with_future_successor,
+    index_without_successor,
+    producer_profile,
 )
 
 CONSUMER_MODULE = "tests.integration.cdc_integration_consumer"
@@ -406,8 +406,9 @@ def test_pos_05_consumer_revalidates(positive: dict[str, Any]) -> None:
     assert [check["check_id"] for check in validation["checks"]] == list(range(1, 17))
     assert all(check["passed"] for check in validation["checks"])
     assert positive["result"]["re_resolved_currentness_state"] == CURRENT
-    assert validation["observed_currentness_epoch_digest"] == (
-        positive["envelope_record"]["currentness_epoch_digest"]
+    assert (
+        validation["observed_currentness_epoch_digest"]
+        == (positive["envelope_record"]["currentness_epoch_digest"])
     )
 
 
@@ -420,8 +421,9 @@ def test_pos_06_reliance_issued(positive: dict[str, Any]) -> None:
     assert reliance["attempt_record_digest"]
     assert reliance["issuance_authorization_digest"]
     # The record binds the re-resolved currentness, not the propagated value.
-    assert reliance["currentness_resolution_digest"] == (
-        positive["result"]["validation"]["re_resolved_currentness_resolution_digest"]
+    assert (
+        reliance["currentness_resolution_digest"]
+        == (positive["result"]["validation"]["re_resolved_currentness_resolution_digest"])
     )
 
 
@@ -505,9 +507,7 @@ def test_case_g_expired_authority_decision(tmp_path: Path) -> None:
 
 def test_case_h_expired_envelope(tmp_path: Path) -> None:
     """T-CASE-H — expired envelope → P3 → I6."""
-    run = _run_pipeline(
-        tmp_path, envelope_overrides={"valid_until": "2026-08-15T09:30:00Z"}
-    )
+    run = _run_pipeline(tmp_path, envelope_overrides={"valid_until": "2026-08-15T09:30:00Z"})
     checks = run["result"]["validation"]["checks"]
     assert checks[2]["check_name"] == "envelope_freshness"
     assert checks[2]["passed"] is False
@@ -686,9 +686,7 @@ def test_dig_01_currentness_epoch_digest() -> None:
     successor = {
         "output_ref": output_ref,
         "record_ref": "EBAWU-P-001-C-TENDER-01-CORR-002#" + output_ref,
-        "record_digest": (
-            "943affbf3e86d8a1b6831eb3deafb2efeac902989d8ee75fe85daea6f82e1e3c"
-        ),
+        "record_digest": ("943affbf3e86d8a1b6831eb3deafb2efeac902989d8ee75fe85daea6f82e1e3c"),
         "record_class": "CORRECTION_SUCCESSOR_RECORD",
         "effective_at": "2026-08-15T12:00:00Z",
         "admitted_at": "2026-08-15T09:00:00Z",
@@ -893,13 +891,11 @@ def test_currentness_pass_is_not_authority_pass() -> None:
 def test_envelope_schema_is_closed(tmp_path: Path) -> None:
     run = _run_pipeline(tmp_path)
     record = run["envelope_record"]
-    assert parse_envelope(
-        json.dumps({**record, "extra": 1}).encode()
-    ).reason_code_id == "P8"
+    assert parse_envelope(json.dumps({**record, "extra": 1}).encode()).reason_code_id == "P8"
     trimmed = {k: v for k, v in record.items() if k != "scope"}
     assert parse_envelope(json.dumps(trimmed).encode()).reason_code_id == "P9"
 
 
 def test_producer_and_consumer_principals_differ() -> None:
-    assert PRODUCER_PRINCIPAL != CONSUMER_PRINCIPAL
+    assert PRODUCER_PRINCIPAL != CONSUMER_PRINCIPAL  # type: ignore[comparison-overlap]
     assert SUBJECT_PRINCIPAL not in (PRODUCER_PRINCIPAL, CONSUMER_PRINCIPAL)

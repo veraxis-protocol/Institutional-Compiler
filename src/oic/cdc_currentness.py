@@ -363,9 +363,7 @@ def parse_basis_completeness_attestation(
         basis_snapshot_digests=tuple(str(item) for item in snapshot_digests),
         completeness_as_of=str(source["completeness_as_of"]),
         admitted_at=str(source["admitted_at"]),
-        fixture_class=(
-            None if source["fixture_class"] is None else str(source["fixture_class"])
-        ),
+        fixture_class=(None if source["fixture_class"] is None else str(source["fixture_class"])),
         completeness_digest=reproduced,
         source=dict(source),
         admission_path=admission_path,
@@ -1048,9 +1046,7 @@ def current_requires_attested_complete_basis(
     attestation = index.attestation_for(resolution.output_ref)
     return (
         attestation is not None
-        and digests_equal(
-            completeness_digest(attestation.source), attestation.completeness_digest
-        )
+        and digests_equal(completeness_digest(attestation.source), attestation.completeness_digest)
         and resolution.reason_code_id == "R1"
     )
 
@@ -1243,6 +1239,7 @@ def evaluate_present_use(
         asserted_controlling_record=request.asserted_controlling_record,
     )
     decided_at = request.requested_at
+
     def decide(code: str) -> UseGateDecision:
         return _decide(
             reason_code_id=code,

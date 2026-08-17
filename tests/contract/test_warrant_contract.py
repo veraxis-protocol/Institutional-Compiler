@@ -1337,9 +1337,7 @@ def _baseline_source_modules(repo_root: Path) -> set[str]:
         check=True,
         text=True,
     )
-    return {
-        Path(path).name for path in listing.stdout.splitlines() if path.endswith(".py")
-    }
+    return {Path(path).name for path in listing.stdout.splitlines() if path.endswith(".py")}
 
 
 def _assert_exact_source_delta(
@@ -1365,19 +1363,14 @@ def test_l0_source_delta_authorization_is_exact(repo_root: Path) -> None:
     """The L0 instrument authorizes source presence only, and says so."""
     authorization = json.loads((repo_root / L0_SOURCE_DELTA_AUTHORIZATION).read_bytes())
     assert (
-        authorization["authorization_id"]
-        == "OWNER-AUTHORIZATION-OIC-ZTL-OAM-DEMO-SLICE-001-L0-001"
+        authorization["authorization_id"] == "OWNER-AUTHORIZATION-OIC-ZTL-OAM-DEMO-SLICE-001-L0-001"
     )
     assert authorization["scope"] == "OIC-ZTL-OAM-DEMO-SLICE-001-L0"
     assert authorization["historical_baseline"] == L0_HISTORICAL_BASELINE
     assert (
-        authorization["implementation_source_commit"]
-        == "fa96f5c3590f54118cd926a84370be6022a80b35"
+        authorization["implementation_source_commit"] == "fa96f5c3590f54118cd926a84370be6022a80b35"
     )
-    assert (
-        authorization["implementation_source_tree"]
-        == "65a704cd9c70aef983b62ecc8176793e20004772"
-    )
+    assert authorization["implementation_source_tree"] == "65a704cd9c70aef983b62ecc8176793e20004772"
     assert authorization["authorized_post_baseline_source_modules"] == [
         "src/oic/cdc_currentness.py",
         "src/oic/cdc_authority.py",
@@ -1399,8 +1392,7 @@ def test_l0_source_delta_is_exactly_authorized(repo_root: Path) -> None:
     """Everything added to src/oic since the baseline is named by the instrument."""
     authorization = json.loads((repo_root / L0_SOURCE_DELTA_AUTHORIZATION).read_bytes())
     authorized = {
-        Path(path).name
-        for path in authorization["authorized_post_baseline_source_modules"]
+        Path(path).name for path in authorization["authorized_post_baseline_source_modules"]
     }
     current_modules = {path.name for path in (repo_root / "src" / "oic").glob("*.py")}
     _assert_exact_source_delta(current_modules, _baseline_source_modules(repo_root), authorized)

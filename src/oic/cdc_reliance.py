@@ -263,9 +263,7 @@ def run_consumer_validation(
 
     def evidence_resolvability() -> tuple[bool, Any, str]:
         refs = record.get("evidence_refs") or []
-        unresolved = [
-            ref for ref in refs if not context.resolve_evidence_ref(ref)
-        ]
+        unresolved = [ref for ref in refs if not context.resolve_evidence_ref(ref)]
         return not unresolved, {"count": len(refs), "unresolved": len(unresolved)}, "I6"
 
     def producer_identity() -> tuple[bool, Any, str]:
@@ -295,9 +293,7 @@ def run_consumer_validation(
 
     def currentness_re_resolution() -> tuple[bool, Any, str]:
         nonlocal re_resolved
-        re_resolved = context.re_resolve_currentness(
-            str(record.get("artifact_ref")), context.now
-        )
+        re_resolved = context.re_resolve_currentness(str(record.get("artifact_ref")), context.now)
         if not re_resolved.basis_reachable:
             return False, "BASIS_UNREACHABLE", "I9"
         if re_resolved.currentness_state != "CURRENT":
@@ -365,9 +361,7 @@ def run_consumer_validation(
         "checks": checks,
         "decision": "PROCEED_TO_ISSUANCE" if gate_open else "REFUSE",
         "reason_code": (
-            RELIANCE_REASON_CODES["I1"]
-            if gate_open
-            else RELIANCE_REASON_CODES[failure[0]]  # type: ignore[index]
+            RELIANCE_REASON_CODES["I1"] if gate_open else RELIANCE_REASON_CODES[failure[0]]  # type: ignore[index]
         ),
         "consumer_identity": dict(context.consumer_identity),
         "evaluated_at": context.now,

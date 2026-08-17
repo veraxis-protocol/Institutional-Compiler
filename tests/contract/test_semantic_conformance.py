@@ -13,25 +13,21 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
-import sys
 from pathlib import Path
 from typing import Any
 
 import pytest
 
-# The validator is a test-only helper that deliberately does not live in src/oic, and
-# tests/ is not a package, so it is loaded from its path rather than imported by name.
-sys.path.insert(0, str(Path(__file__).parent))
-try:
-    from semantic_conformance import (
-        CANONICAL_TRIGGERS,
-        check_runtime_decision,
-        check_warrant_artifact,
-        expected_formula_hash,
-        expected_output_hash,
-    )
-finally:
-    sys.path.pop(0)
+# The validator is a test-only helper that deliberately does not live in src/oic.
+# tests/ is now a package, so it is imported by its canonical name rather than
+# loaded from a path.
+from tests.contract.semantic_conformance import (
+    CANONICAL_TRIGGERS,
+    check_runtime_decision,
+    check_warrant_artifact,
+    expected_formula_hash,
+    expected_output_hash,
+)
 
 ROW_28_CASE = "08-on-credit-sound-allow-with-disclosure"
 ROW_29_CASE = "12-on-credit-until-verification"

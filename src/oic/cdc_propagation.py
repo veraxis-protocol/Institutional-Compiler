@@ -196,9 +196,7 @@ def build_envelope(
 ) -> GovernedPropagationEnvelope:
     """Build an envelope, refusing the producer/consumer collapse outright."""
     if producer_identity.producer_principal == intended_consumer_principal:
-        raise PropagationError(
-            "producer_principal must differ from the intended reliance consumer"
-        )
+        raise PropagationError("producer_principal must differ from the intended reliance consumer")
     envelope = GovernedPropagationEnvelope(
         envelope_id=envelope_id,
         artifact_ref=artifact_ref,

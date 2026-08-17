@@ -40,17 +40,13 @@ CORRECTION_RESULT_PATH: Final = (
     CDC_EVIDENCE_FIXTURE_ROOT
     / "CDC-END-TO-END-MISSION-001-M12-CORRECTION-SUCCESSOR-RUN-002-RAW-RESULT-v0.1.json"
 )
-CORRECTION_RESULT_SHA256: Final = (
-    "8b81e62a1a5e65f14e86ced9f7b3c1f506f4dd4ccaa1c4375e4fb76d41fee246"
-)
+CORRECTION_RESULT_SHA256: Final = "8b81e62a1a5e65f14e86ced9f7b3c1f506f4dd4ccaa1c4375e4fb76d41fee246"
 SYNTHETIC_CONTROL_PATH_ON_DISK: Final = (
     REPOSITORY_ROOT
     / "veraxis/currentness-slice-001"
     / "CDC-CURRENTNESS-SLICE-001-SYNTHETIC-UNAFFECTED-CONTROL-v0.1.json"
 )
-SYNTHETIC_CONTROL_SHA256: Final = (
-    "2a9158e0561d3ab1886f3f4f52c0b828a76979aadccc66b58c95ccb84914a45d"
-)
+SYNTHETIC_CONTROL_SHA256: Final = "2a9158e0561d3ab1886f3f4f52c0b828a76979aadccc66b58c95ccb84914a45d"
 SEMANTIC_DESIGN_PATH: Final = (
     REPOSITORY_ROOT
     / "veraxis/currentness-slice-001/CURRENTNESS-PROPAGATION-SLICE-001-SEMANTIC-DESIGN-v0.2.md"
@@ -158,7 +154,8 @@ def control_artifact() -> dict[str, Any]:
 
 def control_document() -> dict[str, Any]:
     """The whole frozen synthetic control document."""
-    return json.loads(control_bytes().decode("utf-8"))
+    document: dict[str, Any] = json.loads(control_bytes().decode("utf-8"))
+    return document
 
 
 def governed_index(*, with_control: bool = True) -> CurrentnessIndex:
@@ -172,9 +169,7 @@ def governed_index(*, with_control: bool = True) -> CurrentnessIndex:
         observed_at=INDEX_OBSERVED_AT,
         admitted_at=INDEX_ADMITTED_AT,
         synthetic_control_bytes=control_bytes() if with_control else None,
-        expected_synthetic_control_sha256=(
-            SYNTHETIC_CONTROL_SHA256 if with_control else None
-        ),
+        expected_synthetic_control_sha256=(SYNTHETIC_CONTROL_SHA256 if with_control else None),
     )
 
 
