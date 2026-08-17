@@ -1270,6 +1270,12 @@ _ZTL_EVIDENCE_SCRIPTS = frozenset(
     }
 )
 
+#: The one executable ZTL boundary, authorized by name under
+#: OWNER-AUTHORIZATION-OIC-ZTL-OAM-DEMO-SLICE-001-L1-001 for the bounded demonstration
+#: lane. It is listed as a single literal rather than a pattern so a second adapter
+#: implementation appearing beside it still fails this test.
+_AUTHORIZED_L1_ZTL_BRIDGE = frozenset({"adapters/ztl/demo_bridge.py"})
+
 
 def test_no_ztl_or_veip_code_exists_or_is_imported(repo_root: Path) -> None:
     for module in sorted((repo_root / "src" / "oic").glob("*.py")):
@@ -1282,11 +1288,13 @@ def test_no_ztl_or_veip_code_exists_or_is_imported(repo_root: Path) -> None:
             path.relative_to(repo_root).as_posix()
             for path in (repo_root / "adapters" / directory).glob("**/*.py")
         }
-        unexpected = found - _ZTL_EVIDENCE_SCRIPTS
+        unexpected = found - _ZTL_EVIDENCE_SCRIPTS - _AUTHORIZED_L1_ZTL_BRIDGE
         assert unexpected == set(), (
             f"unexpected .py under adapters/{directory}, not part of the named ZTL "
-            f"evidence scripts: {sorted(unexpected)}"
+            f"evidence scripts or the one authorized L1 bridge: {sorted(unexpected)}"
         )
+        # The bridge is authorized under adapters/ztl and nowhere else.
+        assert not (found & _AUTHORIZED_L1_ZTL_BRIDGE) or directory == "ztl"
 
     # The evidence scripts are the ZTL side's own reproduction tooling: never imported or
     # called from OIC runtime code or from the semantic-conformance validator. (This test
@@ -1302,6 +1310,9 @@ def test_no_ztl_or_veip_code_exists_or_is_imported(repo_root: Path) -> None:
 
 
 L0_HISTORICAL_BASELINE = "857a21d47b76c58a511fe2955356db794ca80ab0"
+#: The commit that merged L0. The L0 source delta is the difference between these
+#: two frozen commits and is therefore a permanent historical fact.
+L0_MERGED_COMMIT = "a59b885423b984b2eb8c20751833926b888e6b95"
 L0_SOURCE_DELTA_AUTHORIZATION = (
     "docs/operations/OIC-ZTL-OAM-DEMO-SLICE-001-L0-SOURCE-DELTA-AUTHORIZATION-001.json"
 )
@@ -1320,24 +1331,20 @@ L0_BASELINE_MODULES = frozenset(
 )
 
 
-def _baseline_source_modules(repo_root: Path) -> set[str]:
-    """The src/oic modules present at the frozen L0 baseline commit."""
+def _source_modules_at(repo_root: Path, commit: str) -> set[str]:
+    """The src/oic modules present at one frozen commit."""
     listing = subprocess.run(
-        [
-            "git",
-            "-C",
-            str(repo_root),
-            "ls-tree",
-            "-r",
-            "--name-only",
-            L0_HISTORICAL_BASELINE,
-            "src/oic",
-        ],
+        ["git", "-C", str(repo_root), "ls-tree", "-r", "--name-only", commit, "src/oic"],
         capture_output=True,
         check=True,
         text=True,
     )
     return {Path(path).name for path in listing.stdout.splitlines() if path.endswith(".py")}
+
+
+def _baseline_source_modules(repo_root: Path) -> set[str]:
+    """The src/oic modules present at the frozen pre-L0 baseline commit."""
+    return _source_modules_at(repo_root, L0_HISTORICAL_BASELINE)
 
 
 def _assert_exact_source_delta(
@@ -1389,16 +1396,26 @@ def test_l0_source_delta_authorization_is_exact(repo_root: Path) -> None:
 
 
 def test_l0_source_delta_is_exactly_authorized(repo_root: Path) -> None:
-    """Everything added to src/oic since the baseline is named by the instrument."""
+    """Everything L0 added to src/oic is named by the L0 instrument.
+
+    This is a proposition about L0, so it is evaluated between two frozen
+    commits: the pre-L0 baseline and the commit that merged L0. It previously
+    compared the *working tree* to the pre-L0 baseline, which silently turned an
+    L0 proposition into a claim about whatever exists now, and would fail for any
+    later authorized lane. Successor lanes assert their own exact delta against
+    their own baseline; see ``tests/contract/test_demo_slice_contract.py``.
+    """
     authorization = json.loads((repo_root / L0_SOURCE_DELTA_AUTHORIZATION).read_bytes())
     authorized = {
         Path(path).name for path in authorization["authorized_post_baseline_source_modules"]
     }
+    l0_modules = _source_modules_at(repo_root, L0_MERGED_COMMIT)
+    _assert_exact_source_delta(l0_modules, _baseline_source_modules(repo_root), authorized)
+    # Explicitly excluded from this lane and expected to stay absent — then and now.
     current_modules = {path.name for path in (repo_root / "src" / "oic").glob("*.py")}
-    _assert_exact_source_delta(current_modules, _baseline_source_modules(repo_root), authorized)
-    # Explicitly excluded from this lane and expected to stay absent.
-    assert "cdc_slice.py" not in current_modules
-    assert "cdc_e2e_mission.py" not in current_modules
+    for name in ("cdc_slice.py", "cdc_e2e_mission.py"):
+        assert name not in l0_modules
+        assert name not in current_modules
 
 
 def test_l0_source_delta_guard_rejects_an_undeclared_module() -> None:

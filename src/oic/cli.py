@@ -6,6 +6,14 @@ Subcommands
 ``oic verify-bootstrap``  verify the historical bootstrap baseline from Git objects
 ``oic verify-manifest``   verify current-tree integrity manifests, read-only
 ``oic doctor``            report environment and gate state
+``oic demo validate``     compile the bounded synthetic demo scenario; no execution
+``oic demo run``          refuses unless an owner result-bearing authorization is supplied
+
+The ``demo`` subcommands belong to the bounded OIC-ZTL-OAM demonstration lane. ``demo
+validate`` compiles the synthetic scenario and reports what it produced; it evaluates no
+logic and executes nothing. ``demo run`` is the claim-bearing path and is closed: without
+an owner-issued result-bearing execution authorization it exits FAIL with
+``RESULT_BEARING_EXECUTION_NOT_AUTHORIZED``. There is no flag that opens it.
 
 Bootstrap verification is separate on purpose. ``BOOTSTRAP_MANIFEST.json`` is immutable
 historical evidence about the bootstrap commit, not a policy freezing every path it lists
@@ -57,6 +65,13 @@ from oic.baseline import (
     BaselineStatus,
     BlobStatus,
     verify_bootstrap_baseline,
+)
+from oic.demo_runtime import (
+    RESULT_BEARING_EXECUTION_NOT_AUTHORIZED,
+    SCENARIO_ID,
+    DemoRuntimeError,
+    load_result_bearing_authorization,
+    validate_scenario,
 )
 from oic.doctor import DoctorReport, run_doctor
 from oic.errors import ErrorCategory, OICError
@@ -286,6 +301,54 @@ def _command_doctor(args: argparse.Namespace, stream: TextIO) -> ExitCode:
 
 
 # ---------------------------------------------------------------------------
+# demo
+# ---------------------------------------------------------------------------
+
+
+def _render_demo_validation(report: dict[str, Any], stream: TextIO) -> None:
+    stream.write(f"Demo scenario: {report['scenario_id']}\n")
+    stream.write(f"  scope:               {report['scope_ref']}\n")
+    stream.write(f"  currentness index:   {report['currentness_index_digest']}\n")
+    for version, detail in sorted(report["versions"].items()):
+        stream.write(f"\n  {version}\n")
+        stream.write(f"    source            {detail['source_content_hash']}\n")
+        stream.write(f"    candidates        {detail['candidates']}\n")
+        stream.write(f"    admitted units    {len(detail['admitted_units'])}\n")
+        stream.write(f"    executable        {', '.join(detail['executable_conditions'])}\n")
+        stream.write(f"    envelope          {detail['envelope_id']}\n")
+        stream.write(f"    envelope digest   {detail['envelope_digest']}\n")
+    stream.write(f"\n  claim ceiling: {report['claim_ceiling']}\n")
+    stream.write("  Nothing was executed and no result-bearing claim is made.\n")
+
+
+def _command_demo_validate(args: argparse.Namespace, stream: TextIO) -> ExitCode:
+    root = _resolve_root(args.repo_root)
+    report = validate_scenario(root, args.scenario)
+    if args.format == "json":
+        _dump_json(report, stream)
+    else:
+        _render_demo_validation(report, stream)
+    return ExitCode.PASS
+
+
+def _command_demo_run(args: argparse.Namespace, stream: TextIO) -> ExitCode:
+    # The gate, and the whole of it. `demo run` is the claim-bearing path, so it
+    # opens only for an owner-issued artifact that says so in as many words.
+    # Reaching the execution below without one is not possible from here.
+    try:
+        load_result_bearing_authorization(args.authorization)
+    except DemoRuntimeError as error:
+        stream.write(f"{error}\n")
+        return ExitCode.FAIL
+    stream.write(
+        f"{RESULT_BEARING_EXECUTION_NOT_AUTHORIZED}: an authorization artifact was supplied, "
+        "but no result-bearing execution has been implemented behind this gate in this "
+        "work order.\n"
+    )
+    return ExitCode.FAIL
+
+
+# ---------------------------------------------------------------------------
 # Parser
 # ---------------------------------------------------------------------------
 
@@ -442,6 +505,61 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     doctor.set_defaults(handler=_command_doctor)
+
+    demo = subparsers.add_parser(
+        "demo",
+        parents=[common],
+        help="bounded synthetic OIC-ZTL-OAM demonstration lane",
+        description=(
+            "The bounded synthetic demonstration lane. 'validate' compiles the scenario and "
+            "reports what it produced without evaluating any logic or executing anything. "
+            "'run' is the claim-bearing path and refuses unless a separate owner-issued "
+            "result-bearing execution authorization is supplied. Nothing here performs a "
+            "payment, a disbursement, an external transaction, or any legal act."
+        ),
+    )
+    demo_commands = demo.add_subparsers(dest="demo_command", required=True)
+
+    demo_validate = demo_commands.add_parser(
+        "validate",
+        parents=[common],
+        help="compile the synthetic scenario; evaluates no logic and executes nothing",
+    )
+    demo_validate.add_argument(
+        "--scenario",
+        default=SCENARIO_ID,
+        metavar="ID",
+        help=f"scenario identifier (default: {SCENARIO_ID})",
+    )
+    demo_validate.set_defaults(handler=_command_demo_validate)
+
+    demo_run = demo_commands.add_parser(
+        "run",
+        parents=[common],
+        help="result-bearing execution; refuses without an owner authorization artifact",
+        description=(
+            "Refuses with RESULT_BEARING_EXECUTION_NOT_AUTHORIZED unless an owner-issued "
+            "result-bearing execution authorization artifact is supplied. Development tests "
+            "call the internal orchestration directly and never reach this command."
+        ),
+    )
+    demo_run.add_argument(
+        "--scenario",
+        default=SCENARIO_ID,
+        metavar="ID",
+        help=f"scenario identifier (default: {SCENARIO_ID})",
+    )
+    demo_run.add_argument(
+        "--out", type=Path, default=None, metavar="PATH", help="evidence output directory"
+    )
+    demo_run.add_argument(
+        "--authorization",
+        type=Path,
+        default=None,
+        metavar="PATH",
+        help="owner-issued result-bearing execution authorization artifact",
+    )
+    demo_run.set_defaults(handler=_command_demo_run)
 
     return parser
 

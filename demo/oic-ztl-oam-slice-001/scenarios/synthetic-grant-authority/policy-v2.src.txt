@@ -1,0 +1,10 @@
+POLICY SYNTH-GRANT-POLICY v2
+TITLE Synthetic Grant Disbursement Authority
+EFFECTIVE 2027-06-01
+SUPERSEDES v1
+ACTOR DISBURSING-OFFICER
+ACTION DISBURSE_GRANT
+CONDITION amount_within_limit AMOUNT_MAX 25000
+CONDITION eligibility_evidence_present EVIDENCE signed_eligibility_evidence
+DELEGATION DELEG-2027-014
+GUIDANCE prefer_electronic_submission

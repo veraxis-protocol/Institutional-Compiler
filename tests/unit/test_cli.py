@@ -397,6 +397,87 @@ def test_no_semantic_subcommands_exist() -> None:
         choices = action.choices
         if isinstance(choices, dict):
             commands.update(choices)
-    assert commands == {"validate-schema", "verify-bootstrap", "verify-manifest", "doctor"}
+    # `demo` is a bounded synthetic lane, not a semantic verb over real documents:
+    # `demo validate` compiles the checked-in synthetic scenario and executes nothing,
+    # and `demo run` is closed. The forbidden general-purpose verbs stay forbidden.
+    assert commands >= {"validate-schema", "verify-bootstrap", "verify-manifest", "doctor", "demo"}
+    assert commands <= {
+        "validate-schema",
+        "verify-bootstrap",
+        "verify-manifest",
+        "doctor",
+        "demo",
+        "validate",
+        "run",
+    }
     forbidden = {"compile", "admit", "extract", "ingest", "generate-rego", "evaluate", "envelope"}
     assert forbidden.isdisjoint(commands)
+
+
+# ---------------------------------------------------------------------------
+# demo
+# ---------------------------------------------------------------------------
+
+
+def test_demo_validate_compiles_and_executes_nothing(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    code, out, _ = run(
+        capsys, "--repo-root", str(repo_root), "--format", "json", "demo", "validate"
+    )
+    assert code == ExitCode.PASS
+    report = json.loads(out)
+    assert report["execution_performed"] is False
+    assert report["result_bearing_execution"] is False
+    assert report["claim_ceiling"] == "SYNTHETIC_END_TO_END_PIPELINE_IMPLEMENTED_AND_TESTED"
+    assert set(report["versions"]) == {"v1", "v2"}
+
+
+def test_demo_validate_is_deterministic(
+    capsys: pytest.CaptureFixture[str], repo_root: Path
+) -> None:
+    args = ("--repo-root", str(repo_root), "--format", "json", "demo", "validate")
+    first_code, first_out, _ = run(capsys, *args)
+    second_code, second_out, _ = run(capsys, *args)
+    assert (first_code, first_out) == (second_code, second_out)
+
+
+def test_demo_run_refuses_without_an_owner_authorization(
+    capsys: pytest.CaptureFixture[str], repo_root: Path, tmp_path: Path
+) -> None:
+    """The claim-bearing path is closed, and says exactly why."""
+    code, out, _ = run(
+        capsys,
+        "--repo-root",
+        str(repo_root),
+        "demo",
+        "run",
+        "--scenario",
+        "synthetic-grant-authority",
+        "--out",
+        str(tmp_path / "evidence"),
+    )
+    assert code == ExitCode.FAIL
+    assert "RESULT_BEARING_EXECUTION_NOT_AUTHORIZED" in out
+    assert not (tmp_path / "evidence").exists()
+
+
+def test_demo_run_refuses_an_authorization_that_does_not_authorize(
+    capsys: pytest.CaptureFixture[str], repo_root: Path, tmp_path: Path
+) -> None:
+    path = tmp_path / "authorization.json"
+    path.write_text(
+        json.dumps(
+            {
+                "schema_version": "OIC-DEMO-EXECUTION-AUTHORIZATION-v0.1",
+                "scenario_id": "synthetic-grant-authority",
+                "result_bearing_execution_authorized": False,
+            }
+        ),
+        encoding="utf-8",
+    )
+    code, out, _ = run(
+        capsys, "--repo-root", str(repo_root), "demo", "run", "--authorization", str(path)
+    )
+    assert code == ExitCode.FAIL
+    assert "RESULT_BEARING_EXECUTION_NOT_AUTHORIZED" in out

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/demo/execution-authorization.schema.json",
+  "title": "DemoExecutionAuthorization",
+  "$comment": "DEMONSTRATION LANE ONLY. The single artifact that can open the result-bearing execution gate. Absent one, `oic demo run` refuses with RESULT_BEARING_EXECUTION_NOT_AUTHORIZED. No flag, environment variable or default is an alternative route.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_class",
+    "schema_version",
+    "authorization_id",
+    "scenario_id",
+    "owner",
+    "result_bearing_execution_authorized",
+    "single_use",
+    "issued_at"
+  ],
+  "properties": {
+    "record_class": { "const": "OWNER_DEMO_RESULT_BEARING_EXECUTION_AUTHORIZATION" },
+    "schema_version": { "const": "OIC-DEMO-EXECUTION-AUTHORIZATION-v0.1" },
+    "authorization_id": { "type": "string", "minLength": 1 },
+    "scenario_id": { "type": "string", "minLength": 1 },
+    "owner": { "type": "string", "minLength": 1 },
+    "result_bearing_execution_authorized": { "type": "boolean" },
+    "single_use": { "type": "boolean" },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "measured_claim_authorized": { "type": "boolean" },
+    "production_claim_authorized": { "type": "boolean" },
+    "notes": { "type": "string" }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "record_class": "OWNER_SOURCE_DELTA_AUTHORIZATION",
+  "authorization_id": "OWNER-AUTHORIZATION-OIC-ZTL-OAM-DEMO-SLICE-001-L1-001",
+  "scope": "OIC-ZTL-OAM-DEMO-SLICE-001-L1",
+  "authorizes": "BOUNDED_DEMO_IMPLEMENTATION_ONLY",
+  "owner": "ARKADIY_MITEIKO",
+  "historical_baseline": "a59b885423b984b2eb8c20751833926b888e6b95",
+  "demo_lane_only": true,
+  "authorized_new_source_modules": [
+    "src/oic/demo_compiler.py",
+    "src/oic/demo_ztl.py",
+    "src/oic/demo_runtime.py"
+  ],
+  "authorized_modified_source_paths": [
+    "src/oic/cli.py"
+  ],
+  "authorized_adapter_paths": [
+    "adapters/ztl/demo_bridge.py"
+  ],
+  "global_semantic_implementation_gate_opened": false,
+  "proposed_contract_globally_admitted": false,
+  "demo_use_of_proposed_warrant_contract": true,
+  "implementation_claim_ceiling": "SYNTHETIC_END_TO_END_PIPELINE_IMPLEMENTED_AND_TESTED",
+  "measured_end_to_end_claim_authorized": false,
+  "result_bearing_execution_authorized": false,
+  "production_claim_authorized": false,
+  "institutional_validity_claim_authorized": false,
+  "independent_assurance_claim_authorized": false,
+  "RUN004_authorized": false,
+  "adjudicated_l0_runtime_modules_frozen": [
+    "src/oic/cdc_currentness.py",
+    "src/oic/cdc_authority.py",
+    "src/oic/cdc_propagation.py",
+    "src/oic/cdc_reliance.py"
+  ],
+  "excluded_source_modules": [
+    "src/oic/cdc_slice.py",
+    "src/oic/cdc_e2e_mission.py",
+    "src/oic/ztl.py",
+    "src/oic/oam.py",
+    "src/oic/veip.py"
+  ],
+  "external_kernel_pin": "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b",
+  "not_established": [
+    "OIC_ZTL_OAM_END_TO_END_DEMONSTRATION",
+    "MEASURED_INTERNAL_END_TO_END_TECHNICAL_DEMONSTRATION",
+    "CDC_BENCHMARK_COMPLETION",
+    "PRODUCTION_READINESS",
+    "INSTITUTIONAL_VALIDITY",
+    "INDEPENDENT_ASSURANCE"
+  ]
+}

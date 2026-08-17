@@ -1,0 +1,63 @@
+{
+  "$comment": "Bounded synthetic demonstration material. Nothing here derives from, describes, or stands in for any real institution, programme, policy, or disbursement.",
+  "scenario_id": "synthetic-grant-authority",
+  "scenario_name": "Synthetic Grant Disbursement Authority",
+  "synthetic": true,
+  "derived_from_real_institutional_source": false,
+  "scope_ref": "OIC-ZTL-OAM-DEMO-SLICE-001-SYNTH-GRANT",
+  "policy_family": "SYNTH-GRANT-POLICY",
+  "actor": "DISBURSING-OFFICER",
+  "action": "DISBURSE_GRANT",
+  "test_amount": 40000,
+  "delegation_id": "DELEG-2027-014",
+  "versions": {
+    "v1": {
+      "source_path": "policy-v1.src.txt",
+      "admission_path": "admission-v1.json",
+      "effective_from": "2027-01-01T00:00:00Z",
+      "amount_max": 50000,
+      "supersedes": null
+    },
+    "v2": {
+      "source_path": "policy-v2.src.txt",
+      "admission_path": "admission-v2.json",
+      "effective_from": "2027-06-01T00:00:00Z",
+      "amount_max": 25000,
+      "supersedes": "v1"
+    }
+  },
+  "declared_logical_times": {
+    "$comment": "The supersession record is admitted when v2 is enacted (2027-05-01) and becomes operative on v2's effective date (2027-06-01). The basis-completeness attestation is admitted after it, because the L0 resolver will not call an output CURRENT on an attestation older than a controlling record it would have had to cover. before_v2_effective therefore sits after the attestation and before v2 takes effect.",
+    "supersession_admitted_at": "2027-05-01T00:00:00Z",
+    "basis_attested_at": "2027-05-01T12:00:00Z",
+    "before_v2_effective": "2027-05-15T00:00:00Z",
+    "after_v2_effective": "2027-07-01T00:00:00Z"
+  },
+  "ztl": {
+    "positive_formula": "g_amount_within_limit & g_eligibility_evidence_present",
+    "ground_ids": [
+      "g:amount_within_limit",
+      "g:eligibility_evidence_present"
+    ],
+    "ground_atom_map": {
+      "g:amount_within_limit": "g_amount_within_limit",
+      "g:eligibility_evidence_present": "g_eligibility_evidence_present"
+    },
+    "authority_is_not_a_ground": true,
+    "authority_note": "Authority and delegation are institutional/OAM-plane facts. Encoding either as a ZTL proposition would let a logical result stand in for an institutional one; the formula therefore names neither."
+  },
+  "frozen_demo_policy": {
+    "on_authority_unresolved": "ESCALATE",
+    "on_authority_unresolved_note": "A6 means competing operative authority bases with no frozen precedence. The decision records UNRESOLVED and escalates; it must never state that the proposition is false.",
+    "on_currentness_unknown": "BLOCK",
+    "on_currentness_unknown_note": "UNKNOWN fails closed operationally. It is not substantive falsity and never rewrites an epistemic result."
+  },
+  "claim_ceiling": "SYNTHETIC_END_TO_END_PIPELINE_IMPLEMENTED_AND_TESTED",
+  "not_established": [
+    "OIC_ZTL_OAM_END_TO_END_DEMONSTRATION",
+    "MEASURED_INTERNAL_END_TO_END_TECHNICAL_DEMONSTRATION",
+    "PRODUCTION_READINESS",
+    "INSTITUTIONAL_VALIDITY",
+    "INDEPENDENT_ASSURANCE"
+  ]
+}
