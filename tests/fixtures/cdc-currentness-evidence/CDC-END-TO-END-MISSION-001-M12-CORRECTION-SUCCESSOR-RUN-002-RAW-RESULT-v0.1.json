@@ -1,0 +1,292 @@
+{
+  "affected_output_eligibility": [
+    {
+      "basis": {
+        "correction_stimulus_id": "HA-CORRECTION-001",
+        "predecessor_candidate_id": "CAND-P-001-C-TENDER-01",
+        "predecessor_id": "EBAWU-P-001-C-TENDER-01",
+        "successor_id": "EBAWU-P-001-C-TENDER-01-CORR-002"
+      },
+      "correction_impact": "AFFECTED_BY_SUPERSESSION",
+      "determination_class": "CORRECTION_SUCCESSOR_SIDE_RELIANCE_STATUS",
+      "draft_id": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01",
+      "frozen_draft_modified": false,
+      "post_correction_reliance_state": "INELIGIBLE_PENDING_REGENERATION_OR_EXPLICIT_HUMAN_RESOLUTION",
+      "pre_correction_eligibility_reason": "FROZEN_RUN_001_DETERMINATION",
+      "pre_correction_frozen_eligibility": "INELIGIBLE_PROVENANCE_INCOMPLETE"
+    },
+    {
+      "basis": {
+        "correction_stimulus_id": "HA-CORRECTION-001",
+        "predecessor_candidate_id": "CAND-P-001-C-TENDER-01",
+        "predecessor_id": "EBAWU-P-001-C-TENDER-01",
+        "successor_id": "EBAWU-P-001-C-TENDER-01-CORR-002"
+      },
+      "correction_impact": "AFFECTED_BY_SUPERSESSION",
+      "determination_class": "CORRECTION_SUCCESSOR_SIDE_RELIANCE_STATUS",
+      "draft_id": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02",
+      "frozen_draft_modified": false,
+      "post_correction_reliance_state": "INELIGIBLE_PENDING_REGENERATION_OR_EXPLICIT_HUMAN_RESOLUTION",
+      "pre_correction_eligibility_reason": "FROZEN_RUN_001_DETERMINATION",
+      "pre_correction_frozen_eligibility": "INELIGIBLE_PROVENANCE_INCOMPLETE"
+    },
+    {
+      "basis": {
+        "correction_stimulus_id": "HA-CORRECTION-001",
+        "predecessor_candidate_id": "CAND-P-001-C-TENDER-01",
+        "predecessor_id": "EBAWU-P-001-C-TENDER-01",
+        "successor_id": "EBAWU-P-001-C-TENDER-01-CORR-002"
+      },
+      "correction_impact": "AFFECTED_BY_SUPERSESSION",
+      "determination_class": "CORRECTION_SUCCESSOR_SIDE_RELIANCE_STATUS",
+      "draft_id": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-03",
+      "frozen_draft_modified": false,
+      "post_correction_reliance_state": "INELIGIBLE_PENDING_REGENERATION_OR_EXPLICIT_HUMAN_RESOLUTION",
+      "pre_correction_eligibility_reason": "FROZEN_RUN_001_DETERMINATION",
+      "pre_correction_frozen_eligibility": "INELIGIBLE_PROVENANCE_INCOMPLETE"
+    },
+    {
+      "basis": {
+        "correction_stimulus_id": "HA-CORRECTION-001",
+        "predecessor_candidate_id": "CAND-P-001-C-TENDER-01",
+        "predecessor_id": "EBAWU-P-001-C-TENDER-01",
+        "successor_id": "EBAWU-P-001-C-TENDER-01-CORR-002"
+      },
+      "correction_impact": "AFFECTED_BY_SUPERSESSION",
+      "determination_class": "CORRECTION_SUCCESSOR_SIDE_RELIANCE_STATUS",
+      "draft_id": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04",
+      "frozen_draft_modified": false,
+      "post_correction_reliance_state": "INELIGIBLE_PENDING_REGENERATION_OR_EXPLICIT_HUMAN_RESOLUTION",
+      "pre_correction_eligibility_reason": "FROZEN_RUN_001_DETERMINATION",
+      "pre_correction_frozen_eligibility": "INELIGIBLE_PROVENANCE_INCOMPLETE"
+    },
+    {
+      "basis": {
+        "correction_stimulus_id": "HA-CORRECTION-001",
+        "predecessor_candidate_id": "CAND-P-001-C-TENDER-01",
+        "predecessor_id": "EBAWU-P-001-C-TENDER-01",
+        "successor_id": "EBAWU-P-001-C-TENDER-01-CORR-002"
+      },
+      "correction_impact": "AFFECTED_BY_SUPERSESSION",
+      "determination_class": "CORRECTION_SUCCESSOR_SIDE_RELIANCE_STATUS",
+      "draft_id": "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-05",
+      "frozen_draft_modified": false,
+      "post_correction_reliance_state": "INELIGIBLE_PENDING_REGENERATION_OR_EXPLICIT_HUMAN_RESOLUTION",
+      "pre_correction_eligibility_reason": "FROZEN_RUN_001_DETERMINATION",
+      "pre_correction_frozen_eligibility": "INELIGIBLE_PROVENANCE_INCOMPLETE"
+    }
+  ],
+  "affected_output_refs": [
+    "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01",
+    "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02",
+    "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-03",
+    "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04",
+    "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-05"
+  ],
+  "archive_identity": {
+    "archive_identity_verified": true,
+    "branch": "cdc-e2e-stage2-run-001-evidence",
+    "caller_injectable": false,
+    "expected_branch": "cdc-e2e-stage2-run-001-evidence",
+    "expected_commit": "1a80aabe0f72eac8570b9827ee7545cda370cbe8",
+    "expected_repository": "veraxis-protocol/Institutional-Compiler",
+    "expected_tree": "a6216214ae5a49ffcb3448a97aadce1bb3f418e3",
+    "local_branch_consulted": false,
+    "mismatched": [],
+    "observation_source": "ORIGIN_LS_REMOTE",
+    "observed_after_successor_construction": true,
+    "remote_commit": "1a80aabe0f72eac8570b9827ee7545cda370cbe8",
+    "remote_commit_tree": "a6216214ae5a49ffcb3448a97aadce1bb3f418e3",
+    "remote_commit_tree_source": "LOCAL_OBJECT_FOR_ORIGIN_SUPPLIED_SHA",
+    "repository_normalized": "veraxis-protocol/Institutional-Compiler",
+    "repository_observation_root": "/private/tmp/claude-501/cleanroom",
+    "repository_observation_root_caller_injectable": false,
+    "repository_observation_root_environment_override_used": false,
+    "repository_observation_root_source": "LOADED_IMPLEMENTATION_LOCATION",
+    "repository_remote_url": "https://github.com/veraxis-protocol/Institutional-Compiler.git",
+    "runtime_evidence_root": "/private/tmp/cdc-e2e-stage2-run-001",
+    "runtime_evidence_root_authorization_id": "CDC-E2E-MISSION-001-M12-AUTH-004",
+    "runtime_evidence_root_authorization_sha256": "eb759b44a5c971ba711b7a2a335c35bb8b993fe4f319ddb0c5cc8c4c9bd90e5f",
+    "runtime_evidence_root_equals_repository_observation_root": false,
+    "runtime_evidence_root_source": "VERIFIED_CORRECTION_SUCCESSOR_AUTHORIZATION_BINDING"
+  },
+  "attempt_record": {
+    "attempt_record_bytes": 823,
+    "attempt_record_path": "/private/tmp/cdc-e2e-m12-correction-successor-run-002/.cdc-e2e-correction-successor-attempt-eb759b44a5c971ba711b7a2a335c35bb8b993fe4f319ddb0c5cc8c4c9bd90e5f.json",
+    "attempt_record_sha256": "a73b402e5612630e9ebce0248b2f475c1cd97b0ca57d7692e376169aa3c4dd40",
+    "attempt_state": "CONSUMED_AFTER_FIRST_SUCCESSOR_CONSTRUCTION",
+    "implementation_commit": "97f814e3d4ff40db6cdd55197a48e15c57b2ad49",
+    "implementation_tree": "ff6d864a9b8db7c4c301271b5e7c9b29b5cd0ab5",
+    "mission_package_sha256": "b62f39669cf5891e5864cf2b27debaade4e98637faad162b76e78753a5c9e80b",
+    "owner_execution_authorization_sha256": "eb759b44a5c971ba711b7a2a335c35bb8b993fe4f319ddb0c5cc8c4c9bd90e5f"
+  },
+  "changed_fact_or_control_refs": [
+    "C-TENDER-01"
+  ],
+  "claim_ceiling": "SYNTHETIC_EVALUATION_ONLY",
+  "correction_executed": true,
+  "correction_instruction": {
+    "caller_selectable": false,
+    "correction_instruction_bytes": 1042,
+    "correction_instruction_id": "CDC-END-TO-END-MISSION-001-M12-CORRECTION-INSTRUCTION-002",
+    "correction_instruction_path": "/private/tmp/cdc-e2e-m12-correction-successor-run-002/CDC-END-TO-END-MISSION-001-M12-CORRECTION-INSTRUCTION-002.json",
+    "correction_instruction_sha256": "e33e075c8364f96c999072f12e8dd1f396ba85ad6085c13f5c1e85923a8fd703",
+    "declared_predecessor_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+    "field_authority": {
+      "affected_output_eligibility": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
+      "affected_output_refs": "FROZEN_PREDECESSOR_DERIVED",
+      "changed_fact_or_control_refs": "OWNER_AUTHORED",
+      "correction_event_id": "OWNER_AUTHORED",
+      "correction_reason": "OWNER_AUTHORED",
+      "new_candidate_digest": "OWNER_AUTHORED",
+      "new_ebawu_or_successor_id": "OWNER_AUTHORED",
+      "new_state": "OWNER_AUTHORED",
+      "predecessor_digest": "FROZEN_PREDECESSOR_DERIVED",
+      "prior_state": "FROZEN_PREDECESSOR_DERIVED",
+      "reliance_impact_refs": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
+      "superseded_at_utc": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
+      "superseded_by": "SYSTEM_DERIVED_AFTER_AUTHORIZATION",
+      "supersedes": "FROZEN_PREDECESSOR_DERIVED"
+    },
+    "owner_authored_fields": [
+      "changed_fact_or_control_refs",
+      "correction_event_id",
+      "correction_reason",
+      "new_candidate_digest",
+      "new_ebawu_or_successor_id",
+      "new_state"
+    ],
+    "owner_authored_semantics": {
+      "changed_fact_or_control_refs": [
+        "C-TENDER-01"
+      ],
+      "correction_event_id": "CDC-E2E-M12-CORRECTION-EVT-002",
+      "correction_reason": "Synthetic owner correction of C-TENDER-01 after the completed predecessor transition; the predecessor is preserved and the corrected successor does not inherit the predecessor's prior ACCEPTED_CANDIDATE disposition.",
+      "new_candidate_digest": "d9fb749c59b3da5ddacfcf846fc89aaeb569fa3ada846150ee26f0ed7bac7eb1",
+      "new_ebawu_or_successor_id": "EBAWU-P-001-C-TENDER-01-CORR-002",
+      "new_state": "CANDIDATE_FORMED"
+    }
+  },
+  "correction_reason": "Synthetic owner correction of C-TENDER-01 after the completed predecessor transition; the predecessor is preserved and the corrected successor does not inherit the predecessor's prior ACCEPTED_CANDIDATE disposition.",
+  "correction_stimulus": {
+    "correction_stimulus_digest": "edea71d189bde4b99e84d42267ba3e8960adcc43ff0f33c5ff1cef12c69c4efb",
+    "correction_stimulus_id": "HA-CORRECTION-001",
+    "correction_target_id": "HA-P001-C-TENDER-01",
+    "correction_target_source": "FROZEN_ACTION_PLAN_BYTES",
+    "precondition": "issue only after an eligible completed transition on this chain",
+    "predecessor_ebawu_ref": "EBAWU-P-001-C-TENDER-01",
+    "stimulus_is_not_the_instruction": true
+  },
+  "correction_successor_result_digest": "f5af7424bc58addba6bf1a12a78a6f7fb5979fd730d045ca7ca06f739b5cffc7",
+  "evidence_locations": {
+    "attempt_record_path": "/private/tmp/cdc-e2e-stage2-run-001/.cdc-e2e-stage-2-attempt-42b3c3d1285a0fddc36558875cc9df2e90b283ec79d96a56408b0fbc6f8c5f41.json",
+    "authorization_id": "CDC-E2E-MISSION-001-M12-AUTH-004",
+    "authorization_sha256": "eb759b44a5c971ba711b7a2a335c35bb8b993fe4f319ddb0c5cc8c4c9bd90e5f",
+    "caller_selectable": false,
+    "evidence_root": "/private/tmp/cdc-e2e-stage2-run-001",
+    "locations_derived_from": "VERIFIED_CORRECTION_SUCCESSOR_AUTHORIZATION_BINDINGS",
+    "raw_result_path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-STAGE-2-RAW-RESULT-v0.1.json",
+    "route_trace_path": "/private/tmp/cdc-e2e-stage2-run-001/CDC-END-TO-END-MISSION-001-STAGE-2-ROUTE-TRACE-v0.1.json"
+  },
+  "experiment_id": "CDC-END-TO-END-MISSION-001",
+  "m11_repaired": false,
+  "official_handoff": "PROHIBITED",
+  "owner_correction_authorization": {
+    "authorized_correction_instruction_bytes": 1042,
+    "authorized_correction_instruction_id": "CDC-END-TO-END-MISSION-001-M12-CORRECTION-INSTRUCTION-002",
+    "authorized_correction_instruction_sha256": "e33e075c8364f96c999072f12e8dd1f396ba85ad6085c13f5c1e85923a8fd703",
+    "authorized_evidence_branch": "cdc-e2e-stage2-run-001-evidence",
+    "authorized_evidence_repository": "veraxis-protocol/Institutional-Compiler",
+    "authorized_evidence_root": "/private/tmp/cdc-e2e-stage2-run-001",
+    "authorized_stage": "CORRECTION_SUCCESSOR_ONLY",
+    "authorized_successor_id": "EBAWU-P-001-C-TENDER-01-CORR-002",
+    "owner_correction_authorization_bytes": 3624,
+    "owner_correction_authorization_id": "CDC-E2E-MISSION-001-M12-AUTH-004",
+    "owner_correction_authorization_record_class": "OWNER_CORRECTION_SUCCESSOR_EXECUTION_AUTHORIZATION",
+    "owner_correction_authorization_reference": "sha256:eb759b44a5c971ba711b7a2a335c35bb8b993fe4f319ddb0c5cc8c4c9bd90e5f",
+    "owner_correction_authorization_scope": "ONE_CORRECTION_SUCCESSOR_CONSTRUCTION",
+    "owner_correction_authorization_sha256": "eb759b44a5c971ba711b7a2a335c35bb8b993fe4f319ddb0c5cc8c4c9bd90e5f"
+  },
+  "predecessor": {
+    "candidate_digest": "207c317cb47aada8d7782b2df5691bf4367b9a3b9fd1720f0732f37279050c12",
+    "candidate_id": "CAND-P-001-C-TENDER-01",
+    "ebawu_id": "EBAWU-P-001-C-TENDER-01",
+    "state": "ACCEPTED_CANDIDATE"
+  },
+  "predecessor_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+  "predecessor_immutability": {
+    "level_1_in_memory_digest_after": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+    "level_1_in_memory_digest_before": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+    "level_1_preserved": true,
+    "level_2_expected": {
+      "attempt_record_sha256": "0d11efa747647bf6764bb7562b3a8e7b02219ed2b10f527ce4b5e69df3ca72d2",
+      "raw_result_sha256": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+      "route_trace_sha256": "481957e87f73e2fc058e0e167b6d3d82fea830b2eaad16c78bdfc39f3c952920"
+    },
+    "level_2_observed": {
+      "attempt_record_sha256": "0d11efa747647bf6764bb7562b3a8e7b02219ed2b10f527ce4b5e69df3ca72d2",
+      "raw_result_sha256": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+      "route_trace_sha256": "481957e87f73e2fc058e0e167b6d3d82fea830b2eaad16c78bdfc39f3c952920"
+    },
+    "level_2_preserved": true,
+    "mismatched": [],
+    "predecessor_byte_identity_preserved": true
+  },
+  "predecessor_supersession_record": {
+    "is_successor_side_evidence": true,
+    "predecessor_candidate_id": "CAND-P-001-C-TENDER-01",
+    "predecessor_digest": "07db4673eed5a124ee5eec96f4d149e59654632a12ad2632db72c19cc6efc311",
+    "predecessor_id": "EBAWU-P-001-C-TENDER-01",
+    "predecessor_mutated": false,
+    "predecessor_rewritten": false,
+    "record_class": "PREDECESSOR_SUPERSESSION_RECORD",
+    "superseded_at_utc": "2026-08-14T18:10:54Z",
+    "superseded_by": "EBAWU-P-001-C-TENDER-01-CORR-002",
+    "superseded_by_correction_event_id": "CDC-E2E-M12-CORRECTION-EVT-002"
+  },
+  "run_001_modified": false,
+  "runtime_mission_id": "CDC-TEST-MISSION-001",
+  "source_run_id": "CDC-E2E-STAGE2-RUN-001",
+  "source_stage_2_raw_result_sha256": "715a97038be184f5f0715a9e53d9ceb9150bf74b72e1ff2f4d27654c2b61d45d",
+  "source_stage_2_result_digest": "8a12b681d1f08aa47b70830a939da9d545dccdcea33643fc6f5f6ca9450b3b40",
+  "stage_2_reexecuted": false,
+  "stale_proposal_refusal_observation": {
+    "candidate_id": "CAND-P-001-C-TENDER-01",
+    "decision": "DENY",
+    "epistemic_state": "NOT_ADJUDICATED",
+    "gate_invoked": false,
+    "observation_class": "STALE_PREDECESSOR_PROPOSAL_REFUSAL",
+    "reason_code": "CANDIDATE_SUPERSEDED_OR_CORRECTED",
+    "rule_source": "oic.cdc_slice.refuse_stale_candidate_proposal",
+    "stage_2_attempt_touched": false,
+    "stale_candidate_ids": [
+      "CAND-P-001-C-TENDER-01"
+    ],
+    "superseded_by": "EBAWU-P-001-C-TENDER-01-CORR-002",
+    "transition_event_emitted": false
+  },
+  "successor": {
+    "affected_output_refs": [
+      "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-01",
+      "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-02",
+      "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-03",
+      "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-04",
+      "CDC-TEST-MISSION-001/CDC-E2E-OUTPUT-05"
+    ],
+    "changed_fact_or_control_refs": [
+      "C-TENDER-01"
+    ],
+    "correction_event_id": "CDC-E2E-M12-CORRECTION-EVT-002",
+    "correction_reason": "Synthetic owner correction of C-TENDER-01 after the completed predecessor transition; the predecessor is preserved and the corrected successor does not inherit the predecessor's prior ACCEPTED_CANDIDATE disposition.",
+    "new_candidate_digest": "d9fb749c59b3da5ddacfcf846fc89aaeb569fa3ada846150ee26f0ed7bac7eb1",
+    "new_state": "CANDIDATE_FORMED",
+    "prior_state": "ACCEPTED_CANDIDATE",
+    "production_reliance_semantics": "OUT_OF_SCOPE",
+    "reliance_impact_refs": [],
+    "successor_id": "EBAWU-P-001-C-TENDER-01-CORR-002",
+    "superseded_by": null,
+    "supersedes": "EBAWU-P-001-C-TENDER-01"
+  },
+  "successor_constructed": true,
+  "successor_construction_invoked": true
+}

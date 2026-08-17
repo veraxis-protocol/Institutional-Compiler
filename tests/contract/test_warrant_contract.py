@@ -1301,9 +1301,12 @@ def test_no_ztl_or_veip_code_exists_or_is_imported(repo_root: Path) -> None:
     assert "verify_fixtures" not in validator_text
 
 
-def test_this_work_order_added_no_source_module(repo_root: Path) -> None:
-    modules = {path.name for path in (repo_root / "src" / "oic").glob("*.py")}
-    assert modules == {
+L0_HISTORICAL_BASELINE = "857a21d47b76c58a511fe2955356db794ca80ab0"
+L0_SOURCE_DELTA_AUTHORIZATION = (
+    "docs/operations/OIC-ZTL-OAM-DEMO-SLICE-001-L0-SOURCE-DELTA-AUTHORIZATION-001.json"
+)
+L0_BASELINE_MODULES = frozenset(
+    {
         "__init__.py",
         "baseline.py",
         "cli.py",
@@ -1314,6 +1317,101 @@ def test_this_work_order_added_no_source_module(repo_root: Path) -> None:
         "paths.py",
         "schemas.py",
     }
+)
+
+
+def _baseline_source_modules(repo_root: Path) -> set[str]:
+    """The src/oic modules present at the frozen L0 baseline commit."""
+    listing = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(repo_root),
+            "ls-tree",
+            "-r",
+            "--name-only",
+            L0_HISTORICAL_BASELINE,
+            "src/oic",
+        ],
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    return {Path(path).name for path in listing.stdout.splitlines() if path.endswith(".py")}
+
+
+def _assert_exact_source_delta(
+    current_modules: set[str], baseline_modules: set[str], authorized: set[str]
+) -> None:
+    """Exact equality, never a subset: an undeclared module must fail."""
+    assert baseline_modules <= current_modules
+    assert current_modules - baseline_modules == authorized
+
+
+def test_this_work_order_added_no_source_module(repo_root: Path) -> None:
+    """The baseline is a historical fact and stays true regardless of later work.
+
+    It previously compared the *working tree* to the nine original modules, which
+    conflated "what the baseline contained" with "what exists now" and would fail
+    for any authorized later addition. It now inspects the frozen baseline commit
+    itself, so the proposition remains true forever.
+    """
+    assert _baseline_source_modules(repo_root) == set(L0_BASELINE_MODULES)
+
+
+def test_l0_source_delta_authorization_is_exact(repo_root: Path) -> None:
+    """The L0 instrument authorizes source presence only, and says so."""
+    authorization = json.loads((repo_root / L0_SOURCE_DELTA_AUTHORIZATION).read_bytes())
+    assert (
+        authorization["authorization_id"] == "OWNER-AUTHORIZATION-OIC-ZTL-OAM-DEMO-SLICE-001-L0-001"
+    )
+    assert authorization["scope"] == "OIC-ZTL-OAM-DEMO-SLICE-001-L0"
+    assert authorization["historical_baseline"] == L0_HISTORICAL_BASELINE
+    assert (
+        authorization["implementation_source_commit"] == "fa96f5c3590f54118cd926a84370be6022a80b35"
+    )
+    assert authorization["implementation_source_tree"] == "65a704cd9c70aef983b62ecc8176793e20004772"
+    assert authorization["authorized_post_baseline_source_modules"] == [
+        "src/oic/cdc_currentness.py",
+        "src/oic/cdc_authority.py",
+        "src/oic/cdc_propagation.py",
+        "src/oic/cdc_reliance.py",
+    ]
+    for flag in (
+        "additional_source_modules_authorized",
+        "semantic_modification_authorized",
+        "result_bearing_execution_authorized",
+        "end_to_end_demo_claim_authorized",
+        "production_claim_authorized",
+        "institutional_reliance_authorized",
+    ):
+        assert authorization[flag] is False, flag
+
+
+def test_l0_source_delta_is_exactly_authorized(repo_root: Path) -> None:
+    """Everything added to src/oic since the baseline is named by the instrument."""
+    authorization = json.loads((repo_root / L0_SOURCE_DELTA_AUTHORIZATION).read_bytes())
+    authorized = {
+        Path(path).name for path in authorization["authorized_post_baseline_source_modules"]
+    }
+    current_modules = {path.name for path in (repo_root / "src" / "oic").glob("*.py")}
+    _assert_exact_source_delta(current_modules, _baseline_source_modules(repo_root), authorized)
+    # Explicitly excluded from this lane and expected to stay absent.
+    assert "cdc_slice.py" not in current_modules
+    assert "cdc_e2e_mission.py" not in current_modules
+
+
+def test_l0_source_delta_guard_rejects_an_undeclared_module() -> None:
+    """Fail-closed: a fifth undeclared module must break the exact-delta rule."""
+    authorized = {
+        "cdc_currentness.py",
+        "cdc_authority.py",
+        "cdc_propagation.py",
+        "cdc_reliance.py",
+    }
+    mutated = set(L0_BASELINE_MODULES) | authorized | {"unauthorized_fifth_module.py"}
+    with pytest.raises(AssertionError):
+        _assert_exact_source_delta(mutated, set(L0_BASELINE_MODULES), authorized)
 
 
 def test_draft_schemas_are_byte_identical_to_the_bootstrap(repo_root: Path) -> None:

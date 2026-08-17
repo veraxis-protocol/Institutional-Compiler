@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "authorization_id": "OWNER-AUTHORIZATION-OIC-ZTL-OAM-DEMO-SLICE-001-L0-001",
+  "scope": "OIC-ZTL-OAM-DEMO-SLICE-001-L0",
+  "historical_baseline": "857a21d47b76c58a511fe2955356db794ca80ab0",
+  "implementation_source_commit": "fa96f5c3590f54118cd926a84370be6022a80b35",
+  "implementation_source_tree": "65a704cd9c70aef983b62ecc8176793e20004772",
+  "authorized_post_baseline_source_modules": [
+    "src/oic/cdc_currentness.py",
+    "src/oic/cdc_authority.py",
+    "src/oic/cdc_propagation.py",
+    "src/oic/cdc_reliance.py"
+  ],
+  "additional_source_modules_authorized": false,
+  "semantic_modification_authorized": false,
+  "result_bearing_execution_authorized": false,
+  "end_to_end_demo_claim_authorized": false,
+  "production_claim_authorized": false,
+  "institutional_reliance_authorized": false,
+  "authorizes": "SOURCE_PRESENCE_ONLY",
+  "does_not_change": "the semantics or claim status of the authorized modules"
+}
