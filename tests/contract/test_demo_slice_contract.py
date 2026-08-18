@@ -396,17 +396,94 @@ def test_no_result_bearing_authorization_artifact_was_created(repo_root: Path) -
         assert "OWNER_DEMO_RESULT_BEARING_EXECUTION_AUTHORIZATION" not in text, path
 
 
-def test_no_changed_json_artifact_asserts_the_measured_claim(repo_root: Path) -> None:
-    """The measured may be disclaimed or described; it may not be asserted.
+#: The one owner adjudication a repository pointer may report, bound by digest.
+MEASURED_CLAIM = "MEASURED_INTERNAL_END_TO_END_TECHNICAL_DEMONSTRATION"
+RESULT_001_OWNER_CLAIM_DECISION_SHA256 = (
+    "d14f896c58249394564e8a95b011e2f9f6c843cc29ad9a13f6d62cc0ffb79c5b"
+)
+RESULT_001_CANONICAL_RECORD_SHA256 = (
+    "d98f3f5afc17193b21aa684f51af4e902a46b9a98ee75ff2560e670a5dbe8403"
+)
+RESULT_001_IMPLEMENTATION_COMMIT = "a2ece68f013c25e6a3874f20a924e95730c175f0"
+RESULT_001_SCENARIO_BUNDLE_DIGEST = (
+    "sha256:ae72389334d0476421144e7ad42b6ca74b68e65d524ee188cfdbc485e5129bd3"
+)
+RESULT_001_ZTL_COMMIT = "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b"
+PRESERVATION_AUTHORIZATION_RELPATH = (
+    "docs/operations/OIC-ZTL-OAM-DEMO-SLICE-001-RESULT-001-PRESERVATION-AUTHORIZATION-001.json"
+)
 
-    Listing it under ``not_established`` is the opposite of claiming it, and the
-    authorization schema describes a future artifact rather than being one. What
-    is prohibited is a document that *carries* the ceiling as its own — that is
-    the difference between naming a limit and exceeding it.
+#: Every proposition a document must satisfy to be permitted to *report* the
+#: measured claim. Stated as data so the negative tests can break exactly one at a
+#: time and watch the predicate fail.
+_POINTER_REQUIRED_FIELDS: dict[str, Any] = {
+    "record_class": "RESULT_BEARING_REPOSITORY_EVIDENCE_POINTER",
+    "repository_record_is_evidence_pointer_only": True,
+    "repository_record_is_owner_claim_decision": False,
+    "repository_record_is_canonical_evidence_record": False,
+    "representation_status": "POINTER_ONLY",
+    "result_id": "RESULT-001",
+    "claim_id": "OIC-ZTL-OAM-DEMO-SLICE-001-RESULT-001-MEASURED-CLAIM-001",
+    "decision": "ESTABLISHED",
+    "claim": MEASURED_CLAIM,
+    "owner_claim_decision_sha256": RESULT_001_OWNER_CLAIM_DECISION_SHA256,
+    "canonical_record_sha256": RESULT_001_CANONICAL_RECORD_SHA256,
+    "historical_implementation_commit": RESULT_001_IMPLEMENTATION_COMMIT,
+    "scenario_bundle_digest": RESULT_001_SCENARIO_BUNDLE_DIGEST,
+    "ztl_commit": RESULT_001_ZTL_COMMIT,
+    "evidence_publication_status": "NOT_PUBLICLY_RELEASED",
+    "independent_assurance": "NOT_ESTABLISHED",
+    "benchmark_status": "NOT_A_BENCHMARK",
+}
+
+#: What the preservation authorization must itself say before any document is
+#: allowed to report the claim.
+_AUTHORIZATION_REQUIRED_FIELDS: dict[str, Any] = {
+    "representation_only": True,
+    "claim_readjudication_authorized": False,
+    "claim_ceiling_expansion_authorized": False,
+    "self_asserted_measured_claim_authorized": False,
+}
+
+
+def _is_bound_evidence_pointer(
+    document: dict[str, Any], *, path: str, authorization: dict[str, Any]
+) -> bool:
+    """Whether this document may REPORT the measured claim rather than originate it.
+
+    The distinction the guard turns on: a pointer that names a pre-existing owner
+    adjudication by digest is repeating a decision someone else made and can be
+    checked against it. A document that carries the ceiling with nothing behind it
+    is helping itself to a claim. Only the first is permitted, and only when every
+    binding below holds — no filename is ever exempted, so a copy of this pointer
+    under a different name is judged by exactly the same rules.
     """
-    measured = "MEASURED_INTERNAL_END_TO_END_TECHNICAL_DEMONSTRATION"
+    if any(document.get(key) != value for key, value in _POINTER_REQUIRED_FIELDS.items()):
+        return False
+    if any(
+        authorization.get(key) != value for key, value in _AUTHORIZATION_REQUIRED_FIELDS.items()
+    ):
+        return False
+    return path in set(authorization.get("authorized_repository_paths") or ())
+
+
+def test_no_changed_json_artifact_originates_the_measured_claim(repo_root: Path) -> None:
+    """No changed JSON artifact may ORIGINATE the measured claim.
+
+    A bounded evidence pointer may report it, but only while cryptographically
+    bound to the owner claim decision and canonical record that established it.
+    Everything else keeps the original prohibition exactly: the ceiling may be
+    disclaimed or described, never asserted, and the authorization schema
+    describes a future artifact rather than being one.
+    """
     schema_path = "schemas/demo/execution-authorization.schema.json"
     changed = _git(repo_root, "diff", "--name-only", L1_HISTORICAL_BASELINE).splitlines()
+    authorization_file = repo_root / PRESERVATION_AUTHORIZATION_RELPATH
+    authorization: dict[str, Any] = (
+        json.loads(authorization_file.read_text(encoding="utf-8"))
+        if authorization_file.is_file()
+        else {}
+    )
 
     for path in changed:
         if not path.endswith(".json") or path == schema_path:
@@ -417,19 +494,109 @@ def test_no_changed_json_artifact_asserts_the_measured_claim(repo_root: Path) ->
         document = json.loads(full.read_text(encoding="utf-8"))
         if not isinstance(document, dict):
             continue
-        # Wherever it appears, it must be a disclaimer, never a value the
-        # document claims for itself.
-        assert document.get("claim_ceiling") != measured, path
-        assert document.get("implementation_claim_ceiling") != measured, path
+
+        # A bound pointer reports; it never originates. Even so it may not carry
+        # the ceiling as a property OF ITSELF.
+        if _is_bound_evidence_pointer(document, path=path, authorization=authorization):
+            assert document.get("claim_ceiling") != MEASURED_CLAIM, path
+            assert document.get("measured_end_to_end_claim") is not True, path
+            continue
+
+        assert document.get("claim_ceiling") != MEASURED_CLAIM, path
+        assert document.get("implementation_claim_ceiling") != MEASURED_CLAIM, path
         assert document.get("measured_end_to_end_claim") is not True, path
         disclaimed = set(document.get("not_established") or ())
         for key, value in document.items():
-            if value == measured:
-                assert key in {"not_established"}, f"{path}: {key} asserts the measured ceiling"
-        if measured in json.dumps(document):
-            assert measured in disclaimed or measured in json.dumps(
+            if value == MEASURED_CLAIM:
+                assert key in {"not_established"}, f"{path}: {key} originates the measured ceiling"
+        if MEASURED_CLAIM in json.dumps(document):
+            assert MEASURED_CLAIM in disclaimed or MEASURED_CLAIM in json.dumps(
                 document.get("not_established", [])
-            ), f"{path}: the measured appears outside a disclaimer"
+            ), f"{path}: the measured claim appears outside a disclaimer"
+
+
+def test_the_result_001_pointer_is_a_bound_reporting_artifact(repo_root: Path) -> None:
+    """The real pointer satisfies every binding, so the predicate is not vacuous."""
+    pointer_path = "docs/operations/OIC-ZTL-OAM-DEMO-SLICE-001-RESULT-001-EVIDENCE-POINTER-001.json"
+    document = json.loads((repo_root / pointer_path).read_text(encoding="utf-8"))
+    authorization = json.loads(
+        (repo_root / PRESERVATION_AUTHORIZATION_RELPATH).read_text(encoding="utf-8")
+    )
+    assert _is_bound_evidence_pointer(document, path=pointer_path, authorization=authorization)
+    # Reporting a claim is not carrying it: the pointer holds no ceiling of its own.
+    assert document.get("claim_ceiling") is None
+    assert document.get("measured_end_to_end_claim") is not True
+    assert document["repository_record_is_owner_claim_decision"] is False
+
+
+def test_the_pointer_predicate_fails_on_any_single_mutation(repo_root: Path) -> None:
+    """One mutation at a time, each of which must close the reporting exception.
+
+    A predicate that survived a swapped digest, a flipped flag or an unauthorized
+    path would not be binding the pointer to anything.
+    """
+    pointer_path = "docs/operations/OIC-ZTL-OAM-DEMO-SLICE-001-RESULT-001-EVIDENCE-POINTER-001.json"
+    document = json.loads((repo_root / pointer_path).read_text(encoding="utf-8"))
+    authorization = json.loads(
+        (repo_root / PRESERVATION_AUTHORIZATION_RELPATH).read_text(encoding="utf-8")
+    )
+
+    document_mutations: dict[str, Any] = {
+        "owner_claim_decision_sha256": "0" * 64,
+        "canonical_record_sha256": "0" * 64,
+        "decision": "PENDING",
+        "repository_record_is_evidence_pointer_only": False,
+        "repository_record_is_owner_claim_decision": True,
+        "repository_record_is_canonical_evidence_record": True,
+        "representation_status": "PUBLISHED",
+        "record_class": "SOMETHING_ELSE",
+        "result_id": "RESULT-002",
+        "claim_id": "SOME-OTHER-CLAIM",
+        "historical_implementation_commit": "0" * 40,
+        "scenario_bundle_digest": "sha256:" + "0" * 64,
+        "ztl_commit": "0" * 40,
+        "evidence_publication_status": "PUBLICLY_RELEASED",
+        "independent_assurance": "ESTABLISHED",
+        "benchmark_status": "BENCHMARK",
+    }
+    for field, value in document_mutations.items():
+        mutated = {**document, field: value}
+        assert not _is_bound_evidence_pointer(
+            mutated, path=pointer_path, authorization=authorization
+        ), f"mutating pointer field {field} did not close the reporting exception"
+
+    authorization_mutations: dict[str, Any] = {
+        "representation_only": False,
+        "claim_readjudication_authorized": True,
+        "claim_ceiling_expansion_authorized": True,
+        "self_asserted_measured_claim_authorized": True,
+    }
+    for field, value in authorization_mutations.items():
+        mutated_auth = {**authorization, field: value}
+        assert not _is_bound_evidence_pointer(
+            document, path=pointer_path, authorization=mutated_auth
+        ), f"mutating authorization field {field} did not close the reporting exception"
+
+    # Path membership: an identical document at an unauthorized path is refused.
+    assert not _is_bound_evidence_pointer(
+        document, path="docs/operations/SOME-OTHER-FILE.json", authorization=authorization
+    )
+    stripped = {**authorization, "authorized_repository_paths": []}
+    assert not _is_bound_evidence_pointer(document, path=pointer_path, authorization=stripped)
+
+
+def test_a_self_asserted_measured_claim_is_still_prohibited(repo_root: Path) -> None:
+    """The original prohibition survives for everything that is not a bound pointer."""
+    authorization = json.loads(
+        (repo_root / PRESERVATION_AUTHORIZATION_RELPATH).read_text(encoding="utf-8")
+    )
+    impostor = {"record_class": "SOMETHING_ELSE", "claim": MEASURED_CLAIM}
+    assert not _is_bound_evidence_pointer(
+        impostor, path=PRESERVATION_AUTHORIZATION_RELPATH, authorization=authorization
+    )
+    assert authorization["self_asserted_measured_claim_authorized"] is False
+    assert authorization["filename_allowlist_carveout_authorized"] is False
+    assert authorization["test_semantic_weakening_authorized"] is False
 
 
 def test_no_source_file_asserts_the_measured_claim_as_its_ceiling(repo_root: Path) -> None:
