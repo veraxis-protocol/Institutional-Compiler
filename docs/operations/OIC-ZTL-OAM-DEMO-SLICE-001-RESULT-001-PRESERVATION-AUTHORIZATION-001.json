@@ -1,0 +1,31 @@
+{
+  "record_class": "OWNER_RESULT_EVIDENCE_PRESERVATION_AUTHORIZATION",
+  "authorization_id": "OWNER-AUTHORIZATION-OIC-ZTL-OAM-DEMO-SLICE-001-RESULT-001-PRESERVATION-001",
+  "owner": "ARKADIY_MITEIKO",
+  "slice_id": "OIC-ZTL-OAM-DEMO-SLICE-001",
+  "result_id": "RESULT-001",
+  "historical_result_implementation_commit": "a2ece68f013c25e6a3874f20a924e95730c175f0",
+  "repository_predecessor": "a2ece68f013c25e6a3874f20a924e95730c175f0",
+  "owner_claim_decision_sha256": "d14f896c58249394564e8a95b011e2f9f6c843cc29ad9a13f6d62cc0ffb79c5b",
+  "canonical_record_sha256": "d98f3f5afc17193b21aa684f51af4e902a46b9a98ee75ff2560e670a5dbe8403",
+  "authorized_repository_paths": [
+    "docs/operations/OIC-ZTL-OAM-DEMO-SLICE-001-RESULT-001-PRESERVATION-AUTHORIZATION-001.json",
+    "docs/operations/OIC-ZTL-OAM-DEMO-SLICE-001-RESULT-001-EVIDENCE-POINTER-001.json",
+    "tests/contract/test_demo_slice_contract.py"
+  ],
+  "contract_guard_correction_authorized": true,
+  "contract_guard_correction_class": "POST_ADJUDICATION_REPRESENTATION_SCOPE_CORRECTION",
+  "contract_guard_correction_note": "The measured-claim guard prohibited every changed JSON artifact from carrying the measured ceiling. That was correct while no owner adjudication existed. It is now scoped so that a bounded evidence pointer may REPORT an already-adjudicated claim while no artifact may ORIGINATE one. The prohibition is not weakened and no filename is exempted.",
+  "filename_allowlist_carveout_authorized": false,
+  "test_semantic_weakening_authorized": false,
+  "self_asserted_measured_claim_authorized": false,
+  "claim_readjudication_authorized": false,
+  "claim_ceiling_expansion_authorized": false,
+  "representation_only": true,
+  "result_bearing_execution_authorized": false,
+  "benchmark_release_authorized": false,
+  "research_publication_authorized": false,
+  "external_claim_package_authorized": false,
+  "RUN004_authorized": false,
+  "historical_identity_rule": "RESULT-001 remains permanently bound to implementation_commit a2ece68f013c25e6a3874f20a924e95730c175f0. If this documentation change later merges, the target branch moves beyond that commit; that is provenance recorded AFTER the result and is not the implementation that produced it."
+}
