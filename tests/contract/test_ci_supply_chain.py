@@ -7,6 +7,7 @@ acquires write permission, and that no release or deployment step appears.
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 from typing import Any
@@ -25,6 +26,7 @@ REQUIRED_JOBS = {
     "test",
     "sbom",
     "compose-validation",
+    "live-ztl-demo",
 }
 
 #: `owner/repo@<40 hex>`, optionally followed by a `# vX.Y.Z` comment.
@@ -237,3 +239,174 @@ def test_secret_scan_documents_its_limitations(repo_root: Path) -> None:
     assert "LIMITATIONS" in script
     assert "not evidence that the repository contains no secrets" in script
     assert "never" in script and "git history" in script
+
+
+# ---------------------------------------------------------------------------
+# The live ZTL demonstration gate
+#
+# The assertions below read the frozen kernel profile rather than restating its
+# values, so the workflow and the profile cannot drift apart while both look
+# correct in isolation. A second hardcoded source of truth would be exactly the
+# divergence this job exists to detect.
+# ---------------------------------------------------------------------------
+
+LIVE_JOB = "live-ztl-demo"
+KERNEL_PROFILE_RELPATH = "/".join(("docs", "contracts", "kernel-profiles", "ztl-v0.1.json"))
+
+
+@pytest.fixture(scope="module")
+def kernel_profile(repo_root: Path) -> dict[str, Any]:
+    document: dict[str, Any] = json.loads(
+        (repo_root / KERNEL_PROFILE_RELPATH).read_text(encoding="utf-8")
+    )
+    return document
+
+
+@pytest.fixture(scope="module")
+def live_job(workflow: dict[Any, Any]) -> dict[str, Any]:
+    job: dict[str, Any] = workflow["jobs"][LIVE_JOB]
+    return job
+
+
+def _live_text(live_job: dict[str, Any]) -> str:
+    return "\n".join(str(step.get("run", "")) for step in live_job["steps"])
+
+
+def test_the_live_job_exists_and_runs_on_the_pinned_runner(live_job: dict[str, Any]) -> None:
+    assert live_job["name"] == LIVE_JOB
+    assert live_job["runs-on"] == "ubuntu-24.04"
+
+
+def test_the_live_job_requests_no_write_permission_and_no_secret(
+    live_job: dict[str, Any],
+) -> None:
+    assert "permissions" not in live_job
+    serialized = json.dumps(live_job, sort_keys=True)
+    assert "secrets." not in serialized
+    assert "${{ secrets" not in serialized
+
+
+def test_the_live_job_uses_the_same_sha_pinned_actions(
+    live_job: dict[str, Any], workflow: dict[Any, Any]
+) -> None:
+    used = [step["uses"] for step in live_job["steps"] if "uses" in step]
+    assert used, "the live job uses no actions; the assertion would be vacuous"
+    for reference in used:
+        assert PINNED_ACTION.match(reference.split(" #")[0].strip()), reference
+    # The same pins the rest of the workflow already uses, not new ones.
+    others = {
+        step["uses"].split(" #")[0].strip()
+        for job_name, job in workflow["jobs"].items()
+        if job_name != LIVE_JOB
+        for step in job["steps"]
+        if "uses" in step
+    }
+    for reference in used:
+        assert reference.split(" #")[0].strip() in others, reference
+
+
+def test_the_live_job_does_not_persist_checkout_credentials(live_job: dict[str, Any]) -> None:
+    checkout = next(
+        step
+        for step in live_job["steps"]
+        if str(step.get("uses", "")).startswith("actions/checkout")
+    )
+    assert checkout["with"]["persist-credentials"] is False
+
+
+def test_the_live_job_installs_locked_dependencies_and_runs_pip_check(
+    live_job: dict[str, Any],
+) -> None:
+    text = _live_text(live_job)
+    assert "--require-hashes -r requirements/dev.txt" in text
+    assert "python -m pip check" in text
+    # ZTL is an external checkout, never a Python package.
+    assert "pip install ztl" not in text.lower()
+
+
+def test_the_live_job_names_and_pins_the_external_kernel(
+    live_job: dict[str, Any], kernel_profile: dict[str, Any]
+) -> None:
+    """Repository and commit come from the frozen profile, not from a second copy."""
+    serialized = json.dumps(live_job, sort_keys=True)
+    assert kernel_profile["repository"] in serialized
+    assert kernel_profile["commit"] in serialized
+    assert kernel_profile["commit"] == "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b"
+    text = _live_text(live_job)
+    # The commit is compared, not merely fetched: a branch or tag cannot stand in.
+    assert "rev-parse HEAD" in text
+    assert 'if [ "${observed}" != "${ZTL_COMMIT}" ]' in text
+
+
+def test_the_live_job_provisions_ztl_outside_the_oic_worktree(
+    live_job: dict[str, Any],
+) -> None:
+    text = _live_text(live_job)
+    assert "${RUNNER_TEMP}/oic-ztl-pin" in text
+    assert "git status --porcelain --untracked-files=all" in text
+    assert "contaminated the OIC worktree" in text
+
+
+def test_the_live_job_verifies_the_frozen_fixture_identity(
+    live_job: dict[str, Any], kernel_profile: dict[str, Any]
+) -> None:
+    text = _live_text(live_job)
+    notice = kernel_profile["evidence_dependency_notice"]["current_pin"]
+    assert "ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145" in notice
+    assert "ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145" in json.dumps(
+        live_job, sort_keys=True
+    )
+    assert "INDEX.json" in text
+
+
+def test_the_live_job_runs_the_checked_in_conformance_verifier(
+    live_job: dict[str, Any], kernel_profile: dict[str, Any]
+) -> None:
+    text = _live_text(live_job)
+    assert "adapters/ztl/fixtures/interface-freeze-v0.2/verify_fixtures.py" in text
+    notice = kernel_profile["evidence_dependency_notice"]["current_pin"]
+    assert "13 reachable" in notice
+    assert "3 not-reachable" in notice
+
+
+def test_the_live_job_asserts_the_conformance_counts_not_just_the_exit_code(
+    live_job: dict[str, Any],
+) -> None:
+    """A verifier that reported success while reproducing nothing must still fail."""
+    text = _live_text(live_job)
+    assert 'grep -qx "fixtures reproduced : 13"' in text
+    assert 'grep -qx "not-reachable (skip): 3"' in text
+    assert 'grep -qx "mismatches          : 0"' in text
+    assert 'grep -qx "hash problems       : 0"' in text
+    assert "CONFORMANCE: PASS" in text
+
+
+def test_the_live_job_runs_both_live_suites_with_the_kernel_path_set(
+    live_job: dict[str, Any],
+) -> None:
+    text = _live_text(live_job)
+    assert "tests/unit/test_demo_ztl.py" in text
+    assert "tests/integration/test_oic_ztl_oam_demo_slice_001.py" in text
+    assert "OIC_DEMO_ZTL_PATH=" in json.dumps(live_job, sort_keys=True)
+
+
+def test_the_live_job_treats_a_skip_as_a_failure(live_job: dict[str, Any]) -> None:
+    """The one thing this job exists to rule out is the kernel not being reached."""
+    text = _live_text(live_job)
+    assert "a skip is not a pass in this job" in text
+    assert 'if totals["skipped"]:' in text
+    assert "expected 52 passed" in text
+
+
+def test_the_live_job_performs_no_result_bearing_execution(
+    live_job: dict[str, Any], workflow_text: str
+) -> None:
+    serialized = json.dumps(live_job, sort_keys=True)
+    assert "oic demo run" not in serialized
+    assert "OWNER_AUTHORIZED_RESULT_BEARING" not in serialized
+    assert "execution-authorization" not in serialized
+    # The job declares its own execution context in the workflow source, where a
+    # reader meets it before the steps rather than after.
+    section = workflow_text[workflow_text.index("live-ztl-demo") - 2000 :]
+    assert "DEVELOPMENT_TEST_ONLY" in section
+    assert "not independent assurance" in section

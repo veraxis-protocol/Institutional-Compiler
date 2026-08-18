@@ -1,0 +1,29 @@
+{
+  "$comment": "A synthetic evidence OBSERVATION, not a criterion. The policy source says this evidence is required; this artifact says an observation exists and what state it is in. Nothing in the runtime may infer satisfaction from the presence of a requirement — the two must be established separately.",
+  "record_class": "SYNTHETIC_EVIDENCE_OBSERVATION",
+  "schema_version": "OIC-DEMO-EVIDENCE-OBSERVATION-v0.1",
+  "synthetic": true,
+  "derived_from_real_evidence": false,
+  "evidence_id": "signed_eligibility_evidence",
+  "evidence_class": "SYNTHETIC_ELIGIBILITY_EVIDENCE",
+  "signature_state": "SIGNED",
+  "observation_id": "obs:SYNTH-GRANT/eligibility/0001",
+  "subject": {
+    "actor": "DISBURSING-OFFICER",
+    "action": "DISBURSE_GRANT",
+    "programme": "SYNTHETIC-GRANT-PROGRAM",
+    "applicant_ref": "SYNTH-APPLICANT-0001"
+  },
+  "observed_at": "2027-05-10T00:00:00Z",
+  "valid_from": "2027-05-10T00:00:00Z",
+  "valid_until": "2028-05-10T00:00:00Z",
+  "signature": {
+    "algorithm": "SYNTHETIC_DECLARED_SIGNATURE",
+    "signer_id": "SYNTH-ELIGIBILITY-ASSESSOR-001",
+    "signer_role": "SYNTHETIC_ELIGIBILITY_ASSESSOR",
+    "signed_at": "2027-05-10T00:00:00Z",
+    "verifiable_by_third_party": false,
+    "limitations": "A declared synthetic signature. It is not a cryptographic signature, carries no non-repudiation, and must never be described as one."
+  },
+  "assurance_class": "INTERNAL_TECHNICAL_DEMONSTRATION"
+}

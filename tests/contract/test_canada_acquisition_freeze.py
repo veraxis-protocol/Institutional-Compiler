@@ -446,9 +446,32 @@ def test_mutation_blocked_source_with_a_freeze_entry_fails_verification(
 # --------------------------------------------------------------------------
 
 
+#: The interval this Canada work order actually covers. The upper bound was HEAD, which
+#: made a completed historical proposition drift forward and turn into a permanent
+#: prohibition on every later lane: any future commit touching one of these paths failed a
+#: test that was only ever meant to say what this work order did NOT do. Pinning the upper
+#: bound to the frozen pre-L1 repository state restores the original meaning. The forbidden
+#: path set below is unchanged, and no path is exempted by name.
+CANADA_FREEZE_BASE_SHA = "d99a38510e51a36972a414cadd0e44d49a04227c"
+FROZEN_TERMINAL_SHA = "a59b885423b984b2eb8c20751833926b888e6b95"
+
+
+def test_the_frozen_comparison_boundaries_resolve_exactly(repo_root: Path) -> None:
+    """Both ends of the interval must be real commits, or the guard proves nothing."""
+    for sha in (CANADA_FREEZE_BASE_SHA, FROZEN_TERMINAL_SHA):
+        resolved = subprocess.run(
+            ["git", "rev-parse", sha],
+            cwd=repo_root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        assert resolved == sha
+
+
 def test_status_and_draft_schemas_are_untouched(repo_root: Path) -> None:
     changed = subprocess.run(
-        ["git", "diff", "--name-only", "d99a38510e51a36972a414cadd0e44d49a04227c...HEAD"],
+        ["git", "diff", "--name-only", f"{CANADA_FREEZE_BASE_SHA}...{FROZEN_TERMINAL_SHA}"],
         cwd=repo_root,
         check=True,
         capture_output=True,
@@ -462,7 +485,7 @@ def test_status_and_draft_schemas_are_untouched(repo_root: Path) -> None:
 
 def test_no_semantic_artifact_was_produced(repo_root: Path) -> None:
     changed = subprocess.run(
-        ["git", "diff", "--name-only", "d99a38510e51a36972a414cadd0e44d49a04227c...HEAD"],
+        ["git", "diff", "--name-only", f"{CANADA_FREEZE_BASE_SHA}...{FROZEN_TERMINAL_SHA}"],
         cwd=repo_root,
         check=True,
         capture_output=True,

@@ -1,0 +1,95 @@
+{
+  "$comment": "Owner-authored admissions for one synthetic policy version. The GUIDANCE line extracts as an advisory candidate and is deliberately NOT admitted: extraction does not confer executability, and the difference must be observable.",
+  "admission_records": [
+    {
+      "admission_id": "adm:SYNTH-GRANT-POLICY/v2/mandate",
+      "authority_basis": "OWNER-AUTHORED SYNTHETIC ADMISSION, DEMONSTRATION LANE ONLY",
+      "disposition": "admit",
+      "effective_from": "2027-06-01T00:00:00Z",
+      "effective_until": null,
+      "qualifications": [],
+      "recorded_at": "2027-05-01T00:00:00Z",
+      "reviewer": "SYNTHETIC-GRANT-AUTHORITY-ISSUER",
+      "reviewer_role": "SYNTHETIC_POLICY_OWNER",
+      "scope": {
+        "policy_family": "SYNTH-GRANT-POLICY",
+        "program": "SYNTHETIC-GRANT-PROGRAM",
+        "version": "v2"
+      },
+      "source_hashes": [
+        "sha256:796e2ee9af4c7f7db5acda03c6db2234e1ce06af111a4fcc1209cc4322f8530e"
+      ],
+      "subject_id": "src:SYNTH-GRANT-POLICY/v2#unit/mandate",
+      "supersedes": null
+    },
+    {
+      "admission_id": "adm:SYNTH-GRANT-POLICY/v2/condition-amount",
+      "authority_basis": "OWNER-AUTHORED SYNTHETIC ADMISSION, DEMONSTRATION LANE ONLY",
+      "disposition": "admit",
+      "effective_from": "2027-06-01T00:00:00Z",
+      "effective_until": null,
+      "qualifications": [],
+      "recorded_at": "2027-05-01T00:00:00Z",
+      "reviewer": "SYNTHETIC-GRANT-AUTHORITY-ISSUER",
+      "reviewer_role": "SYNTHETIC_POLICY_OWNER",
+      "scope": {
+        "policy_family": "SYNTH-GRANT-POLICY",
+        "program": "SYNTHETIC-GRANT-PROGRAM",
+        "version": "v2"
+      },
+      "source_hashes": [
+        "sha256:796e2ee9af4c7f7db5acda03c6db2234e1ce06af111a4fcc1209cc4322f8530e"
+      ],
+      "subject_id": "src:SYNTH-GRANT-POLICY/v2#unit/condition/amount_within_limit",
+      "supersedes": null
+    },
+    {
+      "admission_id": "adm:SYNTH-GRANT-POLICY/v2/condition-evidence",
+      "authority_basis": "OWNER-AUTHORED SYNTHETIC ADMISSION, DEMONSTRATION LANE ONLY",
+      "disposition": "admit",
+      "effective_from": "2027-06-01T00:00:00Z",
+      "effective_until": null,
+      "qualifications": [],
+      "recorded_at": "2027-05-01T00:00:00Z",
+      "reviewer": "SYNTHETIC-GRANT-AUTHORITY-ISSUER",
+      "reviewer_role": "SYNTHETIC_POLICY_OWNER",
+      "scope": {
+        "policy_family": "SYNTH-GRANT-POLICY",
+        "program": "SYNTHETIC-GRANT-PROGRAM",
+        "version": "v2"
+      },
+      "source_hashes": [
+        "sha256:796e2ee9af4c7f7db5acda03c6db2234e1ce06af111a4fcc1209cc4322f8530e"
+      ],
+      "subject_id": "src:SYNTH-GRANT-POLICY/v2#unit/condition/eligibility_evidence_present",
+      "supersedes": null
+    },
+    {
+      "admission_id": "adm:SYNTH-GRANT-POLICY/v2/delegation",
+      "authority_basis": "OWNER-AUTHORED SYNTHETIC ADMISSION, DEMONSTRATION LANE ONLY",
+      "disposition": "admit",
+      "effective_from": "2027-06-01T00:00:00Z",
+      "effective_until": null,
+      "qualifications": [],
+      "recorded_at": "2027-05-01T00:00:00Z",
+      "reviewer": "SYNTHETIC-GRANT-AUTHORITY-ISSUER",
+      "reviewer_role": "SYNTHETIC_POLICY_OWNER",
+      "scope": {
+        "policy_family": "SYNTH-GRANT-POLICY",
+        "program": "SYNTHETIC-GRANT-PROGRAM",
+        "version": "v2"
+      },
+      "source_hashes": [
+        "sha256:796e2ee9af4c7f7db5acda03c6db2234e1ce06af111a4fcc1209cc4322f8530e"
+      ],
+      "subject_id": "src:SYNTH-GRANT-POLICY/v2#unit/delegation",
+      "supersedes": null
+    }
+  ],
+  "deliberately_not_admitted": [
+    "src:SYNTH-GRANT-POLICY/v2#unit/advisory/prefer_electronic_submission"
+  ],
+  "policy_version": "v2",
+  "source_content_hash": "sha256:796e2ee9af4c7f7db5acda03c6db2234e1ce06af111a4fcc1209cc4322f8530e",
+  "source_id": "src:SYNTH-GRANT-POLICY/v2"
+}

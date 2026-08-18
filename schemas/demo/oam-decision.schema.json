@@ -1,0 +1,359 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/schemas/demo/oam-decision.schema.json",
+  "title": "DemoOAMDecision",
+  "$comment": "DEMONSTRATION LANE ONLY. Four questions are kept in four fields on purpose: what the logic kernel concluded, whether the institution authorizes the act, what the runtime does, and why. None of them may be derived from another, and an authority or currentness refusal must never rewrite epistemic_status.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "authority_observation",
+    "bounded_action",
+    "case_id",
+    "claim_ceiling",
+    "currentness_observation",
+    "decision_basis",
+    "decision_id",
+    "epistemic_status",
+    "evaluated_at",
+    "evidence_observation",
+    "execution_context",
+    "execution_disposition",
+    "institutional_authorization_status",
+    "measured_end_to_end_claim",
+    "record_class",
+    "runtime_binding_id",
+    "scenario_id",
+    "schema_version",
+    "unmet_components",
+    "warrant_binding_validation",
+    "ztl_observation"
+  ],
+  "properties": {
+    "record_class": {
+      "const": "OIC_DEMO_OAM_DECISION"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "decision_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scenario_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "execution_context": {
+      "enum": [
+        "DEVELOPMENT_TEST_ONLY",
+        "OWNER_AUTHORIZED_RESULT_BEARING"
+      ]
+    },
+    "evaluated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "epistemic_status": {
+      "enum": [
+        "ESTABLISHED",
+        "CONDITIONALLY_SUPPORTED",
+        "UNRESOLVED",
+        "REFUTED"
+      ]
+    },
+    "institutional_authorization_status": {
+      "enum": [
+        "AUTHORIZED",
+        "REFUSED",
+        "UNRESOLVED"
+      ]
+    },
+    "execution_disposition": {
+      "enum": [
+        "ALLOW",
+        "BLOCK",
+        "ESCALATE"
+      ]
+    },
+    "decision_basis": {
+      "enum": [
+        "SUBSTANTIVE",
+        "PRECAUTIONARY",
+        "PROCEDURAL",
+        "CONTROL_REQUIREMENT"
+      ]
+    },
+    "ztl_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "disposition",
+        "warranty_grade",
+        "raw_verdict",
+        "raw_verdict_is_operationally_inert",
+        "unverified_ground_ids",
+        "kernel_profile_id",
+        "warrant_artifact_id"
+      ],
+      "properties": {
+        "disposition": {
+          "enum": [
+            "EARNED",
+            "REFUTED",
+            "ON CREDIT",
+            "OPEN"
+          ]
+        },
+        "warranty_grade": {
+          "enum": [
+            "hereditary",
+            "sound",
+            "until-verification"
+          ]
+        },
+        "raw_verdict": {
+          "enum": [
+            "T",
+            "F",
+            "Z"
+          ]
+        },
+        "raw_verdict_is_operationally_inert": {
+          "const": true
+        },
+        "unverified_ground_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kernel_profile_id": {
+          "type": "string"
+        },
+        "warrant_artifact_id": {
+          "type": "string"
+        }
+      }
+    },
+    "currentness_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "reason_code_id",
+        "reason_code",
+        "decision",
+        "resolution_digest"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "CURRENT",
+            "SUPERSEDED",
+            "INELIGIBLE",
+            "UNKNOWN"
+          ]
+        },
+        "reason_code_id": {
+          "type": "string"
+        },
+        "reason_code": {
+          "type": "string"
+        },
+        "decision": {
+          "enum": [
+            "PROCEED",
+            "DENY"
+          ]
+        },
+        "resolution_digest": {
+          "type": "string"
+        }
+      }
+    },
+    "authority_observation": {
+      "$comment": "Either an evaluated authority decision or an explicit record that authority was never reached. 'Not asked' is not an answer, so the two forms are structurally distinct and an unevaluated authority can never be read as a satisfied one.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "authority_evaluated",
+            "decision",
+            "reason_code_id",
+            "reason_code",
+            "authority_decision_digest"
+          ],
+          "properties": {
+            "authority_evaluated": {
+              "const": true
+            },
+            "decision": {
+              "enum": [
+                "PROCEED",
+                "DENY",
+                "ESCALATE"
+              ]
+            },
+            "reason_code_id": {
+              "type": "string"
+            },
+            "reason_code": {
+              "type": "string"
+            },
+            "authority_decision_digest": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "authority_evaluated",
+            "authority_not_evaluated_reason",
+            "decision",
+            "reason_code_id"
+          ],
+          "properties": {
+            "authority_evaluated": {
+              "const": false
+            },
+            "authority_not_evaluated_reason": {
+              "const": "CURRENTNESS_GATE_DID_NOT_PROCEED"
+            },
+            "decision": {
+              "const": "NOT_EVALUATED"
+            },
+            "reason_code_id": {
+              "const": "NOT_EVALUATED"
+            }
+          }
+        }
+      ]
+    },
+    "unmet_components": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "bounded_action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proposal_id",
+        "action_state",
+        "gate_class",
+        "performs_real_world_effect"
+      ],
+      "properties": {
+        "proposal_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action_state": {
+          "enum": [
+            "ACTION_PERMITTED",
+            "ACTION_BLOCKED",
+            "ACTION_ESCALATED"
+          ]
+        },
+        "gate_class": {
+          "const": "BOUNDED_DEMO_EXECUTION_GATE"
+        },
+        "performs_real_world_effect": {
+          "const": false
+        }
+      }
+    },
+    "runtime_binding_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_ceiling": {
+      "const": "SYNTHETIC_END_TO_END_PIPELINE_IMPLEMENTED_AND_TESTED"
+    },
+    "measured_end_to_end_claim": {
+      "const": false
+    },
+    "evidence_observation": {
+      "$comment": "The requirement and its satisfaction are separately represented. This records what was observed, from which exact bytes, and only then whether the requirement is satisfied.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_evidence_id",
+        "observed_evidence_id",
+        "observed_evidence_class",
+        "observed_digest",
+        "observed_path",
+        "signature_state",
+        "evidence_state",
+        "satisfaction",
+        "findings"
+      ],
+      "properties": {
+        "required_evidence_id": {
+          "type": "string"
+        },
+        "observed_evidence_id": {
+          "type": "string"
+        },
+        "observed_evidence_class": {
+          "type": "string"
+        },
+        "observed_digest": {
+          "type": "string"
+        },
+        "observed_path": {
+          "type": "string"
+        },
+        "signature_state": {
+          "type": "string"
+        },
+        "evidence_state": {
+          "enum": [
+            "SIGNED",
+            "UNSIGNED",
+            "INVALID",
+            "UNKNOWN",
+            "NOT_OBSERVED"
+          ]
+        },
+        "satisfaction": {
+          "type": "boolean"
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "warrant_binding_validation": {
+      "$comment": "The runtime re-derived every binding the warrant claims. Constructing an artifact and being entitled to rely on one are different acts.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validated",
+        "findings"
+      ],
+      "properties": {
+        "validated": {
+          "type": "boolean"
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
