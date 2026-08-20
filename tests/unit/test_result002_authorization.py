@@ -184,7 +184,13 @@ def _double(repo_root: Path, tmp_path: Path) -> ValidatedExecutionAuthorization:
     )
 
 
-def _evidence_tree(repo_root: Path, tmp_path: Path, *, mutate: tuple[str, str] | None) -> Path:
+def _evidence_tree(
+    repo_root: Path,
+    tmp_path: Path,
+    *,
+    mutate: tuple[str, str] | None,
+    value: str = "__MUTATED__",
+) -> Path:
     """A persisted package whose manifest agrees with the oracle, or does not."""
     oracle = json.loads((repo_root / ORACLE_RELPATH).read_text(encoding="utf-8"))
     cases = {
@@ -193,7 +199,7 @@ def _evidence_tree(repo_root: Path, tmp_path: Path, *, mutate: tuple[str, str] |
     }
     if mutate is not None:
         case_id, field = mutate
-        cases[case_id]["semantic_projection"][field] = "__MUTATED__"
+        cases[case_id]["semantic_projection"][field] = value
 
     root = tmp_path / "evidence"
     (root / "05-evidence").mkdir(parents=True)
@@ -308,3 +314,49 @@ def test_there_is_no_retry_after_a_comparator_failure(repo_root: Path) -> None:
         and node.func.id == "run_semantic_comparison"
     ]
     assert len(calls) == 1
+
+
+# --- the injected mutations named in the runbook -----------------------------
+
+
+@pytest.mark.parametrize(
+    ("case_id", "field", "injected"),
+    [
+        ("case-2", "authority_reason_code_id", "A1"),
+        ("case-5", "epistemic_status", "ESTABLISHED"),
+    ],
+)
+def test_an_injected_mutation_prevents_completion(
+    repo_root: Path, tmp_path: Path, case_id: str, field: str, injected: str
+) -> None:
+    """A field mutated in the PERSISTED evidence must block completion.
+
+    Not merely make the comparator function return FAIL — block the result. The
+    two mutations are the ones the runbook names, and each is chosen from a
+    different semantic dimension: case-2 turns an authority that was never
+    evaluated into one that proceeded, and case-5 turns a refuted proposition
+    into an established one. Both are exactly the kind of change a
+    machine-compared conformance claim exists to catch.
+    """
+    root = _evidence_tree(repo_root, tmp_path, mutate=(case_id, field), value=injected)
+    report = run_semantic_comparison(root, _double(repo_root, tmp_path))
+
+    assert report["decision"] == "FAIL"
+    assert report["mismatch_count"] >= 1
+    offending = [
+        entry
+        for entry in report["mismatches"]
+        if entry.get("case_id") == case_id and entry.get("field") == field
+    ]
+    assert offending, report
+    assert offending[0]["observed"] == injected
+
+    # the package still verifies, because the FAIL artifact is bound into it
+    assert verify_evidence_graph(root)["verified"] is True
+    persisted = json.loads(
+        (root / "05-evidence" / RESULT_002_COMPARISON_FILENAME).read_text(encoding="utf-8")
+    )
+    assert persisted["decision"] == "FAIL"
+
+    # and completion is unreachable even with a perfect package
+    assert result_status(package_ok=True, comparison=report) == RESULT_002_FAIL
