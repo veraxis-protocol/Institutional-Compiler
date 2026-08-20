@@ -341,6 +341,22 @@ def _command_demo_validate(args: argparse.Namespace, stream: TextIO) -> ExitCode
     return ExitCode.PASS
 
 
+#: Shell success for a result-bearing run. RESULT-001 completes under its own
+#: status; RESULT-002 deliberately completes under a different one, because a
+#: PASS-looking status must be unreachable when the frozen semantic comparator
+#: says FAIL. Mapping only the first of them to exit 0 would have made a
+#: successful RESULT-002 exit 1 — found by inspection of the frozen public path
+#: before any authorization was issued, and corrected here without touching the
+#: measurement. Every other status, including every RESULT-002 failure, remains
+#: nonzero by falling through.
+_SUCCESSFUL_RUN_STATUSES: Final = frozenset(
+    {
+        "RESULT_BEARING_EXECUTION_COMPLETE",
+        "RESULT_002_MACHINE_COMPARED_CONFORMANCE_PASS",
+    }
+)
+
+
 def _command_demo_run(args: argparse.Namespace, stream: TextIO) -> ExitCode:
     """The claim-bearing path. It opens only for a validated owner authorization.
 
@@ -375,9 +391,7 @@ def _command_demo_run(args: argparse.Namespace, stream: TextIO) -> ExitCode:
         stream.write(f"  authorization: {report['authorization_id']}\n")
         stream.write(f"  cases:         {', '.join(report['cases'])}\n")
         stream.write(f"  package:       {report['package_verification']}\n")
-    return (
-        ExitCode.PASS if report["status"] == "RESULT_BEARING_EXECUTION_COMPLETE" else ExitCode.FAIL
-    )
+    return ExitCode.PASS if report["status"] in _SUCCESSFUL_RUN_STATUSES else ExitCode.FAIL
 
 
 # ---------------------------------------------------------------------------

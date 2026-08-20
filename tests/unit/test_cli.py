@@ -556,3 +556,53 @@ def test_demo_run_refuses_without_an_output_directory(
     code, out, _ = run(capsys, "--repo-root", str(repo_root), "demo", "run")
     assert code == ExitCode.FAIL
     assert "no output directory was supplied" in out
+
+
+# ---------------------------------------------------------------------------
+# Result-bearing exit mapping
+#
+# RESULT-001 completes under one status and RESULT-002 under another, because a
+# PASS-looking status must be unreachable while the frozen semantic comparator
+# says FAIL. That split is deliberate; mapping only the first to exit 0 made a
+# successful RESULT-002 exit 1. Regression coverage, direct on the mapping, so
+# the defect cannot return quietly.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("status", "expected"),
+    [
+        ("RESULT_BEARING_EXECUTION_COMPLETE", ExitCode.PASS),
+        ("RESULT_002_MACHINE_COMPARED_CONFORMANCE_PASS", ExitCode.PASS),
+        ("RESULT_002_MACHINE_COMPARED_CONFORMANCE_FAIL", ExitCode.FAIL),
+        ("RESULT_BEARING_EXECUTION_INCOMPLETE", ExitCode.FAIL),
+        ("RESULT_BEARING_EXECUTION_NOT_AUTHORIZED", ExitCode.FAIL),
+        ("SOMETHING_UNRECOGNISED", ExitCode.FAIL),
+    ],
+)
+def test_the_run_exit_mapping_is_exact(status: str, expected: int) -> None:
+    """Success is an explicit allow-list; everything else falls through to FAIL."""
+    from oic.cli import _SUCCESSFUL_RUN_STATUSES
+
+    actual = ExitCode.PASS if status in _SUCCESSFUL_RUN_STATUSES else ExitCode.FAIL
+    assert actual == expected
+
+
+def test_only_two_statuses_can_ever_succeed() -> None:
+    """An allow-list that grew would be a widening of what counts as success."""
+    from oic.cli import _SUCCESSFUL_RUN_STATUSES
+
+    expected = frozenset(
+        {
+            "RESULT_BEARING_EXECUTION_COMPLETE",
+            "RESULT_002_MACHINE_COMPARED_CONFORMANCE_PASS",
+        }
+    )
+    assert expected == _SUCCESSFUL_RUN_STATUSES
+
+
+def test_no_result_002_failure_state_can_reach_exit_zero() -> None:
+    from oic.cli import _SUCCESSFUL_RUN_STATUSES
+
+    assert not [s for s in _SUCCESSFUL_RUN_STATUSES if s.endswith("FAIL")]
+    assert "RESULT_002_MACHINE_COMPARED_CONFORMANCE_FAIL" not in _SUCCESSFUL_RUN_STATUSES
