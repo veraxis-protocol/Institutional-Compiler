@@ -1,0 +1,63 @@
+{
+  "authorization_id": "RESULT-002-SOURCE-DELTA-AUTHORIZATION-001",
+  "authorization_version": "v0.1",
+  "status": "AUTHORIZED_FOR_FREEZE_READINESS_INTEGRATION_ONLY",
+  "issued_date": "2026-08-20",
+  "base_head": "ac52dcde01b0db1fdf8ecac6321db7a4e1efd81a",
+  "result_id": "RESULT-002",
+  "extends_authorization": "docs/operations/OIC-ZTL-OAM-DEMO-SLICE-001-L1-SOURCE-DELTA-AUTHORIZATION-001.json",
+  "decision": "APPROVE_ADDITIVE_SUCCESSOR_DELTA",
+  "scope": {
+    "additional_authorized_source_paths": [
+      "src/oic/result002_compare.py"
+    ],
+    "additional_authorized_demo_schema_paths": [
+      "schemas/demo/execution-authorization-v0.2.schema.json"
+    ],
+    "base_authorization_preserved": true,
+    "execution_authorization_v0_1_preserved_unchanged": true
+  },
+  "explicitly_not_authorized": [
+    "mutation or replacement of schemas/demo/execution-authorization-v0.1.schema.json",
+    "removal, weakening, or rewriting of the existing L1 source-delta authorization",
+    "folding the RESULT-002 comparator into demo_runtime.py solely to evade source-path authorization",
+    "broadening the authorized source or schema set beyond the two paths named in this authorization without a new owner decision",
+    "issuance or consumption of a RESULT-002 claim-bearing execution authorization",
+    "claim-bearing RESULT-002 execution",
+    "automatic retry after comparator FAIL under the same RESULT-002 identity"
+  ],
+  "comparison_domain_decision": {
+    "comparison_field_count": 13,
+    "comparison_fields": [
+      "case_id",
+      "version",
+      "epistemic_status",
+      "currentness_state",
+      "currentness_reason_code_id",
+      "authority_decision",
+      "authority_reason_code_id",
+      "institutional_authorization_status",
+      "execution_disposition",
+      "decision_basis",
+      "action_state",
+      "reliance_disposition",
+      "reliance_reason_code_id"
+    ],
+    "explicitly_out_of_scope_emitted_fields": [
+      "ztl_disposition",
+      "ztl_warranty_grade",
+      "ztl_raw_verdict"
+    ],
+    "nonclaim": "RESULT-002 tests exact machine conformance of the frozen 13-field institutional semantic projection. It does not test raw ZTL-verdict-field conformance. A change confined to the three excluded raw ZTL fields is outside the RESULT-002 pass/fail claim and must not be represented otherwise."
+  },
+  "d1_provenance_decision": {
+    "status": "NOT_LOAD_BEARING_UNTIL_PROVENANCE_ESTABLISHED",
+    "instruction": "Do not rely on or restate the claimed repository requirement that one command reproduces all five cases and exits non-zero on any mandatory deviation unless its authoritative source is independently located. This does not block RESULT-002 freeze-readiness integration."
+  },
+  "resume_instruction": {
+    "allowed": "Resume Phase G and continue development-only freeze-readiness work through the pre-execution stop condition using the additive authorization above.",
+    "required_stop": "If any additional source path, schema path, governance exception, or semantic change is required beyond this authorization, STOP and return a new blocker. Do not repair around the guard.",
+    "result_execution": "NOT_AUTHORIZED"
+  },
+  "owner_rationale": "The existing source-delta and schema-confinement tests are functioning governance controls. RESULT-002 requires a separately versioned comparator module and a successor execution-authorization schema so that the v0.1 authorization path remains immutable and the comparator cannot be hidden inside an already-authorized module merely to satisfy an older file-set guard. The owner therefore authorizes the minimum additive successor delta and nothing else."
+}

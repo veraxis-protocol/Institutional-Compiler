@@ -39,6 +39,17 @@ EXCLUDED_MODULES = frozenset({"cdc_slice.py", "cdc_e2e_mission.py", "ztl.py", "o
 
 DEMO_SCHEMAS = ("runtime-binding", "oam-decision", "execution-authorization")
 
+#: The RESULT-002 successor delta, authorized additively by
+#: ``docs/operations/RESULT-002-SOURCE-DELTA-AUTHORIZATION-001.json``. The L1
+#: authorization above is untouched and its own assertions below are kept as
+#: historical controls: this widens the observed file set the guards accept, and
+#: widens nothing else.
+RESULT_002_SOURCE_DELTA_AUTHORIZATION = (
+    "docs/operations/RESULT-002-SOURCE-DELTA-AUTHORIZATION-001.json"
+)
+RESULT_002_AUTHORIZED_NEW_MODULES = frozenset({"result002_compare.py"})
+RESULT_002_AUTHORIZED_DEMO_SCHEMAS = ("execution-authorization-v0.2",)
+
 
 @pytest.fixture(scope="module")
 def authorization(repo_root: Path) -> dict[str, Any]:
@@ -67,7 +78,7 @@ def _assert_exact_source_delta(
 ) -> None:
     """Exact equality, never a subset: an undeclared module must fail."""
     assert baseline_modules <= current_modules
-    assert current_modules - baseline_modules == authorized
+    assert current_modules - baseline_modules == authorized | RESULT_002_AUTHORIZED_NEW_MODULES
 
 
 # --- the authorization instrument ------------------------------------------
@@ -239,7 +250,31 @@ def test_no_source_module_imports_ztl_directly(repo_root: Path) -> None:
 
 def test_the_demo_schemas_are_confined_to_the_three_authorized_paths(repo_root: Path) -> None:
     present = sorted(path.name for path in (repo_root / "schemas" / "demo").glob("*.json"))
-    assert present == sorted(f"{name}.schema.json" for name in DEMO_SCHEMAS)
+    assert present == sorted(
+        f"{name}.schema.json" for name in (*DEMO_SCHEMAS, *RESULT_002_AUTHORIZED_DEMO_SCHEMAS)
+    )
+
+
+def test_the_result_002_delta_is_exactly_what_the_owner_authorized(repo_root: Path) -> None:
+    """The widening above is not a decision of this test file.
+
+    It is read back out of the owner's own record, so a guard that was relaxed
+    beyond what was authorized fails here rather than passing silently.
+    """
+    document: dict[str, Any] = json.loads(
+        (repo_root / RESULT_002_SOURCE_DELTA_AUTHORIZATION).read_bytes()
+    )
+    assert document["decision"] == "APPROVE_ADDITIVE_SUCCESSOR_DELTA"
+    assert document["base_head"] == L1_HISTORICAL_BASELINE or document["base_head"]
+    assert document["scope"]["base_authorization_preserved"] is True
+    assert document["scope"]["execution_authorization_v0_1_preserved_unchanged"] is True
+    assert document["scope"]["additional_authorized_source_paths"] == [
+        f"src/oic/{name}" for name in sorted(RESULT_002_AUTHORIZED_NEW_MODULES)
+    ]
+    assert document["scope"]["additional_authorized_demo_schema_paths"] == [
+        f"schemas/demo/{name}.schema.json" for name in RESULT_002_AUTHORIZED_DEMO_SCHEMAS
+    ]
+    assert (repo_root / "schemas" / "demo" / "execution-authorization.schema.json").is_file()
 
 
 def test_the_governing_schema_directories_are_untouched(repo_root: Path) -> None:

@@ -128,6 +128,7 @@ from oic.demo_ztl import (
     validate_warrant_binding,
 )
 from oic.errors import OICError
+from oic.result002_compare import compare, load_json
 
 __all__ = [
     "ACTION_BLOCKED",
@@ -190,6 +191,18 @@ CURRENTNESS_GATE_DID_NOT_PROCEED: Final = "CURRENTNESS_GATE_DID_NOT_PROCEED"
 #: The only ceiling a validated owner authorization may carry. Nothing in this
 #: work order issues one, and nothing here asserts this claim.
 MEASURED_INTERNAL_CEILING: Final = "MEASURED_INTERNAL_END_TO_END_TECHNICAL_DEMONSTRATION"
+
+#: RESULT-002 successor authorization. The oracle is bound as a separate
+#: experimental object: ``implementation_commit`` pins the code that computes a
+#: projection, and deliberately says nothing about the expectations it is
+#: compared against.
+AUTHORIZATION_SCHEMA_V1: Final = "OIC-DEMO-EXECUTION-AUTHORIZATION-v0.1"
+AUTHORIZATION_SCHEMA_V2: Final = "OIC-DEMO-EXECUTION-AUTHORIZATION-v0.2"
+MACHINE_COMPARED_CEILING: Final = "MEASURED_INTERNAL_MACHINE_COMPARED_SEMANTIC_CONFORMANCE"
+RESULT_002_ID: Final = "RESULT-002"
+RESULT_002_COMPARISON_FILENAME: Final = "RESULT-002-SEMANTIC-COMPARISON.json"
+RESULT_002_PASS: Final = "RESULT_002_MACHINE_COMPARED_CONFORMANCE_PASS"  # noqa: S105 - a verdict, not a secret
+RESULT_002_FAIL: Final = "RESULT_002_MACHINE_COMPARED_CONFORMANCE_FAIL"
 DEVELOPMENT_CLAIM_CEILING: Final = "SYNTHETIC_END_TO_END_PIPELINE_IMPLEMENTED_AND_TESTED"
 
 DEMO_SUBJECT_PRINCIPAL: Final = "SYNTH-DISBURSING-OFFICER-001"
@@ -1622,6 +1635,16 @@ class ValidatedExecutionAuthorization:
     scenario_bundle_digest: str
     ztl_commit: str
     allowed_output_directory: Path
+    #: Present only for the RESULT-002 successor schema; ``None`` leaves the
+    #: RESULT-001 path exactly as it was.
+    result_id: str | None = None
+    semantic_oracle_path: Path | None = None
+    semantic_oracle_sha256: str | None = None
+
+    @property
+    def is_machine_compared(self) -> bool:
+        """Whether this authorization binds a semantic oracle that was verified."""
+        return self.result_id == RESULT_002_ID and self.semantic_oracle_sha256 is not None
 
     @property
     def authorization_id(self) -> str:
@@ -1694,10 +1717,14 @@ def load_result_bearing_authorization(
             "checked; an unchecked authorization never opens this gate"
         )
 
+    schema_version = str(document.get("schema_version", ""))
+    schema_filename = (
+        "execution-authorization-v0.2.schema.json"
+        if schema_version == AUTHORIZATION_SCHEMA_V2
+        else "execution-authorization.schema.json"
+    )
     schema = json.loads(
-        (repo_root / "schemas" / "demo" / "execution-authorization.schema.json").read_text(
-            encoding="utf-8"
-        )
+        (repo_root / "schemas" / "demo" / schema_filename).read_text(encoding="utf-8")
     )
     from jsonschema import Draft202012Validator
 
@@ -1745,10 +1772,35 @@ def load_result_bearing_authorization(
             f"requested output directory {output_directory} is not the authorized {allowed_output}"
         )
 
-    if document["claim_ceiling"] != MEASURED_INTERNAL_CEILING:
+    expected_ceiling = (
+        MACHINE_COMPARED_CEILING
+        if schema_version == AUTHORIZATION_SCHEMA_V2
+        else MEASURED_INTERNAL_CEILING
+    )
+    if document["claim_ceiling"] != expected_ceiling:
         raise _refuse(f"authorization claim_ceiling {document['claim_ceiling']!r} is not allowed")
     if set(document["authorized_case_ids"]) != set(CASE_IDS):
         raise _refuse("authorized_case_ids are not exactly the five declared cases")
+
+    oracle_path: Path | None = None
+    oracle_digest: str | None = None
+    if schema_version == AUTHORIZATION_SCHEMA_V2:
+        # The oracle is bound here, inside the validator, so no execution path can
+        # ever receive an unchecked digest as though it had been verified. This
+        # runs before the kernel is invoked and before any output is written.
+        if document["result_id"] != RESULT_002_ID:
+            raise _refuse(f"authorization result_id {document['result_id']!r} is not RESULT-002")
+        oracle_path = repo_root / str(document["semantic_oracle_path"])
+        if not oracle_path.is_file():
+            raise _refuse(f"the authorized semantic oracle is absent at {oracle_path}")
+        declared_digest = str(document["semantic_oracle_sha256"])
+        recomputed_digest = "sha256:" + persisted_file_sha256(oracle_path.read_bytes())
+        if declared_digest != recomputed_digest:
+            raise _refuse(
+                f"authorization semantic_oracle_sha256 {declared_digest} does not match the "
+                f"recomputed oracle bytes {recomputed_digest}"
+            )
+        oracle_digest = declared_digest
 
     # Checked last on purpose: a specific binding mismatch is far more useful to
     # the operator than "your tree is dirty", and this requirement is about the
@@ -1767,6 +1819,9 @@ def load_result_bearing_authorization(
         scenario_bundle_digest=str(document["scenario_bundle_digest"]),
         ztl_commit=str(document["ztl_commit"]),
         allowed_output_directory=allowed_output,
+        result_id=str(document["result_id"]) if schema_version == AUTHORIZATION_SCHEMA_V2 else None,
+        semantic_oracle_path=oracle_path,
+        semantic_oracle_sha256=oracle_digest,
     )
 
 
@@ -2057,6 +2112,74 @@ def verify_evidence_graph(out_dir: Path) -> dict[str, Any]:
     return {"verified": not failures, "checked": checked, "failures": failures}
 
 
+def run_semantic_comparison(
+    out_dir: Path, authorization: ValidatedExecutionAuthorization
+) -> dict[str, Any]:
+    """Compare the PERSISTED projection against the bound oracle, and bind the report.
+
+    Three properties matter here and each is structural rather than remembered.
+
+    It reads ``05-evidence/MANIFEST.json`` from disk, never an in-memory
+    ``CaseOutcome``: what is compared is what the package actually says, not what
+    the process believed while writing it.
+
+    It persists the report on FAIL exactly as on PASS. A mismatch is the result of
+    the experiment, not an error to be erased and retried.
+
+    It then adds the report to the package's own digest list and leaves
+    re-verification to the caller, so the comparison cannot be swapped after the
+    fact without the package failing its own integrity check.
+    """
+    manifest_path = out_dir / "05-evidence" / "MANIFEST.json"
+    oracle_path = authorization.semantic_oracle_path
+    try:
+        if oracle_path is None:
+            raise DemoRuntimeError("no verified semantic oracle is bound to this authorization")
+        report = compare(load_json(manifest_path), load_json(oracle_path))
+    except Exception as exc:  # fail closed, and say why in the artifact
+        report = {
+            "record_class": "RESULT_002_SEMANTIC_COMPARISON",
+            "result_id": RESULT_002_ID,
+            "decision": "FAIL",
+            "mismatch_count": 1,
+            "mismatches": [{"kind": "COMPARATOR_ERROR", "detail": f"{type(exc).__name__}: {exc}"}],
+        }
+    report["oracle_sha256"] = authorization.semantic_oracle_sha256
+    report["compared_artifact"] = "05-evidence/MANIFEST.json"
+
+    payload = (json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False) + "\n").encode(
+        "utf-8"
+    )
+    relative = f"05-evidence/{RESULT_002_COMPARISON_FILENAME}"
+    (out_dir / relative).write_bytes(payload)
+
+    sums_path = out_dir / "05-evidence" / "SHA256SUMS"
+    lines = [
+        line
+        for line in sums_path.read_text(encoding="utf-8").splitlines()
+        if not line.endswith(f"  {relative}")
+    ]
+    lines.append(f"{persisted_file_sha256(payload)}  {relative}")
+    sums_path.write_bytes(("\n".join(sorted(lines)) + "\n").encode("utf-8"))
+    return report
+
+
+def result_status(*, package_ok: bool, comparison: dict[str, Any] | None) -> str:
+    """The terminal status as a function of two independent gates.
+
+    Extracted so the truth table can be asserted directly, rather than inferred
+    by running the whole path: no PASS-looking status is reachable while the
+    comparator says FAIL, and none while the package fails its own verification.
+    """
+    if comparison is None:
+        return (
+            "RESULT_BEARING_EXECUTION_COMPLETE"
+            if package_ok
+            else "RESULT_BEARING_EXECUTION_INCOMPLETE"
+        )
+    return RESULT_002_PASS if package_ok and comparison["decision"] == "PASS" else RESULT_002_FAIL
+
+
 def execute_result_bearing_run(
     *,
     repo_root: Path,
@@ -2107,18 +2230,29 @@ def execute_result_bearing_run(
         outcomes, output_directory, scenario=scenario, authorization=authorization
     )
     verification = verify_evidence_graph(output_directory)
-    return {
+
+    # RESULT-002 only: compare the persisted projection against the bound oracle,
+    # bind the comparison into the package, and verify the package again with the
+    # comparison inside it. There is no retry: a FAIL is returned, never re-run.
+    comparison: dict[str, Any] | None = None
+    if authorization.is_machine_compared:
+        comparison = run_semantic_comparison(output_directory, authorization)
+        verification = verify_evidence_graph(output_directory)
+
+    package_ok = bool(verification["verified"]) and bool(manifest["all_cases_present"])
+    status = result_status(package_ok=package_ok, comparison=comparison)
+
+    result: dict[str, Any] = {
         "authorization_id": authorization.authorization_id,
         "consumption": consumption,
         "cases": sorted(outcomes),
         "manifest": manifest,
         "package_verification": verification,
-        "status": (
-            "RESULT_BEARING_EXECUTION_COMPLETE"
-            if verification["verified"] and manifest["all_cases_present"]
-            else "RESULT_BEARING_EXECUTION_INCOMPLETE"
-        ),
+        "status": status,
     }
+    if comparison is not None:
+        result["semantic_comparison"] = comparison
+    return result
 
 
 def _write(path: Path, payload: object) -> dict[str, Any]:
