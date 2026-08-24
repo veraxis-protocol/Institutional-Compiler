@@ -1,5 +1,11 @@
 # Dependency Status
 
+Python development dependencies are declared in `requirements/dev.in` and resolved into
+the hash-locked `requirements/dev.txt`. CI installs only from that lock, reviews dependency
+changes, runs `pip-audit --skip-editable`, and generates a CycloneDX SBOM. Advisory data
+and the GitHub dependency graph are external inputs, so an unavailable service is reported
+as missing evidence rather than converted into a passing result.
+
 | Dependency | Role | Status | Merge constraint |
 |---|---|---|---|
 | Docling | Document parsing/layout | Candidate for substantial reuse | Pin version, license, parser fixtures, sandbox limits |

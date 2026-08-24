@@ -18,6 +18,8 @@ pytestmark = pytest.mark.contract
 WORKFLOW_RELPATH = "/".join((".github", "workflows", "ci.yml"))
 
 REQUIRED_JOBS = {
+    "dependency-review",
+    "advisory-scan",
     "bootstrap-integrity",
     "schema-validation",
     "lint",
@@ -68,7 +70,12 @@ def test_every_action_is_pinned_to_a_commit_sha(workflow: dict[Any, Any]) -> Non
 def test_workflow_permissions_are_read_only(workflow: dict[Any, Any]) -> None:
     assert workflow["permissions"] == {"contents": "read"}
     for name, job in workflow["jobs"].items():
-        assert "permissions" not in job or job["permissions"] == {"contents": "read"}, name
+        allowed = (
+            {"contents": "read", "pull-requests": "read"}
+            if name == "dependency-review"
+            else {"contents": "read"}
+        )
+        assert "permissions" not in job or job["permissions"] == allowed, name
 
 
 def test_no_job_requests_write_permission(workflow_text: str) -> None:
@@ -98,6 +105,17 @@ def test_dependencies_are_installed_with_hash_verification(workflow_text: str) -
     # A plain `pip install -r` without hash checking would defeat the lockfile.
     plain = re.findall(r"pip install (?!--require-hashes)(?!--no-deps)-r ", workflow_text)
     assert plain == []
+
+
+def test_dependency_review_and_advisory_scan_are_present(
+    workflow: dict[Any, Any], workflow_text: str, repo_root: Path
+) -> None:
+    review = workflow["jobs"]["dependency-review"]
+    assert any("dependency-review-action" in step.get("uses", "") for step in review["steps"])
+    audit = workflow["jobs"]["advisory-scan"]
+    assert any("pip_audit" in str(step.get("run", "")) for step in audit["steps"])
+    dev_input = (repo_root / "requirements/dev.in").read_text(encoding="utf-8")
+    assert "pip-audit==2.10.1" in dev_input
 
 
 def test_workflow_declares_no_release_or_deployment(workflow: dict[Any, Any]) -> None:
