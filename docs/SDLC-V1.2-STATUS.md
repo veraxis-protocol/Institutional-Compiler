@@ -1,23 +1,24 @@
-# SDLC v1.2 status — Institutional Compiler
+# SDLC v1.2 producer status — Institutional Compiler
 
 Baseline: `29daa374b7e5cdc30ca7788310fbabb85f19912b`.
 
-This is a producer disposition and is **NOT SELF-ADJUDICATED**. The governing
-`CURRENT-SDLC.md` v1.2 text was not present at the baseline, so missing normative
-gate names are not reconstructed. Independent verification must reconcile this
-matrix with the authoritative control.
+Semantic implementation remains **BLOCKED**. This matrix covers only implemented,
+non-semantic infrastructure, uses the canonical public-release gate definitions in
+owner-authorized `CURRENT-SDLC.md` v1.2, and is **NOT SELF-ADJUDICATED**.
 
-| Gate | Disposition | Evidence / limitation |
-|---|---|---|
-| E | PASS | Hash-locked install, safe CLI checks, strict lint/type checks, full tests, wheel smoke check, and compose validation are defined in CI. |
-| F | PASS | `make falsify` exercises schema, manifest, semantic-contract, and forbidden code-start failures only for implemented infrastructure. |
-| G | PASS | `SECURITY.md` states the non-service scope, private reporting route, supported state, and bounded triage. |
-| H | PASS | Dependencies are hash-locked; consequential Actions are full-SHA pinned; CI performs dependency review, advisory scanning, SBOM generation, and wheel verification. |
-| I | PASS | `VERSIONING.md` defines provisional pre-1.0 CLI, exit-code, schema, manifest, and artifact contracts. |
-| J | PASS | README first screen states what exists, what is blocked, safe checks, and the first executable objective; `AGENTS.md` prohibits semantic expansion. |
-| K | N/A | No release is authorized or published; the SBOM is candidate evidence, not attestation. |
-| L | NOT ESTABLISHED | Independent verification and owner adjudication of this producer change have not occurred. Semantic code-start remains blocked. |
-| M | PASS | `AGENTS.md` documents GitHub attribution, contribution trailers, dark local activity, zero telemetry, and unimplemented remote gateway/MCP surfaces. |
+| Gate | Canonical gate | Disposition | Evidence / limitation |
+|---|---|---|---|
+| E | Human Repository Usability | PASS | For implemented infrastructure only, the README first screen states what exists, what is blocked, copy/paste safe checks, expected manifest `INCOMPLETE` behavior, and the first executable objective. This is not evidence of semantic compiler usability. |
+| F | Agent Usability | PASS | `AGENTS.md` gives real infrastructure verification commands and explicitly prohibits semantic code-start, claim expansion, and status mutation. No semantic agent capability is claimed. |
+| G | Adoption Readiness | NOT ESTABLISHED | The repository truthfully orients readers to the infrastructure scaffold, but a semantically blocked compiler has no established mature adoption/conversion surface. |
+| H | Supply-Chain & Release Integrity | PASS | Dependencies are hash-locked; consequential Actions are immutable-SHA pinned; CI performs dependency review, advisory scanning, reproducible SBOM generation, and wheel smoke verification. No release is authorized or published, so public artifact provenance/attestation is not claimed. |
+| I | Security & Vulnerability Management | PASS | `SECURITY.md` states the non-service scope, private disclosure route, supported state, triage boundary, and scanner limitations; dependency review and advisory scan are green on the exact PR head. |
+| J | API & Versioning Integrity | PASS | `VERSIONING.md` declares provisional pre-1.0 CLI, exit-code, schema, manifest, import, and artifact contracts for implemented infrastructure. |
+| K | Machine-Readable Discovery & Licensing | NOT ESTABLISHED | Package metadata, schemas, and machine-readable manifests exist, but the explicit no-license/pending-counsel state remains unchanged. No license or SPDX grant is invented. |
+| L | Public Falsification Completeness | PASS | `make falsify` publicly exercises invalid schema, manifest digest mismatch, semantic-contract mutation, and forbidden semantic code-start for implemented infrastructure (4/4). It does not establish semantic compiler behavior. |
+| M | Agent Interaction Observability | NOT ESTABLISHED | `AGENTS.md` documents GitHub attribution, contribution trailers, dark local activity, and zero hidden telemetry. No approved GitHub-event ingestion, hosted gateway, MCP surface, or Agent Interaction Ledger pipeline is implemented. |
 
-The explicit no-license/pending-counsel state remains unchanged.
+## Independent Adjudication
 
+Independent Adjudication remains pending for the designated independent reviewer and owner.
+GitHub CI success is evidence, not acceptance. **CI GREEN IS NOT ACCEPTANCE.**
