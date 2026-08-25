@@ -18,6 +18,11 @@ pytestmark = pytest.mark.contract
 #: Documentation added by this work order. Bootstrap-controlled files are excluded
 #: because they are digest-verified and must not be edited here.
 AUTHORED_DOCS = (
+    "AGENTS.md",
+    "README.md",
+    "SECURITY.md",
+    "VERSIONING.md",
+    "docs/SDLC-V1.2-STATUS.md",
     "docs/operations/FOUNDATION.md",
     "docs/operations/CI.md",
     "docker/README.md",
@@ -198,7 +203,7 @@ def test_claims_bearing_documents_are_unchanged_by_this_work_order(repo_root: Pa
 
     from oic.baseline import BOOTSTRAP_COMMIT
 
-    for relpath in ("CLAIMS.md", "LIMITATIONS.md", "STATUS.md", "README.md", "OWNERS.md"):
+    for relpath in ("CLAIMS.md", "LIMITATIONS.md", "STATUS.md", "OWNERS.md"):
         committed = subprocess.run(
             ["git", "-C", str(repo_root), "cat-file", "blob", f"{BOOTSTRAP_COMMIT}:{relpath}"],
             capture_output=True,

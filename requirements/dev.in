@@ -1,12 +1,13 @@
 # Development dependencies. Superset of runtime.in.
 #
 # Regenerate the lock with:
-#   pip-compile --generate-hashes --output-file=requirements/dev.txt requirements/dev.in
+#   pip-compile --allow-unsafe --generate-hashes \
+#     --output-file=requirements/dev.txt --strip-extras requirements/dev.in
 
 -r runtime.in
 
 # Test
-pytest>=8.3,<9
+pytest>=9.0.3,<10
 pytest-cov>=6.0,<7
 # Imported directly by tests/contract/test_dependency_metadata.py to compare declared
 # requirement ranges against installed versions. Declared rather than relied on as a
@@ -32,3 +33,4 @@ build>=1.2,<2
 # Supply chain: SBOM and license inventory
 cyclonedx-bom>=6.0,<8
 pip-licenses>=5.0,<6
+pip-audit==2.10.1

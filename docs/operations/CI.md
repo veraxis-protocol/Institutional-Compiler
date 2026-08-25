@@ -24,6 +24,8 @@ have to re-verify them by reading the YAML on every change.
 
 | Job | What it does | Fails when |
 |---|---|---|
+| `dependency-review` | Reviews dependency changes with GitHub's dependency graph action | A pull request introduces a dependency at or above the configured severity threshold |
+| `advisory-scan` | Installs the hash-locked environment and runs `pip-audit --skip-editable` | A known advisory affects a resolved third-party package |
 | `bootstrap-integrity` | Checks the governing TDD digest against the working tree, then verifies the historical bootstrap baseline from Git objects, then all current-tree manifests | TDD digest changed; the bootstrap commit no longer holds its recorded bytes; `--all` did not exit exactly `3` |
 | `schema-validation` | `oic validate-schema`, text and JSON | Any of the nine schemas is not valid Draft 2020-12, or a reference does not resolve locally |
 | `lint` | `ruff check`, `ruff format --check`, credential scan | Any lint or format violation, or a credential pattern hit |
