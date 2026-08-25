@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -27,8 +28,67 @@ CASES = (
     ),
 )
 
+SUMMARY_LINE = re.compile(r"^(?P<outcomes>.+?) in \d+(?:\.\d+)?s$")
+SUMMARY_ITEM = re.compile(
+    r"(?P<count>\d+) (?P<kind>passed|failed|skipped|xfailed|xpassed|errors?|deselected|warnings?)"
+)
+
+
+def parse_pytest_summary(output: str) -> dict[str, int]:
+    """Parse one unambiguous pytest terminal-summary line or fail closed."""
+    candidates: list[dict[str, int]] = []
+    for line in output.splitlines():
+        match = SUMMARY_LINE.fullmatch(line.strip())
+        if match is None:
+            continue
+        outcomes = match.group("outcomes")
+        items = list(SUMMARY_ITEM.finditer(outcomes))
+        if not items:
+            continue
+        remainder = SUMMARY_ITEM.sub("", outcomes).replace(",", "").strip()
+        if remainder:
+            continue
+        parsed: dict[str, int] = {}
+        for item in items:
+            kind = item.group("kind")
+            if kind in {"error", "errors"}:
+                kind = "errors"
+            elif kind in {"warning", "warnings"}:
+                kind = "warnings"
+            if kind in parsed:
+                raise ValueError(f"duplicate pytest summary outcome: {kind}")
+            parsed[kind] = int(item.group("count"))
+        candidates.append(parsed)
+    if len(candidates) != 1:
+        raise ValueError(f"expected exactly one parseable pytest summary, found {len(candidates)}")
+    return candidates[0]
+
+
+def actual_single_pass(returncode: int, output: str) -> tuple[bool, str]:
+    """Accept only an exit-zero run proving exactly one selected test passed."""
+    if returncode != 0:
+        return False, f"pytest exit {returncode}"
+    try:
+        summary = parse_pytest_summary(output)
+    except ValueError as error:
+        return False, f"unusable pytest summary: {error}"
+    disallowed = {
+        key: value for key, value in summary.items() if key not in {"passed", "warnings"} and value
+    }
+    if summary.get("passed") != 1 or disallowed:
+        return False, f"expected exactly 1 passed and no other outcomes; observed {summary}"
+    return True, "expected selected=1 observed passed=1"
+
+
+def success_message(observed: int) -> str:
+    return (
+        f"PASS bounded infrastructure falsification: "
+        f"{observed}/{len(CASES)} expected checks observed"
+    )
+
 
 def main() -> int:
+    observed = 0
     for name, selector in CASES:
         result = subprocess.run(  # noqa: S603 - selectors are fixed above
             [sys.executable, "-m", "pytest", "-q", selector],
@@ -37,12 +97,15 @@ def main() -> int:
             capture_output=True,
             check=False,
         )
-        if result.returncode != 0:
+        combined = result.stdout + result.stderr
+        accepted, detail = actual_single_pass(result.returncode, combined)
+        if not accepted:
             sys.stderr.write(result.stdout)
             sys.stderr.write(result.stderr)
-            raise SystemExit(f"FAIL {name}: pytest exit {result.returncode}")
-        print(f"PASS {name}: {selector}")
-    print("PASS bounded infrastructure falsification: 4/4 expected checks observed")
+            raise SystemExit(f"FAIL {name}: {detail}")
+        observed += 1
+        print(f"PASS {name}: {selector}; {detail}")
+    print(success_message(observed))
     return 0
 
 
