@@ -186,7 +186,19 @@ current product claims.
 | False-resolution rate | <=0.05 | TARGET - NOT MEASURED |
 | Behavioral conformance | >=0.95 | TARGET - NOT MEASURED |
 | Change-impact recall | >=0.95 | TARGET - NOT MEASURED |
-| Active human time to first admitted envelope versus the manual baseline | >=40% reduction, with no more than 2 percentage-point loss in adjudicated behavioral quality | TARGET - NOT MEASURED |
+
+### Provisional comparative target
+
+Separately, TDD-OIC-001 v1.1 preregisters a provisional comparative-claim
+threshold: at least 40% reduction in active human time to first admitted
+envelope versus the manual baseline, with no more than 2 percentage-point loss
+in adjudicated behavioral quality.
+
+**Status: PROVISIONAL TARGET - NOT MEASURED - NOT CALIBRATED.**
+
+This threshold is subject to calibration, retention, amendment, or withdrawal
+under the benchmark governance process before it can support a public
+comparative claim. It is not an absolute safety or release gate.
 
 Full OIC-Bench v0.1 is designed around public, frozen-test, private held-out,
 adversarial, change-impact, runtime, and practitioner-review partitions. Its
@@ -247,6 +259,11 @@ observed result. `MEASURED` identifies an observed result tied to a reproducible
 repository or benchmark composition. `BLOCKED` or `NOT YET RUN` identifies an
 evaluation that cannot proceed because semantic implementation or evidence
 prerequisites remain incomplete.
+
+Exact repository composition, CI execution composition, and run provenance for
+these measurements are recorded in the corresponding pull-request and CI
+evidence record. The measurements below are infrastructure evidence, not
+semantic OIC-Bench results.
 
 | Evidence class | Current state |
 |---|---|
