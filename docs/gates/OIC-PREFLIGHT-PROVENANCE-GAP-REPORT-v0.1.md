@@ -55,3 +55,12 @@ The smallest truthful source blocker set is:
 4. freeze every selected source with bytes, hashes, receipts, dates where
    supportable, confidentiality, and declared benchmark authority status.
 
+## Owner source-strategy choice
+
+The governing design permits a bounded public or synthetic subset. The owner
+may continue real Canada clearance, or authorize CA-3 as the real anchor plus
+explicitly synthetic procurement sources for remaining roles. Synthetic
+companions must name a synthetic test institution, declare their synthetic
+status, carry deterministic generated provenance and hashes, create no
+real-world authority, and remain limited to benchmark/test semantics. This
+audit does not authorize or create them.
