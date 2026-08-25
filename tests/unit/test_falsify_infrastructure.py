@@ -1,7 +1,31 @@
 from __future__ import annotations
 
-import scripts.falsify_infrastructure as harness
+import importlib.util
+from pathlib import Path
+from typing import Protocol, cast
+
 from pytest import MonkeyPatch
+
+
+class HarnessModule(Protocol):
+    CASES: tuple[tuple[str, str], ...]
+
+    def actual_single_pass(self, returncode: int, output: str) -> tuple[bool, str]: ...
+
+    def success_message(self, observed: int) -> str: ...
+
+
+def load_harness() -> HarnessModule:
+    path = Path(__file__).resolve().parents[2] / "scripts/falsify_infrastructure.py"
+    spec = importlib.util.spec_from_file_location("oic_falsify_infrastructure", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load harness from {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return cast(HarnessModule, module)
+
+
+harness = load_harness()
 
 
 def test_exactly_one_pass_is_accepted() -> None:
