@@ -158,6 +158,201 @@ comparative benchmarks, independent review, and external consumption establish
 it. See [`CLAIMS.md`](CLAIMS.md) for the evidence required before stronger
 statements are permitted.
 
+## How OIC will be measured
+
+Generating syntactically valid Rego is not the OIC success criterion. OIC-Bench
+is intended to test whether the source-to-control transformation preserves
+source support, authority, uncertainty, exceptions, temporal and currentness
+state, evidence requirements, runtime behavior, change impact, and human-review
+efficiency.
+
+The relevant question is whether OIC can automate more of regulated-enterprise
+control production while preserving the evidence and authority properties that
+make the resulting controls safe to rely on. OIC is successful only if increased
+control-production automation does not come from converting unsupported,
+ambiguous, stale, or unauthorized meaning into executable controls.
+
+The following development gates are preregistered in TDD-OIC-001 v1.1. They are
+targets, not observed results, calibrated thresholds, independent validation, or
+current product claims.
+
+| Benchmark | Target | Status |
+|---|---:|---|
+| Source-supported executable fields | >=99% | TARGET - NOT MEASURED |
+| Unsupported executable-field rate | <=1% | TARGET - NOT MEASURED |
+| Unknown-to-false conversions | 0 | TARGET - NOT MEASURED |
+| Authority Reconstruction F1 | >=0.80 | TARGET - NOT MEASURED |
+| Ambiguity recall | >=0.85 | TARGET - NOT MEASURED |
+| False-resolution rate | <=0.05 | TARGET - NOT MEASURED |
+| Behavioral conformance | >=0.95 | TARGET - NOT MEASURED |
+| Change-impact recall | >=0.95 | TARGET - NOT MEASURED |
+| Active human time to first admitted envelope versus the manual baseline | >=40% reduction, with no more than 2 percentage-point loss in adjudicated behavioral quality | TARGET - NOT MEASURED |
+
+Full OIC-Bench v0.1 is designed around public, frozen-test, private held-out,
+adversarial, change-impact, runtime, and practitioner-review partitions. Its
+proposed aggregate scope includes 21 governing documents, approximately 140
+pages, at least 260 adjudicated normative clauses, at least 85 candidate
+controls, at least 34 known ambiguities or conflicts, at least 160 runtime
+cases, and at least 18 source-version pairs. **PROPOSED BENCHMARK SCOPE - NOT A
+MEASURED SUFFICIENCY CLAIM.**
+
+### Comparative baselines
+
+OIC-Bench is designed to compare OIC with named control-production paths, not
+only with earlier OIC versions:
+
+- **Direct LLM-to-Rego:** the same source inputs and, where architectural
+  comparison requires it, the same declared model.
+- **Modular document-to-policy pipeline:** extraction, validation, and target
+  compilation without OIC's admission and authority representation.
+- **Human policy engineer:** an experienced practitioner using ordinary policy
+  and control-production tools.
+- **Source-grounded knowledge graph:** source entities and relations without a
+  formal admission or control envelope.
+- **RAG plus rule generation:** retrieved source passages followed by
+  target-policy generation.
+- **Commercial capability review:** public documentation and controlled trials
+  where evidence is available. Unknown capabilities remain `UNKNOWN`; they are
+  not assumed absent.
+
+No comparative outperformance claim is permitted until the full benchmark,
+baseline implementations, annotation protocol, and held-out evaluation are
+frozen and independently reviewed.
+
+### Proposed future metric: Safe Automation Coverage
+
+**PROPOSED - NOT YET PART OF THE FROZEN OIC-BENCH SPECIFICATION.**
+
+Safe Automation Coverage would measure the percentage of in-scope,
+gold-adjudicated regulated-control cases that reach an admitted executable state
+while satisfying all applicable source-support, authority, evidence, ambiguity,
+currentness, and behavioral gates.
+
+`CANNOT`, escalation, or human judgment may be the correct outcome. The metric
+must not reward falsely converting ambiguous or unsupported work into executable
+controls. Safe Automation Coverage is not equivalent to `ALLOW` rate. No
+numerical target is authorized.
+
+A related operational measure is **admitted automation yield under fixed
+expert-review budget**: the number of valid admitted executable controls
+produced under a fixed amount of qualified reviewer time, compared with the
+manual baseline. This measure is also **PROPOSED - NOT YET PART OF THE FROZEN
+OIC-BENCH SPECIFICATION.** Formal adoption of either measure requires benchmark
+governance, an ADR, and a traceability update.
+
+## Current measured evidence
+
+`TARGET` identifies a preregistered or proposed benchmark threshold, not an
+observed result. `MEASURED` identifies an observed result tied to a reproducible
+repository or benchmark composition. `BLOCKED` or `NOT YET RUN` identifies an
+evaluation that cannot proceed because semantic implementation or evidence
+prerequisites remain incomplete.
+
+| Evidence class | Current state |
+|---|---|
+| Non-semantic infrastructure verification | MEASURED |
+| Schema validation | MEASURED - 9/9 |
+| Bootstrap integrity | MEASURED - 52/52 |
+| Infrastructure falsification harness | MEASURED - 4/4 |
+| Full repository test suite | MEASURED - 1232 passed, 1 intentional skip |
+| Manifest | MEASURED - INCOMPLETE, required exit 3 |
+| Semantic implementation gate | BLOCKED |
+| OIC-Bench preflight design | PREREGISTERED |
+| Semantic OIC-Bench preflight | NOT YET RUN |
+| Full OIC-Bench v0.1 | NOT YET RUN |
+| Comparative outperformance | NOT ESTABLISHED |
+| Practitioner usability benchmark | NOT YET RUN |
+| Regulated-enterprise pilot evidence | NOT ESTABLISHED |
+
+These results verify repository infrastructure. They are not semantic OIC-Bench
+results. The benchmark preflight metrics remain proposed or preregistered and
+not measured. Experimental branch results are not accepted benchmark evidence.
+
+## Development roadmap
+
+The roadmap is evidence-gated, not schedule-driven. No stage is complete
+because its features exist. Advancement requires the named benchmark,
+verification, operational, and independent-review evidence.
+
+### Stage 0 - Infrastructure and benchmark readiness
+
+**STATUS: CURRENT**
+
+Current capabilities include non-semantic schemas and contracts,
+manifest/integrity verification, the falsification harness, supply-chain
+controls, and the benchmark preflight specification.
+
+Exit requires complete governing-source rights and provenance plus sufficient
+ZTL and VEIP provisional-interface evidence to open the semantic code-start
+gate.
+
+### Stage 1 - Source-to-control reference
+
+**STATUS: NEXT - BLOCKED by the semantic code-start gate**
+
+Target path:
+
+```text
+governing sources
+-> source anchors
+-> candidate normative meaning
+-> ambiguity and review docket
+-> authorized admission
+-> Institutional IR / Open Control Envelope
+-> Rego
+-> runtime result
+-> lineage
+```
+
+Advancement requires a reproducible semantic preflight, passing critical
+invariants, published raw benchmark outputs, and visible failures and
+limitations.
+
+### Stage 2 - Evidence release
+
+Target evidence includes a frozen OIC-Bench v0.1; public, frozen, held-out, and
+adversarial partitions; named comparative baselines; a human policy-engineer
+baseline; change-impact evaluation; a practitioner usability study; and
+independent technical and security review.
+
+Exit permits only bounded benchmark claims for the tested scope.
+
+### Stage 3 - Regulated-enterprise pilot
+
+Target capabilities include real regulated-enterprise governing sources,
+SSO and identity, tenancy, evidence-system integration, an on-premises or
+offline profile, change propagation, rollback, and operational monitoring.
+
+Advancement requires a controlled design-partner pilot, security evidence,
+runtime and reliability evidence, and scoped pilot-readiness claims.
+
+### Stage 4 - Continuous regulated control compilation
+
+Target capabilities include governing-source monitoring, amendment and
+supersession detection, control-dependency impact, invalidation, re-admission,
+controlled publication, CI/CD integration, and historical replay.
+
+Advancement requires change-impact benchmarks, currentness and revocation
+tests, operational incident exercises, and replay and correction evidence.
+
+### Stage 5 - Dependable regulated agents
+
+Target capabilities include agent identity and mandate, dynamic grounding, ZTL
+warrant, VEIP execution continuity, delegation and revocation, reliance and
+correction, and multi-agent consequential-action chains.
+
+Advancement requires a real consequential-runtime pilot, measured
+consequence-control behavior, and independent audit.
+
+### Later - Open infrastructure
+
+Target capabilities include interoperable control-envelope profiles,
+independent compiler and adapter implementations, domain packs, conformance
+suites, and federated authority and control ecosystems.
+
+Evidence requires independent implementations or consuming projects, external
+conformance, and community governance.
+
 ## Current phase
 
 This repository authorizes contract-first, non-semantic infrastructure work.
