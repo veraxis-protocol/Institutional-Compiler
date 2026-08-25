@@ -8,7 +8,7 @@ Open Institutional Compiler (OIC) is developing a reviewable path from the
 human-readable sources that govern a regulated enterprise to the explicit
 controls its software and authorization systems can evaluate.
 
-The target capability is straightforward:
+Target capability:
 
 > A regulated enterprise should be able to automate a larger class of
 > consequential actions and regulated workflows without lowering the
@@ -101,16 +101,14 @@ candidate meaning is still untrusted. A regulated enterprise must determine
 which source applies, what it authorizes, what evidence is required, which
 exceptions govern, and who may admit the result.
 
-The scarce artifact is not another confidence score. It is an authorized,
-versioned, source-grounded control with explicit uncertainty and a correction
-path.
+The control-production bottleneck is the creation of an authorized, versioned,
+source-grounded control with explicit uncertainty and a correction path.
 
 ## Runtime authorization starts downstream
 
-OPA evaluates policy against structured data. Given a policy and facts, it can
-answer whether an action is allowed. Rego is OIC's first proposed executable
-target. OIC complements OPA; it does not replace it or raise OPA's enforcement
-capability.
+OPA evaluates policy over structured input and data and returns policy decisions
+to the integrating application. Rego is OIC's first proposed executable target.
+OIC operates upstream of that evaluation boundary; it does not replace OPA.
 
 Cedar, relationship authorization, and comparable systems provide mature
 runtime authorization approaches. They expect policies, models, relationships,
@@ -189,8 +187,8 @@ must not be normalized into success.
 ## First executable objective
 
 The first semantic objective remains blocked. When its prerequisites are
-authorized, a bounded public or synthetic procurement corpus is intended to
-flow through:
+authorized, a bounded set of public or synthetic procurement governing sources
+is intended to flow through:
 
 ```text
 documents
