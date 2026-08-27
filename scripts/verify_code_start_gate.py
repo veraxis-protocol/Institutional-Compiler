@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -21,6 +23,21 @@ STALE_ZTL_TEXT = (
     "still in DRAFT pull request #18",
     "must not merge before PR #18",
 )
+ADMITTED_PRE_GATE_HEAD = "4065e6a7c02badd3356f4c74be0815079d836aca"
+ADMITTED_SRC_OIC_PATHS = frozenset(
+    {
+        "src/oic/__init__.py",
+        "src/oic/baseline.py",
+        "src/oic/cli.py",
+        "src/oic/doctor.py",
+        "src/oic/errors.py",
+        "src/oic/hashing.py",
+        "src/oic/manifests.py",
+        "src/oic/paths.py",
+        "src/oic/py.typed",
+        "src/oic/schemas.py",
+    }
+)
 
 
 class GateEvidenceError(ValueError):
@@ -30,6 +47,25 @@ class GateEvidenceError(ValueError):
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise GateEvidenceError(message)
+
+
+def discover_unadmitted_production_paths(root: Path) -> list[str]:
+    """Compare tracked ``src/oic`` paths with the immutable pre-gate baseline."""
+    git = shutil.which("git")
+    if git is None:
+        raise GateEvidenceError("cannot enumerate tracked src/oic production paths")
+    result = subprocess.run(  # noqa: S603 - fixed executable and literal arguments
+        [git, "-C", str(root.resolve()), "ls-files", "--", "src/oic"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise GateEvidenceError("cannot enumerate tracked src/oic production paths")
+    current = {line for line in result.stdout.splitlines() if line}
+    added = sorted(current - ADMITTED_SRC_OIC_PATHS)
+    missing = sorted(ADMITTED_SRC_OIC_PATHS - current)
+    return added + [f"MISSING:{path}" for path in missing]
 
 
 def validate_evidence(
@@ -161,7 +197,17 @@ def load_and_validate(root: Path) -> None:
     source_bytes = {
         item["source_id"]: (root / item["path"]).read_bytes() for item in source_set["sources"]
     }
-    validate_evidence(source_set, receipts, profile, veip, gate_text, source_bytes, active_text)
+    semantic_paths = discover_unadmitted_production_paths(root)
+    validate_evidence(
+        source_set,
+        receipts,
+        profile,
+        veip,
+        gate_text,
+        source_bytes,
+        active_text,
+        semantic_paths=semantic_paths,
+    )
 
 
 if __name__ == "__main__":

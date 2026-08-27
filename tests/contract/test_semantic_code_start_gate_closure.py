@@ -5,6 +5,8 @@ from __future__ import annotations
 import copy
 import importlib.util
 import json
+import shutil
+import subprocess
 from collections.abc import Callable
 from pathlib import Path
 from types import ModuleType
@@ -130,3 +132,90 @@ def test_refuses_semantic_implementation(repo_root: Path) -> None:
 
 def test_refuses_global_manifest_escalation(repo_root: Path) -> None:
     _reject(repo_root, lambda e: e["source_set"].__setitem__("global_manifest_status", "PASS"))
+
+
+def _isolated_gate_tree(repo_root: Path, tmp_path: Path) -> Path:
+    root = tmp_path / "repository"
+    required = (
+        "src/oic",
+        "benchmarks/preflight/code-start-v0.1",
+        "benchmarks/corpus/canada/freeze-v0.1/sources/CA-3.xml",
+        "docs/contracts/kernel-profiles/ztl-v0.1.json",
+        "docs/contracts/VEIP-CODE-START-BOUNDARY-v0.1.json",
+        "docs/contracts/WARRANT-CONTRACT-v0.1.md",
+        "adr/ADR-013.md",
+        "docs/gates/OIC-SEMANTIC-CODE-START-GATE-CLOSURE-v0.1.md",
+    )
+    for relpath in required:
+        source = repo_root / relpath
+        target = root / relpath
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if source.is_dir():
+            shutil.copytree(source, target)
+        else:
+            shutil.copy2(source, target)
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    subprocess.run(["git", "-C", str(root), "add", "."], check=True)
+    return root
+
+
+def test_t1_production_detector_accepts_exact_baseline(repo_root: Path) -> None:
+    module = _module(repo_root)
+    assert module.discover_unadmitted_production_paths(repo_root) == []
+
+
+@pytest.mark.parametrize(
+    "relpath",
+    ("src/oic/semantic_parser.py", "src/oic/helper.py", "src/oic/newmodule/engine.py"),
+)
+def test_t2_t3_t4_detector_refuses_any_new_tracked_path(
+    repo_root: Path, tmp_path: Path, relpath: str
+) -> None:
+    module = _module(repo_root)
+    root = _isolated_gate_tree(repo_root, tmp_path)
+    added = root / relpath
+    added.parent.mkdir(parents=True, exist_ok=True)
+    added.write_text("# unauthorized pre-gate production path\n", encoding="utf-8")
+    subprocess.run(["git", "-C", str(root), "add", relpath], check=True)
+    detected = module.discover_unadmitted_production_paths(root)
+    assert relpath in detected
+    with pytest.raises(module.GateEvidenceError, match="semantic implementation appeared"):
+        module.load_and_validate(root)
+
+
+def test_t5_detector_refuses_rename_or_substitution(repo_root: Path, tmp_path: Path) -> None:
+    module = _module(repo_root)
+    root = _isolated_gate_tree(repo_root, tmp_path)
+    original = root / "src/oic/paths.py"
+    replacement = root / "src/oic/replacement.py"
+    original.rename(replacement)
+    subprocess.run(["git", "-C", str(root), "add", "-A", "src/oic"], check=True)
+    detected = module.discover_unadmitted_production_paths(root)
+    assert "src/oic/replacement.py" in detected
+    assert "MISSING:src/oic/paths.py" in detected
+    with pytest.raises(module.GateEvidenceError, match="semantic implementation appeared"):
+        module.load_and_validate(root)
+
+
+def test_t6_load_and_validate_invokes_discovery_without_manual_parameter(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    module = _module(repo_root)
+    root = _isolated_gate_tree(repo_root, tmp_path)
+    added = root / "src/oic/helper.py"
+    added.write_text("# innocuous name, unauthorized path\n", encoding="utf-8")
+    subprocess.run(["git", "-C", str(root), "add", "src/oic/helper.py"], check=True)
+    with pytest.raises(module.GateEvidenceError, match="semantic implementation appeared"):
+        module.load_and_validate(root)
+
+
+def test_t7_working_tree_cannot_self_extend_immutable_baseline(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    module = _module(repo_root)
+    root = _isolated_gate_tree(repo_root, tmp_path)
+    added = root / "src/oic/future_admitted.py"
+    added.write_text("# existence does not confer admission\n", encoding="utf-8")
+    subprocess.run(["git", "-C", str(root), "add", "src/oic/future_admitted.py"], check=True)
+    assert "src/oic/future_admitted.py" not in module.ADMITTED_SRC_OIC_PATHS
+    assert module.discover_unadmitted_production_paths(root) == ["src/oic/future_admitted.py"]
