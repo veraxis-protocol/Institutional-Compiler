@@ -37,8 +37,9 @@ semantic gate.
 ## Claims and licensing
 
 Follow `CLAIMS.md`, `LIMITATIONS.md`, and `STATUS.md` literally. This repository
-has no license grant; do not add a LICENSE file, SPDX grant, or open-source usage
-claim without separate written owner authorization.
+is licensed under the PolyForm Noncommercial License 1.0.0. Do not describe it
+as open source or imply commercial-use rights; commercial use requires a
+separate written license from Veraxis.
 
 ## Telemetry and provenance
 
@@ -56,4 +57,3 @@ Agent-Execution-ID: <optional attributable execution identifier>
 
 Trailers are supplemental provenance, not institutional authority or
 independent review.
-

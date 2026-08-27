@@ -2,16 +2,12 @@
 requires = ["setuptools>=77.0.0"]
 build-backend = "setuptools.build_meta"
 
-# NOTE ON LICENSING
-# No `license` field, no license classifier, and no LICENSE file are declared.
-# Repository licensing remains pending counsel review (see OWNERS.md).
-# Do not add a license here without written authorization.
-
 [project]
 name = "oic"
 version = "0.1.0a0"
 description = "Open Institutional Compiler - non-semantic infrastructure foundation"
 readme = "README.md"
+license-files = ["LICENSE"]
 requires-python = ">=3.12,<3.13"
 dependencies = [
   "jsonschema>=4.23,<5",

@@ -460,8 +460,10 @@ foundation. It is not a functioning institutional compiler. Current scope,
 provisional interfaces, corpus restrictions, human-judgment boundaries, and
 benchmark limitations are recorded in [`LIMITATIONS.md`](LIMITATIONS.md).
 
-No license grant or SPDX identity is established. Licensing remains pending
-counsel review.
+Licensed under the PolyForm Noncommercial License 1.0.0.
+Noncommercial use, modification, testing, and distribution are permitted
+subject to the license terms. Commercial use requires a separate written
+license from Veraxis.
 
 ## Claims discipline
 

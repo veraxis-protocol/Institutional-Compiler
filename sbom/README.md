@@ -31,10 +31,11 @@ differs between a local run and a CI run. Everything else is environment-indepen
 
 ## Licensing
 
-**This repository carries no license.** Licensing is pending counsel review (`OWNERS.md`).
+This repository is licensed under the PolyForm Noncommercial License 1.0.0.
+Commercial use requires a separate written license from Veraxis.
 
 The licenses recorded here are those of third-party dependencies, captured for inventory
-purposes only. **No license-compatibility determination has been made**, and nothing in
+purposes only. **No third-party license-compatibility determination has been made**, and nothing in
 this directory should be read as one. `DEPENDENCIES.md` notes that dependency licence
 compatibility is part of the pending licensing review.
 

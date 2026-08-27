@@ -26,5 +26,6 @@ identities and migration notes; existing bytes are not silently reinterpreted.
 - Admitted artifacts: never mutated in place; supersede with a new version.
 - Experimental releases: `0.x` tags and explicit evidence/limitation manifests.
 
-No release or attestation is authorized by this policy. Licensing remains
-pending counsel and is not a versioned grant.
+No release or attestation is authorized by this policy. The repository license
+is PolyForm Noncommercial License 1.0.0; commercial use requires a separate
+written license from Veraxis.

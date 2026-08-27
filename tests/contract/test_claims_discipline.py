@@ -182,13 +182,15 @@ def test_ci_guide_documents_secret_scan_limitations(documents: dict[str, str]) -
     assert "never git history" in text
 
 
-def test_no_license_file_was_added(repo_root: Path) -> None:
-    """Licensing remains pending counsel; adding a license is prohibited."""
-    for name in ("LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING", "COPYING.txt"):
-        assert not (repo_root / name).exists(), f"{name} must not exist"
+def test_polyform_noncommercial_license_is_declared(repo_root: Path) -> None:
+    """The owner-selected license is present without a conflicting grant."""
+    license_text = (repo_root / "LICENSE").read_text(encoding="utf-8")
+    assert license_text.startswith("# PolyForm Noncommercial License 1.0.0\n")
+    assert "https://polyformproject.org/licenses/noncommercial/1.0.0" in license_text
     pyproject = (repo_root / "pyproject.toml").read_text(encoding="utf-8")
     assert "\nlicense =" not in pyproject
     assert "License ::" not in pyproject
+    assert 'license-files = ["LICENSE"]' in pyproject
 
 
 def test_claims_bearing_documents_are_unchanged_by_this_work_order(repo_root: Path) -> None:
