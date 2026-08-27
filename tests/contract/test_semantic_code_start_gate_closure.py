@@ -33,7 +33,7 @@ def _evidence(repo_root: Path) -> dict[str, Any]:
     source_set = load("benchmarks/preflight/code-start-v0.1/SOURCE-SET.json")
     return {
         "source_set": source_set,
-        "receipts": load("benchmarks/preflight/code-start-v0.1/RECEIPTS.json"),
+        "receipts": load("benchmarks/preflight/code-start-v0.1/PROVENANCE.json"),
         "profile": load("docs/contracts/kernel-profiles/ztl-v0.1.json"),
         "veip": load("docs/contracts/VEIP-CODE-START-BOUNDARY-v0.1.json"),
         "gate_text": (

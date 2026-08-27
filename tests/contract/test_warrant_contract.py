@@ -1329,11 +1329,15 @@ def test_draft_schemas_are_byte_identical_to_the_bootstrap(repo_root: Path) -> N
         assert path.read_bytes() == committed, relative
 
 
-def test_status_records_review_ready_but_not_open_gate(repo_root: Path) -> None:
-    status = _plain(repo_root / "STATUS.md")
-    assert "READY FOR SEPARATE EXACT-HEAD REVIEW" in status
-    assert "NOT OPEN" in status
-    assert "Global repository completeness remains INCOMPLETE" in status
+def test_status_md_is_byte_identical_to_the_bootstrap(repo_root: Path) -> None:
+    from oic.baseline import BOOTSTRAP_COMMIT
+
+    committed = subprocess.run(
+        ["git", "-C", str(repo_root), "cat-file", "blob", f"{BOOTSTRAP_COMMIT}:STATUS.md"],
+        capture_output=True,
+        check=True,
+    ).stdout
+    assert (repo_root / "STATUS.md").read_bytes() == committed
 
 
 def test_proposed_schemas_are_not_in_the_draft_directory(repo_root: Path) -> None:

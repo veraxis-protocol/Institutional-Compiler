@@ -144,7 +144,7 @@ def load_and_validate(root: Path) -> None:
         return value
 
     source_set = load("benchmarks/preflight/code-start-v0.1/SOURCE-SET.json")
-    receipts = load("benchmarks/preflight/code-start-v0.1/RECEIPTS.json")
+    receipts = load("benchmarks/preflight/code-start-v0.1/PROVENANCE.json")
     profile = load("docs/contracts/kernel-profiles/ztl-v0.1.json")
     veip = load("docs/contracts/VEIP-CODE-START-BOUNDARY-v0.1.json")
     gate_text = (root / "docs/gates/OIC-SEMANTIC-CODE-START-GATE-CLOSURE-v0.1.md").read_text(

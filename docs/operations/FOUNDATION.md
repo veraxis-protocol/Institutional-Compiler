@@ -169,15 +169,16 @@ an unknown has nowhere to collapse into a grounded false (invariant I-03).
 
 **`oic verify-manifest --all` exits `3`. This is correct, not a bug.**
 
-`benchmarks/preflight/SOURCE_MANIFEST.csv` records CA-3 and three explicitly synthetic,
-fictional code-start companions. The global manifest remains INCOMPLETE because the
-records are recorded but not verified by the global verifier. It reports:
+`benchmarks/preflight/SOURCE_MANIFEST.csv` currently contains only its header row. There
+are zero corpus source records. The verifier reports:
 
 ```
 benchmarks/preflight/SOURCE_MANIFEST.csv  [source-manifest]
-  4 entries  (RECORDED_NOT_VERIFIED=4)
-  note: 4 corpus source row(s) recorded
+  0 entries
+  note: 0 corpus source row(s) recorded
   note: origin URLs are recorded only; this verifier never fetches them
+  note: preflight corpus manifest contains only its header: corpus provenance is NOT
+        complete and this repository is not corpus-ready
   RESULT: INCOMPLETE
 ```
 
@@ -265,13 +266,10 @@ enforcement artifact (none exists to produce).
 ## 8. Current limitations
 
 - **This is not a compiler.** No semantic implementation exists. See `LIMITATIONS.md`.
-- **The semantic code-start gate is READY FOR SEPARATE EXACT-HEAD REVIEW / NOT OPEN.**
-  Semantic implementation remains prohibited.
-- **Global preflight corpus provenance remains INCOMPLETE.** The bounded code-start set is
-  recorded, but broader Canada/corpus clearance remains unchanged.
-- **ZTL is admitted only as an exact bounded input profile; VEIP has a non-executable
-  boundary record.** Neither runtime is imported or configured; no adapter, container, or
-  call exists (ADR-009, ADR-010).
+- **The semantic implementation gate is BLOCKED** and nothing here opens it.
+- **Preflight corpus provenance is OPEN.** `SOURCE_MANIFEST.csv` has no rows.
+- **ZTL and VEIP are PROVISIONAL / NOT CONFIGURED.** Their interfaces are unfrozen
+  (ADR-009, ADR-010) and no adapter, container, or call exists.
 - **Docker Compose is validated by CI, not locally here.** The `compose-validation` job
   resolves the configuration, pulls every digest-pinned image, starts all three services,
   waits for their healthchecks, and tears the stack down. Docker is unavailable in the
