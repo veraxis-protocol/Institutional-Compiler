@@ -188,7 +188,7 @@ def test_polyform_noncommercial_license_is_declared(repo_root: Path) -> None:
     assert license_text.startswith("# PolyForm Noncommercial License 1.0.0\n")
     assert "https://polyformproject.org/licenses/noncommercial/1.0.0" in license_text
     pyproject = (repo_root / "pyproject.toml").read_text(encoding="utf-8")
-    assert "\nlicense =" not in pyproject
+    assert '\nlicense = "PolyForm-Noncommercial-1.0.0"' in pyproject
     assert "License ::" not in pyproject
     assert 'license-files = ["LICENSE"]' in pyproject
 

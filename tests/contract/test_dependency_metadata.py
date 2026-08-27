@@ -211,7 +211,7 @@ def test_package_declares_polyform_license_file(
 ) -> None:
     project = pyproject["project"]
     assert isinstance(project, dict)
-    assert "license" not in project
+    assert project["license"] == "PolyForm-Noncommercial-1.0.0"
     assert project["license-files"] == ["LICENSE"]
     license_text = (repo_root / "LICENSE").read_text(encoding="utf-8")
     assert license_text.startswith("# PolyForm Noncommercial License 1.0.0\n")
