@@ -277,8 +277,9 @@ enforcement artifact (none exists to produce).
   provides the executable evidence.
 - **The credential scan is a coarse tripwire.** It does not scan git history, encoded
   values, or binaries. Passing it is not evidence that the repository contains no secrets.
-- **No license-compatibility determination has been made.** The repository carries no
-  license; licensing is pending counsel (`OWNERS.md`).
+- **No third-party license-compatibility determination has been made.** The repository
+  is licensed under PolyForm Noncommercial License 1.0.0; dependency and corpus-source
+  rights remain separately bounded and unadjudicated.
 - **Verification means byte integrity only.** A digest match proves two byte sequences are
   identical. It establishes no source authority, institutional validity, or semantic
   equivalence.

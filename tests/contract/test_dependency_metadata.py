@@ -206,11 +206,15 @@ def test_no_forbidden_dependency_is_declared_or_locked(repo_root: Path) -> None:
         assert overlap == [], f"{lockfile} locks forbidden dependencies: {overlap}"
 
 
-def test_package_declares_no_license(repo_root: Path, pyproject: dict[str, object]) -> None:
+def test_package_declares_polyform_license_file(
+    repo_root: Path, pyproject: dict[str, object]
+) -> None:
     project = pyproject["project"]
     assert isinstance(project, dict)
-    assert "license" not in project
-    assert "license-files" not in project
+    assert project["license"] == "PolyForm-Noncommercial-1.0.0"
+    assert project["license-files"] == ["LICENSE"]
+    license_text = (repo_root / "LICENSE").read_text(encoding="utf-8")
+    assert license_text.startswith("# PolyForm Noncommercial License 1.0.0\n")
     classifiers = project.get("classifiers", [])
     assert isinstance(classifiers, list)
     assert not any("License" in str(item) for item in classifiers)
