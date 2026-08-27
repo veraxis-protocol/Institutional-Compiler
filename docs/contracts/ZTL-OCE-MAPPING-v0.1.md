@@ -213,4 +213,5 @@ Proposed by the OIC side under OIC-WO-002. Requires:
 - **Arkadiy Miteiko / Veraxis** — final design authority.
 
 No ZTL call was made to produce this document; the measured rows cite fixtures published
-by the ZTL side. No adapter exists. The semantic implementation gate remains **BLOCKED**.
+by the ZTL side. No adapter exists. The semantic code-start gate remains **NOT OPEN**
+pending separate exact-head review.

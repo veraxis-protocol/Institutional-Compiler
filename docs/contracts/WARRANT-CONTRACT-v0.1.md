@@ -550,15 +550,15 @@ the first VEIP artifact.
 
 ZTL must not create a VEIP lifecycle record. VEIP must not reinterpret the ZTL formula.
 
-## 13a. Evidence dependency on PR #18
+## 13a. Admitted bounded ZTL evidence
 
-**PR #16 must not merge before PR #18.**
-
-Every `MEASURED` label in the canonical mapping, and every field in
-[`kernel-profiles/ztl-v0.1.json`](kernel-profiles/ztl-v0.1.json), references evidence that
-is still in **draft** PR #18 and is not yet on `main`. Merging this first would leave the
-contract citing a branch that could still change or be abandoned — the mapping would claim
-measurement it could not point at.
+The evidence formerly carried through PR #18 is checked in on `main`. Owner decision
+OIC-OWNER-DECISION-003 admits the exact `ztl-v0.1` profile version `0.1.0`, signed tag
+`veraxis-ztl-input-v0.2-signed`, commit
+`56e1ff0510c62b04dbd85bbe08b7a6deacbf276b`, and fixture-index SHA-256
+`ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145` for bounded
+semantic code start only. Tier-1 reproduction remains **NOT ESTABLISHED** and is deferred
+to the experimental-release boundary. No ZTL runtime import or execution is admitted.
 
 ### Pin correction
 
@@ -577,29 +577,20 @@ dependency pin.
 `interface-freeze-v0.1` is **not edited**. It remains immutable historical evidence with a
 documented lineage hole — the commit it cited predated `ztljudge.judge`, so no fixture
 claiming reproduction against it under that entrypoint was actually recomputable at that
-pin. This correction updates the **proposed** `ztl-v0.1` profile's evidence pin only.
-`kernel_profile_id` remains `ztl-v0.1`; no admitted v0.2 semantic profile is created.
+pin. This correction updated the `ztl-v0.1` profile's evidence pin only.
+`kernel_profile_id` remains `ztl-v0.1`; no v0.2 semantic profile is created.
 
 The new commit's fixture set additionally reproduces `EARNED` + non-empty `unverified` as a
 **pinned, reachable** fixture (`earned-hereditary-nonempty-unverified.json`), rather than
 leaving it as census-only corroboration. That question from the prior revision is therefore
 resolved by the pin correction itself, not left open.
 
-### Remaining merge-order steps
-
-Because the current evidence is PR #18's **draft** head rather than its merged state, this
-PR still must, once PR #18 merges:
-
-1. rebase onto the merged `main`;
-2. re-verify **every** `MEASURED` authority label against the checked-in evidence, in case
-   anything moved between the current evidence head and the merge;
-3. re-point the census and fixture references at their merged paths if either changed.
-
 ## 14. Standing
 
-Proposed under OIC-WO-002. Not admitted. No ZTL or VEIP code exists, is imported, or is
+The contract remains proposed and unimplemented; only the exact ZTL input profile is
+owner-admitted for bounded code start. No ZTL or VEIP code exists, is imported, or is
 called. No policy document is parsed, no Institutional IR is constructed, no Open Control
 Envelope is generated, no Rego is emitted, and OPA is not invoked.
 
-`STATUS.md` is unchanged. `schemas/draft/` is unchanged. **No semantic implementation was
-introduced. The semantic implementation gate remains BLOCKED.**
+`schemas/draft/` is unchanged. **No semantic implementation was introduced. The semantic
+code-start gate is READY FOR SEPARATE EXACT-HEAD REVIEW and NOT OPEN.**

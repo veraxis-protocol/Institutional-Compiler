@@ -1,0 +1,46 @@
+{
+  "scope": "SEMANTIC_CODE_START_PREREQUISITES_ONLY",
+  "global_manifest_status": "INCOMPLETE",
+  "sources": [
+    {
+      "source_id": "CA-3",
+      "path": "benchmarks/corpus/canada/freeze-v0.1/sources/CA-3.xml",
+      "sha256": "6e89ad25847944ca2bd72bcbf02ec3d2942a234d373b6c10db44307e0fbdf2c3",
+      "origin_classification": "REAL_PUBLIC_CANADIAN_SOURCE_UNOFFICIAL_COPY",
+      "benchmark_authority": "BOUNDED_TEST_INPUT_ONLY",
+      "effective_state": "NOT_ESTABLISHED_NO_DATE_INVENTED",
+      "rights_basis": "Reproduction of Federal Law Order (SI/97-5), subject to due diligence and no representation as an official version",
+      "rights_limitations": "Unofficial copy; third-party material, insignia, personal-information, and broader corpus clearance remain source-specific and unchanged",
+      "receipt": "benchmarks/corpus/canada/freeze-v0.1/receipts/CA-3.receipt.json"
+    },
+    {
+      "source_id": "SYN-NS-GOV-1",
+      "path": "benchmarks/preflight/code-start-v0.1/sources/SYNTHETIC-NORTHSTAR-GOVERNANCE-v1.txt",
+      "sha256": "b882459931ddf06fb647e6885c1ced368b4a5f45b6441df618484a30473a2a24",
+      "origin_classification": "SYNTHETIC_FICTIONAL",
+      "benchmark_authority": "SYNTHETIC_BENCHMARK_ONLY",
+      "issuer": "Veraxis synthetic fixture generator",
+      "effective_state": "SYNTHETIC_CURRENT"
+    },
+    {
+      "source_id": "SYN-NS-PROC-1",
+      "path": "benchmarks/preflight/code-start-v0.1/sources/SYNTHETIC-NORTHSTAR-PROCEDURE-v1.txt",
+      "sha256": "cfb578274460cc17492f4b25a4db6893ce87a527e1207fe6a52b6384125ec073",
+      "origin_classification": "SYNTHETIC_FICTIONAL",
+      "benchmark_authority": "SYNTHETIC_BENCHMARK_ONLY",
+      "issuer": "Veraxis synthetic fixture generator",
+      "effective_state": "SYNTHETIC_SUPERSEDED",
+      "superseded_by": "SYN-NS-AMEND-2"
+    },
+    {
+      "source_id": "SYN-NS-AMEND-2",
+      "path": "benchmarks/preflight/code-start-v0.1/sources/SYNTHETIC-NORTHSTAR-AMENDMENT-v2.txt",
+      "sha256": "8e197bc9e01554853163dfb5f84ad807893f678b26673737c8a72ddf0c8daf47",
+      "origin_classification": "SYNTHETIC_FICTIONAL",
+      "benchmark_authority": "SYNTHETIC_BENCHMARK_ONLY",
+      "issuer": "Veraxis synthetic fixture generator",
+      "effective_state": "SYNTHETIC_CURRENT",
+      "supersedes": "SYN-NS-PROC-1"
+    }
+  ]
+}

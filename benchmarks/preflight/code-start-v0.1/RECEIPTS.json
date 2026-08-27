@@ -1,0 +1,8 @@
+{
+  "receipts": [
+    {"source_id": "CA-3", "sha256": "6e89ad25847944ca2bd72bcbf02ec3d2942a234d373b6c10db44307e0fbdf2c3", "provenance": "OIC-CA-FREEZE-CA-3-v0.1"},
+    {"source_id": "SYN-NS-GOV-1", "sha256": "b882459931ddf06fb647e6885c1ced368b4a5f45b6441df618484a30473a2a24", "provenance": "DETERMINISTIC_REPOSITORY_GENERATION"},
+    {"source_id": "SYN-NS-PROC-1", "sha256": "cfb578274460cc17492f4b25a4db6893ce87a527e1207fe6a52b6384125ec073", "provenance": "DETERMINISTIC_REPOSITORY_GENERATION"},
+    {"source_id": "SYN-NS-AMEND-2", "sha256": "8e197bc9e01554853163dfb5f84ad807893f678b26673737c8a72ddf0c8daf47", "provenance": "DETERMINISTIC_REPOSITORY_GENERATION"}
+  ]
+}

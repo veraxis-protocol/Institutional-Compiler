@@ -1,0 +1,13 @@
+{
+  "status": "NON_EXECUTABLE_BOUNDARY_RECORD",
+  "version": "0.1.0",
+  "sequence": ["ActionProposal", "OIC exact proposal", "RuntimeDecision", "evidence handed downstream toward VEIP"],
+  "executable_runtime_integration": false,
+  "oic_has_veip_lifecycle_authority": false,
+  "veip_reinterprets_ztl": false,
+  "oic_self_authorizes_runtime_execution": false,
+  "missing_lifecycle_integration": "FAIL_CLOSED",
+  "runtime_adapter_authorized": false,
+  "lifecycle_execution_authorized": false,
+  "runtime_import_authorized": false
+}

@@ -1,0 +1,29 @@
+SYNTHETIC — FICTIONAL TEST/BENCHMARK AUTHORITY ONLY
+Document: Northstar Test Institution Governance Charter
+Version: 1.0.0
+Created: 2026-08-27T00:00:00Z
+Effective state: SYNTHETIC_CURRENT
+Confidentiality: PUBLIC_SYNTHETIC
+
+Definitions: Requester means a fictional test actor. Approver means a fictional
+test actor listed in the matrix. Evidence means a deterministic record bound to
+the proposed action.
+
+Approval and delegation matrix:
+- TEST_PURCHASE_LOW requires Approver-A.
+- TEST_PURCHASE_HIGH requires Approver-A and Approver-B.
+- Approver-A may delegate TEST_PURCHASE_LOW to Delegate-A. No other delegation
+  is recognized.
+
+Evidence requirement: every proposal carries its source identifier, amount,
+requester identifier, and approval records.
+
+Exception: TEST_EMERGENCY may omit Approver-B only when an emergency record and
+Approver-A approval are present.
+
+Discretionary clause: Approver-A may refer any proposal for human review.
+Referral establishes no approval.
+
+This document is fictional. It creates no legal, governmental, institutional,
+Canadian, or other real-world authority. It is limited to deterministic tests
+and benchmarks.

@@ -1,0 +1,16 @@
+SYNTHETIC — FICTIONAL TEST/BENCHMARK AUTHORITY ONLY
+Document: Northstar Test Institution Operating Procedure Amendment
+Version: 2.0.0
+Created: 2026-08-27T00:00:00Z
+Effective state: SYNTHETIC_CURRENT
+Confidentiality: PUBLIC_SYNTHETIC
+
+This amendment supersedes SYNTHETIC-NORTHSTAR-PROCEDURE-v1 in full.
+
+Current procedure: TEST_PURCHASE_HIGH requires both Approver-A and Approver-B,
+consistent with the Governance Charter. A stale procedure must be refused as
+current evidence.
+
+This document is fictional. It creates no legal, governmental, institutional,
+Canadian, or other real-world authority. It is limited to deterministic tests
+and benchmarks.

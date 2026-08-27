@@ -1,0 +1,15 @@
+SYNTHETIC — FICTIONAL STALE TEST/BENCHMARK SOURCE
+Document: Northstar Test Institution Operating Procedure
+Version: 1.0.0
+Created: 2026-08-27T00:00:00Z
+Effective state: SYNTHETIC_SUPERSEDED
+Confidentiality: PUBLIC_SYNTHETIC
+
+Procedure: TEST_PURCHASE_HIGH requires only Approver-A.
+
+This deliberately conflicting procedure is superseded in full by
+SYNTHETIC-NORTHSTAR-AMENDMENT-v2. It must never be treated as current.
+
+This document is fictional. It creates no legal, governmental, institutional,
+Canadian, or other real-world authority. It is limited to deterministic tests
+and benchmarks.

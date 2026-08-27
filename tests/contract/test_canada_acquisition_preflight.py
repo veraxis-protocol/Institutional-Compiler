@@ -33,10 +33,10 @@ OBSERVATIONS_RELPATH = "benchmarks/preflight/canada/PREFLIGHT-HTTP-OBSERVATIONS-
 RESOLUTION_RELPATH = "benchmarks/preflight/canada/OFFICIAL-SOURCE-RESOLUTION-v0.1.md"
 CLOSURE_SUMMARY_RELPATH = "benchmarks/preflight/canada/PREFLIGHT-CLOSURE-SUMMARY-v0.1.json"
 
-EXPECTED_STATUS_SHA256 = "4a6894ca72ae8d2efcf48b3d25f8aca3bc1e2e86b6aa6aa5b38af31a52c7fde8"
+EXPECTED_STATUS_SHA256 = "2cc1600a91a0966c42c42d5c9bcd37cf5a3e3638bf324a97e67f53db3c2a38e2"
 # Repinned when the Canada rights freeze added the CA-3 row. The preflight PR left the
 # manifest header-only at c3ea6162cbeb9a5814f543ec23a02fecacad72053d90258162687ad3f48a2db2.
-EXPECTED_SOURCE_MANIFEST_SHA256 = "7fc66adf8940758702b0b469c5dbfcf1c4b5ee2241f217794da7b9c10305e49e"
+EXPECTED_SOURCE_MANIFEST_SHA256 = "c175d96d3f211feb77bf9d020a17a3e2f01cb0f8d6da9946c8e8526d98c66a1b"
 EXPECTED_SCHEMA_SHA256 = {
     "admission-record.schema.json": (
         "d040c4c86794268e26d9dd833ecd3a40347b724fbd73fb3accb3df355065f748"
