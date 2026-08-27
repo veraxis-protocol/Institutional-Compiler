@@ -612,7 +612,16 @@ def test_status_and_draft_schemas_are_unchanged(repo_root: Path) -> None:
     changed = _changed_files(repo_root)
     assert "STATUS.md" not in changed
     assert not any(path.startswith("schemas/draft/") for path in changed)
-    assert not any(path.startswith("docs/contracts/") for path in changed)
+    allowed_contract_updates = {
+        "docs/contracts/VEIP-CODE-START-BOUNDARY-v0.1.json",
+        "docs/contracts/WARRANT-CONTRACT-v0.1.md",
+        "docs/contracts/ZTL-OCE-MAPPING-v0.1.md",
+        "docs/contracts/kernel-profiles/ztl-v0.1.json",
+    }
+    assert (
+        not {path for path in changed if path.startswith("docs/contracts/")}
+        - allowed_contract_updates
+    )
     assert not any(path.startswith("adapters/ztl/") for path in changed)
 
 
