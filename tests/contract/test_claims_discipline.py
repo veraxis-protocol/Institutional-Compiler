@@ -115,13 +115,13 @@ def test_readiness_claims_appear_only_when_denied(documents: dict[str, str], phr
     assert offenders == [], f"un-negated readiness claim: {offenders}"
 
 
-def test_operator_guide_states_the_semantic_gate_is_blocked(documents: dict[str, str]) -> None:
+def test_operator_guide_bounds_the_open_semantic_gate(documents: dict[str, str]) -> None:
     text = documents["docs/operations/FOUNDATION.md"]
     # Markdown emphasis may wrap either the word or the whole sentence, so match the
     # claim with emphasis markers stripped.
     plain = text.replace("*", "")
-    assert "semantic implementation gate is blocked" in plain
-    assert "no semantic implementation exists" in plain
+    assert "semantic code-start gate is owner-opened" in plain
+    assert "institutional admission remains blocked" in plain
 
 
 def test_operator_guide_states_ztl_and_veip_are_provisional(documents: dict[str, str]) -> None:
@@ -205,10 +205,13 @@ def test_claims_bearing_documents_are_unchanged_by_this_work_order(repo_root: Pa
 
     from oic.baseline import BOOTSTRAP_COMMIT
 
-    for relpath in ("CLAIMS.md", "LIMITATIONS.md", "STATUS.md", "OWNERS.md"):
+    for relpath in ("CLAIMS.md", "LIMITATIONS.md", "OWNERS.md"):
         committed = subprocess.run(
             ["git", "-C", str(repo_root), "cat-file", "blob", f"{BOOTSTRAP_COMMIT}:{relpath}"],
             capture_output=True,
             check=True,
         ).stdout
         assert (repo_root / relpath).read_bytes() == committed, relpath
+    status = (repo_root / "STATUS.md").read_text("utf-8")
+    assert "OWNER-OPENED AT" in status
+    assert "Global manifest completeness remains `INCOMPLETE`" in status

@@ -1,8 +1,8 @@
 # Agent operating boundary
 
-This repository is a non-semantic infrastructure foundation. The semantic OIC
-code-start gate remains **BLOCKED** by `STATUS.md`. No agent may implement or
-claim document interpretation, candidate extraction, institutional admission,
+This repository includes an owner-opened, bounded semantic candidate-extraction
+slice defined by `docs/decisions/OIC-OWNER-DECISION-004.md`. No agent may claim
+general document interpretation, institutional admission,
 Open Control Envelope generation, Rego compilation, or runtime semantic
 decisions under this work order.
 
@@ -22,7 +22,9 @@ bash scripts/generate_sbom.sh
 bash scripts/wheel_smoke_test.sh
 ```
 
-Implemented CLI commands are limited to `oic validate-schema`,
+The only authorized semantic production path is
+`src/oic/candidate_extraction.py`, limited to the three synthetic Northstar
+sources. Implemented CLI commands are limited to `oic validate-schema`,
 `oic verify-bootstrap`, `oic verify-manifest`, and `oic doctor`. They verify
 infrastructure contracts only. Do not invent semantic commands, hosted APIs,
 gateways, remote context services, or MCP servers.

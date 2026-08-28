@@ -41,6 +41,7 @@ def _evidence(repo_root: Path) -> dict[str, Any]:
         "gate_text": (
             repo_root / "docs/gates/OIC-SEMANTIC-CODE-START-GATE-CLOSURE-v0.1.md"
         ).read_text(encoding="utf-8"),
+        "gate_record": load("docs/gates/OIC-SEMANTIC-CODE-START-GATE-OPEN-v0.1.json"),
         "source_bytes": {
             item["source_id"]: (repo_root / item["path"]).read_bytes()
             for item in source_set["sources"]
@@ -145,6 +146,7 @@ def _isolated_gate_tree(repo_root: Path, tmp_path: Path) -> Path:
         "docs/contracts/WARRANT-CONTRACT-v0.1.md",
         "adr/ADR-013.md",
         "docs/gates/OIC-SEMANTIC-CODE-START-GATE-CLOSURE-v0.1.md",
+        "docs/gates/OIC-SEMANTIC-CODE-START-GATE-OPEN-v0.1.json",
     )
     for relpath in required:
         source = repo_root / relpath
@@ -155,6 +157,8 @@ def _isolated_gate_tree(repo_root: Path, tmp_path: Path) -> Path:
         else:
             shutil.copy2(source, target)
     subprocess.run(["git", "init", "-q", str(root)], check=True)
+    for cache in root.rglob("__pycache__"):
+        shutil.rmtree(cache)
     subprocess.run(["git", "-C", str(root), "add", "."], check=True)
     return root
 
@@ -162,6 +166,17 @@ def _isolated_gate_tree(repo_root: Path, tmp_path: Path) -> Path:
 def test_t1_production_detector_accepts_exact_baseline(repo_root: Path) -> None:
     module = _module(repo_root)
     assert module.discover_unadmitted_production_paths(repo_root) == []
+
+
+def test_owner_gate_requires_exact_authorized_base(repo_root: Path) -> None:
+    _reject(repo_root, lambda e: e["gate_record"].__setitem__("owner_decision_base_sha", "0" * 40))
+
+
+def test_owner_gate_refuses_allowlist_self_extension(repo_root: Path) -> None:
+    _reject(
+        repo_root,
+        lambda e: e["gate_record"]["authorized_production_paths"].append("src/oic/helper.py"),
+    )
 
 
 @pytest.mark.parametrize(
@@ -179,7 +194,7 @@ def test_t2_t3_t4_detector_refuses_any_new_tracked_path(
     subprocess.run(["git", "-C", str(root), "add", relpath], check=True)
     detected = module.discover_unadmitted_production_paths(root)
     assert relpath in detected
-    with pytest.raises(module.GateEvidenceError, match="semantic implementation appeared"):
+    with pytest.raises(module.GateEvidenceError, match="production path exceeds"):
         module.load_and_validate(root)
 
 
@@ -193,7 +208,7 @@ def test_t5_detector_refuses_rename_or_substitution(repo_root: Path, tmp_path: P
     detected = module.discover_unadmitted_production_paths(root)
     assert "src/oic/replacement.py" in detected
     assert "MISSING:src/oic/paths.py" in detected
-    with pytest.raises(module.GateEvidenceError, match="semantic implementation appeared"):
+    with pytest.raises(module.GateEvidenceError, match="production path exceeds"):
         module.load_and_validate(root)
 
 
@@ -205,7 +220,7 @@ def test_t6_load_and_validate_invokes_discovery_without_manual_parameter(
     added = root / "src/oic/helper.py"
     added.write_text("# innocuous name, unauthorized path\n", encoding="utf-8")
     subprocess.run(["git", "-C", str(root), "add", "src/oic/helper.py"], check=True)
-    with pytest.raises(module.GateEvidenceError, match="semantic implementation appeared"):
+    with pytest.raises(module.GateEvidenceError, match="production path exceeds"):
         module.load_and_validate(root)
 
 
