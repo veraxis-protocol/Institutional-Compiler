@@ -587,19 +587,19 @@ def test_semantic_rules_and_validator_agree_on_rule_ids(repo_root: Path) -> None
     )
 
 
-def test_pr18_dependency_is_recorded(repo_root: Path) -> None:
+def test_ztl_bounded_admission_is_recorded(repo_root: Path) -> None:
     profile = _load(repo_root, PROFILE)
     notice = profile["evidence_dependency_notice"]
-    assert "PR #16 must not merge before PR #18" in notice["merge_order"]
-    assert "draft" in notice["statement"].lower()
-    assert any("index_sha256" in step for step in notice["on_pr18_merge"])
-    assert any("MEASURED" in step for step in notice["on_pr18_merge"])
+    assert notice["status"] == "ADMITTED_BOUNDED_CODE_START"
+    assert "checked in on main" in notice["current_pin"]
+    assert "No runtime import or execution" in notice["statement"]
+    assert profile["tier_1_reproduction"].startswith("NOT ESTABLISHED")
 
     contract = _active(repo_root, CONTRACT)
-    assert "PR #16 must not merge before PR #18" in contract
+    assert "Admitted bounded ZTL evidence" in contract
     assert "interface-freeze-v0.2" in contract
     adr = _active(repo_root, ADR)
-    assert "PR #16 must not merge before PR #18" in adr
+    assert "admits the exact profile/tag/commit/fixture-index tuple" in adr
 
 
 def test_pinned_fixture_index_is_the_corrected_v02_pin(repo_root: Path) -> None:

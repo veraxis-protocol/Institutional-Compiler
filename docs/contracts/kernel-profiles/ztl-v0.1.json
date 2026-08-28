@@ -1,5 +1,5 @@
 {
-  "$comment": "PROPOSED, NOT ADMITTED. A frozen description of one logic kernel's interface and vocabulary. Dispositions, grades, and digests are NOT portable between kernels, so every WarrantArtifact declares the kernel_profile_id it was produced under and OIC never compares artifacts across profiles. Nothing in this file imports, executes, or calls ZTL.",
+  "$comment": "OWNER-ADMITTED FOR BOUNDED SEMANTIC CODE START ONLY. A frozen description of one logic kernel's interface and vocabulary. Dispositions, grades, and digests are NOT portable between kernels, so every WarrantArtifact declares the kernel_profile_id it was produced under and OIC never compares artifacts across profiles. Nothing in this file imports, executes, or calls ZTL.",
   "canonicalization_profile_id": "ztl-jcs-float-free-sha384-v0.1",
   "commit": "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b",
   "conformance_fixture_set": {
@@ -13,7 +13,7 @@
     "index_sha256": "ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145",
     "location": "adapters/ztl/fixtures/interface-freeze-v0.2/",
     "not_reachable": 3,
-    "provenance": "Published by the ZTL side under ZTL-OIC-WO-002/OIC-WO-003, reproduced against the pinned v0.2 commit by its author (Tier 3). Independent Tier-1 reproduction remains OPEN.",
+    "provenance": "Published by the ZTL side under ZTL-OIC-WO-002/OIC-WO-003, reproduced against the pinned v0.2 commit by its author (Tier 3). Independent Tier-1 reproduction is NOT ESTABLISHED and is deferred to the experimental-release boundary.",
     "reachable": 13,
     "total": 16
   },
@@ -81,16 +81,9 @@
   ],
   "entrypoint": "ztljudge.judge",
   "evidence_dependency_notice": {
-    "current_pin": "interface-freeze-v0.2, index_sha256 ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145 (13 reachable, 3 not-reachable, 16 total), reproduced against the signed commit 56e1ff0510c62b04dbd85bbe08b7a6deacbf276b (veraxis-ztl-input-v0.2-signed). This is PR #18's current DRAFT evidence head, not its merged state.",
-    "merge_order": "PR #16 must not merge before PR #18.",
-    "on_pr18_merge": [
-      "PR #16 rebases onto the merged main.",
-      "Every MEASURED authority label in the canonical mapping is re-verified against the checked-in evidence, in case anything moved between the current evidence head and the merge.",
-      "conformance_fixture_set.location, counts and index_sha256 are re-pointed at the merged path if the evidence changed further before merge.",
-      "The census reference is re-pointed at its merged path."
-    ],
-    "statement": "Every field in this profile references evidence that is still in DRAFT pull request #18 and is NOT yet on main.",
-    "status": "BLOCKING for merge order"
+    "current_pin": "interface-freeze-v0.2, index_sha256 ffadd65352d69ffcf55787c6dc26339e51eaed76b4c2ae789f7c813625247145 (13 reachable, 3 not-reachable, 16 total), reproduced against signed commit 56e1ff0510c62b04dbd85bbe08b7a6deacbf276b (veraxis-ztl-input-v0.2-signed). Evidence is checked in on main and owner-admitted for bounded code start.",
+    "statement": "The exact profile, tag, commit, and fixture index are admitted only for bounded semantic code start. No runtime import or execution is admitted.",
+    "status": "ADMITTED_BOUNDED_CODE_START"
   },
   "formula_digest_algorithm": "sha384",
   "formula_hash_projection": {
@@ -218,7 +211,8 @@
     "name": "veraxis-ztl-input-v0.2-signed",
     "signs_commit": "56e1ff0510c62b04dbd85bbe08b7a6deacbf276b"
   },
-  "status": "PROPOSED - frozen interface description, not admitted",
+  "status": "ADMITTED FOR BOUNDED SEMANTIC CODE START ONLY",
+  "tier_1_reproduction": "NOT ESTABLISHED — DEFERRED TO EXPERIMENTAL RELEASE",
   "unsigned_tag": "veraxis-ztl-input-v0.1",
   "unverified_ground_semantics": {
     "EARNED": "informational - irrelevant to this conclusion because the result is hereditary",

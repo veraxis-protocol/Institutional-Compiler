@@ -1348,11 +1348,11 @@ def test_proposed_schemas_are_not_in_the_draft_directory(repo_root: Path) -> Non
     assert len(proposed) == 3
 
 
-def test_documents_state_the_gate_is_blocked(repo_root: Path) -> None:
+def test_documents_state_the_gate_is_not_open(repo_root: Path) -> None:
     for relpath in (CONTRACT_DOC, MAPPING_MD, ADR):
-        assert "semantic implementation gate remains BLOCKED" in _plain(repo_root / relpath), (
-            relpath
-        )
+        text = _plain(repo_root / relpath)
+        assert "semantic code-start gate" in text, relpath
+        assert "NOT OPEN" in text, relpath
 
 
 def test_documents_label_themselves_proposed(repo_root: Path) -> None:
