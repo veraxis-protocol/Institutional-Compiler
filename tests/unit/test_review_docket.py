@@ -42,7 +42,10 @@ def extract(provider: str, content: str) -> CandidateExtractionResult:
 
 
 def test_identical_candidate_sets_are_exposed_without_admission() -> None:
-    content = '{"candidates":[{"unit_type":"obligation","actor":"Treasurer","action":"approve"}]}'
+    content = (
+        '{"candidates":[{"unit_type":"obligation","actor":"Treasurer",'
+        '"action":"approval","object":"Payments"}]}'
+    )
     docket = build_review_docket([extract("p1", content), extract("p2", content)])
     assert docket.agreement_state is AgreementState.IDENTICAL
     assert docket.to_json()["institutional_admission"] is False
@@ -50,8 +53,14 @@ def test_identical_candidate_sets_are_exposed_without_admission() -> None:
 
 
 def test_divergent_candidate_sets_are_preserved_not_voted() -> None:
-    left = '{"candidates":[{"unit_type":"obligation","actor":"Treasurer","action":"approve"}]}'
-    right = '{"candidates":[{"unit_type":"permission","actor":"Treasurer","action":"approve"}]}'
+    left = (
+        '{"candidates":[{"unit_type":"obligation","actor":"Treasurer",'
+        '"action":"approval","object":"Payments"}]}'
+    )
+    right = (
+        '{"candidates":[{"unit_type":"permission","actor":"Treasurer",'
+        '"action":"approval","object":"Payments"}]}'
+    )
     docket = build_review_docket([extract("p1", left), extract("p2", right)])
     assert docket.agreement_state is AgreementState.DIVERGENT
     assert len(docket.candidates_by_id) == 2

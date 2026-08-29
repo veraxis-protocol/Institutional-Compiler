@@ -1,5 +1,25 @@
 """Bounded model-assisted extraction of candidate normative units.
 
+A candidate normative unit is **source-grounded candidate material**, not Institutional IR.
+The distinction is the whole point of this module. Identification and segmentation of what
+the source says happen here; normalization of what it institutionally means does not, and
+is not authorized to. Canonicalizing paraphrases, resolving ambiguity into institutional
+fact, and supplying participants the source leaves unstated all belong after admission.
+
+So the model is asked for two different kinds of thing, held to two different standards:
+
+* ``unit_type`` is a classification. It is an epistemically uncertain proposal about the
+  candidate's primary normative function, and OIC stamps every candidate ``uncertain``.
+* every textual role -- actor, action, object, target, conditions, exceptions,
+  evidence_requirements -- must be a verbatim span of the source fragment. That is checked
+  deterministically, by literal containment, and a value that is not in the source fails
+  the whole response closed. Nothing is stripped, repaired, or silently accepted.
+
+Requiring verbatim spans is what makes a deterministic grounding check honest. The
+alternative -- letting the model paraphrase and then trying to judge whether the paraphrase
+is supported -- needs a similarity engine or a second model to adjudicate, and both would
+put semantic authority back inside the candidate layer.
+
 This module deliberately stops before review, admission, Institutional IR construction,
 control-envelope generation, compilation, or runtime authorization.
 """
@@ -36,9 +56,25 @@ _UNIT_TYPES: tuple[str, ...] = (
 )
 _ALLOWED_UNIT_TYPES = frozenset(_UNIT_TYPES)
 _UNIT_TYPE_LIST = ", ".join(_UNIT_TYPES)
+#: Model-proposed semantic fields. ``target`` is the one role added by
+#: OIC-CANDIDATE-SEMANTICS-002: an explicitly stated recipient or destination had nowhere
+#: to go, so it was landing in ``object`` in some runs and vanishing in others.
 _MODEL_ALLOWED_KEYS = frozenset(
-    {"unit_type", "actor", "action", "object", "conditions", "exceptions", "evidence_requirements"}
+    {
+        "unit_type",
+        "actor",
+        "action",
+        "object",
+        "target",
+        "conditions",
+        "exceptions",
+        "evidence_requirements",
+    }
 )
+#: Textual roles. Every value here must be a verbatim span of the source fragment.
+#: ``unit_type`` is deliberately absent: it is a classification, not source text.
+_GROUNDED_SCALAR_KEYS = ("actor", "action", "object", "target")
+_GROUNDED_ARRAY_KEYS = ("conditions", "exceptions", "evidence_requirements")
 _MODEL_FORBIDDEN_AUTHORITY_KEYS = frozenset(
     {
         "unit_id",
@@ -59,15 +95,16 @@ _SOURCE_ANCHOR_ALLOWED_KEYS = frozenset(
 )
 _SHA256_PATTERN = re.compile(r"^sha256:[0-9a-f]{64}$")
 
-# Two separate things the worker has to be told, because conflating them suppresses
-# extraction: what a candidate *is*, and that the source's institutional standing is not
-# part of that question. Neither statement grants the model any authority; the paragraph
-# that withholds authority is unchanged in substance and is restated in the user prompt
-# and re-enforced by the parser, which is the only thing that actually binds.
+# The worker has to be told four separate things, because collapsing any two of them
+# breaks extraction in a different way: what a candidate *is*; that the source's
+# institutional standing is not part of that question; that every textual role is a
+# verbatim source span rather than a normalized restatement; and that it decides no
+# authority. Only the last of those is enforced by trust -- the span rule is checked
+# deterministically below, and the authority rule is enforced by the parser.
 _SYSTEM_PROMPT = f"""You are an extraction worker inside the Open Institutional Compiler.
 
-Your task is semantic identification only. Read the supplied source fragment and identify
-every span that literally expresses institutional normative content.
+Your task is source-grounded semantic identification only. Read the supplied source
+fragment and identify every span that literally expresses institutional normative content.
 
 A candidate normative unit is the literal source expression of any one of these:
 {_UNIT_TYPE_LIST}.
@@ -78,6 +115,21 @@ exists. Those questions belong to later stages and are decided elsewhere, not by
 Identify the candidate even when the standing of the source is unknown, draft, synthetic,
 hypothetical, or unverified.
 
+You are reporting what the fragment says, not what it institutionally means. Every textual
+field you return must be copied verbatim from the fragment: an exact, contiguous run of
+characters that appears in it. Do not paraphrase, re-inflect, pluralize, expand an
+abbreviation, or tidy grammar. A field whose text is not a literal span of the fragment
+fails the whole response.
+
+Never supply a participant the fragment does not name. If the fragment is passive or
+otherwise names nobody who acts, actor is null. Do not infer an actor from the passive
+voice, and do not invent a recipient, approver, owner, payee, department, office, role, or
+authority that the fragment does not state. A missing participant is null, never a guess.
+
+Never drop material qualifying language. Explicit if, when, where, unless, provided that
+and similar clauses, monetary and quantitative thresholds, and stated time limits are part
+of what the fragment says and must appear in the candidate.
+
 Your output is candidate material only and has no institutional authority. Do not decide
 admission, authority, authorization, enforceability, legal effect, runtime outcome, allow
 or deny, or any confidence standing for admission. Do not invent source anchors. Return
@@ -86,6 +138,15 @@ only the requested JSON object."""
 
 class CandidateBoundaryError(ModelProviderError):
     """Raised when provider output attempts to cross the candidate-only boundary."""
+
+
+class CandidateGroundingError(CandidateBoundaryError):
+    """Raised when a model-proposed textual role is not a verbatim span of the source.
+
+    A subclass rather than a separate error so every existing fail-closed handler keeps
+    catching it, while a receipt can still tell an ungrounded value apart from a malformed
+    envelope or an attempted authority claim.
+    """
 
 
 @dataclass(frozen=True, slots=True)
@@ -100,6 +161,56 @@ class CandidateExtractionResult:
     raw_content_sha256: str
 
 
+def _grounding_key(value: str) -> str:
+    """Casefolded, whitespace-collapsed form used only for comparison.
+
+    Neither side of the comparison is stored in this form and no candidate value is
+    rewritten by it. Collapsing runs of whitespace and ignoring case cannot let an absent
+    phrase pass -- text the fragment never contains is still absent under both -- so this
+    only removes false rejections over line wrapping and capitalization.
+    """
+    return " ".join(value.split()).casefold()
+
+
+def _require_source_span(value: str, *, key: str, index: int, haystack: str) -> None:
+    if not value.strip():
+        raise CandidateGroundingError(
+            f"candidate {index} field {key} is blank; use null or an empty array instead"
+        )
+    if _grounding_key(value) not in haystack:
+        raise CandidateGroundingError(
+            f"candidate {index} field {key} is not a verbatim span of the source fragment: "
+            f"{value!r}"
+        )
+
+
+def check_source_grounding(item: JsonObject, *, source_text: str, index: int = 0) -> None:
+    """Fail closed unless every textual role is a literal span of the source fragment.
+
+    Deliberately literal containment and nothing more: no similarity model, no second model
+    adjudicating the first, no stemming, no synonym table. A phrase the fragment does not
+    contain -- an inferred approver, an invented payee, a department nobody named -- has no
+    way through. The cost is that a legitimate paraphrase is refused too, which is why the
+    contract requires verbatim spans rather than paraphrase.
+
+    Nothing is repaired. An ungrounded value fails the response it arrived in.
+    """
+    haystack = _grounding_key(source_text)
+    for key in _GROUNDED_SCALAR_KEYS:
+        value = item.get(key)
+        if isinstance(value, str):
+            _require_source_span(value, key=key, index=index, haystack=haystack)
+    for key in _GROUNDED_ARRAY_KEYS:
+        entries = item.get(key, [])
+        if not isinstance(entries, list):
+            continue
+        for position, entry in enumerate(entries):
+            if isinstance(entry, str):
+                _require_source_span(
+                    entry, key=f"{key}[{position}]", index=index, haystack=haystack
+                )
+
+
 def propose_candidate_units(
     *, source_text: str, source_anchor: JsonObject, provider: ModelProvider
 ) -> CandidateExtractionResult:
@@ -110,29 +221,58 @@ def propose_candidate_units(
     request = ModelRequest(
         system_prompt=_SYSTEM_PROMPT,
         user_prompt=(
-            "Extract zero or more candidate normative units from this exact source fragment.\n"
+            "Extract zero or more candidate normative units from this exact source "
+            "fragment.\n"
             "Identifying candidate material is not a finding that the source is "
             "authoritative, admitted, enforceable, legally effective, approved, or "
             "institutionally controlling. Do not withhold a candidate on those grounds.\n\n"
-            "Return exactly one JSON object with exactly one top-level key named candidates.\n"
+            "Return exactly one JSON object with exactly one top-level key named "
+            "candidates.\n"
             "Use exactly this envelope:\n"
             '{"candidates":[{"unit_type":"...","actor":null,"action":null,'
-            '"object":null,"conditions":[],"exceptions":[],'
+            '"object":null,"target":null,"conditions":[],"exceptions":[],'
             '"evidence_requirements":[]}]}\n'
             'For zero candidates, return exactly {"candidates":[]}.\n'
-            "Never return a candidate directly at the JSON root. Never add another root key.\n\n"
+            "Never return a candidate directly at the JSON root. Never add another root "
+            "key.\n\n"
             "For each candidate use only these keys: unit_type, actor, action, object, "
-            "conditions, exceptions, evidence_requirements.\n"
-            "Restate only what the fragment literally says:\n"
-            f"- unit_type: the closest of {_UNIT_TYPE_LIST}.\n"
-            "- actor: whoever the fragment names as acting or bearing the duty.\n"
-            "- action: the act the fragment requires, permits, forbids, or confers.\n"
-            "- object: what that act applies to.\n"
-            "- conditions: circumstances the fragment states must hold, one per entry.\n"
-            "- exceptions: carve-outs the fragment states, one per entry.\n"
-            "- evidence_requirements: records or proof the fragment states are required.\n"
-            "Use null for an absent actor, action, or object and an empty array for an absent "
-            "list. Do not infer, complete, or supply anything the fragment does not say.\n"
+            "target, conditions, exceptions, evidence_requirements.\n\n"
+            "unit_type is your classification of the candidate's PRIMARY normative "
+            "function. It is the one field that is not copied text, and it is understood "
+            "to be an uncertain proposal.\n"
+            f"Choose the closest of: {_UNIT_TYPE_LIST}.\n"
+            "Classify by what the fragment principally does. An explicit duty to retain, "
+            "produce or record proof is normally evidence_duty. An explicit recommendation "
+            "or encouragement is normally advisory, and remains candidate material even "
+            "though it compels nothing. An explicit referral of an unresolved matter "
+            "onward is normally escalation. An if, when, where, unless, quantitative or "
+            "temporal qualifier normally belongs in conditions and does not replace the "
+            "primary function it qualifies. These are guides, not a precedence table; "
+            "institutional language is often genuinely ambiguous, and a defensible reading "
+            "is what is being asked for.\n\n"
+            "EVERY OTHER FIELD MUST BE COPIED VERBATIM FROM THE FRAGMENT. Each value must "
+            "be an exact contiguous run of characters that appears in the fragment above. "
+            "Do not paraphrase, re-inflect, pluralize, expand abbreviations, or repair "
+            "grammar. A value that is not a literal span of the fragment fails the whole "
+            "response.\n"
+            "- actor: the span naming who acts or bears the duty. If the fragment names "
+            "nobody, use null. Never infer an actor from the passive voice and never "
+            "invent one.\n"
+            "- action: the span carrying the governed operative act. When a clause states "
+            "a trigger and a consequence, the operative act is the consequence, not the "
+            "trigger; the trigger belongs in conditions.\n"
+            "- object: the span naming what the act applies to.\n"
+            "- target: the span naming an explicitly stated recipient, destination, "
+            "beneficiary, or counterparty the act is directed toward. Use null unless the "
+            "fragment states one.\n"
+            "- conditions: spans stating circumstances, triggers, thresholds or time "
+            "limits that qualify the unit, one per entry.\n"
+            "- exceptions: spans stating carve-outs, one per entry.\n"
+            "- evidence_requirements: spans stating records, proof or retention that is "
+            "required.\n"
+            "Use null for an absent actor, action, object or target, and an empty array "
+            "for an absent list. Do not infer, complete, or supply anything the fragment "
+            "does not say.\n"
             "Do not emit unit_id, source_anchors, interpretation_state, epistemic_state, "
             "lifecycle_state, confidence, admission, authority, verdict, or allow.\n\n"
             f"SOURCE FRAGMENT:\n{source_text}"
@@ -144,8 +284,10 @@ def propose_candidate_units(
     response = provider.complete(request)
     payload = _parse_provider_json(response.content)
     normalized = tuple(
-        _normalize_candidate(item, source_anchor=source_anchor)
-        for item in _candidate_items(payload)
+        _normalize_candidate(
+            item, source_anchor=source_anchor, source_text=source_text, index=index
+        )
+        for index, item in enumerate(_candidate_items(payload))
     )
     return CandidateExtractionResult(
         candidates=normalized,
@@ -212,7 +354,9 @@ def _candidate_items(payload: JsonObject) -> tuple[JsonObject, ...]:
     return tuple(items)
 
 
-def _normalize_candidate(item: JsonObject, *, source_anchor: JsonObject) -> JsonObject:
+def _normalize_candidate(
+    item: JsonObject, *, source_anchor: JsonObject, source_text: str, index: int
+) -> JsonObject:
     forbidden = set(item) & _MODEL_FORBIDDEN_AUTHORITY_KEYS
     if forbidden:
         raise CandidateBoundaryError(
@@ -226,11 +370,15 @@ def _normalize_candidate(item: JsonObject, *, source_anchor: JsonObject) -> Json
     unit_type = item.get("unit_type")
     if not isinstance(unit_type, str) or unit_type not in _ALLOWED_UNIT_TYPES:
         raise CandidateBoundaryError(f"invalid candidate unit_type: {unit_type!r}")
+    # Grounding runs before anything is kept, so an ungrounded value can never reach a
+    # normalized candidate even transiently.
+    check_source_grounding(item, source_text=source_text, index=index)
     semantic: JsonObject = {
         "unit_type": unit_type,
         "actor": _nullable_string(item, "actor"),
         "action": _nullable_string(item, "action"),
         "object": _nullable_string(item, "object"),
+        "target": _nullable_string(item, "target"),
         "conditions": _string_array(item, "conditions"),
         "exceptions": _string_array(item, "exceptions"),
         "evidence_requirements": _string_array(item, "evidence_requirements"),

@@ -98,6 +98,7 @@ def candidate_json(**fields: object) -> str:
         "actor": None,
         "action": None,
         "object": None,
+        "target": None,
         "conditions": [],
         "exceptions": [],
         "evidence_requirements": [],
@@ -302,6 +303,7 @@ def test_projection_keeps_only_model_proposed_fields(harness: ModuleType) -> Non
         "actor": "CFO",
         "action": "approve",
         "object": "payment above $10,000",
+        "target": "the Treasury",
         "conditions": [],
         "exceptions": [],
         "evidence_requirements": [],
@@ -554,7 +556,9 @@ def test_unit_types_inside_the_preregistered_set_are_reported_as_such(
 def test_semantic_stability_distinguishes_two_different_decompositions(
     harness: ModuleType, tmp_path: Path
 ) -> None:
-    corpus = harness.load_corpus(write_corpus(harness, tmp_path, specimen_dict("T-1")))
+    corpus = harness.load_corpus(
+        write_corpus(harness, tmp_path, specimen_dict("T-1", text=THRESHOLD_SOURCE))
+    )
     provider = ScriptedProvider(
         candidate_json(unit_type="mandate", object="payment above $10,000"),
         candidate_json(unit_type="mandate", conditions=["payment above $10,000"]),
@@ -572,17 +576,20 @@ def test_semantic_stability_reports_identical_answers_as_stable(
 ) -> None:
     corpus = harness.load_corpus(write_corpus(harness, tmp_path, specimen_dict("T-1")))
     attempts = harness.run_corpus(
-        corpus, provider=ScriptedProvider(candidate_json(actor="CFO")), runs_per_specimen=3
+        corpus, provider=ScriptedProvider(candidate_json(actor="Treasurer")), runs_per_specimen=3
     )
     metric = harness.metric_semantic_stability(harness.group_by_specimen(attempts))
     assert metric["per_specimen"][0]["result"] == harness.REPEAT_STABLE
+
+
+THRESHOLD_SOURCE = "A payment above $10,000 requires approval, approve above $10,000."
 
 
 @pytest.mark.parametrize(
     ("fields", "expected_key"),
     [
         ({"object": "payment above $10,000"}, "THRESHOLD_IN_OBJECT"),
-        ({"conditions": ["amount above $10,000"]}, "THRESHOLD_IN_CONDITIONS"),
+        ({"conditions": ["above $10,000"]}, "THRESHOLD_IN_CONDITIONS"),
         (
             {"object": "payment above $10,000", "conditions": ["above $10,000"]},
             "THRESHOLD_IN_OBJECT_AND_CONDITIONS",
@@ -595,7 +602,11 @@ def test_threshold_placement_is_observed_wherever_it_lands(
     harness: ModuleType, tmp_path: Path, fields: dict[str, object], expected_key: str
 ) -> None:
     corpus = harness.load_corpus(
-        write_corpus(harness, tmp_path, specimen_dict("T-1", markers=["$10,000"]))
+        write_corpus(
+            harness,
+            tmp_path,
+            specimen_dict("T-1", text=THRESHOLD_SOURCE, markers=["$10,000"]),
+        )
     )
     attempts = harness.run_corpus(
         corpus, provider=ScriptedProvider(candidate_json(**fields)), runs_per_specimen=1
@@ -777,6 +788,13 @@ def test_receipt_carries_every_required_section(harness: ModuleType, tmp_path: P
         "h_paraphrase_families",
         "i_threshold_placement",
         "j_multi_unit_behaviour",
+        "k_unsupported_actor",
+        "l_explicit_condition_preservation",
+        "m_material_qualifier_preservation",
+        "n_advisory_presence",
+        "o_target_preservation",
+        "p_evidence_duty_typing",
+        "q_operative_predicate",
     }
     assert len(receipt["evidence"]) == 2
     assert receipt["evidence"][0]["semantic_projection_sha256"]
@@ -902,3 +920,354 @@ def test_cli_defaults_point_at_the_frozen_corpus_and_an_untracked_output(
     assert args.model == "nvidia/nemotron-3.5-lightning-30b-a3b"
     assert args.allow_corpus_drift is False
     assert str(args.output).startswith(".local/")
+
+
+# --------------------------------------------------------------------------
+# OIC-CANDIDATE-SEMANTICS-002 source-grounding metrics
+#
+# Each is exercised in both directions: the observation must fire when the condition it
+# names is present, and must stay quiet when it is not. A metric that always reported a
+# problem would be as useless as one that never did.
+# --------------------------------------------------------------------------
+
+PASSIVE = "Invoices are paid within thirty days of receipt."
+TARGETED = "The Secretary shall forward the minutes to each committee member."
+TRIGGERED = "If the vendor fails to deliver within five business days, the order is cancelled."
+
+
+def _grounding_specimen(specimen_id: str, text: str, **overrides: object) -> dict[str, Any]:
+    record = specimen_dict(specimen_id, text=text)
+    record.update(overrides)
+    return record
+
+
+def _run(
+    harness: ModuleType, tmp_path: Path, specimen: dict[str, Any], content: str, runs: int = 1
+) -> tuple[Any, dict[str, list[Any]]]:
+    corpus = harness.load_corpus(write_corpus(harness, tmp_path, specimen))
+    attempts = harness.run_corpus(
+        corpus, provider=ScriptedProvider(content), runs_per_specimen=runs
+    )
+    return corpus, harness.group_by_specimen(attempts)
+
+
+def test_k_reports_an_actor_asserted_where_the_source_names_none(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    specimen = _grounding_specimen("T-1", PASSIVE, actor_explicitly_named=False)
+    corpus, grouped = _run(
+        harness, tmp_path, specimen, candidate_json(actor="Invoices", action="are paid"), runs=2
+    )
+    metric = harness.metric_unsupported_actor(corpus, grouped)
+    record = metric["per_specimen"][0]
+    assert record["candidates_asserting_an_actor"] == 2
+    assert record["asserted_actor_values"] == ["Invoices"]
+    assert record["result"] == harness.ACTOR_ASSERTED_WHERE_SOURCE_NAMES_NONE
+    assert metric["candidates_asserting_an_actor"] == 2
+
+
+def test_k_stays_quiet_when_the_actor_is_null_as_preregistered(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    specimen = _grounding_specimen("T-1", PASSIVE, actor_explicitly_named=False)
+    corpus, grouped = _run(harness, tmp_path, specimen, candidate_json(action="are paid"), runs=2)
+    metric = harness.metric_unsupported_actor(corpus, grouped)
+    assert metric["per_specimen"][0]["result"] == harness.ACTOR_ABSENT_AS_PREREGISTERED
+    assert metric["candidates_asserting_an_actor"] == 0
+
+
+def test_k_ignores_specimens_whose_source_does_name_an_actor(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    specimen = _grounding_specimen("T-1", TARGETED, actor_explicitly_named=True)
+    corpus, grouped = _run(
+        harness, tmp_path, specimen, candidate_json(actor="The Secretary", action="shall forward")
+    )
+    assert harness.metric_unsupported_actor(corpus, grouped)["per_specimen"] == []
+
+
+def test_an_entirely_invented_actor_never_reaches_metric_k(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    """It fails the boundary first, and is counted as a grounding rejection instead."""
+    specimen = _grounding_specimen("T-1", PASSIVE, actor_explicitly_named=False)
+    corpus = harness.load_corpus(write_corpus(harness, tmp_path, specimen))
+    attempts = harness.run_corpus(
+        corpus,
+        provider=ScriptedProvider(candidate_json(actor="accounts payable")),
+        runs_per_specimen=2,
+    )
+    boundary = harness.metric_boundary_acceptance(attempts)
+    assert boundary["boundary_rejected"] == 2
+    assert boundary["rejection_error_types"] == {"CandidateGroundingError": 2}
+    metric = harness.metric_unsupported_actor(corpus, harness.group_by_specimen(attempts))
+    assert metric["per_specimen"][0]["result"] == harness.NOT_OBSERVED
+
+
+def test_l_counts_an_omitted_explicit_condition(harness: ModuleType, tmp_path: Path) -> None:
+    specimen = _grounding_specimen(
+        "T-1", PASSIVE, required_condition_spans=["within thirty days of receipt"]
+    )
+    corpus, grouped = _run(harness, tmp_path, specimen, candidate_json(action="are paid"), runs=3)
+    metric = harness.metric_condition_preservation(corpus, grouped)
+    record = metric["per_specimen"][0]
+    assert record["candidates_omitting_the_element"] == 3
+    assert record["result"] == harness.ELEMENT_OMITTED
+
+
+def test_l_accepts_any_declared_rendering_of_the_same_element(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    specimen = _grounding_specimen(
+        "T-1",
+        PASSIVE,
+        required_condition_spans=["within thirty days of receipt", "thirty days"],
+    )
+    corpus, grouped = _run(
+        harness,
+        tmp_path,
+        specimen,
+        candidate_json(action="are paid", conditions=["thirty days"]),
+    )
+    record = harness.metric_condition_preservation(corpus, grouped)["per_specimen"][0]
+    assert record["result"] == harness.ELEMENT_PRESERVED
+    assert record["matched_renderings"] == ["thirty days"]
+
+
+def test_l_looks_only_in_conditions(harness: ModuleType, tmp_path: Path) -> None:
+    """A qualifier parked in object is not a preserved condition."""
+    specimen = _grounding_specimen("T-1", PASSIVE, required_condition_spans=["thirty days"])
+    corpus, grouped = _run(
+        harness, tmp_path, specimen, candidate_json(object="Invoices", action="thirty days")
+    )
+    assert (
+        harness.metric_condition_preservation(corpus, grouped)["per_specimen"][0]["result"]
+        == harness.ELEMENT_OMITTED
+    )
+
+
+def test_m_counts_a_dropped_material_qualifier(harness: ModuleType, tmp_path: Path) -> None:
+    specimen = _grounding_specimen("T-1", THRESHOLD_SOURCE, material_qualifier_spans=["$10,000"])
+    corpus, grouped = _run(harness, tmp_path, specimen, candidate_json(object="payment"), runs=2)
+    record = harness.metric_material_qualifier_preservation(corpus, grouped)["per_specimen"][0]
+    assert record["candidates_omitting_the_element"] == 2
+    assert record["result"] == harness.ELEMENT_OMITTED
+
+
+def test_m_accepts_the_qualifier_in_any_textual_role(harness: ModuleType, tmp_path: Path) -> None:
+    """Where a threshold lands is metric I's business. M only asks whether it survived."""
+    specimen = _grounding_specimen("T-1", THRESHOLD_SOURCE, material_qualifier_spans=["$10,000"])
+    for fields in (
+        {"object": "payment above $10,000"},
+        {"conditions": ["above $10,000"]},
+        {"action": "approve above $10,000"},
+    ):
+        corpus, grouped = _run(harness, tmp_path, specimen, candidate_json(**fields))
+        record = harness.metric_material_qualifier_preservation(corpus, grouped)["per_specimen"][0]
+        assert record["result"] == harness.ELEMENT_PRESERVED, fields
+
+
+def test_n_isolates_advisory_presence_misses(harness: ModuleType, tmp_path: Path) -> None:
+    specimen = _grounding_specimen(
+        "T-1", "Units are encouraged to consolidate purchases.", category="advisory"
+    )
+    corpus, grouped = _run(harness, tmp_path, specimen, EMPTY, runs=3)
+    metric = harness.metric_advisory_presence(corpus, grouped)
+    assert metric["advisory_specimens"] == 1
+    assert metric["presence_misses"] == 3
+    assert metric["per_specimen"][0]["result"] == harness.PRESENCE_MISS
+
+
+def test_n_reports_advisory_material_that_was_found(harness: ModuleType, tmp_path: Path) -> None:
+    specimen = _grounding_specimen(
+        "T-1", "Units are encouraged to consolidate purchases.", category="advisory"
+    )
+    corpus, grouped = _run(
+        harness,
+        tmp_path,
+        specimen,
+        candidate_json(unit_type="advisory", action="are encouraged"),
+        runs=2,
+    )
+    metric = harness.metric_advisory_presence(corpus, grouped)
+    assert metric["presence_misses"] == 0
+    assert metric["per_specimen"][0]["observed_unit_types"] == ["advisory"]
+    assert metric["per_specimen"][0]["result"] == harness.EXPECTED_PRESENCE_OBSERVED
+
+
+def test_o_reports_an_explicit_target_carried_in_target(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    specimen = _grounding_specimen(
+        "T-1",
+        TARGETED,
+        target_explicitly_named=True,
+        expected_target_spans=["each committee member"],
+    )
+    corpus, grouped = _run(
+        harness,
+        tmp_path,
+        specimen,
+        candidate_json(action="shall forward", target="each committee member"),
+        runs=2,
+    )
+    record = harness.metric_target_preservation(corpus, grouped)["per_specimen"][0]
+    assert record["candidates_carrying_it_in_target"] == 2
+    assert record["candidates_dropping_it_entirely"] == 0
+    assert record["result"] == harness.TARGET_PRESERVED
+
+
+def test_o_separates_a_target_parked_in_another_role_from_one_that_vanished(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    specimen = _grounding_specimen(
+        "T-1",
+        TARGETED,
+        target_explicitly_named=True,
+        expected_target_spans=["each committee member"],
+    )
+    corpus, grouped = _run(
+        harness, tmp_path, specimen, candidate_json(object="each committee member")
+    )
+    parked = harness.metric_target_preservation(corpus, grouped)["per_specimen"][0]
+    assert parked["candidates_carrying_it_in_another_role"] == 1
+    assert parked["candidates_dropping_it_entirely"] == 0
+    assert parked["result"] == harness.TARGET_OMITTED
+
+    corpus, grouped = _run(harness, tmp_path, specimen, candidate_json(action="shall forward"))
+    dropped = harness.metric_target_preservation(corpus, grouped)["per_specimen"][0]
+    assert dropped["candidates_carrying_it_in_another_role"] == 0
+    assert dropped["candidates_dropping_it_entirely"] == 1
+
+
+def test_p_reports_evidence_duty_typing_alongside_action_and_requirements(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    specimen = _grounding_specimen(
+        "T-1",
+        "The unit must retain the original receipt for seven years.",
+        category="evidence_duty",
+    )
+    corpus, grouped = _run(
+        harness,
+        tmp_path,
+        specimen,
+        candidate_json(
+            unit_type="condition", action=None, evidence_requirements=["the original receipt"]
+        ),
+        runs=3,
+    )
+    record = harness.metric_evidence_duty_typing(corpus, grouped)["per_specimen"][0]
+    assert record["unit_type_distribution"] == {"condition": 3}
+    assert record["candidates_typed_evidence_duty"] == 0
+    assert record["candidates_populating_evidence_requirements"] == 3
+    assert record["candidates_with_a_null_action"] == 3
+
+
+def test_q_reports_a_trigger_recorded_as_the_operative_action(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    specimen = _grounding_specimen(
+        "T-1", TRIGGERED, non_operative_predicate_spans=["fails to deliver"]
+    )
+    corpus, grouped = _run(
+        harness, tmp_path, specimen, candidate_json(action="fails to deliver"), runs=2
+    )
+    metric = harness.metric_operative_predicate(corpus, grouped)
+    record = metric["per_specimen"][0]
+    assert record["candidates_recording_the_trigger_as_action"] == 2
+    assert record["result"] == harness.TRIGGER_RECORDED_AS_ACTION
+    assert metric["candidates_recording_the_trigger_as_action"] == 2
+
+
+def test_q_stays_quiet_when_the_operative_act_is_recorded(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    specimen = _grounding_specimen(
+        "T-1", TRIGGERED, non_operative_predicate_spans=["fails to deliver"]
+    )
+    corpus, grouped = _run(
+        harness,
+        tmp_path,
+        specimen,
+        candidate_json(action="is cancelled", conditions=["fails to deliver"]),
+    )
+    record = harness.metric_operative_predicate(corpus, grouped)["per_specimen"][0]
+    assert record["result"] == harness.TRIGGER_NOT_RECORDED_AS_ACTION
+    assert record["candidates_recording_the_trigger_as_action"] == 0
+
+
+# --------------------------------------------------------------------------
+# Receipt: measure classification and the demotion of exact semantic hashing
+# --------------------------------------------------------------------------
+
+
+def test_receipt_classifies_measures_and_demotes_exact_semantic_hashing(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    receipt = _receipt(harness, tmp_path, specimen_dict("T-1"))
+    classification = receipt["measure_classification"]
+    assert "f_semantic_decomposition_stability" in classification["secondary"]
+    assert "f_semantic_decomposition_stability" not in classification["primary"]
+    assert "f_semantic_decomposition_stability" in classification["demoted"]
+    assert "k_unsupported_actor" in classification["primary"]
+    assert "l_explicit_condition_preservation" in classification["primary"]
+    assert "n_advisory_presence" in classification["primary"]
+    assert "o_target_preservation" in classification["primary"]
+    named = set(classification["primary"]) | set(classification["secondary"])
+    assert named == set(receipt["metrics"])
+    assert "Institutional IR" in classification["demoted"]["f_semantic_decomposition_stability"]
+
+
+def test_paraphrase_metric_states_hash_agreement_is_not_required_here(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    receipt = _receipt(harness, tmp_path, specimen_dict("T-1"))
+    metric = receipt["metrics"]["h_paraphrase_families"]
+    assert metric["not_required_at_candidate_stage"] == ["semantic_hash_set_agreement"]
+    assert metric["candidate_stage_invariants"] == [
+        "presence_agreement",
+        "count_set_agreement",
+        "unit_type_set_agreement",
+    ]
+    assert "Normalizing them is Institutional IR's job" in metric["note"]
+
+
+def test_receipt_summary_surfaces_every_grounding_headline(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    receipt = _receipt(harness, tmp_path, specimen_dict("T-1"))
+    summary = receipt["engineering_summary"]
+    for key in (
+        "candidates_asserting_an_actor_where_source_names_none",
+        "candidates_omitting_an_explicit_condition",
+        "candidates_omitting_a_material_qualifier",
+        "advisory_presence_misses",
+        "candidates_dropping_an_explicit_target",
+        "candidates_recording_a_trigger_as_the_action",
+    ):
+        assert key in summary, key
+
+
+def test_semantic_projection_now_carries_target(harness: ModuleType) -> None:
+    assert "target" in harness.SEMANTIC_FIELDS
+    assert "target" in harness.TEXTUAL_ROLE_FIELDS
+    assert "unit_type" not in harness.TEXTUAL_ROLE_FIELDS
+    assert set(harness.TEXTUAL_ROLE_FIELDS) < set(harness.SEMANTIC_FIELDS)
+
+
+def test_the_predecessor_corpus_still_loads_unchanged(harness: ModuleType, repo_root: Path) -> None:
+    """OIC-CANDIDATE-SEMANTICS-001 stays readable as historical evidence."""
+    predecessor = repo_root / "benchmarks/characterization/candidate-semantics-001/CORPUS-v0.1.json"
+    corpus = harness.load_corpus(predecessor)
+    assert corpus.corpus_id == "OIC-CANDIDATE-SEMANTICS-001"
+    assert len(corpus.specimens) == 32
+    assert corpus.specimens[0].actor_explicitly_named is None
+
+
+def test_cli_defaults_now_point_at_the_successor_corpus(harness: ModuleType) -> None:
+    args = harness.build_parser().parse_args([])
+    assert "candidate-semantics-002" in str(args.corpus)
+    assert "CORPUS-v0.2.json" in str(args.corpus)
+    assert "CORPUS-FREEZE-v0.2.json" in str(args.freeze)
+    assert "OIC-CANDIDATE-SEMANTICS-002" in str(args.output)

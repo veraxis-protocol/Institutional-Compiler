@@ -78,6 +78,17 @@ PLACEMENT_BOTH = "THRESHOLD_IN_OBJECT_AND_CONDITIONS"
 PLACEMENT_OTHER_FIELD = "THRESHOLD_IN_OTHER_SEMANTIC_FIELD"
 PLACEMENT_NEITHER = "THRESHOLD_ABSENT_FROM_CANDIDATE"
 
+# Source-grounding observation states (OIC-CANDIDATE-SEMANTICS-002). Observational: an
+# "unsupported" actor here is a corpus-relative observation, not an adjudication.
+ACTOR_ABSENT_AS_PREREGISTERED = "ACTOR_ABSENT_AS_PREREGISTERED"
+ACTOR_ASSERTED_WHERE_SOURCE_NAMES_NONE = "ACTOR_ASSERTED_WHERE_SOURCE_NAMES_NONE"
+ELEMENT_PRESERVED = "ELEMENT_PRESERVED"
+ELEMENT_OMITTED = "ELEMENT_OMITTED"
+TARGET_PRESERVED = "TARGET_PRESERVED"
+TARGET_OMITTED = "TARGET_OMITTED"
+TRIGGER_RECORDED_AS_ACTION = "TRIGGER_RECORDED_AS_ACTION"
+TRIGGER_NOT_RECORDED_AS_ACTION = "TRIGGER_NOT_RECORDED_AS_ACTION"
+
 CORPUS_INTACT = "INTACT"
 CORPUS_DRIFT_ACKNOWLEDGED = "DRIFT_ACKNOWLEDGED"
 
@@ -87,6 +98,17 @@ SEMANTIC_FIELDS = (
     "actor",
     "action",
     "object",
+    "target",
+    "conditions",
+    "exceptions",
+    "evidence_requirements",
+)
+#: Textual roles the model proposes. Excludes unit_type, which is a classification.
+TEXTUAL_ROLE_FIELDS = (
+    "actor",
+    "action",
+    "object",
+    "target",
     "conditions",
     "exceptions",
     "evidence_requirements",
@@ -101,9 +123,11 @@ OIC_CONTROLLED_FIELDS = (
     "source_anchors",
 )
 
-DEFAULT_CORPUS = Path("benchmarks/characterization/candidate-semantics-001/CORPUS-v0.1.json")
-DEFAULT_FREEZE = Path("benchmarks/characterization/candidate-semantics-001/CORPUS-FREEZE-v0.1.json")
-DEFAULT_OUTPUT = Path(".local/candidate-semantics-receipts/OIC-CANDIDATE-SEMANTICS-001.json")
+#: OIC-CANDIDATE-SEMANTICS-002 is the current corpus. The 001 corpus stays in the tree,
+#: unchanged, as the historical evidence its receipt refers to.
+DEFAULT_CORPUS = Path("benchmarks/characterization/candidate-semantics-002/CORPUS-v0.2.json")
+DEFAULT_FREEZE = Path("benchmarks/characterization/candidate-semantics-002/CORPUS-FREEZE-v0.2.json")
+DEFAULT_OUTPUT = Path(".local/candidate-semantics-receipts/OIC-CANDIDATE-SEMANTICS-002.json")
 DEFAULT_RUNS_PER_SPECIMEN = 3
 
 
@@ -139,6 +163,16 @@ class Specimen:
     threshold_markers: tuple[str, ...] | None
     characterization_notes: str
     claim_ceiling: str
+    # OIC-CANDIDATE-SEMANTICS-002 source-grounding pre-registration. Optional so the
+    # frozen OIC-CANDIDATE-SEMANTICS-001 corpus still loads unchanged as historical
+    # evidence. Each *_spans list is disjunctive: one required element, several
+    # acceptable renderings.
+    actor_explicitly_named: bool | None = None
+    target_explicitly_named: bool | None = None
+    expected_target_spans: tuple[str, ...] | None = None
+    required_condition_spans: tuple[str, ...] | None = None
+    material_qualifier_spans: tuple[str, ...] | None = None
+    non_operative_predicate_spans: tuple[str, ...] | None = None
 
     @property
     def source_sha256(self) -> str:
@@ -204,6 +238,13 @@ def _optional_str_tuple(value: object, label: str) -> tuple[str, ...] | None:
     return tuple(str(entry) for entry in entries)
 
 
+def _optional_bool(value: object, label: str) -> bool | None:
+    if value is None:
+        return None
+    _require(isinstance(value, bool), f"{label} must be a boolean or null")
+    return bool(value)
+
+
 def _parse_family(value: object, label: str) -> Family:
     _require(isinstance(value, dict), f"{label} entry must be an object")
     record = value if isinstance(value, dict) else {}
@@ -266,6 +307,25 @@ def _parse_specimen(value: object, index: int) -> Specimen:
         ),
         characterization_notes=str(record["characterization_notes"]),
         claim_ceiling=str(record["claim_ceiling"]),
+        actor_explicitly_named=_optional_bool(
+            record.get("actor_explicitly_named"), f"{label}.actor_explicitly_named"
+        ),
+        target_explicitly_named=_optional_bool(
+            record.get("target_explicitly_named"), f"{label}.target_explicitly_named"
+        ),
+        expected_target_spans=_optional_str_tuple(
+            record.get("expected_target_spans"), f"{label}.expected_target_spans"
+        ),
+        required_condition_spans=_optional_str_tuple(
+            record.get("required_condition_spans"), f"{label}.required_condition_spans"
+        ),
+        material_qualifier_spans=_optional_str_tuple(
+            record.get("material_qualifier_spans"), f"{label}.material_qualifier_spans"
+        ),
+        non_operative_predicate_spans=_optional_str_tuple(
+            record.get("non_operative_predicate_spans"),
+            f"{label}.non_operative_predicate_spans",
+        ),
     )
 
 
@@ -478,6 +538,15 @@ def metric_boundary_acceptance(attempts: Sequence[Attempt]) -> JsonObject:
         "provider_errors": provider_errors,
         "acceptance_rate_over_adjudicated": (accepted / adjudicated) if adjudicated else None,
         "acceptance_rate_denominator": "boundary_accepted + boundary_rejected",
+        "rejection_error_types": dict(
+            sorted(
+                Counter(
+                    item.error_type
+                    for item in attempts
+                    if item.boundary_result == BOUNDARY_REJECTED and item.error_type
+                ).items()
+            )
+        ),
         "boundary_errors": [
             {
                 "specimen_id": item.specimen_id,
@@ -751,9 +820,19 @@ def metric_paraphrase_families(corpus: Corpus, grouped: dict[str, list[Attempt]]
     """H. Agreement across phrasings the fixture intends as equivalent."""
     return {
         "families": _families(corpus, grouped, "paraphrase"),
+        "candidate_stage_invariants": [
+            "presence_agreement",
+            "count_set_agreement",
+            "unit_type_set_agreement",
+        ],
+        "not_required_at_candidate_stage": ["semantic_hash_set_agreement"],
         "note": (
             "The fixture states the test intent that these phrasings are equivalent. It "
-            "does not establish that they are, and agreement here is not correctness."
+            "does not establish that they are, and agreement here is not correctness. "
+            "Exact semantic-hash agreement across materially different phrasings is NOT "
+            "required at this stage: a source-grounded candidate quotes its own fragment, "
+            "so different wording produces different spans by construction. Normalizing "
+            "them is Institutional IR's job, after admission."
         ),
     }
 
@@ -850,6 +929,371 @@ def metric_multi_unit(corpus: Corpus, grouped: dict[str, list[Attempt]]) -> Json
 
 
 # --------------------------------------------------------------------------
+# Source-grounding metrics (OIC-CANDIDATE-SEMANTICS-002)
+#
+# Every one of these is an observation against what the corpus pre-registered about the
+# SOURCE, not a judgement about the model. A specimen whose pre-registration is wrong
+# produces a confidently wrong count, which is why the pre-registrations are frozen and
+# separately tested.
+# --------------------------------------------------------------------------
+
+
+def _match(spans: Sequence[str], values: Sequence[object]) -> str | None:
+    """First declared span found inside any candidate value. Literal, case-insensitive."""
+    haystacks = [
+        _grounding_key(value) for value in values if isinstance(value, str) and value.strip()
+    ]
+    for span in spans:
+        needle = _grounding_key(span)
+        if any(needle in haystack for haystack in haystacks):
+            return span
+    return None
+
+
+def _grounding_key(value: str) -> str:
+    return " ".join(value.split()).casefold()
+
+
+def _textual_values(projection: JsonObject) -> list[object]:
+    values: list[object] = []
+    for name in TEXTUAL_ROLE_FIELDS:
+        value = projection.get(name)
+        if isinstance(value, list):
+            values.extend(value)
+        else:
+            values.append(value)
+    return values
+
+
+def metric_unsupported_actor(corpus: Corpus, grouped: dict[str, list[Attempt]]) -> JsonObject:
+    """K. Candidates asserting an actor on specimens whose source names none.
+
+    Under the revised contract an ungrounded actor cannot survive the boundary at all, so
+    anything counted here is a *grounded* span the model chose to read as an actor on a
+    fragment the corpus records as naming nobody. That is a weaker and more honest finding
+    than the pre-revision invention it replaces, and both are worth seeing.
+    """
+    per_specimen: list[JsonObject] = []
+    asserted = 0
+    examined = 0
+    for specimen in corpus.specimens:
+        if specimen.actor_explicitly_named is not False:
+            continue
+        accepted = _accepted(grouped.get(specimen.specimen_id, []))
+        candidates = [projection for item in accepted for projection in item.semantic_projections]
+        with_actor = [
+            projection for projection in candidates if projection.get("actor") is not None
+        ]
+        examined += len(candidates)
+        asserted += len(with_actor)
+        per_specimen.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "candidates_examined": len(candidates),
+                "candidates_asserting_an_actor": len(with_actor),
+                "asserted_actor_values": sorted(
+                    {str(projection["actor"]) for projection in with_actor}
+                ),
+                "result": (
+                    NOT_OBSERVED
+                    if not candidates
+                    else ACTOR_ASSERTED_WHERE_SOURCE_NAMES_NONE
+                    if with_actor
+                    else ACTOR_ABSENT_AS_PREREGISTERED
+                ),
+            }
+        )
+    return {
+        "specimens_where_source_names_no_actor": len(per_specimen),
+        "candidates_examined": examined,
+        "candidates_asserting_an_actor": asserted,
+        "per_specimen": per_specimen,
+        "note": (
+            "The boundary already refuses an actor that is not a verbatim source span, so "
+            "an entirely invented participant fails the response and is counted under "
+            "boundary rejections, not here."
+        ),
+    }
+
+
+def _element_metric(
+    corpus: Corpus,
+    grouped: dict[str, list[Attempt]],
+    *,
+    spans_of: str,
+    searched_fields: Sequence[str],
+    label: str,
+) -> JsonObject:
+    per_specimen: list[JsonObject] = []
+    examined = 0
+    omitted = 0
+    for specimen in corpus.specimens:
+        spans = getattr(specimen, spans_of)
+        if not spans:
+            continue
+        accepted = _accepted(grouped.get(specimen.specimen_id, []))
+        projections = [projection for item in accepted for projection in item.semantic_projections]
+        preserved: list[str] = []
+        missing = 0
+        for projection in projections:
+            values: list[object] = []
+            for name in searched_fields:
+                value = projection.get(name)
+                if isinstance(value, list):
+                    values.extend(value)
+                else:
+                    values.append(value)
+            found = _match(spans, values)
+            if found is None:
+                missing += 1
+            else:
+                preserved.append(found)
+        examined += len(projections)
+        omitted += missing
+        per_specimen.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "declared_spans": list(spans),
+                "searched_fields": list(searched_fields),
+                "candidates_examined": len(projections),
+                "candidates_preserving_the_element": len(preserved),
+                "candidates_omitting_the_element": missing,
+                "matched_renderings": sorted(set(preserved)),
+                "result": (
+                    NOT_OBSERVED
+                    if not projections
+                    else ELEMENT_OMITTED
+                    if missing
+                    else ELEMENT_PRESERVED
+                ),
+            }
+        )
+    return {
+        "measured_specimens": len(per_specimen),
+        "candidates_examined": examined,
+        "candidates_omitting_the_element": omitted,
+        "per_specimen": per_specimen,
+        "element": label,
+        "note": (
+            "Each declared span list is disjunctive: one required element, several "
+            "acceptable renderings. Matching is literal and case-insensitive; a model that "
+            "restates the element in other words reads as omitted."
+        ),
+    }
+
+
+def metric_condition_preservation(corpus: Corpus, grouped: dict[str, list[Attempt]]) -> JsonObject:
+    """L. Explicit if/when/where/unless qualifiers reaching ``conditions``."""
+    return _element_metric(
+        corpus,
+        grouped,
+        spans_of="required_condition_spans",
+        searched_fields=("conditions",),
+        label="explicit qualifying clause, searched in conditions only",
+    )
+
+
+def metric_material_qualifier_preservation(
+    corpus: Corpus, grouped: dict[str, list[Attempt]]
+) -> JsonObject:
+    """M. Thresholds and quantities surviving anywhere in the candidate."""
+    return _element_metric(
+        corpus,
+        grouped,
+        spans_of="material_qualifier_spans",
+        searched_fields=TEXTUAL_ROLE_FIELDS,
+        label="material quantitative or temporal qualifier, searched in every textual role",
+    )
+
+
+def metric_advisory_presence(corpus: Corpus, grouped: dict[str, list[Attempt]]) -> JsonObject:
+    """N. Whether explicit recommendatory language is discoverable at all."""
+    per_specimen: list[JsonObject] = []
+    accepted_runs = 0
+    misses = 0
+    for specimen in corpus.specimens:
+        if specimen.category != "advisory":
+            continue
+        accepted = _accepted(grouped.get(specimen.specimen_id, []))
+        empty = [item for item in accepted if (item.candidate_count or 0) == 0]
+        accepted_runs += len(accepted)
+        misses += len(empty)
+        per_specimen.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "accepted_runs": len(accepted),
+                "runs_returning_no_candidate": len(empty),
+                "observed_unit_types": sorted(
+                    {unit for item in accepted for unit in item.unit_types}
+                ),
+                "result": (
+                    NOT_OBSERVED
+                    if not accepted
+                    else PRESENCE_MISS
+                    if empty
+                    else EXPECTED_PRESENCE_OBSERVED
+                ),
+            }
+        )
+    return {
+        "advisory_specimens": len(per_specimen),
+        "accepted_runs": accepted_runs,
+        "presence_misses": misses,
+        "per_specimen": per_specimen,
+        "note": (
+            "OIC-CANDIDATE-SEMANTICS-001 recorded 3/3 presence misses on the single "
+            "advisory specimen. This metric isolates that class."
+        ),
+    }
+
+
+def metric_target_preservation(corpus: Corpus, grouped: dict[str, list[Attempt]]) -> JsonObject:
+    """O. Explicit recipients reaching the ``target`` role."""
+    per_specimen: list[JsonObject] = []
+    examined = 0
+    preserved_total = 0
+    for specimen in corpus.specimens:
+        if specimen.target_explicitly_named is not True:
+            continue
+        accepted = _accepted(grouped.get(specimen.specimen_id, []))
+        projections = [projection for item in accepted for projection in item.semantic_projections]
+        spans = specimen.expected_target_spans or ()
+        in_target = [
+            projection
+            for projection in projections
+            if _match(spans, [projection.get("target")]) is not None
+        ]
+        elsewhere = [
+            projection
+            for projection in projections
+            if projection not in in_target
+            and _match(spans, _textual_values(projection)) is not None
+        ]
+        examined += len(projections)
+        preserved_total += len(in_target)
+        per_specimen.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "expected_target_spans": list(spans),
+                "candidates_examined": len(projections),
+                "candidates_carrying_it_in_target": len(in_target),
+                "candidates_carrying_it_in_another_role": len(elsewhere),
+                "candidates_dropping_it_entirely": len(projections)
+                - len(in_target)
+                - len(elsewhere),
+                "observed_target_values": sorted(
+                    {
+                        str(projection["target"])
+                        for projection in projections
+                        if projection.get("target") is not None
+                    }
+                ),
+                "result": (
+                    NOT_OBSERVED
+                    if not projections
+                    else TARGET_PRESERVED
+                    if len(in_target) == len(projections)
+                    else TARGET_OMITTED
+                ),
+            }
+        )
+    return {
+        "specimens_with_an_explicit_target": len(per_specimen),
+        "candidates_examined": examined,
+        "candidates_carrying_it_in_target": preserved_total,
+        "per_specimen": per_specimen,
+        "note": (
+            "Carrying an explicit recipient in another role is reported separately from "
+            "dropping it. Neither is corrected."
+        ),
+    }
+
+
+def metric_evidence_duty_typing(corpus: Corpus, grouped: dict[str, list[Attempt]]) -> JsonObject:
+    """P. How explicit record and proof duties were actually classified."""
+    per_specimen: list[JsonObject] = []
+    for specimen in corpus.specimens:
+        if specimen.category != "evidence_duty":
+            continue
+        accepted = _accepted(grouped.get(specimen.specimen_id, []))
+        projections = [projection for item in accepted for projection in item.semantic_projections]
+        per_specimen.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "candidates_examined": len(projections),
+                "unit_type_distribution": dict(
+                    sorted(Counter(str(item["unit_type"]) for item in projections).items())
+                ),
+                "candidates_typed_evidence_duty": sum(
+                    1 for item in projections if item["unit_type"] == "evidence_duty"
+                ),
+                "candidates_populating_evidence_requirements": sum(
+                    1 for item in projections if item.get("evidence_requirements")
+                ),
+                "candidates_with_a_null_action": sum(
+                    1 for item in projections if item.get("action") is None
+                ),
+            }
+        )
+    return {
+        "per_specimen": per_specimen,
+        "note": (
+            "OIC-CANDIDATE-SEMANTICS-001 recorded evidence_requirements populated while "
+            "unit_type was condition and action was null. Those three are reported side by "
+            "side so the pattern stays visible."
+        ),
+    }
+
+
+def metric_operative_predicate(corpus: Corpus, grouped: dict[str, list[Attempt]]) -> JsonObject:
+    """Q. Whether a trigger predicate was recorded as the operative action."""
+    per_specimen: list[JsonObject] = []
+    total = 0
+    confused = 0
+    for specimen in corpus.specimens:
+        spans = specimen.non_operative_predicate_spans
+        if not spans:
+            continue
+        accepted = _accepted(grouped.get(specimen.specimen_id, []))
+        projections = [projection for item in accepted for projection in item.semantic_projections]
+        hits = [
+            projection
+            for projection in projections
+            if _match(spans, [projection.get("action")]) is not None
+        ]
+        total += len(projections)
+        confused += len(hits)
+        per_specimen.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "trigger_predicate_spans": list(spans),
+                "candidates_examined": len(projections),
+                "candidates_recording_the_trigger_as_action": len(hits),
+                "observed_action_values": sorted(
+                    {
+                        str(projection["action"])
+                        for projection in projections
+                        if projection.get("action") is not None
+                    }
+                ),
+                "result": (
+                    NOT_OBSERVED
+                    if not projections
+                    else TRIGGER_RECORDED_AS_ACTION
+                    if hits
+                    else TRIGGER_NOT_RECORDED_AS_ACTION
+                ),
+            }
+        )
+    return {
+        "measured_specimens": len(per_specimen),
+        "candidates_examined": total,
+        "candidates_recording_the_trigger_as_action": confused,
+        "per_specimen": per_specimen,
+    }
+
+
+# --------------------------------------------------------------------------
 # Receipt
 # --------------------------------------------------------------------------
 
@@ -890,6 +1334,20 @@ def build_receipt(
     boundary = metric_boundary_acceptance(attempts)
     presence = metric_normative_presence(corpus, grouped)
     negatives = metric_negative_controls(corpus, grouped)
+    actor = metric_unsupported_actor(corpus, grouped)
+    conditions = metric_condition_preservation(corpus, grouped)
+    qualifiers = metric_material_qualifier_preservation(corpus, grouped)
+    advisory = metric_advisory_presence(corpus, grouped)
+    targets = metric_target_preservation(corpus, grouped)
+    trigger = metric_operative_predicate(corpus, grouped)
+    grounding_summary = {
+        "actor": actor["candidates_asserting_an_actor"],
+        "condition": conditions["candidates_omitting_the_element"],
+        "qualifier": qualifiers["candidates_omitting_the_element"],
+        "advisory": advisory["presence_misses"],
+        "target": targets["candidates_examined"] - targets["candidates_carrying_it_in_target"],
+        "trigger": trigger["candidates_recording_the_trigger_as_action"],
+    }
     return {
         "work_order": WORK_ORDER,
         "claim_ceiling": CLAIM_CEILING,
@@ -944,6 +1402,57 @@ def build_receipt(
             "h_paraphrase_families": metric_paraphrase_families(corpus, grouped),
             "i_threshold_placement": metric_threshold_placement(corpus, grouped),
             "j_multi_unit_behaviour": metric_multi_unit(corpus, grouped),
+            "k_unsupported_actor": actor,
+            "l_explicit_condition_preservation": conditions,
+            "m_material_qualifier_preservation": qualifiers,
+            "n_advisory_presence": advisory,
+            "o_target_preservation": targets,
+            "p_evidence_duty_typing": metric_evidence_duty_typing(corpus, grouped),
+            "q_operative_predicate": trigger,
+        },
+        "measure_classification": {
+            "primary": [
+                "a_boundary_acceptance",
+                "c_negative_controls",
+                "d_candidate_count_stability",
+                "e_unit_type_observation",
+                "g_source_standing_invariance",
+                "k_unsupported_actor",
+                "l_explicit_condition_preservation",
+                "m_material_qualifier_preservation",
+                "n_advisory_presence",
+                "o_target_preservation",
+                "p_evidence_duty_typing",
+                "q_operative_predicate",
+            ],
+            "secondary": [
+                "b_normative_presence",
+                "f_semantic_decomposition_stability",
+                "h_paraphrase_families",
+                "i_threshold_placement",
+                "j_multi_unit_behaviour",
+            ],
+            "demoted": {
+                "f_semantic_decomposition_stability": (
+                    "Demoted from a primary measure by OIC-CANDIDATE-SEMANTICS-002. A "
+                    "source-grounded candidate is a literal span of its own fragment, so "
+                    "two defensible readings of one fragment legitimately hash "
+                    "differently. Canonicalizing them is Institutional IR's job, after "
+                    "admission, and is not implemented. The metric is still reported "
+                    "because instability is informative; it is not a target."
+                ),
+                "h_paraphrase_families": (
+                    "Exact semantic-hash agreement across materially different phrasings "
+                    "is NOT required at the candidate stage and is reported for "
+                    "information only. Presence, count and broadly compatible unit types "
+                    "are the invariants this stage asks about."
+                ),
+            },
+            "note": (
+                "A classification of what this stage is entitled to ask about. No measure "
+                "is a gate; the only gates in this receipt are the mechanical ones under "
+                "engineering_gates."
+            ),
         },
         "evidence": [
             {
@@ -974,6 +1483,12 @@ def build_receipt(
             "presence_misses": presence["presence_misses"],
             "negative_control_accepted_runs": negatives["accepted_runs"],
             "false_positive_runs": negatives["false_positive_runs"],
+            "candidates_asserting_an_actor_where_source_names_none": grounding_summary["actor"],
+            "candidates_omitting_an_explicit_condition": grounding_summary["condition"],
+            "candidates_omitting_a_material_qualifier": grounding_summary["qualifier"],
+            "advisory_presence_misses": grounding_summary["advisory"],
+            "candidates_dropping_an_explicit_target": grounding_summary["target"],
+            "candidates_recording_a_trigger_as_the_action": grounding_summary["trigger"],
             "note": (
                 "A summary of counts observed on this corpus under these run conditions. "
                 "It is not a verdict."
@@ -1084,6 +1599,18 @@ def main(argv: Sequence[str] | None = None) -> int:
             errors=summary["provider_errors"],
             misses=summary["presence_misses"],
             positives=summary["false_positive_runs"],
+        )
+    )
+    print(
+        "GROUNDING  asserted_actor={actor}  condition_omissions={condition}  "
+        "qualifier_omissions={qualifier}  advisory_misses={advisory}  "
+        "target_drops={target}  trigger_as_action={trigger}".format(
+            actor=summary["candidates_asserting_an_actor_where_source_names_none"],
+            condition=summary["candidates_omitting_an_explicit_condition"],
+            qualifier=summary["candidates_omitting_a_material_qualifier"],
+            advisory=summary["advisory_presence_misses"],
+            target=summary["candidates_dropping_an_explicit_target"],
+            trigger=summary["candidates_recording_a_trigger_as_the_action"],
         )
     )
     print(
