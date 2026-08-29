@@ -35,3 +35,6 @@ junit.xml
 # Canada corpus rights evidence and internal-only frozen bytes (never committed).
 .local/canada-rights-evidence/
 .local/canada-freeze-internal/
+
+# Candidate semantic characterization: live receipts stay local by default.
+.local/candidate-semantics-receipts/
