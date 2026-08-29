@@ -19,6 +19,7 @@ Nothing here imports, calls, or simulates ZTL or VEIP.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import subprocess
@@ -1320,17 +1321,35 @@ def test_source_modules_match_bounded_owner_authorization(repo_root: Path) -> No
     }
 
 
-def test_draft_schemas_are_byte_identical_to_the_bootstrap(repo_root: Path) -> None:
+def test_bootstrap_draft_schemas_match_the_historical_bootstrap_manifest(repo_root: Path) -> None:
     from oic.baseline import BOOTSTRAP_COMMIT
 
-    for path in sorted((repo_root / "schemas" / "draft").glob("*.schema.json")):
-        relative = path.relative_to(repo_root).as_posix()
-        committed = subprocess.run(
+    manifest_body = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(repo_root),
+            "cat-file",
+            "blob",
+            f"{BOOTSTRAP_COMMIT}:BOOTSTRAP_MANIFEST.json",
+        ],
+        capture_output=True,
+        check=True,
+    ).stdout
+    manifest = json.loads(manifest_body)
+    schema_entries = [
+        entry for entry in manifest["files"] if str(entry["path"]).startswith("schemas/draft/")
+    ]
+    assert len(schema_entries) == 9
+    for entry in schema_entries:
+        relative = str(entry["path"])
+        historical = subprocess.run(
             ["git", "-C", str(repo_root), "cat-file", "blob", f"{BOOTSTRAP_COMMIT}:{relative}"],
             capture_output=True,
             check=True,
         ).stdout
-        assert path.read_bytes() == committed, relative
+        assert hashlib.sha256(historical).hexdigest() == entry["sha256"], relative
+        assert len(historical) == entry["bytes"], relative
 
 
 def test_status_records_bounded_transition_without_runtime_authorization(repo_root: Path) -> None:

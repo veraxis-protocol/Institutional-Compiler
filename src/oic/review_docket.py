@@ -58,6 +58,8 @@ class ReviewDocket:
 
     def to_json(self) -> JsonObject:
         return {
+            "candidate_contract": "source-grounded-candidate-003",
+            "candidate_status": "candidate material only; not admitted or canonical meaning",
             "docket_id": self.docket_id,
             "source_anchor": dict(self.source_anchor),
             "agreement_state": self.agreement_state.value,

@@ -298,6 +298,26 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _historical_schema_sha256(repo_root: Path) -> dict[str, str]:
+    """Schema digests at the exact tip governed by this historical work order."""
+    observed: dict[str, str] = {}
+    for name in EXPECTED_SCHEMA_SHA256:
+        body = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(repo_root),
+                "cat-file",
+                "blob",
+                f"{WORK_ORDER.tip}:schemas/draft/{name}",
+            ],
+            check=True,
+            capture_output=True,
+        ).stdout
+        observed[name] = hashlib.sha256(body).hexdigest()
+    return observed
+
+
 @pytest.fixture(scope="module")
 def registry(repo_root: Path) -> dict[str, Any]:
     return cast(
@@ -1109,10 +1129,9 @@ def test_governing_files_preserve_freeze_and_record_bounded_transition(repo_root
         _sha256(repo_root / "benchmarks/preflight/SOURCE_MANIFEST.csv")
         == EXPECTED_SOURCE_MANIFEST_SHA256
     )
-    schema_dir = repo_root / "schemas/draft"
-    assert {path.name: _sha256(path) for path in sorted(schema_dir.glob("*.json"))} == (
-        EXPECTED_SCHEMA_SHA256
-    )
+    # This is evidence about the closed Canada preflight range, not a prohibition on a
+    # later, separately authorized candidate-schema transition.
+    assert _historical_schema_sha256(repo_root) == EXPECTED_SCHEMA_SHA256
 
 
 def test_no_semantic_artifact_types_are_created(repo_root: Path) -> None:

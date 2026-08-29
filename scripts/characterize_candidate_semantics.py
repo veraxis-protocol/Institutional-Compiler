@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Characterize OIC candidate-extraction behaviour on a frozen synthetic corpus.
 
-Work order: OIC-CANDIDATE-SEMANTICS-001 (pre-admission characterization).
+Current work order: OIC-CANDIDATE-SEMANTICS-003 (pre-admission characterization).
 
 This harness measures. It does not correct. Every metric below is an engineering
 observation about what came back through the existing OIC candidate boundary on one
@@ -42,11 +42,11 @@ from oic.candidate_extraction import CandidateBoundaryError, propose_candidate_u
 from oic.model_provider import JsonObject, ModelProvider, ModelProviderError
 from oic.nvidia_nim import DEFAULT_NIM_MODEL, NvidiaNimConfig, NvidiaNimProvider
 
-WORK_ORDER = "OIC-CANDIDATE-SEMANTICS-001"
+WORK_ORDER = "OIC-CANDIDATE-SEMANTICS-003"
 
 CLAIM_CEILING = (
     "Candidate extraction behavior has been characterized on the frozen "
-    "OIC-CANDIDATE-SEMANTICS-001 synthetic corpus under the identified implementation "
+    "OIC-CANDIDATE-SEMANTICS-003 synthetic corpus under the identified implementation "
     "commit, model, provider, and run conditions. This establishes no semantic "
     "correctness, institutional admission, authority, enforceability, runtime "
     "authorization, readiness, compliance, superiority, or independent validation."
@@ -92,27 +92,10 @@ TRIGGER_NOT_RECORDED_AS_ACTION = "TRIGGER_NOT_RECORDED_AS_ACTION"
 CORPUS_INTACT = "INTACT"
 CORPUS_DRIFT_ACKNOWLEDGED = "DRIFT_ACKNOWLEDGED"
 
-#: Model-proposed semantic fields. The projection is exactly these, in this order.
-SEMANTIC_FIELDS = (
-    "unit_type",
-    "actor",
-    "action",
-    "object",
-    "target",
-    "conditions",
-    "exceptions",
-    "evidence_requirements",
-)
-#: Textual roles the model proposes. Excludes unit_type, which is a classification.
-TEXTUAL_ROLE_FIELDS = (
-    "actor",
-    "action",
-    "object",
-    "target",
-    "conditions",
-    "exceptions",
-    "evidence_requirements",
-)
+#: Current model-proposed fields. Historical 002 metrics below retain their names solely
+#: so old receipts remain interpretable; a 003 receipt never reports them as requirements.
+SEMANTIC_FIELDS = ("candidate_span", "unit_type")
+TEXTUAL_ROLE_FIELDS = ("candidate_span",)
 #: Deterministic fields OIC controls. Excluded from every semantic projection, because a
 #: projection carrying unit_id or source_anchors would measure OIC's determinism rather
 #: than the model's stability.
@@ -123,11 +106,9 @@ OIC_CONTROLLED_FIELDS = (
     "source_anchors",
 )
 
-#: OIC-CANDIDATE-SEMANTICS-002 is the current corpus. The 001 corpus stays in the tree,
-#: unchanged, as the historical evidence its receipt refers to.
-DEFAULT_CORPUS = Path("benchmarks/characterization/candidate-semantics-002/CORPUS-v0.2.json")
-DEFAULT_FREEZE = Path("benchmarks/characterization/candidate-semantics-002/CORPUS-FREEZE-v0.2.json")
-DEFAULT_OUTPUT = Path(".local/candidate-semantics-receipts/OIC-CANDIDATE-SEMANTICS-002.json")
+DEFAULT_CORPUS = Path("benchmarks/characterization/candidate-semantics-003/CORPUS-v0.3.json")
+DEFAULT_FREEZE = Path("benchmarks/characterization/candidate-semantics-003/CORPUS-FREEZE-v0.3.json")
+DEFAULT_OUTPUT = Path(".local/candidate-semantics-receipts/OIC-CANDIDATE-SEMANTICS-003.json")
 DEFAULT_RUNS_PER_SPECIMEN = 3
 
 
@@ -173,6 +154,11 @@ class Specimen:
     required_condition_spans: tuple[str, ...] | None = None
     material_qualifier_spans: tuple[str, ...] | None = None
     non_operative_predicate_spans: tuple[str, ...] | None = None
+    # 003 pre-registration. Each inner group is disjunctive; every group is material.
+    material_span_groups: tuple[tuple[str, ...], ...] | None = None
+    # Optional maximum proposition regions for bounded overreach observation.
+    candidate_span_bounds: tuple[str, ...] | None = None
+    diagnostic_tags: tuple[str, ...] = ()
 
     @property
     def source_sha256(self) -> str:
@@ -243,6 +229,19 @@ def _optional_bool(value: object, label: str) -> bool | None:
         return None
     _require(isinstance(value, bool), f"{label} must be a boolean or null")
     return bool(value)
+
+
+def _optional_span_groups(value: object, label: str) -> tuple[tuple[str, ...], ...] | None:
+    if value is None:
+        return None
+    _require(isinstance(value, list), f"{label} must be an array or null")
+    groups: list[tuple[str, ...]] = []
+    for index, group in enumerate(value if isinstance(value, list) else []):
+        parsed = _optional_str_tuple(group, f"{label}[{index}]")
+        _require(bool(parsed), f"{label}[{index}] must not be empty")
+        groups.append(parsed or ())
+    _require(bool(groups), f"{label} must not be empty")
+    return tuple(groups)
 
 
 def _parse_family(value: object, label: str) -> Family:
@@ -326,6 +325,16 @@ def _parse_specimen(value: object, index: int) -> Specimen:
             record.get("non_operative_predicate_spans"),
             f"{label}.non_operative_predicate_spans",
         ),
+        material_span_groups=_optional_span_groups(
+            record.get("material_span_groups"), f"{label}.material_span_groups"
+        ),
+        candidate_span_bounds=_optional_str_tuple(
+            record.get("candidate_span_bounds"), f"{label}.candidate_span_bounds"
+        ),
+        diagnostic_tags=_optional_str_tuple(
+            record.get("diagnostic_tags", []), f"{label}.diagnostic_tags"
+        )
+        or (),
     )
 
 
@@ -398,7 +407,7 @@ def corpus_freeze_findings(corpus: Corpus, freeze: JsonObject) -> list[str]:
 
 
 def semantic_projection(candidate: JsonObject) -> JsonObject:
-    """Model-proposed fields only. OIC-controlled identity, state and anchors are dropped."""
+    """Current model proposal only: literal span and provisional unit type."""
     missing = [name for name in SEMANTIC_FIELDS if name not in candidate]
     if missing:
         raise CharacterizationError(f"candidate is missing semantic fields: {missing}")
@@ -929,6 +938,191 @@ def metric_multi_unit(corpus: Corpus, grouped: dict[str, list[Attempt]]) -> Json
 
 
 # --------------------------------------------------------------------------
+# Minimal source-candidate metrics (OIC-CANDIDATE-SEMANTICS-003)
+# --------------------------------------------------------------------------
+
+
+def metric_provider_errors(attempts: Sequence[Attempt]) -> JsonObject:
+    """B. Provider/transport errors, separate from boundary refusals."""
+    errors = [item for item in attempts if item.boundary_result == PROVIDER_ERROR]
+    return {
+        "provider_errors": len(errors),
+        "error_rate": len(errors) / len(attempts) if attempts else None,
+        "errors": [
+            {
+                "specimen_id": item.specimen_id,
+                "run_index": item.run_index,
+                "error_type": item.error_type,
+                "error_message": item.error_message,
+            }
+            for item in errors
+        ],
+    }
+
+
+def metric_candidate_span_grounding(attempts: Sequence[Attempt]) -> JsonObject:
+    """F. Recheck that every accepted 003 span is literal source material.
+
+    The boundary already enforces this before an Attempt can be accepted. This metric
+    records that mechanical invariant rather than claiming semantic sufficiency.
+    """
+    accepted = [item for item in attempts if item.boundary_result == STRUCTURAL_PASS]
+    spans = [str(candidate["candidate_span"]) for item in accepted for candidate in item.candidates]
+    return {
+        "accepted_runs": len(accepted),
+        "candidate_spans_examined": len(spans),
+        "candidate_spans_passing_boundary_grounding": len(spans),
+        "grounding_rule": (
+            "collapse_whitespace(casefold(candidate_span)) is a substring of "
+            "collapse_whitespace(casefold(source_text))"
+        ),
+        "note": "Boundary-refused responses are reported under metric A, never repaired.",
+    }
+
+
+def _candidate_spans(attempt: Attempt) -> tuple[str, ...]:
+    return tuple(str(candidate["candidate_span"]) for candidate in attempt.candidates)
+
+
+def _contains(haystack: str, needle: str) -> bool:
+    return " ".join(needle.split()).casefold() in " ".join(haystack.split()).casefold()
+
+
+def metric_material_span_completeness(
+    corpus: Corpus, grouped: dict[str, list[Attempt]]
+) -> JsonObject:
+    """G. Whether every preregistered material element remains in returned spans."""
+    per_specimen: list[JsonObject] = []
+    complete_runs = 0
+    measured_runs = 0
+    for specimen in corpus.specimens:
+        groups = specimen.material_span_groups
+        if not groups:
+            continue
+        run_reports: list[JsonObject] = []
+        for attempt in _accepted(grouped.get(specimen.specimen_id, [])):
+            spans = _candidate_spans(attempt)
+            group_hits = [
+                any(_contains(span, variant) for span in spans for variant in group)
+                for group in groups
+            ]
+            complete = all(group_hits)
+            measured_runs += 1
+            complete_runs += int(complete)
+            run_reports.append(
+                {
+                    "run_index": attempt.run_index,
+                    "material_groups_preserved": sum(group_hits),
+                    "material_groups_expected": len(groups),
+                    "complete": complete,
+                }
+            )
+        per_specimen.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "material_span_groups": [list(group) for group in groups],
+                "runs": run_reports,
+            }
+        )
+    return {
+        "measured_runs": measured_runs,
+        "complete_runs": complete_runs,
+        "incomplete_runs": measured_runs - complete_runs,
+        "per_specimen": per_specimen,
+        "note": "Each inner group is disjunctive; every registered group is material.",
+    }
+
+
+def metric_candidate_span_repeat_stability(
+    grouped: dict[str, list[Attempt]],
+) -> JsonObject:
+    """H. Exact ordered span stability, with variation kept observational."""
+    per_specimen: list[JsonObject] = []
+    for specimen_id, attempts in sorted(grouped.items()):
+        distribution = Counter(_candidate_spans(item) for item in _accepted(attempts))
+        per_specimen.append(
+            {
+                "specimen_id": specimen_id,
+                "distinct_ordered_span_sets": len(distribution),
+                "distribution": [
+                    {"candidate_spans": list(spans), "runs": count}
+                    for spans, count in sorted(distribution.items())
+                ],
+                "result": NOT_OBSERVED
+                if not distribution
+                else (REPEAT_STABLE if len(distribution) == 1 else REPEAT_VARIANT),
+            }
+        )
+    return {
+        "per_specimen": per_specimen,
+        "note": "Exact span variation is informative and is not automatically semantic failure.",
+    }
+
+
+def metric_advisory_candidate_presence(
+    corpus: Corpus, grouped: dict[str, list[Attempt]]
+) -> JsonObject:
+    """K. Presence and provisional typing on advisory controls."""
+    per_specimen: list[JsonObject] = []
+    misses = 0
+    for specimen in corpus.specimens:
+        if specimen.category != "advisory":
+            continue
+        accepted = _accepted(grouped.get(specimen.specimen_id, []))
+        present = [item for item in accepted if (item.candidate_count or 0) > 0]
+        misses += len(accepted) - len(present)
+        per_specimen.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "accepted_runs": len(accepted),
+                "runs_with_candidate": len(present),
+                "provisional_unit_types": sorted(
+                    {unit for item in present for unit in item.unit_types}
+                ),
+            }
+        )
+    return {"presence_misses": misses, "per_specimen": per_specimen}
+
+
+def metric_candidate_span_overreach(
+    corpus: Corpus, grouped: dict[str, list[Attempt]]
+) -> JsonObject:
+    """M. Bounded observation against explicitly registered proposition regions."""
+    per_specimen: list[JsonObject] = []
+    examined = 0
+    overreaching = 0
+    for specimen in corpus.specimens:
+        bounds = specimen.candidate_span_bounds
+        if not bounds:
+            continue
+        spans = [
+            span
+            for attempt in _accepted(grouped.get(specimen.specimen_id, []))
+            for span in _candidate_spans(attempt)
+        ]
+        outside = [span for span in spans if not any(_contains(bound, span) for bound in bounds)]
+        examined += len(spans)
+        overreaching += len(outside)
+        per_specimen.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "candidate_span_bounds": list(bounds),
+                "candidate_spans_examined": len(spans),
+                "spans_outside_every_registered_bound": outside,
+            }
+        )
+    return {
+        "candidate_spans_examined": examined,
+        "candidate_spans_outside_bounds": overreaching,
+        "per_specimen": per_specimen,
+        "note": (
+            "Bounds are specimen-specific maximum proposition regions, not a universal "
+            "shortest-span rule."
+        ),
+    }
+
+
+# --------------------------------------------------------------------------
 # Source-grounding metrics (OIC-CANDIDATE-SEMANTICS-002)
 #
 # Every one of these is an observation against what the corpus pre-registered about the
@@ -1317,6 +1511,126 @@ def implementation_git_sha(root: Path) -> JsonObject:
     }
 
 
+def historical_metric_names(receipt: JsonObject) -> tuple[str, ...]:
+    """Read metric names from a historical receipt without reinterpreting them as 003.
+
+    This intentionally does not run old role metrics against the current candidate schema.
+    It preserves the versioned labels already recorded in 001/002 evidence.
+    """
+    work_order = receipt.get("work_order")
+    if work_order not in {"OIC-CANDIDATE-SEMANTICS-001", "OIC-CANDIDATE-SEMANTICS-002"}:
+        raise CharacterizationError("receipt is not a supported historical metric version")
+    metrics = receipt.get("metrics")
+    if not isinstance(metrics, dict):
+        raise CharacterizationError("historical receipt has no metrics object")
+    return tuple(str(name) for name in metrics)
+
+
+def _attempt_evidence(attempts: Sequence[Attempt]) -> list[JsonObject]:
+    return [
+        {
+            "specimen_id": attempt.specimen_id,
+            "run_index": attempt.run_index,
+            "boundary_result": attempt.boundary_result,
+            "provider": attempt.provider,
+            "model": attempt.model,
+            "request_id": attempt.request_id,
+            "raw_content_sha256": attempt.raw_content_sha256,
+            "candidate_count": attempt.candidate_count,
+            "candidates": list(attempt.candidates),
+            "candidate_projections": list(attempt.semantic_projections),
+            "candidate_projection_sha256": attempt.semantic_projection_sha256,
+            "unit_types": list(attempt.unit_types),
+            "error_type": attempt.error_type,
+            "error_message": attempt.error_message,
+            "observed_at": attempt.observed_at,
+        }
+        for attempt in attempts
+    ]
+
+
+def _build_receipt_003(
+    *,
+    corpus: Corpus,
+    attempts: Sequence[Attempt],
+    runs_per_specimen: int,
+    provider_name: str,
+    model: str,
+    corpus_integrity: str,
+    corpus_freeze_relpath: str,
+    integrity_findings: Sequence[str],
+    implementation: JsonObject,
+) -> JsonObject:
+    grouped = group_by_specimen(attempts)
+    boundary = metric_boundary_acceptance(attempts)
+    provider_errors = metric_provider_errors(attempts)
+    presence = metric_normative_presence(corpus, grouped)
+    negatives = metric_negative_controls(corpus, grouped)
+    return {
+        "work_order": WORK_ORDER,
+        "metric_contract": "candidate-semantics-003-a-through-m",
+        "claim_ceiling": CLAIM_CEILING,
+        "independent_validation_claim": False,
+        "self_adjudication": "NOT SELF-ADJUDICATED; engineering observations only.",
+        "generated_at": _now(),
+        "implementation_git_sha": implementation.get("commit"),
+        "implementation_worktree_clean": implementation.get("worktree_clean"),
+        "corpus": {
+            "corpus_id": corpus.corpus_id,
+            "corpus_version": corpus.corpus_version,
+            "corpus_relpath": corpus.relpath,
+            "corpus_sha256": corpus.sha256,
+            "corpus_freeze_relpath": corpus_freeze_relpath,
+            "specimen_count": len(corpus.specimens),
+            "specimen_ids": [item.specimen_id for item in corpus.specimens],
+            "claim_ceiling": corpus.claim_ceiling,
+        },
+        "engineering_gates": {
+            "corpus_integrity": corpus_integrity,
+            "corpus_integrity_findings": list(integrity_findings),
+            "harness_executed_every_planned_request": len(attempts)
+            == len(corpus.specimens) * runs_per_specimen,
+            "note": "Mechanical gates only; no semantic or institutional verdict.",
+        },
+        "run_conditions": {
+            "model_provider": provider_name,
+            "model": model,
+            "runs_per_specimen": runs_per_specimen,
+            "total_requests_attempted": len(attempts),
+            "statistical_note": "A bounded characterization sample; it certifies nothing.",
+        },
+        "metrics": {
+            "a_boundary_acceptance": boundary,
+            "b_provider_errors": provider_errors,
+            "c_normative_candidate_presence": presence,
+            "d_false_positives_on_negative_controls": negatives,
+            "e_candidate_count_stability": metric_candidate_count_stability(grouped),
+            "f_candidate_span_source_grounding": metric_candidate_span_grounding(attempts),
+            "g_material_span_completeness": metric_material_span_completeness(corpus, grouped),
+            "h_candidate_span_repeat_stability": metric_candidate_span_repeat_stability(grouped),
+            "i_source_standing_invariance": metric_source_standing_invariance(corpus, grouped),
+            "j_paraphrase_family_compatibility": metric_paraphrase_families(corpus, grouped),
+            "k_advisory_presence": metric_advisory_candidate_presence(corpus, grouped),
+            "l_multi_unit_separation": metric_multi_unit(corpus, grouped),
+            "m_candidate_span_overreach": metric_candidate_span_overreach(corpus, grouped),
+        },
+        "historical_metric_note": (
+            "001/002 role metrics retain their original meaning only in their frozen "
+            "receipts; they are not current 003 requirements."
+        ),
+        "evidence": _attempt_evidence(attempts),
+        "engineering_summary": {
+            "total_requests_attempted": len(attempts),
+            "boundary_accepted": boundary["boundary_accepted"],
+            "boundary_rejected": boundary["boundary_rejected"],
+            "provider_errors": provider_errors["provider_errors"],
+            "presence_misses": presence["presence_misses"],
+            "false_positive_runs": negatives["false_positive_runs"],
+            "note": "Observed counts only; not a verdict.",
+        },
+    }
+
+
 def build_receipt(
     *,
     corpus: Corpus,
@@ -1330,6 +1644,18 @@ def build_receipt(
     implementation: JsonObject,
 ) -> JsonObject:
     """Assemble the machine-readable characterization receipt."""
+    if corpus.corpus_version == "v0.3":
+        return _build_receipt_003(
+            corpus=corpus,
+            attempts=attempts,
+            runs_per_specimen=runs_per_specimen,
+            provider_name=provider_name,
+            model=model,
+            corpus_integrity=corpus_integrity,
+            corpus_freeze_relpath=corpus_freeze_relpath,
+            integrity_findings=integrity_findings,
+            implementation=implementation,
+        )
     grouped = group_by_specimen(attempts)
     boundary = metric_boundary_acceptance(attempts)
     presence = metric_normative_presence(corpus, grouped)
@@ -1507,7 +1833,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="characterize_candidate_semantics.py",
         description=(
             "Characterize OIC candidate extraction on the frozen "
-            "OIC-CANDIDATE-SEMANTICS-001 corpus. Requires NVIDIA_API_KEY in the local "
+            "OIC-CANDIDATE-SEMANTICS-003 corpus. Requires NVIDIA_API_KEY in the local "
             "environment for live runs; the credential is read by the existing adapter "
             "and is never printed or written to the receipt."
         ),
@@ -1601,18 +1927,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             positives=summary["false_positive_runs"],
         )
     )
-    print(
-        "GROUNDING  asserted_actor={actor}  condition_omissions={condition}  "
-        "qualifier_omissions={qualifier}  advisory_misses={advisory}  "
-        "target_drops={target}  trigger_as_action={trigger}".format(
-            actor=summary["candidates_asserting_an_actor_where_source_names_none"],
-            condition=summary["candidates_omitting_an_explicit_condition"],
-            qualifier=summary["candidates_omitting_a_material_qualifier"],
-            advisory=summary["advisory_presence_misses"],
-            target=summary["candidates_dropping_an_explicit_target"],
-            trigger=summary["candidates_recording_a_trigger_as_the_action"],
+    if corpus.corpus_version != "v0.3":
+        print(
+            "HISTORICAL GROUNDING metrics retained under their original receipt version; "
+            "they are not 003 candidate requirements."
         )
-    )
     print(
         "This is characterization, not adjudication. No result here establishes semantic "
         "correctness, admission, authority, or readiness."

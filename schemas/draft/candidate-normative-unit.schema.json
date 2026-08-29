@@ -2,10 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openinstitutionalcompiler.org/schemas/draft/candidate-normative-unit.schema.json",
   "title": "CandidateNormativeUnit",
+  "description": "Minimal source-grounded candidate material. This schema establishes no admission, authority, canonical meaning, or Institutional IR.",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "unit_id",
+    "candidate_span",
     "unit_type",
     "interpretation_state",
     "epistemic_state",
@@ -13,9 +15,16 @@
   ],
   "properties": {
     "unit_id": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^cnu-[0-9a-f]{24}$"
+    },
+    "candidate_span": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Literal contiguous source span proposed as candidate normative material."
     },
     "unit_type": {
+      "description": "Epistemically uncertain classification of apparent primary normative function.",
       "enum": [
         "definition",
         "mandate",
@@ -35,82 +44,11 @@
         "advisory"
       ]
     },
-    "actor": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "action": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "object": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "conditions": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "exceptions": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "evidence_requirements": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
     "interpretation_state": {
-      "enum": [
-        "extracted",
-        "inferred",
-        "reviewed",
-        "admitted",
-        "rejected"
-      ]
+      "const": "extracted"
     },
     "epistemic_state": {
-      "enum": [
-        "confirmed",
-        "uncertain",
-        "contested",
-        "unknown"
-      ]
-    },
-    "lifecycle_state": {
-      "enum": [
-        "proposed",
-        "active",
-        "suspended",
-        "expired",
-        "superseded",
-        "revoked"
-      ]
-    },
-    "confidence": {
-      "type": [
-        "number",
-        "null"
-      ],
-      "minimum": 0,
-      "maximum": 1
-    },
-    "alternatives": {
-      "type": "array",
-      "items": {
-        "type": "object"
-      }
+      "const": "uncertain"
     },
     "source_anchors": {
       "type": "array",
