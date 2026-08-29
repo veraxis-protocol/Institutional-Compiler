@@ -14,26 +14,28 @@ from typing import Any
 
 from oic.model_provider import JsonObject, ModelProvider, ModelProviderError, ModelRequest
 
-_ALLOWED_UNIT_TYPES = frozenset(
-    {
-        "definition",
-        "mandate",
-        "delegation",
-        "obligation",
-        "prohibition",
-        "permission",
-        "power",
-        "condition",
-        "exception",
-        "evidence_duty",
-        "review_duty",
-        "escalation",
-        "remedy",
-        "temporal_trigger",
-        "discretion",
-        "advisory",
-    }
+# Ordered so the outbound instructions and the parser cannot drift: the vocabulary the
+# model is offered is generated from the same tuple the parser accepts.
+_UNIT_TYPES: tuple[str, ...] = (
+    "definition",
+    "mandate",
+    "delegation",
+    "obligation",
+    "prohibition",
+    "permission",
+    "power",
+    "condition",
+    "exception",
+    "evidence_duty",
+    "review_duty",
+    "escalation",
+    "remedy",
+    "temporal_trigger",
+    "discretion",
+    "advisory",
 )
+_ALLOWED_UNIT_TYPES = frozenset(_UNIT_TYPES)
+_UNIT_TYPE_LIST = ", ".join(_UNIT_TYPES)
 _MODEL_ALLOWED_KEYS = frozenset(
     {"unit_type", "actor", "action", "object", "conditions", "exceptions", "evidence_requirements"}
 )
@@ -57,11 +59,29 @@ _SOURCE_ANCHOR_ALLOWED_KEYS = frozenset(
 )
 _SHA256_PATTERN = re.compile(r"^sha256:[0-9a-f]{64}$")
 
-_SYSTEM_PROMPT = """You are an extraction worker inside the Open Institutional Compiler.
-You may identify candidate normative units in the supplied source fragment. Your output
-is candidate material only and has no institutional authority. Do not decide admission,
-authorization, enforceability, legal effect, or runtime outcome. Do not invent source
-anchors. Return only the requested JSON object."""
+# Two separate things the worker has to be told, because conflating them suppresses
+# extraction: what a candidate *is*, and that the source's institutional standing is not
+# part of that question. Neither statement grants the model any authority; the paragraph
+# that withholds authority is unchanged in substance and is restated in the user prompt
+# and re-enforced by the parser, which is the only thing that actually binds.
+_SYSTEM_PROMPT = f"""You are an extraction worker inside the Open Institutional Compiler.
+
+Your task is semantic identification only. Read the supplied source fragment and identify
+every span that literally expresses institutional normative content.
+
+A candidate normative unit is the literal source expression of any one of these:
+{_UNIT_TYPE_LIST}.
+
+Whether the source is authoritative, admitted, enforceable, legally effective, approved,
+or institutionally controlling is NOT a criterion for deciding whether candidate material
+exists. Those questions belong to later stages and are decided elsewhere, not by you.
+Identify the candidate even when the standing of the source is unknown, draft, synthetic,
+hypothetical, or unverified.
+
+Your output is candidate material only and has no institutional authority. Do not decide
+admission, authority, authorization, enforceability, legal effect, runtime outcome, allow
+or deny, or any confidence standing for admission. Do not invent source anchors. Return
+only the requested JSON object."""
 
 
 class CandidateBoundaryError(ModelProviderError):
@@ -90,7 +110,10 @@ def propose_candidate_units(
     request = ModelRequest(
         system_prompt=_SYSTEM_PROMPT,
         user_prompt=(
-            "Extract zero or more candidate normative units from this exact source fragment.\n\n"
+            "Extract zero or more candidate normative units from this exact source fragment.\n"
+            "Identifying candidate material is not a finding that the source is "
+            "authoritative, admitted, enforceable, legally effective, approved, or "
+            "institutionally controlling. Do not withhold a candidate on those grounds.\n\n"
             "Return exactly one JSON object with exactly one top-level key named candidates.\n"
             "Use exactly this envelope:\n"
             '{"candidates":[{"unit_type":"...","actor":null,"action":null,'
@@ -100,6 +123,16 @@ def propose_candidate_units(
             "Never return a candidate directly at the JSON root. Never add another root key.\n\n"
             "For each candidate use only these keys: unit_type, actor, action, object, "
             "conditions, exceptions, evidence_requirements.\n"
+            "Restate only what the fragment literally says:\n"
+            f"- unit_type: the closest of {_UNIT_TYPE_LIST}.\n"
+            "- actor: whoever the fragment names as acting or bearing the duty.\n"
+            "- action: the act the fragment requires, permits, forbids, or confers.\n"
+            "- object: what that act applies to.\n"
+            "- conditions: circumstances the fragment states must hold, one per entry.\n"
+            "- exceptions: carve-outs the fragment states, one per entry.\n"
+            "- evidence_requirements: records or proof the fragment states are required.\n"
+            "Use null for an absent actor, action, or object and an empty array for an absent "
+            "list. Do not infer, complete, or supply anything the fragment does not say.\n"
             "Do not emit unit_id, source_anchors, interpretation_state, epistemic_state, "
             "lifecycle_state, confidence, admission, authority, verdict, or allow.\n\n"
             f"SOURCE FRAGMENT:\n{source_text}"
