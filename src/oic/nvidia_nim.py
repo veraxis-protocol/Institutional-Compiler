@@ -106,6 +106,17 @@ class NvidiaNimProvider:
             raise ModelProviderError(f"NVIDIA NIM HTTP error: {exc.code}") from exc
         except urllib.error.URLError as exc:
             raise ModelProviderError(f"NVIDIA NIM connection failed: {exc.reason}") from exc
+        except TimeoutError as exc:
+            # A socket timeout while reading an already-opened response arrives as a bare
+            # TimeoutError rather than a URLError, so without this clause it escapes the
+            # provider boundary entirely. Callers that treat ModelProviderError as one
+            # observed provider failure would instead see the whole run abort. The
+            # connect-path timeout is inside the same block, so both are covered.
+            #
+            # Translated, never retried: a timeout is transport evidence and stays visible
+            # to the caller as a provider failure. The message is a fixed string carrying
+            # no endpoint, credential, header, or request body.
+            raise ModelProviderError("NVIDIA NIM connection timed out") from exc
 
         try:
             decoded: Any = json.loads(raw_bytes.decode("utf-8"))
