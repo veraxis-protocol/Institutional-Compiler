@@ -84,7 +84,9 @@ It does not authorize institutional admission, runtime authorization,
 OCE execution, Rego/OPA execution, ZTL runtime integration, VEIP runtime
 integration, production claims, or benchmark claims unless separately
 authorized."""
-    unquoted = "\n".join(line.removeprefix("> ").removeprefix(">") for line in decision.splitlines())
+    unquoted = "\n".join(
+        line.removeprefix("> ").removeprefix(">") for line in decision.splitlines()
+    )
     assert exact_authorization in unquoted
 
 
