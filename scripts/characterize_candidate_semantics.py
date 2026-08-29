@@ -89,6 +89,23 @@ TARGET_OMITTED = "TARGET_OMITTED"
 TRIGGER_RECORDED_AS_ACTION = "TRIGGER_RECORDED_AS_ACTION"
 TRIGGER_NOT_RECORDED_AS_ACTION = "TRIGGER_NOT_RECORDED_AS_ACTION"
 
+# Framing-separation observation states (OIC-CANDIDATE-SEMANTICS-004). Observational:
+# "carries framing" is a corpus-relative record of what the span held, not a verdict.
+FRAMING_SEPARATED = "SEPARABLE_FRAMING_EXCLUDED"
+FRAMING_CARRIED = "SEPARABLE_FRAMING_CARRIED"
+SPAN_WITHIN_BOUNDS = "SPAN_WITHIN_REGISTERED_BOUNDS"
+SPAN_OUTSIDE_BOUNDS = "SPAN_OUTSIDE_REGISTERED_BOUNDS"
+MATERIAL_COMPLETE = "MATERIAL_CONTENT_PRESERVED"
+MATERIAL_UNDERREACH = "MATERIAL_CONTENT_LOST"
+
+CLAIM_CEILING_004 = (
+    "This experiment characterizes candidate-span framing separation under one frozen "
+    "synthetic corpus, implementation commit, provider/model when run live, and bounded "
+    "run conditions. It does not establish semantic correctness, institutional admission, "
+    "authority, enforceability, legal interpretation, production readiness, runtime "
+    "readiness, cross-model generalization, or independent validation."
+)
+
 CORPUS_INTACT = "INTACT"
 CORPUS_DRIFT_ACKNOWLEDGED = "DRIFT_ACKNOWLEDGED"
 
@@ -106,9 +123,11 @@ OIC_CONTROLLED_FIELDS = (
     "source_anchors",
 )
 
-DEFAULT_CORPUS = Path("benchmarks/characterization/candidate-semantics-003/CORPUS-v0.3.json")
-DEFAULT_FREEZE = Path("benchmarks/characterization/candidate-semantics-003/CORPUS-FREEZE-v0.3.json")
-DEFAULT_OUTPUT = Path(".local/candidate-semantics-receipts/OIC-CANDIDATE-SEMANTICS-003.json")
+#: OIC-CANDIDATE-SEMANTICS-004 is the current corpus. Every earlier corpus stays in the
+#: tree, unchanged, as the historical evidence its own receipt refers to.
+DEFAULT_CORPUS = Path("benchmarks/characterization/candidate-semantics-004/CORPUS-v0.4.json")
+DEFAULT_FREEZE = Path("benchmarks/characterization/candidate-semantics-004/CORPUS-FREEZE-v0.4.json")
+DEFAULT_OUTPUT = Path(".local/candidate-semantics-receipts/OIC-CANDIDATE-SEMANTICS-004.json")
 DEFAULT_RUNS_PER_SPECIMEN = 3
 
 
@@ -159,6 +178,11 @@ class Specimen:
     # Optional maximum proposition regions for bounded overreach observation.
     candidate_span_bounds: tuple[str, ...] | None = None
     diagnostic_tags: tuple[str, ...] = ()
+    # OIC-CANDIDATE-SEMANTICS-004 framing pre-registration. Optional so every earlier
+    # frozen corpus still loads unchanged as historical evidence.
+    separable_framing_spans: tuple[str, ...] | None = None
+    framing_expected_excluded: bool | None = None
+    framing_structure: str | None = None
 
     @property
     def source_sha256(self) -> str:
@@ -222,6 +246,13 @@ def _optional_str_tuple(value: object, label: str) -> tuple[str, ...] | None:
     entries = list(value) if isinstance(value, list) else []
     _require(all(isinstance(entry, str) for entry in entries), f"{label} must hold strings")
     return tuple(str(entry) for entry in entries)
+
+
+def _optional_string(value: object, label: str) -> str | None:
+    if value is None:
+        return None
+    _require(isinstance(value, str), f"{label} must be a string or null")
+    return str(value)
 
 
 def _optional_bool(value: object, label: str) -> bool | None:
@@ -335,6 +366,15 @@ def _parse_specimen(value: object, index: int) -> Specimen:
             record.get("diagnostic_tags", []), f"{label}.diagnostic_tags"
         )
         or (),
+        separable_framing_spans=_optional_str_tuple(
+            record.get("separable_framing_spans"), f"{label}.separable_framing_spans"
+        ),
+        framing_expected_excluded=_optional_bool(
+            record.get("framing_expected_excluded"), f"{label}.framing_expected_excluded"
+        ),
+        framing_structure=_optional_string(
+            record.get("framing_structure"), f"{label}.framing_structure"
+        ),
     )
 
 
@@ -1123,6 +1163,218 @@ def metric_candidate_span_overreach(
 
 
 # --------------------------------------------------------------------------
+# Framing-separation metrics (OIC-CANDIDATE-SEMANTICS-004)
+#
+# Overreach and underreach are opposite failures and are counted separately on purpose.
+# A span that sheds a draft prefix but also sheds the threshold has not separated framing
+# successfully; it has traded one defect for a worse one, and metric J refuses to score it
+# as a success.
+# --------------------------------------------------------------------------
+
+
+def _material_groups_missing(specimen: Specimen, spans: Sequence[str]) -> list[list[str]]:
+    """Preregistered material groups absent from a run's spans, taken together."""
+    return [
+        list(group)
+        for group in (specimen.material_span_groups or ())
+        if not any(_contains(span, variant) for span in spans for variant in group)
+    ]
+
+
+def metric_framing_separation(corpus: Corpus, grouped: dict[str, list[Attempt]]) -> JsonObject:
+    """J. Whether separable source-standing framing stayed outside the candidate span.
+
+    Reported per preregistered framing specimen. A span counts as a clean separation only
+    when it carries no registered framing AND the run loses no preregistered material
+    content, so shrinking a span past the proposition can never look like a success.
+    """
+    per_specimen: list[JsonObject] = []
+    totals = {
+        "candidate_spans_examined": 0,
+        "spans_inside_acceptable_bounds": 0,
+        "spans_containing_separable_framing": 0,
+        "runs_dropping_material_content": 0,
+        "spans_cleanly_separated": 0,
+    }
+    for specimen in corpus.specimens:
+        if specimen.framing_expected_excluded is not True:
+            continue
+        framing = specimen.separable_framing_spans or ()
+        bounds = specimen.candidate_span_bounds or ()
+        accepted = _accepted(grouped.get(specimen.specimen_id, []))
+        spans_examined: list[str] = []
+        carrying: list[str] = []
+        inside = 0
+        runs_losing_material = 0
+        run_reports: list[JsonObject] = []
+        for attempt in accepted:
+            spans = _candidate_spans(attempt)
+            spans_examined.extend(spans)
+            run_carrying = [
+                span for span in spans if any(_contains(span, mark) for mark in framing)
+            ]
+            carrying.extend(run_carrying)
+            run_inside = [span for span in spans if any(_contains(bound, span) for bound in bounds)]
+            inside += len(run_inside)
+            missing = _material_groups_missing(specimen, spans)
+            runs_losing_material += int(bool(missing))
+            run_reports.append(
+                {
+                    "run_index": attempt.run_index,
+                    "candidate_spans": list(spans),
+                    "spans_containing_separable_framing": run_carrying,
+                    "spans_inside_acceptable_bounds": len(run_inside),
+                    "material_groups_lost": missing,
+                    "result": (
+                        MATERIAL_UNDERREACH
+                        if missing
+                        else FRAMING_CARRIED
+                        if run_carrying
+                        else FRAMING_SEPARATED
+                    ),
+                }
+            )
+        clean = sum(
+            len(report["candidate_spans"])
+            for report in run_reports
+            if report["result"] == FRAMING_SEPARATED
+        )
+        totals["candidate_spans_examined"] += len(spans_examined)
+        totals["spans_inside_acceptable_bounds"] += inside
+        totals["spans_containing_separable_framing"] += len(carrying)
+        totals["runs_dropping_material_content"] += runs_losing_material
+        totals["spans_cleanly_separated"] += clean
+        per_specimen.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "framing_structure": specimen.framing_structure,
+                "separable_framing_spans": list(framing),
+                "acceptable_proposition_bounds": list(bounds),
+                "accepted_runs": len(accepted),
+                "candidate_spans_examined": len(spans_examined),
+                "spans_inside_acceptable_bounds": inside,
+                "spans_containing_separable_framing": len(carrying),
+                "observed_framing_carrying_spans": sorted(set(carrying)),
+                "runs_dropping_material_proposition_content": runs_losing_material,
+                "runs": run_reports,
+                "result": (
+                    NOT_OBSERVED
+                    if not accepted
+                    else MATERIAL_UNDERREACH
+                    if runs_losing_material
+                    else FRAMING_CARRIED
+                    if carrying
+                    else FRAMING_SEPARATED
+                ),
+            }
+        )
+    return {
+        **totals,
+        "measured_specimens": len(per_specimen),
+        "per_specimen": per_specimen,
+        "note": (
+            "Excluding framing while losing material proposition content is recorded as "
+            "MATERIAL_CONTENT_LOST, never as a separation success. Framing is asked for in "
+            "the prompt contract and never removed after generation."
+        ),
+    }
+
+
+def metric_framing_must_not_be_stripped(
+    corpus: Corpus, grouped: dict[str, list[Attempt]]
+) -> JsonObject:
+    """J2. Controls where framing-looking words are part of the proposition itself.
+
+    The counterpart to J. A specimen whose source says something *about a draft* rather
+    than *as a draft* must keep that language, and a span that sheds it is underreach.
+    """
+    per_specimen: list[JsonObject] = []
+    losing = 0
+    for specimen in corpus.specimens:
+        if specimen.framing_expected_excluded is not False:
+            continue
+        if not specimen.material_span_groups:
+            continue
+        accepted = _accepted(grouped.get(specimen.specimen_id, []))
+        run_reports: list[JsonObject] = []
+        for attempt in accepted:
+            missing = _material_groups_missing(specimen, _candidate_spans(attempt))
+            losing += int(bool(missing))
+            run_reports.append(
+                {
+                    "run_index": attempt.run_index,
+                    "candidate_spans": list(_candidate_spans(attempt)),
+                    "material_groups_lost": missing,
+                    "result": MATERIAL_UNDERREACH if missing else MATERIAL_COMPLETE,
+                }
+            )
+        per_specimen.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "framing_structure": specimen.framing_structure,
+                "accepted_runs": len(accepted),
+                "runs": run_reports,
+            }
+        )
+    return {
+        "measured_specimens": len(per_specimen),
+        "runs_dropping_material_content": losing,
+        "per_specimen": per_specimen,
+        "note": (
+            "These specimens register no separable framing. Language that merely looks "
+            "like framing is material proposition content here and must stay in the span."
+        ),
+    }
+
+
+def metric_candidate_span_underreach(
+    corpus: Corpus, grouped: dict[str, list[Attempt]]
+) -> JsonObject:
+    """M. Material proposition content lost from the returned spans.
+
+    Deliberately the mirror of the overreach metric and reported beside it. Metric G says
+    whether a run was complete; this one names the groups that went missing and books the
+    loss as underreach, so a shrinking span is never mistaken for a tightening one.
+    """
+    per_specimen: list[JsonObject] = []
+    measured = 0
+    underreaching = 0
+    for specimen in corpus.specimens:
+        if not specimen.material_span_groups:
+            continue
+        accepted = _accepted(grouped.get(specimen.specimen_id, []))
+        run_reports: list[JsonObject] = []
+        for attempt in accepted:
+            missing = _material_groups_missing(specimen, _candidate_spans(attempt))
+            measured += 1
+            underreaching += int(bool(missing))
+            run_reports.append(
+                {
+                    "run_index": attempt.run_index,
+                    "material_groups_lost": missing,
+                    "result": MATERIAL_UNDERREACH if missing else MATERIAL_COMPLETE,
+                }
+            )
+        per_specimen.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "material_span_groups": [list(g) for g in specimen.material_span_groups],
+                "runs": run_reports,
+            }
+        )
+    return {
+        "measured_runs": measured,
+        "runs_losing_material_content": underreaching,
+        "per_specimen": per_specimen,
+        "note": (
+            "Underreach and overreach are opposite defects. Overreach is metric M-prime "
+            "(candidate_span_overreach); a run can exhibit both at once and each is "
+            "counted where it belongs."
+        ),
+    }
+
+
+# --------------------------------------------------------------------------
 # Source-grounding metrics (OIC-CANDIDATE-SEMANTICS-002)
 #
 # Every one of these is an observation against what the corpus pre-registered about the
@@ -1549,6 +1801,127 @@ def _attempt_evidence(attempts: Sequence[Attempt]) -> list[JsonObject]:
     ]
 
 
+def _build_receipt_004(
+    *,
+    corpus: Corpus,
+    attempts: Sequence[Attempt],
+    runs_per_specimen: int,
+    provider_name: str,
+    model: str,
+    corpus_integrity: str,
+    corpus_freeze_relpath: str,
+    integrity_findings: Sequence[str],
+    implementation: JsonObject,
+) -> JsonObject:
+    """OIC-CANDIDATE-SEMANTICS-004 metrics: 003's set plus explicit framing separation.
+
+    Version-specific by design. 001, 002 and 003 receipts keep their own metric contracts
+    and are never reinterpreted under this one.
+    """
+    grouped = group_by_specimen(attempts)
+    boundary = metric_boundary_acceptance(attempts)
+    provider_errors = metric_provider_errors(attempts)
+    presence = metric_normative_presence(corpus, grouped)
+    negatives = metric_negative_controls(corpus, grouped)
+    framing = metric_framing_separation(corpus, grouped)
+    underreach = metric_candidate_span_underreach(corpus, grouped)
+    overreach = metric_candidate_span_overreach(corpus, grouped)
+    return {
+        "work_order": "OIC-CANDIDATE-SEMANTICS-004",
+        "metric_contract": "candidate-semantics-004-a-through-m",
+        "claim_ceiling": CLAIM_CEILING_004,
+        "independent_validation_claim": False,
+        "self_adjudication": "NOT SELF-ADJUDICATED; engineering observations only.",
+        "generated_at": _now(),
+        "implementation_git_sha": implementation.get("commit"),
+        "implementation_worktree_clean": implementation.get("worktree_clean"),
+        "candidate_contract": {
+            "model_proposed_fields": ["candidate_span", "unit_type"],
+            "oic_controlled_fields": [
+                "unit_id",
+                "interpretation_state",
+                "epistemic_state",
+                "source_anchors",
+            ],
+            "schema_changed_in_004": False,
+            "framing_separation_mechanism": (
+                "prompt contract only; no phrase list, no regex, no post-generation "
+                "trimming, and no repair exists in production code"
+            ),
+        },
+        "corpus": {
+            "corpus_id": corpus.corpus_id,
+            "corpus_version": corpus.corpus_version,
+            "corpus_relpath": corpus.relpath,
+            "corpus_sha256": corpus.sha256,
+            "corpus_freeze_relpath": corpus_freeze_relpath,
+            "specimen_count": len(corpus.specimens),
+            "specimen_ids": [item.specimen_id for item in corpus.specimens],
+            "claim_ceiling": corpus.claim_ceiling,
+        },
+        "engineering_gates": {
+            "corpus_integrity": corpus_integrity,
+            "corpus_integrity_findings": list(integrity_findings),
+            "harness_executed_every_planned_request": len(attempts)
+            == len(corpus.specimens) * runs_per_specimen,
+            "note": "Mechanical gates only; no semantic or institutional verdict.",
+        },
+        "run_conditions": {
+            "model_provider": provider_name,
+            "model": model,
+            "runs_per_specimen": runs_per_specimen,
+            "total_requests_attempted": len(attempts),
+            "statistical_note": "A bounded characterization sample; it certifies nothing.",
+        },
+        "metrics": {
+            "a_boundary_acceptance": boundary,
+            "b_provider_errors": provider_errors,
+            "c_normative_candidate_presence": presence,
+            "d_false_positives_on_negative_controls": negatives,
+            "e_candidate_count_stability": metric_candidate_count_stability(grouped),
+            "f_candidate_span_source_grounding": metric_candidate_span_grounding(attempts),
+            "g_material_span_completeness": metric_material_span_completeness(corpus, grouped),
+            "h_candidate_span_repeat_stability": metric_candidate_span_repeat_stability(grouped),
+            "i_source_standing_invariance": metric_source_standing_invariance(corpus, grouped),
+            "j_framing_separation": framing,
+            "j2_framing_that_must_not_be_stripped": metric_framing_must_not_be_stripped(
+                corpus, grouped
+            ),
+            "k_multi_unit_separation": metric_multi_unit(corpus, grouped),
+            "l_advisory_presence": metric_advisory_candidate_presence(corpus, grouped),
+            "m_candidate_span_underreach": underreach,
+            "m_prime_candidate_span_overreach": overreach,
+        },
+        "overreach_versus_underreach": (
+            "Opposite defects, counted separately. m_prime records a span reaching beyond "
+            "a registered proposition bound; m records a run losing preregistered material "
+            "content. A span that sheds framing and also sheds material content is booked "
+            "under m and is never scored as a framing-separation success in j."
+        ),
+        "historical_metric_note": (
+            "001, 002 and 003 metric labels retain their original meaning only inside "
+            "their own frozen receipts. They are not 004 requirements and 004 does not "
+            "reinterpret them."
+        ),
+        "evidence": _attempt_evidence(attempts),
+        "engineering_summary": {
+            "total_requests_attempted": len(attempts),
+            "boundary_accepted": boundary["boundary_accepted"],
+            "boundary_rejected": boundary["boundary_rejected"],
+            "provider_errors": provider_errors["provider_errors"],
+            "presence_misses": presence["presence_misses"],
+            "false_positive_runs": negatives["false_positive_runs"],
+            "candidate_spans_examined_for_framing": framing["candidate_spans_examined"],
+            "spans_containing_separable_framing": framing["spans_containing_separable_framing"],
+            "runs_losing_material_content": underreach["runs_losing_material_content"],
+            "candidate_spans_outside_registered_bounds": overreach[
+                "candidate_spans_outside_bounds"
+            ],
+            "note": "Observed counts only; not a verdict.",
+        },
+    }
+
+
 def _build_receipt_003(
     *,
     corpus: Corpus,
@@ -1644,6 +2017,18 @@ def build_receipt(
     implementation: JsonObject,
 ) -> JsonObject:
     """Assemble the machine-readable characterization receipt."""
+    if corpus.corpus_version == "v0.4":
+        return _build_receipt_004(
+            corpus=corpus,
+            attempts=attempts,
+            runs_per_specimen=runs_per_specimen,
+            provider_name=provider_name,
+            model=model,
+            corpus_integrity=corpus_integrity,
+            corpus_freeze_relpath=corpus_freeze_relpath,
+            integrity_findings=integrity_findings,
+            implementation=implementation,
+        )
     if corpus.corpus_version == "v0.3":
         return _build_receipt_003(
             corpus=corpus,

@@ -4,6 +4,23 @@ OIC-CANDIDATE-SEMANTICS-003 gives the model only ``candidate_span`` and provisio
 ``unit_type``. Semantic-role decomposition is not a pre-admission responsibility.
 Identity, state, and source anchoring remain deterministic OIC outputs. Nothing here
 admits, authorizes, or constructs Institutional IR.
+
+OIC-CANDIDATE-SEMANTICS-004 changes the prompt contract only. The schema, the parser, the
+fail-closed grounding rule and the deterministic identity material are all unchanged. What
+004 adds is a quoting rule: the span should hold the normative proposition, not the
+source's separable commentary about that proposition's own status. A fragment that marks
+itself a draft, a hypothetical, an illustration or an unverified extract is still saying
+something normative, and the framing is source context rather than part of what is said.
+
+Framing separation is asked of the provider and is never imposed afterwards. There is no
+phrase list, no regex, no post-generation trimming, and no repair anywhere in this module:
+a span that carries framing is accepted exactly as returned and recorded as an
+observation. The alternative -- stripping recognized prefixes -- would make OIC the author
+of the span it then reports as source-grounded.
+
+Excluding framing is a quoting decision, not a finding about the source. It decides
+nothing about whether the proposition is authoritative, adopted, valid, admitted,
+enforceable, or legally operative, and the source anchor keeps the framing either way.
 """
 
 from __future__ import annotations
@@ -82,12 +99,34 @@ summarize, paraphrase, complete, or infer. Passive voice does not require actor 
 preserve the proposition as source text. If the fragment contains two independently
 meaningful normative propositions, return two source-grounded candidate spans.
 
+Quote the proposition, not the source's commentary about the proposition. Where the
+fragment separately marks its own status as a draft, a proposal, a hypothetical, an
+illustration, an example, a quotation of another party, or as unadopted, unverified or
+non-authoritative, and that marking is grammatically separable from the proposition, leave
+it outside the span. Framing that is itself part of what the proposition says stays in:
+a circumstance the rule applies to governs conduct and belongs in the span.
+
+Never buy a shorter span with material content. Every threshold, amount, deadline,
+condition, exception, recipient, prohibition, advisory wording, trigger and consequence
+stays inside the span. Dropping material content is a worse error than including framing.
+
+Worked example, worded so it matches no fragment you will be given:
+  Fragment: INTERNAL WORKING TEXT - SUPERSEDED. Each grant over 5,000 euro must be
+  countersigned by the Programme Director.
+  Correct span: Each grant over 5,000 euro must be countersigned by the Programme
+  Director.
+  Over-extraction: the whole fragment, carrying INTERNAL WORKING TEXT - SUPERSEDED.
+  Under-extraction: must be countersigned, which loses the amount and the role.
+
 unit_type is the only classification and the only proposed field that need not occur in
 the source. It is provisional and epistemically uncertain. Advisory language remains
 candidate material when supported by the source.
 
 Source standing is not a discovery criterion. Draft, hypothetical, synthetic, unverified,
 and non-authoritative framing must not suppress a candidate that appears in the fragment.
+Leaving that framing outside the span is a quoting decision and not a finding: it does not
+decide whether the proposition is authoritative, adopted, valid, admitted, enforceable, or
+legally operative. The source anchor keeps the framing.
 
 Candidate material has no institutional authority. Do not decide or propose admission,
 authority, authorization, enforceability, legal effect, runtime outcome, allow, deny,
@@ -155,7 +194,11 @@ def propose_candidate_units(
             "Each candidate must have exactly these two keys: candidate_span and unit_type. "
             "candidate_span must be one literal, contiguous source span preserving the "
             "complete material proposition and its material qualifiers; do not paraphrase, "
-            "repair, infer, or split qualifiers into semantic roles. unit_type is an "
+            "repair, infer, or split qualifiers into semantic roles. Leave out separable "
+            "framing that states the source's own status - draft, proposal, hypothetical, "
+            "illustration, attribution, unverified, non-authoritative - rather than forming "
+            "part of the proposition, and never drop material proposition content in order "
+            "to do so. unit_type is an "
             "uncertain provisional classification and need not be source text. "
             f"Choose the closest of: {_UNIT_TYPE_LIST}.\n\n"
             "Never emit actor, action, object, target, conditions, exceptions, or "

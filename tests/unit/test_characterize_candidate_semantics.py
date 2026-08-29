@@ -405,8 +405,358 @@ def test_002_historical_metric_names_remain_readable_without_reinterpretation(
     )
 
 
-def test_cli_defaults_point_to_003_and_no_live_call_occurs(harness: ModuleType) -> None:
+def test_cli_defaults_point_to_004_and_no_live_call_occurs(harness: ModuleType) -> None:
     args = harness.build_parser().parse_args([])
-    assert "candidate-semantics-003" in args.corpus.as_posix()
-    assert "candidate-semantics-003" in args.freeze.as_posix()
-    assert "OIC-CANDIDATE-SEMANTICS-003" in args.output.as_posix()
+    assert "candidate-semantics-004" in args.corpus.as_posix()
+    assert "candidate-semantics-004" in args.freeze.as_posix()
+    assert "OIC-CANDIDATE-SEMANTICS-004" in args.output.as_posix()
+
+
+def test_every_predecessor_corpus_still_loads_from_its_own_path(
+    harness: ModuleType, repo_root: Path
+) -> None:
+    """001, 002 and 003 stay runnable as the evidence their own receipts refer to."""
+    for version, expected in (
+        ("001/CORPUS-v0.1.json", "OIC-CANDIDATE-SEMANTICS-001"),
+        ("002/CORPUS-v0.2.json", "OIC-CANDIDATE-SEMANTICS-002"),
+        ("003/CORPUS-v0.3.json", "OIC-CANDIDATE-SEMANTICS-003"),
+    ):
+        path = repo_root / "benchmarks/characterization" / f"candidate-semantics-{version}"
+        corpus = harness.load_corpus(path)
+        assert corpus.corpus_id == expected
+        assert corpus.specimens[0].separable_framing_spans is None
+
+
+# --------------------------------------------------------------------------
+# OIC-CANDIDATE-SEMANTICS-004 metrics
+#
+# Every metric is exercised firing and staying quiet. The one that matters most is the
+# interaction: a span that sheds framing but also sheds material content must be booked as
+# underreach and must NOT be counted as a framing-separation success.
+# --------------------------------------------------------------------------
+
+FRAMED = (
+    "DRAFT — NOT YET ADOPTED. A payment above $10,000 requires approval by the "
+    "Chief Financial Officer."
+)
+PROPOSITION = "A payment above $10,000 requires approval by the Chief Financial Officer."
+FRAMING = "DRAFT — NOT YET ADOPTED."
+
+
+def framing_specimen(
+    specimen_id: str = "F-1",
+    *,
+    text: str = FRAMED,
+    framing: list[str] | None = None,
+    expected: bool | None = True,
+    structure: str = "draft_prefix",
+    material: list[list[str]] | None = None,
+    bounds: list[str] | None = None,
+    category: str = "standing_draft",
+) -> dict[str, Any]:
+    record = specimen(
+        specimen_id,
+        text=text,
+        category=category,
+        material=material
+        if material is not None
+        else [["above $10,000"], ["Chief Financial Officer"]],
+        bounds=bounds if bounds is not None else [PROPOSITION],
+    )
+    record["separable_framing_spans"] = framing if framing is not None else [FRAMING]
+    record["framing_expected_excluded"] = expected
+    record["framing_structure"] = structure
+    return record
+
+
+def framing_document(*specimens: dict[str, Any]) -> dict[str, Any]:
+    record = document(*specimens)
+    record["corpus_id"] = "TEST-CORPUS-004"
+    record["corpus_version"] = "v0.4"
+    return record
+
+
+def load_004(harness: ModuleType, tmp_path: Path, *items: dict[str, Any]) -> Any:  # noqa: ANN401
+    path = tmp_path / "CORPUS-004.json"
+    path.write_bytes(harness.canonical_json_bytes(framing_document(*items)))
+    return harness.load_corpus(path)
+
+
+def run(harness: ModuleType, corpus: Any, content: str, runs: int = 1) -> Any:  # noqa: ANN401
+    attempts = harness.run_corpus(
+        corpus, provider=ScriptedProvider(content), runs_per_specimen=runs
+    )
+    return attempts, harness.group_by_specimen(attempts)
+
+
+def test_004_specimen_fields_load_and_stay_optional(harness: ModuleType, tmp_path: Path) -> None:
+    corpus = load_004(harness, tmp_path, framing_specimen(), specimen("T-2"))
+    framed, plain = corpus.specimens
+    assert framed.separable_framing_spans == (FRAMING,)
+    assert framed.framing_expected_excluded is True
+    assert framed.framing_structure == "draft_prefix"
+    assert plain.separable_framing_spans is None
+    assert plain.framing_expected_excluded is None
+    assert plain.framing_structure is None
+
+
+def test_j_records_a_clean_framing_separation(harness: ModuleType, tmp_path: Path) -> None:
+    corpus = load_004(harness, tmp_path, framing_specimen())
+    _, grouped = run(harness, corpus, response((PROPOSITION, "obligation")), runs=3)
+    metric = harness.metric_framing_separation(corpus, grouped)
+    record = metric["per_specimen"][0]
+    assert record["result"] == harness.FRAMING_SEPARATED
+    assert record["spans_containing_separable_framing"] == 0
+    assert record["spans_inside_acceptable_bounds"] == 3
+    assert record["runs_dropping_material_proposition_content"] == 0
+    assert metric["spans_cleanly_separated"] == 3
+
+
+def test_j_records_carried_framing_without_repairing_it(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    """The evidenced CSEM-021 defect: the whole framed fragment returned as the span."""
+    corpus = load_004(harness, tmp_path, framing_specimen())
+    _, grouped = run(harness, corpus, response((FRAMED, "obligation")), runs=3)
+    metric = harness.metric_framing_separation(corpus, grouped)
+    record = metric["per_specimen"][0]
+    assert record["result"] == harness.FRAMING_CARRIED
+    assert record["spans_containing_separable_framing"] == 3
+    assert record["observed_framing_carrying_spans"] == [FRAMED]
+    assert record["runs_dropping_material_proposition_content"] == 0
+    assert metric["spans_cleanly_separated"] == 0
+
+
+def test_j_refuses_to_score_underreach_as_a_separation_success(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    """Shedding the framing AND the threshold is a worse answer, not a better one."""
+    corpus = load_004(harness, tmp_path, framing_specimen())
+    _, grouped = run(harness, corpus, response(("requires approval", "obligation")), runs=2)
+    metric = harness.metric_framing_separation(corpus, grouped)
+    record = metric["per_specimen"][0]
+    assert record["spans_containing_separable_framing"] == 0
+    assert record["result"] == harness.MATERIAL_UNDERREACH
+    assert record["runs_dropping_material_proposition_content"] == 2
+    assert metric["spans_cleanly_separated"] == 0
+    assert record["runs"][0]["material_groups_lost"] == [
+        ["above $10,000"],
+        ["Chief Financial Officer"],
+    ]
+
+
+def test_j_ignores_specimens_that_register_no_separable_framing(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    corpus = load_004(harness, tmp_path, framing_specimen(expected=False, framing=None))
+    _, grouped = run(harness, corpus, response((PROPOSITION, "obligation")))
+    assert harness.metric_framing_separation(corpus, grouped)["per_specimen"] == []
+
+
+def test_j2_flags_a_specimen_whose_framing_words_belong_to_the_proposition(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    """CSEM-043's role: 'still in draft' governs conduct and must not be stripped."""
+    text = (
+        "Where a contract is still in draft, the sponsoring unit must record the reason "
+        "for the delay."
+    )
+    control = framing_specimen(
+        "F-CTRL",
+        text=text,
+        framing=None,
+        expected=False,
+        structure="draft_word_inside_proposition",
+        material=[["Where a contract is still in draft"], ["record the reason for the delay"]],
+        bounds=[text],
+        category="condition_is_not_framing",
+    )
+    corpus = load_004(harness, tmp_path, control)
+    stripped = "the sponsoring unit must record the reason for the delay."
+    _, grouped = run(harness, corpus, response((stripped, "obligation")), runs=2)
+    metric = harness.metric_framing_must_not_be_stripped(corpus, grouped)
+    assert metric["runs_dropping_material_content"] == 2
+    assert metric["per_specimen"][0]["runs"][0]["result"] == harness.MATERIAL_UNDERREACH
+
+    _, kept = run(harness, corpus, response((text, "obligation")), runs=2)
+    assert (
+        harness.metric_framing_must_not_be_stripped(corpus, kept)["runs_dropping_material_content"]
+        == 0
+    )
+
+
+def test_m_underreach_names_the_material_groups_that_went_missing(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    corpus = load_004(harness, tmp_path, framing_specimen())
+    _, grouped = run(
+        harness,
+        corpus,
+        response(("A payment above $10,000 requires approval", "obligation")),
+        runs=2,
+    )
+    metric = harness.metric_candidate_span_underreach(corpus, grouped)
+    assert metric["measured_runs"] == 2
+    assert metric["runs_losing_material_content"] == 2
+    assert metric["per_specimen"][0]["runs"][0]["material_groups_lost"] == [
+        ["Chief Financial Officer"]
+    ]
+
+
+def test_m_stays_quiet_when_every_material_group_survives(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    corpus = load_004(harness, tmp_path, framing_specimen())
+    _, grouped = run(harness, corpus, response((PROPOSITION, "obligation")), runs=3)
+    metric = harness.metric_candidate_span_underreach(corpus, grouped)
+    assert metric["measured_runs"] == 3
+    assert metric["runs_losing_material_content"] == 0
+
+
+def test_overreach_and_underreach_are_counted_separately(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    """The same run can be both, and each lands where it belongs."""
+    corpus = load_004(harness, tmp_path, framing_specimen())
+    # Reaches beyond the registered bound (carries framing) and loses the recipient.
+    span = "DRAFT — NOT YET ADOPTED. A payment above $10,000 requires approval"
+    _, grouped = run(harness, corpus, response((span, "obligation")))
+    over = harness.metric_candidate_span_overreach(corpus, grouped)
+    under = harness.metric_candidate_span_underreach(corpus, grouped)
+    assert over["candidate_spans_outside_bounds"] == 1
+    assert under["runs_losing_material_content"] == 1
+    framing = harness.metric_framing_separation(corpus, grouped)
+    assert framing["per_specimen"][0]["result"] == harness.MATERIAL_UNDERREACH
+
+
+def test_a_multi_unit_specimen_under_one_prefix_separates_cleanly(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    text = (
+        "NOT YET IN FORCE. A purchase requisition must be approved before an order is "
+        "placed. Suppliers are paid within forty-five days of invoice."
+    )
+    first = "A purchase requisition must be approved before an order is placed."
+    second = "Suppliers are paid within forty-five days of invoice."
+    item = framing_specimen(
+        "F-MULTI",
+        text=text,
+        framing=["NOT YET IN FORCE."],
+        structure="shared_framing_prefix_two_propositions",
+        material=[["before an order is placed"], ["within forty-five days of invoice"]],
+        bounds=[first, second],
+        category="shared_framing_multi_unit",
+    )
+    item["expected_candidate_count_min"] = 2
+    corpus = load_004(harness, tmp_path, item)
+    _, grouped = run(harness, corpus, response((first, "obligation"), (second, "temporal_trigger")))
+    record = harness.metric_framing_separation(corpus, grouped)["per_specimen"][0]
+    assert record["candidate_spans_examined"] == 2
+    assert record["spans_inside_acceptable_bounds"] == 2
+    assert record["result"] == harness.FRAMING_SEPARATED
+    assert (
+        harness.metric_multi_unit(corpus, grouped)["per_specimen"][0][
+            "runs_returning_separated_units"
+        ]
+        == 1
+    )
+
+
+def test_the_004_receipt_is_version_specific_and_labels_both_defects(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    corpus = load_004(
+        harness, tmp_path, framing_specimen(), specimen("N-1", normative=False, cmin=0, cmax=0)
+    )
+    attempts, _ = run(harness, corpus, response((PROPOSITION, "obligation")), runs=2)
+    receipt = harness.build_receipt(
+        corpus=corpus,
+        attempts=attempts,
+        runs_per_specimen=2,
+        provider_name="fake-provider",
+        model="fake-model",
+        corpus_integrity=harness.CORPUS_INTACT,
+        corpus_freeze_relpath="FREEZE.json",
+        integrity_findings=[],
+        implementation={"commit": "0" * 40, "worktree_clean": True},
+    )
+    assert receipt["work_order"] == "OIC-CANDIDATE-SEMANTICS-004"
+    assert receipt["metric_contract"] == "candidate-semantics-004-a-through-m"
+    assert set(receipt["metrics"]) == {
+        "a_boundary_acceptance",
+        "b_provider_errors",
+        "c_normative_candidate_presence",
+        "d_false_positives_on_negative_controls",
+        "e_candidate_count_stability",
+        "f_candidate_span_source_grounding",
+        "g_material_span_completeness",
+        "h_candidate_span_repeat_stability",
+        "i_source_standing_invariance",
+        "j_framing_separation",
+        "j2_framing_that_must_not_be_stripped",
+        "k_multi_unit_separation",
+        "l_advisory_presence",
+        "m_candidate_span_underreach",
+        "m_prime_candidate_span_overreach",
+    }
+    assert "Opposite defects, counted separately" in receipt["overreach_versus_underreach"]
+    assert receipt["candidate_contract"]["model_proposed_fields"] == [
+        "candidate_span",
+        "unit_type",
+    ]
+    assert receipt["candidate_contract"]["schema_changed_in_004"] is False
+    assert "no post-generation" in receipt["candidate_contract"]["framing_separation_mechanism"]
+
+
+def test_the_004_receipt_states_its_claim_ceiling_and_does_not_self_adjudicate(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    corpus = load_004(harness, tmp_path, framing_specimen())
+    attempts, _ = run(harness, corpus, response((PROPOSITION, "obligation")))
+    receipt = harness.build_receipt(
+        corpus=corpus,
+        attempts=attempts,
+        runs_per_specimen=1,
+        provider_name="fake-provider",
+        model="fake-model",
+        corpus_integrity=harness.CORPUS_INTACT,
+        corpus_freeze_relpath="FREEZE.json",
+        integrity_findings=[],
+        implementation={"commit": "0" * 40, "worktree_clean": True},
+    )
+    ceiling = receipt["claim_ceiling"]
+    assert receipt["independent_validation_claim"] is False
+    assert receipt["self_adjudication"] == "NOT SELF-ADJUDICATED; engineering observations only."
+    for denied in (
+        "semantic correctness",
+        "institutional admission",
+        "authority",
+        "enforceability",
+        "cross-model generalization",
+        "independent validation",
+    ):
+        assert denied in ceiling, denied
+    serialized = harness.canonical_json_bytes(receipt).decode("utf-8")
+    for banned in ('"ADMITTED"', '"AUTHORIZED"', '"COMPLIANT"', '"ALLOW"', '"DENY"'):
+        assert banned not in serialized, banned
+
+
+def test_historical_metric_labels_stay_version_correct(harness: ModuleType, tmp_path: Path) -> None:
+    """A v0.3 corpus still gets the 003 metric contract, not the 004 one."""
+    corpus = load(harness, tmp_path, specimen("T-1", material=[["approve"]]))
+    attempts, _ = run(harness, corpus, response(("The Treasurer must approve", "obligation")))
+    receipt = harness.build_receipt(
+        corpus=corpus,
+        attempts=attempts,
+        runs_per_specimen=1,
+        provider_name="fake-provider",
+        model="fake-model",
+        corpus_integrity=harness.CORPUS_INTACT,
+        corpus_freeze_relpath="FREEZE.json",
+        integrity_findings=[],
+        implementation={"commit": "0" * 40, "worktree_clean": True},
+    )
+    assert receipt["metric_contract"] == "candidate-semantics-003-a-through-m"
+    assert "j_framing_separation" not in receipt["metrics"]
+    assert "m_candidate_span_overreach" in receipt["metrics"]
+    assert "not current 003 requirements" in receipt["historical_metric_note"]
