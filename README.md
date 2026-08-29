@@ -4,6 +4,8 @@
 - **Bootstrap date:** 2026-07-29
 - **Governing design:** TDD-OIC-001 v1.1
 
+[![Research Paper DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22160516.svg)](https://doi.org/10.5281/zenodo.22160516)
+
 Open Institutional Compiler (OIC) is developing a reviewable path from the
 human-readable sources that govern a regulated enterprise to the explicit
 controls its software and authorization systems can evaluate.
@@ -23,6 +25,38 @@ checks. It is not a functioning institutional compiler.
 **What is blocked:** semantic implementation remains blocked pending the corpus
 provenance and ZTL/VEIP interface evidence listed in [`STATUS.md`](STATUS.md).
 Nothing in this README opens that gate or promotes the repository's maturity.
+
+## Research paper
+
+**From Governing Source to Warranted Control: A Formal Model of Institutional Compilation**
+
+Research preprint by Arkadiy Miteiko, Veraxis Research Group.
+
+DOI: [10.5281/zenodo.22160516](https://doi.org/10.5281/zenodo.22160516)
+
+The paper formalizes **institutional compilation** as the governed
+transformation from governing source to admitted meaning to warranted machine
+control. It defines eight jointly necessary obligations: source binding,
+admission authority, semantic conservation, unknown preservation, authority
+non-amplification, temporal currentness, version binding, and target-projection
+fidelity.
+
+Its bounded executable checker exhaustively evaluates all 6,561 states of the
+eight-obligation aggregation rule and kills five deliberately defective
+aggregators. That experiment establishes conformance of the finite aggregation
+rule only. It does **not** establish natural-language semantic correctness,
+benchmark superiority, legal or regulatory compliance, production readiness,
+or independent validation.
+
+The publication is a scholarly research artifact. This repository is the
+evolving engineering implementation record. The paper's archived engineering
+snapshot is bound to repository commit
+`914830ceec70bde17004d2ccbbb13218ca44a89b`; later repository commits do not
+retroactively alter the published paper. The DOI does not certify the
+repository implementation, and repository CI does not validate the paper's
+substantive legal or semantic claims. The paper does not establish semantic
+benchmark PASS, production readiness, regulatory compliance, or independent
+validation.
 
 ## Capability being developed
 
@@ -474,3 +508,9 @@ institutional validity, compliance, comparative advantage, or owner acceptance.
 The permitted, evidence-gated, and forbidden claims are recorded in
 [`CLAIMS.md`](CLAIMS.md). Semantic implementation remains blocked by
 [`STATUS.md`](STATUS.md).
+
+## Citation
+
+Miteiko, A. (2026). *From Governing Source to Warranted Control: A Formal Model
+of Institutional Compilation*. Zenodo.
+https://doi.org/10.5281/zenodo.22160516
