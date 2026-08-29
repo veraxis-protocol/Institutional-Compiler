@@ -91,10 +91,17 @@ def propose_candidate_units(
         system_prompt=_SYSTEM_PROMPT,
         user_prompt=(
             "Extract zero or more candidate normative units from this exact source fragment.\n\n"
+            "Return exactly one JSON object with exactly one top-level key named candidates.\n"
+            "Use exactly this envelope:\n"
+            '{"candidates":[{"unit_type":"...","actor":null,"action":null,'
+            '"object":null,"conditions":[],"exceptions":[],'
+            '"evidence_requirements":[]}]}\n'
+            'For zero candidates, return exactly {"candidates":[]}.\n'
+            "Never return a candidate directly at the JSON root. Never add another root key.\n\n"
             "For each candidate use only these keys: unit_type, actor, action, object, "
             "conditions, exceptions, evidence_requirements.\n"
             "Do not emit unit_id, source_anchors, interpretation_state, epistemic_state, "
-            "lifecycle_state, confidence, admission, authority, or verdict.\n\n"
+            "lifecycle_state, confidence, admission, authority, verdict, or allow.\n\n"
             f"SOURCE FRAGMENT:\n{source_text}"
         ),
         response_format={"type": "json_object"},

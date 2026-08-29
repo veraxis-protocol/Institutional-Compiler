@@ -47,6 +47,39 @@ def test_provider_output_is_forced_to_candidate_only_state() -> None:
     assert provider.requests[0].response_format == {"type": "json_object"}
 
 
+def test_outbound_prompt_requires_exact_candidates_root_envelope() -> None:
+    provider = FakeProvider('{"candidates":[]}')
+    propose_candidate_units(
+        source_text="No duties here.", source_anchor=anchor(), provider=provider
+    )
+    prompt = provider.requests[0].user_prompt
+    assert "exactly one top-level key named candidates" in prompt
+    assert (
+        '{"candidates":[{"unit_type":"...","actor":null,"action":null,"object":null,'
+        '"conditions":[],"exceptions":[],"evidence_requirements":[]}]}' in prompt
+    )
+    assert 'For zero candidates, return exactly {"candidates":[]}.' in prompt
+    assert "Never return a candidate directly at the JSON root." in prompt
+    assert "Never add another root key." in prompt
+
+
+def test_bare_candidate_object_at_root_remains_rejected() -> None:
+    provider = FakeProvider('{"unit_type":"obligation","actor":"Treasurer"}')
+    with pytest.raises(CandidateBoundaryError, match="unexpected root keys"):
+        propose_candidate_units(
+            source_text="The Treasurer must approve.", source_anchor=anchor(), provider=provider
+        )
+
+
+def test_empty_candidates_envelope_is_accepted() -> None:
+    result = propose_candidate_units(
+        source_text="No duties here.",
+        source_anchor=anchor(),
+        provider=FakeProvider('{"candidates":[]}'),
+    )
+    assert result.candidates == ()
+
+
 def test_model_cannot_emit_authority_controlled_fields() -> None:
     provider = FakeProvider(
         '{"candidates":[{"unit_type":"permission","source_anchors":[],"action":"pay"}]}'
