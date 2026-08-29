@@ -1,12 +1,12 @@
 # Foundation setup and verification
 
-Operator guide for the non-semantic infrastructure delivered by `CLAUDE-FABLE5-WO-001`.
+Operator guide for infrastructure plus the Owner Decision 004 bounded candidate slice.
 
-> **What this is not.** This repository contains no compiler. It does not interpret
-> institutional documents, determine authority, record admission, produce an Open Control
-> Envelope, generate Rego, evaluate a control, or call ZTL or VEIP. The semantic
-> implementation gate is **BLOCKED** (`STATUS.md`). Nothing here is a quality, security,
-> enterprise-readiness, or legal-compliance claim.
+> **What this is not.** The bounded model layer proposes candidate material only. It does
+> not determine authority, record admission, produce an Open Control Envelope, generate
+> Rego, evaluate a runtime control, or execute ZTL or VEIP. Model output has no authority
+> or admission rights. Nothing here is a quality, security, enterprise-readiness, or
+> legal-compliance claim.
 
 ---
 

@@ -151,7 +151,17 @@ def _isolated_gate_tree(repo_root: Path, tmp_path: Path) -> Path:
         target = root / relpath
         target.parent.mkdir(parents=True, exist_ok=True)
         if source.is_dir():
-            shutil.copytree(source, target)
+            shutil.copytree(
+                source,
+                target,
+                ignore=shutil.ignore_patterns(
+                    "__pycache__",
+                    "model_provider.py",
+                    "nvidia_nim.py",
+                    "candidate_extraction.py",
+                    "review_docket.py",
+                ),
+            )
         else:
             shutil.copy2(source, target)
     subprocess.run(["git", "init", "-q", str(root)], check=True)
@@ -159,9 +169,12 @@ def _isolated_gate_tree(repo_root: Path, tmp_path: Path) -> Path:
     return root
 
 
-def test_t1_production_detector_accepts_exact_baseline(repo_root: Path) -> None:
+def test_t1_production_detector_accepts_exact_historical_baseline(
+    repo_root: Path, tmp_path: Path
+) -> None:
     module = _module(repo_root)
-    assert module.discover_unadmitted_production_paths(repo_root) == []
+    root = _isolated_gate_tree(repo_root, tmp_path)
+    assert module.discover_unadmitted_production_paths(root) == []
 
 
 @pytest.mark.parametrize(

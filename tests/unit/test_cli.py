@@ -320,7 +320,7 @@ def test_doctor_exits_zero_and_reports_the_gate(
     code, out, _ = run(capsys, "--repo-root", str(repo_root), "doctor")
     assert code == ExitCode.PASS
     assert "semantic implementation gate" in out
-    assert "BLOCKED" in out
+    assert "OWNER-AUTHORIZED BOUNDED IMPLEMENTATION" in out
 
 
 def test_doctor_text_output_marks_ztl_and_veip_provisional(
@@ -349,7 +349,7 @@ def test_doctor_json_output_parses(capsys: pytest.CaptureFixture[str], repo_root
     payload = json.loads(out)
     assert {boundary["name"] for boundary in payload["boundaries"]} == {"ZTL", "VEIP"}
     gate = next(c for c in payload["gates"] if c["name"] == "semantic implementation gate")
-    assert gate["status"] == "BLOCKED"
+    assert gate["status"] == "OWNER-AUTHORIZED BOUNDED IMPLEMENTATION"
 
 
 # ---------------------------------------------------------------------------
@@ -385,7 +385,7 @@ def test_help_text_disclaims_semantic_function(capsys: pytest.CaptureFixture[str
 
 
 def test_no_semantic_subcommands_exist() -> None:
-    """The CLI must expose infrastructure verbs only while the gate is BLOCKED."""
+    """The bounded code start does not add semantic CLI verbs."""
     from oic.cli import build_parser
 
     parser = build_parser()

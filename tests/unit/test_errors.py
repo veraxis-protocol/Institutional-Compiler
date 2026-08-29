@@ -150,7 +150,7 @@ def test_redact_never_returns_the_value() -> None:
 
 
 def test_no_semantic_error_classes_are_defined() -> None:
-    """The semantic gate is BLOCKED; semantic error classes must not exist yet."""
+    """The bounded slice does not introduce authority or admission errors."""
     import oic.errors as errors_module
 
     forbidden = {

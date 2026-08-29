@@ -18,10 +18,8 @@ no boolean values at all, so there is nowhere for an unknown to collapse into a 
 What this never reports
 -----------------------
 Production readiness, enterprise readiness, or compliance of any kind. ZTL and VEIP are
-always reported as ``PROVISIONAL / NOT CONFIGURED`` and the semantic implementation gate
-is always reported as ``BLOCKED``; neither can be flipped by anything found in the
-environment, because both are governance states recorded in ``STATUS.md``, not facts
-about a machine.
+always reported as ``PROVISIONAL / NOT CONFIGURED`` and bounded semantic implementation
+as owner-authorized. These governance states cannot be flipped by host state.
 """
 
 from __future__ import annotations
@@ -54,7 +52,7 @@ __all__ = [
 
 #: Fixed governance strings. These are statements about `STATUS.md`, not about the host.
 PROVISIONAL_BOUNDARY_STATUS: Final[str] = "PROVISIONAL / NOT CONFIGURED"
-SEMANTIC_GATE_STATUS: Final[str] = "BLOCKED"
+SEMANTIC_GATE_STATUS: Final[str] = "OWNER-AUTHORIZED BOUNDED IMPLEMENTATION"
 REQUIRED_PYTHON: Final[str] = ">=3.12,<3.13"
 COMPOSE_RELPATH: Final[str] = "docker/compose.yaml"
 
@@ -331,10 +329,7 @@ def run_doctor(root: Path | None = None) -> DoctorReport:
         CheckResult(
             name="semantic implementation gate",
             status=SEMANTIC_GATE_STATUS,
-            note=(
-                "blocked until the preflight corpus manifest and the ZTL/VEIP provisional "
-                "interface records are completed (STATUS.md)"
-            ),
+            note="limited by Owner Decision 004; model output has no authority or admission rights",
         ),
         CheckResult(
             name="preflight corpus provenance",
@@ -348,7 +343,7 @@ def run_doctor(root: Path | None = None) -> DoctorReport:
         ),
         CheckResult(
             name="release status",
-            status="OWNER-AUTHORIZED BOOTSTRAP - PRE-EXTERNAL-REVIEW",
+            status="OWNER-AUTHORIZED BOUNDED SEMANTIC IMPLEMENTATION - PRE-EXTERNAL-REVIEW",
             note=(
                 "NOT PRODUCTION READY. This repository makes no quality, "
                 "enterprise-readiness, security, or legal-compliance claim."

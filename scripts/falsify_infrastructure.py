@@ -23,8 +23,8 @@ CASES = (
         "tests/contract/test_semantic_conformance.py::test_reject_duplicated_reason_codes",
     ),
     (
-        "semantic code-start remains blocked",
-        "tests/contract/test_claims_discipline.py::test_operator_guide_states_the_semantic_gate_is_blocked",
+        "candidate authority boundary remains fail-closed",
+        "tests/contract/test_claims_discipline.py::test_operator_guide_states_the_candidate_authority_boundary",
     ),
 )
 

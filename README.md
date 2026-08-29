@@ -1,6 +1,6 @@
 # Open Institutional Compiler
 
-- **Status:** OWNER-AUTHORIZED BOOTSTRAP - PRE-EXTERNAL-REVIEW
+- **Status:** OWNER-AUTHORIZED BOUNDED SEMANTIC IMPLEMENTATION - PRE-EXTERNAL-REVIEW
 - **Bootstrap date:** 2026-07-29
 - **Governing design:** TDD-OIC-001 v1.1
 
@@ -17,14 +17,17 @@ Target capability:
 > evidentiary standard required to authorize, explain, audit, or correct those
 > actions.
 
-**What exists today:** a tested, non-semantic Python infrastructure package for
+**What exists today:** a tested Python infrastructure package plus the bounded,
+candidate-only model provider, NVIDIA NIM, extraction, and deterministic review-docket
+mechanics authorized by Owner Decision 004. The infrastructure continues to provide
 offline schema validation, historical bootstrap verification, current manifest
 verification, environment and gate diagnostics, and reproducible CI and SBOM
 checks. It is not a functioning institutional compiler.
 
-**What is blocked:** semantic implementation remains blocked pending the corpus
-provenance and ZTL/VEIP interface evidence listed in [`STATUS.md`](STATUS.md).
-Nothing in this README opens that gate or promotes the repository's maturity.
+Model output has no authority or admission rights. Open Run execution, institutional
+admission, Institutional IR, Open Control Envelope, Rego, runtime ALLOW/DENY, ZTL
+execution, and VEIP execution remain unauthorized. See [`STATUS.md`](STATUS.md) and
+[`Owner Decision 004`](docs/decisions/OIC-OWNER-DECISION-004.md).
 
 ## Research paper
 
@@ -307,7 +310,7 @@ semantic OIC-Bench results.
 | Infrastructure falsification harness | MEASURED - 4/4 |
 | Full repository test suite | MEASURED - 1232 passed, 1 intentional skip |
 | Manifest | MEASURED - INCOMPLETE, required exit 3 |
-| Semantic implementation gate | BLOCKED |
+| Bounded semantic implementation | OWNER-AUTHORIZED - PRE-EXTERNAL-REVIEW |
 | OIC-Bench preflight design | PREREGISTERED |
 | Semantic OIC-Bench preflight | NOT YET RUN |
 | Full OIC-Bench v0.1 | NOT YET RUN |
@@ -333,13 +336,12 @@ Current capabilities include non-semantic schemas and contracts,
 manifest/integrity verification, the falsification harness, supply-chain
 controls, and the benchmark preflight specification.
 
-Exit requires complete governing-source rights and provenance plus sufficient
-ZTL and VEIP provisional-interface evidence to open the semantic code-start
-gate.
+The candidate-only slice is now owner-authorized. Global source-manifest completeness
+and the ZTL/VEIP execution boundaries remain incomplete and unchanged.
 
 ### Stage 1 - Source-to-control reference
 
-**STATUS: NEXT - BLOCKED by the semantic code-start gate**
+**STATUS: BOUNDED CANDIDATE-ONLY START — NO ADMISSION OR RUNTIME AUTHORIZATION**
 
 Target path:
 

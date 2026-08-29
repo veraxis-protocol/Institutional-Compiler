@@ -31,7 +31,7 @@ BOOTSTRAP_FILE_COUNT = 50
 
 def _git(workspace: Path, *args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        ["git", "-C", str(workspace), *args],
+        ["git", "-c", "commit.gpgsign=false", "-C", str(workspace), *args],
         capture_output=True,
         text=True,
         check=True,

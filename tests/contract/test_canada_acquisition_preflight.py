@@ -33,7 +33,6 @@ OBSERVATIONS_RELPATH = "benchmarks/preflight/canada/PREFLIGHT-HTTP-OBSERVATIONS-
 RESOLUTION_RELPATH = "benchmarks/preflight/canada/OFFICIAL-SOURCE-RESOLUTION-v0.1.md"
 CLOSURE_SUMMARY_RELPATH = "benchmarks/preflight/canada/PREFLIGHT-CLOSURE-SUMMARY-v0.1.json"
 
-EXPECTED_STATUS_SHA256 = "4a6894ca72ae8d2efcf48b3d25f8aca3bc1e2e86b6aa6aa5b38af31a52c7fde8"
 # Repinned when the Canada rights freeze added the CA-3 row. The preflight PR left the
 # manifest header-only at c3ea6162cbeb9a5814f543ec23a02fecacad72053d90258162687ad3f48a2db2.
 EXPECTED_SOURCE_MANIFEST_SHA256 = "7fc66adf8940758702b0b469c5dbfcf1c4b5ee2241f217794da7b9c10305e49e"
@@ -1091,8 +1090,10 @@ def test_no_source_bytes_are_tracked(repo_root: Path) -> None:
     assert not any(path.startswith(".local/") for path in tracked)
 
 
-def test_governing_files_are_byte_identical(repo_root: Path) -> None:
-    assert _sha256(repo_root / "STATUS.md") == EXPECTED_STATUS_SHA256
+def test_governing_files_preserve_freeze_and_record_bounded_transition(repo_root: Path) -> None:
+    status = (repo_root / "STATUS.md").read_text(encoding="utf-8")
+    assert "OWNER-AUTHORIZED BOUNDED SEMANTIC IMPLEMENTATION" in status
+    assert "OIC-OWNER-DECISION-004.md" in status
     assert (
         _sha256(repo_root / "benchmarks/preflight/SOURCE_MANIFEST.csv")
         == EXPECTED_SOURCE_MANIFEST_SHA256

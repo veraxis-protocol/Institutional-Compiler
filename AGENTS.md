@@ -1,10 +1,13 @@
 # Agent operating boundary
 
-This repository is a non-semantic infrastructure foundation. The semantic OIC
-code-start gate remains **BLOCKED** by `STATUS.md`. No agent may implement or
-claim document interpretation, candidate extraction, institutional admission,
-Open Control Envelope generation, Rego compilation, or runtime semantic
-decisions under this work order.
+This repository is in **OWNER-AUTHORIZED BOUNDED SEMANTIC IMPLEMENTATION —
+PRE-EXTERNAL-REVIEW** under `docs/decisions/OIC-OWNER-DECISION-004.md`. The only
+authorized semantic scope is the provider-neutral model layer, NVIDIA NIM adapter,
+candidate-only extraction boundary, deterministic review docket, and corresponding
+engineering tests. Model output has no authority or admission rights.
+
+Open Run execution, institutional admission, Institutional IR, Open Control Envelope,
+Rego, runtime ALLOW/DENY, ZTL execution, and VEIP execution remain unauthorized.
 
 ## Safe commands
 
@@ -22,7 +25,7 @@ bash scripts/generate_sbom.sh
 bash scripts/wheel_smoke_test.sh
 ```
 
-Implemented CLI commands are limited to `oic validate-schema`,
+Implemented CLI commands remain limited to `oic validate-schema`,
 `oic verify-bootstrap`, `oic verify-manifest`, and `oic doctor`. They verify
 infrastructure contracts only. Do not invent semantic commands, hosted APIs,
 gateways, remote context services, or MCP servers.

@@ -193,9 +193,9 @@ def test_doctor_never_describes_ztl_or_veip_as_active(report: DoctorReport, forb
         assert forbidden not in boundary.gate.upper()
 
 
-def test_semantic_gate_is_blocked(report: DoctorReport) -> None:
+def test_semantic_gate_is_bounded_owner_authorized(report: DoctorReport) -> None:
     check = next(c for c in report.gates if c.name == "semantic implementation gate")
-    assert check.status == SEMANTIC_GATE_STATUS == "BLOCKED"
+    assert check.status == SEMANTIC_GATE_STATUS == "OWNER-AUTHORIZED BOUNDED IMPLEMENTATION"
 
 
 def test_corpus_and_dependency_gates_are_not_reported_complete(report: DoctorReport) -> None:
