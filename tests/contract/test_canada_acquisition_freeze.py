@@ -21,7 +21,17 @@ import pytest
 # urllib.request is imported eagerly so the freeze modules load cleanly under pytest.
 _ = urllib.request
 
+# The work-order scope helper is a test-only module that deliberately does not live in
+# src/oic, and tests/ is not a package, so it is loaded from its path rather than by name.
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from work_order_scope import CANADA_RIGHTS_FREEZE, changed_paths
+finally:
+    sys.path.pop(0)
+
 pytestmark = pytest.mark.contract
+
+WORK_ORDER = CANADA_RIGHTS_FREEZE
 
 FREEZE_RELDIR = "benchmarks/corpus/canada/freeze-v0.1"
 INDEX_RELPATH = f"{FREEZE_RELDIR}/INDEX.json"
@@ -447,36 +457,15 @@ def test_mutation_blocked_source_with_a_freeze_entry_fails_verification(
 
 
 def test_status_and_draft_schemas_are_untouched(repo_root: Path) -> None:
-    changed = subprocess.run(
-        ["git", "diff", "--name-only", "d99a38510e51a36972a414cadd0e44d49a04227c...HEAD"],
-        cwd=repo_root,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.splitlines()
+    changed = changed_paths(repo_root, WORK_ORDER)
     assert "STATUS.md" not in changed
     assert not any(path.startswith("schemas/draft/") for path in changed)
-    allowed_contract_updates = {
-        "docs/contracts/VEIP-CODE-START-BOUNDARY-v0.1.json",
-        "docs/contracts/WARRANT-CONTRACT-v0.1.md",
-        "docs/contracts/ZTL-OCE-MAPPING-v0.1.md",
-        "docs/contracts/kernel-profiles/ztl-v0.1.json",
-    }
-    assert (
-        not {path for path in changed if path.startswith("docs/contracts/")}
-        - allowed_contract_updates
-    )
+    assert not any(path.startswith("docs/contracts/") for path in changed)
     assert not any(path.startswith("adapters/ztl/") for path in changed)
 
 
 def test_no_semantic_artifact_was_produced(repo_root: Path) -> None:
-    changed = subprocess.run(
-        ["git", "diff", "--name-only", "d99a38510e51a36972a414cadd0e44d49a04227c...HEAD"],
-        cwd=repo_root,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.splitlines()
+    changed = changed_paths(repo_root, WORK_ORDER)
     prohibited = (
         "candidate-normative",
         "control-envelope",

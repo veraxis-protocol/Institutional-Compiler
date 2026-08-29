@@ -18,9 +18,17 @@ from typing import Any, cast
 
 import pytest
 
+# The work-order scope helper is a test-only module that deliberately does not live in
+# src/oic, and tests/ is not a package, so it is loaded from its path rather than by name.
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from work_order_scope import CANADA_RIGHTS_RESOLUTION_DOSSIER, changed_paths
+finally:
+    sys.path.pop(0)
+
 pytestmark = pytest.mark.contract
 
-BASE_SHA = "2dab50aa5e84cc2995bb8561a8d1fb63741e4a3a"
+WORK_ORDER = CANADA_RIGHTS_RESOLUTION_DOSSIER
 
 FREEZE_RELDIR = "benchmarks/corpus/canada/freeze-v0.1"
 DOSSIER_RELDIR = "benchmarks/corpus/canada/rights-resolution-v0.1"
@@ -76,13 +84,8 @@ def _load(repo_root: Path, name: str) -> dict[str, Any]:
 
 
 def _changed_files(repo_root: Path) -> list[str]:
-    return subprocess.run(
-        ["git", "diff", "--name-only", f"{BASE_SHA}...HEAD"],
-        cwd=repo_root,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.splitlines()
+    """What this work order changed, evaluated at the commit that landed it."""
+    return changed_paths(repo_root, WORK_ORDER)
 
 
 @pytest.fixture(scope="module")
@@ -612,16 +615,7 @@ def test_status_and_draft_schemas_are_unchanged(repo_root: Path) -> None:
     changed = _changed_files(repo_root)
     assert "STATUS.md" not in changed
     assert not any(path.startswith("schemas/draft/") for path in changed)
-    allowed_contract_updates = {
-        "docs/contracts/VEIP-CODE-START-BOUNDARY-v0.1.json",
-        "docs/contracts/WARRANT-CONTRACT-v0.1.md",
-        "docs/contracts/ZTL-OCE-MAPPING-v0.1.md",
-        "docs/contracts/kernel-profiles/ztl-v0.1.json",
-    }
-    assert (
-        not {path for path in changed if path.startswith("docs/contracts/")}
-        - allowed_contract_updates
-    )
+    assert not any(path.startswith("docs/contracts/") for path in changed)
     assert not any(path.startswith("adapters/ztl/") for path in changed)
 
 

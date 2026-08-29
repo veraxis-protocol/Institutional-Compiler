@@ -10,6 +10,7 @@ import importlib.util
 import io
 import json
 import subprocess
+import sys
 import urllib.request
 from collections.abc import Callable, Mapping, Sequence
 from datetime import UTC, datetime
@@ -21,7 +22,17 @@ from urllib.parse import urlparse
 import jsonschema
 import pytest
 
+# The work-order scope helper is a test-only module that deliberately does not live in
+# src/oic, and tests/ is not a package, so it is loaded from its path rather than by name.
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from work_order_scope import CANADA_ACQUISITION_PREFLIGHT, changed_paths
+finally:
+    sys.path.pop(0)
+
 pytestmark = pytest.mark.contract
+
+WORK_ORDER = CANADA_ACQUISITION_PREFLIGHT
 
 REGISTRY_RELPATH = "benchmarks/preflight/canada/SOURCE-REGISTRY-PROPOSED-v0.1.json"
 FRENCH_RELPATH = "benchmarks/preflight/canada/FRENCH-COUNTERPARTS-v0.1.json"
@@ -1105,15 +1116,7 @@ def test_governing_files_preserve_freeze_and_record_bounded_transition(repo_root
 
 
 def test_no_semantic_artifact_types_are_created(repo_root: Path) -> None:
-    changed = set(
-        subprocess.run(
-            ["git", "diff", "--name-only", "37d6fa4dd12f7f26c632169611b13c251bbec14a...HEAD"],
-            cwd=repo_root,
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.splitlines()
-    )
+    changed = set(changed_paths(repo_root, WORK_ORDER))
     prohibited_fragments = {
         "candidate-normative",
         "control-envelope",
