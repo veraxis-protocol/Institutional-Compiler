@@ -70,9 +70,7 @@ def test_current_evidence_is_valid(repo_root: Path) -> None:
 
 
 def test_owner_decision_preserves_exact_authorization(repo_root: Path) -> None:
-    decision = (repo_root / "docs/decisions/OIC-OWNER-DECISION-004.md").read_text(
-        encoding="utf-8"
-    )
+    decision = (repo_root / "docs/decisions/OIC-OWNER-DECISION-004.md").read_text(encoding="utf-8")
     exact_authorization = """I authorize the OIC semantic code-start gate to OPEN on
 Institutional-Compiler main at exact commit
 914830ceec70bde17004d2ccbbb13218ca44a89b.
