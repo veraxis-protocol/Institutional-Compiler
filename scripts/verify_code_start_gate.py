@@ -174,10 +174,14 @@ def validate_evidence(
         "global incompleteness not explicit",
     )
     _require("READY FOR SEPARATE EXACT-HEAD REVIEW" in normalized_gate, "gate language invalid")
-    _require(gate_record.get("status") == "OPEN", "owner gate is not OPEN")
-    _require(gate_record.get("owner_decision_base_sha") == OWNER_OPEN_BASE, "wrong owner base SHA")
     _require(
-        set(gate_record.get("authorized_production_paths", [])) == OWNER_AUTHORIZED_SEMANTIC_PATHS,
+        gate_record.get("gate_id") == "OIC-SEMANTIC-CODE-START-GATE-OPEN-v0.1",
+        "wrong owner gate identity",
+    )
+    _require(gate_record.get("state") == "OPEN", "owner gate is not OPEN")
+    _require(gate_record.get("authorization_base_sha") == OWNER_OPEN_BASE, "wrong owner base SHA")
+    _require(
+        set(gate_record.get("authorized_semantic_paths", [])) == OWNER_AUTHORIZED_SEMANTIC_PATHS,
         "gate production allowlist mismatch",
     )
     _require(

@@ -1,9 +1,9 @@
 {
-  "record_id": "OIC-SEMANTIC-CODE-START-GATE-OPEN-v0.1",
-  "status": "OPEN",
+  "gate_id": "OIC-SEMANTIC-CODE-START-GATE-OPEN-v0.1",
+  "state": "OPEN",
   "owner_decision": "docs/decisions/OIC-OWNER-DECISION-004.md",
-  "owner_decision_base_sha": "914830ceec70bde17004d2ccbbb13218ca44a89b",
-  "authorized_production_paths": ["src/oic/candidate_extraction.py"],
+  "authorization_base_sha": "914830ceec70bde17004d2ccbbb13218ca44a89b",
+  "authorized_semantic_paths": ["src/oic/candidate_extraction.py"],
   "authorized_source_ids": ["SYN-NS-GOV-1", "SYN-NS-PROC-1", "SYN-NS-AMEND-2"],
   "authorized_scope": "SOURCE_TO_CANDIDATE_NORMATIVE_UNIT",
   "forbidden_capabilities": [

@@ -69,6 +69,25 @@ def test_current_evidence_is_valid(repo_root: Path) -> None:
     _module(repo_root).validate_evidence(**_evidence(repo_root))
 
 
+def test_owner_decision_preserves_exact_authorization(repo_root: Path) -> None:
+    decision = (repo_root / "docs/decisions/OIC-OWNER-DECISION-004.md").read_text(
+        encoding="utf-8"
+    )
+    exact_authorization = """I authorize the OIC semantic code-start gate to OPEN on
+Institutional-Compiler main at exact commit
+914830ceec70bde17004d2ccbbb13218ca44a89b.
+
+This authorization permits bounded semantic implementation under
+TDD-OIC-001 v1.1 and the admitted gate constraints.
+
+It does not authorize institutional admission, runtime authorization,
+OCE execution, Rego/OPA execution, ZTL runtime integration, VEIP runtime
+integration, production claims, or benchmark claims unless separately
+authorized."""
+    unquoted = "\n".join(line.removeprefix("> ").removeprefix(">") for line in decision.splitlines())
+    assert exact_authorization in unquoted
+
+
 def test_refuses_synthetic_as_real_authority(repo_root: Path) -> None:
     _reject(
         repo_root,
@@ -169,19 +188,19 @@ def test_t1_production_detector_accepts_exact_baseline(repo_root: Path) -> None:
 
 
 def test_owner_gate_requires_exact_authorized_base(repo_root: Path) -> None:
-    _reject(repo_root, lambda e: e["gate_record"].__setitem__("owner_decision_base_sha", "0" * 40))
+    _reject(repo_root, lambda e: e["gate_record"].__setitem__("authorization_base_sha", "0" * 40))
 
 
 def test_owner_gate_refuses_allowlist_self_extension(repo_root: Path) -> None:
     _reject(
         repo_root,
-        lambda e: e["gate_record"]["authorized_production_paths"].append("src/oic/helper.py"),
+        lambda e: e["gate_record"]["authorized_semantic_paths"].append("src/oic/helper.py"),
     )
 
 
 @pytest.mark.parametrize(
     "relpath",
-    ("src/oic/semantic_parser.py", "src/oic/helper.py", "src/oic/newmodule/engine.py"),
+    ("src/oic/helper.py", "src/oic/runtime.py", "src/oic/newmodule/engine.py"),
 )
 def test_t2_t3_t4_detector_refuses_any_new_tracked_path(
     repo_root: Path, tmp_path: Path, relpath: str
