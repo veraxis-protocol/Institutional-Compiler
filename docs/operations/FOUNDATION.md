@@ -265,8 +265,9 @@ enforcement artifact (none exists to produce).
 
 ## 8. Current limitations
 
-- **This is not a compiler.** No semantic implementation exists. See `LIMITATIONS.md`.
-- **The semantic implementation gate is BLOCKED** and nothing here opens it.
+- **This is not a compiler.** One bounded synthetic candidate extractor exists.
+- **The semantic code-start gate is OWNER-OPENED** only for that extractor and
+  those three synthetic sources; institutional admission remains blocked.
 - **Preflight corpus provenance is OPEN.** `SOURCE_MANIFEST.csv` has no rows.
 - **ZTL and VEIP are PROVISIONAL / NOT CONFIGURED.** Their interfaces are unfrozen
   (ADR-009, ADR-010) and no adapter, container, or call exists.

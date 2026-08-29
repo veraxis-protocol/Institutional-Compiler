@@ -64,7 +64,6 @@ FROZEN_ARTIFACTS = (
     f"{FREEZE_RELDIR}/receipts/CA-3.receipt.json",
     f"{FREEZE_RELDIR}/sources/CA-3.xml",
     MANIFEST_RELPATH,
-    "STATUS.md",
 )
 
 
@@ -608,9 +607,13 @@ def test_no_disposition_changed_and_all_ten_remain_blocked(rights: dict[str, Any
     assert sorted(blocked) == sorted(UNRESOLVED)
 
 
-def test_status_and_draft_schemas_are_unchanged(repo_root: Path) -> None:
+def test_gate_currentness_update_preserves_rights_and_draft_schema_boundaries(
+    repo_root: Path,
+) -> None:
     changed = _changed_files(repo_root)
-    assert "STATUS.md" not in changed
+    status = (repo_root / "STATUS.md").read_text(encoding="utf-8")
+    assert "SYNTHETIC NORTHSTAR SOURCES ONLY" in status
+    assert "CA-3\nsemantic extraction" in status
     assert not any(path.startswith("schemas/draft/") for path in changed)
     allowed_contract_updates = {
         "docs/contracts/VEIP-CODE-START-BOUNDARY-v0.1.json",

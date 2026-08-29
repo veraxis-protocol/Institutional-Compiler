@@ -446,7 +446,9 @@ def test_mutation_blocked_source_with_a_freeze_entry_fails_verification(
 # --------------------------------------------------------------------------
 
 
-def test_status_and_draft_schemas_are_untouched(repo_root: Path) -> None:
+def test_gate_currentness_update_preserves_canada_and_draft_schema_boundaries(
+    repo_root: Path,
+) -> None:
     changed = subprocess.run(
         ["git", "diff", "--name-only", "d99a38510e51a36972a414cadd0e44d49a04227c...HEAD"],
         cwd=repo_root,
@@ -454,7 +456,9 @@ def test_status_and_draft_schemas_are_untouched(repo_root: Path) -> None:
         capture_output=True,
         text=True,
     ).stdout.splitlines()
-    assert "STATUS.md" not in changed
+    status = (repo_root / "STATUS.md").read_text(encoding="utf-8")
+    assert "SYNTHETIC NORTHSTAR SOURCES ONLY" in status
+    assert "CA-3\nsemantic extraction" in status
     assert not any(path.startswith("schemas/draft/") for path in changed)
     allowed_contract_updates = {
         "docs/contracts/VEIP-CODE-START-BOUNDARY-v0.1.json",

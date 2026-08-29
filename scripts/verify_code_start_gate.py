@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed verifier for the non-semantic code-start evidence package."""
+"""Fail-closed verifier for the owner-opened bounded semantic code-start gate."""
 
 from __future__ import annotations
 
@@ -38,6 +38,9 @@ ADMITTED_SRC_OIC_PATHS = frozenset(
         "src/oic/schemas.py",
     }
 )
+OWNER_OPEN_BASE = "914830ceec70bde17004d2ccbbb13218ca44a89b"
+OWNER_AUTHORIZED_SEMANTIC_PATHS = frozenset({"src/oic/candidate_extraction.py"})
+AUTHORIZED_SOURCE_IDS = frozenset({"SYN-NS-GOV-1", "SYN-NS-PROC-1", "SYN-NS-AMEND-2"})
 
 
 class GateEvidenceError(ValueError):
@@ -50,7 +53,7 @@ def _require(condition: bool, message: str) -> None:
 
 
 def discover_unadmitted_production_paths(root: Path) -> list[str]:
-    """Compare tracked ``src/oic`` paths with the immutable pre-gate baseline."""
+    """Compare tracked paths with the immutable baseline plus owner allowlist."""
     git = shutil.which("git")
     if git is None:
         raise GateEvidenceError("cannot enumerate tracked src/oic production paths")
@@ -63,8 +66,9 @@ def discover_unadmitted_production_paths(root: Path) -> list[str]:
     if result.returncode != 0:
         raise GateEvidenceError("cannot enumerate tracked src/oic production paths")
     current = {line for line in result.stdout.splitlines() if line}
-    added = sorted(current - ADMITTED_SRC_OIC_PATHS)
-    missing = sorted(ADMITTED_SRC_OIC_PATHS - current)
+    admitted = ADMITTED_SRC_OIC_PATHS | OWNER_AUTHORIZED_SEMANTIC_PATHS
+    added = sorted(current - admitted)
+    missing = sorted(admitted - current)
     return added + [f"MISSING:{path}" for path in missing]
 
 
@@ -74,6 +78,7 @@ def validate_evidence(
     profile: dict[str, Any],
     veip: dict[str, Any],
     gate_text: str,
+    gate_record: dict[str, Any],
     source_bytes: dict[str, bytes],
     active_text: str,
     semantic_paths: list[str] | None = None,
@@ -168,10 +173,23 @@ def validate_evidence(
         "GLOBAL REPOSITORY COMPLETENESS" in normalized_gate and "INCOMPLETE" in normalized_gate,
         "global incompleteness not explicit",
     )
+    _require("READY FOR SEPARATE EXACT-HEAD REVIEW" in normalized_gate, "gate language invalid")
     _require(
-        "READY FOR SEPARATE EXACT-HEAD REVIEW\nNOT OPEN" in normalized_gate, "gate language invalid"
+        gate_record.get("gate_id") == "OIC-SEMANTIC-CODE-START-GATE-OPEN-v0.1",
+        "wrong owner gate identity",
     )
-    _require(not semantic_paths, "semantic implementation appeared before gate opening")
+    _require(gate_record.get("state") == "OPEN", "owner gate is not OPEN")
+    _require(gate_record.get("authorization_base_sha") == OWNER_OPEN_BASE, "wrong owner base SHA")
+    _require(
+        set(gate_record.get("authorized_semantic_paths", [])) == OWNER_AUTHORIZED_SEMANTIC_PATHS,
+        "gate production allowlist mismatch",
+    )
+    _require(
+        set(gate_record.get("authorized_source_ids", [])) == AUTHORIZED_SOURCE_IDS,
+        "gate source allowlist mismatch",
+    )
+    _require(gate_record.get("global_manifest_status") == "INCOMPLETE", "gate escalates manifest")
+    _require(not semantic_paths, "production path exceeds owner authorization")
 
 
 def load_and_validate(root: Path) -> None:
@@ -186,6 +204,7 @@ def load_and_validate(root: Path) -> None:
     gate_text = (root / "docs/gates/OIC-SEMANTIC-CODE-START-GATE-CLOSURE-v0.1.md").read_text(
         encoding="utf-8"
     )
+    gate_record = load("docs/gates/OIC-SEMANTIC-CODE-START-GATE-OPEN-v0.1.json")
     active_text = "\n".join(
         (root / path).read_text(encoding="utf-8")
         for path in (
@@ -204,6 +223,7 @@ def load_and_validate(root: Path) -> None:
         profile,
         veip,
         gate_text,
+        gate_record,
         source_bytes,
         active_text,
         semantic_paths=semantic_paths,
@@ -216,4 +236,4 @@ if __name__ == "__main__":
     except (GateEvidenceError, OSError, KeyError, json.JSONDecodeError) as exc:
         print(f"FAIL semantic code-start gate evidence: {exc}")
         sys.exit(1)
-    print("PASS semantic code-start prerequisite evidence; gate remains NOT OPEN")
+    print("PASS semantic code-start gate is owner-opened for the exact bounded path and sources")

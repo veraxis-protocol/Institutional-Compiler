@@ -1,0 +1,29 @@
+{
+  "classification": [
+    "OWNER-SPECIFIED PREIMPLEMENTATION EXPECTATION",
+    "NOT AN OBSERVED BENCHMARK RESULT",
+    "NOT INDEPENDENTLY ADJUDICATED"
+  ],
+  "expected_total": 14,
+  "expected_by_source": {
+    "SYN-NS-GOV-1": 11,
+    "SYN-NS-PROC-1": 1,
+    "SYN-NS-AMEND-2": 2
+  },
+  "candidates": [
+    {"label":"G1","source_id":"SYN-NS-GOV-1","unit_type":"definition","actor":"Requester","action":"means","object":"a fictional test actor","conditions":[]},
+    {"label":"G2","source_id":"SYN-NS-GOV-1","unit_type":"definition","actor":"Approver","action":"means","object":"a fictional test actor listed in the matrix","conditions":[]},
+    {"label":"G3","source_id":"SYN-NS-GOV-1","unit_type":"definition","actor":"Evidence","action":"means","object":"a deterministic record bound to the proposed action","conditions":[]},
+    {"label":"G4","source_id":"SYN-NS-GOV-1","unit_type":"condition","actor":null,"action":"TEST_PURCHASE_LOW","object":"approval","conditions":["Approver-A"]},
+    {"label":"G5","source_id":"SYN-NS-GOV-1","unit_type":"condition","actor":null,"action":"TEST_PURCHASE_HIGH","object":"approval","conditions":["Approver-A","Approver-B"]},
+    {"label":"G6","source_id":"SYN-NS-GOV-1","unit_type":"delegation","actor":"Approver-A","action":"delegate","object":"TEST_PURCHASE_LOW to Delegate-A","conditions":[]},
+    {"label":"G7","source_id":"SYN-NS-GOV-1","unit_type":"prohibition","actor":null,"action":"recognize","object":"other delegation","conditions":[]},
+    {"label":"G8","source_id":"SYN-NS-GOV-1","unit_type":"evidence_duty","actor":null,"action":"proposal_carries_evidence","object":null,"conditions":[]},
+    {"label":"G9","source_id":"SYN-NS-GOV-1","unit_type":"exception","actor":null,"action":"TEST_EMERGENCY","object":"omit Approver-B","conditions":["emergency record present","Approver-A approval present"]},
+    {"label":"G10","source_id":"SYN-NS-GOV-1","unit_type":"discretion","actor":"Approver-A","action":"refer","object":"any proposal for human review","conditions":[]},
+    {"label":"G11","source_id":"SYN-NS-GOV-1","unit_type":"prohibition","actor":null,"action":"treat referral as approval","object":null,"conditions":[]},
+    {"label":"P1","source_id":"SYN-NS-PROC-1","unit_type":"condition","actor":null,"action":"TEST_PURCHASE_HIGH","object":"approval","conditions":["Approver-A"]},
+    {"label":"A1","source_id":"SYN-NS-AMEND-2","unit_type":"condition","actor":null,"action":"TEST_PURCHASE_HIGH","object":"approval","conditions":["Approver-A","Approver-B"]},
+    {"label":"A2","source_id":"SYN-NS-AMEND-2","unit_type":"prohibition","actor":null,"action":"use as current evidence","object":"SYNTHETIC-NORTHSTAR-PROCEDURE-v1","conditions":[]}
+  ]
+}

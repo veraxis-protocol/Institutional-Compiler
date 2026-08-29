@@ -21,6 +21,17 @@ It does not authorize public quality, enterprise-readiness, legal-compliance, un
 | Public Lab restrictions visible before upload | PASS as specification | `LIMITATIONS.md`, `docs/architecture/LAB_RESTRICTIONS.md` |
 | Named owner for each implemented module | PASS for kickoff | `OWNERS.md` |
 
-**Semantic implementation gate:** BLOCKED until the preflight corpus manifest and ZTL/VEIP provisional-interface records are completed.
+SEMANTIC CODE-START GATE:
+OWNER-OPENED AT
+914830ceec70bde17004d2ccbbb13218ca44a89b
+
+FIRST AUTHORIZED SEMANTIC SCOPE:
+SOURCE → CANDIDATE NORMATIVE UNIT
+SYNTHETIC NORTHSTAR SOURCES ONLY
+
+Only the deterministic candidate-extraction slice is opened. Institutional
+admission, IR/OCE generation, runtime authorization and integration, CA-3
+semantic extraction, and all production or benchmark claims remain blocked or
+not established. Global manifest completeness remains `INCOMPLETE`.
 
 Infrastructure scaffolding and schema validation may proceed before that gate.

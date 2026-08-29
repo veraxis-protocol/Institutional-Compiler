@@ -17,14 +17,17 @@ Target capability:
 > evidentiary standard required to authorize, explain, audit, or correct those
 > actions.
 
-**What exists today:** a tested, non-semantic Python infrastructure package for
+**What exists today:** a tested Python infrastructure package plus one bounded,
+deterministic candidate extractor for three synthetic Northstar sources. The
+infrastructure supports
 offline schema validation, historical bootstrap verification, current manifest
 verification, environment and gate diagnostics, and reproducible CI and SBOM
 checks. It is not a functioning institutional compiler.
 
-**What is blocked:** semantic implementation remains blocked pending the corpus
-provenance and ZTL/VEIP interface evidence listed in [`STATUS.md`](STATUS.md).
-Nothing in this README opens that gate or promotes the repository's maturity.
+**What is blocked:** every semantic capability beyond source → candidate
+normative unit remains blocked. Institutional admission, IR/OCE generation,
+runtime authorization, CA-3 extraction, and ZTL/VEIP runtime integration are
+not authorized. See [`STATUS.md`](STATUS.md).
 
 ## Research paper
 
@@ -329,17 +332,17 @@ verification, operational, and independent-review evidence.
 
 **STATUS: CURRENT**
 
-Current capabilities include non-semantic schemas and contracts,
+Current capabilities include schemas and contracts,
 manifest/integrity verification, the falsification harness, supply-chain
-controls, and the benchmark preflight specification.
+controls, the benchmark preflight specification, and the bounded synthetic
+candidate extractor.
 
-Exit requires complete governing-source rights and provenance plus sufficient
-ZTL and VEIP provisional-interface evidence to open the semantic code-start
-gate.
+The global corpus manifest remains incomplete and ZTL/VEIP runtime integration
+remains unauthorized.
 
 ### Stage 1 - Source-to-control reference
 
-**STATUS: NEXT - BLOCKED by the semantic code-start gate**
+**STATUS: FIRST BOUNDED SLICE OWNER-OPENED; REMAINDER BLOCKED**
 
 Target path:
 
@@ -406,19 +409,21 @@ conformance, and community governance.
 
 ## Current phase
 
-This repository authorizes contract-first, non-semantic infrastructure work.
-It currently implements four infrastructure CLI commands:
+This repository authorizes contract-first infrastructure work and the exact
+bounded extraction scope in `docs/decisions/OIC-OWNER-DECISION-004.md`. It
+currently implements four infrastructure CLI commands:
 
 - `oic validate-schema`
 - `oic verify-bootstrap`
 - `oic verify-manifest`
 - `oic doctor`
 
-It does not implement document interpretation, candidate extraction,
+It implements deterministic candidate extraction only for three authorized
+synthetic sources. It does not implement general document interpretation,
 institutional admission, Institutional IR production, Open Control Envelope
 generation, Rego compilation, or runtime semantic decisions.
 
-Run the safe non-semantic checks after the hash-locked installation described
+Run the checks after the hash-locked installation described
 in [`docs/operations/CI.md`](docs/operations/CI.md):
 
 ```bash
@@ -432,9 +437,9 @@ must not be normalized into success.
 
 ## First executable objective
 
-The first semantic objective remains blocked. When its prerequisites are
-authorized, a bounded set of public or synthetic procurement governing sources
-is intended to flow through:
+The first semantic objective is owner-opened only through source-anchored
+candidate normative units for the synthetic Northstar source set. Later stages
+remain blocked:
 
 ```text
 documents

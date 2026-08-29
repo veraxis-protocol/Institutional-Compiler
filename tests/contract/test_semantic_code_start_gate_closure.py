@@ -41,6 +41,7 @@ def _evidence(repo_root: Path) -> dict[str, Any]:
         "gate_text": (
             repo_root / "docs/gates/OIC-SEMANTIC-CODE-START-GATE-CLOSURE-v0.1.md"
         ).read_text(encoding="utf-8"),
+        "gate_record": load("docs/gates/OIC-SEMANTIC-CODE-START-GATE-OPEN-v0.1.json"),
         "source_bytes": {
             item["source_id"]: (repo_root / item["path"]).read_bytes()
             for item in source_set["sources"]
@@ -66,6 +67,25 @@ def _synthetic(evidence: dict[str, Any]) -> dict[str, Any]:
 
 def test_current_evidence_is_valid(repo_root: Path) -> None:
     _module(repo_root).validate_evidence(**_evidence(repo_root))
+
+
+def test_owner_decision_preserves_exact_authorization(repo_root: Path) -> None:
+    decision = (repo_root / "docs/decisions/OIC-OWNER-DECISION-004.md").read_text(encoding="utf-8")
+    exact_authorization = """I authorize the OIC semantic code-start gate to OPEN on
+Institutional-Compiler main at exact commit
+914830ceec70bde17004d2ccbbb13218ca44a89b.
+
+This authorization permits bounded semantic implementation under
+TDD-OIC-001 v1.1 and the admitted gate constraints.
+
+It does not authorize institutional admission, runtime authorization,
+OCE execution, Rego/OPA execution, ZTL runtime integration, VEIP runtime
+integration, production claims, or benchmark claims unless separately
+authorized."""
+    unquoted = "\n".join(
+        line.removeprefix("> ").removeprefix(">") for line in decision.splitlines()
+    )
+    assert exact_authorization in unquoted
 
 
 def test_refuses_synthetic_as_real_authority(repo_root: Path) -> None:
@@ -145,6 +165,7 @@ def _isolated_gate_tree(repo_root: Path, tmp_path: Path) -> Path:
         "docs/contracts/WARRANT-CONTRACT-v0.1.md",
         "adr/ADR-013.md",
         "docs/gates/OIC-SEMANTIC-CODE-START-GATE-CLOSURE-v0.1.md",
+        "docs/gates/OIC-SEMANTIC-CODE-START-GATE-OPEN-v0.1.json",
     )
     for relpath in required:
         source = repo_root / relpath
@@ -155,6 +176,8 @@ def _isolated_gate_tree(repo_root: Path, tmp_path: Path) -> Path:
         else:
             shutil.copy2(source, target)
     subprocess.run(["git", "init", "-q", str(root)], check=True)
+    for cache in root.rglob("__pycache__"):
+        shutil.rmtree(cache)
     subprocess.run(["git", "-C", str(root), "add", "."], check=True)
     return root
 
@@ -164,9 +187,20 @@ def test_t1_production_detector_accepts_exact_baseline(repo_root: Path) -> None:
     assert module.discover_unadmitted_production_paths(repo_root) == []
 
 
+def test_owner_gate_requires_exact_authorized_base(repo_root: Path) -> None:
+    _reject(repo_root, lambda e: e["gate_record"].__setitem__("authorization_base_sha", "0" * 40))
+
+
+def test_owner_gate_refuses_allowlist_self_extension(repo_root: Path) -> None:
+    _reject(
+        repo_root,
+        lambda e: e["gate_record"]["authorized_semantic_paths"].append("src/oic/helper.py"),
+    )
+
+
 @pytest.mark.parametrize(
     "relpath",
-    ("src/oic/semantic_parser.py", "src/oic/helper.py", "src/oic/newmodule/engine.py"),
+    ("src/oic/helper.py", "src/oic/runtime.py", "src/oic/newmodule/engine.py"),
 )
 def test_t2_t3_t4_detector_refuses_any_new_tracked_path(
     repo_root: Path, tmp_path: Path, relpath: str
@@ -179,7 +213,7 @@ def test_t2_t3_t4_detector_refuses_any_new_tracked_path(
     subprocess.run(["git", "-C", str(root), "add", relpath], check=True)
     detected = module.discover_unadmitted_production_paths(root)
     assert relpath in detected
-    with pytest.raises(module.GateEvidenceError, match="semantic implementation appeared"):
+    with pytest.raises(module.GateEvidenceError, match="production path exceeds"):
         module.load_and_validate(root)
 
 
@@ -193,7 +227,7 @@ def test_t5_detector_refuses_rename_or_substitution(repo_root: Path, tmp_path: P
     detected = module.discover_unadmitted_production_paths(root)
     assert "src/oic/replacement.py" in detected
     assert "MISSING:src/oic/paths.py" in detected
-    with pytest.raises(module.GateEvidenceError, match="semantic implementation appeared"):
+    with pytest.raises(module.GateEvidenceError, match="production path exceeds"):
         module.load_and_validate(root)
 
 
@@ -205,7 +239,7 @@ def test_t6_load_and_validate_invokes_discovery_without_manual_parameter(
     added = root / "src/oic/helper.py"
     added.write_text("# innocuous name, unauthorized path\n", encoding="utf-8")
     subprocess.run(["git", "-C", str(root), "add", "src/oic/helper.py"], check=True)
-    with pytest.raises(module.GateEvidenceError, match="semantic implementation appeared"):
+    with pytest.raises(module.GateEvidenceError, match="production path exceeds"):
         module.load_and_validate(root)
 
 

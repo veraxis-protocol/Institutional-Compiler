@@ -1301,11 +1301,12 @@ def test_no_ztl_or_veip_code_exists_or_is_imported(repo_root: Path) -> None:
     assert "verify_fixtures" not in validator_text
 
 
-def test_this_work_order_added_no_source_module(repo_root: Path) -> None:
+def test_only_owner_authorized_candidate_source_module_was_added(repo_root: Path) -> None:
     modules = {path.name for path in (repo_root / "src" / "oic").glob("*.py")}
     assert modules == {
         "__init__.py",
         "baseline.py",
+        "candidate_extraction.py",
         "cli.py",
         "doctor.py",
         "errors.py",
@@ -1329,15 +1330,11 @@ def test_draft_schemas_are_byte_identical_to_the_bootstrap(repo_root: Path) -> N
         assert path.read_bytes() == committed, relative
 
 
-def test_status_md_is_byte_identical_to_the_bootstrap(repo_root: Path) -> None:
-    from oic.baseline import BOOTSTRAP_COMMIT
-
-    committed = subprocess.run(
-        ["git", "-C", str(repo_root), "cat-file", "blob", f"{BOOTSTRAP_COMMIT}:STATUS.md"],
-        capture_output=True,
-        check=True,
-    ).stdout
-    assert (repo_root / "STATUS.md").read_bytes() == committed
+def test_status_md_records_exact_bounded_gate_transition(repo_root: Path) -> None:
+    status = (repo_root / "STATUS.md").read_text("utf-8")
+    assert "914830ceec70bde17004d2ccbbb13218ca44a89b" in status
+    assert "SOURCE → CANDIDATE NORMATIVE UNIT" in status
+    assert "SYNTHETIC NORTHSTAR SOURCES ONLY" in status
 
 
 def test_proposed_schemas_are_not_in_the_draft_directory(repo_root: Path) -> None:
