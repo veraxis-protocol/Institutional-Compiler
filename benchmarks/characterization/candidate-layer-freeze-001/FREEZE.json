@@ -1,0 +1,145 @@
+{
+  "freeze_id": "OIC-CANDIDATE-LAYER-FREEZE-001",
+  "authorization": "OWNER-AUTHORIZED CANDIDATE-LAYER BOUNDED FREEZE — PRE-ADMISSION",
+  "freeze_state": "FROZEN FOR SUCCESSOR ARCHITECTURE WORK",
+  "frozen_implementation_sha": "59c6b34a4972c7758ea1ef4c09fd26be5ddb507e",
+  "production_tree_objects": {
+    "src": "b5a99903933c37cc664b6134d134e1e88d6caad9",
+    "schemas": "9a7b886128083fe078582665241b98d53e47d52d"
+  },
+  "candidate_schema_identifier": "https://openinstitutionalcompiler.org/schemas/draft/candidate-normative-unit.schema.json",
+  "corpus_references": {
+    "OIC-CANDIDATE-SEMANTICS-003": {
+      "path": "benchmarks/characterization/candidate-semantics-003/CORPUS-v0.3.json",
+      "sha256": "8555d59112b07ee6c438136b79602c3b2658e2ff96abfa5deb4563a09883db5a"
+    },
+    "OIC-CANDIDATE-SEMANTICS-004": {
+      "path": "benchmarks/characterization/candidate-semantics-004/CORPUS-v0.4.json",
+      "sha256": "594cbee619f467ef949690cd56014eb4f8b3c5ba9527596c6e4bef3f242d5386"
+    },
+    "OIC-CANDIDATE-SEMANTICS-005": {
+      "path": "benchmarks/characterization/candidate-semantics-005/CORPUS-v0.5.json",
+      "sha256": "2d8c5f3f4be2028e00179b4b8eee464b325b8d9efbaf19875b8b783a6139dbf0"
+    }
+  },
+  "receipt_references": {
+    "OIC-CANDIDATE-SEMANTICS-005": {
+      "local_conventional_path": ".local/candidate-semantics-receipts/OIC-CANDIDATE-SEMANTICS-005.json",
+      "sha256": "a44b14b81dbd300d8a6d86e1e882ae0dc7eab152ea4f0823f227c71fce64f8bd",
+      "committed": false
+    },
+    "OIC-CANDIDATE-NEGATIVE-STABILITY-001": {
+      "local_conventional_path": ".local/candidate-semantics-receipts/OIC-CANDIDATE-NEGATIVE-STABILITY-001.json",
+      "sha256": "3a1dfbb8d43e69800af4f38cf856907fdcdf82108e925723ee745df92ced1408",
+      "committed": false,
+      "historical_result": "INCONCLUSIVE"
+    }
+  },
+  "live_characterization": {
+    "provider": "nvidia-nim",
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "runs_per_specimen": 3,
+    "requests_attempted": 63,
+    "boundary_accepted": 63,
+    "boundary_rejected": 0,
+    "provider_errors": 0,
+    "presence_misses": 0,
+    "negative_control_false_positive_runs": 0,
+    "positive_boundary_presence_misses": 0,
+    "candidate_spans_outside_registered_bounds": 0,
+    "runs_losing_material_content": 0,
+    "spans_containing_separable_framing": 0,
+    "source_grounded_candidate_spans": {
+      "passing": 45,
+      "examined": 45
+    },
+    "material_completeness_runs": {
+      "complete": 36,
+      "measured": 36
+    },
+    "negative_controls": {
+      "accepted_runs": 24,
+      "false_positive_runs": 0
+    },
+    "positive_controls": {
+      "accepted_runs": 39,
+      "presence_misses": 0
+    },
+    "explicit_specimen_observations": {
+      "CSEM-031": "3/3 zero-candidate runs",
+      "CSEM-046": "3/3 zero-candidate runs",
+      "CSEM-047": "3/3 zero-candidate runs",
+      "CSEM-048": "3/3 zero-candidate runs",
+      "CSEM-049": "3/3 candidate-present runs",
+      "CSEM-050": "3/3 candidate-present runs",
+      "CSEM-051": "3/3 candidate-present runs",
+      "CSEM-052": "3/3 candidate-present runs",
+      "CSEM-025": "exactly 2 candidates in 3/3 runs",
+      "CSEM-045": "exactly 2 candidates in 3/3 runs"
+    },
+    "framing_sentinel_observation": "zero separable framing retained"
+  },
+  "boundary": {
+    "flow": [
+      "Source Fragment",
+      "Model-proposed candidate_span + provisional unit_type",
+      "deterministic fail-closed source grounding",
+      "Candidate Normative Unit",
+      "review / admission boundary"
+    ],
+    "model_proposed_fields": [
+      "candidate_span",
+      "unit_type"
+    ],
+    "oic_controlled_fields": [
+      "unit_id",
+      "interpretation_state",
+      "epistemic_state",
+      "source_anchors"
+    ],
+    "grounding_rule": "collapse_whitespace(casefold(candidate_span)) must be a substring of collapse_whitespace(casefold(source_text))",
+    "does_not_establish": [
+      "authority",
+      "admission",
+      "legal validity",
+      "enforceability",
+      "institutional meaning",
+      "Institutional IR",
+      "runtime authorization",
+      "ALLOW",
+      "DENY"
+    ]
+  },
+  "frozen_invariants": [
+    "Candidate discovery requires apparent normative or constitutive function.",
+    "Institutional vocabulary alone does not create normativity.",
+    "Candidate spans remain literal contiguous source text.",
+    "Material qualifiers remain inside the proposition.",
+    "Separable source-status framing remains in source context rather than candidate_span.",
+    "Source standing does not suppress discovery.",
+    "Normativity does not require modal keywords.",
+    "Definitions, delegations and advisory propositions remain candidate material when they genuinely perform those functions.",
+    "No semantic-role decomposition occurs pre-admission.",
+    "No deterministic semantic filtering, repair, trimming or secondary classifier occurs after provider output.",
+    "Fail-closed source grounding remains authoritative.",
+    "Candidate identity remains source-instance-sensitive."
+  ],
+  "future_revision_requirements": [
+    "a new demonstrated defect",
+    "a new bounded work order",
+    "explicit owner authorization",
+    "preservation of this freeze record",
+    "a new successor version rather than silent modification"
+  ],
+  "successor_boundary": "Institutional admission design may consume the frozen Candidate Normative Unit, but candidate discovery itself remains pre-admission and confers no authority.",
+  "known_limitations": [
+    "The evidence is bounded to the identified corpora, implementation, provider, model and run conditions.",
+    "Three runs per specimen do not establish a population error rate or cross-model generalization.",
+    "Prompt behavior remains provider behavior; no deterministic normativity classifier was introduced.",
+    "The historical negative-stability experiment remains INCONCLUSIVE and is not reinterpreted.",
+    "The freeze does not claim that future candidate-layer revision is impossible."
+  ],
+  "claim_ceiling": "This bounded freeze records the current pre-admission candidate architecture and identified characterization evidence. It does not establish universal semantic correctness, zero defect probability, institutional admission, authority, legal validity, enforceability, institutional meaning, Institutional IR, runtime authorization, production readiness, cross-model generalization, or independent validation.",
+  "independent_validation_claim": false,
+  "self_adjudication": "NOT SELF-ADJUDICATED"
+}
