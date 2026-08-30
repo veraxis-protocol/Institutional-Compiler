@@ -29,6 +29,14 @@ EXPECTED_FILES = {
     "TEST-VECTORS-FREEZE-v0.1.json",
     "PREREGISTRATION-v0.1.md",
 }
+DESIGN_CONSISTENCY_SUCCESSOR_FILES = {
+    "ADMISSION-INPUT-v0.1.schema.json",
+    "EXECUTABLE-INPUT-CONTRACT-v0.1.md",
+    "STATE-INPUT-MAPPING-v0.1.json",
+    "TEST-VECTORS-v0.2.json",
+    "TEST-VECTORS-FREEZE-v0.2.json",
+    "VECTOR-CROSSWALK-v0.1.json",
+}
 STATE_TO_REASON = {
     "ADMITTED": "OIC-ADM-0000",
     "CANDIDATE_INPUT_INVALID": "OIC-ADM-1001",
@@ -91,7 +99,8 @@ def _json(repo_root: Path, name: str) -> dict[str, Any]:
 
 
 def test_design_package_has_exact_required_artifacts(repo_root: Path) -> None:
-    assert {path.name for path in (repo_root / DESIGN_DIR).iterdir()} == EXPECTED_FILES
+    observed = {path.name for path in (repo_root / DESIGN_DIR).iterdir()}
+    assert observed == EXPECTED_FILES | DESIGN_CONSISTENCY_SUCCESSOR_FILES
 
 
 def test_vector_corpus_and_freeze_are_byte_pinned(
@@ -332,7 +341,11 @@ def test_phase_b_does_not_change_candidate_or_production_trees(repo_root: Path) 
     ).stdout.splitlines()
     assert all(
         path.startswith(f"{DESIGN_DIR}/")
-        or path == "tests/contract/test_admission_boundary_001_design.py"
+        or path
+        in {
+            "tests/contract/test_admission_boundary_001_design.py",
+            "tests/contract/test_admission_design_consistency_001.py",
+        }
         for path in changed
     )
 
