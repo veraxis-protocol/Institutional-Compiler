@@ -106,6 +106,21 @@ CLAIM_CEILING_004 = (
     "readiness, cross-model generalization, or independent validation."
 )
 
+# Normative-discovery observation states (OIC-CANDIDATE-SEMANTICS-005).
+DISCOVERY_ABSTAINED = "NO_CANDIDATE_ON_NON_NORMATIVE_SOURCE"
+DISCOVERY_FALSE_POSITIVE = "CANDIDATE_ON_NON_NORMATIVE_SOURCE"
+DISCOVERY_PRESENT = "CANDIDATE_PRESENT_ON_NORMATIVE_SOURCE"
+DISCOVERY_MISSED = "NO_CANDIDATE_ON_NORMATIVE_SOURCE"
+
+CLAIM_CEILING_005 = (
+    "This experiment characterizes one bounded candidate-discovery prompt contract under "
+    "one frozen synthetic corpus, implementation commit, provider/model when run live, and "
+    "bounded run conditions. It does not establish semantic correctness, zero "
+    "false-positive probability, institutional admission, authority, enforceability, legal "
+    "interpretation, production readiness, cross-model generalization, statistical "
+    "superiority, or independent validation."
+)
+
 CORPUS_INTACT = "INTACT"
 CORPUS_DRIFT_ACKNOWLEDGED = "DRIFT_ACKNOWLEDGED"
 
@@ -123,11 +138,11 @@ OIC_CONTROLLED_FIELDS = (
     "source_anchors",
 )
 
-#: OIC-CANDIDATE-SEMANTICS-004 is the current corpus. Every earlier corpus stays in the
+#: OIC-CANDIDATE-SEMANTICS-005 is the current corpus. Every earlier corpus stays in the
 #: tree, unchanged, as the historical evidence its own receipt refers to.
-DEFAULT_CORPUS = Path("benchmarks/characterization/candidate-semantics-004/CORPUS-v0.4.json")
-DEFAULT_FREEZE = Path("benchmarks/characterization/candidate-semantics-004/CORPUS-FREEZE-v0.4.json")
-DEFAULT_OUTPUT = Path(".local/candidate-semantics-receipts/OIC-CANDIDATE-SEMANTICS-004.json")
+DEFAULT_CORPUS = Path("benchmarks/characterization/candidate-semantics-005/CORPUS-v0.5.json")
+DEFAULT_FREEZE = Path("benchmarks/characterization/candidate-semantics-005/CORPUS-FREEZE-v0.5.json")
+DEFAULT_OUTPUT = Path(".local/candidate-semantics-receipts/OIC-CANDIDATE-SEMANTICS-005.json")
 DEFAULT_RUNS_PER_SPECIMEN = 3
 
 
@@ -183,6 +198,9 @@ class Specimen:
     separable_framing_spans: tuple[str, ...] | None = None
     framing_expected_excluded: bool | None = None
     framing_structure: str | None = None
+    # OIC-CANDIDATE-SEMANTICS-005. Optional so every earlier frozen corpus still loads.
+    arm_role: str | None = None
+    carried_from_commit: str | None = None
 
     @property
     def source_sha256(self) -> str:
@@ -374,6 +392,10 @@ def _parse_specimen(value: object, index: int) -> Specimen:
         ),
         framing_structure=_optional_string(
             record.get("framing_structure"), f"{label}.framing_structure"
+        ),
+        arm_role=_optional_string(record.get("arm_role"), f"{label}.arm_role"),
+        carried_from_commit=_optional_string(
+            record.get("carried_from_commit"), f"{label}.carried_from_commit"
         ),
     )
 
@@ -1375,6 +1397,110 @@ def metric_candidate_span_underreach(
 
 
 # --------------------------------------------------------------------------
+# Normative-discovery discrimination (OIC-CANDIDATE-SEMANTICS-005)
+# --------------------------------------------------------------------------
+
+
+def metric_normative_discovery(corpus: Corpus, grouped: dict[str, list[Attempt]]) -> JsonObject:
+    """N. Whether institutional subject matter alone still produces candidates.
+
+    Reported per specimen and never reduced to a single accuracy number. Discovery on a
+    non-normative source and absence on a normative one are different failures with
+    different causes, and a scalar that traded one against the other would hide exactly the
+    over-correction this metric exists to catch.
+    """
+    negatives: list[JsonObject] = []
+    positives: list[JsonObject] = []
+    negative_runs = 0
+    false_positive_runs = 0
+    positive_runs = 0
+    presence_misses = 0
+    for specimen in corpus.specimens:
+        accepted = _accepted(grouped.get(specimen.specimen_id, []))
+        with_candidates = [item for item in accepted if (item.candidate_count or 0) > 0]
+        empty = [item for item in accepted if (item.candidate_count or 0) == 0]
+        counts = {
+            str(key): value
+            for key, value in sorted(
+                Counter(item.candidate_count for item in accepted).items(),
+                key=lambda pair: (pair[0] is None, pair[0]),
+            )
+        }
+        if not specimen.normative_expected:
+            negative_runs += len(accepted)
+            false_positive_runs += len(with_candidates)
+            negatives.append(
+                {
+                    "specimen_id": specimen.specimen_id,
+                    "category": specimen.category,
+                    "diagnostic_tags": list(specimen.diagnostic_tags),
+                    "accepted_runs": len(accepted),
+                    "zero_candidate_runs": len(empty),
+                    "false_positive_runs": len(with_candidates),
+                    "false_positive_spans": [
+                        {
+                            "run_index": item.run_index,
+                            "candidate_spans": list(_candidate_spans(item)),
+                            "unit_types": list(item.unit_types),
+                            "raw_content_sha256": item.raw_content_sha256,
+                        }
+                        for item in with_candidates
+                    ],
+                    "false_positive_provisional_types": sorted(
+                        {unit for item in with_candidates for unit in item.unit_types}
+                    ),
+                    "result": (
+                        NOT_OBSERVED
+                        if not accepted
+                        else DISCOVERY_FALSE_POSITIVE
+                        if with_candidates
+                        else DISCOVERY_ABSTAINED
+                    ),
+                }
+            )
+            continue
+        positive_runs += len(accepted)
+        presence_misses += len(empty)
+        positives.append(
+            {
+                "specimen_id": specimen.specimen_id,
+                "category": specimen.category,
+                "arm_role": specimen.arm_role,
+                "diagnostic_tags": list(specimen.diagnostic_tags),
+                "accepted_runs": len(accepted),
+                "runs_with_candidate": len(with_candidates),
+                "presence_misses": len(empty),
+                "candidate_count_distribution": counts,
+                "observed_provisional_types": sorted(
+                    {unit for item in accepted for unit in item.unit_types}
+                ),
+                "result": (
+                    NOT_OBSERVED
+                    if not accepted
+                    else DISCOVERY_MISSED
+                    if empty
+                    else DISCOVERY_PRESENT
+                ),
+            }
+        )
+    return {
+        "negative_control_specimens": len(negatives),
+        "negative_accepted_runs": negative_runs,
+        "negative_false_positive_runs": false_positive_runs,
+        "positive_specimens": len(positives),
+        "positive_accepted_runs": positive_runs,
+        "positive_presence_misses": presence_misses,
+        "negative_controls": negatives,
+        "positive_boundary_sentinels": positives,
+        "note": (
+            "No scalar accuracy score is computed. A false positive on a descriptive source "
+            "and a presence miss on a normative one are different failures; reporting them "
+            "separately is the point, since a correction for one can cause the other."
+        ),
+    }
+
+
+# --------------------------------------------------------------------------
 # Source-grounding metrics (OIC-CANDIDATE-SEMANTICS-002)
 #
 # Every one of these is an observation against what the corpus pre-registered about the
@@ -1801,6 +1927,149 @@ def _attempt_evidence(attempts: Sequence[Attempt]) -> list[JsonObject]:
     ]
 
 
+def _build_receipt_005(
+    *,
+    corpus: Corpus,
+    attempts: Sequence[Attempt],
+    runs_per_specimen: int,
+    provider_name: str,
+    model: str,
+    corpus_integrity: str,
+    corpus_freeze_relpath: str,
+    integrity_findings: Sequence[str],
+    implementation: JsonObject,
+) -> JsonObject:
+    """OIC-CANDIDATE-SEMANTICS-005 metrics: 004's set plus normative-discovery discrimination.
+
+    Version-specific by design. 001 through 004 keep their own metric contracts and are
+    never reinterpreted under this one.
+    """
+    grouped = group_by_specimen(attempts)
+    boundary = metric_boundary_acceptance(attempts)
+    provider_errors = metric_provider_errors(attempts)
+    presence = metric_normative_presence(corpus, grouped)
+    negatives = metric_negative_controls(corpus, grouped)
+    framing = metric_framing_separation(corpus, grouped)
+    underreach = metric_candidate_span_underreach(corpus, grouped)
+    overreach = metric_candidate_span_overreach(corpus, grouped)
+    discovery = metric_normative_discovery(corpus, grouped)
+    return {
+        "work_order": "OIC-CANDIDATE-SEMANTICS-005",
+        "metric_contract": "candidate-semantics-005-a-through-n",
+        "claim_ceiling": CLAIM_CEILING_005,
+        "independent_validation_claim": False,
+        "self_adjudication": "NOT SELF-ADJUDICATED; engineering observations only.",
+        "generated_at": _now(),
+        "implementation_git_sha": implementation.get("commit"),
+        "implementation_worktree_clean": implementation.get("worktree_clean"),
+        "candidate_contract": {
+            "model_proposed_fields": ["candidate_span", "unit_type"],
+            "oic_controlled_fields": [
+                "unit_id",
+                "interpretation_state",
+                "epistemic_state",
+                "source_anchors",
+            ],
+            "schema_changed_in_005": False,
+            "parser_changed_in_005": False,
+            "grounding_rule_changed_in_005": False,
+            "identity_rule_changed_in_005": False,
+            "normative_discovery_mechanism": (
+                "prompt contract only; no keyword list, no institutional-vocabulary "
+                "blacklist, no deterministic negative filter, no secondary classifier, and "
+                "no post-generation removal of candidates exists in production code"
+            ),
+        },
+        "motivating_evidence": (
+            "OIC-CANDIDATE-NEGATIVE-STABILITY-001 compared frozen commits "
+            "db95d8fdf52b5ffb546b2ebd84bb9e035629c46f (003) and "
+            "11acd84b97bbdb3910c208e63b69b4fbb10be179 (004) over 112 requests. Its "
+            "preregistered band returned INCONCLUSIVE and that result stands unrewritten. "
+            "The observed defect was localized and reproducible: 3 false positives, all on "
+            "CSEM-031, all in the 004 arm, against 0 in the 003 arm. No "
+            "statistical-significance claim is made."
+        ),
+        "corpus": {
+            "corpus_id": corpus.corpus_id,
+            "corpus_version": corpus.corpus_version,
+            "corpus_relpath": corpus.relpath,
+            "corpus_sha256": corpus.sha256,
+            "corpus_freeze_relpath": corpus_freeze_relpath,
+            "specimen_count": len(corpus.specimens),
+            "specimen_ids": [item.specimen_id for item in corpus.specimens],
+            "claim_ceiling": corpus.claim_ceiling,
+        },
+        "engineering_gates": {
+            "corpus_integrity": corpus_integrity,
+            "corpus_integrity_findings": list(integrity_findings),
+            "harness_executed_every_planned_request": len(attempts)
+            == len(corpus.specimens) * runs_per_specimen,
+            "note": "Mechanical gates only; no semantic or institutional verdict.",
+        },
+        "run_conditions": {
+            "model_provider": provider_name,
+            "model": model,
+            "runs_per_specimen": runs_per_specimen,
+            "total_requests_attempted": len(attempts),
+            "statistical_note": "A bounded characterization sample; it certifies nothing.",
+        },
+        "metrics": {
+            "a_boundary_acceptance": boundary,
+            "b_provider_errors": provider_errors,
+            "c_normative_candidate_presence": presence,
+            "d_false_positives_on_negative_controls": negatives,
+            "e_candidate_count_stability": metric_candidate_count_stability(grouped),
+            "f_candidate_span_source_grounding": metric_candidate_span_grounding(attempts),
+            "g_material_span_completeness": metric_material_span_completeness(corpus, grouped),
+            "h_candidate_span_repeat_stability": metric_candidate_span_repeat_stability(grouped),
+            "i_source_standing_invariance": metric_source_standing_invariance(corpus, grouped),
+            "j_framing_separation": framing,
+            "j2_framing_that_must_not_be_stripped": metric_framing_must_not_be_stripped(
+                corpus, grouped
+            ),
+            "k_multi_unit_separation": metric_multi_unit(corpus, grouped),
+            "l_advisory_presence": metric_advisory_candidate_presence(corpus, grouped),
+            "m_candidate_span_underreach": underreach,
+            "m_prime_candidate_span_overreach": overreach,
+            "n_normative_discovery_discrimination": discovery,
+        },
+        "overreach_versus_underreach": (
+            "Opposite defects, counted separately. m_prime records a span reaching beyond a "
+            "registered proposition bound; m records a run losing preregistered material "
+            "content. A span that sheds framing and also sheds material content is booked "
+            "under m and is never scored as a framing-separation success in j."
+        ),
+        "discovery_versus_suppression": (
+            "Metric N reports false positives on non-normative sources and presence misses "
+            "on normative ones separately, and no scalar combines them. The 005 correction "
+            "could fail in either direction: institutional description still discovered, or "
+            "genuine advisory, definition and delegation material suppressed."
+        ),
+        "historical_metric_note": (
+            "001 through 004 metric labels retain their original meaning only inside their "
+            "own frozen receipts. They are not 005 requirements and 005 does not "
+            "reinterpret them."
+        ),
+        "evidence": _attempt_evidence(attempts),
+        "engineering_summary": {
+            "total_requests_attempted": len(attempts),
+            "boundary_accepted": boundary["boundary_accepted"],
+            "boundary_rejected": boundary["boundary_rejected"],
+            "provider_errors": provider_errors["provider_errors"],
+            "presence_misses": presence["presence_misses"],
+            "false_positive_runs": negatives["false_positive_runs"],
+            "negative_control_false_positive_runs": discovery["negative_false_positive_runs"],
+            "positive_boundary_presence_misses": discovery["positive_presence_misses"],
+            "spans_containing_separable_framing": framing["spans_containing_separable_framing"],
+            "runs_losing_material_content": underreach["runs_losing_material_content"],
+            "candidate_spans_outside_registered_bounds": overreach[
+                "candidate_spans_outside_bounds"
+            ],
+            "note": "Observed counts only; not a verdict.",
+        },
+    }
+
+
 def _build_receipt_004(
     *,
     corpus: Corpus,
@@ -2017,6 +2286,18 @@ def build_receipt(
     implementation: JsonObject,
 ) -> JsonObject:
     """Assemble the machine-readable characterization receipt."""
+    if corpus.corpus_version == "v0.5":
+        return _build_receipt_005(
+            corpus=corpus,
+            attempts=attempts,
+            runs_per_specimen=runs_per_specimen,
+            provider_name=provider_name,
+            model=model,
+            corpus_integrity=corpus_integrity,
+            corpus_freeze_relpath=corpus_freeze_relpath,
+            integrity_findings=integrity_findings,
+            implementation=implementation,
+        )
     if corpus.corpus_version == "v0.4":
         return _build_receipt_004(
             corpus=corpus,

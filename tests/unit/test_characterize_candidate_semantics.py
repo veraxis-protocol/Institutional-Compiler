@@ -405,11 +405,11 @@ def test_002_historical_metric_names_remain_readable_without_reinterpretation(
     )
 
 
-def test_cli_defaults_point_to_004_and_no_live_call_occurs(harness: ModuleType) -> None:
+def test_cli_defaults_point_to_005_and_no_live_call_occurs(harness: ModuleType) -> None:
     args = harness.build_parser().parse_args([])
-    assert "candidate-semantics-004" in args.corpus.as_posix()
-    assert "candidate-semantics-004" in args.freeze.as_posix()
-    assert "OIC-CANDIDATE-SEMANTICS-004" in args.output.as_posix()
+    assert "candidate-semantics-005" in args.corpus.as_posix()
+    assert "candidate-semantics-005" in args.freeze.as_posix()
+    assert "OIC-CANDIDATE-SEMANTICS-005" in args.output.as_posix()
 
 
 def test_every_predecessor_corpus_still_loads_from_its_own_path(
@@ -420,11 +420,12 @@ def test_every_predecessor_corpus_still_loads_from_its_own_path(
         ("001/CORPUS-v0.1.json", "OIC-CANDIDATE-SEMANTICS-001"),
         ("002/CORPUS-v0.2.json", "OIC-CANDIDATE-SEMANTICS-002"),
         ("003/CORPUS-v0.3.json", "OIC-CANDIDATE-SEMANTICS-003"),
+        ("004/CORPUS-v0.4.json", "OIC-CANDIDATE-SEMANTICS-004"),
     ):
         path = repo_root / "benchmarks/characterization" / f"candidate-semantics-{version}"
         corpus = harness.load_corpus(path)
         assert corpus.corpus_id == expected
-        assert corpus.specimens[0].separable_framing_spans is None
+        assert corpus.specimens[0].arm_role is None
 
 
 # --------------------------------------------------------------------------
@@ -760,3 +761,270 @@ def test_historical_metric_labels_stay_version_correct(harness: ModuleType, tmp_
     assert "j_framing_separation" not in receipt["metrics"]
     assert "m_candidate_span_overreach" in receipt["metrics"]
     assert "not current 003 requirements" in receipt["historical_metric_note"]
+
+
+# --------------------------------------------------------------------------
+# OIC-CANDIDATE-SEMANTICS-005: normative-discovery discrimination (metric N)
+#
+# The correction can fail in two opposite directions and metric N must see both: it can
+# leave institutional description being discovered, or it can suppress genuine advisory,
+# definition and delegation material. No scalar combines them, on purpose -- an accuracy
+# number would let one failure pay for the other.
+# --------------------------------------------------------------------------
+
+DESCRIPTIVE = (
+    "This section explains the governance framework, the delegation register, and the "
+    "compliance calendar maintained by the Secretariat."
+)
+ADVISORY = "Managers are encouraged to discuss workload allocation with their teams."
+EMPTY = '{"candidates":[]}'
+
+
+class KeyedProvider:
+    """Returns content chosen by a marker in the source fragment. Performs no I/O."""
+
+    provider_name = "fake-provider"
+
+    def __init__(self, routes: dict[str, str], default: str) -> None:
+        self.routes = routes
+        self.default = default
+
+    def complete(self, request: ModelRequest) -> ModelResponse:
+        content = next(
+            (body for marker, body in self.routes.items() if marker in request.user_prompt),
+            self.default,
+        )
+        return ModelResponse(
+            provider=self.provider_name,
+            model="fake-model",
+            content=content,
+            request_id=None,
+            raw={},
+        )
+
+
+def discovery_document(*specimens: dict[str, Any]) -> dict[str, Any]:
+    record = document(*specimens)
+    record["corpus_id"] = "TEST-CORPUS-005"
+    record["corpus_version"] = "v0.5"
+    return record
+
+
+def load_005(harness: ModuleType, tmp_path: Path, *items: dict[str, Any]) -> Any:  # noqa: ANN401
+    path = tmp_path / "CORPUS-005.json"
+    path.write_bytes(harness.canonical_json_bytes(discovery_document(*items)))
+    return harness.load_corpus(path)
+
+
+def test_n_records_a_false_positive_on_a_descriptive_source(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    """The motivating defect: description discovered and typed advisory."""
+    corpus = load_005(
+        harness,
+        tmp_path,
+        specimen(
+            "N-1",
+            text=DESCRIPTIVE,
+            normative=False,
+            cmin=0,
+            cmax=0,
+            category="institutional_vocabulary_no_norm",
+            tags=["negative_control"],
+        ),
+    )
+    attempts = harness.run_corpus(
+        corpus,
+        provider=ScriptedProvider(response((DESCRIPTIVE, "advisory"))),
+        runs_per_specimen=3,
+    )
+    metric = harness.metric_normative_discovery(corpus, harness.group_by_specimen(attempts))
+    record = metric["negative_controls"][0]
+    assert record["accepted_runs"] == 3
+    assert record["zero_candidate_runs"] == 0
+    assert record["false_positive_runs"] == 3
+    assert record["result"] == harness.DISCOVERY_FALSE_POSITIVE
+    assert record["false_positive_provisional_types"] == ["advisory"]
+    assert record["false_positive_spans"][0]["candidate_spans"] == [DESCRIPTIVE]
+    assert record["false_positive_spans"][0]["raw_content_sha256"]
+    assert metric["negative_false_positive_runs"] == 3
+
+
+def test_n_records_correct_abstention_on_a_descriptive_source(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    corpus = load_005(
+        harness,
+        tmp_path,
+        specimen(
+            "N-1", text=DESCRIPTIVE, normative=False, cmin=0, cmax=0, tags=["negative_control"]
+        ),
+    )
+    attempts = harness.run_corpus(corpus, provider=ScriptedProvider(EMPTY), runs_per_specimen=3)
+    metric = harness.metric_normative_discovery(corpus, harness.group_by_specimen(attempts))
+    record = metric["negative_controls"][0]
+    assert record["zero_candidate_runs"] == 3
+    assert record["false_positive_runs"] == 0
+    assert record["false_positive_spans"] == []
+    assert record["result"] == harness.DISCOVERY_ABSTAINED
+
+
+def test_n_records_an_over_correction_that_suppresses_genuine_advisory(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    """The opposite failure. A fix for false positives that kills advisory is not a fix."""
+    corpus = load_005(
+        harness,
+        tmp_path,
+        specimen(
+            "P-1",
+            text=ADVISORY,
+            category="advisory",
+            types=["advisory"],
+            tags=["positive_sentinel", "over_correction_control"],
+        ),
+    )
+    attempts = harness.run_corpus(corpus, provider=ScriptedProvider(EMPTY), runs_per_specimen=3)
+    metric = harness.metric_normative_discovery(corpus, harness.group_by_specimen(attempts))
+    record = metric["positive_boundary_sentinels"][0]
+    assert record["accepted_runs"] == 3
+    assert record["runs_with_candidate"] == 0
+    assert record["presence_misses"] == 3
+    assert record["result"] == harness.DISCOVERY_MISSED
+    assert metric["positive_presence_misses"] == 3
+
+
+def test_n_records_a_preserved_positive(harness: ModuleType, tmp_path: Path) -> None:
+    corpus = load_005(
+        harness,
+        tmp_path,
+        specimen("P-1", text=ADVISORY, category="advisory", types=["advisory"]),
+    )
+    attempts = harness.run_corpus(
+        corpus, provider=ScriptedProvider(response((ADVISORY, "advisory"))), runs_per_specimen=2
+    )
+    metric = harness.metric_normative_discovery(corpus, harness.group_by_specimen(attempts))
+    record = metric["positive_boundary_sentinels"][0]
+    assert record["runs_with_candidate"] == 2
+    assert record["presence_misses"] == 0
+    assert record["observed_provisional_types"] == ["advisory"]
+    assert record["candidate_count_distribution"] == {"1": 2}
+    assert record["result"] == harness.DISCOVERY_PRESENT
+
+
+def test_n_reports_both_directions_separately_and_computes_no_accuracy_score(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    corpus = load_005(
+        harness,
+        tmp_path,
+        specimen("N-1", text=DESCRIPTIVE, normative=False, cmin=0, cmax=0),
+        specimen("P-1", text=ADVISORY, category="advisory", types=["advisory"]),
+    )
+    provider = KeyedProvider({DESCRIPTIVE: response((DESCRIPTIVE, "advisory"))}, default=EMPTY)
+    attempts = harness.run_corpus(corpus, provider=provider, runs_per_specimen=2)
+    metric = harness.metric_normative_discovery(corpus, harness.group_by_specimen(attempts))
+    assert metric["negative_false_positive_runs"] == 2
+    assert metric["positive_presence_misses"] == 2
+    assert "No scalar accuracy score is computed" in metric["note"]
+    for forbidden in ("accuracy", "score", "f1", "precision", "recall"):
+        assert forbidden not in {key.lower() for key in metric}, forbidden
+
+
+def test_the_005_receipt_is_version_specific_and_carries_metric_n(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    corpus = load_005(
+        harness,
+        tmp_path,
+        specimen("N-1", text=DESCRIPTIVE, normative=False, cmin=0, cmax=0),
+        specimen("P-1", text=ADVISORY, category="advisory", types=["advisory"]),
+    )
+    attempts = harness.run_corpus(corpus, provider=ScriptedProvider(EMPTY), runs_per_specimen=1)
+    receipt = harness.build_receipt(
+        corpus=corpus,
+        attempts=attempts,
+        runs_per_specimen=1,
+        provider_name="fake-provider",
+        model="fake-model",
+        corpus_integrity=harness.CORPUS_INTACT,
+        corpus_freeze_relpath="FREEZE.json",
+        integrity_findings=[],
+        implementation={"commit": "0" * 40, "worktree_clean": True},
+    )
+    assert receipt["work_order"] == "OIC-CANDIDATE-SEMANTICS-005"
+    assert receipt["metric_contract"] == "candidate-semantics-005-a-through-n"
+    assert "n_normative_discovery_discrimination" in receipt["metrics"]
+    assert "j_framing_separation" in receipt["metrics"]
+    assert "m_candidate_span_underreach" in receipt["metrics"]
+    assert "m_prime_candidate_span_overreach" in receipt["metrics"]
+    contract = receipt["candidate_contract"]
+    assert contract["model_proposed_fields"] == ["candidate_span", "unit_type"]
+    assert contract["schema_changed_in_005"] is False
+    assert contract["parser_changed_in_005"] is False
+    assert contract["grounding_rule_changed_in_005"] is False
+    assert contract["identity_rule_changed_in_005"] is False
+    assert "no keyword list" in contract["normative_discovery_mechanism"]
+    assert "no secondary classifier" in contract["normative_discovery_mechanism"]
+    assert "INCONCLUSIVE" in receipt["motivating_evidence"]
+    assert "No statistical-significance claim is made" in receipt["motivating_evidence"]
+    assert "could fail in either direction" in receipt["discovery_versus_suppression"]
+
+
+def test_the_005_receipt_states_its_claim_ceiling(harness: ModuleType, tmp_path: Path) -> None:
+    corpus = load_005(harness, tmp_path, specimen("P-1", text=ADVISORY, types=["advisory"]))
+    attempts = harness.run_corpus(corpus, provider=ScriptedProvider(EMPTY), runs_per_specimen=1)
+    receipt = harness.build_receipt(
+        corpus=corpus,
+        attempts=attempts,
+        runs_per_specimen=1,
+        provider_name="fake",
+        model="fake",
+        corpus_integrity=harness.CORPUS_INTACT,
+        corpus_freeze_relpath="FREEZE.json",
+        integrity_findings=[],
+        implementation={"commit": "0" * 40, "worktree_clean": True},
+    )
+    ceiling = receipt["claim_ceiling"]
+    assert receipt["independent_validation_claim"] is False
+    for denied in (
+        "semantic correctness",
+        "zero false-positive probability",
+        "institutional admission",
+        "authority",
+        "enforceability",
+        "legal interpretation",
+        "production readiness",
+        "cross-model generalization",
+        "statistical superiority",
+        "independent validation",
+    ):
+        assert denied in ceiling, denied
+    serialized = harness.canonical_json_bytes(receipt).decode("utf-8")
+    for banned in ('"ADMITTED"', '"AUTHORIZED"', '"COMPLIANT"', '"ALLOW"', '"DENY"'):
+        assert banned not in serialized, banned
+
+
+def test_a_v04_corpus_still_receives_the_004_metric_contract(
+    harness: ModuleType, tmp_path: Path
+) -> None:
+    """Historical metric labels stay version-correct; 005 reinterprets nothing."""
+    corpus = load_004(harness, tmp_path, framing_specimen())
+    attempts = harness.run_corpus(
+        corpus,
+        provider=ScriptedProvider(response((PROPOSITION, "obligation"))),
+        runs_per_specimen=1,
+    )
+    receipt = harness.build_receipt(
+        corpus=corpus,
+        attempts=attempts,
+        runs_per_specimen=1,
+        provider_name="fake",
+        model="fake",
+        corpus_integrity=harness.CORPUS_INTACT,
+        corpus_freeze_relpath="FREEZE.json",
+        integrity_findings=[],
+        implementation={"commit": "0" * 40, "worktree_clean": True},
+    )
+    assert receipt["metric_contract"] == "candidate-semantics-004-a-through-m"
+    assert "n_normative_discovery_discrimination" not in receipt["metrics"]

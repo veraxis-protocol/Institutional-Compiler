@@ -21,6 +21,21 @@ of the span it then reports as source-grounded.
 Excluding framing is a quoting decision, not a finding about the source. It decides
 nothing about whether the proposition is authoritative, adopted, valid, admitted,
 enforceable, or legally operative, and the source anchor keeps the framing either way.
+
+OIC-CANDIDATE-SEMANTICS-005 corrects one reproducible discovery defect and changes nothing
+else. A frozen A/B against the 003 prompt found 004 returning a candidate for prose that
+merely describes institutional structures -- registers, calendars, a governance framework --
+and typing it advisory. Institutional subject matter had become sufficient for discovery.
+The prompt now says plainly that it is not, that description and reporting yield no
+candidates whatever institutional vocabulary they carry, and that the test is what a
+proposition does rather than which words it uses.
+
+The correction is a prompt contract and nothing else. There is no keyword list, no
+institutional-vocabulary blacklist, no deterministic negative filter, no secondary
+classifier, and no post-generation removal of candidates anywhere in this module: a
+descriptive fragment the provider still reports is recorded as returned and measured. A
+filter would let OIC decide what counts as normative, which is precisely the judgement this
+layer is not entitled to make.
 """
 
 from __future__ import annotations
@@ -90,6 +105,36 @@ _SYSTEM_PROMPT = f"""You are a bounded extraction worker inside the Open Institu
 Find source-grounded normative propositions. A candidate is only material that appears to
 express one apparent normative function from this provisional vocabulary:
 {_UNIT_TYPE_LIST}.
+
+Institutional subject matter is not by itself normative. A fragment that only says something
+exists, sits somewhere, happened, contains something, explains or describes something,
+maintains an artifact, summarizes a structure, reports past activity, or advertises a
+capability is not candidate material, however much governance, compliance, policy,
+delegation, oversight, register, framework, committee, procedure or office vocabulary it
+carries. Institutional nouns do not create normativity. If nothing in the fragment performs
+an apparent normative or constitutive function, return no candidates.
+
+Do not look for particular words either. Normative function needs no must, shall, may or
+should: a proposition can require, prohibit, permit, authorize, delegate, fix what a term
+means, set a condition or exception, impose an evidence or review duty, prescribe
+escalation or remedy, establish a temporal trigger, confer discretion, or genuinely
+recommend, without any of those modals. Ask what the proposition does, not which words it
+uses.
+
+Two distinctions this turns on. A definition is candidate material when it is constitutive
+or operative, fixing what a term means for some stated purpose, and not when it merely
+explains what a concept is about. Advisory is candidate material when the fragment actually
+recommends or encourages a course of action, and not when it merely discusses guidance,
+standards, or good practice.
+
+Three short contrasts, worded to match no fragment you will be given:
+  The standards office maintains a register of accredited laboratories and issues a monthly
+  bulletin. -> no candidates. It reports what an office does and names no requirement,
+  permission, prohibition, or definition.
+  Sites are encouraged to rotate on-call duty between qualified staff. -> a candidate. It
+  actually recommends a course of action.
+  For this schedule, 'Accredited Laboratory' means a laboratory listed in the register. ->
+  a candidate. It fixes what a term means for a stated purpose.
 
 Return a literal, contiguous candidate_span copied from the source. Include enough
 surrounding source language to preserve the material proposition and every material
@@ -185,7 +230,12 @@ def propose_candidate_units(
         system_prompt=_SYSTEM_PROMPT,
         user_prompt=(
             "Extract zero or more source-grounded candidate normative propositions from "
-            "this exact source fragment. Source standing does not suppress discovery.\n\n"
+            "this exact source fragment. Source standing does not suppress discovery.\n"
+            "Institutional subject matter alone is not a normative proposition: "
+            "description, explanation and reporting produce zero candidates unless the "
+            "fragment itself requires, permits, prohibits, authorizes, delegates, fixes "
+            "what a term means, sets a condition or exception, or genuinely "
+            "recommends.\n\n"
             "Return exactly one JSON object with exactly one top-level key named "
             "candidates. Use exactly this envelope:\n"
             '{"candidates":[{"candidate_span":"...","unit_type":"..."}]}\n'

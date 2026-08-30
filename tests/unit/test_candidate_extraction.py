@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import json
 from pathlib import Path
 
@@ -596,3 +597,371 @@ def test_equivalent_propositions_from_different_framings_are_not_forced_to_share
     plain = extract(candidate(PROPOSITION), source=PROPOSITION, source_anchor=anchor("plain"))
     assert drafted.candidates[0]["candidate_span"] == plain.candidates[0]["candidate_span"]
     assert drafted.candidates[0]["unit_id"] != plain.candidates[0]["unit_id"]
+
+
+# --------------------------------------------------------------------------
+# OIC-CANDIDATE-SEMANTICS-005: the normative-discovery boundary
+#
+# A frozen A/B found 004 returning a candidate for prose that only describes institutional
+# structures -- registers, a compliance calendar, a governance framework -- and typing it
+# advisory. Institutional subject matter had become sufficient for discovery. 005 says
+# plainly that it is not.
+#
+# The correction is a prompt contract and nothing else, so these tests split three ways:
+# what OIC asks for, what OIC must NOT have built (no keyword list, no filter, no
+# classifier), and what 004 established that must not regress. None of them asserts that
+# any model complies; that is what the later live regression measures.
+# --------------------------------------------------------------------------
+
+DESCRIPTIVE_SOURCE = (
+    "This section explains the governance framework, the delegation register, and the "
+    "compliance calendar maintained by the Secretariat."
+)
+
+
+# ---- what OIC asks for ----------------------------------------------------
+
+
+def test_the_contract_states_institutional_subject_matter_is_not_normative() -> None:
+    system = flat(outbound().system_prompt)
+    assert "Institutional subject matter is not by itself normative." in system
+    assert "Institutional nouns do not create normativity." in system
+    assert (
+        "If nothing in the fragment performs an apparent normative or constitutive "
+        "function, return no candidates." in system
+    )
+
+
+@pytest.mark.parametrize(
+    "descriptive",
+    [
+        "only says something exists",
+        "sits somewhere",
+        "happened",
+        "contains something",
+        "explains or describes something",
+        "maintains an artifact",
+        "summarizes a structure",
+        "reports past activity",
+        "advertises a capability",
+    ],
+)
+def test_the_contract_enumerates_the_non_normative_shapes(descriptive: str) -> None:
+    assert descriptive in flat(outbound().system_prompt), descriptive
+
+
+@pytest.mark.parametrize(
+    "vocabulary",
+    [
+        "governance",
+        "compliance",
+        "policy",
+        "delegation",
+        "oversight",
+        "register",
+        "framework",
+        "committee",
+        "procedure",
+        "office",
+    ],
+)
+def test_the_contract_names_the_vocabulary_that_is_insufficient_on_its_own(
+    vocabulary: str,
+) -> None:
+    """Named as insufficient in the instructions, never encoded as a filter."""
+    assert vocabulary in flat(outbound().system_prompt), vocabulary
+
+
+def test_the_contract_introduces_no_modal_keyword_requirement() -> None:
+    """The overcorrection guard: normative function does not require must/shall/may/should."""
+    system = flat(outbound().system_prompt)
+    assert "Do not look for particular words either." in system
+    assert "Normative function needs no must, shall, may or should" in system
+    assert "Ask what the proposition does, not which words it uses." in system
+
+
+def test_the_contract_distinguishes_a_constitutive_definition_from_description() -> None:
+    system = flat(outbound().system_prompt)
+    assert (
+        "A definition is candidate material when it is constitutive or operative, fixing "
+        "what a term means for some stated purpose, and not when it merely explains what a "
+        "concept is about." in system
+    )
+
+
+def test_the_contract_distinguishes_actual_advisory_from_discussion_of_guidance() -> None:
+    system = flat(outbound().system_prompt)
+    assert (
+        "Advisory is candidate material when the fragment actually recommends or encourages "
+        "a course of action, and not when it merely discusses guidance, standards, or good "
+        "practice." in system
+    )
+
+
+def test_the_contract_carries_one_contrast_for_each_distinction() -> None:
+    system = flat(outbound().system_prompt)
+    assert "Three short contrasts, worded to match no fragment you will be given" in system
+    assert "no candidates. It reports what an office does" in system
+    assert "a candidate. It actually recommends a course of action." in system
+    assert "a candidate. It fixes what a term means for a stated purpose." in system
+
+
+def test_the_user_prompt_repeats_the_discovery_rule() -> None:
+    user = flat(outbound().user_prompt.split("SOURCE FRAGMENT:")[0])
+    assert (
+        "Institutional subject matter alone is not a normative proposition: description, "
+        "explanation and reporting produce zero candidates unless the fragment itself "
+        "requires, permits, prohibits, authorizes, delegates, fixes what a term means, "
+        "sets a condition or exception, or genuinely recommends." in user
+    )
+
+
+def test_the_instructions_reproduce_no_frozen_corpus_specimen(repo_root: Path) -> None:
+    """Examples teach the rule. They must never teach a corpus answer."""
+    import json as _json
+
+    system = outbound().system_prompt
+    user = outbound().user_prompt.split("SOURCE FRAGMENT:")[0]
+    root = repo_root / "benchmarks/characterization"
+    for version in ("003/CORPUS-v0.3.json", "004/CORPUS-v0.4.json", "005/CORPUS-v0.5.json"):
+        document = _json.loads((root / f"candidate-semantics-{version}").read_text("utf-8"))
+        for specimen in document["specimens"]:
+            assert specimen["source_text"] not in system, specimen["specimen_id"]
+            assert specimen["source_text"] not in user, specimen["specimen_id"]
+            for key in ("separable_framing_spans", "candidate_span_bounds"):
+                for span in specimen.get(key) or []:
+                    assert span not in system, (specimen["specimen_id"], span)
+
+
+def test_the_motivating_specimen_text_is_absent_from_the_prompt() -> None:
+    """CSEM-031 in particular: the fix must generalize, not memorize."""
+    request = outbound()
+    instructions = request.system_prompt + request.user_prompt.split("SOURCE FRAGMENT:")[0]
+    assert DESCRIPTIVE_SOURCE not in instructions
+    assert "Secretariat" not in instructions
+    assert "compliance calendar" not in instructions
+    assert "delegation register" not in instructions
+
+
+# ---- what OIC must NOT have built ----------------------------------------
+
+
+def _module_ast(repo_root: Path) -> ast.Module:
+    return ast.parse((repo_root / "src/oic/candidate_extraction.py").read_text("utf-8"))
+
+
+def _is_collection(value: ast.expr | None) -> bool:
+    if isinstance(value, ast.Tuple | ast.List | ast.Set | ast.Dict):
+        return True
+    return (
+        isinstance(value, ast.Call)
+        and isinstance(value.func, ast.Name)
+        and value.func.id in {"frozenset", "set", "tuple", "list"}
+    )
+
+
+def test_no_keyword_blacklist_or_vocabulary_constant_exists(repo_root: Path) -> None:
+    """Structural, via AST, so prose in a docstring cannot pass or fail it.
+
+    Every module-level collection constant is enumerated here. A new
+    institutional-vocabulary list could not be added without failing this test.
+    """
+    collections: set[str] = set()
+    for node in _module_ast(repo_root).body:
+        if isinstance(node, ast.Assign) and _is_collection(node.value):
+            collections.update(target.id for target in node.targets if isinstance(target, ast.Name))
+        elif (
+            isinstance(node, ast.AnnAssign)
+            and isinstance(node.target, ast.Name)
+            and _is_collection(node.value)
+        ):
+            collections.add(node.target.id)
+    assert collections == {
+        "_UNIT_TYPES",
+        "_ALLOWED_UNIT_TYPES",
+        "_MODEL_ALLOWED_KEYS",
+        "_REMOVED_SEMANTIC_ROLE_KEYS",
+        "_MODEL_FORBIDDEN_AUTHORITY_KEYS",
+        "_SOURCE_ANCHOR_REQUIRED_KEYS",
+        "_SOURCE_ANCHOR_ALLOWED_KEYS",
+    }
+
+
+def test_the_only_regular_expression_is_the_source_anchor_digest(repo_root: Path) -> None:
+    calls = [
+        node.func.attr
+        for node in ast.walk(_module_ast(repo_root))
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Attribute)
+        and isinstance(node.func.value, ast.Name)
+        and node.func.value.id == "re"
+    ]
+    assert calls == ["compile"]
+
+
+def test_no_candidate_is_filtered_out_after_generation(repo_root: Path) -> None:
+    """The normalized-candidate comprehension carries no condition.
+
+    A filter here would let OIC decide what counts as normative, which is exactly the
+    judgement this layer is not entitled to make -- and it would make the measurement
+    circular, since the metric would then be scoring OIC's own filter.
+    """
+    tree = _module_ast(repo_root)
+    comprehensions = [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.GeneratorExp | ast.ListComp | ast.SetComp)
+    ]
+    assert comprehensions, "expected the normalized-candidate comprehension"
+    for comprehension in comprehensions:
+        for generator in comprehension.generators:
+            assert generator.ifs == [], ast.dump(comprehension)[:200]
+
+
+def test_no_deletion_or_skipping_machinery_exists_in_the_module(repo_root: Path) -> None:
+    tree = _module_ast(repo_root)
+    for node in ast.walk(tree):
+        assert not isinstance(node, ast.Delete), "del is never used"
+        assert not isinstance(node, ast.Continue), "continue is never used"
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+            assert node.func.id != "filter", "filter() is never used"
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+            assert node.func.attr != "pop", ".pop() is never used"
+
+
+def test_a_descriptive_span_the_provider_returns_is_recorded_not_suppressed() -> None:
+    """The behavioural half: OIC measures the defect, it does not silently fix it."""
+    result = extract(candidate(DESCRIPTIVE_SOURCE, "advisory"), source=DESCRIPTIVE_SOURCE)
+    assert len(result.candidates) == 1
+    assert result.candidates[0]["candidate_span"] == DESCRIPTIVE_SOURCE
+    assert result.candidates[0]["unit_type"] == "advisory"
+    assert result.candidates[0]["epistemic_state"] == "uncertain"
+
+
+def test_no_second_model_or_provider_call_is_introduced() -> None:
+    """One provider call per extraction, exactly as before."""
+    provider = FakeProvider('{"candidates":[]}')
+    propose_candidate_units(
+        source_text=DESCRIPTIVE_SOURCE, source_anchor=anchor(), provider=provider
+    )
+    assert len(provider.requests) == 1
+
+
+# ---- what must not regress ------------------------------------------------
+
+
+def test_the_004_framing_rules_are_all_still_present() -> None:
+    system = flat(outbound().system_prompt)
+    assert "Quote the proposition, not the source's commentary about the proposition." in system
+    assert "grammatically separable from the proposition, leave it outside the span" in system
+    assert "Never buy a shorter span with material content." in system
+    assert "Dropping material content is a worse error than including framing." in system
+    assert "Source standing is not a discovery criterion." in system
+    assert "The source anchor keeps the framing." in system
+
+
+def test_framing_separation_still_works_on_the_004_worked_case() -> None:
+    result = extract(candidate(PROPOSITION), source=DRAFT_SOURCE)
+    span = str(result.candidates[0]["candidate_span"])
+    assert span == PROPOSITION
+    assert "DRAFT" not in span
+    assert "$10,000" in span
+    assert "Chief Financial Officer" in span
+
+
+def test_material_completeness_language_survives_the_005_change() -> None:
+    system = flat(outbound().system_prompt)
+    for element in (
+        "threshold",
+        "deadline",
+        "condition",
+        "exception",
+        "recipient",
+        "advisory wording",
+        "trigger",
+        "consequence",
+    ):
+        assert element in system, element
+
+
+def test_the_authority_boundary_survives_the_005_change() -> None:
+    system = flat(outbound().system_prompt)
+    assert "Candidate material has no institutional authority." in system
+    assert "Do not decide or propose admission" in system
+    assert "Institutional IR state" in system
+
+
+def test_no_field_was_added_by_005() -> None:
+    from oic.candidate_extraction import _MODEL_ALLOWED_KEYS
+
+    assert set(_MODEL_ALLOWED_KEYS) == {"candidate_span", "unit_type"}
+    result = extract(candidate(PROPOSITION), source=DRAFT_SOURCE)
+    assert set(result.candidates[0]) == {
+        "unit_id",
+        "candidate_span",
+        "unit_type",
+        "interpretation_state",
+        "epistemic_state",
+        "source_anchors",
+    }
+    for invented in (
+        "confidence",
+        "normative_score",
+        "advisory_score",
+        "standing",
+        "authority",
+        "admission",
+        "legal_effect",
+        "context",
+    ):
+        payload = json.dumps(
+            {
+                "candidates": [
+                    {"candidate_span": PROPOSITION, "unit_type": "obligation", invented: 1}
+                ]
+            }
+        )
+        with pytest.raises(CandidateBoundaryError):
+            extract(payload, source=DRAFT_SOURCE)
+
+
+def test_identity_is_unchanged_by_005() -> None:
+    from oic.candidate_extraction import _candidate_id
+
+    expected = _candidate_id(
+        semantic={"candidate_span": PROPOSITION, "unit_type": "obligation"},
+        source_anchor=anchor(),
+    )
+    assert extract(candidate(PROPOSITION), source=DRAFT_SOURCE).candidates[0]["unit_id"] == (
+        expected
+    )
+    here = extract(candidate(PROPOSITION), source=DRAFT_SOURCE, source_anchor=anchor("1"))
+    there = extract(candidate(PROPOSITION), source=DRAFT_SOURCE, source_anchor=anchor("2"))
+    assert here.candidates[0]["unit_id"] != there.candidates[0]["unit_id"]
+
+
+def test_grounding_is_unchanged_by_005() -> None:
+    with pytest.raises(CandidateGroundingError, match="literal contiguous span"):
+        extract(candidate("The Secretariat must maintain the register."), source=DESCRIPTIVE_SOURCE)
+    assert (
+        extract(candidate(DESCRIPTIVE_SOURCE), source=DESCRIPTIVE_SOURCE).candidates[0][
+            "candidate_span"
+        ]
+        == DESCRIPTIVE_SOURCE
+    )
+
+
+def test_genuine_normative_material_still_passes_the_boundary_unchanged() -> None:
+    """Advisory, definition and delegation all remain acceptable candidate material."""
+    cases = [
+        ("Managers are encouraged to discuss workload allocation with their teams.", "advisory"),
+        (
+            "For this part, 'Responsible Officer' means the person holding the delegation.",
+            "definition",
+        ),
+        ("The Head of Service may authorise a Deputy to sign purchase agreements.", "delegation"),
+    ]
+    for source, unit_type in cases:
+        result = extract(candidate(source, unit_type), source=source)
+        assert result.candidates[0]["candidate_span"] == source
+        assert result.candidates[0]["unit_type"] == unit_type
