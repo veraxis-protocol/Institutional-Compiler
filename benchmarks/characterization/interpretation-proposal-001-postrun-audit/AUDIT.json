@@ -1,0 +1,4979 @@
+{
+  "work_order": "OIC-INTERPRETATION-PROPOSAL-POSTRUN-AUDIT-001",
+  "source_instrument_sha": "213ef5988f16f13cbf0b2e691b1873a740034a82",
+  "source_receipt_sha256": "29217e29207f7a1a5e32ae28bc7ae28cd9d33cc7acc591a9fb4aa0f38d59b7f5",
+  "source_corpus_sha256": "462158c1f70e10838f09d02e1dc62136d30477535048852bbc110f1d6cf7f817",
+  "provider": "nvidia-nim",
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "historical_metrics": {
+    "A_provider_structural_boundary": {
+      "accepted_proposals": 86,
+      "boundary_rejection_reasons": [],
+      "proposal_boundary_rejected": 0,
+      "provider_accepted": 86,
+      "provider_errors": 1,
+      "requests_attempted": 87,
+      "requests_planned": 87
+    },
+    "B_proposal_presence": {
+      "IIR-001": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-002": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-003": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-004": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-005": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-006": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-007": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-008": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-009": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-010": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-011": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-012": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-013": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-014": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-015": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-016": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-017": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-018": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-023": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-024": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-025": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-026": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-027": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-028": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-029": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-030": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-031": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      },
+      "IIR-032": {
+        "accepted_runs": 2,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 2
+      },
+      "IIR-035": {
+        "accepted_runs": 3,
+        "empty_proposal_runs": 0,
+        "runs_with_at_least_one_assertion": 3
+      }
+    },
+    "C_force_classification": {
+      "confusion_matrix": {
+        "ADVISORY": {
+          "ADVISORY": 6,
+          "CONSTITUTIVE_DEFINITION": 0,
+          "DELEGATION": 0,
+          "OBLIGATION": 0,
+          "OMITTED": 0,
+          "PERMISSION": 0,
+          "PROHIBITION": 0
+        },
+        "CONSTITUTIVE_DEFINITION": {
+          "ADVISORY": 0,
+          "CONSTITUTIVE_DEFINITION": 0,
+          "DELEGATION": 1,
+          "OBLIGATION": 0,
+          "OMITTED": 8,
+          "PERMISSION": 0,
+          "PROHIBITION": 0
+        },
+        "DELEGATION": {
+          "ADVISORY": 0,
+          "CONSTITUTIVE_DEFINITION": 0,
+          "DELEGATION": 3,
+          "OBLIGATION": 0,
+          "OMITTED": 0,
+          "PERMISSION": 0,
+          "PROHIBITION": 0
+        },
+        "OBLIGATION": {
+          "ADVISORY": 0,
+          "CONSTITUTIVE_DEFINITION": 0,
+          "DELEGATION": 0,
+          "OBLIGATION": 55,
+          "OMITTED": 1,
+          "PERMISSION": 0,
+          "PROHIBITION": 0
+        },
+        "PERMISSION": {
+          "ADVISORY": 0,
+          "CONSTITUTIVE_DEFINITION": 0,
+          "DELEGATION": 0,
+          "OBLIGATION": 0,
+          "OMITTED": 0,
+          "PERMISSION": 9,
+          "PROHIBITION": 0
+        },
+        "PROHIBITION": {
+          "ADVISORY": 0,
+          "CONSTITUTIVE_DEFINITION": 0,
+          "DELEGATION": 0,
+          "OBLIGATION": 0,
+          "OMITTED": 0,
+          "PERMISSION": 0,
+          "PROHIBITION": 3
+        }
+      },
+      "mismatch_instances": [
+        {
+          "expected_force": "CONSTITUTIVE_DEFINITION",
+          "proposed_force": "OMITTED",
+          "run_index": 1,
+          "specimen_id": "IIR-005"
+        },
+        {
+          "expected_force": "CONSTITUTIVE_DEFINITION",
+          "proposed_force": "OMITTED",
+          "run_index": 2,
+          "specimen_id": "IIR-005"
+        },
+        {
+          "expected_force": "CONSTITUTIVE_DEFINITION",
+          "proposed_force": "DELEGATION",
+          "run_index": 3,
+          "specimen_id": "IIR-005"
+        },
+        {
+          "expected_force": "OBLIGATION",
+          "proposed_force": "OMITTED",
+          "run_index": 3,
+          "specimen_id": "IIR-014"
+        },
+        {
+          "expected_force": "CONSTITUTIVE_DEFINITION",
+          "proposed_force": "OMITTED",
+          "run_index": 1,
+          "specimen_id": "IIR-023"
+        },
+        {
+          "expected_force": "CONSTITUTIVE_DEFINITION",
+          "proposed_force": "OMITTED",
+          "run_index": 2,
+          "specimen_id": "IIR-023"
+        },
+        {
+          "expected_force": "CONSTITUTIVE_DEFINITION",
+          "proposed_force": "OMITTED",
+          "run_index": 3,
+          "specimen_id": "IIR-023"
+        },
+        {
+          "expected_force": "CONSTITUTIVE_DEFINITION",
+          "proposed_force": "OMITTED",
+          "run_index": 1,
+          "specimen_id": "IIR-024"
+        },
+        {
+          "expected_force": "CONSTITUTIVE_DEFINITION",
+          "proposed_force": "OMITTED",
+          "run_index": 2,
+          "specimen_id": "IIR-024"
+        },
+        {
+          "expected_force": "CONSTITUTIVE_DEFINITION",
+          "proposed_force": "OMITTED",
+          "run_index": 3,
+          "specimen_id": "IIR-024"
+        }
+      ]
+    },
+    "D_unsupported_semantic_invention": {
+      "counts": {
+        "action:NOT_APPLICABLE": 1,
+        "bearer:NOT_ESTABLISHED": 3,
+        "condition:NOT_ESTABLISHED": 15,
+        "counterparty:NOT_ESTABLISHED": 3,
+        "definiendum:NOT_APPLICABLE": 1,
+        "invented_condition": 15,
+        "invented_value": 20,
+        "object:NOT_APPLICABLE": 1,
+        "object:NOT_ESTABLISHED": 3,
+        "quantum:NOT_ESTABLISHED": 6,
+        "temporal_qualifier:NOT_ESTABLISHED": 2
+      },
+      "instances": [
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "seven years",
+          "run_index": 1,
+          "slot": "quantum",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "seven years",
+          "run_index": 2,
+          "slot": "quantum",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "seven years",
+          "run_index": 3,
+          "slot": "quantum",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "outside the standard schedule",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-003"
+        },
+        {
+          "gold_status": "NOT_APPLICABLE",
+          "kind": "invented_value",
+          "proposed_value": "pending",
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-005"
+        },
+        {
+          "gold_status": "NOT_APPLICABLE",
+          "kind": "invented_value",
+          "proposed_value": "file",
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-005"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "the request exceeds the delegated limit",
+          "run_index": 1,
+          "slot": "quantum",
+          "specimen_id": "IIR-010"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "the request",
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-010"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "the request exceeds the delegated limit",
+          "run_index": 3,
+          "slot": "quantum",
+          "specimen_id": "IIR-010"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "transfers between internal accounts",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "transfers between internal accounts",
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "transfers between internal accounts",
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "applicable period",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "applicable period",
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "applicable period",
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "the report",
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-018"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "the registrar",
+          "run_index": 2,
+          "slot": "counterparty",
+          "specimen_id": "IIR-018"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "the registrar",
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-018"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "subject to section 4 of this policy",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-025"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "subject to section 4 of this policy",
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-025"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "subject to section 4 of this policy",
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-025"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "requests",
+          "run_index": 1,
+          "slot": "bearer",
+          "specimen_id": "IIR-026"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "requests",
+          "run_index": 2,
+          "slot": "bearer",
+          "specimen_id": "IIR-026"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "requests",
+          "run_index": 3,
+          "slot": "bearer",
+          "specimen_id": "IIR-026"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "quarterly",
+          "run_index": 1,
+          "slot": "quantum",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "quarterly",
+          "run_index": 2,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "quarterly",
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "gold_status": "NOT_APPLICABLE",
+          "kind": "invented_value",
+          "proposed_value": "reconciliation",
+          "run_index": 3,
+          "slot": "definiendum",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "a second officer",
+          "run_index": 1,
+          "slot": "counterparty",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "over 250 units",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_value",
+          "proposed_value": "a second officer",
+          "run_index": 2,
+          "slot": "counterparty",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "Transactions over 250 units",
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "before disposal",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "before disposal",
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "gold_status": "NOT_ESTABLISHED",
+          "kind": "invented_condition",
+          "proposed_value": "before disposal",
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-035"
+        }
+      ]
+    },
+    "E_established_slot_recall": {
+      "instances": [
+        {
+          "expected_value": "for seven years",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "expected_value": "for seven years",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "expected_value": "for seven years",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "expected_value": "Teams",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "bearer",
+          "specimen_id": "IIR-004"
+        },
+        {
+          "expected_value": "Teams",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "bearer",
+          "specimen_id": "IIR-004"
+        },
+        {
+          "expected_value": "CONSTITUTIVE_DEFINITION",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "normative_force",
+          "specimen_id": "IIR-005"
+        },
+        {
+          "expected_value": "CONSTITUTIVE_DEFINITION",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "normative_force",
+          "specimen_id": "IIR-005"
+        },
+        {
+          "expected_value": "CONSTITUTIVE_DEFINITION",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "DELEGATION"
+          ],
+          "run_index": 3,
+          "slot": "normative_force",
+          "specimen_id": "IIR-005"
+        },
+        {
+          "expected_value": "Closed file",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "definiendum",
+          "specimen_id": "IIR-005"
+        },
+        {
+          "expected_value": "a file for which no further action is pending",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "definiens",
+          "specimen_id": "IIR-005"
+        },
+        {
+          "expected_value": "The Board",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "Risk Committee"
+          ],
+          "run_index": 1,
+          "slot": "bearer",
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_value": "delegates",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "approval of exceptions"
+          ],
+          "run_index": 1,
+          "slot": "action",
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_value": "approval of exceptions",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_value": "the Risk Committee",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "the Board"
+          ],
+          "run_index": 1,
+          "slot": "counterparty",
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_value": "The Board",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "Risk Committee"
+          ],
+          "run_index": 2,
+          "slot": "bearer",
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_value": "delegates",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "approval of exceptions"
+          ],
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_value": "approval of exceptions",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_value": "the Risk Committee",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "counterparty",
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_value": "The Board",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "the Risk Committee"
+          ],
+          "run_index": 3,
+          "slot": "bearer",
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_value": "delegates",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "approval of exceptions"
+          ],
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_value": "approval of exceptions",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_value": "the Risk Committee",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "counterparty",
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_value": "a case file",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-009"
+        },
+        {
+          "expected_value": "a case file",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-009"
+        },
+        {
+          "expected_value": "countersigned",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "action",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "expected_value": "All transfers",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "expected_value": "countersigned",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "expected_value": "All transfers",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "expected_value": "except transfers between internal accounts",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "exception",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "expected_value": "countersigned",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "expected_value": "All transfers",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "expected_value": "except transfers between internal accounts",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "exception",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "expected_value": "a second approval",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-012"
+        },
+        {
+          "expected_value": "require",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "approval"
+          ],
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-012"
+        },
+        {
+          "expected_value": "Purchases above 5000 units",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-012"
+        },
+        {
+          "expected_value": "a second approval",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-012"
+        },
+        {
+          "expected_value": "filed",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "action",
+          "specimen_id": "IIR-014"
+        },
+        {
+          "expected_value": "The report",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-014"
+        },
+        {
+          "expected_value": "filed",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-014"
+        },
+        {
+          "expected_value": "The report",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-014"
+        },
+        {
+          "expected_value": "OBLIGATION",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "normative_force",
+          "specimen_id": "IIR-014"
+        },
+        {
+          "expected_value": "filed",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-014"
+        },
+        {
+          "expected_value": "The report",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-014"
+        },
+        {
+          "expected_value": "no later than 2026-03-31T00:00:00Z",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "deadline"
+          ],
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-014"
+        },
+        {
+          "expected_value": "retained",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "action",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "expected_value": "Records",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "expected_value": "for the applicable period",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "expected_value": "retained",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "expected_value": "Records",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "expected_value": "for the applicable period",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "expected_value": "retained",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "expected_value": "Records",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "expected_value": "for the applicable period",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "expected_value": "CONSTITUTIVE_DEFINITION",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "normative_force",
+          "specimen_id": "IIR-023"
+        },
+        {
+          "expected_value": "For the purposes of this policy",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-023"
+        },
+        {
+          "expected_value": "CONSTITUTIVE_DEFINITION",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "normative_force",
+          "specimen_id": "IIR-023"
+        },
+        {
+          "expected_value": "For the purposes of this policy",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-023"
+        },
+        {
+          "expected_value": "CONSTITUTIVE_DEFINITION",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "normative_force",
+          "specimen_id": "IIR-023"
+        },
+        {
+          "expected_value": "For the purposes of this policy",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-023"
+        },
+        {
+          "expected_value": "CONSTITUTIVE_DEFINITION",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "normative_force",
+          "specimen_id": "IIR-024"
+        },
+        {
+          "expected_value": "CONSTITUTIVE_DEFINITION",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "normative_force",
+          "specimen_id": "IIR-024"
+        },
+        {
+          "expected_value": "CONSTITUTIVE_DEFINITION",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "normative_force",
+          "specimen_id": "IIR-024"
+        },
+        {
+          "expected_value": "granted",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "action",
+          "specimen_id": "IIR-025"
+        },
+        {
+          "expected_value": "Approvals",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-025"
+        },
+        {
+          "expected_value": "granted",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-025"
+        },
+        {
+          "expected_value": "Approvals",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-025"
+        },
+        {
+          "expected_value": "granted",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-025"
+        },
+        {
+          "expected_value": "Approvals",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-025"
+        },
+        {
+          "expected_value": "all requests",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-026"
+        },
+        {
+          "expected_value": "all requests",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-026"
+        },
+        {
+          "expected_value": "all requests",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-026"
+        },
+        {
+          "expected_value": "Departments",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "bearer",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "expected_value": "consider",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "reconciliation"
+          ],
+          "run_index": 1,
+          "slot": "action",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "expected_value": "Departments",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "bearer",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "expected_value": "consider",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "reconciliation"
+          ],
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "expected_value": "Departments",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "bearer",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "expected_value": "consider",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "reconciliation"
+          ],
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "expected_value": "additional documentation",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-028"
+        },
+        {
+          "expected_value": "require",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "action",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "expected_value": "dual approval",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "expected_value": "All withdrawals",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "dual approval"
+          ],
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "expected_value": "require",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "expected_value": "dual approval",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "expected_value": "All withdrawals",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "except withdrawals under an approved standing order"
+          ],
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "expected_value": "except withdrawals under an approved standing order",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "exception",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "expected_value": "require",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "expected_value": "dual approval",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "expected_value": "All withdrawals",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "except withdrawals under an approved standing order"
+          ],
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "expected_value": "except withdrawals under an approved standing order",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "exception",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "expected_value": "a second officer",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "Transactions"
+          ],
+          "run_index": 1,
+          "slot": "bearer",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "expected_value": "Transactions",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "expected_value": "a second officer",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "Transactions"
+          ],
+          "run_index": 2,
+          "slot": "bearer",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "expected_value": "Transactions",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "expected_value": "a second officer",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "the party initiating or executing the transaction"
+          ],
+          "run_index": 3,
+          "slot": "bearer",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "expected_value": "Transactions",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "expected_value": "the registered address",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "counterparty",
+          "specimen_id": "IIR-032"
+        },
+        {
+          "expected_value": "required",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "disposal"
+          ],
+          "run_index": 1,
+          "slot": "action",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "expected_value": "Approval",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "expected_value": "before disposal",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 1,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "expected_value": "required",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "disposal"
+          ],
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "expected_value": "Approval",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "expected_value": "before disposal",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 2,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "expected_value": "required",
+          "outcome": "incompatible",
+          "proposed_values": [
+            "disposal"
+          ],
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "expected_value": "Approval",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "expected_value": "before disposal",
+          "outcome": "omitted",
+          "proposed_values": [],
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-035"
+        }
+      ],
+      "per_slot": {
+        "action": {
+          "expected_established": 74,
+          "incompatible": 10,
+          "omitted": 15,
+          "proposed_compatible": 49
+        },
+        "bearer": {
+          "expected_established": 45,
+          "incompatible": 6,
+          "omitted": 5,
+          "proposed_compatible": 34
+        },
+        "condition": {
+          "expected_established": 18,
+          "incompatible": 3,
+          "omitted": 4,
+          "proposed_compatible": 11
+        },
+        "counterparty": {
+          "expected_established": 11,
+          "incompatible": 1,
+          "omitted": 3,
+          "proposed_compatible": 7
+        },
+        "definiendum": {
+          "expected_established": 9,
+          "incompatible": 0,
+          "omitted": 1,
+          "proposed_compatible": 8
+        },
+        "definiens": {
+          "expected_established": 6,
+          "incompatible": 0,
+          "omitted": 1,
+          "proposed_compatible": 5
+        },
+        "exception": {
+          "expected_established": 9,
+          "incompatible": 0,
+          "omitted": 4,
+          "proposed_compatible": 5
+        },
+        "normative_force": {
+          "expected_established": 86,
+          "incompatible": 1,
+          "omitted": 9,
+          "proposed_compatible": 76
+        },
+        "object": {
+          "expected_established": 71,
+          "incompatible": 0,
+          "omitted": 32,
+          "proposed_compatible": 39
+        },
+        "quantum": {
+          "expected_established": 9,
+          "incompatible": 0,
+          "omitted": 0,
+          "proposed_compatible": 9
+        },
+        "temporal_qualifier": {
+          "expected_established": 27,
+          "incompatible": 1,
+          "omitted": 9,
+          "proposed_compatible": 17
+        }
+      }
+    },
+    "F_ambiguity_overcommitment": {
+      "counts": {
+        "alternatives_preserved": 6
+      },
+      "instances": [
+        {
+          "gold_alternatives": [
+            "The department",
+            "its contractor"
+          ],
+          "outcome": "alternatives_preserved",
+          "proposed_values": [
+            "The department and its contractor"
+          ],
+          "run_index": 1,
+          "slot": "bearer",
+          "specimen_id": "IIR-017"
+        },
+        {
+          "gold_alternatives": [
+            "The department",
+            "its contractor"
+          ],
+          "outcome": "alternatives_preserved",
+          "proposed_values": [
+            "The department and its contractor"
+          ],
+          "run_index": 2,
+          "slot": "bearer",
+          "specimen_id": "IIR-017"
+        },
+        {
+          "gold_alternatives": [
+            "The department",
+            "its contractor"
+          ],
+          "outcome": "alternatives_preserved",
+          "proposed_values": [
+            "The department and its contractor"
+          ],
+          "run_index": 3,
+          "slot": "bearer",
+          "specimen_id": "IIR-017"
+        },
+        {
+          "gold_alternatives": [
+            "notify",
+            "file"
+          ],
+          "outcome": "alternatives_preserved",
+          "proposed_values": [
+            "notify the registrar and file the report"
+          ],
+          "run_index": 1,
+          "slot": "action",
+          "specimen_id": "IIR-018"
+        },
+        {
+          "gold_alternatives": [
+            "notify",
+            "file"
+          ],
+          "outcome": "alternatives_preserved",
+          "proposed_values": [
+            "notify the registrar and file the report"
+          ],
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-018"
+        },
+        {
+          "gold_alternatives": [
+            "notify",
+            "file"
+          ],
+          "outcome": "alternatives_preserved",
+          "proposed_values": [
+            "notify the registrar and file the report"
+          ],
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-018"
+        }
+      ]
+    },
+    "G_bearer_counterparty_separation": {
+      "counts": {
+        "bearer_omitted": 5,
+        "correct_bearer": 34,
+        "correct_counterparty": 7,
+        "counterparty_omitted": 3,
+        "swapped": 5,
+        "unsupported_role_inserted": 4
+      },
+      "instances": [
+        {
+          "expected_bearer": "The Records Officer",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "Records Officer"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 1,
+          "specimen_id": "IIR-001"
+        },
+        {
+          "expected_bearer": "The Records Officer",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "Records Officer"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 2,
+          "specimen_id": "IIR-001"
+        },
+        {
+          "expected_bearer": "The Records Officer",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "Records Officer"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-001"
+        },
+        {
+          "expected_bearer": "No employee",
+          "expected_counterparty": "an external party",
+          "outcomes": [
+            "correct_bearer",
+            "correct_counterparty"
+          ],
+          "proposed_bearer": [
+            "employee"
+          ],
+          "proposed_counterparty": [
+            "external party"
+          ],
+          "run_index": 1,
+          "specimen_id": "IIR-002"
+        },
+        {
+          "expected_bearer": "No employee",
+          "expected_counterparty": "an external party",
+          "outcomes": [
+            "correct_bearer",
+            "correct_counterparty"
+          ],
+          "proposed_bearer": [
+            "employee"
+          ],
+          "proposed_counterparty": [
+            "external party"
+          ],
+          "run_index": 2,
+          "specimen_id": "IIR-002"
+        },
+        {
+          "expected_bearer": "No employee",
+          "expected_counterparty": "an external party",
+          "outcomes": [
+            "correct_bearer",
+            "correct_counterparty"
+          ],
+          "proposed_bearer": [
+            "employee"
+          ],
+          "proposed_counterparty": [
+            "external party"
+          ],
+          "run_index": 3,
+          "specimen_id": "IIR-002"
+        },
+        {
+          "expected_bearer": "A department head",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "department head"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 1,
+          "specimen_id": "IIR-003"
+        },
+        {
+          "expected_bearer": "A department head",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "department head"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 2,
+          "specimen_id": "IIR-003"
+        },
+        {
+          "expected_bearer": "A department head",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "department head"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-003"
+        },
+        {
+          "expected_bearer": "Teams",
+          "expected_counterparty": null,
+          "outcomes": [
+            "bearer_omitted"
+          ],
+          "proposed_bearer": [],
+          "proposed_counterparty": [],
+          "run_index": 1,
+          "specimen_id": "IIR-004"
+        },
+        {
+          "expected_bearer": "Teams",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "Teams"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 2,
+          "specimen_id": "IIR-004"
+        },
+        {
+          "expected_bearer": "Teams",
+          "expected_counterparty": null,
+          "outcomes": [
+            "bearer_omitted"
+          ],
+          "proposed_bearer": [],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-004"
+        },
+        {
+          "expected_bearer": "The Board",
+          "expected_counterparty": "the Risk Committee",
+          "outcomes": [
+            "swapped"
+          ],
+          "proposed_bearer": [
+            "Risk Committee"
+          ],
+          "proposed_counterparty": [
+            "the Board"
+          ],
+          "run_index": 1,
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_bearer": "The Board",
+          "expected_counterparty": "the Risk Committee",
+          "outcomes": [
+            "counterparty_omitted",
+            "swapped"
+          ],
+          "proposed_bearer": [
+            "Risk Committee"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 2,
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_bearer": "The Board",
+          "expected_counterparty": "the Risk Committee",
+          "outcomes": [
+            "counterparty_omitted",
+            "swapped"
+          ],
+          "proposed_bearer": [
+            "the Risk Committee"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-006"
+        },
+        {
+          "expected_bearer": "The custodian",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "The custodian"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 1,
+          "specimen_id": "IIR-007"
+        },
+        {
+          "expected_bearer": "The custodian",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "The custodian"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 2,
+          "specimen_id": "IIR-007"
+        },
+        {
+          "expected_bearer": "The custodian",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "The custodian"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-007"
+        },
+        {
+          "expected_bearer": "The committee",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "the committee"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 1,
+          "specimen_id": "IIR-008"
+        },
+        {
+          "expected_bearer": "The committee",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "the committee"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 2,
+          "specimen_id": "IIR-008"
+        },
+        {
+          "expected_bearer": "The committee",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "the committee"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-008"
+        },
+        {
+          "expected_bearer": "the office",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "the office"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 1,
+          "specimen_id": "IIR-009"
+        },
+        {
+          "expected_bearer": "the office",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "the office"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 2,
+          "specimen_id": "IIR-009"
+        },
+        {
+          "expected_bearer": "the office",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "the office"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-009"
+        },
+        {
+          "expected_bearer": "the manager",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "the manager"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 1,
+          "specimen_id": "IIR-010"
+        },
+        {
+          "expected_bearer": "the manager",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "the manager"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 2,
+          "specimen_id": "IIR-010"
+        },
+        {
+          "expected_bearer": "the manager",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "the manager"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-010"
+        },
+        {
+          "expected_bearer": "the controller",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "the controller"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 1,
+          "specimen_id": "IIR-013"
+        },
+        {
+          "expected_bearer": "the controller",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "the controller"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 2,
+          "specimen_id": "IIR-013"
+        },
+        {
+          "expected_bearer": "the controller",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "the controller"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-013"
+        },
+        {
+          "expected_bearer": "The vendor",
+          "expected_counterparty": "the compliance office",
+          "outcomes": [
+            "correct_bearer",
+            "correct_counterparty"
+          ],
+          "proposed_bearer": [
+            "vendor"
+          ],
+          "proposed_counterparty": [
+            "compliance office"
+          ],
+          "run_index": 1,
+          "specimen_id": "IIR-016"
+        },
+        {
+          "expected_bearer": "The vendor",
+          "expected_counterparty": "the compliance office",
+          "outcomes": [
+            "correct_bearer",
+            "correct_counterparty"
+          ],
+          "proposed_bearer": [
+            "vendor"
+          ],
+          "proposed_counterparty": [
+            "compliance office"
+          ],
+          "run_index": 2,
+          "specimen_id": "IIR-016"
+        },
+        {
+          "expected_bearer": "The vendor",
+          "expected_counterparty": "the compliance office",
+          "outcomes": [
+            "correct_bearer",
+            "correct_counterparty"
+          ],
+          "proposed_bearer": [
+            "vendor"
+          ],
+          "proposed_counterparty": [
+            "compliance office"
+          ],
+          "run_index": 3,
+          "specimen_id": "IIR-016"
+        },
+        {
+          "expected_bearer": "The officer",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "The officer"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 1,
+          "specimen_id": "IIR-018"
+        },
+        {
+          "expected_bearer": "The officer",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer",
+            "unsupported_role_inserted"
+          ],
+          "proposed_bearer": [
+            "officer"
+          ],
+          "proposed_counterparty": [
+            "the registrar"
+          ],
+          "run_index": 2,
+          "specimen_id": "IIR-018"
+        },
+        {
+          "expected_bearer": "The officer",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "officer"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-018"
+        },
+        {
+          "expected_bearer": "Departments",
+          "expected_counterparty": null,
+          "outcomes": [
+            "bearer_omitted"
+          ],
+          "proposed_bearer": [],
+          "proposed_counterparty": [],
+          "run_index": 1,
+          "specimen_id": "IIR-027"
+        },
+        {
+          "expected_bearer": "Departments",
+          "expected_counterparty": null,
+          "outcomes": [
+            "bearer_omitted"
+          ],
+          "proposed_bearer": [],
+          "proposed_counterparty": [],
+          "run_index": 2,
+          "specimen_id": "IIR-027"
+        },
+        {
+          "expected_bearer": "Departments",
+          "expected_counterparty": null,
+          "outcomes": [
+            "bearer_omitted"
+          ],
+          "proposed_bearer": [],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-027"
+        },
+        {
+          "expected_bearer": "The reviewer",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "reviewer"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 1,
+          "specimen_id": "IIR-028"
+        },
+        {
+          "expected_bearer": "The reviewer",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "reviewer"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 2,
+          "specimen_id": "IIR-028"
+        },
+        {
+          "expected_bearer": "The reviewer",
+          "expected_counterparty": null,
+          "outcomes": [
+            "correct_bearer"
+          ],
+          "proposed_bearer": [
+            "reviewer"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-028"
+        },
+        {
+          "expected_bearer": "a second officer",
+          "expected_counterparty": null,
+          "outcomes": [
+            "swapped",
+            "unsupported_role_inserted"
+          ],
+          "proposed_bearer": [
+            "Transactions"
+          ],
+          "proposed_counterparty": [
+            "a second officer"
+          ],
+          "run_index": 1,
+          "specimen_id": "IIR-031"
+        },
+        {
+          "expected_bearer": "a second officer",
+          "expected_counterparty": null,
+          "outcomes": [
+            "swapped",
+            "unsupported_role_inserted"
+          ],
+          "proposed_bearer": [
+            "Transactions"
+          ],
+          "proposed_counterparty": [
+            "a second officer"
+          ],
+          "run_index": 2,
+          "specimen_id": "IIR-031"
+        },
+        {
+          "expected_bearer": "a second officer",
+          "expected_counterparty": null,
+          "outcomes": [
+            "unsupported_role_inserted"
+          ],
+          "proposed_bearer": [
+            "the party initiating or executing the transaction"
+          ],
+          "proposed_counterparty": [],
+          "run_index": 3,
+          "specimen_id": "IIR-031"
+        },
+        {
+          "expected_bearer": null,
+          "expected_counterparty": "the registered address",
+          "outcomes": [
+            "counterparty_omitted"
+          ],
+          "proposed_bearer": [],
+          "proposed_counterparty": [],
+          "run_index": 2,
+          "specimen_id": "IIR-032"
+        },
+        {
+          "expected_bearer": null,
+          "expected_counterparty": "the registered address",
+          "outcomes": [
+            "correct_counterparty"
+          ],
+          "proposed_bearer": [],
+          "proposed_counterparty": [
+            "registered address"
+          ],
+          "run_index": 3,
+          "specimen_id": "IIR-032"
+        }
+      ]
+    },
+    "H_material_qualifier_preservation": {
+      "counts": {
+        "condition": {
+          "invented": 15,
+          "moved_to_wrong_slot": 1,
+          "omitted": 6,
+          "preserved": 11
+        },
+        "currency": {
+          "preserved": 3
+        },
+        "deadline": {
+          "omitted": 1,
+          "preserved": 2
+        },
+        "discretion_advisory": {
+          "omitted": 6
+        },
+        "exception": {
+          "moved_to_wrong_slot": 4,
+          "preserved": 5
+        },
+        "quantum": {
+          "broadened": 6,
+          "invented": 6,
+          "preserved": 3
+        },
+        "temporal_qualifier": {
+          "invented": 2,
+          "moved_to_wrong_slot": 9,
+          "omitted": 1,
+          "preserved": 17
+        }
+      },
+      "instances": [
+        {
+          "category": "temporal_qualifier",
+          "expected": "for seven years",
+          "found_under": [
+            "quantum"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 1,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "category": "quantum",
+          "outcome": "invented",
+          "proposed": [
+            "seven years"
+          ],
+          "run_index": 1,
+          "slot": "quantum",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "category": "temporal_qualifier",
+          "expected": "for seven years",
+          "found_under": [
+            "quantum"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 2,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "category": "quantum",
+          "outcome": "invented",
+          "proposed": [
+            "seven years"
+          ],
+          "run_index": 2,
+          "slot": "quantum",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "category": "temporal_qualifier",
+          "expected": "for seven years",
+          "found_under": [
+            "quantum"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "category": "quantum",
+          "outcome": "invented",
+          "proposed": [
+            "seven years"
+          ],
+          "run_index": 3,
+          "slot": "quantum",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "outside the standard schedule"
+          ],
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-003"
+        },
+        {
+          "category": "discretion_advisory",
+          "missing_markers": [
+            "are encouraged to"
+          ],
+          "outcome": "omitted",
+          "run_index": 1,
+          "specimen_id": "IIR-004"
+        },
+        {
+          "category": "discretion_advisory",
+          "missing_markers": [
+            "are encouraged to"
+          ],
+          "outcome": "omitted",
+          "run_index": 2,
+          "specimen_id": "IIR-004"
+        },
+        {
+          "category": "discretion_advisory",
+          "missing_markers": [
+            "are encouraged to"
+          ],
+          "outcome": "omitted",
+          "run_index": 3,
+          "specimen_id": "IIR-004"
+        },
+        {
+          "category": "quantum",
+          "outcome": "invented",
+          "proposed": [
+            "the request exceeds the delegated limit"
+          ],
+          "run_index": 1,
+          "slot": "quantum",
+          "specimen_id": "IIR-010"
+        },
+        {
+          "category": "quantum",
+          "outcome": "invented",
+          "proposed": [
+            "the request exceeds the delegated limit"
+          ],
+          "run_index": 3,
+          "slot": "quantum",
+          "specimen_id": "IIR-010"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "transfers between internal accounts"
+          ],
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "transfers between internal accounts"
+          ],
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "category": "exception",
+          "expected": "except transfers between internal accounts",
+          "found_under": [
+            "condition"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 2,
+          "slot": "exception",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "transfers between internal accounts"
+          ],
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "category": "exception",
+          "expected": "except transfers between internal accounts",
+          "found_under": [
+            "condition"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 3,
+          "slot": "exception",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "category": "quantum",
+          "missing_markers": [
+            "above"
+          ],
+          "outcome": "broadened",
+          "run_index": 1,
+          "slot": "quantum",
+          "specimen_id": "IIR-012"
+        },
+        {
+          "category": "condition",
+          "expected": "Purchases above 5000 units",
+          "found_under": [
+            "quantum"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-012"
+        },
+        {
+          "category": "quantum",
+          "missing_markers": [
+            "above"
+          ],
+          "outcome": "broadened",
+          "run_index": 2,
+          "slot": "quantum",
+          "specimen_id": "IIR-012"
+        },
+        {
+          "category": "quantum",
+          "missing_markers": [
+            "above"
+          ],
+          "outcome": "broadened",
+          "run_index": 3,
+          "slot": "quantum",
+          "specimen_id": "IIR-012"
+        },
+        {
+          "category": "temporal_qualifier",
+          "expected": "no later than 2026-03-31T00:00:00Z",
+          "outcome": "omitted",
+          "proposed": [
+            "deadline"
+          ],
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-014"
+        },
+        {
+          "category": "deadline",
+          "expected_deadline": "2026-03-31T00:00:00Z",
+          "outcome": "omitted",
+          "run_index": 3,
+          "specimen_id": "IIR-014"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "applicable period"
+          ],
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "category": "temporal_qualifier",
+          "expected": "for the applicable period",
+          "found_under": [
+            "condition"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 1,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "applicable period"
+          ],
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "category": "temporal_qualifier",
+          "expected": "for the applicable period",
+          "found_under": [
+            "condition"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 2,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "applicable period"
+          ],
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "category": "temporal_qualifier",
+          "expected": "for the applicable period",
+          "found_under": [
+            "condition"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "category": "condition",
+          "expected": "For the purposes of this policy",
+          "outcome": "omitted",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-023"
+        },
+        {
+          "category": "condition",
+          "expected": "For the purposes of this policy",
+          "outcome": "omitted",
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-023"
+        },
+        {
+          "category": "condition",
+          "expected": "For the purposes of this policy",
+          "outcome": "omitted",
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-023"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "subject to section 4 of this policy"
+          ],
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-025"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "subject to section 4 of this policy"
+          ],
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-025"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "subject to section 4 of this policy"
+          ],
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-025"
+        },
+        {
+          "category": "quantum",
+          "outcome": "invented",
+          "proposed": [
+            "quarterly"
+          ],
+          "run_index": 1,
+          "slot": "quantum",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "category": "discretion_advisory",
+          "missing_markers": [
+            "should"
+          ],
+          "outcome": "omitted",
+          "run_index": 1,
+          "specimen_id": "IIR-027"
+        },
+        {
+          "category": "temporal_qualifier",
+          "outcome": "invented",
+          "proposed": [
+            "quarterly"
+          ],
+          "run_index": 2,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "category": "discretion_advisory",
+          "missing_markers": [
+            "should"
+          ],
+          "outcome": "omitted",
+          "run_index": 2,
+          "specimen_id": "IIR-027"
+        },
+        {
+          "category": "temporal_qualifier",
+          "outcome": "invented",
+          "proposed": [
+            "quarterly"
+          ],
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "category": "discretion_advisory",
+          "missing_markers": [
+            "should"
+          ],
+          "outcome": "omitted",
+          "run_index": 3,
+          "specimen_id": "IIR-027"
+        },
+        {
+          "category": "condition",
+          "expected": "All withdrawals",
+          "outcome": "omitted",
+          "proposed": [
+            "dual approval"
+          ],
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "category": "condition",
+          "expected": "All withdrawals",
+          "outcome": "omitted",
+          "proposed": [
+            "except withdrawals under an approved standing order"
+          ],
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "category": "exception",
+          "expected": "except withdrawals under an approved standing order",
+          "found_under": [
+            "condition"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 2,
+          "slot": "exception",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "category": "condition",
+          "expected": "All withdrawals",
+          "outcome": "omitted",
+          "proposed": [
+            "except withdrawals under an approved standing order"
+          ],
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "category": "exception",
+          "expected": "except withdrawals under an approved standing order",
+          "found_under": [
+            "condition"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 3,
+          "slot": "exception",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "over 250 units"
+          ],
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "category": "quantum",
+          "missing_markers": [
+            "over"
+          ],
+          "outcome": "broadened",
+          "run_index": 1,
+          "slot": "quantum",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "category": "quantum",
+          "missing_markers": [
+            "over"
+          ],
+          "outcome": "broadened",
+          "run_index": 2,
+          "slot": "quantum",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "Transactions over 250 units"
+          ],
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "category": "quantum",
+          "missing_markers": [
+            "over"
+          ],
+          "outcome": "broadened",
+          "run_index": 3,
+          "slot": "quantum",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "before disposal"
+          ],
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "category": "temporal_qualifier",
+          "expected": "before disposal",
+          "found_under": [
+            "action",
+            "condition"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 1,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "before disposal"
+          ],
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "category": "temporal_qualifier",
+          "expected": "before disposal",
+          "found_under": [
+            "action",
+            "condition"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 2,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "category": "condition",
+          "outcome": "invented",
+          "proposed": [
+            "before disposal"
+          ],
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "category": "temporal_qualifier",
+          "expected": "before disposal",
+          "found_under": [
+            "action",
+            "condition"
+          ],
+          "outcome": "moved_to_wrong_slot",
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-035"
+        }
+      ]
+    },
+    "I_source_quote_grounding": {
+      "grounded": 323,
+      "ungrounded": 0,
+      "ungrounded_instances": []
+    },
+    "J_quote_to_value_support": {
+      "counts": {
+        "force_span_quote": 77,
+        "no_gold_value_for_slot": 4,
+        "no_quote": 81,
+        "supports_a_different_role": 42,
+        "supports_proposed_role": 200
+      },
+      "instances": [
+        {
+          "actually_supports": [
+            "temporal_qualifier"
+          ],
+          "quote": "seven years",
+          "run_index": 1,
+          "slot": "quantum",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "actually_supports": [
+            "temporal_qualifier"
+          ],
+          "quote": "seven years",
+          "run_index": 2,
+          "slot": "quantum",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "actually_supports": [
+            "temporal_qualifier"
+          ],
+          "quote": "seven years",
+          "run_index": 3,
+          "slot": "quantum",
+          "specimen_id": "IIR-001"
+        },
+        {
+          "actually_supports": [
+            "object"
+          ],
+          "quote": "outside the standard schedule",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-003"
+        },
+        {
+          "actually_supports": [
+            "definiens"
+          ],
+          "quote": "no further action is pending",
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-005"
+        },
+        {
+          "actually_supports": [
+            "definiendum"
+          ],
+          "quote": "Closed file",
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-005"
+        },
+        {
+          "actually_supports": [
+            "condition"
+          ],
+          "quote": "If the request exceeds the delegated limit",
+          "run_index": 1,
+          "slot": "quantum",
+          "specimen_id": "IIR-010"
+        },
+        {
+          "actually_supports": [
+            "condition"
+          ],
+          "quote": "If the request exceeds the delegated limit",
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-010"
+        },
+        {
+          "actually_supports": [
+            "condition"
+          ],
+          "quote": "If the request exceeds the delegated limit",
+          "run_index": 3,
+          "slot": "quantum",
+          "specimen_id": "IIR-010"
+        },
+        {
+          "actually_supports": [
+            "exception"
+          ],
+          "quote": "except transfers between internal accounts",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "actually_supports": [
+            "exception"
+          ],
+          "quote": "except transfers between internal accounts",
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "actually_supports": [
+            "exception"
+          ],
+          "quote": "except transfers between internal accounts",
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "actually_supports": [
+            "temporal_qualifier"
+          ],
+          "quote": "for the applicable period",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "actually_supports": [
+            "temporal_qualifier"
+          ],
+          "quote": "for the applicable period",
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "actually_supports": [
+            "temporal_qualifier"
+          ],
+          "quote": "for the applicable period",
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-015"
+        },
+        {
+          "actually_supports": [
+            "action",
+            "object"
+          ],
+          "quote": "The department and its contractor must maintain the register",
+          "run_index": 1,
+          "slot": "bearer",
+          "specimen_id": "IIR-017"
+        },
+        {
+          "actually_supports": [
+            "action",
+            "object"
+          ],
+          "quote": "The department and its contractor must maintain the register",
+          "run_index": 2,
+          "slot": "bearer",
+          "specimen_id": "IIR-017"
+        },
+        {
+          "actually_supports": [
+            "action",
+            "object"
+          ],
+          "quote": "The department and its contractor must maintain the register",
+          "run_index": 3,
+          "slot": "bearer",
+          "specimen_id": "IIR-017"
+        },
+        {
+          "actually_supports": [
+            "bearer",
+            "condition"
+          ],
+          "quote": "The officer must notify the registrar and file the report if the amount is disputed.",
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-018"
+        },
+        {
+          "actually_supports": [
+            "bearer",
+            "condition"
+          ],
+          "quote": "The officer must notify the registrar and file the report if the amount is disputed.",
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-018"
+        },
+        {
+          "actually_supports": [
+            "bearer",
+            "condition"
+          ],
+          "quote": "The officer must notify the registrar and file the report if the amount is disputed.",
+          "run_index": 2,
+          "slot": "counterparty",
+          "specimen_id": "IIR-018"
+        },
+        {
+          "actually_supports": [
+            "bearer",
+            "condition"
+          ],
+          "quote": "The officer must notify the registrar and file the report if the amount is disputed.",
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-018"
+        },
+        {
+          "actually_supports": [
+            "bearer",
+            "condition"
+          ],
+          "quote": "The officer must notify the registrar and file the report if the amount is disputed.",
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-018"
+        },
+        {
+          "actually_supports": [
+            "object"
+          ],
+          "quote": "all requests",
+          "run_index": 1,
+          "slot": "bearer",
+          "specimen_id": "IIR-026"
+        },
+        {
+          "actually_supports": [
+            "object"
+          ],
+          "quote": "all requests",
+          "run_index": 2,
+          "slot": "bearer",
+          "specimen_id": "IIR-026"
+        },
+        {
+          "actually_supports": [
+            "object"
+          ],
+          "quote": "all requests",
+          "run_index": 3,
+          "slot": "bearer",
+          "specimen_id": "IIR-026"
+        },
+        {
+          "actually_supports": [
+            "bearer",
+            "action",
+            "object"
+          ],
+          "quote": "Departments should consider quarterly reconciliation of suspense accounts.",
+          "run_index": 1,
+          "slot": "quantum",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "actually_supports": [
+            "bearer",
+            "action",
+            "object"
+          ],
+          "quote": "Departments should consider quarterly reconciliation of suspense accounts.",
+          "run_index": 2,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "actually_supports": [
+            "object"
+          ],
+          "quote": "reconciliation of suspense accounts",
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "actually_supports": [
+            "object"
+          ],
+          "quote": "quarterly reconciliation",
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "actually_supports": [
+            "object"
+          ],
+          "quote": "reconciliation of suspense accounts",
+          "run_index": 3,
+          "slot": "definiendum",
+          "specimen_id": "IIR-027"
+        },
+        {
+          "actually_supports": [
+            "action",
+            "object"
+          ],
+          "quote": "require dual approval",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "actually_supports": [
+            "exception"
+          ],
+          "quote": "except withdrawals under an approved standing order",
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "actually_supports": [
+            "exception"
+          ],
+          "quote": "except withdrawals under an approved standing order",
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "actually_supports": [
+            "object",
+            "quantum"
+          ],
+          "quote": "Transactions over 250 units",
+          "run_index": 1,
+          "slot": "bearer",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "actually_supports": [
+            "bearer",
+            "action"
+          ],
+          "quote": "must be reviewed by a second officer",
+          "run_index": 1,
+          "slot": "counterparty",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "actually_supports": [
+            "object",
+            "quantum"
+          ],
+          "quote": "Transactions over 250 units",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "actually_supports": [
+            "bearer",
+            "action"
+          ],
+          "quote": "must be reviewed by a second officer.",
+          "run_index": 2,
+          "slot": "counterparty",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "actually_supports": [
+            "bearer",
+            "action",
+            "object",
+            "quantum"
+          ],
+          "quote": "Transactions over 250 units must be reviewed by a second officer.",
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-031"
+        },
+        {
+          "actually_supports": [
+            "action",
+            "object",
+            "temporal_qualifier"
+          ],
+          "quote": "Approval is required before disposal.",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "actually_supports": [
+            "action",
+            "object",
+            "temporal_qualifier"
+          ],
+          "quote": "Approval is required before disposal.",
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-035"
+        },
+        {
+          "actually_supports": [
+            "action",
+            "object",
+            "temporal_qualifier"
+          ],
+          "quote": "Approval is required before disposal.",
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-035"
+        }
+      ]
+    },
+    "K_unresolved_reference_recall": {
+      "counts": {
+        "correct_kind": 4,
+        "expected": 9,
+        "proposed": 9,
+        "wrong_kind": 5
+      },
+      "instances": [
+        {
+          "expected": {
+            "reference_kind": "DEFINITION",
+            "reference_text": "the Framework Agreement"
+          },
+          "outcome": "wrong_kind",
+          "proposed": {
+            "reference_kind": "EXTERNAL_DOCUMENT",
+            "reference_text": "Framework Agreement"
+          },
+          "run_index": 1,
+          "specimen_id": "IIR-024"
+        },
+        {
+          "expected": {
+            "reference_kind": "DEFINITION",
+            "reference_text": "the Framework Agreement"
+          },
+          "outcome": "wrong_kind",
+          "proposed": {
+            "reference_kind": "EXTERNAL_DOCUMENT",
+            "reference_text": "Framework Agreement"
+          },
+          "run_index": 2,
+          "specimen_id": "IIR-024"
+        },
+        {
+          "expected": {
+            "reference_kind": "DEFINITION",
+            "reference_text": "the Framework Agreement"
+          },
+          "outcome": "wrong_kind",
+          "proposed": {
+            "reference_kind": "EXTERNAL_DOCUMENT",
+            "reference_text": "Framework Agreement"
+          },
+          "run_index": 3,
+          "specimen_id": "IIR-024"
+        },
+        {
+          "expected": {
+            "reference_kind": "EXTERNAL_DOCUMENT",
+            "reference_text": "Policy B"
+          },
+          "outcome": "wrong_kind",
+          "proposed": {
+            "reference_kind": "INTERNAL_PROVISION",
+            "reference_text": "Policy B"
+          },
+          "run_index": 2,
+          "specimen_id": "IIR-026"
+        },
+        {
+          "expected": {
+            "reference_kind": "EXTERNAL_DOCUMENT",
+            "reference_text": "Policy B"
+          },
+          "outcome": "wrong_kind",
+          "proposed": {
+            "reference_kind": "INTERNAL_PROVISION",
+            "reference_text": "Policy B"
+          },
+          "run_index": 3,
+          "specimen_id": "IIR-026"
+        }
+      ]
+    },
+    "L_strengthening_rate": {
+      "counts": {
+        "conditional_to_unconditional_by_dropped_condition": 4,
+        "exception_bearing_to_exceptionless_by_dropped_exception": 4,
+        "recipient_promoted_to_bearer": 3
+      },
+      "instances": [
+        {
+          "kind": "recipient_promoted_to_bearer",
+          "run_index": 1,
+          "specimen_id": "IIR-006",
+          "value": "the Risk Committee"
+        },
+        {
+          "kind": "recipient_promoted_to_bearer",
+          "run_index": 2,
+          "specimen_id": "IIR-006",
+          "value": "the Risk Committee"
+        },
+        {
+          "kind": "recipient_promoted_to_bearer",
+          "run_index": 3,
+          "specimen_id": "IIR-006",
+          "value": "the Risk Committee"
+        },
+        {
+          "expected_value": "except transfers between internal accounts",
+          "kind": "exception_bearing_to_exceptionless_by_dropped_exception",
+          "run_index": 2,
+          "slot": "exception",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "expected_value": "except transfers between internal accounts",
+          "kind": "exception_bearing_to_exceptionless_by_dropped_exception",
+          "run_index": 3,
+          "slot": "exception",
+          "specimen_id": "IIR-011"
+        },
+        {
+          "expected_value": "Purchases above 5000 units",
+          "kind": "conditional_to_unconditional_by_dropped_condition",
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-012"
+        },
+        {
+          "expected_value": "For the purposes of this policy",
+          "kind": "conditional_to_unconditional_by_dropped_condition",
+          "run_index": 1,
+          "slot": "condition",
+          "specimen_id": "IIR-023"
+        },
+        {
+          "expected_value": "For the purposes of this policy",
+          "kind": "conditional_to_unconditional_by_dropped_condition",
+          "run_index": 2,
+          "slot": "condition",
+          "specimen_id": "IIR-023"
+        },
+        {
+          "expected_value": "For the purposes of this policy",
+          "kind": "conditional_to_unconditional_by_dropped_condition",
+          "run_index": 3,
+          "slot": "condition",
+          "specimen_id": "IIR-023"
+        },
+        {
+          "expected_value": "except withdrawals under an approved standing order",
+          "kind": "exception_bearing_to_exceptionless_by_dropped_exception",
+          "run_index": 2,
+          "slot": "exception",
+          "specimen_id": "IIR-030"
+        },
+        {
+          "expected_value": "except withdrawals under an approved standing order",
+          "kind": "exception_bearing_to_exceptionless_by_dropped_exception",
+          "run_index": 3,
+          "slot": "exception",
+          "specimen_id": "IIR-030"
+        }
+      ]
+    },
+    "M_repeat_stability": {
+      "IIR-001": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 1,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": true,
+        "slot_set_stable": true
+      },
+      "IIR-002": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 3,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": true
+      },
+      "IIR-003": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 3,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": false,
+          "bearer": true,
+          "condition": false,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": false,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-004": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 2,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": false,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-005": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 3,
+        "force_stable": false,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": false,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": false,
+          "definiens": false,
+          "exception": true,
+          "normative_force": false,
+          "object": false,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-006": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 3,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": false,
+          "condition": true,
+          "counterparty": false,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-007": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 3,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": false,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": false,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-008": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 2,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": true
+      },
+      "IIR-009": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 3,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": false,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-010": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 3,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": false,
+          "quantum": false,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-011": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 2,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": false,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-012": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 3,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": false,
+          "bearer": true,
+          "condition": false,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": false,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-013": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 2,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": true
+      },
+      "IIR-014": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 2,
+        "force_stable": false,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": false,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": false
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-015": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 2,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": true
+      },
+      "IIR-016": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 2,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": false,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": true
+      },
+      "IIR-017": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 2,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-018": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 3,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": false,
+          "condition": true,
+          "counterparty": false,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": false,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-023": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 1,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": true,
+        "slot_set_stable": true
+      },
+      "IIR-024": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 1,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": true,
+        "slot_set_stable": true
+      },
+      "IIR-025": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 1,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": true,
+        "slot_set_stable": true
+      },
+      "IIR-026": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 2,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": true
+      },
+      "IIR-027": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 3,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": false,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": false,
+          "temporal_qualifier": false
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-028": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 2,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": false,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": false,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-029": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 1,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": true,
+        "slot_set_stable": true
+      },
+      "IIR-030": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 2,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": false,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": false,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-031": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 3,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": false,
+          "bearer": false,
+          "condition": false,
+          "counterparty": false,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-032": {
+        "accepted_runs": 2,
+        "distinct_semantic_hashes": 2,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": false,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": false,
+        "slot_set_stable": false
+      },
+      "IIR-035": {
+        "accepted_runs": 3,
+        "distinct_semantic_hashes": 1,
+        "force_stable": true,
+        "oic_binding_deterministic": true,
+        "per_slot_value_stable": {
+          "action": true,
+          "bearer": true,
+          "condition": true,
+          "counterparty": true,
+          "definiendum": true,
+          "definiens": true,
+          "exception": true,
+          "normative_force": true,
+          "object": true,
+          "quantum": true,
+          "temporal_qualifier": true
+        },
+        "semantic_hash_stable": true,
+        "slot_set_stable": true
+      }
+    }
+  },
+  "historical_metrics_canonical_sha256": "0edf35f335d7d60bc31d6c875c613b05e8dcc6bca007c00665450550e6e1103f",
+  "authoritative_observations": {
+    "planned_requests": 87,
+    "attempted": 87,
+    "accepted_proposals": 86,
+    "provider_errors": 1,
+    "boundary_rejections": 0,
+    "source_quotes_grounded": 323,
+    "source_quotes_ungrounded": 0
+  },
+  "corrected_metrics": {
+    "ambiguity": {
+      "counts": {
+        "ALTERNATIVES_SEPARATELY_SURFACED": 0,
+        "SINGLE_ALTERNATIVE_SELECTED": 0,
+        "ALTERNATIVES_CONJOINED_OR_COLLAPSED": 6,
+        "UNSUPPORTED_ALTERNATIVE": 0,
+        "AMBIGUOUS_SLOT_OMITTED": 0
+      },
+      "instances": [
+        {
+          "specimen_id": "IIR-017",
+          "run_index": 1,
+          "slot": "bearer",
+          "gold_alternatives": [
+            "The department",
+            "its contractor"
+          ],
+          "proposed_values": [
+            "The department and its contractor"
+          ],
+          "category": "ALTERNATIVES_CONJOINED_OR_COLLAPSED"
+        },
+        {
+          "specimen_id": "IIR-017",
+          "run_index": 2,
+          "slot": "bearer",
+          "gold_alternatives": [
+            "The department",
+            "its contractor"
+          ],
+          "proposed_values": [
+            "The department and its contractor"
+          ],
+          "category": "ALTERNATIVES_CONJOINED_OR_COLLAPSED"
+        },
+        {
+          "specimen_id": "IIR-017",
+          "run_index": 3,
+          "slot": "bearer",
+          "gold_alternatives": [
+            "The department",
+            "its contractor"
+          ],
+          "proposed_values": [
+            "The department and its contractor"
+          ],
+          "category": "ALTERNATIVES_CONJOINED_OR_COLLAPSED"
+        },
+        {
+          "specimen_id": "IIR-018",
+          "run_index": 1,
+          "slot": "action",
+          "gold_alternatives": [
+            "notify",
+            "file"
+          ],
+          "proposed_values": [
+            "notify the registrar and file the report"
+          ],
+          "category": "ALTERNATIVES_CONJOINED_OR_COLLAPSED"
+        },
+        {
+          "specimen_id": "IIR-018",
+          "run_index": 2,
+          "slot": "action",
+          "gold_alternatives": [
+            "notify",
+            "file"
+          ],
+          "proposed_values": [
+            "notify the registrar and file the report"
+          ],
+          "category": "ALTERNATIVES_CONJOINED_OR_COLLAPSED"
+        },
+        {
+          "specimen_id": "IIR-018",
+          "run_index": 3,
+          "slot": "action",
+          "gold_alternatives": [
+            "notify",
+            "file"
+          ],
+          "proposed_values": [
+            "notify the registrar and file the report"
+          ],
+          "category": "ALTERNATIVES_CONJOINED_OR_COLLAPSED"
+        }
+      ]
+    },
+    "source_text_and_semantic_assignment": {
+      "counts": {
+        "UNGROUNDED_SOURCE_TEXT": 0,
+        "UNSUPPORTED_SEMANTIC_ASSIGNMENT": 36,
+        "WRONG_ROLE_ASSIGNMENT": 21,
+        "SUPPORTED_ROLE_ASSIGNMENT": 266,
+        "NO_SOURCE_QUOTE": 0
+      },
+      "instances": [
+        {
+          "specimen_id": "IIR-001",
+          "run_index": 1,
+          "slot": "quantum",
+          "proposed_value": "seven years",
+          "proposed_source_quote": "seven years",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-001",
+          "run_index": 2,
+          "slot": "quantum",
+          "proposed_value": "seven years",
+          "proposed_source_quote": "seven years",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-001",
+          "run_index": 3,
+          "slot": "quantum",
+          "proposed_value": "seven years",
+          "proposed_source_quote": "seven years",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-003",
+          "run_index": 1,
+          "slot": "condition",
+          "proposed_value": "outside the standard schedule",
+          "proposed_source_quote": "outside the standard schedule",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-005",
+          "run_index": 3,
+          "slot": "normative_force",
+          "proposed_value": "DELEGATION",
+          "proposed_source_quote": "Closed file means a file for which no further action is pending.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-005",
+          "run_index": 3,
+          "slot": "action",
+          "proposed_value": "pending",
+          "proposed_source_quote": "no further action is pending",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-005",
+          "run_index": 3,
+          "slot": "object",
+          "proposed_value": "file",
+          "proposed_source_quote": "Closed file",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-006",
+          "run_index": 1,
+          "slot": "bearer",
+          "proposed_value": "Risk Committee",
+          "proposed_source_quote": "The Board delegates approval of exceptions to the Risk Committee.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-006",
+          "run_index": 1,
+          "slot": "action",
+          "proposed_value": "approval of exceptions",
+          "proposed_source_quote": "The Board delegates approval of exceptions to the Risk Committee.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-006",
+          "run_index": 1,
+          "slot": "counterparty",
+          "proposed_value": "the Board",
+          "proposed_source_quote": "The Board delegates approval of exceptions to the Risk Committee.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-006",
+          "run_index": 2,
+          "slot": "bearer",
+          "proposed_value": "Risk Committee",
+          "proposed_source_quote": "The Board delegates approval of exceptions to the Risk Committee.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-006",
+          "run_index": 2,
+          "slot": "action",
+          "proposed_value": "approval of exceptions",
+          "proposed_source_quote": "The Board delegates approval of exceptions to the Risk Committee.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-006",
+          "run_index": 3,
+          "slot": "bearer",
+          "proposed_value": "the Risk Committee",
+          "proposed_source_quote": "The Board delegates approval of exceptions to the Risk Committee.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-006",
+          "run_index": 3,
+          "slot": "action",
+          "proposed_value": "approval of exceptions",
+          "proposed_source_quote": "The Board delegates approval of exceptions to the Risk Committee.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-010",
+          "run_index": 1,
+          "slot": "quantum",
+          "proposed_value": "the request exceeds the delegated limit",
+          "proposed_source_quote": "If the request exceeds the delegated limit",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-010",
+          "run_index": 2,
+          "slot": "object",
+          "proposed_value": "the request",
+          "proposed_source_quote": "If the request exceeds the delegated limit",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-010",
+          "run_index": 3,
+          "slot": "quantum",
+          "proposed_value": "the request exceeds the delegated limit",
+          "proposed_source_quote": "If the request exceeds the delegated limit",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-011",
+          "run_index": 1,
+          "slot": "condition",
+          "proposed_value": "transfers between internal accounts",
+          "proposed_source_quote": "except transfers between internal accounts",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-011",
+          "run_index": 2,
+          "slot": "condition",
+          "proposed_value": "transfers between internal accounts",
+          "proposed_source_quote": "except transfers between internal accounts",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-011",
+          "run_index": 3,
+          "slot": "condition",
+          "proposed_value": "transfers between internal accounts",
+          "proposed_source_quote": "except transfers between internal accounts",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-012",
+          "run_index": 2,
+          "slot": "action",
+          "proposed_value": "approval",
+          "proposed_source_quote": "require a second approval",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-014",
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "proposed_value": "deadline",
+          "proposed_source_quote": "no later than 2026-03-31T00:00:00Z",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-015",
+          "run_index": 1,
+          "slot": "condition",
+          "proposed_value": "applicable period",
+          "proposed_source_quote": "for the applicable period",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-015",
+          "run_index": 2,
+          "slot": "condition",
+          "proposed_value": "applicable period",
+          "proposed_source_quote": "for the applicable period",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-015",
+          "run_index": 3,
+          "slot": "condition",
+          "proposed_value": "applicable period",
+          "proposed_source_quote": "for the applicable period",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-018",
+          "run_index": 2,
+          "slot": "object",
+          "proposed_value": "the report",
+          "proposed_source_quote": "The officer must notify the registrar and file the report if the amount is disputed.",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-018",
+          "run_index": 2,
+          "slot": "counterparty",
+          "proposed_value": "the registrar",
+          "proposed_source_quote": "The officer must notify the registrar and file the report if the amount is disputed.",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-018",
+          "run_index": 3,
+          "slot": "object",
+          "proposed_value": "the registrar",
+          "proposed_source_quote": "The officer must notify the registrar and file the report if the amount is disputed.",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-025",
+          "run_index": 1,
+          "slot": "condition",
+          "proposed_value": "subject to section 4 of this policy",
+          "proposed_source_quote": "subject to section 4 of this policy",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-025",
+          "run_index": 2,
+          "slot": "condition",
+          "proposed_value": "subject to section 4 of this policy",
+          "proposed_source_quote": "subject to section 4 of this policy",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-025",
+          "run_index": 3,
+          "slot": "condition",
+          "proposed_value": "subject to section 4 of this policy",
+          "proposed_source_quote": "subject to section 4 of this policy",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-026",
+          "run_index": 1,
+          "slot": "bearer",
+          "proposed_value": "requests",
+          "proposed_source_quote": "all requests",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-026",
+          "run_index": 2,
+          "slot": "bearer",
+          "proposed_value": "requests",
+          "proposed_source_quote": "all requests",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-026",
+          "run_index": 3,
+          "slot": "bearer",
+          "proposed_value": "requests",
+          "proposed_source_quote": "all requests",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-027",
+          "run_index": 1,
+          "slot": "action",
+          "proposed_value": "reconciliation",
+          "proposed_source_quote": "Departments should consider quarterly reconciliation of suspense accounts.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-027",
+          "run_index": 1,
+          "slot": "quantum",
+          "proposed_value": "quarterly",
+          "proposed_source_quote": "Departments should consider quarterly reconciliation of suspense accounts.",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-027",
+          "run_index": 2,
+          "slot": "action",
+          "proposed_value": "reconciliation",
+          "proposed_source_quote": "Departments should consider quarterly reconciliation of suspense accounts.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-027",
+          "run_index": 2,
+          "slot": "temporal_qualifier",
+          "proposed_value": "quarterly",
+          "proposed_source_quote": "Departments should consider quarterly reconciliation of suspense accounts.",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-027",
+          "run_index": 3,
+          "slot": "action",
+          "proposed_value": "reconciliation",
+          "proposed_source_quote": "reconciliation of suspense accounts",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-027",
+          "run_index": 3,
+          "slot": "temporal_qualifier",
+          "proposed_value": "quarterly",
+          "proposed_source_quote": "quarterly reconciliation",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-027",
+          "run_index": 3,
+          "slot": "definiendum",
+          "proposed_value": "reconciliation",
+          "proposed_source_quote": "reconciliation of suspense accounts",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-030",
+          "run_index": 1,
+          "slot": "condition",
+          "proposed_value": "dual approval",
+          "proposed_source_quote": "require dual approval",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-030",
+          "run_index": 2,
+          "slot": "condition",
+          "proposed_value": "except withdrawals under an approved standing order",
+          "proposed_source_quote": "except withdrawals under an approved standing order",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-030",
+          "run_index": 3,
+          "slot": "condition",
+          "proposed_value": "except withdrawals under an approved standing order",
+          "proposed_source_quote": "except withdrawals under an approved standing order",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-031",
+          "run_index": 1,
+          "slot": "bearer",
+          "proposed_value": "Transactions",
+          "proposed_source_quote": "Transactions over 250 units",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-031",
+          "run_index": 1,
+          "slot": "counterparty",
+          "proposed_value": "a second officer",
+          "proposed_source_quote": "must be reviewed by a second officer",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-031",
+          "run_index": 1,
+          "slot": "condition",
+          "proposed_value": "over 250 units",
+          "proposed_source_quote": "Transactions over 250 units",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-031",
+          "run_index": 2,
+          "slot": "bearer",
+          "proposed_value": "Transactions",
+          "proposed_source_quote": "Transactions over 250 units must be reviewed by a second officer.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-031",
+          "run_index": 2,
+          "slot": "counterparty",
+          "proposed_value": "a second officer",
+          "proposed_source_quote": "must be reviewed by a second officer.",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-031",
+          "run_index": 3,
+          "slot": "condition",
+          "proposed_value": "Transactions over 250 units",
+          "proposed_source_quote": "Transactions over 250 units must be reviewed by a second officer.",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-031",
+          "run_index": 3,
+          "slot": "bearer",
+          "proposed_value": "the party initiating or executing the transaction",
+          "proposed_source_quote": "Transactions over 250 units must be reviewed by a second officer.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-035",
+          "run_index": 1,
+          "slot": "action",
+          "proposed_value": "disposal",
+          "proposed_source_quote": "Approval is required before disposal.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-035",
+          "run_index": 1,
+          "slot": "condition",
+          "proposed_value": "before disposal",
+          "proposed_source_quote": "Approval is required before disposal.",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-035",
+          "run_index": 2,
+          "slot": "action",
+          "proposed_value": "disposal",
+          "proposed_source_quote": "Approval is required before disposal.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-035",
+          "run_index": 2,
+          "slot": "condition",
+          "proposed_value": "before disposal",
+          "proposed_source_quote": "Approval is required before disposal.",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-035",
+          "run_index": 3,
+          "slot": "action",
+          "proposed_value": "disposal",
+          "proposed_source_quote": "Approval is required before disposal.",
+          "category": "WRONG_ROLE_ASSIGNMENT"
+        },
+        {
+          "specimen_id": "IIR-035",
+          "run_index": 3,
+          "slot": "condition",
+          "proposed_value": "before disposal",
+          "proposed_source_quote": "Approval is required before disposal.",
+          "category": "UNSUPPORTED_SEMANTIC_ASSIGNMENT"
+        }
+      ]
+    },
+    "semantic_strengthening": {
+      "counts": {
+        "CONDITION_MOVED_TO_WRONG_ROLE": 1,
+        "CONDITION_OMITTED": 6,
+        "EXCEPTION_MOVED_TO_CONDITION": 4,
+        "RECIPIENT_PROMOTED_TO_BEARER": 3,
+        "TEMPORAL_QUALIFIER_MOVED_TO_CONDITION": 9,
+        "TEMPORAL_QUALIFIER_OMITTED": 1,
+        "THRESHOLD_BROADENED_BY_COMPARATOR_LOSS": 6
+      },
+      "instances": [
+        {
+          "specimen_id": "IIR-001",
+          "run_index": 1,
+          "category": "TEMPORAL_QUALIFIER_MOVED_TO_CONDITION",
+          "expected_value": "for seven years",
+          "observed_slots": [
+            "quantum"
+          ]
+        },
+        {
+          "specimen_id": "IIR-001",
+          "run_index": 2,
+          "category": "TEMPORAL_QUALIFIER_MOVED_TO_CONDITION",
+          "expected_value": "for seven years",
+          "observed_slots": [
+            "quantum"
+          ]
+        },
+        {
+          "specimen_id": "IIR-001",
+          "run_index": 3,
+          "category": "TEMPORAL_QUALIFIER_MOVED_TO_CONDITION",
+          "expected_value": "for seven years",
+          "observed_slots": [
+            "quantum"
+          ]
+        },
+        {
+          "specimen_id": "IIR-006",
+          "run_index": 1,
+          "category": "RECIPIENT_PROMOTED_TO_BEARER",
+          "recipient": "the Risk Committee"
+        },
+        {
+          "specimen_id": "IIR-006",
+          "run_index": 2,
+          "category": "RECIPIENT_PROMOTED_TO_BEARER",
+          "recipient": "the Risk Committee"
+        },
+        {
+          "specimen_id": "IIR-006",
+          "run_index": 3,
+          "category": "RECIPIENT_PROMOTED_TO_BEARER",
+          "recipient": "the Risk Committee"
+        },
+        {
+          "specimen_id": "IIR-011",
+          "run_index": 2,
+          "category": "EXCEPTION_MOVED_TO_CONDITION",
+          "expected_value": "except transfers between internal accounts",
+          "observed_slots": [
+            "condition"
+          ]
+        },
+        {
+          "specimen_id": "IIR-011",
+          "run_index": 3,
+          "category": "EXCEPTION_MOVED_TO_CONDITION",
+          "expected_value": "except transfers between internal accounts",
+          "observed_slots": [
+            "condition"
+          ]
+        },
+        {
+          "specimen_id": "IIR-012",
+          "run_index": 1,
+          "category": "THRESHOLD_BROADENED_BY_COMPARATOR_LOSS",
+          "expected_value": "above 5000 units",
+          "proposed_value": "5000 units",
+          "missing_comparators": [
+            "above"
+          ]
+        },
+        {
+          "specimen_id": "IIR-012",
+          "run_index": 2,
+          "category": "CONDITION_MOVED_TO_WRONG_ROLE",
+          "expected_value": "Purchases above 5000 units",
+          "observed_slots": [
+            "quantum"
+          ]
+        },
+        {
+          "specimen_id": "IIR-012",
+          "run_index": 2,
+          "category": "THRESHOLD_BROADENED_BY_COMPARATOR_LOSS",
+          "expected_value": "above 5000 units",
+          "proposed_value": "5000 units",
+          "missing_comparators": [
+            "above"
+          ]
+        },
+        {
+          "specimen_id": "IIR-012",
+          "run_index": 3,
+          "category": "THRESHOLD_BROADENED_BY_COMPARATOR_LOSS",
+          "expected_value": "above 5000 units",
+          "proposed_value": "5000 units",
+          "missing_comparators": [
+            "above"
+          ]
+        },
+        {
+          "specimen_id": "IIR-014",
+          "run_index": 3,
+          "category": "TEMPORAL_QUALIFIER_OMITTED",
+          "expected_value": "no later than 2026-03-31T00:00:00Z"
+        },
+        {
+          "specimen_id": "IIR-015",
+          "run_index": 1,
+          "category": "TEMPORAL_QUALIFIER_MOVED_TO_CONDITION",
+          "expected_value": "for the applicable period",
+          "observed_slots": [
+            "condition"
+          ]
+        },
+        {
+          "specimen_id": "IIR-015",
+          "run_index": 2,
+          "category": "TEMPORAL_QUALIFIER_MOVED_TO_CONDITION",
+          "expected_value": "for the applicable period",
+          "observed_slots": [
+            "condition"
+          ]
+        },
+        {
+          "specimen_id": "IIR-015",
+          "run_index": 3,
+          "category": "TEMPORAL_QUALIFIER_MOVED_TO_CONDITION",
+          "expected_value": "for the applicable period",
+          "observed_slots": [
+            "condition"
+          ]
+        },
+        {
+          "specimen_id": "IIR-023",
+          "run_index": 1,
+          "category": "CONDITION_OMITTED",
+          "expected_value": "For the purposes of this policy"
+        },
+        {
+          "specimen_id": "IIR-023",
+          "run_index": 2,
+          "category": "CONDITION_OMITTED",
+          "expected_value": "For the purposes of this policy"
+        },
+        {
+          "specimen_id": "IIR-023",
+          "run_index": 3,
+          "category": "CONDITION_OMITTED",
+          "expected_value": "For the purposes of this policy"
+        },
+        {
+          "specimen_id": "IIR-030",
+          "run_index": 1,
+          "category": "CONDITION_OMITTED",
+          "expected_value": "All withdrawals"
+        },
+        {
+          "specimen_id": "IIR-030",
+          "run_index": 2,
+          "category": "CONDITION_OMITTED",
+          "expected_value": "All withdrawals"
+        },
+        {
+          "specimen_id": "IIR-030",
+          "run_index": 2,
+          "category": "EXCEPTION_MOVED_TO_CONDITION",
+          "expected_value": "except withdrawals under an approved standing order",
+          "observed_slots": [
+            "condition"
+          ]
+        },
+        {
+          "specimen_id": "IIR-030",
+          "run_index": 3,
+          "category": "CONDITION_OMITTED",
+          "expected_value": "All withdrawals"
+        },
+        {
+          "specimen_id": "IIR-030",
+          "run_index": 3,
+          "category": "EXCEPTION_MOVED_TO_CONDITION",
+          "expected_value": "except withdrawals under an approved standing order",
+          "observed_slots": [
+            "condition"
+          ]
+        },
+        {
+          "specimen_id": "IIR-031",
+          "run_index": 1,
+          "category": "THRESHOLD_BROADENED_BY_COMPARATOR_LOSS",
+          "expected_value": "over 250 units",
+          "proposed_value": "250 units",
+          "missing_comparators": [
+            "over"
+          ]
+        },
+        {
+          "specimen_id": "IIR-031",
+          "run_index": 2,
+          "category": "THRESHOLD_BROADENED_BY_COMPARATOR_LOSS",
+          "expected_value": "over 250 units",
+          "proposed_value": "250 units",
+          "missing_comparators": [
+            "over"
+          ]
+        },
+        {
+          "specimen_id": "IIR-031",
+          "run_index": 3,
+          "category": "THRESHOLD_BROADENED_BY_COMPARATOR_LOSS",
+          "expected_value": "over 250 units",
+          "proposed_value": "250 units",
+          "missing_comparators": [
+            "over"
+          ]
+        },
+        {
+          "specimen_id": "IIR-035",
+          "run_index": 1,
+          "category": "TEMPORAL_QUALIFIER_MOVED_TO_CONDITION",
+          "expected_value": "before disposal",
+          "observed_slots": [
+            "action",
+            "condition"
+          ]
+        },
+        {
+          "specimen_id": "IIR-035",
+          "run_index": 2,
+          "category": "TEMPORAL_QUALIFIER_MOVED_TO_CONDITION",
+          "expected_value": "before disposal",
+          "observed_slots": [
+            "action",
+            "condition"
+          ]
+        },
+        {
+          "specimen_id": "IIR-035",
+          "run_index": 3,
+          "category": "TEMPORAL_QUALIFIER_MOVED_TO_CONDITION",
+          "expected_value": "before disposal",
+          "observed_slots": [
+            "action",
+            "condition"
+          ]
+        }
+      ]
+    },
+    "established_slots": {
+      "expected_established": 365,
+      "compatible": 260,
+      "omitted": 83,
+      "incompatible": 22
+    },
+    "references": {
+      "expected": 9,
+      "surfaced": 9,
+      "correct_reference_kind": 4,
+      "wrong_reference_kind": 5,
+      "omitted": 0,
+      "invented": 0,
+      "semantically_resolved_instead_of_surfaced": 0
+    },
+    "repeat_stability": {
+      "specimen_denominator": 29,
+      "semantic_hash_stable_specimens": 6,
+      "force_stable_specimens": 27,
+      "slot_set_stable_specimens": 12,
+      "per_slot_value_stable_specimens": {
+        "action": 22,
+        "bearer": 25,
+        "condition": 25,
+        "counterparty": 25,
+        "definiendum": 27,
+        "definiens": 28,
+        "exception": 27,
+        "normative_force": 27,
+        "object": 21,
+        "quantum": 27,
+        "temporal_qualifier": 27
+      },
+      "provider_successful_runs_by_specimen": {
+        "IIR-001": 3,
+        "IIR-002": 3,
+        "IIR-003": 3,
+        "IIR-004": 3,
+        "IIR-005": 3,
+        "IIR-006": 3,
+        "IIR-007": 3,
+        "IIR-008": 3,
+        "IIR-009": 3,
+        "IIR-010": 3,
+        "IIR-011": 3,
+        "IIR-012": 3,
+        "IIR-013": 3,
+        "IIR-014": 3,
+        "IIR-015": 3,
+        "IIR-016": 3,
+        "IIR-017": 3,
+        "IIR-018": 3,
+        "IIR-023": 3,
+        "IIR-024": 3,
+        "IIR-025": 3,
+        "IIR-026": 3,
+        "IIR-027": 3,
+        "IIR-028": 3,
+        "IIR-029": 3,
+        "IIR-030": 3,
+        "IIR-031": 3,
+        "IIR-032": 2,
+        "IIR-035": 3
+      },
+      "IIR-032_note": "two provider-successful runs; all other specimens have three",
+      "binding_note": "Deterministic OIC binding is provenance stability, not model-semantic stability."
+    }
+  },
+  "population_rate_claimed": false,
+  "canonicalization_performed": false,
+  "institutional_ir_runtime_implemented": false,
+  "new_model_call_made": false,
+  "owner_disposition": "AMEND — INTERPRETATION PROPOSAL ARCHITECTURE RETAINED; CURRENT MODEL/PROMPT SEMANTICS NOT FREEZE-READY",
+  "limitations": [
+    "One frozen run, one model/provider, 29 synthetic specimens; no population rate.",
+    "Gold is preregistered design evidence, not independent semantic truth.",
+    "Literal quote grounding does not establish correct semantic-role assignment.",
+    "Corrected categories are deterministic measurement projections, not canonical meaning."
+  ],
+  "claim_ceiling": "A corrected audit interpretation of one frozen live characterization only; no semantic correctness, canonical institutional meaning, model authority, production readiness, cross-model generalization, canonicalization, Institutional IR runtime, legal interpretation, or independent validation is established.",
+  "independent_validation_claim": false,
+  "self_adjudication": "NOT SELF-ADJUDICATED"
+}
