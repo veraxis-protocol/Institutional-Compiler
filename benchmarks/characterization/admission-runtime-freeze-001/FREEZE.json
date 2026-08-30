@@ -1,0 +1,228 @@
+{
+  "freeze_id": "OIC-ADMISSION-RUNTIME-FREEZE-001",
+  "authorization": "OWNER-AUTHORIZED BOUNDED ADMISSION RUNTIME FREEZE — PRE-INSTITUTIONAL-IR",
+  "freeze_state": "FROZEN FOR INSTITUTIONAL-IR SUCCESSOR WORK",
+  "frozen_final_state_sha": "ae6021496e5f87e5aaf7a6a52514dc86538987e9",
+  "chronology": [
+    {
+      "sha": "9fa2c684841ea89632bfe0129f98177761d85d12",
+      "role": "starting state; Admission Boundary 001 executable input contract closure, design only"
+    },
+    {
+      "sha": "ddc8c7ddee72cd0b3fc2ffe5c878ab7e550630ca",
+      "role": "Admission Runtime 001 evaluator implementation"
+    },
+    {
+      "sha": "ae6021496e5f87e5aaf7a6a52514dc86538987e9",
+      "role": "subsequent historical scope-binding test repair; final state frozen here"
+    }
+  ],
+  "frozen_production_artifacts": {
+    "src/oic/admission.py": {
+      "sha256": "9c33785a956daa5f2bda7f4eee1ec76901c348ee18d94d26f5bedafa4fff5c84",
+      "git_blob": "bc3ba982c9e657da4c137701e90ae741d75a5aa2"
+    },
+    "src/oic/admission_specs/__init__.py": {
+      "sha256": "76455eed5038171d7201b004e0e254170d1f79f9fd7966acd54bb6661a2ecd6e"
+    },
+    "src/oic/admission_specs/ADMISSION-INPUT-v0.1.schema.json": {
+      "sha256": "bfa5fc3c755bfbc472d2be74fede06173d5ac4db029986da0c4a07b9b5759d3e"
+    },
+    "src/oic/admission_specs/ADMISSION-RECEIPT-v0.1.schema.json": {
+      "sha256": "c70782201912231491e06239611bbd542dcdbb91da061a4ed9403111dc4ef40e"
+    },
+    "src/oic/admission_specs/AUTHORITY-EVIDENCE-v0.1.schema.json": {
+      "sha256": "f1d91532a1a50be1f5d969ce8134bdb445f4a62fee0e62565437c2c4be196c98"
+    },
+    "src/oic/admission_specs/STATE-INPUT-MAPPING-v0.1.json": {
+      "sha256": "9ed244f0a4a7f892943720f13b30b672968bfa5e20f584ca03c3195fe69e421c"
+    }
+  },
+  "frozen_production_tree_objects": {
+    "src/oic/admission_specs": "d3879065a7da2be9dffe68e6348ca715672d1bf3"
+  },
+  "packaging": {
+    "declaration_file": "pyproject.toml",
+    "declaration": "[tool.setuptools.package-data] \"oic.admission_specs\" = [\"*.json\"]",
+    "requirement": "the frozen specifications must ship in the wheel; the evaluator reads them from installed package data and must run with no design/ tree present"
+  },
+  "packaged_specifications_are_byte_identical_to": {
+    "design/admission-boundary-001/ADMISSION-INPUT-v0.1.schema.json": "bfa5fc3c755bfbc472d2be74fede06173d5ac4db029986da0c4a07b9b5759d3e",
+    "design/admission-boundary-001/ADMISSION-RECEIPT-v0.1.schema.json": "c70782201912231491e06239611bbd542dcdbb91da061a4ed9403111dc4ef40e",
+    "design/admission-boundary-001/AUTHORITY-EVIDENCE-v0.1.schema.json": "f1d91532a1a50be1f5d969ce8134bdb445f4a62fee0e62565437c2c4be196c98",
+    "design/admission-boundary-001/STATE-INPUT-MAPPING-v0.1.json": "9ed244f0a4a7f892943720f13b30b672968bfa5e20f584ca03c3195fe69e421c"
+  },
+  "governing_corpus": {
+    "path": "design/admission-boundary-001/TEST-VECTORS-v0.2.json",
+    "sha256": "969ddf9a853155ce6ed27f30f1c41e76f7a1ff37a42071d2141d9966907add81",
+    "bytes": 209358,
+    "vector_count": 38,
+    "legacy_vector_count": 30,
+    "precedence_diagnostic_count": 8,
+    "freeze_path": "design/admission-boundary-001/TEST-VECTORS-FREEZE-v0.2.json",
+    "freeze_sha256": "9f250c07447be532a022c3b4bf7e712283fc5567caefa541585fbbf643f048de"
+  },
+  "evidence_test_references": {
+    "tests/unit/test_admission.py": "d79df2468c81cc708764282ef1e5827231128269e920883099664027cdaf0277",
+    "tests/contract/test_admission_runtime_001_vectors.py": "a62a7474a5f5aa85fd0ca2b92041d0f72024b1b9a22808ed87e76e03b513f368",
+    "tests/contract/test_admission_runtime_mutations.py": "86e4d5880f9f0090be9f1d7a7d65759e66d12d61056555bca80a7f94d675cd9e",
+    "tests/contract/admission_probes.py": "ec640e025085dcea651f1a4649d32e21eca001c6424ea991b060b9d7e6ce11fe"
+  },
+  "frozen_interface": {
+    "module": "oic.admission",
+    "public_api": "evaluate_admission_bytes(input_bytes: bytes) -> AdmissionReceipt",
+    "input_is_bytes_not_object": true,
+    "reason_input_is_bytes": "encoding, duplicate keys, canonical form, schema conformance, evidence ordering, evidence integrity and the ruleset binding are properties of the bytes; an object entry point would let a caller skip every one of them",
+    "no_object_entry_point_is_exported": true,
+    "no_cli_was_added": true
+  },
+  "frozen_identity": {
+    "evaluator_id": "oic-admission-reference-evaluator",
+    "evaluator_version": "0.1-preregistered",
+    "ruleset_id": "OIC-ADMISSION-BOUNDARY-001",
+    "ruleset_canonical_digest": "sha256:794ff36a702964ef32b3bc7b68cc9286e06665e20744975db5f4ef692e685b6c",
+    "ruleset_digest_definition": "SHA-256 over Canonical JSON v0.1 of the complete parsed STATE-INPUT-MAPPING-v0.1.json; it is NOT the raw file digest 9ed244f0a4a7f892943720f13b30b672968bfa5e20f584ca03c3195fe69e421c",
+    "canonicalization_id": "OIC-ADMISSION-CANONICAL-JSON-v0.1",
+    "canonicalization": "UTF-8 without BOM; object keys sorted by Unicode code point; ',' and ':' separators with no insignificant whitespace; no ASCII-only escaping; no NaN or infinity; array order as recorded; no trailing newline",
+    "receipt_id_prefix": "admrec-sha256:"
+  },
+  "frozen_state_vocabulary": [
+    {"precedence": 1, "state": "CANDIDATE_INPUT_INVALID", "reason_code": "OIC-ADM-1001"},
+    {"precedence": 2, "state": "AUTHORITY_REGISTRY_UNAVAILABLE", "reason_code": "OIC-ADM-1012"},
+    {"precedence": 3, "state": "AUTHORITY_EVIDENCE_STALE", "reason_code": "OIC-ADM-1013"},
+    {"precedence": 4, "state": "SOURCE_NOT_REGISTERED", "reason_code": "OIC-ADM-1002"},
+    {"precedence": 5, "state": "SOURCE_VERSION_MISMATCH", "reason_code": "OIC-ADM-1003"},
+    {"precedence": 6, "state": "SOURCE_DIGEST_MISMATCH", "reason_code": "OIC-ADM-1004"},
+    {"precedence": 7, "state": "MISSING_AUTHORITY_EVIDENCE", "reason_code": "OIC-ADM-1005"},
+    {"precedence": 8, "state": "OUT_OF_SCOPE", "reason_code": "OIC-ADM-1010"},
+    {"precedence": 9, "state": "NOT_YET_EFFECTIVE", "reason_code": "OIC-ADM-1006"},
+    {"precedence": 10, "state": "EXPIRED", "reason_code": "OIC-ADM-1007"},
+    {"precedence": 11, "state": "SUPERSEDED", "reason_code": "OIC-ADM-1008"},
+    {"precedence": 12, "state": "REVOKED", "reason_code": "OIC-ADM-1009"},
+    {"precedence": 13, "state": "CONFLICTING_AUTHORITY", "reason_code": "OIC-ADM-1011"},
+    {"precedence": 14, "state": "ADMISSION_NOT_ESTABLISHED", "reason_code": "OIC-ADM-1099"},
+    {"precedence": 15, "state": "ADMITTED", "reason_code": "OIC-ADM-0000"}
+  ],
+  "frozen_exception_boundary": {
+    "root": "AdmissionError(RuntimeError)",
+    "input_boundary_class": "AdmissionInputBoundaryError",
+    "input_boundary_subclasses": [
+      "AdmissionEncodingError",
+      "AdmissionJSONError",
+      "AdmissionCanonicalFormError",
+      "AdmissionSchemaError",
+      "AdmissionTimestampError",
+      "AdmissionEvidenceOrderError",
+      "AdmissionEvidenceIntegrityError",
+      "AdmissionRulesetError"
+    ],
+    "specification_class": "AdmissionSpecificationError",
+    "internal_defect_class": "AdmissionEvaluationError",
+    "rule": "An input-boundary failure is not an admission outcome. It produces no terminal state and no receipt, and is never converted into ADMISSION_NOT_ESTABLISHED. An unexpected internal defect never becomes a valid institutional receipt either.",
+    "redaction": "boundary error messages carry field names, JSON pointers, indices and counts only; never input values or evidence bodies"
+  },
+  "frozen_receipt_identity_projection": {
+    "authority_evidence_digest": "SHA-256 over Canonical JSON v0.1 of the complete authority-evidence object with only its top-level evidence_digest omitted",
+    "candidate_projection_digest": "SHA-256 over Canonical JSON v0.1 of the exact candidate object in the accepted input",
+    "input_digest": "SHA-256 over Canonical JSON v0.1 of the entire accepted executable input; non-self-referential",
+    "receipt_aggregate_evidence_digest": "SHA-256 over Canonical JSON v0.1 of the ordered array of complete authority-evidence objects, including their individual evidence_digest values",
+    "admission_receipt_id": "'admrec-sha256:' + SHA-256 over Canonical JSON v0.1 of the full receipt with only admission_receipt_id omitted",
+    "evidence_order": "ascending (evidence_id, evidence_digest); duplicate evidence_id is invalid; the evaluator verifies this order and never imposes it"
+  },
+  "frozen_behavior": {
+    "vectors_executed_through_the_public_byte_boundary": 38,
+    "exact_receipt_reproductions": 38,
+    "exactness": "admission_state, reason_code, candidate_projection_digest, authority_evidence_refs, authority_evidence_digests, input_digest, aggregate evidence_digest, ruleset_digest and admission_receipt_id all reproduce exactly",
+    "terminal_states_defined": 15,
+    "terminal_states_exercised": 15,
+    "terminal_state_coverage": {
+      "CANDIDATE_INPUT_INVALID": 1,
+      "AUTHORITY_REGISTRY_UNAVAILABLE": 2,
+      "AUTHORITY_EVIDENCE_STALE": 2,
+      "SOURCE_NOT_REGISTERED": 3,
+      "SOURCE_VERSION_MISMATCH": 2,
+      "SOURCE_DIGEST_MISMATCH": 3,
+      "MISSING_AUTHORITY_EVIDENCE": 4,
+      "OUT_OF_SCOPE": 3,
+      "NOT_YET_EFFECTIVE": 2,
+      "EXPIRED": 1,
+      "SUPERSEDED": 2,
+      "REVOKED": 3,
+      "CONFLICTING_AUTHORITY": 2,
+      "ADMISSION_NOT_ESTABLISHED": 1,
+      "ADMITTED": 7
+    },
+    "precedence_diagnostics_defined": 8,
+    "precedence_diagnostics_passing": 8,
+    "first_terminal_state_wins": true,
+    "byte_boundary_rejection_cases": 36,
+    "named_implementation_mutations": 24,
+    "named_implementation_mutations_killed": 24,
+    "mutation_control_case_present": true,
+    "behavioral_probe_bank_cases": 33,
+    "deterministic_receipt_construction": true,
+    "idempotent_over_repeated_identical_bytes": true,
+    "no_wall_clock": true,
+    "no_model": true,
+    "no_network_schema_resolution": true,
+    "no_runtime_configuration_can_reorder_states_or_change_the_ruleset": true,
+    "installed_wheel_execution_without_design_tree": true,
+    "wheel_smoke_vectors": ["ADM-001 (ADMITTED)", "ADM-003 (SOURCE_NOT_REGISTERED, fail-closed)"],
+    "dependency_added": false
+  },
+  "frozen_invariants": [
+    "The public evaluation entry point consumes bytes, so no caller can bypass the byte seam.",
+    "An input-boundary failure is never converted into a terminal admission state.",
+    "Exactly one terminal state and one immutable receipt result from an admissible input.",
+    "The precedence order is read from the packaged frozen ruleset; the module refuses to load if its own state order disagrees.",
+    "No caller-selected ruleset is accepted: an input naming a different ruleset digest is refused at the boundary.",
+    "Time enters only through evaluation_time; the module imports no clock, no randomness, and no host or network metadata.",
+    "Timestamps must already be normalized RFC 3339 UTC 'Z'; a non-normalized timestamp is refused rather than repaired.",
+    "Half-open intervals: effective_from <= t < effective_until; revoked_at <= t yields REVOKED; superseded_at <= t yields SUPERSEDED.",
+    "Evidence order is verified, never imposed; the evaluator does not silently sort accepted bytes.",
+    "Every recorded evidence_digest is recomputed from its own evidence object before evaluation.",
+    "CONFLICTING_AUTHORITY is emitted whenever two or more operative authority bases cover one evaluation, because the frozen ruleset carries no institutional precedence rule. Recency, order, rank and version never pick a winner.",
+    "No authority is created from candidate text, unit_type, model output, source metadata, defaults, environment or configuration. No default authority exists.",
+    "Relabelling unit_type or rewriting candidate_span cannot change any outcome.",
+    "Repeated extraction and perfect provenance confer no standing.",
+    "A warrant is never widened by the request that consults it.",
+    "Schema resolution runs through a registry built only from packaged bytes, with no retrieve callback; absolute https $id and $ref values resolve locally or fail.",
+    "The vocabulary contains no runtime permission state: no ALLOW, no DENY, no execution decision.",
+    "ADMITTED means eligible for Institutional IR interpretation only.",
+    "An earlier receipt is never mutated when later lifecycle evidence arrives; re-evaluation produces a new receipt."
+  ],
+  "successor_boundary": "Only an AdmissionReceipt whose admission_state is ADMITTED may cross into Institutional IR construction, together with the unchanged Candidate Normative Unit, its source anchors, and the authority-evidence references and digests needed for reconstruction. Admission established eligibility for interpretation. It did not establish the interpretation.",
+  "historical_preservation": {
+    "design/admission-boundary-001": "byte-unchanged; Admission Boundary 001 v0.1, TEST-VECTORS v0.1 and v0.2 and both freezes, STATE-INPUT-MAPPING-v0.1 and the executable input contract were not rewritten",
+    "schemas/draft": "byte-unchanged; admission-record.schema.json and authority-record.schema.json were not modified or replaced",
+    "src/oic/candidate_extraction.py": "byte-unchanged since Candidate Layer Freeze 001",
+    "benchmarks/characterization/candidate-layer-freeze-001": "byte-unchanged",
+    "candidate_semantics_corpora": "byte-unchanged; no historical result was reinterpreted"
+  },
+  "sbom_environment_note": {
+    "classification": "ENVIRONMENTAL / NONBLOCKING / NO DEPENDENCY CHANGE",
+    "observation": "scripts/generate_sbom.sh could not run locally because cyclonedx-py was absent from the local environment.",
+    "sbom_generated": false,
+    "claim": "No SBOM was generated under this freeze. This is an environment gap, not a repository defect, and it is unrelated to the frozen diff.",
+    "dependency_change_made_to_close_it": false
+  },
+  "future_change_rule": [
+    "a demonstrated defect",
+    "a bounded successor work order",
+    "explicit owner authorization",
+    "preservation of this freeze record",
+    "a versioned successor rather than silent mutation"
+  ],
+  "freeze_scope_statement": "This freeze covers the Admission Runtime 001 artifacts named above and nothing else. It is not an assertion that unrelated future OIC modules under src/ may never change.",
+  "known_limitations": [
+    "The evidence is bounded to the 38 frozen executable vectors, the 33 behavioral probes, and the 24 named mutations. It is not a population error rate.",
+    "The corpus is synthetic design fixture material; no real institution, issuer or authority is represented.",
+    "The evaluator verifies schema, exact values, digests, source bindings, scope, time, warrant status, internal consistency and frozen precedence only. It performs no PKI, issuer authentication, or institutional mandate validation.",
+    "Issuer authentication, registry transport authentication, signature format, key lifecycle, freshness duration, authority hierarchy and conflict-resolution governance remain unresolved and require separate owner authorization.",
+    "CONFLICTING_AUTHORITY is unconditional on two operative bases because no precedence rule exists to consult. If the institution later authorizes one, that is a versioned successor, not a correction of this freeze.",
+    "The freeze does not claim that future admission-runtime revision is impossible."
+  ],
+  "claim_ceiling": "This bounded freeze records the first deterministic Admission Boundary 001 reference evaluator and the identified executable evidence. It does not establish legal validity, universal authority semantics, production authority validation, issuer authentication, semantic correctness, institutional meaning, Institutional IR, successful IR compilation, execution authorization, runtime safety, compliance, production readiness, or independent validation.",
+  "independent_validation_claim": false,
+  "self_adjudication": "NOT SELF-ADJUDICATED"
+}
