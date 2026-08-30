@@ -1322,6 +1322,10 @@ def test_source_modules_match_bounded_owner_authorization(repo_root: Path) -> No
         # Admission Boundary 001 contract. No model participates in it and it authorizes
         # no runtime execution.
         "admission.py",
+        # Interpretation Proposal Characterization 001: act 3 only. A model may propose
+        # semantic structure here; it may not canonicalize, and this module constructs no
+        # Institutional IR.
+        "interpretation_proposal.py",
     }
 
 

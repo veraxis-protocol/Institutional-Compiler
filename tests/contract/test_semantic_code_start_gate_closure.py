@@ -166,6 +166,7 @@ def _isolated_gate_tree(repo_root: Path, tmp_path: Path) -> Path:
                     "review_docket.py",
                     "admission.py",
                     "admission_specs",
+                    "interpretation_proposal.py",
                 ),
             )
         else:

@@ -1,0 +1,3458 @@
+{
+  "act": "3_INTERPRETATION_PROPOSAL",
+  "claim_ceiling": "Characterization 001 measures one model and provider proposing provisional semantic structure over a small frozen synthetic admitted-candidate corpus. It does not establish canonical institutional meaning, semantic correctness generally, interpretation authority, legal interpretation, successful Institutional IR construction, model suitability for autonomous canonicalization, production readiness, cross-model generalization, or independent validation.",
+  "corpus_id": "OIC-INTERPRETATION-PROPOSAL-001-CORPUS-v0.1",
+  "gold_is_evaluator_only": true,
+  "gold_never_sent_to_provider": true,
+  "include_provisional_unit_type_in_prompt": false,
+  "independent_validation_claim": false,
+  "interpretation_ruleset": "design/institutional-ir-001/INTERPRETATION-RULESET-v0.1.json",
+  "interpretation_ruleset_canonical_digest": "sha256:e3751aac77b2ef0a0cdad99aff44d47861cd6d7d39d044e485a520a452e75b71",
+  "interpretation_ruleset_sha256": "8ba398eb20d346d66ce49c0f638babe2167930a07c3bd2946757fa41d6ccb114",
+  "live_run_executed": false,
+  "planned_live_requests": 87,
+  "proposal_schema": "design/institutional-ir-001/INTERPRETATION-PROPOSAL-v0.1.schema.json",
+  "proposal_schema_sha256": "0e71dc3fbd20d2b025549df565314c0f90f69d36ec2eb874915a865731c437df",
+  "runs_per_specimen": 3,
+  "self_adjudication": "NOT SELF-ADJUDICATED",
+  "slot_vocabulary": [
+    "normative_force",
+    "bearer",
+    "action",
+    "object",
+    "counterparty",
+    "condition",
+    "exception",
+    "temporal_qualifier",
+    "quantum",
+    "definiendum",
+    "definiens"
+  ],
+  "source_corpus": "design/institutional-ir-001/TEST-VECTORS-v0.1.json",
+  "source_corpus_sha256": "5761b82cc67c8bfb139689d04c7ca36283d0c6e63fd8f82199b8a1fa9d013358",
+  "specimen_count": 29,
+  "specimens": [
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:2593442ac9c0c9849272db1013a0595ddfc66a975fd45a353d849ae769bcaf49",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:62749f6c83e0027ab48602dfe110d0cecdc885a845e7a7e6d1f369c950ff5a16",
+        "candidate_unit_id": "cnu-739dc970439de10ac879c6a3",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:487ffa441103fb42c5e3385df85372eda663160c0a1cf18ff56f2fe6593412cc",
+        "source_id": "policy-iir-001",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:62749f6c83e0027ab48602dfe110d0cecdc885a845e7a7e6d1f369c950ff5a16",
+        "candidate_span": "The Records Officer must retain each closed file for seven years.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-739dc970439de10ac879c6a3",
+        "unit_type": "mandate"
+      },
+      "category": "core_force",
+      "design_vector_id": "IIR-001",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "retain"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "The Records Officer"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "each closed file"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": {
+              "kind": "DURATION",
+              "raw_source_text": "for seven years"
+            },
+            "status": "ESTABLISHED",
+            "value": "for seven years"
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-001",
+      "threat_tags": [
+        "baseline_positive"
+      ],
+      "title": "simple mandate"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:e7e7e5e713b263cfa6d1819c338bc4d21646beeec00587ce2428b68478c8254f",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:f5b629422638ba9b72b4d85bf2d575bf7949f23efed1e8c5ea056d59ccf5410b",
+        "candidate_unit_id": "cnu-7dfa3e2445276aea8fbd1406",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:b55cf1121433bc4c1c7a271c6d71ef3fa07206dc1166c5cf85b88d3c6e53c8b9",
+        "source_id": "policy-iir-002",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:f5b629422638ba9b72b4d85bf2d575bf7949f23efed1e8c5ea056d59ccf5410b",
+        "candidate_span": "No employee may disclose client identifiers to an external party.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-7dfa3e2445276aea8fbd1406",
+        "unit_type": "prohibition"
+      },
+      "category": "core_force",
+      "design_vector_id": "IIR-002",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "PROHIBITION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "disclose"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [
+              {
+                "qualifier_kind": "NEGATION",
+                "text": "No"
+              }
+            ],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "No employee"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "an external party"
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "PROHIBITION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "client identifiers"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-002",
+      "threat_tags": [
+        "baseline_positive",
+        "negation_preservation"
+      ],
+      "title": "prohibition"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:b1c5983df1a6eacb0a5c7bbbe42fe5e712efd66fe8749ebc30ae85c20b68cca5",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:2532a71378b954044739ff26b9238e3b919cd3e81386496a88db89bcb28f4b7e",
+        "candidate_unit_id": "cnu-ca958e507972c17d3e94bd33",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:3f9196e4c62f6f04dfe0884b05ab4a94c808fe4baf29ac4243ae793895d97de4",
+        "source_id": "policy-iir-003",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:2532a71378b954044739ff26b9238e3b919cd3e81386496a88db89bcb28f4b7e",
+        "candidate_span": "A department head may approve travel outside the standard schedule.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-ca958e507972c17d3e94bd33",
+        "unit_type": "permission"
+      },
+      "category": "core_force",
+      "design_vector_id": "IIR-003",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "PERMISSION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "approve"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "A department head"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "PERMISSION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "travel outside the standard schedule"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-003",
+      "threat_tags": [
+        "baseline_positive"
+      ],
+      "title": "permission"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:2865741ebeddd1a50b2dc8648eec5466f8c407b2dd27e29c04b75a0e560dc9e6",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:5907348cb5ff3daa7c278847a8d44f0fcac8eb952a54f99116750e2459695404",
+        "candidate_unit_id": "cnu-d1682265314052de280971fb",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:64740c81fd2dbafcb33e381c447c0955740466d8a3fb82e3b69a515e0c8a0ba2",
+        "source_id": "policy-iir-004",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:5907348cb5ff3daa7c278847a8d44f0fcac8eb952a54f99116750e2459695404",
+        "candidate_span": "Teams are encouraged to review vendor documentation before renewal.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-d1682265314052de280971fb",
+        "unit_type": "advisory"
+      },
+      "category": "core_force",
+      "design_vector_id": "IIR-004",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "ADVISORY",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [
+              {
+                "qualifier_kind": "HEDGE",
+                "text": "are encouraged to"
+              }
+            ],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "review"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "Teams"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "ADVISORY"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "vendor documentation"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "before renewal"
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-004",
+      "threat_tags": [
+        "baseline_positive",
+        "advisory_wording"
+      ],
+      "title": "advisory"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:aa5efa5a4a2a9f9e48e3fbb595983075ae3adefefd6ff34f0127021df90570ac",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:08f1947a244cfae7fda9b5cc628a757623b6691e571d0f6398e7c7187db22b8b",
+        "candidate_unit_id": "cnu-d9940db8be9a7b17d3e13b78",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:6d3b4f464e0f85eca1c36682b3eb82ab4e5475675b6736fcfc00913878796516",
+        "source_id": "policy-iir-005",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:08f1947a244cfae7fda9b5cc628a757623b6691e571d0f6398e7c7187db22b8b",
+        "candidate_span": "Closed file means a file for which no further action is pending.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-d9940db8be9a7b17d3e13b78",
+        "unit_type": "definition"
+      },
+      "category": "definition",
+      "design_vector_id": "IIR-005",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "CONSTITUTIVE_DEFINITION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "Closed file"
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "a file for which no further action is pending"
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "CONSTITUTIVE_DEFINITION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-005",
+      "threat_tags": [
+        "baseline_positive",
+        "definition_source_loss"
+      ],
+      "title": "constitutive definition"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:b497cd60af223fa2978c177248adad416ed8e1fc2d878f04c27f9fd76d290fd5",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:afd9dd53dd3bc7c31d7956f354ed9803703be89e9404cbf0ada9891f4f1aafd7",
+        "candidate_unit_id": "cnu-aca16e9ddb497692fbc5d581",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:15a126734276cd9e3cfe1dd9bba4dbf6d733a25aa56774e0416607d42d6fa315",
+        "source_id": "policy-iir-006",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:afd9dd53dd3bc7c31d7956f354ed9803703be89e9404cbf0ada9891f4f1aafd7",
+        "candidate_span": "The Board delegates approval of exceptions to the Risk Committee.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-aca16e9ddb497692fbc5d581",
+        "unit_type": "delegation"
+      },
+      "category": "core_force",
+      "design_vector_id": "IIR-006",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "DELEGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "delegates"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "The Board"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "the Risk Committee"
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "DELEGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "approval of exceptions"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-006",
+      "threat_tags": [
+        "baseline_positive",
+        "incomplete_delegation"
+      ],
+      "title": "delegation"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:2bf58aa54d9fe3e8fda186aa64210195b078ed15ca7e578ccb5e8df8a06484a0",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:04b25aed5454691b6d5a7fa1544116e2bba737fae9fc9d44fea78b5afbf452d3",
+        "candidate_unit_id": "cnu-66b448b937957eb3ffb0ba1e",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:5a2c40ca8bd48417cf75ccb094b164798cc458d9957477d0415e539e9045b924",
+        "source_id": "policy-iir-007",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:04b25aed5454691b6d5a7fa1544116e2bba737fae9fc9d44fea78b5afbf452d3",
+        "candidate_span": "The custodian must retain proof of destruction for each disposed record.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-66b448b937957eb3ffb0ba1e",
+        "unit_type": "evidence_duty"
+      },
+      "category": "representability",
+      "design_vector_id": "IIR-007",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "retain"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "The custodian"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "proof of destruction for each disposed record"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-007",
+      "threat_tags": [
+        "slot_minimality"
+      ],
+      "title": "evidence duty representable without a dedicated slot"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:1136b01f1198acef71d390227d3d4482c77f232f8112c9de56f6db7a5465854a",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:09672c62a06e18cb716de14f6596a1cb66100f7a8ddf04cb0f6f466612b97c53",
+        "candidate_unit_id": "cnu-34f19168d9a3953a5e792e6d",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:f200d2ea355b0ce36b0e9906f8009344b7a126ada00b5bcb08c70254c6c9b0b3",
+        "source_id": "policy-iir-008",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:09672c62a06e18cb716de14f6596a1cb66100f7a8ddf04cb0f6f466612b97c53",
+        "candidate_span": "The committee must review each granted exception every quarter.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-34f19168d9a3953a5e792e6d",
+        "unit_type": "review_duty"
+      },
+      "category": "representability",
+      "design_vector_id": "IIR-008",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "review"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "The committee"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "each granted exception"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "every quarter"
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-008",
+      "threat_tags": [
+        "slot_minimality",
+        "review_becomes_approval"
+      ],
+      "title": "review duty representable without a dedicated slot"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:0c0df8eec8c269391e7165acd4465e18bfac2c27d25539404e10365b465c147f",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:b9022d978be39d751e890b69479b281526da9e3ffaa855561b9e06f2eb3382de",
+        "candidate_unit_id": "cnu-427a08541d6e5e70e45b6b47",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:e50e9a505e459027a288d16bd62b1af8aea07c4bad4321634f8cd5cd03f3c8ce",
+        "source_id": "policy-iir-009",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:b9022d978be39d751e890b69479b281526da9e3ffaa855561b9e06f2eb3382de",
+        "candidate_span": "Upon receipt of a complaint, the office must open a case file within two business days.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-427a08541d6e5e70e45b6b47",
+        "unit_type": "temporal_trigger"
+      },
+      "category": "temporal",
+      "design_vector_id": "IIR-009",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "open"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "the office"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "Upon receipt of a complaint"
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "a case file"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "within two business days"
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "vague_temporal_normalization"
+      ],
+      "specimen_id": "IIR-009",
+      "threat_tags": [
+        "temporal_preservation",
+        "vague_temporal_phrase"
+      ],
+      "title": "temporal trigger"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:26ce0ea67e898f27550be6aabc802859f0f31885b0eca69c548a1973952456e4",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:d29e19e363e6a3845de587716dee9181f9f07271beae0208425fd28e340fe06d",
+        "candidate_unit_id": "cnu-302f133dee72cd16e4d8f8ea",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:60183336df5976a497947c02f275bf3b4f7f56ae48885faa860d923566a1256d",
+        "source_id": "policy-iir-010",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:d29e19e363e6a3845de587716dee9181f9f07271beae0208425fd28e340fe06d",
+        "candidate_span": "If the request exceeds the delegated limit, the manager must escalate it.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-302f133dee72cd16e4d8f8ea",
+        "unit_type": "condition"
+      },
+      "category": "condition",
+      "design_vector_id": "IIR-010",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "escalate"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "the manager"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "If the request exceeds the delegated limit"
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-010",
+      "threat_tags": [
+        "condition_preservation"
+      ],
+      "title": "explicit condition"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:f80c8e68f8a7f6fd1a0bcbbd57467df50ccec03ea66e42aef9d333e8391f208a",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:35620a2268ae4dc566fcf3f2e64e41dd52500f5d393037e9eb49ab78ba4f77d3",
+        "candidate_unit_id": "cnu-b695207932170d98f3c2d515",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:64659f88ea0895c2f8beb53ab36927bdea770e75d95229569cecdd3ea547e0fb",
+        "source_id": "policy-iir-011",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:35620a2268ae4dc566fcf3f2e64e41dd52500f5d393037e9eb49ab78ba4f77d3",
+        "candidate_span": "All transfers must be countersigned, except transfers between internal accounts.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-b695207932170d98f3c2d515",
+        "unit_type": "exception"
+      },
+      "category": "exception",
+      "design_vector_id": "IIR-011",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "countersigned"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "except transfers between internal accounts"
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "All transfers"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-011",
+      "threat_tags": [
+        "exception_preservation",
+        "closed_world"
+      ],
+      "title": "explicit exception"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:e4cad7ff723d34a431c7a246d90518fd79e1e31eb48b7bb9b42872997a66e418",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:d7d005edb47357b51f9cfb77fc7862cd164d2cb0b26a4f86dff6a7b445ec08fb",
+        "candidate_unit_id": "cnu-70fc94b74035a29dd642bb6a",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:ab54ef0a93ed94adbb616d498eb0dfe60a15788c3f83e19982665c8fc91d8421",
+        "source_id": "policy-iir-012",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:d7d005edb47357b51f9cfb77fc7862cd164d2cb0b26a4f86dff6a7b445ec08fb",
+        "candidate_span": "Purchases above 5000 units require a second approval.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-70fc94b74035a29dd642bb6a",
+        "unit_type": "mandate"
+      },
+      "category": "quantum",
+      "design_vector_id": "IIR-012",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "require"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "Purchases above 5000 units"
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "a second approval"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [
+              {
+                "qualifier_kind": "COMPARATOR",
+                "text": "above"
+              }
+            ],
+            "normalization": {
+              "kind": "NUMBER",
+              "raw_source_text": "5000"
+            },
+            "status": "ESTABLISHED",
+            "value": "above 5000 units"
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-012",
+      "threat_tags": [
+        "threshold_preservation"
+      ],
+      "title": "quantitative threshold"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:5362def04a58dfad33616caedbadd0f7a888ec7ee09f5eb3993b4845013e055c",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:7481ff3149a50709decdb922274cc57e4f2f639d41c248a75b6b6726553bfa75",
+        "candidate_unit_id": "cnu-a3934a443d6993457cc7e6a7",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:02e7a86a0b9a076752f07f422b619a736aa010aaabc21ebe991629a99ad0695d",
+        "source_id": "policy-iir-013",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:7481ff3149a50709decdb922274cc57e4f2f639d41c248a75b6b6726553bfa75",
+        "candidate_span": "An invoice of $10,000 or more must be approved by the controller.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-a3934a443d6993457cc7e6a7",
+        "unit_type": "mandate"
+      },
+      "category": "quantum",
+      "design_vector_id": "IIR-013",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "approved"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "the controller"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "An invoice"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [
+              {
+                "qualifier_kind": "CURRENCY",
+                "text": "$"
+              },
+              {
+                "qualifier_kind": "COMPARATOR",
+                "text": "or more"
+              }
+            ],
+            "normalization": {
+              "kind": "CURRENCY",
+              "raw_source_text": "$10,000"
+            },
+            "status": "ESTABLISHED",
+            "value": "$10,000 or more"
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-013",
+      "threat_tags": [
+        "threshold_preservation",
+        "currency_preservation"
+      ],
+      "title": "currency amount"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:fac2d0035c6661bc317ad94d1577e81194a96c5b8525052538b2d23c77fe95d2",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:71790393a9b771482844715af8c66465f1d675de1265628f3ae5dd5a09b89a58",
+        "candidate_unit_id": "cnu-766af1ba482e17f171b7554e",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:4735829d28cfede34826a354b7b26e97b14d304302b5b625aaea2b0d3024412f",
+        "source_id": "policy-iir-014",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:71790393a9b771482844715af8c66465f1d675de1265628f3ae5dd5a09b89a58",
+        "candidate_span": "The report must be filed no later than 2026-03-31T00:00:00Z.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-766af1ba482e17f171b7554e",
+        "unit_type": "mandate"
+      },
+      "category": "temporal",
+      "design_vector_id": "IIR-014",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "filed"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "The report"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": {
+              "kind": "TIMESTAMP",
+              "raw_source_text": "2026-03-31T00:00:00Z"
+            },
+            "status": "ESTABLISHED",
+            "value": "no later than 2026-03-31T00:00:00Z"
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-014",
+      "threat_tags": [
+        "temporal_preservation"
+      ],
+      "title": "deadline"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:bc4dece34464ccb574fce8cf114e43a761e57e3860c98b4669bb672423d40ef8",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:9a9a98134bd78a8a6f86b0acb086940e9ace6323ef24a01c40215a4769278602",
+        "candidate_unit_id": "cnu-0706ae308d07133cd6b3d4a8",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:5d623dfcc3de96b9bafa6faf94108b1440220d19d73662606461ff5e994574af",
+        "source_id": "policy-iir-015",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:9a9a98134bd78a8a6f86b0acb086940e9ace6323ef24a01c40215a4769278602",
+        "candidate_span": "Records shall be retained for the applicable period.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-0706ae308d07133cd6b3d4a8",
+        "unit_type": "mandate"
+      },
+      "category": "unknown",
+      "design_vector_id": "IIR-015",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "retained"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "Records"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "for the applicable period"
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "passive_actor"
+      ],
+      "specimen_id": "IIR-015",
+      "threat_tags": [
+        "invented_actor",
+        "unknown_as_false"
+      ],
+      "title": "passive voice with no actor"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:c2426c733f86c418436cf65a557d0b981c10de9d8fa680ca4c859943c6554660",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:6f42904d62365aa2be1166aded202d40d35e21f018ce303cb782f869316c04c3",
+        "candidate_unit_id": "cnu-1f0158ab8557b6ef7e9bc391",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:dbc54858ad42dd29aa170a189e49adbd6d0d6eb977c3ac294fe2c8c13921345c",
+        "source_id": "policy-iir-016",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:6f42904d62365aa2be1166aded202d40d35e21f018ce303cb782f869316c04c3",
+        "candidate_span": "The vendor must submit the certificate to the compliance office.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-1f0158ab8557b6ef7e9bc391",
+        "unit_type": "mandate"
+      },
+      "category": "role_separation",
+      "design_vector_id": "IIR-016",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "submit"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "The vendor"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "the compliance office"
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "the certificate"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "bearer_counterparty_separation"
+      ],
+      "specimen_id": "IIR-016",
+      "threat_tags": [
+        "recipient_becomes_actor"
+      ],
+      "title": "recipient distinct from actor"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:3abddc548ac470ccb42eccb943d24de98b7972359c51a9d5538d0e9af32d31a0",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:3edd0283d0fb5e2ede0761bdb75144a81789817ab2f32ed20e2619dbdee9b2f3",
+        "candidate_unit_id": "cnu-abdcd66da6a8b92e38883f15",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:9e39352afaf2ced364d8a813f45dbe646df9af98160fb0cbb78f705fefefaa7b",
+        "source_id": "policy-iir-017",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:3edd0283d0fb5e2ede0761bdb75144a81789817ab2f32ed20e2619dbdee9b2f3",
+        "candidate_span": "The department and its contractor must maintain the register; it must be updated monthly.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-abdcd66da6a8b92e38883f15",
+        "unit_type": "mandate"
+      },
+      "category": "ambiguity",
+      "design_vector_id": "IIR-017",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "maintain"
+          },
+          "bearer": {
+            "alternatives": [
+              "The department",
+              "its contractor"
+            ],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "AMBIGUOUS",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "the register"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "monthly"
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "ambiguity_overcommitment"
+      ],
+      "specimen_id": "IIR-017",
+      "threat_tags": [
+        "ambiguity_guessed_away",
+        "ambiguous_pronoun"
+      ],
+      "title": "ambiguous actor"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:44d5354b1575a903d1cdec0b2ee8dbadd322e0003e836c6f8be4e6793ad8be16",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:086005585339d48c02404504c88c0bc7f60168a73e4003a8c0ec948b2d7bb8cf",
+        "candidate_unit_id": "cnu-e40f77402029c34f5350232d",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:9329a3c3021a29c92891f5e48812a63a3c71c85343bab0d4c729319ae3605dfe",
+        "source_id": "policy-iir-018",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:086005585339d48c02404504c88c0bc7f60168a73e4003a8c0ec948b2d7bb8cf",
+        "candidate_span": "The officer must notify the registrar and file the report if the amount is disputed.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-e40f77402029c34f5350232d",
+        "unit_type": "condition"
+      },
+      "category": "ambiguity",
+      "design_vector_id": "IIR-018",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [
+              "notify",
+              "file"
+            ],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "AMBIGUOUS",
+            "value": null
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "The officer"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "if the amount is disputed"
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "ambiguity_overcommitment"
+      ],
+      "specimen_id": "IIR-018",
+      "threat_tags": [
+        "ambiguity_guessed_away",
+        "unclear_exception_scope"
+      ],
+      "title": "ambiguous condition attachment"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:81e4bf22d5fbc9a1d76f041d9a7df7076a371d5553ddfce6f9cf4ff569924335",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:fb569da64e707b685a271528210608d5f4f9f721afe668739d6a2f6f66c57f60",
+        "candidate_unit_id": "cnu-544ca39f4bd0758c479c43d6",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:5d0941bf4ae82c5330bb48e0c3c32dddf8f1a1af71f51b23fcedcb8cb00d5e75",
+        "source_id": "policy-iir-023",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:fb569da64e707b685a271528210608d5f4f9f721afe668739d6a2f6f66c57f60",
+        "candidate_span": "For the purposes of this policy, business day means a day on which the head office is open.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-544ca39f4bd0758c479c43d6",
+        "unit_type": "definition"
+      },
+      "category": "definition",
+      "design_vector_id": "IIR-023",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "CONSTITUTIVE_DEFINITION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "For the purposes of this policy"
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "business day"
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "a day on which the head office is open"
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "CONSTITUTIVE_DEFINITION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [],
+      "specimen_id": "IIR-023",
+      "threat_tags": [
+        "definition_source_loss",
+        "definition_scope_loss"
+      ],
+      "title": "local definition"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:767d80bbc905a128ad831930c73b446201791eb0d62d7b7f4a82e420dcd3058e",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:be196514e8d434751165d8fda35c25237e784a7ce1bea9bbff5d499aa37f24e4",
+        "candidate_unit_id": "cnu-f93d13fae6275d54c690ca41",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:9c0097c56c4206a8d4d65ee58a22581e6f9373b32ccb3ede1ade36eea47dfe51",
+        "source_id": "policy-iir-024",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:be196514e8d434751165d8fda35c25237e784a7ce1bea9bbff5d499aa37f24e4",
+        "candidate_span": "Eligible institution has the meaning given in the Framework Agreement.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-f93d13fae6275d54c690ca41",
+        "unit_type": "definition"
+      },
+      "category": "definition",
+      "design_vector_id": "IIR-024",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "CONSTITUTIVE_DEFINITION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "Eligible institution"
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "CONSTITUTIVE_DEFINITION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": [
+          {
+            "reference_kind": "DEFINITION",
+            "reference_text": "the Framework Agreement"
+          }
+        ]
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "definition_resolved_instead_of_surfaced"
+      ],
+      "specimen_id": "IIR-024",
+      "threat_tags": [
+        "definition_invention",
+        "undefined_term"
+      ],
+      "title": "unresolved external definition"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:bb8874df284d886cffd61ac04900a28796f6c38c5ac6f81f25688aa17399ce26",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:4ccbcc0484153f37b04deb329ac737665d2f9e0c6d8b1999568f293674895bf5",
+        "candidate_unit_id": "cnu-e6869b7a2f86e4d63f2028eb",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:7965ec3f0d8efcbe1112e6559363683a0335d95c91481565cde76bf10522a8fb",
+        "source_id": "policy-iir-025",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:4ccbcc0484153f37b04deb329ac737665d2f9e0c6d8b1999568f293674895bf5",
+        "candidate_span": "Approvals are granted subject to section 4 of this policy.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-e6869b7a2f86e4d63f2028eb",
+        "unit_type": "condition"
+      },
+      "category": "cross_reference",
+      "design_vector_id": "IIR-025",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "PERMISSION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "granted"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "PERMISSION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "Approvals"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": [
+          {
+            "reference_kind": "INTERNAL_PROVISION",
+            "reference_text": "section 4 of this policy"
+          }
+        ]
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "reference_resolved_instead_of_surfaced"
+      ],
+      "specimen_id": "IIR-025",
+      "threat_tags": [
+        "reference_expansion"
+      ],
+      "title": "cross-reference identified but unresolved"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:2c070007426000846e8a9e9e5ffb8571f1848e5b7bc47ef8393300685d8e1bb2",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:c7a11c8c7c4d518fc4f73c34ba1006c4dd65762cd4b82452c8da1a3595065084",
+        "candidate_unit_id": "cnu-45fbb085319b224c88cd2e83",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:a2064ac4ce1b22cfd0bde71467a1f972cc38ee3ecfdaf3e24065c74a310c0ec0",
+        "source_id": "policy-iir-026",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:c7a11c8c7c4d518fc4f73c34ba1006c4dd65762cd4b82452c8da1a3595065084",
+        "candidate_span": "Except as provided in Policy B, all requests must be logged.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-45fbb085319b224c88cd2e83",
+        "unit_type": "exception"
+      },
+      "category": "cross_reference",
+      "design_vector_id": "IIR-026",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "logged"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "Except as provided in Policy B"
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "all requests"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": [
+          {
+            "reference_kind": "EXTERNAL_DOCUMENT",
+            "reference_text": "Policy B"
+          }
+        ]
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "reference_resolved_instead_of_surfaced"
+      ],
+      "specimen_id": "IIR-026",
+      "threat_tags": [
+        "reference_expansion",
+        "reference_loss"
+      ],
+      "title": "unresolved external cross-reference inside an exception"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:5b1d915a9e4e878e07d568ec375b005574d7b4a6676e0a56d079fe1bf95e4d70",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:bbd5c428dd29fb6034b5eeaa1479270a447b17641b673160ced48befe3b0cadc",
+        "candidate_unit_id": "cnu-90b7424e20cc7b859b40cb51",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:b15d573b38b130d11aac46e31095eba0af640f113495160ce173d73d82a0af45",
+        "source_id": "policy-iir-027",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:bbd5c428dd29fb6034b5eeaa1479270a447b17641b673160ced48befe3b0cadc",
+        "candidate_span": "Departments should consider quarterly reconciliation of suspense accounts.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-90b7424e20cc7b859b40cb51",
+        "unit_type": "advisory"
+      },
+      "category": "attack",
+      "design_vector_id": "IIR-027",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "ADVISORY",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [
+              {
+                "qualifier_kind": "HEDGE",
+                "text": "should"
+              }
+            ],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "consider"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "Departments"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "ADVISORY"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "quarterly reconciliation of suspense accounts"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "advisory_strengthening"
+      ],
+      "specimen_id": "IIR-027",
+      "threat_tags": [
+        "force_strengthening"
+      ],
+      "title": "advisory-to-obligation strengthening attack"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:d2a7b79653146009bf3817b6317a46bdef84f51379f6d9636bd8cf5ee54a885e",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:45fa04bee3cfc99239ae35133651048e0c27e81889281a8386d3c4999051b0a7",
+        "candidate_unit_id": "cnu-787be45d80d4ef8c472d81d8",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:c582f253393417a217d369dc6b2d4e350f47e4b6284b35547da99b04e3984800",
+        "source_id": "policy-iir-028",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:45fa04bee3cfc99239ae35133651048e0c27e81889281a8386d3c4999051b0a7",
+        "candidate_span": "The reviewer may request additional documentation.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-787be45d80d4ef8c472d81d8",
+        "unit_type": "permission"
+      },
+      "category": "attack",
+      "design_vector_id": "IIR-028",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "PERMISSION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "request"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "The reviewer"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "PERMISSION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "additional documentation"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "permission_strengthening"
+      ],
+      "specimen_id": "IIR-028",
+      "threat_tags": [
+        "force_strengthening"
+      ],
+      "title": "permission-to-obligation strengthening attack"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:4734656187c07b8e33df9c4762ba6a23463c3d5107a8b473d6ab51bba1a8c523",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:25b8afd2631bfc120fdcb62831b77f8a2b2e9198ac2d18b5e7957ae787b90bb1",
+        "candidate_unit_id": "cnu-8c680ea9ba4d961160c7b005",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:8ea3f4c627bea28d6593ba08d181b841f82b50f9ff98a2d502d0a2563d1e4467",
+        "source_id": "policy-iir-029",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:25b8afd2631bfc120fdcb62831b77f8a2b2e9198ac2d18b5e7957ae787b90bb1",
+        "candidate_span": "The register shall be reconciled at each period end.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-8c680ea9ba4d961160c7b005",
+        "unit_type": "mandate"
+      },
+      "category": "attack",
+      "design_vector_id": "IIR-029",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "reconciled"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "The register"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "at each period end"
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "invented_actor"
+      ],
+      "specimen_id": "IIR-029",
+      "threat_tags": [
+        "invented_actor"
+      ],
+      "title": "model-invented actor attack"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:c3c3b530c81ad5eb79ae80c36b6f1b1a64e0fe1a72efa54d43c90155045004ff",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:17818c7b3894dd82c1b8f59a0c4b5ace1e6eb90919545a0ed9b328ae6bf3dcd2",
+        "candidate_unit_id": "cnu-83b88226b6f3b7bd68750506",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:ba3bcaa46488da1e1f4c0f48ace6ffb0d1be795796c9a0eda67f7d0d7bf6bcd4",
+        "source_id": "policy-iir-030",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:17818c7b3894dd82c1b8f59a0c4b5ace1e6eb90919545a0ed9b328ae6bf3dcd2",
+        "candidate_span": "All withdrawals require dual approval, except withdrawals under an approved standing order.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-83b88226b6f3b7bd68750506",
+        "unit_type": "exception"
+      },
+      "category": "attack",
+      "design_vector_id": "IIR-030",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "require"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "All withdrawals"
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "except withdrawals under an approved standing order"
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "dual approval"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "dropped_exception"
+      ],
+      "specimen_id": "IIR-030",
+      "threat_tags": [
+        "exception_preservation"
+      ],
+      "title": "model-dropped exception attack"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:29d822dad46c882f3537a6a8807a3b24807428d047169d9df785b367a3b6b0e2",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:34f20fd9a0c7644fe98e97000ca18fb7e49363694a6474262ae53e359b024d9d",
+        "candidate_unit_id": "cnu-4aed26b227c4c0e37b15cbff",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:cfc1a204fb1374aa95a758560df19a6c8806ce646810175afd3ab410b834f8d5",
+        "source_id": "policy-iir-031",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:34f20fd9a0c7644fe98e97000ca18fb7e49363694a6474262ae53e359b024d9d",
+        "candidate_span": "Transactions over 250 units must be reviewed by a second officer.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-4aed26b227c4c0e37b15cbff",
+        "unit_type": "mandate"
+      },
+      "category": "attack",
+      "design_vector_id": "IIR-031",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "reviewed"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "a second officer"
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "Transactions"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [
+              {
+                "qualifier_kind": "COMPARATOR",
+                "text": "over"
+              }
+            ],
+            "normalization": {
+              "kind": "NUMBER",
+              "raw_source_text": "250"
+            },
+            "status": "ESTABLISHED",
+            "value": "over 250 units"
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "dropped_threshold"
+      ],
+      "specimen_id": "IIR-031",
+      "threat_tags": [
+        "threshold_preservation"
+      ],
+      "title": "model-dropped threshold attack"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:885d3530cc6a23e9849f4b40c104a4138471dfe1a14feaab04cb5a05831f3ce9",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:a05bd3779d6516757e80b9b1e66ba8f2cfdd2711822863655a1c3a0a86f3998c",
+        "candidate_unit_id": "cnu-6a090f6fd3a3173277fdda23",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:96a7f9b44d26ee68feb68454d1ad7d3ee7d362db3afe1ebc2f29e5c7d973635a",
+        "source_id": "policy-iir-032",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:a05bd3779d6516757e80b9b1e66ba8f2cfdd2711822863655a1c3a0a86f3998c",
+        "candidate_span": "The notice must be sent to the registered address.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-6a090f6fd3a3173277fdda23",
+        "unit_type": "mandate"
+      },
+      "category": "attack",
+      "design_vector_id": "IIR-032",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "sent"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "the registered address"
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "The notice"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "added_business_convention"
+      ],
+      "specimen_id": "IIR-032",
+      "threat_tags": [
+        "invented_condition"
+      ],
+      "title": "model-added business convention attack"
+    },
+    {
+      "admission": {
+        "admission_receipt_id": "admrec-sha256:7a24964dfa26f92a9be3d2fe333034e0f56d5dc643b404c8e3f3b60e162eb7d4",
+        "admission_state": "ADMITTED",
+        "candidate_projection_digest": "sha256:00a911ae5370d4789a4e08e88be12b485cff038993d0184177f5f549d5a25d9d",
+        "candidate_unit_id": "cnu-7988e0e6445fdb86f06d5790",
+        "evaluation_time": "2026-06-01T00:00:00Z",
+        "reason_code": "OIC-ADM-0000",
+        "source_digest": "sha256:39a617605f49af9a12974a91c6343fa7ec5b546d1cb8b9167d4f5a84b962aba9",
+        "source_id": "policy-iir-035",
+        "source_version": "v1"
+      },
+      "candidate": {
+        "candidate_digest": "sha256:00a911ae5370d4789a4e08e88be12b485cff038993d0184177f5f549d5a25d9d",
+        "candidate_span": "Approval is required before disposal.",
+        "epistemic_state": "uncertain",
+        "interpretation_state": "extracted",
+        "unit_id": "cnu-7988e0e6445fdb86f06d5790",
+        "unit_type": "mandate"
+      },
+      "category": "unknown",
+      "design_vector_id": "IIR-035",
+      "gold": {
+        "exception_closure": "OPEN",
+        "expected_force": "OBLIGATION",
+        "expected_slots": {
+          "action": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "required"
+          },
+          "bearer": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "condition": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "counterparty": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "definiendum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "definiens": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_APPLICABLE",
+            "value": null
+          },
+          "exception": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "normative_force": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "OBLIGATION"
+          },
+          "object": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "Approval"
+          },
+          "quantum": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "NOT_ESTABLISHED",
+            "value": null
+          },
+          "temporal_qualifier": {
+            "alternatives": [],
+            "material_qualifiers": [],
+            "normalization": null,
+            "status": "ESTABLISHED",
+            "value": "before disposal"
+          }
+        },
+        "expected_unresolved_references": []
+      },
+      "gold_is_evaluator_only": true,
+      "semantic_risk_tags": [
+        "explicit_not_established"
+      ],
+      "specimen_id": "IIR-035",
+      "threat_tags": [
+        "unknown_as_false"
+      ],
+      "title": "explicit NOT_ESTABLISHED semantic slot"
+    }
+  ],
+  "unit_type_arm_rationale": "Characterization 001 preregisters the candidate_span-only arm. The provisional unit_type is an earlier model's uncertain classification; passing it would let the interpretation stage inherit and reinforce a prior model's error before there is any evidence the hint helps. The harness supports the second arm so a later A/B can run it; that A/B is not run here.",
+  "work_order": "OIC-INTERPRETATION-PROPOSAL-CHARACTERIZATION-001"
+}
