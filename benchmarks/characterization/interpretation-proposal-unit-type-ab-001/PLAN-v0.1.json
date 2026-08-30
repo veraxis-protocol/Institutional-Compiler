@@ -1,0 +1,1246 @@
+{
+  "work_order": "OIC-INTERPRETATION-PROPOSAL-UNIT-TYPE-AB-001",
+  "starting_sha": "20399bd98b2702b077c0874d36fce7f3fbb45a7f",
+  "source_corpus_path": "benchmarks/characterization/interpretation-proposal-001/CORPUS-v0.1.json",
+  "source_corpus_sha256": "462158c1f70e10838f09d02e1dc62136d30477535048852bbc110f1d6cf7f817",
+  "specimen_count": 29,
+  "runs_per_specimen": 3,
+  "arms": {
+    "A_SPAN_ONLY": {
+      "inputs": [
+        "candidate_span"
+      ],
+      "description": "exact Characterization 001 behavior"
+    },
+    "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE": {
+      "inputs": [
+        "candidate_span",
+        "provisional_unit_type"
+      ],
+      "description": "same production prompt plus the existing explicitly provisional, untrusted, non-authoritative and possibly wrong earlier-stage hint"
+    }
+  },
+  "only_experimental_difference": "presence of provisional_unit_type",
+  "planned_requests": 174,
+  "retry_policy": "none; exactly one provider call per planned request",
+  "pacing": "external client only; recommended 4 seconds after every request",
+  "interleaving": "odd run A then B; even run B then A within each specimen/run pair",
+  "request_plan": [
+    {
+      "ordinal": 1,
+      "specimen_id": "IIR-001",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 2,
+      "specimen_id": "IIR-001",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 3,
+      "specimen_id": "IIR-001",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 4,
+      "specimen_id": "IIR-001",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 5,
+      "specimen_id": "IIR-001",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 6,
+      "specimen_id": "IIR-001",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 7,
+      "specimen_id": "IIR-002",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 8,
+      "specimen_id": "IIR-002",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 9,
+      "specimen_id": "IIR-002",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 10,
+      "specimen_id": "IIR-002",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 11,
+      "specimen_id": "IIR-002",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 12,
+      "specimen_id": "IIR-002",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 13,
+      "specimen_id": "IIR-003",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 14,
+      "specimen_id": "IIR-003",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 15,
+      "specimen_id": "IIR-003",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 16,
+      "specimen_id": "IIR-003",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 17,
+      "specimen_id": "IIR-003",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 18,
+      "specimen_id": "IIR-003",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 19,
+      "specimen_id": "IIR-004",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 20,
+      "specimen_id": "IIR-004",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 21,
+      "specimen_id": "IIR-004",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 22,
+      "specimen_id": "IIR-004",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 23,
+      "specimen_id": "IIR-004",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 24,
+      "specimen_id": "IIR-004",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 25,
+      "specimen_id": "IIR-005",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 26,
+      "specimen_id": "IIR-005",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 27,
+      "specimen_id": "IIR-005",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 28,
+      "specimen_id": "IIR-005",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 29,
+      "specimen_id": "IIR-005",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 30,
+      "specimen_id": "IIR-005",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 31,
+      "specimen_id": "IIR-006",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 32,
+      "specimen_id": "IIR-006",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 33,
+      "specimen_id": "IIR-006",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 34,
+      "specimen_id": "IIR-006",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 35,
+      "specimen_id": "IIR-006",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 36,
+      "specimen_id": "IIR-006",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 37,
+      "specimen_id": "IIR-007",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 38,
+      "specimen_id": "IIR-007",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 39,
+      "specimen_id": "IIR-007",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 40,
+      "specimen_id": "IIR-007",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 41,
+      "specimen_id": "IIR-007",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 42,
+      "specimen_id": "IIR-007",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 43,
+      "specimen_id": "IIR-008",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 44,
+      "specimen_id": "IIR-008",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 45,
+      "specimen_id": "IIR-008",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 46,
+      "specimen_id": "IIR-008",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 47,
+      "specimen_id": "IIR-008",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 48,
+      "specimen_id": "IIR-008",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 49,
+      "specimen_id": "IIR-009",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 50,
+      "specimen_id": "IIR-009",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 51,
+      "specimen_id": "IIR-009",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 52,
+      "specimen_id": "IIR-009",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 53,
+      "specimen_id": "IIR-009",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 54,
+      "specimen_id": "IIR-009",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 55,
+      "specimen_id": "IIR-010",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 56,
+      "specimen_id": "IIR-010",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 57,
+      "specimen_id": "IIR-010",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 58,
+      "specimen_id": "IIR-010",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 59,
+      "specimen_id": "IIR-010",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 60,
+      "specimen_id": "IIR-010",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 61,
+      "specimen_id": "IIR-011",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 62,
+      "specimen_id": "IIR-011",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 63,
+      "specimen_id": "IIR-011",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 64,
+      "specimen_id": "IIR-011",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 65,
+      "specimen_id": "IIR-011",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 66,
+      "specimen_id": "IIR-011",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 67,
+      "specimen_id": "IIR-012",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 68,
+      "specimen_id": "IIR-012",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 69,
+      "specimen_id": "IIR-012",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 70,
+      "specimen_id": "IIR-012",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 71,
+      "specimen_id": "IIR-012",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 72,
+      "specimen_id": "IIR-012",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 73,
+      "specimen_id": "IIR-013",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 74,
+      "specimen_id": "IIR-013",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 75,
+      "specimen_id": "IIR-013",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 76,
+      "specimen_id": "IIR-013",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 77,
+      "specimen_id": "IIR-013",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 78,
+      "specimen_id": "IIR-013",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 79,
+      "specimen_id": "IIR-014",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 80,
+      "specimen_id": "IIR-014",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 81,
+      "specimen_id": "IIR-014",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 82,
+      "specimen_id": "IIR-014",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 83,
+      "specimen_id": "IIR-014",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 84,
+      "specimen_id": "IIR-014",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 85,
+      "specimen_id": "IIR-015",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 86,
+      "specimen_id": "IIR-015",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 87,
+      "specimen_id": "IIR-015",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 88,
+      "specimen_id": "IIR-015",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 89,
+      "specimen_id": "IIR-015",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 90,
+      "specimen_id": "IIR-015",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 91,
+      "specimen_id": "IIR-016",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 92,
+      "specimen_id": "IIR-016",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 93,
+      "specimen_id": "IIR-016",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 94,
+      "specimen_id": "IIR-016",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 95,
+      "specimen_id": "IIR-016",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 96,
+      "specimen_id": "IIR-016",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 97,
+      "specimen_id": "IIR-017",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 98,
+      "specimen_id": "IIR-017",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 99,
+      "specimen_id": "IIR-017",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 100,
+      "specimen_id": "IIR-017",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 101,
+      "specimen_id": "IIR-017",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 102,
+      "specimen_id": "IIR-017",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 103,
+      "specimen_id": "IIR-018",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 104,
+      "specimen_id": "IIR-018",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 105,
+      "specimen_id": "IIR-018",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 106,
+      "specimen_id": "IIR-018",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 107,
+      "specimen_id": "IIR-018",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 108,
+      "specimen_id": "IIR-018",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 109,
+      "specimen_id": "IIR-023",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 110,
+      "specimen_id": "IIR-023",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 111,
+      "specimen_id": "IIR-023",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 112,
+      "specimen_id": "IIR-023",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 113,
+      "specimen_id": "IIR-023",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 114,
+      "specimen_id": "IIR-023",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 115,
+      "specimen_id": "IIR-024",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 116,
+      "specimen_id": "IIR-024",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 117,
+      "specimen_id": "IIR-024",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 118,
+      "specimen_id": "IIR-024",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 119,
+      "specimen_id": "IIR-024",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 120,
+      "specimen_id": "IIR-024",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 121,
+      "specimen_id": "IIR-025",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 122,
+      "specimen_id": "IIR-025",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 123,
+      "specimen_id": "IIR-025",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 124,
+      "specimen_id": "IIR-025",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 125,
+      "specimen_id": "IIR-025",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 126,
+      "specimen_id": "IIR-025",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 127,
+      "specimen_id": "IIR-026",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 128,
+      "specimen_id": "IIR-026",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 129,
+      "specimen_id": "IIR-026",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 130,
+      "specimen_id": "IIR-026",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 131,
+      "specimen_id": "IIR-026",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 132,
+      "specimen_id": "IIR-026",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 133,
+      "specimen_id": "IIR-027",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 134,
+      "specimen_id": "IIR-027",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 135,
+      "specimen_id": "IIR-027",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 136,
+      "specimen_id": "IIR-027",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 137,
+      "specimen_id": "IIR-027",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 138,
+      "specimen_id": "IIR-027",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 139,
+      "specimen_id": "IIR-028",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 140,
+      "specimen_id": "IIR-028",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 141,
+      "specimen_id": "IIR-028",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 142,
+      "specimen_id": "IIR-028",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 143,
+      "specimen_id": "IIR-028",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 144,
+      "specimen_id": "IIR-028",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 145,
+      "specimen_id": "IIR-029",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 146,
+      "specimen_id": "IIR-029",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 147,
+      "specimen_id": "IIR-029",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 148,
+      "specimen_id": "IIR-029",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 149,
+      "specimen_id": "IIR-029",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 150,
+      "specimen_id": "IIR-029",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 151,
+      "specimen_id": "IIR-030",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 152,
+      "specimen_id": "IIR-030",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 153,
+      "specimen_id": "IIR-030",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 154,
+      "specimen_id": "IIR-030",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 155,
+      "specimen_id": "IIR-030",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 156,
+      "specimen_id": "IIR-030",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 157,
+      "specimen_id": "IIR-031",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 158,
+      "specimen_id": "IIR-031",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 159,
+      "specimen_id": "IIR-031",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 160,
+      "specimen_id": "IIR-031",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 161,
+      "specimen_id": "IIR-031",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 162,
+      "specimen_id": "IIR-031",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 163,
+      "specimen_id": "IIR-032",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 164,
+      "specimen_id": "IIR-032",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 165,
+      "specimen_id": "IIR-032",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 166,
+      "specimen_id": "IIR-032",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 167,
+      "specimen_id": "IIR-032",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 168,
+      "specimen_id": "IIR-032",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 169,
+      "specimen_id": "IIR-035",
+      "run_index": 1,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 170,
+      "specimen_id": "IIR-035",
+      "run_index": 1,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 171,
+      "specimen_id": "IIR-035",
+      "run_index": 2,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    },
+    {
+      "ordinal": 172,
+      "specimen_id": "IIR-035",
+      "run_index": 2,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 173,
+      "specimen_id": "IIR-035",
+      "run_index": 3,
+      "arm": "A_SPAN_ONLY"
+    },
+    {
+      "ordinal": 174,
+      "specimen_id": "IIR-035",
+      "run_index": 3,
+      "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+    }
+  ],
+  "definition_primary_diagnostic": {
+    "specimen_ids": [
+      "IIR-005",
+      "IIR-023",
+      "IIR-024"
+    ],
+    "observations": [
+      {
+        "ordinal": 25,
+        "specimen_id": "IIR-005",
+        "run_index": 1,
+        "arm": "A_SPAN_ONLY"
+      },
+      {
+        "ordinal": 26,
+        "specimen_id": "IIR-005",
+        "run_index": 1,
+        "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+      },
+      {
+        "ordinal": 27,
+        "specimen_id": "IIR-005",
+        "run_index": 2,
+        "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+      },
+      {
+        "ordinal": 28,
+        "specimen_id": "IIR-005",
+        "run_index": 2,
+        "arm": "A_SPAN_ONLY"
+      },
+      {
+        "ordinal": 29,
+        "specimen_id": "IIR-005",
+        "run_index": 3,
+        "arm": "A_SPAN_ONLY"
+      },
+      {
+        "ordinal": 30,
+        "specimen_id": "IIR-005",
+        "run_index": 3,
+        "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+      },
+      {
+        "ordinal": 109,
+        "specimen_id": "IIR-023",
+        "run_index": 1,
+        "arm": "A_SPAN_ONLY"
+      },
+      {
+        "ordinal": 110,
+        "specimen_id": "IIR-023",
+        "run_index": 1,
+        "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+      },
+      {
+        "ordinal": 111,
+        "specimen_id": "IIR-023",
+        "run_index": 2,
+        "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+      },
+      {
+        "ordinal": 112,
+        "specimen_id": "IIR-023",
+        "run_index": 2,
+        "arm": "A_SPAN_ONLY"
+      },
+      {
+        "ordinal": 113,
+        "specimen_id": "IIR-023",
+        "run_index": 3,
+        "arm": "A_SPAN_ONLY"
+      },
+      {
+        "ordinal": 114,
+        "specimen_id": "IIR-023",
+        "run_index": 3,
+        "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+      },
+      {
+        "ordinal": 115,
+        "specimen_id": "IIR-024",
+        "run_index": 1,
+        "arm": "A_SPAN_ONLY"
+      },
+      {
+        "ordinal": 116,
+        "specimen_id": "IIR-024",
+        "run_index": 1,
+        "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+      },
+      {
+        "ordinal": 117,
+        "specimen_id": "IIR-024",
+        "run_index": 2,
+        "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+      },
+      {
+        "ordinal": 118,
+        "specimen_id": "IIR-024",
+        "run_index": 2,
+        "arm": "A_SPAN_ONLY"
+      },
+      {
+        "ordinal": 119,
+        "specimen_id": "IIR-024",
+        "run_index": 3,
+        "arm": "A_SPAN_ONLY"
+      },
+      {
+        "ordinal": 120,
+        "specimen_id": "IIR-024",
+        "run_index": 3,
+        "arm": "B_SPAN_PLUS_PROVISIONAL_UNIT_TYPE"
+      }
+    ],
+    "observation_count": 18,
+    "report_categories": [
+      "CONSTITUTIVE_DEFINITION_PROPOSED",
+      "FORCE_OMITTED",
+      "OTHER_FORCE_PROPOSED"
+    ]
+  },
+  "regression_sentinels": [
+    "IIR-004",
+    "IIR-027",
+    "IIR-003",
+    "IIR-028",
+    "IIR-006",
+    "IIR-015",
+    "IIR-016",
+    "IIR-017",
+    "IIR-018",
+    "IIR-029",
+    "IIR-030",
+    "IIR-031",
+    "IIR-032",
+    "IIR-035"
+  ],
+  "corrected_paired_metrics": [
+    "force_paired_outcomes",
+    "definition_force_paired_outcomes",
+    "unsupported_semantic_assignments",
+    "wrong_role_assignments",
+    "established_slot_compatibility",
+    "bearer_counterparty_swaps",
+    "material_omissions",
+    "material_wrong_slot_placements",
+    "threshold_comparator_loss",
+    "exception_preservation",
+    "condition_preservation",
+    "source_quote_grounding",
+    "unresolved_reference_surfacing_and_kind",
+    "semantic_strengthening_instances",
+    "ambiguity_collapse",
+    "semantic_hash_stability",
+    "slot_set_stability"
+  ],
+  "paired_defect_cells": [
+    "A_ONLY_DEFECT",
+    "B_ONLY_DEFECT",
+    "BOTH_DEFECT",
+    "NEITHER_DEFECT"
+  ],
+  "live_run_executed": false,
+  "model_call_made": false,
+  "production_prompt_changed": false,
+  "canonicalization_implemented": false,
+  "institutional_ir_runtime_implemented": false,
+  "independent_validation_claim": false,
+  "self_adjudication": "NOT SELF-ADJUDICATED",
+  "claim_ceiling": "A preregistered experiment isolating one prompt-input factor only; no semantic correctness, canonical meaning, model authority, production readiness, cross-model generalization, canonicalization, Institutional IR runtime, legal interpretation, or independent validation is established."
+}

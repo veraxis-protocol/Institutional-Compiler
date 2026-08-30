@@ -1,0 +1,23 @@
+{
+  "freeze_id": "OIC-INTERPRETATION-PROPOSAL-UNIT-TYPE-AB-001-PLAN-FREEZE-v0.1",
+  "phase_a_final_sha": "20399bd98b2702b077c0874d36fce7f3fbb45a7f",
+  "phase_a_audit_sha256": "b688779640d014e6c5cf6f7a61cc3ed9cc4d4313a13df0ed54114dcf3579b774",
+  "plan_path": "benchmarks/characterization/interpretation-proposal-unit-type-ab-001/PLAN-v0.1.json",
+  "plan_sha256": "134173f2314d66a943ebe1f35e3b00c124b731433a693de6138bfdc0b248f1d4",
+  "plan_bytes": 27511,
+  "source_corpus_sha256": "462158c1f70e10838f09d02e1dc62136d30477535048852bbc110f1d6cf7f817",
+  "production_interpretation_proposal_sha256": "921a569952ff8d1f3c3acd2f3b3a27be6f3c41ae4a1cc78d8f809317166a7ce0",
+  "specimen_count": 29,
+  "runs_per_specimen": 3,
+  "arm_count": 2,
+  "paired_request_count": 174,
+  "definition_arm_observation_count": 18,
+  "regression_sentinel_count": 14,
+  "live_run_executed": false,
+  "model_call_made": false,
+  "production_prompt_changed": false,
+  "canonicalization_implemented": false,
+  "institutional_ir_runtime_implemented": false,
+  "independent_validation_claim": false,
+  "self_adjudication": "NOT SELF-ADJUDICATED"
+}
