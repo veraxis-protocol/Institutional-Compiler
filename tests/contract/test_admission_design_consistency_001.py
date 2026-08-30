@@ -6,6 +6,7 @@ import copy
 import hashlib
 import json
 import subprocess
+import sys
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Any, cast
@@ -15,7 +16,17 @@ from jsonschema import FormatChecker
 from jsonschema.validators import Draft202012Validator
 from referencing import Registry, Resource
 
+# The work-order scope helper is a test-only module that deliberately does not live in
+# src/oic, and tests/ is not a package, so it is loaded from its path rather than by name.
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from work_order_scope import ADMISSION_DESIGN_CONSISTENCY_001, changed_paths
+finally:
+    sys.path.pop(0)
+
 pytestmark = pytest.mark.contract
+
+WORK_ORDER = ADMISSION_DESIGN_CONSISTENCY_001
 
 DESIGN = Path("design/admission-boundary-001")
 STARTING_SHA = "e445c25a4f657c59fbfe32617f46153ac678150c"
@@ -623,14 +634,16 @@ def test_no_receipt_only_or_model_confidence_fields_are_in_input_schema(repo_roo
 
 
 def test_production_candidate_and_historical_freeze_remain_unchanged(repo_root: Path) -> None:
-    changed = subprocess.run(
-        ["git", "diff", "--name-only", f"{STARTING_SHA}...HEAD", "--", "src", "schemas"],
-        cwd=repo_root,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout
-    assert changed == ""
+    """Two separate guarantees, kept separate.
+
+    The scope half is evaluated over ``base...tip``, the range this closed work order
+    actually produced, so a later authorized commit cannot retroactively falsify it. The
+    standing half — that the protected artifacts still hold their frozen bytes right now
+    — is checked against the working tree below, where it belongs.
+    """
+    assert WORK_ORDER.base == STARTING_SHA
+    changed_in_scope = changed_paths(repo_root, WORK_ORDER)
+    assert [path for path in changed_in_scope if path.startswith(("src/", "schemas/"))] == []
     protected = (
         "src/oic/candidate_extraction.py",
         "src/oic/nvidia_nim.py",
@@ -650,13 +663,7 @@ def test_production_candidate_and_historical_freeze_remain_unchanged(repo_root: 
 
 
 def test_changes_remain_design_and_contract_tests_only(repo_root: Path) -> None:
-    changed = subprocess.run(
-        ["git", "diff", "--name-only", f"{STARTING_SHA}...HEAD"],
-        cwd=repo_root,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.splitlines()
+    changed = changed_paths(repo_root, WORK_ORDER)
     assert all(
         path.startswith(f"{DESIGN}/")
         or path

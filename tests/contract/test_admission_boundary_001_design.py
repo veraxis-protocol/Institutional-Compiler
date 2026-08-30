@@ -5,13 +5,24 @@ from __future__ import annotations
 import hashlib
 import json
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any, cast
 
 import pytest
 from jsonschema.validators import Draft202012Validator
 
+# The work-order scope helper is a test-only module that deliberately does not live in
+# src/oic, and tests/ is not a package, so it is loaded from its path rather than by name.
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from work_order_scope import ADMISSION_BOUNDARY_001_DESIGN, changed_paths
+finally:
+    sys.path.pop(0)
+
 pytestmark = pytest.mark.contract
+
+WORK_ORDER = ADMISSION_BOUNDARY_001_DESIGN
 
 DESIGN_DIR = Path("design/admission-boundary-001")
 STARTING_FREEZE = "6968dfc04f2108e910e1983b15262e2b26bf7fc9"
@@ -317,28 +328,15 @@ def test_preregistration_answers_all_falsification_questions(repo_root: Path) ->
 
 
 def test_phase_b_does_not_change_candidate_or_production_trees(repo_root: Path) -> None:
-    changed_production = subprocess.run(
-        ["git", "diff", "--name-only", f"{STARTING_FREEZE}...HEAD", "--", "src", "schemas"],
-        cwd=repo_root,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout
-    assert changed_production == ""
-    candidate_at_freeze = subprocess.run(
-        ["git", "show", f"{STARTING_FREEZE}:src/oic/candidate_extraction.py"],
-        cwd=repo_root,
-        check=True,
-        capture_output=True,
-    ).stdout
-    assert (repo_root / "src/oic/candidate_extraction.py").read_bytes() == candidate_at_freeze
-    changed = subprocess.run(
-        ["git", "diff", "--name-only", f"{STARTING_FREEZE}...HEAD"],
-        cwd=repo_root,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.splitlines()
+    """The scope of this closed work order, evaluated over the range it actually produced.
+
+    ``base...tip``, never ``base...HEAD``: a later, separately authorized commit cannot
+    retroactively falsify a receipt that was true when it was issued. The recorded range
+    is still anchored to this repository — rewrite it and ``changed_paths`` fails.
+    """
+    assert WORK_ORDER.base == STARTING_FREEZE
+    changed = changed_paths(repo_root, WORK_ORDER)
+    assert [path for path in changed if path.startswith(("src/", "schemas/"))] == []
     assert all(
         path.startswith(f"{DESIGN_DIR}/")
         or path
@@ -348,6 +346,18 @@ def test_phase_b_does_not_change_candidate_or_production_trees(repo_root: Path) 
         }
         for path in changed
     )
+
+
+def test_the_frozen_candidate_layer_still_holds_its_frozen_bytes(repo_root: Path) -> None:
+    """The standing half of the guarantee: the temporal binding above says nothing about
+    what the working tree holds now, so that is checked here, against HEAD, on purpose."""
+    candidate_at_freeze = subprocess.run(
+        ["git", "show", f"{STARTING_FREEZE}:src/oic/candidate_extraction.py"],
+        cwd=repo_root,
+        check=True,
+        capture_output=True,
+    ).stdout
+    assert (repo_root / "src/oic/candidate_extraction.py").read_bytes() == candidate_at_freeze
 
 
 def test_claim_ceiling_and_role_separation_are_frozen(corpus: dict[str, Any]) -> None:

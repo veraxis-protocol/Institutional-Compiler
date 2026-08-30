@@ -71,10 +71,25 @@ CANADA_RIGHTS_RESOLUTION_DOSSIER = WorkOrder(
     tip="29daa374b7e5cdc30ca7788310fbabb85f19912b",
 )
 
+# The closed admission design work orders. Each produced exactly one commit; their scope
+# assertions are evidence about that commit, not about whatever HEAD later becomes.
+ADMISSION_BOUNDARY_001_DESIGN = WorkOrder(
+    name="design/admission-boundary-001-preregistration",
+    base="6968dfc04f2108e910e1983b15262e2b26bf7fc9",
+    tip="e445c25a4f657c59fbfe32617f46153ac678150c",
+)
+ADMISSION_DESIGN_CONSISTENCY_001 = WorkOrder(
+    name="design/admission-design-consistency-001",
+    base="e445c25a4f657c59fbfe32617f46153ac678150c",
+    tip="9fa2c684841ea89632bfe0129f98177761d85d12",
+)
+
 CLOSED_WORK_ORDERS = (
     CANADA_ACQUISITION_PREFLIGHT,
     CANADA_RIGHTS_FREEZE,
     CANADA_RIGHTS_RESOLUTION_DOSSIER,
+    ADMISSION_BOUNDARY_001_DESIGN,
+    ADMISSION_DESIGN_CONSISTENCY_001,
 )
 
 

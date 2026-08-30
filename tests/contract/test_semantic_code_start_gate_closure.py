@@ -154,12 +154,18 @@ def _isolated_gate_tree(repo_root: Path, tmp_path: Path) -> Path:
             shutil.copytree(
                 source,
                 target,
+                # The pre-gate baseline is what the detector is specified against, so
+                # every separately authorized post-gate path is excluded from the tree
+                # it is shown. Leaving one in would test the detector against a state
+                # its immutable baseline was never written to describe.
                 ignore=shutil.ignore_patterns(
                     "__pycache__",
                     "model_provider.py",
                     "nvidia_nim.py",
                     "candidate_extraction.py",
                     "review_docket.py",
+                    "admission.py",
+                    "admission_specs",
                 ),
             )
         else:

@@ -27,6 +27,10 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 oic = ["py.typed"]
+# The frozen Admission Boundary 001 specifications are read at runtime by
+# `oic.admission`, so they must be in the wheel: the evaluator has to work from an
+# installed package with no `design/` tree present.
+"oic.admission_specs" = ["*.json"]
 
 # --------------------------------------------------------------------------
 # Ruff

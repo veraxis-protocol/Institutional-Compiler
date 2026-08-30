@@ -1318,6 +1318,10 @@ def test_source_modules_match_bounded_owner_authorization(repo_root: Path) -> No
         "nvidia_nim.py",
         "candidate_extraction.py",
         "review_docket.py",
+        # Admission Runtime 001: the deterministic reference evaluator over the frozen
+        # Admission Boundary 001 contract. No model participates in it and it authorizes
+        # no runtime execution.
+        "admission.py",
     }
 
 

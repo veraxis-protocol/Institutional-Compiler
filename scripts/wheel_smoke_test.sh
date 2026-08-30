@@ -66,6 +66,37 @@ assert "site-packages" in location.parts, (
 PY
 
 echo
+echo "==> Admission evaluator runs from the installed package, with no design/ tree"
+# The frozen admission specifications are read at runtime. If they were left out of the
+# wheel, or if the evaluator silently fell back to the repository's design/ tree, this
+# would fail: the working directory is moved away from the repository first, and both an
+# ADMITTED and a fail-closed vector are driven through the real byte boundary.
+cp design/admission-boundary-001/TEST-VECTORS-v0.2.json "${work_dir}/vectors.json"
+(
+  cd "${work_dir}"
+  "${venv_python}" - <<'ADMISSION_SMOKE'
+import json
+import pathlib
+
+import oic.admission as admission
+
+location = pathlib.Path(admission.__file__).resolve()
+assert "site-packages" in location.parts, f"expected an installed package, got {location}"
+assert not pathlib.Path("design").exists(), "the design tree must not be reachable here"
+
+corpus = json.loads(pathlib.Path("vectors.json").read_text(encoding="utf-8"))
+vectors = {vector["vector_id"]: vector for vector in corpus["vectors"]}
+for vector_id in ("ADM-001", "ADM-003"):
+    vector = vectors[vector_id]
+    payload = admission.canonical_json(vector["executable_input"])
+    receipt = admission.evaluate_admission_bytes(payload)
+    assert receipt.to_json() == vector["expected_receipt"], vector_id
+    print(f"{vector_id}: {receipt.admission_state.value} {receipt.reason_code.value}")
+print("admission evaluator reproduced both vectors from site-packages")
+ADMISSION_SMOKE
+)
+
+echo
 echo "==> Console script"
 "${venv_dir}/bin/oic" --version
 "${venv_dir}/bin/oic" --help > /dev/null
