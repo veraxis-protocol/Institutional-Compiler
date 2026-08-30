@@ -16,6 +16,15 @@ FREEZE_DIR = "benchmarks/characterization/candidate-layer-freeze-001"
 FREEZE_JSON = f"{FREEZE_DIR}/FREEZE.json"
 FREEZE_MD = f"{FREEZE_DIR}/FREEZE.md"
 FROZEN_IMPLEMENTATION = "59c6b34a4972c7758ea1ef4c09fd26be5ddb507e"
+#: The artifacts Candidate Layer Freeze 001 actually froze. Separately authorized work
+#: elsewhere in `src` is outside the freeze; changing one of these is not.
+FROZEN_CANDIDATE_LAYER_FILES = (
+    "src/oic/candidate_extraction.py",
+    "src/oic/model_provider.py",
+    "src/oic/nvidia_nim.py",
+    "src/oic/review_docket.py",
+    "schemas/draft/candidate-normative-unit.schema.json",
+)
 FROZEN_JSON_SHA256 = "19501da4e34187a745a55bee6cabb10e6361d2b77905a2f668d4a73a086db8df"
 EXPECTED_CORPORA = {
     "OIC-CANDIDATE-SEMANTICS-003": (
@@ -66,21 +75,32 @@ def test_freeze_pins_the_authorized_implementation_and_state(freeze: dict[str, A
     assert freeze["self_adjudication"] == "NOT SELF-ADJUDICATED"
 
 
-def test_production_trees_are_byte_identical_to_frozen_implementation(
+def test_the_freeze_records_the_tree_objects_of_the_implementation_it_froze(
     repo_root: Path, freeze: dict[str, Any]
 ) -> None:
+    """The freeze is evidence about one commit, so it is verified against that commit.
+
+    Reading the recorded tree objects against ``HEAD`` instead would make the freeze a
+    claim that ``src`` and ``schemas`` never change again — which the freeze does not
+    say and could not be authorized to say. What the freeze actually froze is the
+    candidate layer, and that is checked, at HEAD, in the test below.
+    """
     for path in ("src", "schemas"):
-        frozen_tree = _tree(repo_root, FROZEN_IMPLEMENTATION, path)
-        assert frozen_tree == freeze["production_tree_objects"][path]
-        assert _tree(repo_root, "HEAD", path) == frozen_tree
-    changed = subprocess.run(
-        ["git", "diff", "--name-only", f"{FROZEN_IMPLEMENTATION}...HEAD", "--", "src", "schemas"],
-        cwd=repo_root,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout
-    assert changed == ""
+        assert (
+            _tree(repo_root, FROZEN_IMPLEMENTATION, path) == freeze["production_tree_objects"][path]
+        )
+
+
+def test_the_frozen_candidate_layer_still_holds_its_frozen_bytes(repo_root: Path) -> None:
+    """The standing guarantee, against the working tree: these exact artifacts are frozen."""
+    for relpath in FROZEN_CANDIDATE_LAYER_FILES:
+        frozen = subprocess.run(
+            ["git", "show", f"{FROZEN_IMPLEMENTATION}:{relpath}"],
+            cwd=repo_root,
+            check=True,
+            capture_output=True,
+        ).stdout
+        assert (repo_root / relpath).read_bytes() == frozen, relpath
 
 
 def test_referenced_corpora_match_their_pinned_digests(

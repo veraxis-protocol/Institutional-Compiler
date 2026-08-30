@@ -13,12 +13,23 @@ from __future__ import annotations
 import hashlib
 import json
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any, cast
 
 import pytest
 
+# The work-order scope helper is a test-only module that deliberately does not live in
+# src/oic, and tests/ is not a package, so it is loaded from its path rather than by name.
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from work_order_scope import CANDIDATE_SEMANTICS_005, changed_paths
+finally:
+    sys.path.pop(0)
+
 pytestmark = pytest.mark.contract
+
+WORK_ORDER = CANDIDATE_SEMANTICS_005
 
 BENCH = "benchmarks/characterization"
 DIR_005 = f"{BENCH}/candidate-semantics-005"
@@ -143,13 +154,20 @@ def test_no_out_of_scope_production_file_was_modified(repo_root: Path, relpath: 
 
 
 def test_only_the_candidate_prompt_changed_in_production(repo_root: Path) -> None:
-    """005 is a prompt-contract correction. The rest of production is untouched."""
-    changed = subprocess.run(
-        ["git", "-C", str(repo_root), "diff", "--name-only", C004, "--", "src/", "schemas/"],
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.split()
+    """005 is a prompt-contract correction. The rest of production is untouched.
+
+    Evaluated over the range 005 actually produced, never against HEAD: a later,
+    separately authorized commit is outside a closed work order's scope, and widening
+    this assertion until it tolerated one would leave it saying nothing. That the four
+    frozen production files still hold their 004 bytes *now* is a different guarantee,
+    checked against the working tree in the test above.
+    """
+    assert WORK_ORDER.base == C004
+    changed = [
+        path
+        for path in changed_paths(repo_root, WORK_ORDER)
+        if path.startswith(("src/", "schemas/"))
+    ]
     assert changed == ["src/oic/candidate_extraction.py"]
 
 
