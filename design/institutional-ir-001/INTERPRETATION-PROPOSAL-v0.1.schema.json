@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/design/institutional-ir-001/INTERPRETATION-PROPOSAL-v0.1.schema.json",
+  "title": "InterpretationProposal",
+  "description": "A provisional, untrusted semantic proposal about one ADMITTED candidate normative unit. Provider-neutral: the proposer may be a model, a human, or a deterministic rule, and the schema is identical either way. The object deliberately has no field in which confidence, authority, canonical status, interpretation evidence, an interpretation warrant, or a terminal admission or runtime state could be asserted, and additionalProperties is false, so a proposer cannot make its own output canonical by writing more of it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "proposal_id",
+    "proposal_schema_id",
+    "admission_receipt_id",
+    "candidate_unit_id",
+    "candidate_projection_digest",
+    "proposer",
+    "proposal_state",
+    "epistemic_state",
+    "proposed_assertions"
+  ],
+  "properties": {
+    "proposal_id": {
+      "type": "string",
+      "pattern": "^iip-[0-9a-z-]{1,64}$"
+    },
+    "proposal_schema_id": {
+      "const": "OIC-INTERPRETATION-PROPOSAL-v0.1"
+    },
+    "admission_receipt_id": {
+      "type": "string",
+      "pattern": "^admrec-sha256:[0-9a-f]{64}$"
+    },
+    "candidate_unit_id": {
+      "type": "string",
+      "pattern": "^cnu-[0-9a-f]{24}$"
+    },
+    "candidate_projection_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "proposer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposer_kind", "proposer_id"],
+      "description": "Who proposed. No provider, vendor, model family or endpoint is named by this schema; a proposer_id is an opaque institution-chosen label.",
+      "properties": {
+        "proposer_kind": {
+          "enum": ["MODEL", "HUMAN", "DETERMINISTIC_RULE"]
+        },
+        "proposer_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "proposal_state": {
+      "const": "PROVISIONAL",
+      "description": "A proposal is never anything else. There is no value of this field that makes it canonical."
+    },
+    "epistemic_state": {
+      "const": "uncertain"
+    },
+    "proposed_assertions": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/proposed_assertion"
+      }
+    },
+    "proposed_unresolved_references": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/proposed_reference"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "slot": {
+      "enum": [
+        "normative_force",
+        "bearer",
+        "action",
+        "object",
+        "counterparty",
+        "condition",
+        "exception",
+        "temporal_qualifier",
+        "quantum",
+        "definiendum",
+        "definiens"
+      ]
+    },
+    "proposed_assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slot", "proposed_value", "proposed_source_quote"],
+      "properties": {
+        "slot": {
+          "$ref": "#/$defs/slot"
+        },
+        "proposed_value": {
+          "type": ["string", "null"],
+          "maxLength": 4096
+        },
+        "proposed_source_quote": {
+          "type": ["string", "null"],
+          "maxLength": 4096,
+          "description": "The span of the admitted candidate the proposer says supports this value. It is a claim, not a verified fact; canonicalization verifies it against the admitted candidate."
+        },
+        "proposed_material_qualifiers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 512
+          }
+        }
+      }
+    },
+    "proposed_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference_text", "reference_kind"],
+      "properties": {
+        "reference_text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "reference_kind": {
+          "enum": ["INTERNAL_PROVISION", "EXTERNAL_DOCUMENT", "DEFINITION", "UNCLASSIFIED"]
+        }
+      }
+    }
+  }
+}

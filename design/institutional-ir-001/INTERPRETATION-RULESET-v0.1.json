@@ -1,0 +1,217 @@
+{
+  "ruleset_id": "OIC-INTERPRETATION-RULESET-001",
+  "ruleset_version": "v0.1",
+  "design_only": true,
+  "first_unsupported_slot_does_not_block_the_unit": true,
+  "slot_vocabulary": [
+    {
+      "slot": "normative_force",
+      "required_head": true,
+      "justification": "A downstream compiler cannot compute anything from a proposition whose force is unknown. Obligation, prohibition, permission, constitutive definition, delegation and advisory produce different consequences from identical wording, so force is the head of every IR unit rather than one slot among many.",
+      "values": [
+        "OBLIGATION",
+        "PROHIBITION",
+        "PERMISSION",
+        "CONSTITUTIVE_DEFINITION",
+        "DELEGATION",
+        "ADVISORY"
+      ]
+    },
+    {
+      "slot": "bearer",
+      "justification": "Who is bound, permitted, or empowered. Without it the compiler cannot attach a consequence to anyone. It is also the slot most often absent from real institutional text (agentless passive), so it must be able to be NOT_ESTABLISHED without invalidating the unit."
+    },
+    {
+      "slot": "action",
+      "justification": "The predicate the force applies to. An obligation with no action is not computable."
+    },
+    {
+      "slot": "object",
+      "justification": "What the action is performed on. 'Approve the request' and 'approve the budget' are different norms; folding the object into the action would make them indistinguishable to a compiler that never re-reads the source."
+    },
+    {
+      "slot": "counterparty",
+      "justification": "The recipient or target, kept structurally distinct from the bearer. Collapsing the two is a specific, observed failure mode: the party a duty is owed to silently becomes the party who owes it."
+    },
+    {
+      "slot": "condition",
+      "justification": "What must hold for the norm to apply. A dropped condition converts a conditional norm into an unconditional one, which is a strengthening."
+    },
+    {
+      "slot": "exception",
+      "justification": "What is carved out. A dropped exception is a strengthening. Kept separate from condition because an exception defeats an otherwise applicable norm rather than gating it, and the two are negated differently downstream."
+    },
+    {
+      "slot": "temporal_qualifier",
+      "justification": "Deadlines, durations, effective moments and temporal triggers. A deadline that disappears changes what compliance means. Non-temporal triggers are represented as conditions; only the temporal ones live here, so that a compiler can reason about time without parsing prose."
+    },
+    {
+      "slot": "quantum",
+      "justification": "Thresholds, quantities, currency amounts and their comparators. A broadened or dropped threshold changes which facts the norm reaches, and is not recoverable from the action text."
+    },
+    {
+      "slot": "definiendum",
+      "justification": "The term a constitutive definition defines. Required so a compiler never resolves an institutional term by ordinary-language meaning."
+    },
+    {
+      "slot": "definiens",
+      "justification": "The institutional meaning assigned to the definiendum, kept as its own slot so the definition's content carries its own source support and status independently of the term."
+    }
+  ],
+  "excluded_dimensions": [
+    {
+      "dimension": "scope",
+      "decision": "EXCLUDED",
+      "justification": "Jurisdiction and applicability scope are already established, and bounded, by the admission receipt and its authority evidence. An IR-level scope slot would let interpretation restate — and therefore widen — scope that admission already fixed."
+    },
+    {
+      "dimension": "consequence / remedy",
+      "decision": "EXCLUDED",
+      "justification": "Computing what follows from a breach is compilation, not meaning. Including remedy semantics here would begin designing OCE inside the IR contract. Candidate for a successor version once a compiler interface exists."
+    },
+    {
+      "dimension": "evidence duty",
+      "decision": "EXCLUDED AS A SLOT",
+      "justification": "An evidence duty is an OBLIGATION whose action is to produce or retain evidence. A dedicated slot would duplicate action and invite two representations of one norm. Representability is tested by corpus vector IIR-007, not by a special slot."
+    },
+    {
+      "dimension": "review duty",
+      "decision": "EXCLUDED AS A SLOT",
+      "justification": "Same reasoning as evidence duty; tested by IIR-008."
+    },
+    {
+      "dimension": "trigger",
+      "decision": "FOLDED",
+      "justification": "A trigger is either temporal, in which case it is a temporal_qualifier, or factual, in which case it is a condition. A third slot would make the same fact representable two ways and defeat deterministic comparison."
+    },
+    {
+      "dimension": "delegation source / delegation recipient",
+      "decision": "FOLDED",
+      "justification": "For DELEGATION force, the bearer is the delegating authority and the counterparty is the delegate. Two extra slots would encode force-specific vocabulary into a force-neutral frame."
+    },
+    {
+      "dimension": "discretion",
+      "decision": "FOLDED",
+      "justification": "Discretion is recorded as a material qualifier inside the assertion it qualifies, under PERMISSION force. Promoting it to a slot would tempt a compiler to treat discretion as an independent operator."
+    },
+    {
+      "dimension": "advisory force",
+      "decision": "FOLDED",
+      "justification": "A value of normative_force, not a slot. Giving advisory force its own slot would make one proposition representable two ways and let a unit carry an obligation and an advisory reading at once."
+    },
+    {
+      "dimension": "cross-reference",
+      "decision": "REPRESENTED AS A RELATION",
+      "justification": "A cross-reference is not a property of the proposition; it is an unresolved link to another source instance. It is carried in unresolved_references so a compiler sees explicitly that meaning is incomplete, rather than finding an empty slot."
+    }
+  ],
+  "slot_applicability_by_force": {
+    "_note": "Which slots are in question for a given force. A slot outside its force's applicable set is recorded NOT_APPLICABLE rather than NOT_ESTABLISHED, so a compiler is not forced to fail closed on a question the norm never raised.",
+    "OBLIGATION": ["bearer", "action", "object", "counterparty", "condition", "exception", "temporal_qualifier", "quantum"],
+    "PROHIBITION": ["bearer", "action", "object", "counterparty", "condition", "exception", "temporal_qualifier", "quantum"],
+    "PERMISSION": ["bearer", "action", "object", "counterparty", "condition", "exception", "temporal_qualifier", "quantum"],
+    "DELEGATION": ["bearer", "action", "object", "counterparty", "condition", "exception", "temporal_qualifier", "quantum"],
+    "ADVISORY": ["bearer", "action", "object", "counterparty", "condition", "exception", "temporal_qualifier", "quantum"],
+    "CONSTITUTIVE_DEFINITION": ["definiendum", "definiens", "condition", "exception", "temporal_qualifier", "quantum"]
+  },
+  "interpretation_status_vocabulary": [
+    {
+      "status": "ESTABLISHED",
+      "meaning": "Exactly one reading is supported by the admitted source material and is institutionally recognized under a permitted interpretation basis."
+    },
+    {
+      "status": "AMBIGUOUS",
+      "meaning": "The admitted source supports two or more readings and no permitted basis selects between them. The alternatives are enumerated. The source did say something; what it said is not settled."
+    },
+    {
+      "status": "NOT_ESTABLISHED",
+      "meaning": "The admitted source does not supply this slot at all. It is not a finding that the slot is empty in the world, and never means false."
+    },
+    {
+      "status": "NOT_APPLICABLE",
+      "meaning": "The slot is not meaningful for this normative force — for example quantum on a bare constitutive definition. Distinguished from NOT_ESTABLISHED so a compiler is not forced to fail closed on a slot that was never in question."
+    }
+  ],
+  "interpretation_basis_vocabulary": [
+    {
+      "basis": "DETERMINISTIC_NORMALIZATION",
+      "tier": "D",
+      "warrant_required": false,
+      "meaning": "A conservative, verifiable, syntax-preserving transformation of material already present in the admitted source."
+    },
+    {
+      "basis": "REGISTERED_INTERPRETATION_RULE",
+      "tier": "S",
+      "warrant_required": false,
+      "warranting_instrument": "an institution-registered, machine-verifiable interpretation rule",
+      "meaning": "The slot value is a verbatim contiguous span with exactly one syntactic attachment, and an institution-registered rule authorizes reading it that way."
+    },
+    {
+      "basis": "INSTITUTIONAL_INTERPRETATION_WARRANT",
+      "tier": "W",
+      "warrant_required": true,
+      "meaning": "An institution-controlled interpretation warrant authorizes this reading. Required whenever the reading is not forced by the source's own structure."
+    },
+    {
+      "basis": "NONE",
+      "tier": "P",
+      "warrant_required": false,
+      "meaning": "No basis. Only permissible on assertions whose status is AMBIGUOUS, NOT_ESTABLISHED or NOT_APPLICABLE. A proposal alone is always tier P."
+    }
+  ],
+  "conservative_normalizations": [
+    "canonical RFC 3339 UTC timestamp representation of a timestamp already written in the source",
+    "canonical decimal representation of a number already written in the source",
+    "canonical ISO 8601 duration representation of a duration already written in the source",
+    "ISO 4217 currency code for a currency symbol already written in the source",
+    "exact source-span references (anchor id, quote, content hash)",
+    "stable identifier ordering within the IR projection"
+  ],
+  "normalization_prohibitions": [
+    "adding an actor",
+    "resolving ambiguity",
+    "inferring a missing condition",
+    "broadening scope",
+    "changing modality",
+    "inferring authority",
+    "inferring a definition from general or dictionary knowledge",
+    "dropping or widening a quantum",
+    "dropping an exception",
+    "converting a temporal qualifier into a different one"
+  ],
+  "operations_requiring_an_interpretation_warrant": [
+    "ROLE_ASSIGNMENT",
+    "FORCE_ASSIGNMENT",
+    "DEFINITION_RESOLUTION",
+    "CROSS_REFERENCE_EXPANSION",
+    "AGGREGATION",
+    "CLOSED_WORLD_ASSUMPTION",
+    "CANONICAL_EQUIVALENCE"
+  ],
+  "forbidden_force_transitions": [
+    {"from": "ADVISORY", "to": "OBLIGATION"},
+    {"from": "PERMISSION", "to": "OBLIGATION"},
+    {"from": "PERMISSION", "to": "PROHIBITION"},
+    {"from": "ADVISORY", "to": "PROHIBITION"},
+    {"from": "PERMISSION", "to": "DELEGATION"},
+    {"from": "ADVISORY", "to": "CONSTITUTIVE_DEFINITION"}
+  ],
+  "forbidden_status_transitions": [
+    {"from": "NOT_ESTABLISHED", "to": "ESTABLISHED", "unless": "INSTITUTIONAL_INTERPRETATION_WARRANT"},
+    {"from": "AMBIGUOUS", "to": "ESTABLISHED", "unless": "INSTITUTIONAL_INTERPRETATION_WARRANT"},
+    {"from": "NOT_ESTABLISHED", "to": "false"}
+  ],
+  "forbidden_structural_transitions": [
+    "eligible -> entitled",
+    "review -> approval",
+    "recipient -> bearer",
+    "default -> universal rule",
+    "conditional -> unconditional",
+    "exception-bearing -> exceptionless",
+    "open exception closure -> closed exception closure without CLOSED_WORLD_ASSUMPTION warrant"
+  ],
+  "runtime_permission_states": [],
+  "successor_stage": "future compilation stage; not designed here",
+  "independent_validation_claim": false,
+  "self_adjudication": "NOT SELF-ADJUDICATED"
+}

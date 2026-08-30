@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/design/institutional-ir-001/INTERPRETATION-EVIDENCE-v0.1.schema.json",
+  "title": "InterpretationEvidence",
+  "description": "One institution-controlled instrument authorizing a reading. It deliberately mirrors the shape of AUTHORITY-EVIDENCE-v0.1 so a reviewer who can read one can read the other: an issuer, a basis reference, an exact source-instance binding, a bounded reach, a validity interval and a status. Two instrument kinds are distinguished. A REGISTERED_INTERPRETATION_RULE is a standing, machine-verifiable rule the institution has registered, sufficient for readings the source's own structure forces. An INSTITUTIONAL_INTERPRETATION_WARRANT is a specific institutional act, required for every reading the source does not force. A model can be neither: proposer output is not evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "interpretation_evidence_id",
+    "evidence_digest",
+    "issued_at",
+    "interpretation_authority_id",
+    "basis_kind",
+    "basis_ref",
+    "applies_to",
+    "permitted_operations",
+    "effective_from",
+    "effective_until",
+    "revoked_at",
+    "status"
+  ],
+  "properties": {
+    "interpretation_evidence_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "evidence_digest": {
+      "$ref": "#/$defs/sha256",
+      "description": "SHA-256 over Canonical JSON of this object with only its own evidence_digest omitted. A content-integrity binding, not a signature and not proof that the issuer was entitled to issue it."
+    },
+    "issued_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "interpretation_authority_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "The institutional interpretation authority. A model identifier may not appear here; a model cannot issue its own interpretation warrant."
+    },
+    "basis_kind": {
+      "enum": ["REGISTERED_INTERPRETATION_RULE", "INSTITUTIONAL_INTERPRETATION_WARRANT"]
+    },
+    "basis_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "applies_to": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "source_version", "source_digest", "slots"],
+      "description": "The exact source instance and the exact slots this instrument reaches. Binding to a source instance rather than to wording is what stops one warrant from silently authorizing a reading of similar text elsewhere.",
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "source_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "source_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "slots": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/slot"
+          }
+        }
+      }
+    },
+    "permitted_operations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "ROLE_ASSIGNMENT",
+          "FORCE_ASSIGNMENT",
+          "DEFINITION_RESOLUTION",
+          "CROSS_REFERENCE_EXPANSION",
+          "AGGREGATION",
+          "CLOSED_WORLD_ASSUMPTION",
+          "CANONICAL_EQUIVALENCE"
+        ]
+      },
+      "description": "Closed vocabulary. An operation absent from this list is not authorized by this instrument, and there is no catch-all value."
+    },
+    "effective_from": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "effective_until": {
+      "$ref": "#/$defs/nullable_timestamp"
+    },
+    "revoked_at": {
+      "$ref": "#/$defs/nullable_timestamp"
+    },
+    "status": {
+      "enum": ["ACTIVE", "SUSPENDED", "REVOKED"]
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "nullable_timestamp": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "slot": {
+      "enum": [
+        "normative_force",
+        "bearer",
+        "action",
+        "object",
+        "counterparty",
+        "condition",
+        "exception",
+        "temporal_qualifier",
+        "quantum",
+        "definiendum",
+        "definiens"
+      ]
+    }
+  }
+}

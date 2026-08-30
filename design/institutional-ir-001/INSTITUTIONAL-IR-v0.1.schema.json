@@ -1,0 +1,618 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/design/institutional-ir-001/INSTITUTIONAL-IR-v0.1.schema.json",
+  "title": "InstitutionalIRUnit",
+  "description": "One canonical institutional semantic object derived from exactly one ADMITTED candidate normative unit. This is a design-namespace successor to the historical generic schemas/draft/institutional-ir.schema.json; it does not replace it, and no migration between them is claimed. The unit carries no ALLOW, DENY, execution decision or transaction result: it states what the institution has established the source to mean, not what may be done.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ir_unit_id",
+    "ir_schema_id",
+    "interpretation_ruleset",
+    "admission",
+    "interpretation_time",
+    "assertions",
+    "exception_closure",
+    "unresolved_references",
+    "semantic_equivalence_key",
+    "supersedes_ir_unit_id"
+  ],
+  "properties": {
+    "ir_unit_id": {
+      "type": "string",
+      "pattern": "^iir-sha256:[0-9a-f]{64}$",
+      "description": "Content-derived identity. Never a random UUID and never a wall-clock value."
+    },
+    "ir_schema_id": {
+      "const": "OIC-INSTITUTIONAL-IR-001-v0.1"
+    },
+    "interpretation_ruleset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ruleset_id", "ruleset_digest"],
+      "properties": {
+        "ruleset_id": {
+          "const": "OIC-INTERPRETATION-RULESET-001"
+        },
+        "ruleset_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "admission": {
+      "$ref": "#/$defs/admission_binding"
+    },
+    "interpretation_time": {
+      "$ref": "#/$defs/timestamp",
+      "description": "Explicit and supplied, exactly as admission's evaluation_time is. No interpreter clock is consulted."
+    },
+    "assertions": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "description": "Exactly one assertion per frozen slot, always all eleven. A slot the source does not supply is present with status NOT_ESTABLISHED rather than absent, so a compiler can never mistake an omitted slot for an unexamined one.",
+      "items": {
+        "$ref": "#/$defs/assertion"
+      }
+    },
+    "exception_closure": {
+      "enum": ["OPEN", "CLOSED_BY_WARRANT"],
+      "description": "OPEN means the absence of a further exception is not a finding that none exists. CLOSED_BY_WARRANT requires an interpretation instrument carrying CLOSED_WORLD_ASSUMPTION."
+    },
+    "closed_world_evidence_refs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128
+      }
+    },
+    "unresolved_references": {
+      "type": "array",
+      "description": "Cross-references that have not been resolved. They remain visible to the compiler as explicit incompleteness rather than being expanded or dropped.",
+      "items": {
+        "$ref": "#/$defs/reference"
+      }
+    },
+    "semantic_equivalence_key": {
+      "$ref": "#/$defs/sha256",
+      "description": "SHA-256 over the canonical semantic projection alone, with no admission or source-instance binding. Two units from different source instances may share this key; that makes their semantic similarity observable without merging them into one institutional instance."
+    },
+    "supersedes_ir_unit_id": {
+      "type": ["string", "null"],
+      "pattern": "^iir-sha256:[0-9a-f]{64}$",
+      "description": "Set on a successor unit. A predecessor is never mutated when later evidence arrives."
+    },
+    "claim_ceiling": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "slot": {
+      "enum": [
+        "normative_force",
+        "bearer",
+        "action",
+        "object",
+        "counterparty",
+        "condition",
+        "exception",
+        "temporal_qualifier",
+        "quantum",
+        "definiendum",
+        "definiens"
+      ]
+    },
+    "admission_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "admission_receipt_id",
+        "admission_state",
+        "candidate_unit_id",
+        "candidate_projection_digest",
+        "source_id",
+        "source_version",
+        "source_digest",
+        "authority_evidence_refs",
+        "authority_evidence_digests",
+        "evaluation_time",
+        "evaluation_scope",
+        "ruleset_id",
+        "ruleset_digest",
+        "evaluator_id",
+        "evaluator_version"
+      ],
+      "description": "The admission receipt this unit stands on, reproduced in full enough to be reconstructable without re-running admission.",
+      "properties": {
+        "admission_receipt_id": {
+          "type": "string",
+          "pattern": "^admrec-sha256:[0-9a-f]{64}$"
+        },
+        "admission_state": {
+          "const": "ADMITTED",
+          "description": "Only ADMITTED crosses this seam. A non-ADMITTED receipt is an IR input-boundary failure, not an empty IR."
+        },
+        "candidate_unit_id": {
+          "type": "string",
+          "pattern": "^cnu-[0-9a-f]{24}$"
+        },
+        "candidate_projection_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "source_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "source_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "authority_evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "authority_evidence_digests": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/sha256"
+          }
+        },
+        "evaluation_time": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "evaluation_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["jurisdiction", "applicability"],
+          "properties": {
+            "jurisdiction": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "applicability": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          }
+        },
+        "ruleset_id": {
+          "const": "OIC-ADMISSION-BOUNDARY-001"
+        },
+        "ruleset_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "evaluator_id": {
+          "const": "oic-admission-reference-evaluator"
+        },
+        "evaluator_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        }
+      }
+    },
+    "source_support": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["anchor_id", "quote", "content_hash"],
+      "description": "Where in the admitted material this value came from. Verified against the admitted candidate; a quote the candidate does not contain is a canonicalization failure, not a repairable defect.",
+      "properties": {
+        "anchor_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "content_hash": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "alternative": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "source_support"],
+      "properties": {
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "source_support": {
+          "$ref": "#/$defs/source_support"
+        }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assertion_id",
+        "slot",
+        "interpretation_status",
+        "value",
+        "alternatives",
+        "source_support",
+        "interpretation_basis",
+        "interpretation_evidence_refs",
+        "material_qualifiers"
+      ],
+      "properties": {
+        "assertion_id": {
+          "type": "string",
+          "pattern": "^iia-[a-z_]{1,32}$"
+        },
+        "slot": {
+          "$ref": "#/$defs/slot"
+        },
+        "interpretation_status": {
+          "enum": ["ESTABLISHED", "AMBIGUOUS", "NOT_ESTABLISHED", "NOT_APPLICABLE"]
+        },
+        "value": {
+          "type": ["string", "null"],
+          "maxLength": 4096
+        },
+        "alternatives": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/alternative"
+          }
+        },
+        "source_support": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/source_support"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "interpretation_basis": {
+          "enum": [
+            "DETERMINISTIC_NORMALIZATION",
+            "REGISTERED_INTERPRETATION_RULE",
+            "INSTITUTIONAL_INTERPRETATION_WARRANT",
+            "NONE"
+          ]
+        },
+        "interpretation_evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "material_qualifiers": {
+          "type": "array",
+          "description": "Material source content attached to this slot that must not be lost: discretion markers, explicit negation, hedges, and qualifying phrases.",
+          "items": {
+            "$ref": "#/$defs/material_qualifier"
+          }
+        },
+        "normalization": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["kind", "raw_source_text", "normalized_value"],
+          "properties": {
+            "kind": {
+              "enum": [
+                "TIMESTAMP",
+                "NUMBER",
+                "CURRENCY",
+                "DURATION",
+                "NONE"
+              ]
+            },
+            "raw_source_text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "normalized_value": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "interpretation_status": {
+                "const": "ESTABLISHED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_support": {
+                "$ref": "#/$defs/source_support"
+              },
+              "interpretation_basis": {
+                "enum": [
+                  "DETERMINISTIC_NORMALIZATION",
+                  "REGISTERED_INTERPRETATION_RULE",
+                  "INSTITUTIONAL_INTERPRETATION_WARRANT"
+                ]
+              },
+              "alternatives": {
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "interpretation_status": {
+                "const": "AMBIGUOUS"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "alternatives": {
+                "minItems": 2
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "interpretation_status": {
+                "const": "NOT_ESTABLISHED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "alternatives": {
+                "maxItems": 0
+              },
+              "interpretation_basis": {
+                "const": "NONE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "interpretation_status": {
+                "const": "NOT_APPLICABLE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "alternatives": {
+                "maxItems": 0
+              },
+              "interpretation_basis": {
+                "const": "NONE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "interpretation_basis": {
+                "const": "INSTITUTIONAL_INTERPRETATION_WARRANT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "interpretation_evidence_refs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "interpretation_basis": {
+                "const": "REGISTERED_INTERPRETATION_RULE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "interpretation_evidence_refs": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "material_qualifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qualifier_kind", "text", "source_support"],
+      "properties": {
+        "qualifier_kind": {
+          "enum": [
+            "DISCRETION",
+            "NEGATION",
+            "HEDGE",
+            "SCOPE_QUALIFIER",
+            "COMPARATOR",
+            "CURRENCY",
+            "DURATION",
+            "OTHER_MATERIAL"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "source_support": {
+          "$ref": "#/$defs/source_support"
+        }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_id",
+        "reference_text",
+        "reference_kind",
+        "resolution_status",
+        "source_support",
+        "resolved_target"
+      ],
+      "properties": {
+        "reference_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "reference_text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "reference_kind": {
+          "enum": ["INTERNAL_PROVISION", "EXTERNAL_DOCUMENT", "DEFINITION", "UNCLASSIFIED"]
+        },
+        "resolution_status": {
+          "enum": ["UNRESOLVED", "RESOLVED_BY_WARRANT"],
+          "description": "There is no value meaning 'resolved by the interpreter's own reading'. Expansion requires CROSS_REFERENCE_EXPANSION on an interpretation instrument."
+        },
+        "source_support": {
+          "$ref": "#/$defs/source_support"
+        },
+        "resolved_target": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": [
+            "source_id",
+            "source_version",
+            "source_digest",
+            "admission_receipt_id",
+            "interpretation_evidence_refs"
+          ],
+          "properties": {
+            "source_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "source_version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "source_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "admission_receipt_id": {
+              "type": "string",
+              "pattern": "^admrec-sha256:[0-9a-f]{64}$"
+            },
+            "interpretation_evidence_refs": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "resolution_status": {
+                "const": "UNRESOLVED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "resolved_target": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "resolution_status": {
+                "const": "RESOLVED_BY_WARRANT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "resolved_target": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
