@@ -1,0 +1,21 @@
+{
+  "base_sha": "c4a87eb8483c3bd965612b601399463e005bd73e",
+  "canonicalization_performed": false,
+  "contract_test_path": "tests/contract/test_definition_ontology_discrimination_002.py",
+  "contract_test_sha256": "edb616315663300e89b96a77ff53e95bce144de073f25f1c813b205145c330c0",
+  "freeze_id": "OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-002-PLAN-FREEZE-v0.1",
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "instrument_path": "scripts/characterize_definition_ontology_discrimination_002.py",
+  "instrument_sha256": "96c5afe10cbeb83a155b20efb8c3704dab0b57bb263f0fcd0f80c69da51ccaf7",
+  "live_run_executed": false,
+  "model_call_made": false,
+  "plan_path": "benchmarks/characterization/definition-ontology-discrimination-002/PLAN-v0.1.json",
+  "plan_sha256": "d543a24ef8e39fb3fab3c725114913cfd7b502b9258ec07faade962f542fef27",
+  "provider_adjudicability_gate_added": true,
+  "provider_call_made": false,
+  "provider_prerequisite_work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-002",
+  "semantic_design_change_from_001": false,
+  "source_001_plan_sha256": "eda5025fbdcb2a8ef4154930ef6e5a9794d0e472696c863639ef3b5cd617a4f3",
+  "work_order": "OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-002"
+}
