@@ -1,0 +1,314 @@
+{
+  "arms": {
+    "A_FROZEN_SPAN_ONLY": {
+      "description": "exact frozen Characterization 001 span-only proposal prompt"
+    },
+    "B_ONTOLOGY_CLARIFIED_FORCE_LABEL": {
+      "description": "Arm A plus one ontology-clarification block; no unit_type or other specimen hint"
+    }
+  },
+  "canonicalization_implemented": false,
+  "claim_ceiling": "This experiment may characterize whether a fixed output-ontology clarification changes one model/provider's provisional force labeling on six frozen synthetic admitted propositions. It does not establish canonical meaning, interpretation authority, legal interpretation, production readiness, cross-model generalization, or a revised Institutional IR ontology.",
+  "controls": {
+    "b_only_force_defects_required": 0,
+    "purpose": "detect false generalization or force-label regression on delegation, advisory and permission",
+    "specimen_ids": [
+      "IIR-006",
+      "IIR-027",
+      "IIR-028"
+    ]
+  },
+  "decision_rule": {
+    "INCONCLUSIVE_EFFECT": "no REGRESSION; Arm B emits CONSTITUTIVE_DEFINITION on at least 8/9 but one or more paired-improvement or definition-slot-preservation support criteria are not met",
+    "PARTIAL_SUPPORT": "no REGRESSION; Arm B emits CONSTITUTIVE_DEFINITION on 4-7/9 primary observations",
+    "REFUTES_SIMPLE_ONTOLOGY_CLARIFICATION": "no REGRESSION; Arm B emits CONSTITUTIVE_DEFINITION on 0-3/9 primary observations",
+    "REGRESSION": "any B-only control force defect",
+    "SUPPORTS_ONTOLOGY_CLARIFICATION": "no REGRESSION; Arm B emits CONSTITUTIVE_DEFINITION on at least 8/9 primary observations; Arm B improves at least 6 paired primary observations over Arm A with both calls accepted; and definiendum/definiens compatibility does not decline versus Arm A"
+  },
+  "empirical_trigger": {
+    "b_only_sentinel_defects": 0,
+    "definition_arm_b_correct_force": "0/9",
+    "definition_definiendum_compatible_b": "9/9",
+    "definition_definiens_compatible_b": "6/6",
+    "interpretation": "The preceding A/B suggests structural definition recognition without emission of CONSTITUTIVE_DEFINITION as normative_force; this experiment tests whether the field ontology/prompt label is the limiting factor.",
+    "source_receipt_sha256": "a1cdf8bde3826074e74b0d907d55e3dab6b78fbe06760d572aef69647560369a"
+  },
+  "independent_validation_claim": false,
+  "institutional_ir_runtime_implemented": false,
+  "interleaving": "odd run A then B; even run B then A within each specimen/run pair",
+  "live_run_executed": false,
+  "model_call_made": false,
+  "only_experimental_difference": "one fixed ontology-clarification block explaining that normative_force includes CONSTITUTIVE_DEFINITION as a label for propositions that constitute term meaning",
+  "ontology_clarification_block": "\n\nONTOLOGY CLARIFICATION FOR THIS OUTPUT CONTRACT:\nThe field name `normative_force` is used here for all six allowed institutional relation labels, not only deontic modalities. `CONSTITUTIVE_DEFINITION` is therefore the required `normative_force` label when, and only when, the literal proposition itself constitutes what a term means. This label is provisional description only: it does not establish authority or canonical institutional meaning. Infer it only from the proposition; do not infer or resolve anything from outside text.",
+  "pacing": "external client only; recommended 4 seconds after every request",
+  "planned_requests": 36,
+  "primary_diagnostic": {
+    "observation_count_per_arm": 9,
+    "specimen_ids": [
+      "IIR-005",
+      "IIR-023",
+      "IIR-024"
+    ],
+    "success_value": "CONSTITUTIVE_DEFINITION"
+  },
+  "production_interpretation_proposal_sha256": "921a569952ff8d1f3c3acd2f3b3a27be6f3c41ae4a1cc78d8f809317166a7ce0",
+  "production_prompt_changed": false,
+  "request_plan": [
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 1,
+      "run_index": 1,
+      "specimen_id": "IIR-005"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 2,
+      "run_index": 1,
+      "specimen_id": "IIR-005"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 3,
+      "run_index": 2,
+      "specimen_id": "IIR-005"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 4,
+      "run_index": 2,
+      "specimen_id": "IIR-005"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 5,
+      "run_index": 3,
+      "specimen_id": "IIR-005"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 6,
+      "run_index": 3,
+      "specimen_id": "IIR-005"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 7,
+      "run_index": 1,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 8,
+      "run_index": 1,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 9,
+      "run_index": 2,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 10,
+      "run_index": 2,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 11,
+      "run_index": 3,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 12,
+      "run_index": 3,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 13,
+      "run_index": 1,
+      "specimen_id": "IIR-023"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 14,
+      "run_index": 1,
+      "specimen_id": "IIR-023"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 15,
+      "run_index": 2,
+      "specimen_id": "IIR-023"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 16,
+      "run_index": 2,
+      "specimen_id": "IIR-023"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 17,
+      "run_index": 3,
+      "specimen_id": "IIR-023"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 18,
+      "run_index": 3,
+      "specimen_id": "IIR-023"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 19,
+      "run_index": 1,
+      "specimen_id": "IIR-024"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 20,
+      "run_index": 1,
+      "specimen_id": "IIR-024"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 21,
+      "run_index": 2,
+      "specimen_id": "IIR-024"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 22,
+      "run_index": 2,
+      "specimen_id": "IIR-024"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 23,
+      "run_index": 3,
+      "specimen_id": "IIR-024"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 24,
+      "run_index": 3,
+      "specimen_id": "IIR-024"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 25,
+      "run_index": 1,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 26,
+      "run_index": 1,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 27,
+      "run_index": 2,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 28,
+      "run_index": 2,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 29,
+      "run_index": 3,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 30,
+      "run_index": 3,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 31,
+      "run_index": 1,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 32,
+      "run_index": 1,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 33,
+      "run_index": 2,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 34,
+      "run_index": 2,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "A_FROZEN_SPAN_ONLY",
+      "ordinal": 35,
+      "run_index": 3,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "B_ONTOLOGY_CLARIFIED_FORCE_LABEL",
+      "ordinal": 36,
+      "run_index": 3,
+      "specimen_id": "IIR-028"
+    }
+  ],
+  "retry_policy": "none; exactly one provider call per planned request",
+  "runs_per_specimen": 3,
+  "selected_specimens": [
+    {
+      "expected_force": "CONSTITUTIVE_DEFINITION",
+      "role": "PRIMARY_DEFINITION",
+      "specimen_id": "IIR-005"
+    },
+    {
+      "expected_force": "DELEGATION",
+      "role": "CONTROL_NEAREST_CONFOUND",
+      "specimen_id": "IIR-006"
+    },
+    {
+      "expected_force": "CONSTITUTIVE_DEFINITION",
+      "role": "PRIMARY_DEFINITION",
+      "specimen_id": "IIR-023"
+    },
+    {
+      "expected_force": "CONSTITUTIVE_DEFINITION",
+      "role": "PRIMARY_DEFINITION",
+      "specimen_id": "IIR-024"
+    },
+    {
+      "expected_force": "ADVISORY",
+      "role": "CONTROL_NONDEONTIC",
+      "specimen_id": "IIR-027"
+    },
+    {
+      "expected_force": "PERMISSION",
+      "role": "CONTROL_DEONTIC",
+      "specimen_id": "IIR-028"
+    }
+  ],
+  "self_adjudication": "NOT SELF-ADJUDICATED",
+  "source_corpus_path": "benchmarks/characterization/interpretation-proposal-001/CORPUS-v0.1.json",
+  "source_corpus_sha256": "462158c1f70e10838f09d02e1dc62136d30477535048852bbc110f1d6cf7f817",
+  "specimen_count": 6,
+  "starting_sha": "f060dc60620c5ee4f72be7846915b80872afa00f",
+  "work_order": "OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-001"
+}
