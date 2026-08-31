@@ -1,0 +1,69 @@
+{
+  "adjudicability": {
+    "accepted_observations": 36,
+    "adjudicable": true,
+    "complete_ab_pairs": 18,
+    "control_complete_pairs": 9,
+    "observed_attempts": 36,
+    "primary_complete_pairs": 9
+  },
+  "boundaries": {
+    "architectural_change_authorized": false,
+    "canonicalization_performed": false,
+    "independent_validation_claim": false,
+    "institutional_ir_constructed": false,
+    "same_work_order_rerun_authorized": false
+  },
+  "combined_arm_secondary": {
+    "boundary_rejections": 0,
+    "definiendum": {
+      "expected_established": 9,
+      "incompatible": 0,
+      "omitted": 3,
+      "proposed_compatible": 6
+    },
+    "definiens": {
+      "expected_established": 6,
+      "incompatible": 0,
+      "omitted": 0,
+      "proposed_compatible": 6
+    },
+    "provider_errors": 0
+  },
+  "control_force": {
+    "b_only_control_defects": 0,
+    "paired_cells": {
+      "A_ONLY_DEFECT": 0,
+      "BOTH_DEFECT": 0,
+      "B_ONLY_DEFECT": 0,
+      "NEITHER_DEFECT": 9
+    }
+  },
+  "evidence": {
+    "live_log_path": "$HOME/Desktop/OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-003A-LIVE.log",
+    "live_log_sha256": "91666e8365f73e2a9385d9885bd66989e2110c4440e75396ad2988bbffe5d1d9",
+    "provider_qualification_receipt_sha256": "90adcd3364ea93b56bb8a908bd0caf2d604e48e5634a7a25f9ae1325382abf51",
+    "receipt_path": ".local/interpretation-proposal-receipts/OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-003A.json",
+    "receipt_sha256": "e5c44978937109af275ecc7fc4ffae7abd0499149b37df092286396ad860cfdc"
+  },
+  "execution_status": "CLOSED",
+  "next_authorized_activity": "Preregister a new staged-decomposition successor experiment. Do not modify production architecture from Ontology 003A alone.",
+  "primary_force": {
+    "a_improvements_over_force_only_b": 0,
+    "b_improvements_over_combined_a": 4,
+    "force_only_b_correct": {
+      "correct": 9,
+      "planned": 9
+    },
+    "paired_cells": {
+      "A_ONLY_DEFECT": 4,
+      "BOTH_DEFECT": 0,
+      "B_ONLY_DEFECT": 0,
+      "NEITHER_DEFECT": 5
+    }
+  },
+  "scientific_disposition": "SUPPORTS_TASK_INTERFERENCE_HYPOTHESIS",
+  "semantic_decision_rule_evaluated": true,
+  "successor_hypothesis": "A staged semantic decomposition may preserve the 9/9 force-classification performance observed in force-only Arm B while recovering the slot-preservation defects observed in the combined proposal operation.",
+  "work_order": "OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-003A"
+}
