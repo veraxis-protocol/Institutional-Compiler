@@ -1,0 +1,418 @@
+{
+  "adjudicability_gate": {
+    "accepted_observations_required": 36,
+    "complete_ab_pairs_required": 18,
+    "control_complete_pairs_required": 9,
+    "failure_disposition": "NOT_ADJUDICABLE_PROVIDER_FAILURE",
+    "planned_observations": 36,
+    "primary_complete_pairs_required": 9,
+    "rule": "No semantic disposition may be computed unless every planned observation is ACCEPTED and every paired A/B cell is complete."
+  },
+  "architectural_change_authorized": false,
+  "arms": {
+    "A_COMBINED_ONTOLOGY_CLARIFIED": {
+      "authority_metadata_exposed": false,
+      "description": "Exact ontology-clarified combined proposal condition from Ontology 002 Arm B. Candidate span only; full frozen Interpretation Proposal output surface remains active.",
+      "gold_label_exposed": false,
+      "ontology_clarification": "ONTOLOGY CLARIFICATION FOR THIS OUTPUT CONTRACT:\nThe field name `normative_force` is used here for all six allowed institutional relation labels, not only deontic modalities. `CONSTITUTIVE_DEFINITION` is therefore the required `normative_force` label when, and only when, the literal proposition itself constitutes what a term means. This label is provisional description only: it does not establish authority or canonical institutional meaning. Infer it only from the proposition; do not infer or resolve anything from outside text.",
+      "production_prompt_path": "src/oic/interpretation_proposal.py",
+      "production_prompt_sha256": "921a569952ff8d1f3c3acd2f3b3a27be6f3c41ae4a1cc78d8f809317166a7ce0",
+      "source_instrument": "scripts/characterize_definition_ontology_discrimination.py",
+      "unit_type_hint": false
+    },
+    "B_FORCE_ONLY_ONTOLOGY_CLARIFIED": {
+      "authority_metadata_exposed": false,
+      "description": "Candidate span only; same six-label relation ontology and same constitutive-definition clarification, but no slot extraction. The model returns one provisional force label only.",
+      "gold_label_exposed": false,
+      "max_tokens": 64,
+      "output_contract": {
+        "exact_keys": [
+          "normative_force"
+        ],
+        "normative_force_allowed_values": [
+          "OBLIGATION",
+          "PROHIBITION",
+          "PERMISSION",
+          "CONSTITUTIVE_DEFINITION",
+          "DELEGATION",
+          "ADVISORY"
+        ],
+        "root_type": "object"
+      },
+      "response_format": "json_object",
+      "system_prompt": "You classify. You do not decide.\n\nYou are given one institutional proposition that has already been admitted for\ninterpretation. Admission does not establish what it means.\n\nYour only task is to propose the institutional relation expressed by the literal\nproposition.\n\nInspect only the proposition supplied. Do not use outside facts, institutional\npractice, authority metadata, source identity, or an expected answer.\n\nThe allowed provisional relation labels are exactly:\nOBLIGATION\nPROHIBITION\nPERMISSION\nCONSTITUTIVE_DEFINITION\nDELEGATION\nADVISORY\n\nONTOLOGY CLARIFICATION FOR THIS OUTPUT CONTRACT:\nThe field name `normative_force` is used here for all six allowed institutional\nrelation labels, not only deontic modalities. `CONSTITUTIVE_DEFINITION` is\ntherefore the required `normative_force` label when, and only when, the literal\nproposition itself constitutes what a term means. This label is provisional\ndescription only: it does not establish authority or canonical institutional\nmeaning. Infer it only from the proposition; do not infer or resolve anything\nfrom outside text.\n\nReturn exactly one JSON object with exactly one key:\n{\"normative_force\":\"<ONE_ALLOWED_LABEL>\"}\n\nReturn no explanation, confidence, score, status, authority claim, identifier,\nslot extraction, or other key.",
+      "temperature": 0,
+      "unit_type_hint": false,
+      "user_prompt_template": "Classify only the provisional institutional relation expressed by this admitted proposition.\n\nReturn exactly {\"normative_force\":\"<ONE_ALLOWED_LABEL>\"}.\n\nADMITTED PROPOSITION:\n{candidate_span}"
+    }
+  },
+  "canonicalization_implemented": false,
+  "claim_ceiling": "This experiment may characterize whether a force-only task is more reliable than the combined proposal task for one model/provider on six frozen synthetic admitted propositions. It does not establish canonical meaning, interpretation authority, legal validity, production staging, a schema split, a revised Institutional IR ontology, cross-model generalization, or an architectural change.",
+  "competing_explanations": [
+    "relation-ontology insufficiency",
+    "generative task interference between force classification and slot extraction",
+    "model/provider instability at the classification boundary"
+  ],
+  "control_endpoint": {
+    "metric": "Correct force classification on delegation, advisory, and permission controls.",
+    "regression": "any B-only control-force defect"
+  },
+  "control_pairs": 9,
+  "execution_repair": {
+    "forbidden_renderer": "whole-string str.format",
+    "force_only_literal_json_example": "{\"normative_force\":\"<ONE_ALLOWED_LABEL>\"}",
+    "literal_json_braces_preserved": true,
+    "materialization_provider_constructed": false,
+    "offline_materialization_manifest_path": "benchmarks/characterization/definition-ontology-discrimination-003a/REQUEST-MATERIALIZATION-v0.1.json",
+    "offline_request_materialization_count": 36,
+    "offline_request_materialization_required": true,
+    "repair_scope": "REQUEST_RENDERING_ONLY",
+    "required_materialization_checks": [
+      "all 36 planned requests materialize without exception",
+      "ordinal/specimen/run/arm identity matches frozen request_plan",
+      "Arm A request semantics remain identical to Ontology 003",
+      "Arm B substitutes only the literal {candidate_span} token",
+      "Arm B runtime prompt preserves the literal JSON example exactly",
+      "no unresolved {candidate_span} token remains",
+      "no gold label is exposed",
+      "no authority metadata is exposed",
+      "no provider is constructed",
+      "no network request is made"
+    ],
+    "required_renderer": "literal substitution of the exact token {candidate_span} only",
+    "semantic_prompt_text_changed": false
+  },
+  "force_values": [
+    "OBLIGATION",
+    "PROHIBITION",
+    "PERMISSION",
+    "CONSTITUTIVE_DEFINITION",
+    "DELEGATION",
+    "ADVISORY"
+  ],
+  "independent_validation_claim": false,
+  "institutional_ir_runtime_implemented": false,
+  "interleaving": "Within each specimen/run pair: odd run A then B; even run B then A.",
+  "pacing_seconds": 4.0,
+  "planned_pairs": 18,
+  "planned_requests": 36,
+  "primary_endpoint": {
+    "metric": "Correct provisional normative-force classification on the nine primary definition observations.",
+    "paired_metric": "Count of primary A/B pairs in which force-only B is correct and combined A is incorrect, versus the reverse direction."
+  },
+  "primary_pairs": 9,
+  "prior_incident_binding": {
+    "closed_status": "EXECUTION_ABORTED_INSTRUMENT_DEFECT",
+    "closed_work_order": "OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-003",
+    "closure_commit": "1d3833b9be6caef7906aef75016967dc709c3931",
+    "complete_ab_pairs": 0,
+    "incident_path": "benchmarks/characterization/definition-ontology-discrimination-003/EXECUTION-INCIDENT-v0.1.json",
+    "incident_sha256": "995359db702a9a69fe7d23424238ec152ad04d9763adce1accefe6c0e12277ef",
+    "post_run_incident_path": "benchmarks/characterization/definition-ontology-discrimination-003/POST-RUN-INCIDENT.md",
+    "post_run_incident_sha256": "3344e1ac6b382bdadcb765967c8ca2b63681159e0963f5400e7421a61440355f",
+    "provider_calls_consumed": 1,
+    "same_work_order_rerun_authorized": false,
+    "scientific_result": null
+  },
+  "prior_result_binding": {
+    "architectural_change_authorized": false,
+    "b_only_control_force_defects": 0,
+    "combined_ontology_clarified_primary_force_correct": {
+      "correct": 7,
+      "planned": 9
+    },
+    "definition_slots_no_decline": false,
+    "paired_primary_improvements_b_over_a": 7,
+    "post_run_adjudication_path": "benchmarks/characterization/definition-ontology-discrimination-002/POST-RUN-ADJUDICATION.md",
+    "post_run_adjudication_sha256": "7db5217bc11eb70216cbf47e1c70fe129ae75060659ec02ce9e7fceb2f146c9d",
+    "receipt_002_sha256": "4016c845757478518130a1570b1e2074550943ec46196ec8671c37e85bec4056",
+    "scientific_disposition": "PARTIAL_SUPPORT"
+  },
+  "production_code_changed": false,
+  "production_prompt_changed": false,
+  "provider_prerequisite": {
+    "receipt_path": ".local/provider-qualification-receipts/OIC-NVIDIA-PROVIDER-QUALIFICATION-003A.json",
+    "required_disposition": "QUALIFIED",
+    "required_semantic_successor_authorized": true,
+    "required_semantic_successor_target": "OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-003A",
+    "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-003A"
+  },
+  "purpose": "Discriminate whether residual constitutive-definition force failures are consistent with interference from performing force classification and multi-slot extraction in one generative proposal operation.",
+  "request_plan": [
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 1,
+      "run_index": 1,
+      "specimen_id": "IIR-005"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 2,
+      "run_index": 1,
+      "specimen_id": "IIR-005"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 3,
+      "run_index": 2,
+      "specimen_id": "IIR-005"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 4,
+      "run_index": 2,
+      "specimen_id": "IIR-005"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 5,
+      "run_index": 3,
+      "specimen_id": "IIR-005"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 6,
+      "run_index": 3,
+      "specimen_id": "IIR-005"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 7,
+      "run_index": 1,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 8,
+      "run_index": 1,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 9,
+      "run_index": 2,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 10,
+      "run_index": 2,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 11,
+      "run_index": 3,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 12,
+      "run_index": 3,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 13,
+      "run_index": 1,
+      "specimen_id": "IIR-023"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 14,
+      "run_index": 1,
+      "specimen_id": "IIR-023"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 15,
+      "run_index": 2,
+      "specimen_id": "IIR-023"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 16,
+      "run_index": 2,
+      "specimen_id": "IIR-023"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 17,
+      "run_index": 3,
+      "specimen_id": "IIR-023"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 18,
+      "run_index": 3,
+      "specimen_id": "IIR-023"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 19,
+      "run_index": 1,
+      "specimen_id": "IIR-024"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 20,
+      "run_index": 1,
+      "specimen_id": "IIR-024"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 21,
+      "run_index": 2,
+      "specimen_id": "IIR-024"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 22,
+      "run_index": 2,
+      "specimen_id": "IIR-024"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 23,
+      "run_index": 3,
+      "specimen_id": "IIR-024"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 24,
+      "run_index": 3,
+      "specimen_id": "IIR-024"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 25,
+      "run_index": 1,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 26,
+      "run_index": 1,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 27,
+      "run_index": 2,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 28,
+      "run_index": 2,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 29,
+      "run_index": 3,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 30,
+      "run_index": 3,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 31,
+      "run_index": 1,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 32,
+      "run_index": 1,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 33,
+      "run_index": 2,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 34,
+      "run_index": 2,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 35,
+      "run_index": 3,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 36,
+      "run_index": 3,
+      "specimen_id": "IIR-028"
+    }
+  ],
+  "retry_policy": "none; exactly one provider call per planned request",
+  "runs_per_specimen": 3,
+  "secondary_descriptive_endpoints": [
+    "per-specimen 3-run force stability for each arm",
+    "combined-arm definiendum compatibility",
+    "combined-arm definiens compatibility",
+    "provider and boundary error counts",
+    "source-quote grounding for combined arm"
+  ],
+  "selected_specimens": [
+    {
+      "expected_force": "CONSTITUTIVE_DEFINITION",
+      "role": "PRIMARY_DEFINITION",
+      "specimen_id": "IIR-005"
+    },
+    {
+      "expected_force": "DELEGATION",
+      "role": "CONTROL_NEAREST_CONFOUND",
+      "specimen_id": "IIR-006"
+    },
+    {
+      "expected_force": "CONSTITUTIVE_DEFINITION",
+      "role": "PRIMARY_DEFINITION",
+      "specimen_id": "IIR-023"
+    },
+    {
+      "expected_force": "CONSTITUTIVE_DEFINITION",
+      "role": "PRIMARY_DEFINITION",
+      "specimen_id": "IIR-024"
+    },
+    {
+      "expected_force": "ADVISORY",
+      "role": "CONTROL_NONDEONTIC",
+      "specimen_id": "IIR-027"
+    },
+    {
+      "expected_force": "PERMISSION",
+      "role": "CONTROL_DEONTIC",
+      "specimen_id": "IIR-028"
+    }
+  ],
+  "self_adjudication": "NOT SELF-ADJUDICATED",
+  "semantic_decision_rule": {
+    "INCONCLUSIVE": "Adjudicable and no control regression, but none of the stronger directional rules above is satisfied.",
+    "REFUTES_FORCE_ONLY_ADVANTAGE": "No control regression, but combined Arm A is correct and force-only Arm B is incorrect in at least 2 paired primary observations.",
+    "REGRESSION": "Any B-only control-force defect.",
+    "SUPPORTS_TASK_INTERFERENCE_HYPOTHESIS": "No control regression; force-only Arm B is correct on at least 8/9 primary observations; and Arm B improves at least 2 paired primary observations over combined Arm A."
+  },
+  "semantic_design_vs_003": "UNCHANGED",
+  "semantic_hypothesis": "Force classification and slot extraction may interfere when required in one generative proposal operation. If that is materially responsible for the residual failures observed in 002, an ontology-clarified force-only task should classify primary definitions more reliably than the ontology-clarified combined proposal task while preserving controls.",
+  "source_bindings": {
+    "corpus_path": "benchmarks/characterization/interpretation-proposal-001/CORPUS-v0.1.json",
+    "corpus_sha256": "462158c1f70e10838f09d02e1dc62136d30477535048852bbc110f1d6cf7f817",
+    "production_interpretation_proposal_path": "src/oic/interpretation_proposal.py",
+    "production_interpretation_proposal_sha256": "921a569952ff8d1f3c3acd2f3b3a27be6f3c41ae4a1cc78d8f809317166a7ce0"
+  },
+  "starting_sha": "1d3833b9be6caef7906aef75016967dc709c3931",
+  "successor_of": "OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-003",
+  "work_order": "OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-003A"
+}
