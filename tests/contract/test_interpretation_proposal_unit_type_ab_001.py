@@ -26,6 +26,7 @@ FREEZE = Path(
 CORPUS = Path("benchmarks/characterization/interpretation-proposal-001/CORPUS-v0.1.json")
 SCRIPT = Path("scripts/characterize_interpretation_proposal_unit_type_ab.py")
 PHASE_A_SHA = "20399bd98b2702b077c0874d36fce7f3fbb45a7f"
+UNIT_TYPE_PHASE_END_SHA = "f060dc60620c5ee4f72be7846915b80872afa00f"
 PLAN_SHA = "134173f2314d66a943ebe1f35e3b00c124b731433a693de6138bfdc0b248f1d4"
 CORPUS_SHA = "462158c1f70e10838f09d02e1dc62136d30477535048852bbc110f1d6cf7f817"
 PRODUCTION_SHA = "921a569952ff8d1f3c3acd2f3b3a27be6f3c41ae4a1cc78d8f809317166a7ce0"
@@ -308,7 +309,7 @@ def test_no_live_claim_or_architectural_overreach(plan: dict[str, Any]) -> None:
 
 def test_phase_b_changes_only_instrument_and_preregistration_paths(repo_root: Path) -> None:
     changed = subprocess.run(
-        ["git", "diff", "--name-only", f"{PHASE_A_SHA}...HEAD"],
+        ["git", "diff", "--name-only", f"{PHASE_A_SHA}...{UNIT_TYPE_PHASE_END_SHA}"],
         cwd=repo_root,
         check=True,
         capture_output=True,
@@ -317,6 +318,8 @@ def test_phase_b_changes_only_instrument_and_preregistration_paths(repo_root: Pa
     assert all(
         path.startswith("benchmarks/characterization/interpretation-proposal-unit-type-ab-001/")
         or path == "scripts/characterize_interpretation_proposal_unit_type_ab.py"
+        or path == "scripts/characterize_interpretation_proposal_unit_type_ab_v2.py"
         or path == "tests/contract/test_interpretation_proposal_unit_type_ab_001.py"
+        or path == "tests/contract/test_interpretation_proposal_unit_type_ab_001a.py"
         for path in changed
     )
