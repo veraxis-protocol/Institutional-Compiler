@@ -1,0 +1,84 @@
+{
+  "authorization_rule": "Only QUALIFIED authorizes execution of the already-preregistered OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-002.",
+  "base_sha": "17775d93b93e00e3dd9a8bb10c97ae9eda373ebe",
+  "canonicalization_performed": false,
+  "claim_ceiling": "This work order establishes only bounded availability of the exact NVIDIA provider path under three fixed probes after a recorded remediation signal. It does not establish model quality, institutional semantics, canonical meaning, production readiness, or cross-provider reliability.",
+  "decision_rule": {
+    "DEGRADED": "All 3 probes ACCEPTED but one or more elapsed_seconds > 45.0; semantic successor remains unauthorized.",
+    "NOT_QUALIFIED": "Any provider error, response mismatch, missing probe, or incomplete execution; semantic successor remains unauthorized.",
+    "QUALIFIED": "All 3 probes ACCEPTED, markers valid, and every elapsed_seconds <= 45.0."
+  },
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "latency_headroom_seconds": 45.0,
+  "live_run_executed": false,
+  "pacing_seconds": 4.0,
+  "planned_probe_count": 3,
+  "predecessor_001_probe_plan_semantics": "UNCHANGED",
+  "predecessor_failure_evidence": {
+    "cross_model_diagnostic_001a_response_sha256": "4110a3b4f0115eaa2425909d05ca5f8ea184cd42b40b73490aa38f0e67c74823",
+    "cross_model_diagnostic_001a_result_sha256": "51f4c674477e51d6c7efaf65c83dd55face113e905f600d4c13b01604e3551d5",
+    "observed_failure_class": "authenticated model discovery succeeded, while /v1/chat/completions timed out for target model and returned HTTP 404 'Function ... Not found for account' for an alternative account-visible model",
+    "qualification_001_disposition": "NOT_QUALIFIED",
+    "qualification_001_plan_sha256": "a72370f16e93048466ecc25d9d03b8d85d43e055b1f8d2d467750116c779c02e",
+    "qualification_001_receipt_sha256": "f8c0f60d669f6057cf7e8514473a19bd14c9c43736355802050608e4f94d5705",
+    "qualification_001_work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-001",
+    "raw_chat_diagnostic_001_result_sha256": "f7c2396e3d2be8522b290d90af8584e4934ba34737216a25cab326c8160c3142"
+  },
+  "probe_spec_sha256": "262445c71ca34f41dd9d173a978ebcaa7bd71df2f313f0c9b090b9fd4a8925d1",
+  "probes": [
+    {
+      "expected_mode": "TEXT_MARKER",
+      "expected_value": "OIC_PROVIDER_OK",
+      "max_tokens": 16,
+      "ordinal": 1,
+      "probe_id": "BASIC_TEXT",
+      "response_format": null,
+      "temperature": 0.0
+    },
+    {
+      "expected_mode": "JSON_STATUS",
+      "expected_value": "OIC_PROVIDER_OK",
+      "max_tokens": 64,
+      "ordinal": 2,
+      "probe_id": "JSON_MODE",
+      "response_format": {
+        "type": "json_object"
+      },
+      "temperature": 0.0
+    },
+    {
+      "expected_mode": "JSON_STATUS",
+      "expected_value": "OIC_PROVIDER_OK",
+      "max_tokens": 4096,
+      "ordinal": 3,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "response_format": {
+        "type": "json_object"
+      },
+      "temperature": 0.0
+    }
+  ],
+  "provider": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "timeout_seconds": 60.0
+  },
+  "purpose": "Recovery qualification of the exact NVIDIA NIM provider path after the account/public-endpoint routing failure recorded by Qualification 001.",
+  "remediation_prerequisite": {
+    "marker_path": ".local/provider-remediation/OIC-NVIDIA-PROVIDER-QUALIFICATION-002-REMEDIATION.json",
+    "required_remediation_confirmed": true,
+    "required_work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-002",
+    "rule": "Live qualification 002 is forbidden until the owner records an external NVIDIA remediation/enablement signal in the local remediation marker."
+  },
+  "retries": 0,
+  "self_adjudication": "NOT SELF-ADJUDICATED",
+  "semantic_hypothesis": null,
+  "semantic_successor_target": {
+    "commit_sha": "17775d93b93e00e3dd9a8bb10c97ae9eda373ebe",
+    "freeze_v0_3_sha256": "374c706034cf0eef0d9bc2e79a9b5457405809ef326ffb1b71ba51d03b1dd684",
+    "plan_sha256": "d543a24ef8e39fb3fab3c725114913cfd7b502b9258ec07faade962f542fef27",
+    "work_order": "OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-002"
+  },
+  "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-002"
+}
