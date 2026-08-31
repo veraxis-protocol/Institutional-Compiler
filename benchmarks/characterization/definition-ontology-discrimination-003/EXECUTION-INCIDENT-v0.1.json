@@ -1,0 +1,54 @@
+{
+  "architectural_change_authorized": false,
+  "canonicalization_performed": false,
+  "evidence": {
+    "freeze_v0_2_sha256": "e50310eecf97fc3aedfd3f673ca80fd800f02f7ac3bfaf1afc82f0a2cd5cb62d",
+    "instrument_sha256": "a02ac7071a79582c7d712ba8172a7a88bdcb5e53899b492449cf9707a60924e0",
+    "live_log_sha256": "727fe1ecbdaa422784a227a004640bef47a4d99f10409480f572805154f0ee5e",
+    "plan_sha256": "1643851ed0afddeafaba5731abd9308695c4f374b0be567fb8fae9ce6168b570"
+  },
+  "failure": {
+    "key": "\"normative_force\"",
+    "location": "execute_force_only user_prompt_template.format(...)",
+    "root_cause": "Literal JSON braces in the frozen force-only user_prompt_template were interpreted by Python str.format as a replacement field.",
+    "type": "KeyError"
+  },
+  "frozen_execution_commit": "fd07eefae35e3fb0855847bd4d0a911ec3636a9f",
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "live_process_exit_status": 1,
+  "live_run_started": true,
+  "partial_execution": {
+    "abort_request": {
+      "arm": "B_FORCE_ONLY_ONTOLOGY_CLARIFIED",
+      "ordinal": 2,
+      "provider_call_reached": false,
+      "run_index": 1,
+      "specimen_id": "IIR-005"
+    },
+    "completed_ab_pairs": 0,
+    "first_request": {
+      "arm": "A_COMBINED_ONTOLOGY_CLARIFIED",
+      "ordinal": 1,
+      "run_index": 1,
+      "specimen_id": "IIR-005"
+    },
+    "partial_attempt_state_persisted": false,
+    "planned_request_reached_before_abort": 2,
+    "provider_calls_attempted_before_abort": 1,
+    "receipt_written": false
+  },
+  "provider_qualification": {
+    "disposition": "QUALIFIED",
+    "receipt_sha256": "a5149d8bb030c90541a34031a05bbfbfb75e5e6dc20e03569fdf30ba4d94e256",
+    "semantic_successor_authorized": true,
+    "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-003"
+  },
+  "same_work_order_rerun_authorized": false,
+  "scientific_adjudicability": false,
+  "scientific_result": null,
+  "semantic_decision_rule_evaluated": false,
+  "status": "EXECUTION_ABORTED_INSTRUMENT_DEFECT",
+  "successor_work_order_required": true,
+  "work_order": "OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-003"
+}
