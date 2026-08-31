@@ -1,0 +1,60 @@
+{
+  "authorization_rule": "Only QUALIFIED authorizes creation/execution of a successor semantic experiment.",
+  "base_sha": "c4a87eb8483c3bd965612b601399463e005bd73e",
+  "canonicalization_performed": false,
+  "claim_ceiling": "This work order establishes only bounded provider-path availability under three fixed probes. It does not establish model quality, institutional semantics, canonical meaning, production readiness, or cross-provider reliability.",
+  "decision_rule": {
+    "DEGRADED": "All 3 probes ACCEPTED but one or more elapsed_seconds > 45.0; semantic successor remains unauthorized.",
+    "NOT_QUALIFIED": "Any provider error, response mismatch, missing probe, or incomplete execution; semantic successor remains unauthorized.",
+    "QUALIFIED": "All 3 probes ACCEPTED, markers valid, and every elapsed_seconds <= 45.0."
+  },
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "latency_headroom_seconds": 45.0,
+  "live_run_executed": false,
+  "pacing_seconds": 4.0,
+  "planned_probe_count": 3,
+  "probes": [
+    {
+      "expected_mode": "TEXT_MARKER",
+      "expected_value": "OIC_PROVIDER_OK",
+      "max_tokens": 16,
+      "ordinal": 1,
+      "probe_id": "BASIC_TEXT",
+      "response_format": null,
+      "temperature": 0.0
+    },
+    {
+      "expected_mode": "JSON_STATUS",
+      "expected_value": "OIC_PROVIDER_OK",
+      "max_tokens": 64,
+      "ordinal": 2,
+      "probe_id": "JSON_MODE",
+      "response_format": {
+        "type": "json_object"
+      },
+      "temperature": 0.0
+    },
+    {
+      "expected_mode": "JSON_STATUS",
+      "expected_value": "OIC_PROVIDER_OK",
+      "max_tokens": 4096,
+      "ordinal": 3,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "response_format": {
+        "type": "json_object"
+      },
+      "temperature": 0.0
+    }
+  ],
+  "provider": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "timeout_seconds": 60.0
+  },
+  "purpose": "Qualify the exact NVIDIA NIM provider path before any successor semantic experiment.",
+  "retries": 0,
+  "self_adjudication": "NOT SELF-ADJUDICATED",
+  "semantic_hypothesis": null,
+  "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-001"
+}

@@ -38,3 +38,6 @@ junit.xml
 
 # Candidate semantic characterization: live receipts stay local by default.
 .local/candidate-semantics-receipts/
+
+# Provider qualification: live receipts stay local by default.
+.local/provider-qualification-receipts/

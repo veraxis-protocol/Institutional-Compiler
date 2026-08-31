@@ -1,0 +1,19 @@
+{
+  "base_sha": "c4a87eb8483c3bd965612b601399463e005bd73e",
+  "canonicalization_performed": false,
+  "contract_test_path": "tests/contract/test_nvidia_provider_qualification_001.py",
+  "contract_test_sha256": "151028570f602ee82130c5629274054c9b0e571074bdb3dd1a2bb3f4e5d20935",
+  "freeze_id": "OIC-NVIDIA-PROVIDER-QUALIFICATION-001-PLAN-FREEZE-v0.1",
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "instrument_path": "scripts/qualify_nvidia_provider_001.py",
+  "instrument_sha256": "144393892d05fe4d2eb2d70f110164023c36e3d69e393c874227a432b2bb426f",
+  "live_run_executed": false,
+  "model_call_made": false,
+  "plan_path": "benchmarks/provider-qualification/nvidia-nim-001/PLAN-v0.1.json",
+  "plan_sha256": "a72370f16e93048466ecc25d9d03b8d85d43e055b1f8d2d467750116c779c02e",
+  "planned_probe_count": 3,
+  "self_adjudication": "NOT SELF-ADJUDICATED",
+  "semantic_hypothesis": null,
+  "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-001"
+}
