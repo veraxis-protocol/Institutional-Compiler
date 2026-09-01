@@ -1,0 +1,82 @@
+{
+  "architectural_change_authorized": false,
+  "authorization_rule": "Only QUALIFIED authorizes execution of the already-frozen OIC-DEFINITION-ONTOLOGY-PREDICATE-FRAME-DISCRIMINATION-006.",
+  "base_sha": "34abc1bc44bd89d1b29c0d005a23eabfb78ca196",
+  "canonicalization_performed": false,
+  "claim_ceiling": "Provider-path availability only. No predicate-frame result, semantic correctness, canonical institutional meaning, institutional authority, production readiness, architecture, cross-provider reliability, or independent-validation claim.",
+  "decision_rule": {
+    "DEGRADED": "All three probes ACCEPTED but one or more elapsed_seconds > 45.0; successor remains unauthorized.",
+    "NOT_QUALIFIED": "Any provider error, response mismatch, missing probe, or incomplete execution; successor remains unauthorized.",
+    "QUALIFIED": "All three probes ACCEPTED, expected markers valid, and every elapsed_seconds <= 45.0."
+  },
+  "fresh_provider_qualification": true,
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "latency_headroom_seconds": 45.0,
+  "live_run_executed": false,
+  "model_call_made": false,
+  "next_authorized_activity": "Implement, test and statically freeze Provider Qualification 006. Do not execute live qualification yet.",
+  "pacing_seconds": 4.0,
+  "planned_probe_count": 3,
+  "probe_spec_sha256": "262445c71ca34f41dd9d173a978ebcaa7bd71df2f313f0c9b090b9fd4a8925d1",
+  "probes": [
+    {
+      "expected_mode": "TEXT_MARKER",
+      "expected_value": "OIC_PROVIDER_OK",
+      "max_tokens": 16,
+      "ordinal": 1,
+      "probe_id": "BASIC_TEXT",
+      "response_format": null,
+      "temperature": 0.0
+    },
+    {
+      "expected_mode": "JSON_STATUS",
+      "expected_value": "OIC_PROVIDER_OK",
+      "max_tokens": 64,
+      "ordinal": 2,
+      "probe_id": "JSON_MODE",
+      "response_format": {
+        "type": "json_object"
+      },
+      "temperature": 0.0
+    },
+    {
+      "expected_mode": "JSON_STATUS",
+      "expected_value": "OIC_PROVIDER_OK",
+      "max_tokens": 4096,
+      "ordinal": 3,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "response_format": {
+        "type": "json_object"
+      },
+      "temperature": 0.0
+    }
+  ],
+  "provider": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "timeout_seconds": 60.0
+  },
+  "provider_call_made": false,
+  "qualification_retry_policy": "ZERO_RETRIES. Qualification measures immediate provider-path availability and does not consume or simulate the separate Ontology 006 semantic exact-timeout recovery allowance.",
+  "retries": 0,
+  "semantic_hypothesis": null,
+  "semantic_successor_authorized": false,
+  "semantic_successor_target": {
+    "commit_sha": "34abc1bc44bd89d1b29c0d005a23eabfb78ca196",
+    "contract_test_sha256": "07231f87fb029a5154a843c6e8fed5fe77a6d5ef23fcdf0af330a7d3dd7b7379",
+    "freeze_v0_2_sha256": "2acd8e2ebe0a6913721240008f06c28108ea01c85c4484958c1b849ef95b5719",
+    "instrument_sha256": "ddd069cf7317f86ad3c50b6e48291c4579efafb57a2a0ac3f420a5a4d7e080f8",
+    "plan_sha256": "4ef705e97e74e4623251975fb0e71d9cd59e5eb380ab6b63ebb1d07571992816",
+    "preregistration_freeze_v0_1_sha256": "1dba54e248f7761e5c153b18a37d86ded55bba9a92e95bd3c9db52fa3826df27",
+    "preregistration_sha256": "5da9fd19c17fe24f9560438d047e2f7f201e07580f1990fba171d460176c1825",
+    "provider_adapter_sha256": "c1c02303cec29eaef8cb96d1baeec735ef724d9c8a06e20a61b91388d4350339",
+    "request_materialization_sha256": "8b45a5755dc0ccc4df8d58f84f2408ef6e06e1847bb9b4e4e11963f3255e17bd",
+    "source_ontology_005_transport_instrument_sha256": "4a638722c680f3ed400b5987cdc023d8493e146bc7600f299371808fed9cf265",
+    "treatment_binding_sha256": "f95efb0189adc9368499684e6d3262651751c39fe8a5e422da94f8ef0111920a",
+    "work_order": "OIC-DEFINITION-ONTOLOGY-PREDICATE-FRAME-DISCRIMINATION-006"
+  },
+  "transport_probe_semantics_vs_004": "UNCHANGED",
+  "transport_probe_semantics_vs_005": "UNCHANGED",
+  "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-006"
+}
