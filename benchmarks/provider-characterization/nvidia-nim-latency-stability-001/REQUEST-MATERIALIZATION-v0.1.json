@@ -1,0 +1,684 @@
+{
+  "analysis_population": "LATENCY_STABILITY_001_ONLY",
+  "cycles": 12,
+  "live_run_executed": false,
+  "model_call_made": false,
+  "network_request_made": false,
+  "observations_per_probe": 12,
+  "provider": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "timeout_seconds": 60.0
+  },
+  "provider_call_made": false,
+  "qualification_006_live_outputs_reused": false,
+  "replacement_requests_allowed": false,
+  "request_count": 36,
+  "requests": [
+    {
+      "cycle_index": 1,
+      "cycle_position": 1,
+      "ordinal": 1,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "93aba93cdc10cd47223cc363f4226b555b5b67bc9e950e37004b6965597869b0"
+    },
+    {
+      "cycle_index": 1,
+      "cycle_position": 2,
+      "ordinal": 2,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "8f60a1bf8733765d83258615533cbdc0ff142b6b716bc906a270199973072e94"
+    },
+    {
+      "cycle_index": 1,
+      "cycle_position": 3,
+      "ordinal": 3,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "6e7a5d4c9ace6c0ee32cb37fd0d4b365fa22683f0c98e3b5bcdb5afe424dfbc0"
+    },
+    {
+      "cycle_index": 2,
+      "cycle_position": 1,
+      "ordinal": 4,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "8f60a1bf8733765d83258615533cbdc0ff142b6b716bc906a270199973072e94"
+    },
+    {
+      "cycle_index": 2,
+      "cycle_position": 2,
+      "ordinal": 5,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "6e7a5d4c9ace6c0ee32cb37fd0d4b365fa22683f0c98e3b5bcdb5afe424dfbc0"
+    },
+    {
+      "cycle_index": 2,
+      "cycle_position": 3,
+      "ordinal": 6,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "93aba93cdc10cd47223cc363f4226b555b5b67bc9e950e37004b6965597869b0"
+    },
+    {
+      "cycle_index": 3,
+      "cycle_position": 1,
+      "ordinal": 7,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "6e7a5d4c9ace6c0ee32cb37fd0d4b365fa22683f0c98e3b5bcdb5afe424dfbc0"
+    },
+    {
+      "cycle_index": 3,
+      "cycle_position": 2,
+      "ordinal": 8,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "93aba93cdc10cd47223cc363f4226b555b5b67bc9e950e37004b6965597869b0"
+    },
+    {
+      "cycle_index": 3,
+      "cycle_position": 3,
+      "ordinal": 9,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "8f60a1bf8733765d83258615533cbdc0ff142b6b716bc906a270199973072e94"
+    },
+    {
+      "cycle_index": 4,
+      "cycle_position": 1,
+      "ordinal": 10,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "93aba93cdc10cd47223cc363f4226b555b5b67bc9e950e37004b6965597869b0"
+    },
+    {
+      "cycle_index": 4,
+      "cycle_position": 2,
+      "ordinal": 11,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "8f60a1bf8733765d83258615533cbdc0ff142b6b716bc906a270199973072e94"
+    },
+    {
+      "cycle_index": 4,
+      "cycle_position": 3,
+      "ordinal": 12,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "6e7a5d4c9ace6c0ee32cb37fd0d4b365fa22683f0c98e3b5bcdb5afe424dfbc0"
+    },
+    {
+      "cycle_index": 5,
+      "cycle_position": 1,
+      "ordinal": 13,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "8f60a1bf8733765d83258615533cbdc0ff142b6b716bc906a270199973072e94"
+    },
+    {
+      "cycle_index": 5,
+      "cycle_position": 2,
+      "ordinal": 14,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "6e7a5d4c9ace6c0ee32cb37fd0d4b365fa22683f0c98e3b5bcdb5afe424dfbc0"
+    },
+    {
+      "cycle_index": 5,
+      "cycle_position": 3,
+      "ordinal": 15,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "93aba93cdc10cd47223cc363f4226b555b5b67bc9e950e37004b6965597869b0"
+    },
+    {
+      "cycle_index": 6,
+      "cycle_position": 1,
+      "ordinal": 16,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "6e7a5d4c9ace6c0ee32cb37fd0d4b365fa22683f0c98e3b5bcdb5afe424dfbc0"
+    },
+    {
+      "cycle_index": 6,
+      "cycle_position": 2,
+      "ordinal": 17,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "93aba93cdc10cd47223cc363f4226b555b5b67bc9e950e37004b6965597869b0"
+    },
+    {
+      "cycle_index": 6,
+      "cycle_position": 3,
+      "ordinal": 18,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "8f60a1bf8733765d83258615533cbdc0ff142b6b716bc906a270199973072e94"
+    },
+    {
+      "cycle_index": 7,
+      "cycle_position": 1,
+      "ordinal": 19,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "93aba93cdc10cd47223cc363f4226b555b5b67bc9e950e37004b6965597869b0"
+    },
+    {
+      "cycle_index": 7,
+      "cycle_position": 2,
+      "ordinal": 20,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "8f60a1bf8733765d83258615533cbdc0ff142b6b716bc906a270199973072e94"
+    },
+    {
+      "cycle_index": 7,
+      "cycle_position": 3,
+      "ordinal": 21,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "6e7a5d4c9ace6c0ee32cb37fd0d4b365fa22683f0c98e3b5bcdb5afe424dfbc0"
+    },
+    {
+      "cycle_index": 8,
+      "cycle_position": 1,
+      "ordinal": 22,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "8f60a1bf8733765d83258615533cbdc0ff142b6b716bc906a270199973072e94"
+    },
+    {
+      "cycle_index": 8,
+      "cycle_position": 2,
+      "ordinal": 23,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "6e7a5d4c9ace6c0ee32cb37fd0d4b365fa22683f0c98e3b5bcdb5afe424dfbc0"
+    },
+    {
+      "cycle_index": 8,
+      "cycle_position": 3,
+      "ordinal": 24,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "93aba93cdc10cd47223cc363f4226b555b5b67bc9e950e37004b6965597869b0"
+    },
+    {
+      "cycle_index": 9,
+      "cycle_position": 1,
+      "ordinal": 25,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "6e7a5d4c9ace6c0ee32cb37fd0d4b365fa22683f0c98e3b5bcdb5afe424dfbc0"
+    },
+    {
+      "cycle_index": 9,
+      "cycle_position": 2,
+      "ordinal": 26,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "93aba93cdc10cd47223cc363f4226b555b5b67bc9e950e37004b6965597869b0"
+    },
+    {
+      "cycle_index": 9,
+      "cycle_position": 3,
+      "ordinal": 27,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "8f60a1bf8733765d83258615533cbdc0ff142b6b716bc906a270199973072e94"
+    },
+    {
+      "cycle_index": 10,
+      "cycle_position": 1,
+      "ordinal": 28,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "93aba93cdc10cd47223cc363f4226b555b5b67bc9e950e37004b6965597869b0"
+    },
+    {
+      "cycle_index": 10,
+      "cycle_position": 2,
+      "ordinal": 29,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "8f60a1bf8733765d83258615533cbdc0ff142b6b716bc906a270199973072e94"
+    },
+    {
+      "cycle_index": 10,
+      "cycle_position": 3,
+      "ordinal": 30,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "6e7a5d4c9ace6c0ee32cb37fd0d4b365fa22683f0c98e3b5bcdb5afe424dfbc0"
+    },
+    {
+      "cycle_index": 11,
+      "cycle_position": 1,
+      "ordinal": 31,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "8f60a1bf8733765d83258615533cbdc0ff142b6b716bc906a270199973072e94"
+    },
+    {
+      "cycle_index": 11,
+      "cycle_position": 2,
+      "ordinal": 32,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "6e7a5d4c9ace6c0ee32cb37fd0d4b365fa22683f0c98e3b5bcdb5afe424dfbc0"
+    },
+    {
+      "cycle_index": 11,
+      "cycle_position": 3,
+      "ordinal": 33,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "93aba93cdc10cd47223cc363f4226b555b5b67bc9e950e37004b6965597869b0"
+    },
+    {
+      "cycle_index": 12,
+      "cycle_position": 1,
+      "ordinal": 34,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "6e7a5d4c9ace6c0ee32cb37fd0d4b365fa22683f0c98e3b5bcdb5afe424dfbc0"
+    },
+    {
+      "cycle_index": 12,
+      "cycle_position": 2,
+      "ordinal": 35,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "93aba93cdc10cd47223cc363f4226b555b5b67bc9e950e37004b6965597869b0"
+    },
+    {
+      "cycle_index": 12,
+      "cycle_position": 3,
+      "ordinal": 36,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "8f60a1bf8733765d83258615533cbdc0ff142b6b716bc906a270199973072e94"
+    }
+  ],
+  "retries": 0,
+  "source_probe_spec_sha256": "262445c71ca34f41dd9d173a978ebcaa7bd71df2f313f0c9b090b9fd4a8925d1",
+  "source_qualification_006_instrument_sha256": "72eb72aeb95f9727a9380902400c7d8e6891fba9447c30694193dad31f467674",
+  "status": "MATERIALIZED_OFFLINE_NOT_EXECUTED",
+  "work_order": "OIC-NVIDIA-PROVIDER-LATENCY-STABILITY-001"
+}
