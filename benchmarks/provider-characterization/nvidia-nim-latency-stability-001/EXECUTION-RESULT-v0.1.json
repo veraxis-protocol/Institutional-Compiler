@@ -1,0 +1,65 @@
+{
+  "accepted_marker_valid": 0,
+  "architecture_change_authorized": false,
+  "claim_ceiling": "This result establishes only persistent provider-path timeout behavior for one endpoint/model during the frozen 36-observation window. It establishes no semantic defect, Ontology 006 result, canonical institutional meaning, Institutional IR result, production architecture change, cross-provider generalization, or independent validation.",
+  "classification": "PROVIDER_PATH_UNSTABLE",
+  "error_message": "NVIDIA NIM connection timed out",
+  "error_message_count": 36,
+  "error_type": "ModelProviderError",
+  "evidence": {
+    "live_log_sha256": "cd228dd5b8ffee758256f0b048b5ec202b33ae03d69fd733f0d9970c29956441",
+    "receipt_sha256": "82681f706aba1b63fa10fea5f50f456d877d035c2e98bee9602b20007b06103e"
+  },
+  "failure_class": "PERSISTENT_PROVIDER_TIMEOUT",
+  "interpretation": "Across the complete frozen 36-observation characterization window, every provider request terminated as ModelProviderError with the exact message 'NVIDIA NIM connection timed out'. The failure affected all three frozen probe classes and persisted from the first through the final observation. This establishes provider-path instability for this bounded observation window. It establishes no semantic result.",
+  "latency_seconds": {
+    "by_probe": {
+      "BASIC_TEXT": {
+        "max_latency_seconds": 60.221,
+        "median_latency_seconds": 60.088,
+        "min_latency_seconds": 60.055,
+        "observation_count": 12,
+        "provider_error_count": 12
+      },
+      "JSON_MODE": {
+        "max_latency_seconds": 60.308,
+        "median_latency_seconds": 60.082,
+        "min_latency_seconds": 60.055,
+        "observation_count": 12,
+        "provider_error_count": 12
+      },
+      "PRODUCTION_TOKEN_RESERVATION": {
+        "max_latency_seconds": 60.295,
+        "median_latency_seconds": 60.086,
+        "min_latency_seconds": 60.05,
+        "observation_count": 12,
+        "provider_error_count": 12
+      }
+    },
+    "maximum": 60.308,
+    "median": 60.088,
+    "minimum": 60.05
+  },
+  "next_scientific_activity": "Treat the NVIDIA path as an infrastructure incident. Perform a separately bounded provider-path incident investigation or remediation before designing any future qualification. Do not execute Ontology 006 and do not create Qualification 007.",
+  "ontology_006_executed": false,
+  "ontology_006_execution_authorized": false,
+  "planned_observations": 36,
+  "probe_population": {
+    "BASIC_TEXT": 12,
+    "JSON_MODE": 12,
+    "PRODUCTION_TOKEN_RESERVATION": 12
+  },
+  "provider_errors": 36,
+  "qualification_006_reclassified": false,
+  "qualification_006_status": "CLOSED_DEGRADED",
+  "qualification_007_authorized": false,
+  "replacement_requests_allowed": false,
+  "rerun_authorized": false,
+  "retries": 0,
+  "semantic_hypothesis_evaluated": false,
+  "semantic_successor_authorized": false,
+  "static_freeze_commit": "fc6e11f7651ace3b6470db02f3c68b616866bb0b",
+  "status": "CLOSED_EXECUTED_PROVIDER_PATH_UNSTABLE",
+  "terminal_observations": 36,
+  "work_order": "OIC-NVIDIA-PROVIDER-LATENCY-STABILITY-001"
+}
