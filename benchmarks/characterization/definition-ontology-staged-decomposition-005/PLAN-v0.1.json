@@ -1,0 +1,619 @@
+{
+  "adjudicability_gate": {
+    "complete_composite_pairs_required": 18,
+    "control_complete_pairs_required": 9,
+    "failure_disposition": "NOT_ADJUDICABLE_PROVIDER_OR_BOUNDARY_FAILURE",
+    "primary_complete_pairs_required": 9,
+    "provider_requests_accepted_required": 54,
+    "provider_requests_required": 54,
+    "rule": "No semantic disposition may be evaluated unless all 54 provider requests are accepted and all 18 A/B composite pairs are complete."
+  },
+  "architectural_change_authorized": false,
+  "arms": {
+    "A_COMBINED_ONTOLOGY_CLARIFIED": {
+      "description": "Exact combined ontology-clarified proposal condition used as Arm A in Ontology 003A.",
+      "production_code_changed": false,
+      "production_prompt_changed": false,
+      "provider_requests_per_observation": 1,
+      "semantic_source": "OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-003A"
+    },
+    "B_STAGED_DECOMPOSED": {
+      "description": "Two independent provider requests over the same candidate span followed by deterministic local merge.",
+      "deterministic_merge": {
+        "model_may_merge_or_rewrite": false,
+        "nonforce_assertions_source": "B2_NONFORCE_SLOTS.proposed_assertions",
+        "normative_force_source": "B1_FORCE.normative_force",
+        "normative_force_source_quote": null,
+        "provider_call": false,
+        "unresolved_references_source": "B2_NONFORCE_SLOTS.proposed_unresolved_references"
+      },
+      "provider_requests_per_observation": 2,
+      "stage_1_force": {
+        "condition": "Exact force-only ontology-clarified condition from Ontology 003A Arm B.",
+        "consumes_stage_2_output": false,
+        "output_contract": {
+          "allowed_values": [
+            "OBLIGATION",
+            "PROHIBITION",
+            "PERMISSION",
+            "CONSTITUTIVE_DEFINITION",
+            "DELEGATION",
+            "ADVISORY"
+          ],
+          "exact_keys": [
+            "normative_force"
+          ],
+          "root_type": "object"
+        },
+        "stage_id": "B1_FORCE"
+      },
+      "stage_2_nonforce_slots": {
+        "allowed_slots": [
+          "bearer",
+          "action",
+          "object",
+          "counterparty",
+          "condition",
+          "exception",
+          "temporal_qualifier",
+          "quantum",
+          "definiendum",
+          "definiens"
+        ],
+        "candidate_input": "candidate_span only",
+        "consumes_stage_1_output": false,
+        "max_tokens": 4096,
+        "normative_force_visible": false,
+        "response_format": "json_object",
+        "stage_id": "B2_NONFORCE_SLOTS",
+        "system_prompt": "You extract provisional semantic slots. You do not classify force and you do not decide.\n\nYou are given one institutional proposition that has already been admitted for interpretation. Admission established only that the proposition may be interpreted. It did not establish what the proposition means.\n\nYour only task is to propose non-force semantic structure supplied by the literal proposition.\n\nThe allowed non-force slots are exactly:\n\nbearer\naction\nobject\ncounterparty\ncondition\nexception\ntemporal_qualifier\nquantum\ndefiniendum\ndefiniens\n\nDo not emit normative_force.\n\nInspect only the proposition supplied. Use no outside facts, institutional practice, source identity, authority metadata, expected answer, or output from another model stage.\n\nPropose a slot only when the proposition itself supplies it. For every proposed slot, quote literal supporting text in proposed_source_quote. If no literal text supports the value, use null and prefer omitting the slot to inventing a value.\n\nPreserve conditions, exceptions, temporal qualifiers, quantities, comparators, currencies, negations, hedges and discretion markers.\n\nWhere the proposition points at another provision or document, surface it in proposed_unresolved_references. Do not resolve referenced content.\n\nReturn exactly one JSON object with at most these two root keys:\n\nproposed_assertions\nproposed_unresolved_references\n\nEach proposed assertion has exactly:\n\nslot\nproposed_value\nproposed_source_quote\n\nand may additionally contain proposed_material_qualifiers.\n\nEvery assertion slot must be one of the ten allowed non-force slots above.\n\nEach unresolved reference has exactly:\n\nreference_text\nreference_kind\n\nreference_kind must be one of:\n\nINTERNAL_PROVISION\nEXTERNAL_DOCUMENT\nDEFINITION\nUNCLASSIFIED\n\nNever emit normative_force, a status, basis, warrant, authority, admission, canonical status, confidence, score, probability, ALLOW, DENY, runtime outcome, or identifier.\n\nReturn only the requested JSON object.",
+        "temperature": 0,
+        "user_prompt_template": "Propose only non-force provisional semantic structure for this admitted institutional proposition.\n\nDo not classify or return normative_force.\n\nReturn exactly one JSON object using this envelope:\n{\"proposed_assertions\":[{\"slot\":\"...\",\"proposed_value\":\"...\",\"proposed_source_quote\":\"...\"}],\"proposed_unresolved_references\":[]}\n\nADMITTED PROPOSITION:\n{candidate_span}"
+      }
+    }
+  },
+  "canonicalization_implemented": false,
+  "claim_ceiling": "This experiment may establish bounded evidence that a staged provisional semantic proposal can jointly preserve force classification and expected definition slots for one model/provider and six frozen synthetic admitted propositions. It does not establish canonical institutional meaning, interpretation authority, legal validity, a revised Institutional IR ontology, production architecture, production staging, cross-model generalization, cross-provider generalization, or independent validation.",
+  "control_endpoint": {
+    "force_regression": "Any staged-B-only force defect on delegation, advisory, or permission controls.",
+    "nonforce_slot_regression": "Any staged-B-only omission or incompatibility of a gold-expected non-force control slot that Arm A proposes compatibly in the paired observation."
+  },
+  "control_specimens": [
+    "IIR-006",
+    "IIR-027",
+    "IIR-028"
+  ],
+  "immediate_predecessor_004": {
+    "closure_commit": "3f7d96f1c83574e002e3a1972bcca0c6597e3c19",
+    "execution_result_path": "benchmarks/characterization/definition-ontology-staged-decomposition-004/EXECUTION-RESULT-v0.1.json",
+    "execution_result_sha256": "8ccae38f277fb7ac77a2baea1fbed2a991213e8967bb19bba1bd82db02b52ac0",
+    "failure_localization_path": "benchmarks/characterization/definition-ontology-staged-decomposition-004/FAILURE-LOCALIZATION-v0.1.json",
+    "failure_localization_sha256": "2a2c70dd47457602a36afeb1cf3ef67653da8af1bf2fbd8ed3c534cb9fc80e77",
+    "live_log_sha256": "797d4d81f1bf8fb62a846c23bb1d07792e19f134f669e67ee3fc30a634932726",
+    "localized_failure": {
+      "error_message": "NVIDIA NIM connection timed out",
+      "error_type": "ModelProviderError",
+      "ordinal": 45,
+      "outcome": "PROVIDER_ERROR",
+      "run_index": 3,
+      "specimen_id": "IIR-027",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    "post_run_adjudication_path": "benchmarks/characterization/definition-ontology-staged-decomposition-004/POST-RUN-ADJUDICATION.md",
+    "post_run_adjudication_sha256": "a524bed36f4d10d4ea2222ce275b38081961b0941607f8d3e64ca5ab81b3fe89",
+    "provider_qualification_004_receipt_sha256": "83db697b6bc1922b7a73e08047fb5e269c53578fef410e52f392c4b7d29ed50f",
+    "receipt_sha256": "f0630ff6b3ce22d94132b807d3ab2dd841889fe20c9d1b82c2d5bda0230ca3a2",
+    "rerun_authorized": false,
+    "scientific_disposition": "NOT_ADJUDICABLE_PROVIDER_OR_BOUNDARY_FAILURE",
+    "semantic_decision_rule_evaluated": false,
+    "work_order": "OIC-DEFINITION-ONTOLOGY-STAGED-DECOMPOSITION-004"
+  },
+  "independent_validation_claim": false,
+  "institutional_ir_runtime_implemented": false,
+  "interleaving": "For odd runs: A_COMBINED -> B1_FORCE -> B2_NONFORCE_SLOTS. For even runs: B1_FORCE -> B2_NONFORCE_SLOTS -> A_COMBINED.",
+  "live_run_executed": false,
+  "model_call_made": false,
+  "next_authorized_activity": "Implement the Ontology 005 experimental instrument offline, materialize all 54 semantic requests, prove byte identity against the frozen Ontology 004 manifest, implement and test the frozen transport-recovery envelope, then statically freeze the instrument. Do not execute Provider Qualification 005 yet.",
+  "offline_request_materialization": {
+    "exact_provider_requests_required": 54,
+    "network_request_made": false,
+    "provider_constructed": false,
+    "required_before_instrument_freeze": true,
+    "required_checks": [
+      "all 54 exact requests render without exception",
+      "request ordinals are 1..54",
+      "18 exact A requests are preserved",
+      "18 exact B1 force-only requests are preserved",
+      "18 exact B2 non-force-slot requests are preserved",
+      "B2 excludes normative_force",
+      "B2 does not consume B1 output",
+      "no gold label is exposed",
+      "no authority metadata is exposed",
+      "no provider is constructed",
+      "no network request is made"
+    ]
+  },
+  "pacing_seconds": 4.0,
+  "planned_composite_observations": 36,
+  "planned_pairs": 18,
+  "planned_provider_requests": 54,
+  "planned_semantic_requests": 54,
+  "predecessor": {
+    "a_improvements_over_force_only_b": 0,
+    "b_improvements_over_combined_a": 4,
+    "b_only_control_force_defects": 0,
+    "closure_commit": "f3eff10c7311783b6a7a8c97caf8cfd1c1b90473",
+    "combined_definiendum": {
+      "compatible": 6,
+      "expected": 9,
+      "incompatible": 0,
+      "omitted": 3
+    },
+    "combined_definiens": {
+      "compatible": 6,
+      "expected": 6,
+      "incompatible": 0,
+      "omitted": 0
+    },
+    "execution_result_path": "benchmarks/characterization/definition-ontology-discrimination-003a/EXECUTION-RESULT-v0.1.json",
+    "execution_result_sha256": "c6befe2c084b927d53bd093c4980fc95c1d3ae5fada38bfc34cdbb2f9bc71d72",
+    "force_only_primary_correct": {
+      "correct": 9,
+      "planned": 9
+    },
+    "live_log_sha256": "91666e8365f73e2a9385d9885bd66989e2110c4440e75396ad2988bbffe5d1d9",
+    "post_run_adjudication_path": "benchmarks/characterization/definition-ontology-discrimination-003a/POST-RUN-ADJUDICATION.md",
+    "post_run_adjudication_sha256": "e0cf414b2cdc04665357d1ad4d66456cbc2958ff1815e30bcb71326d5130eaba",
+    "receipt_sha256": "e5c44978937109af275ecc7fc4ffae7abd0499149b37df092286396ad860cfdc",
+    "scientific_disposition": "SUPPORTS_TASK_INTERFERENCE_HYPOTHESIS",
+    "work_order": "OIC-DEFINITION-ONTOLOGY-DISCRIMINATION-003A"
+  },
+  "primary_endpoints": {
+    "definition_slot_preservation": {
+      "definiendum": {
+        "compatible_required": 9,
+        "expected": 9,
+        "incompatible_allowed": 0,
+        "omitted_allowed": 0
+      },
+      "definiens": {
+        "compatible_required": 6,
+        "expected": 6,
+        "incompatible_allowed": 0,
+        "omitted_allowed": 0
+      }
+    },
+    "force_preservation": {
+      "metric": "Correct staged B normative-force classification on the nine primary definition observations.",
+      "strict_target": {
+        "correct": 9,
+        "planned": 9
+      }
+    }
+  },
+  "primary_specimens": [
+    "IIR-005",
+    "IIR-023",
+    "IIR-024"
+  ],
+  "production_code_changed": false,
+  "production_prompt_changed": false,
+  "provider_call_made": false,
+  "provider_prerequisite": {
+    "fresh_qualification_required": true,
+    "required_disposition": "QUALIFIED",
+    "required_semantic_successor_authorized": true,
+    "required_semantic_successor_target": "OIC-DEFINITION-ONTOLOGY-STAGED-DECOMPOSITION-005",
+    "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-005"
+  },
+  "provider_request_plan": [
+    {
+      "ordinal": 1,
+      "run_index": 1,
+      "specimen_id": "IIR-005",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 2,
+      "run_index": 1,
+      "specimen_id": "IIR-005",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 3,
+      "run_index": 1,
+      "specimen_id": "IIR-005",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 4,
+      "run_index": 2,
+      "specimen_id": "IIR-005",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 5,
+      "run_index": 2,
+      "specimen_id": "IIR-005",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 6,
+      "run_index": 2,
+      "specimen_id": "IIR-005",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 7,
+      "run_index": 3,
+      "specimen_id": "IIR-005",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 8,
+      "run_index": 3,
+      "specimen_id": "IIR-005",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 9,
+      "run_index": 3,
+      "specimen_id": "IIR-005",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 10,
+      "run_index": 1,
+      "specimen_id": "IIR-006",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 11,
+      "run_index": 1,
+      "specimen_id": "IIR-006",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 12,
+      "run_index": 1,
+      "specimen_id": "IIR-006",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 13,
+      "run_index": 2,
+      "specimen_id": "IIR-006",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 14,
+      "run_index": 2,
+      "specimen_id": "IIR-006",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 15,
+      "run_index": 2,
+      "specimen_id": "IIR-006",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 16,
+      "run_index": 3,
+      "specimen_id": "IIR-006",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 17,
+      "run_index": 3,
+      "specimen_id": "IIR-006",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 18,
+      "run_index": 3,
+      "specimen_id": "IIR-006",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 19,
+      "run_index": 1,
+      "specimen_id": "IIR-023",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 20,
+      "run_index": 1,
+      "specimen_id": "IIR-023",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 21,
+      "run_index": 1,
+      "specimen_id": "IIR-023",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 22,
+      "run_index": 2,
+      "specimen_id": "IIR-023",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 23,
+      "run_index": 2,
+      "specimen_id": "IIR-023",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 24,
+      "run_index": 2,
+      "specimen_id": "IIR-023",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 25,
+      "run_index": 3,
+      "specimen_id": "IIR-023",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 26,
+      "run_index": 3,
+      "specimen_id": "IIR-023",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 27,
+      "run_index": 3,
+      "specimen_id": "IIR-023",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 28,
+      "run_index": 1,
+      "specimen_id": "IIR-024",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 29,
+      "run_index": 1,
+      "specimen_id": "IIR-024",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 30,
+      "run_index": 1,
+      "specimen_id": "IIR-024",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 31,
+      "run_index": 2,
+      "specimen_id": "IIR-024",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 32,
+      "run_index": 2,
+      "specimen_id": "IIR-024",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 33,
+      "run_index": 2,
+      "specimen_id": "IIR-024",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 34,
+      "run_index": 3,
+      "specimen_id": "IIR-024",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 35,
+      "run_index": 3,
+      "specimen_id": "IIR-024",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 36,
+      "run_index": 3,
+      "specimen_id": "IIR-024",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 37,
+      "run_index": 1,
+      "specimen_id": "IIR-027",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 38,
+      "run_index": 1,
+      "specimen_id": "IIR-027",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 39,
+      "run_index": 1,
+      "specimen_id": "IIR-027",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 40,
+      "run_index": 2,
+      "specimen_id": "IIR-027",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 41,
+      "run_index": 2,
+      "specimen_id": "IIR-027",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 42,
+      "run_index": 2,
+      "specimen_id": "IIR-027",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 43,
+      "run_index": 3,
+      "specimen_id": "IIR-027",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 44,
+      "run_index": 3,
+      "specimen_id": "IIR-027",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 45,
+      "run_index": 3,
+      "specimen_id": "IIR-027",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 46,
+      "run_index": 1,
+      "specimen_id": "IIR-028",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 47,
+      "run_index": 1,
+      "specimen_id": "IIR-028",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 48,
+      "run_index": 1,
+      "specimen_id": "IIR-028",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 49,
+      "run_index": 2,
+      "specimen_id": "IIR-028",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 50,
+      "run_index": 2,
+      "specimen_id": "IIR-028",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 51,
+      "run_index": 2,
+      "specimen_id": "IIR-028",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 52,
+      "run_index": 3,
+      "specimen_id": "IIR-028",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 53,
+      "run_index": 3,
+      "specimen_id": "IIR-028",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 54,
+      "run_index": 3,
+      "specimen_id": "IIR-028",
+      "stage": "B2_NONFORCE_SLOTS"
+    }
+  ],
+  "provider_transport_call_ceiling": 108,
+  "provider_transport_calls_nominal": 54,
+  "purpose": "Test whether decomposing provisional normative-force classification from all remaining semantic-slot extraction can preserve the 003A force result while recovering the definition-slot omissions observed in the combined task.",
+  "retry_policy": {
+    "retries": 0
+  },
+  "runs_per_specimen": 3,
+  "secondary_descriptive_endpoints": [
+    "paired A-versus-B force cells",
+    "paired expected non-force-slot preservation",
+    "per-specimen three-run stability",
+    "source-quote grounding",
+    "provider errors",
+    "boundary rejections",
+    "deterministic merge validation"
+  ],
+  "selected_specimens": [
+    {
+      "expected_force": "CONSTITUTIVE_DEFINITION",
+      "role": "PRIMARY_DEFINITION",
+      "specimen_id": "IIR-005"
+    },
+    {
+      "expected_force": "DELEGATION",
+      "role": "CONTROL_NEAREST_CONFOUND",
+      "specimen_id": "IIR-006"
+    },
+    {
+      "expected_force": "CONSTITUTIVE_DEFINITION",
+      "role": "PRIMARY_DEFINITION",
+      "specimen_id": "IIR-023"
+    },
+    {
+      "expected_force": "CONSTITUTIVE_DEFINITION",
+      "role": "PRIMARY_DEFINITION",
+      "specimen_id": "IIR-024"
+    },
+    {
+      "expected_force": "ADVISORY",
+      "role": "CONTROL_NONDEONTIC",
+      "specimen_id": "IIR-027"
+    },
+    {
+      "expected_force": "PERMISSION",
+      "role": "CONTROL_DEONTIC",
+      "specimen_id": "IIR-028"
+    }
+  ],
+  "semantic_decision_rule": {
+    "INCONCLUSIVE": "Adjudicable result satisfying none of the rules above.",
+    "REFUTES_STAGED_DECOMPOSITION_VIABILITY": "No REGRESSION, but staged B primary force is <=7/9 OR staged B has at least two expected definition-slot omissions/incompatibilities.",
+    "REGRESSION": "Any staged-B-only control force defect OR any staged-B-only critical non-force control-slot defect.",
+    "SUPPORTS_STAGED_DECOMPOSITION_VIABILITY": "No REGRESSION; staged B primary force is 9/9; staged B definiendum is 9/9 compatible with zero omissions/incompatibilities; and staged B definiens is 6/6 compatible with zero omissions/incompatibilities."
+  },
+  "semantic_hypothesis": "A staged decomposition consisting of an independent force-only classification request plus an independent non-force-slot extraction request can jointly preserve correct force classification and expected definition slots more reliably than a single combined generative proposal operation.",
+  "semantic_replication": {
+    "adjudicability_gate": "IDENTICAL",
+    "analysis_population": "ONTOLOGY_005_ONLY",
+    "arm_definitions": "IDENTICAL",
+    "binding_path": "benchmarks/characterization/definition-ontology-staged-decomposition-005/SEMANTIC-REPLICATION-BINDING-v0.1.json",
+    "binding_sha256": "58204132703e9c613db68367c834c65a4008a671e3dcee92ef868029ea7bca14",
+    "control_endpoints": "IDENTICAL",
+    "interleaving": "IDENTICAL",
+    "ontology_004_outputs_reused": false,
+    "pacing_between_semantic_cells": "IDENTICAL",
+    "primary_endpoints": "IDENTICAL",
+    "request_order": "IDENTICAL",
+    "scientific_decision_rule": "IDENTICAL",
+    "selected_specimens": "IDENTICAL",
+    "semantic_requests": "BYTE_IDENTICAL",
+    "source_manifest_sha256": "bb03876f765599fcf2630935195dfedf53d4ea759f13aba35f680f28bdf613e7",
+    "source_plan_sha256": "90945b2016918ea66ce94a5d972dae881bbe23cb54060e069acbbe89656e7100",
+    "source_work_order": "OIC-DEFINITION-ONTOLOGY-STAGED-DECOMPOSITION-004"
+  },
+  "starting_sha": "3f7d96f1c83574e002e3a1972bcca0c6597e3c19",
+  "status": "PREREGISTERED_NOT_EXECUTED",
+  "transport_recovery_policy": {
+    "eligible_exact_error": "ModelProviderError: NVIDIA NIM connection timed out",
+    "max_retries_per_semantic_request": 1,
+    "path": "benchmarks/characterization/definition-ontology-staged-decomposition-005/TRANSPORT-RECOVERY-POLICY-v0.1.json",
+    "semantic_change": false,
+    "sha256": "13cdf153a8394dfcb9ce64a468de2fda73cc5c705e02f4a7feb54147622d250f"
+  },
+  "work_order": "OIC-DEFINITION-ONTOLOGY-STAGED-DECOMPOSITION-005"
+}

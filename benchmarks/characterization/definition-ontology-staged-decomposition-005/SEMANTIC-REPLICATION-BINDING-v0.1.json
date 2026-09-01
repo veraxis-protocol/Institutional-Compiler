@@ -1,0 +1,395 @@
+{
+  "analysis_population": "ONTOLOGY_005_ONLY",
+  "binding_version": "v0.1",
+  "ontology_004_semantic_outputs_reused": false,
+  "partial_completion_of_004": false,
+  "request_order_equivalence": "IDENTICAL_TO_FROZEN_ONTOLOGY_004",
+  "requests": [
+    {
+      "ordinal": 1,
+      "request_sha256": "e7cafbc4585460d04377a7daef31ff98a3c1ee05017ec2d7514a63a90c649a63",
+      "run_index": 1,
+      "specimen_id": "IIR-005",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 2,
+      "request_sha256": "ba0549a1514ece6274f8371b12e5b4dbe061b262ecd6e84c2bb664b78835a440",
+      "run_index": 1,
+      "specimen_id": "IIR-005",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 3,
+      "request_sha256": "ea70fd75e9029d20ebebd678191fe3592b17748f2d7c971f5a41097005ff9eed",
+      "run_index": 1,
+      "specimen_id": "IIR-005",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 4,
+      "request_sha256": "ba0549a1514ece6274f8371b12e5b4dbe061b262ecd6e84c2bb664b78835a440",
+      "run_index": 2,
+      "specimen_id": "IIR-005",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 5,
+      "request_sha256": "ea70fd75e9029d20ebebd678191fe3592b17748f2d7c971f5a41097005ff9eed",
+      "run_index": 2,
+      "specimen_id": "IIR-005",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 6,
+      "request_sha256": "e7cafbc4585460d04377a7daef31ff98a3c1ee05017ec2d7514a63a90c649a63",
+      "run_index": 2,
+      "specimen_id": "IIR-005",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 7,
+      "request_sha256": "e7cafbc4585460d04377a7daef31ff98a3c1ee05017ec2d7514a63a90c649a63",
+      "run_index": 3,
+      "specimen_id": "IIR-005",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 8,
+      "request_sha256": "ba0549a1514ece6274f8371b12e5b4dbe061b262ecd6e84c2bb664b78835a440",
+      "run_index": 3,
+      "specimen_id": "IIR-005",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 9,
+      "request_sha256": "ea70fd75e9029d20ebebd678191fe3592b17748f2d7c971f5a41097005ff9eed",
+      "run_index": 3,
+      "specimen_id": "IIR-005",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 10,
+      "request_sha256": "552c3f4ec8a8a0f244e5889c5232b11b7736bcf8f9c68b0581868c8f51361648",
+      "run_index": 1,
+      "specimen_id": "IIR-006",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 11,
+      "request_sha256": "e3d1f0431b237b537bea6ab8b99f395a8ed64aa427e344c3093d9a28dda6e4f9",
+      "run_index": 1,
+      "specimen_id": "IIR-006",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 12,
+      "request_sha256": "1aee0c08978a9b1096ceaca137f9e51e8aa1768129504d8bfa489eb567006967",
+      "run_index": 1,
+      "specimen_id": "IIR-006",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 13,
+      "request_sha256": "e3d1f0431b237b537bea6ab8b99f395a8ed64aa427e344c3093d9a28dda6e4f9",
+      "run_index": 2,
+      "specimen_id": "IIR-006",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 14,
+      "request_sha256": "1aee0c08978a9b1096ceaca137f9e51e8aa1768129504d8bfa489eb567006967",
+      "run_index": 2,
+      "specimen_id": "IIR-006",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 15,
+      "request_sha256": "552c3f4ec8a8a0f244e5889c5232b11b7736bcf8f9c68b0581868c8f51361648",
+      "run_index": 2,
+      "specimen_id": "IIR-006",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 16,
+      "request_sha256": "552c3f4ec8a8a0f244e5889c5232b11b7736bcf8f9c68b0581868c8f51361648",
+      "run_index": 3,
+      "specimen_id": "IIR-006",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 17,
+      "request_sha256": "e3d1f0431b237b537bea6ab8b99f395a8ed64aa427e344c3093d9a28dda6e4f9",
+      "run_index": 3,
+      "specimen_id": "IIR-006",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 18,
+      "request_sha256": "1aee0c08978a9b1096ceaca137f9e51e8aa1768129504d8bfa489eb567006967",
+      "run_index": 3,
+      "specimen_id": "IIR-006",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 19,
+      "request_sha256": "22ca4f96332023a1a718d911d1cc3c652ee133b5a4e2591dcaa5980ab7f8dd8f",
+      "run_index": 1,
+      "specimen_id": "IIR-023",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 20,
+      "request_sha256": "e71606393bcbf59344f6ff58448f24bac2d179bd3e8f2e31baea465342a89cb5",
+      "run_index": 1,
+      "specimen_id": "IIR-023",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 21,
+      "request_sha256": "38b4f67125a488dfb667044f9235326c86acf35207c871278a78f67ad02d3097",
+      "run_index": 1,
+      "specimen_id": "IIR-023",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 22,
+      "request_sha256": "e71606393bcbf59344f6ff58448f24bac2d179bd3e8f2e31baea465342a89cb5",
+      "run_index": 2,
+      "specimen_id": "IIR-023",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 23,
+      "request_sha256": "38b4f67125a488dfb667044f9235326c86acf35207c871278a78f67ad02d3097",
+      "run_index": 2,
+      "specimen_id": "IIR-023",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 24,
+      "request_sha256": "22ca4f96332023a1a718d911d1cc3c652ee133b5a4e2591dcaa5980ab7f8dd8f",
+      "run_index": 2,
+      "specimen_id": "IIR-023",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 25,
+      "request_sha256": "22ca4f96332023a1a718d911d1cc3c652ee133b5a4e2591dcaa5980ab7f8dd8f",
+      "run_index": 3,
+      "specimen_id": "IIR-023",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 26,
+      "request_sha256": "e71606393bcbf59344f6ff58448f24bac2d179bd3e8f2e31baea465342a89cb5",
+      "run_index": 3,
+      "specimen_id": "IIR-023",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 27,
+      "request_sha256": "38b4f67125a488dfb667044f9235326c86acf35207c871278a78f67ad02d3097",
+      "run_index": 3,
+      "specimen_id": "IIR-023",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 28,
+      "request_sha256": "c56074bb957c2def2aef7a27d680f2dfd57bb3e2a1aed8050d1d6fc7d22577c3",
+      "run_index": 1,
+      "specimen_id": "IIR-024",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 29,
+      "request_sha256": "9295a2674f3edc7e8d0e188531d32e78e73581333ffb5aea15092c58a604cb1d",
+      "run_index": 1,
+      "specimen_id": "IIR-024",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 30,
+      "request_sha256": "6d2d0d34b478ffead5100984d58d40765d42abe29d980df42d05b7d62c254533",
+      "run_index": 1,
+      "specimen_id": "IIR-024",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 31,
+      "request_sha256": "9295a2674f3edc7e8d0e188531d32e78e73581333ffb5aea15092c58a604cb1d",
+      "run_index": 2,
+      "specimen_id": "IIR-024",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 32,
+      "request_sha256": "6d2d0d34b478ffead5100984d58d40765d42abe29d980df42d05b7d62c254533",
+      "run_index": 2,
+      "specimen_id": "IIR-024",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 33,
+      "request_sha256": "c56074bb957c2def2aef7a27d680f2dfd57bb3e2a1aed8050d1d6fc7d22577c3",
+      "run_index": 2,
+      "specimen_id": "IIR-024",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 34,
+      "request_sha256": "c56074bb957c2def2aef7a27d680f2dfd57bb3e2a1aed8050d1d6fc7d22577c3",
+      "run_index": 3,
+      "specimen_id": "IIR-024",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 35,
+      "request_sha256": "9295a2674f3edc7e8d0e188531d32e78e73581333ffb5aea15092c58a604cb1d",
+      "run_index": 3,
+      "specimen_id": "IIR-024",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 36,
+      "request_sha256": "6d2d0d34b478ffead5100984d58d40765d42abe29d980df42d05b7d62c254533",
+      "run_index": 3,
+      "specimen_id": "IIR-024",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 37,
+      "request_sha256": "1c31b6bfedde77818ea79f32096af76933ddabd1dd313963a1d7ae577d636426",
+      "run_index": 1,
+      "specimen_id": "IIR-027",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 38,
+      "request_sha256": "c2c26df713f0b84e54d1e8da8c7be480a2010ce8afc0059b5f83e72e149d7bc5",
+      "run_index": 1,
+      "specimen_id": "IIR-027",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 39,
+      "request_sha256": "93ddd3a007cd9b7a4b926122f14f31355b91c79cb17686e27dbed81d69e1f174",
+      "run_index": 1,
+      "specimen_id": "IIR-027",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 40,
+      "request_sha256": "c2c26df713f0b84e54d1e8da8c7be480a2010ce8afc0059b5f83e72e149d7bc5",
+      "run_index": 2,
+      "specimen_id": "IIR-027",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 41,
+      "request_sha256": "93ddd3a007cd9b7a4b926122f14f31355b91c79cb17686e27dbed81d69e1f174",
+      "run_index": 2,
+      "specimen_id": "IIR-027",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 42,
+      "request_sha256": "1c31b6bfedde77818ea79f32096af76933ddabd1dd313963a1d7ae577d636426",
+      "run_index": 2,
+      "specimen_id": "IIR-027",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 43,
+      "request_sha256": "1c31b6bfedde77818ea79f32096af76933ddabd1dd313963a1d7ae577d636426",
+      "run_index": 3,
+      "specimen_id": "IIR-027",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 44,
+      "request_sha256": "c2c26df713f0b84e54d1e8da8c7be480a2010ce8afc0059b5f83e72e149d7bc5",
+      "run_index": 3,
+      "specimen_id": "IIR-027",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 45,
+      "request_sha256": "93ddd3a007cd9b7a4b926122f14f31355b91c79cb17686e27dbed81d69e1f174",
+      "run_index": 3,
+      "specimen_id": "IIR-027",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 46,
+      "request_sha256": "7eadf7822af40d12d637ed1937885c61f0e9b1be4ba6d9e37bdce56ffaea07d8",
+      "run_index": 1,
+      "specimen_id": "IIR-028",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 47,
+      "request_sha256": "4b5c8a09f5070ed89c5f0ebd4a4e3e6dc31a7a06d6adef038c505ec7aeebe95d",
+      "run_index": 1,
+      "specimen_id": "IIR-028",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 48,
+      "request_sha256": "bc6daf227f5eee744ebf1e493e3341cb13d04dc3d1742460a236d7028b582b4d",
+      "run_index": 1,
+      "specimen_id": "IIR-028",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 49,
+      "request_sha256": "4b5c8a09f5070ed89c5f0ebd4a4e3e6dc31a7a06d6adef038c505ec7aeebe95d",
+      "run_index": 2,
+      "specimen_id": "IIR-028",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 50,
+      "request_sha256": "bc6daf227f5eee744ebf1e493e3341cb13d04dc3d1742460a236d7028b582b4d",
+      "run_index": 2,
+      "specimen_id": "IIR-028",
+      "stage": "B2_NONFORCE_SLOTS"
+    },
+    {
+      "ordinal": 51,
+      "request_sha256": "7eadf7822af40d12d637ed1937885c61f0e9b1be4ba6d9e37bdce56ffaea07d8",
+      "run_index": 2,
+      "specimen_id": "IIR-028",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 52,
+      "request_sha256": "7eadf7822af40d12d637ed1937885c61f0e9b1be4ba6d9e37bdce56ffaea07d8",
+      "run_index": 3,
+      "specimen_id": "IIR-028",
+      "stage": "A_COMBINED"
+    },
+    {
+      "ordinal": 53,
+      "request_sha256": "4b5c8a09f5070ed89c5f0ebd4a4e3e6dc31a7a06d6adef038c505ec7aeebe95d",
+      "run_index": 3,
+      "specimen_id": "IIR-028",
+      "stage": "B1_FORCE"
+    },
+    {
+      "ordinal": 54,
+      "request_sha256": "bc6daf227f5eee744ebf1e493e3341cb13d04dc3d1742460a236d7028b582b4d",
+      "run_index": 3,
+      "specimen_id": "IIR-028",
+      "stage": "B2_NONFORCE_SLOTS"
+    }
+  ],
+  "required_runtime_rule": "Before each network access, the materialized Ontology 005 ModelRequest projection and SHA256 must exactly equal the corresponding frozen Ontology 004 request object and request SHA256.",
+  "semantic_request_equivalence": "BYTE_IDENTICAL_TO_FROZEN_ONTOLOGY_004",
+  "semantic_request_population": 54,
+  "source_closure_commit": "3f7d96f1c83574e002e3a1972bcca0c6597e3c19",
+  "source_manifest_path": "benchmarks/characterization/definition-ontology-staged-decomposition-004/REQUEST-MATERIALIZATION-v0.1.json",
+  "source_manifest_sha256": "bb03876f765599fcf2630935195dfedf53d4ea759f13aba35f680f28bdf613e7",
+  "source_work_order": "OIC-DEFINITION-ONTOLOGY-STAGED-DECOMPOSITION-004",
+  "work_order": "OIC-DEFINITION-ONTOLOGY-STAGED-DECOMPOSITION-005"
+}
