@@ -1,0 +1,117 @@
+{
+  "adapter_binding": {
+    "known_observability_limit": "The frozen adapter translates both connect-path TimeoutError and response-read TimeoutError into the same ModelProviderError message. Latency Stability 001 therefore establishes persistent timeout behavior but does not localize the failing network/API layer.",
+    "sha256": "c1c02303cec29eaef8cb96d1baeec735ef724d9c8a06e20a61b91388d4350339"
+  },
+  "architecture_change_authorized": false,
+  "claim_ceiling": "Bounded localization of one NVIDIA provider-path incident only. No semantic correctness, canonical meaning, Institutional IR, production readiness, provider-wide availability, cross-provider reliability, architecture change, or independent-validation claim.",
+  "classification_boundary": "Classification localizes the bounded incident observation only. It does not reclassify Latency Stability 001 or Qualification 006 and does not authorize Qualification 007 or Ontology 006.",
+  "classification_precedence": [
+    "DNS_RESOLUTION_FAILURE",
+    "TCP_CONNECT_FAILURE",
+    "TLS_HANDSHAKE_FAILURE",
+    "HTTP_ROUTE_OR_GATEWAY_FAILURE",
+    "AUTH_OR_ACCOUNT_FAILURE",
+    "TARGET_INFERENCE_PATH_TIMEOUT",
+    "TARGET_INFERENCE_HTTP_OR_RESPONSE_FAILURE",
+    "TARGET_PATH_RESPONDED_DURING_INCIDENT_PROBE",
+    "INCONCLUSIVE"
+  ],
+  "diagnostic_order_fixed": true,
+  "diagnostic_sequence": [
+    {
+      "credential_required": false,
+      "diagnostic_id": "DNS_RESOLUTION",
+      "maximum_attempts": 1,
+      "model_inference": false,
+      "ordinal": 1,
+      "purpose": "Resolve integrate.api.nvidia.com and record terminal resolver outcome and returned addresses.",
+      "timeout_seconds": 10.0
+    },
+    {
+      "credential_required": false,
+      "diagnostic_id": "TCP_CONNECT",
+      "maximum_attempts": 1,
+      "model_inference": false,
+      "ordinal": 2,
+      "purpose": "Open one TCP connection to the resolved NVIDIA host on port 443 and record connect latency/outcome.",
+      "timeout_seconds": 10.0
+    },
+    {
+      "credential_required": false,
+      "diagnostic_id": "TLS_HANDSHAKE",
+      "maximum_attempts": 1,
+      "model_inference": false,
+      "ordinal": 3,
+      "purpose": "Perform one verified TLS handshake with SNI and record protocol/cipher/certificate-host validation.",
+      "timeout_seconds": 10.0
+    },
+    {
+      "credential_required": false,
+      "diagnostic_id": "HTTP_ROUTE",
+      "maximum_attempts": 1,
+      "model_inference": false,
+      "ordinal": 4,
+      "purpose": "Send one deliberately unauthenticated request to the documented chat-completions route. Any bounded HTTP response establishes route/gateway reachability; no successful inference is requested.",
+      "timeout_seconds": 15.0
+    },
+    {
+      "credential_required": true,
+      "diagnostic_id": "AUTH_VALIDATION",
+      "maximum_attempts": 1,
+      "model_inference": false,
+      "ordinal": 5,
+      "purpose": "Send one authenticated but deliberately malformed chat-completions request designed to terminate at request validation before model inference. Record HTTP status, headers timing, and terminal outcome.",
+      "timeout_seconds": 15.0
+    },
+    {
+      "credential_required": true,
+      "diagnostic_id": "TARGET_BASIC_TEXT",
+      "maximum_attempts": 1,
+      "model_inference": true,
+      "ordinal": 6,
+      "purpose": "Send exactly one frozen BASIC_TEXT provider probe against the target model while separately timing connection establishment, response headers, and response-body completion.",
+      "timeout_seconds": 60.0
+    }
+  ],
+  "incident_source": {
+    "classification": "PROVIDER_PATH_UNSTABLE",
+    "closure_commit": "69e77bfa7e09a371a1e3675fd8742d0f6fe1cf0b",
+    "exact_error_message": "NVIDIA NIM connection timed out",
+    "execution_result_sha256": "bde77412e37282083034b22c03b14dc93ee3320ca70957e97811fae3983e0ab8",
+    "failure_class": "PERSISTENT_PROVIDER_TIMEOUT",
+    "live_log_sha256": "cd228dd5b8ffee758256f0b048b5ec202b33ae03d69fd733f0d9970c29956441",
+    "post_run_adjudication_sha256": "f11d8f5772f3afa72513eed42d04f0c56df421dd1ff7090d7ae5acf37e6d3582",
+    "provider_errors": 36,
+    "receipt_sha256": "82681f706aba1b63fa10fea5f50f456d877d035c2e98bee9602b20007b06103e",
+    "rerun_authorized": false,
+    "terminal_observations": 36,
+    "work_order": "OIC-NVIDIA-PROVIDER-LATENCY-STABILITY-001"
+  },
+  "live_run_executed": false,
+  "maximum_live_diagnostics": 6,
+  "maximum_model_inference_requests": 1,
+  "model_call_made": false,
+  "next_authorized_activity": "Implement, test, materialize and statically freeze the incident diagnostic instrument offline. Do not execute incident diagnostics live yet.",
+  "nvidia_network_request_made": false,
+  "ontology_006_execution_authorized": false,
+  "provider_diagnostic_call_made": false,
+  "provider_target": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "chat_endpoint": "/v1/chat/completions",
+    "host": "integrate.api.nvidia.com",
+    "port": 443,
+    "target_model": "nvidia/nemotron-3.5-lightning-30b-a3b"
+  },
+  "qualification_007_authorized": false,
+  "replacement_requests_allowed": false,
+  "retries": 0,
+  "scientific_question": "At which bounded provider-path layer does the NVIDIA path fail: DNS resolution, TCP connection, TLS handshake, HTTP route/gateway, authenticated request validation, or the target chat-completion inference/response path?",
+  "semantic_hypothesis": null,
+  "semantic_hypothesis_evaluated": false,
+  "starting_sha": "69e77bfa7e09a371a1e3675fd8742d0f6fe1cf0b",
+  "status": "PREREGISTERED_NOT_IMPLEMENTED_NOT_EXECUTED",
+  "stop_on_earliest_layer_failure": true,
+  "stop_rule": "If DNS, TCP, or TLS fails, no later provider diagnostic is executed because downstream layers are not reachable. If HTTP_ROUTE fails by timeout/transport error, AUTH_VALIDATION and TARGET_BASIC_TEXT are not executed. If AUTH_VALIDATION demonstrates explicit credential/account rejection, TARGET_BASIC_TEXT is not executed. No failed diagnostic is replaced or retried.",
+  "work_order": "OIC-NVIDIA-PROVIDER-PATH-INCIDENT-001"
+}
