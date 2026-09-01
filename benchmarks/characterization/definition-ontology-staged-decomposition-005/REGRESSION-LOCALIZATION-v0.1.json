@@ -1,0 +1,177 @@
+{
+  "adjudicable": true,
+  "claim_boundary": {
+    "architecture_change_authorized": false,
+    "canonicalization_performed": false,
+    "independent_validation_claim": false,
+    "institutional_ir_constructed": false,
+    "ontology_004_outputs_reused": false
+  },
+  "definition_metrics": {
+    "combined_arm": {
+      "definiendum": {
+        "expected_established": 9,
+        "incompatible": 0,
+        "omitted": 3,
+        "proposed_compatible": 6
+      },
+      "definiens": {
+        "expected_established": 6,
+        "incompatible": 0,
+        "omitted": 0,
+        "proposed_compatible": 6
+      }
+    },
+    "staged_nonforce": {
+      "all_slot_metrics": {
+        "action": {
+          "expected_established": 9,
+          "incompatible": 3,
+          "omitted": 0,
+          "proposed_compatible": 6
+        },
+        "bearer": {
+          "expected_established": 9,
+          "incompatible": 0,
+          "omitted": 1,
+          "proposed_compatible": 8
+        },
+        "condition": {
+          "expected_established": 3,
+          "incompatible": 0,
+          "omitted": 3,
+          "proposed_compatible": 0
+        },
+        "counterparty": {
+          "expected_established": 3,
+          "incompatible": 0,
+          "omitted": 0,
+          "proposed_compatible": 3
+        },
+        "definiendum": {
+          "expected_established": 9,
+          "incompatible": 0,
+          "omitted": 3,
+          "proposed_compatible": 6
+        },
+        "definiens": {
+          "expected_established": 6,
+          "incompatible": 0,
+          "omitted": 3,
+          "proposed_compatible": 3
+        },
+        "exception": {
+          "expected_established": 0,
+          "incompatible": 0,
+          "omitted": 0,
+          "proposed_compatible": 0
+        },
+        "normative_force": {
+          "expected_established": 18,
+          "incompatible": 0,
+          "omitted": 18,
+          "proposed_compatible": 0
+        },
+        "object": {
+          "expected_established": 9,
+          "incompatible": 0,
+          "omitted": 3,
+          "proposed_compatible": 6
+        },
+        "quantum": {
+          "expected_established": 0,
+          "incompatible": 0,
+          "omitted": 0,
+          "proposed_compatible": 0
+        },
+        "temporal_qualifier": {
+          "expected_established": 0,
+          "incompatible": 0,
+          "omitted": 0,
+          "proposed_compatible": 0
+        }
+      },
+      "definiendum": {
+        "expected_established": 9,
+        "incompatible": 0,
+        "omitted": 3,
+        "proposed_compatible": 6
+      },
+      "definiens": {
+        "expected_established": 6,
+        "incompatible": 0,
+        "omitted": 3,
+        "proposed_compatible": 3
+      }
+    }
+  },
+  "evidence": {
+    "ontology_005_live_log_sha256": "ed584b780969dfb4a251f18dbaf5fd8234e19a8f1d12f1b2ef9b7415a556d913",
+    "ontology_005_receipt_sha256": "6ac1d6f79ba7dd10710edc380ab8780f308f335cd4658b83761e0af67557ed35",
+    "provider_qualification_005_receipt_sha256": "41ff8801c98621dc132c918c612e713afbbe2a46ffaa41e56710f6de3543d3b6"
+  },
+  "execution_commit": "713eb9a5f8cbe4b184e163573c30dd9d48cf1541",
+  "localization_version": "v0.1",
+  "primary_force": {
+    "b_correct_planned_denominator": {
+      "correct": 9,
+      "planned": 9
+    }
+  },
+  "regression_class": "STAGED_NONFORCE_CONTROL_REGRESSION",
+  "regression_trigger": {
+    "control_force_b_only_defect_count": 0,
+    "control_nonforce_b_only_slot_defect_count": 2,
+    "control_nonforce_b_only_slot_defect_instances": [
+      {
+        "run_index": 1,
+        "slot": "action",
+        "specimen_id": "IIR-027"
+      },
+      {
+        "run_index": 3,
+        "slot": "action",
+        "specimen_id": "IIR-027"
+      }
+    ]
+  },
+  "rerun_authorized": false,
+  "scientific_disposition": "REGRESSION",
+  "transport_event": {
+    "calls": [
+      {
+        "error_message": "NVIDIA NIM connection timed out",
+        "error_type": "ModelProviderError",
+        "model": null,
+        "outcome": "PROVIDER_ERROR",
+        "provider": null,
+        "raw_content_sha256": null,
+        "request_id": null,
+        "request_projection_sha256": "7eadf7822af40d12d637ed1937885c61f0e9b1be4ba6d9e37bdce56ffaea07d8",
+        "same_request_object_as_first": true,
+        "semantic_ordinal": 51,
+        "transport_attempt_index": 1
+      },
+      {
+        "error_message": null,
+        "error_type": null,
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "outcome": "ACCEPTED",
+        "provider": "nvidia-nim",
+        "raw_content_sha256": "73737a6a0291e9b43520a59ff993fcdbe39b5fd9613ac09a1d493309c234b37d",
+        "request_id": "chatcmpl-b255f996-c71b-4eed-9424-f812f5e2f7bc",
+        "request_projection_sha256": "7eadf7822af40d12d637ed1937885c61f0e9b1be4ba6d9e37bdce56ffaea07d8",
+        "same_request_object_as_first": true,
+        "semantic_ordinal": 51,
+        "transport_attempt_index": 2
+      }
+    ],
+    "causal_status_for_regression": "SEPARATE_FROM_SEMANTIC_REGRESSION",
+    "classification": "RECOVERED_PREREGISTERED_TRANSPORT_TIMEOUT",
+    "run_index": 2,
+    "semantic_ordinal": 51,
+    "specimen_id": "IIR-028",
+    "stage": "A_COMBINED"
+  },
+  "work_order": "OIC-DEFINITION-ONTOLOGY-STAGED-DECOMPOSITION-005"
+}

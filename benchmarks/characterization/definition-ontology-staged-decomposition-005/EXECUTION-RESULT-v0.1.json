@@ -1,0 +1,52 @@
+{
+  "accepted_semantic_attempts": 54,
+  "adjudicability": {
+    "accepted_provider_requests": 54,
+    "adjudicable": true,
+    "complete_composite_pairs": 18,
+    "control_complete_pairs": 9,
+    "observed_attempts": 54,
+    "planned_provider_requests": 54,
+    "primary_complete_pairs": 9
+  },
+  "architectural_change_authorized": false,
+  "canonicalization_performed": false,
+  "control_force_b_only_defect_count": 0,
+  "control_nonforce_b_only_slot_defect_count": 2,
+  "control_nonforce_b_only_slot_defect_instances": [
+    {
+      "run_index": 1,
+      "slot": "action",
+      "specimen_id": "IIR-027"
+    },
+    {
+      "run_index": 3,
+      "slot": "action",
+      "specimen_id": "IIR-027"
+    }
+  ],
+  "evidence": {
+    "ontology_005_live_log_sha256": "ed584b780969dfb4a251f18dbaf5fd8234e19a8f1d12f1b2ef9b7415a556d913",
+    "ontology_005_receipt_sha256": "6ac1d6f79ba7dd10710edc380ab8780f308f335cd4658b83761e0af67557ed35",
+    "provider_qualification_005_receipt_sha256": "41ff8801c98621dc132c918c612e713afbbe2a46ffaa41e56710f6de3543d3b6"
+  },
+  "execution_commit": "713eb9a5f8cbe4b184e163573c30dd9d48cf1541",
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "ontology_004_semantic_outputs_reused": false,
+  "primary_force_b_correct": {
+    "correct": 9,
+    "planned": 9
+  },
+  "rerun_authorized": false,
+  "scientific_disposition": "REGRESSION",
+  "semantic_attempts": 54,
+  "semantic_decision_rule_evaluated": true,
+  "status": "CLOSED_EXECUTED_ADJUDICABLE",
+  "transport_calls_observed": 55,
+  "transport_retries_used": 1,
+  "transport_retry_cells": [
+    51
+  ],
+  "work_order": "OIC-DEFINITION-ONTOLOGY-STAGED-DECOMPOSITION-005"
+}
