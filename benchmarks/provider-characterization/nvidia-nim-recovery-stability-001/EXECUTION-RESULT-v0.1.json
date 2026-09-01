@@ -1,0 +1,66 @@
+{
+  "accepted_marker_valid_count": 18,
+  "analysis_population": "PROVIDER_RECOVERY_STABILITY_001_ONLY",
+  "architecture_change_authorized": false,
+  "bounded_recovery_stability_established": true,
+  "canonicalization_performed": false,
+  "claim_ceiling": "One NVIDIA endpoint/model, one fresh 18-observation post-incident population, three frozen provider-probe shapes, provider availability and latency only. No historical root-cause claim, provider qualification, semantic correctness, canonical institutional meaning, Institutional IR, production readiness, architecture change, cross-provider reliability, or independent validation claim.",
+  "classification": "BOUNDED_RECOVERY_STABILITY_OBSERVED",
+  "cycles": 6,
+  "evidence": {
+    "live_log_sha256": "f54255341d79b5b9870c6baaa95ac57d9be867850892dee47a30649f96fbbc18",
+    "receipt_sha256": "1dd08e03883e360139edf4e20c91a0647d4eb1585e4f7f2bd78b4d7e84c95ad6"
+  },
+  "headroom_violation_count_gt_45_seconds": 0,
+  "historical_latency_stability_001_result": "PROVIDER_PATH_UNSTABLE",
+  "historical_observations_reused": false,
+  "incident_001_observation_reused": false,
+  "institutional_ir_constructed": false,
+  "interpretation": "Across the complete fresh preregistered 18-observation post-incident population, all three frozen provider probe shapes returned accepted marker-valid responses. No provider or response failures occurred and no observation exceeded the frozen 45-second latency headroom. This establishes bounded provider recovery stability for the tested endpoint/model and observation window. It does not itself constitute provider qualification.",
+  "latency_headroom_seconds": 45.0,
+  "next_scientific_activity": "A separately preregistered fresh Provider Qualification 007 may now be considered. Recovery Stability 001 itself does not create or execute Qualification 007 and does not authorize Ontology 006. Ontology 006 remains blocked until a separately frozen Qualification 007 executes and returns QUALIFIED.",
+  "observations_per_probe": 6,
+  "ontology_006_executed": false,
+  "ontology_006_execution_authorized": false,
+  "overall_latency_max_seconds": 42.01,
+  "overall_latency_median_seconds": 31.106,
+  "per_probe": {
+    "BASIC_TEXT": {
+      "accepted_marker_valid": 6,
+      "headroom_violation_count": 0,
+      "max_latency_seconds": 42.01,
+      "median_latency_seconds": 31.556,
+      "observation_count": 6
+    },
+    "JSON_MODE": {
+      "accepted_marker_valid": 6,
+      "headroom_violation_count": 0,
+      "max_latency_seconds": 39.639,
+      "median_latency_seconds": 32.106,
+      "observation_count": 6
+    },
+    "PRODUCTION_TOKEN_RESERVATION": {
+      "accepted_marker_valid": 6,
+      "headroom_violation_count": 0,
+      "max_latency_seconds": 37.365,
+      "median_latency_seconds": 30.292,
+      "observation_count": 6
+    }
+  },
+  "planned_provider_requests": 18,
+  "provider_or_response_failure_count": 0,
+  "provider_path_incident_001_result": "TARGET_PATH_RESPONDED_DURING_INCIDENT_PROBE",
+  "provider_qualification_established": false,
+  "qualification_006_reclassified": false,
+  "qualification_007_authorized": false,
+  "qualification_007_consideration_permitted": true,
+  "qualification_007_created": false,
+  "replacement_requests_allowed": false,
+  "rerun_authorized": false,
+  "retries": 0,
+  "semantic_hypothesis_evaluated": false,
+  "static_freeze_commit": "b5c46377857348c18cf937e364509dfd965621ba",
+  "status": "CLOSED_BOUNDED_RECOVERY_STABILITY_OBSERVED",
+  "terminal_observation_count": 18,
+  "work_order": "OIC-NVIDIA-PROVIDER-RECOVERY-STABILITY-001"
+}
