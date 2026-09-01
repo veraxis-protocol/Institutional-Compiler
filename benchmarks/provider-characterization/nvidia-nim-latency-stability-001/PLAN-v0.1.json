@@ -1,0 +1,315 @@
+{
+  "adjudicability_gate": {
+    "planned_positions": 36,
+    "required_terminal_observations": 36,
+    "rule": "Every frozen request position must produce exactly one terminal observation. Errors, timeouts, mismatches, invalid markers and slow responses are observations and must not be replaced."
+  },
+  "analysis_population": "LATENCY_STABILITY_001_ONLY",
+  "architecture_change_authorized": false,
+  "canonicalization_performed": false,
+  "claim_ceiling": "Bounded descriptive latency evidence for one NVIDIA endpoint/model and one frozen 36-observation window only. No semantic result, Ontology 006 result, canonical meaning, institutional authority, production readiness, revised latency threshold, architecture change, cross-provider generalization, or independent-validation claim.",
+  "classification_precedence": [
+    "PROVIDER_PATH_UNSTABLE",
+    "FREQUENT_HEADROOM_VIOLATION",
+    "INTERMITTENT_HEADROOM_VIOLATION",
+    "STABLE_WITHIN_FROZEN_HEADROOM"
+  ],
+  "classification_rules": {
+    "FREQUENT_HEADROOM_VIOLATION": "All 36 observations are accepted and marker-valid, and at least 4 of 36 exceed 45.0 seconds.",
+    "INTERMITTENT_HEADROOM_VIOLATION": "All 36 observations are accepted and marker-valid, and 1 through 3 inclusive exceed 45.0 seconds.",
+    "PROVIDER_PATH_UNSTABLE": "At least one terminal observation is a provider error, timeout, response mismatch, or invalid expected marker.",
+    "STABLE_WITHIN_FROZEN_HEADROOM": "All 36 observations are accepted and marker-valid, and zero exceed 45.0 seconds."
+  },
+  "cycles": 12,
+  "future_qualification_rule": "No characterization classification automatically authorizes Qualification 007 or any other provider qualification. Any new qualification requires a separately preregistered work order after this characterization is closed.",
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "interpretation_boundary": "This work order characterizes provider-path latency only. It cannot retroactively change Qualification 006, authorize Ontology 006, redefine the 45-second threshold, or itself constitute a new provider qualification.",
+  "latency_headroom_seconds": 45.0,
+  "live_run_executed": false,
+  "model_call_made": false,
+  "network_request_made": false,
+  "next_authorized_activity": "Implement, materialize, contract-test and statically freeze Latency Stability 001 offline. Do not execute it live.",
+  "observations_per_probe": 12,
+  "ontology_006_execution_authorized": false,
+  "order_control": "Three cyclic orders repeated four times. Each probe occupies each within-cycle position exactly four times.",
+  "pacing_seconds_between_cycles": 10.0,
+  "pacing_seconds_between_requests": 4.0,
+  "planned_provider_requests": 36,
+  "primary_metrics": [
+    "terminal_observation_count",
+    "accepted_marker_valid_count",
+    "provider_or_response_failure_count",
+    "headroom_violation_count",
+    "headroom_violation_rate",
+    "per_probe_headroom_violation_count",
+    "per_probe_median_latency_seconds",
+    "per_probe_max_latency_seconds",
+    "overall_median_latency_seconds",
+    "overall_max_latency_seconds"
+  ],
+  "probe_semantics": {
+    "probe_ids": [
+      "BASIC_TEXT",
+      "JSON_MODE",
+      "PRODUCTION_TOKEN_RESERVATION"
+    ],
+    "probe_spec_sha256": "262445c71ca34f41dd9d173a978ebcaa7bd71df2f313f0c9b090b9fd4a8925d1",
+    "status": "BYTE_SEMANTICS_TO_BE_BOUND_TO_FROZEN_QUALIFICATION_006"
+  },
+  "probes_per_cycle": 3,
+  "production_code_changed": false,
+  "production_prompt_changed": false,
+  "provider": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "timeout_seconds": 60.0
+  },
+  "provider_call_made": false,
+  "purpose": "Characterize short-run latency stability of the exact frozen NVIDIA provider path after Provider Qualification 006 closed DEGRADED solely because one accepted JSON_MODE observation exceeded the preregistered 45-second headroom.",
+  "qualification_006_observations_reused": false,
+  "replacement_requests_allowed": false,
+  "request_plan": [
+    {
+      "cycle_index": 1,
+      "cycle_position": 1,
+      "ordinal": 1,
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "cycle_index": 1,
+      "cycle_position": 2,
+      "ordinal": 2,
+      "probe_id": "JSON_MODE"
+    },
+    {
+      "cycle_index": 1,
+      "cycle_position": 3,
+      "ordinal": 3,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    },
+    {
+      "cycle_index": 2,
+      "cycle_position": 1,
+      "ordinal": 4,
+      "probe_id": "JSON_MODE"
+    },
+    {
+      "cycle_index": 2,
+      "cycle_position": 2,
+      "ordinal": 5,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    },
+    {
+      "cycle_index": 2,
+      "cycle_position": 3,
+      "ordinal": 6,
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "cycle_index": 3,
+      "cycle_position": 1,
+      "ordinal": 7,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    },
+    {
+      "cycle_index": 3,
+      "cycle_position": 2,
+      "ordinal": 8,
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "cycle_index": 3,
+      "cycle_position": 3,
+      "ordinal": 9,
+      "probe_id": "JSON_MODE"
+    },
+    {
+      "cycle_index": 4,
+      "cycle_position": 1,
+      "ordinal": 10,
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "cycle_index": 4,
+      "cycle_position": 2,
+      "ordinal": 11,
+      "probe_id": "JSON_MODE"
+    },
+    {
+      "cycle_index": 4,
+      "cycle_position": 3,
+      "ordinal": 12,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    },
+    {
+      "cycle_index": 5,
+      "cycle_position": 1,
+      "ordinal": 13,
+      "probe_id": "JSON_MODE"
+    },
+    {
+      "cycle_index": 5,
+      "cycle_position": 2,
+      "ordinal": 14,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    },
+    {
+      "cycle_index": 5,
+      "cycle_position": 3,
+      "ordinal": 15,
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "cycle_index": 6,
+      "cycle_position": 1,
+      "ordinal": 16,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    },
+    {
+      "cycle_index": 6,
+      "cycle_position": 2,
+      "ordinal": 17,
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "cycle_index": 6,
+      "cycle_position": 3,
+      "ordinal": 18,
+      "probe_id": "JSON_MODE"
+    },
+    {
+      "cycle_index": 7,
+      "cycle_position": 1,
+      "ordinal": 19,
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "cycle_index": 7,
+      "cycle_position": 2,
+      "ordinal": 20,
+      "probe_id": "JSON_MODE"
+    },
+    {
+      "cycle_index": 7,
+      "cycle_position": 3,
+      "ordinal": 21,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    },
+    {
+      "cycle_index": 8,
+      "cycle_position": 1,
+      "ordinal": 22,
+      "probe_id": "JSON_MODE"
+    },
+    {
+      "cycle_index": 8,
+      "cycle_position": 2,
+      "ordinal": 23,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    },
+    {
+      "cycle_index": 8,
+      "cycle_position": 3,
+      "ordinal": 24,
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "cycle_index": 9,
+      "cycle_position": 1,
+      "ordinal": 25,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    },
+    {
+      "cycle_index": 9,
+      "cycle_position": 2,
+      "ordinal": 26,
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "cycle_index": 9,
+      "cycle_position": 3,
+      "ordinal": 27,
+      "probe_id": "JSON_MODE"
+    },
+    {
+      "cycle_index": 10,
+      "cycle_position": 1,
+      "ordinal": 28,
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "cycle_index": 10,
+      "cycle_position": 2,
+      "ordinal": 29,
+      "probe_id": "JSON_MODE"
+    },
+    {
+      "cycle_index": 10,
+      "cycle_position": 3,
+      "ordinal": 30,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    },
+    {
+      "cycle_index": 11,
+      "cycle_position": 1,
+      "ordinal": 31,
+      "probe_id": "JSON_MODE"
+    },
+    {
+      "cycle_index": 11,
+      "cycle_position": 2,
+      "ordinal": 32,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    },
+    {
+      "cycle_index": 11,
+      "cycle_position": 3,
+      "ordinal": 33,
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "cycle_index": 12,
+      "cycle_position": 1,
+      "ordinal": 34,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    },
+    {
+      "cycle_index": 12,
+      "cycle_position": 2,
+      "ordinal": 35,
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "cycle_index": 12,
+      "cycle_position": 3,
+      "ordinal": 36,
+      "probe_id": "JSON_MODE"
+    }
+  ],
+  "retries": 0,
+  "scientific_question": "Across a predetermined fresh 36-observation window using unchanged provider and probe semantics, is the 45-second headroom violation absent, intermittent, recurrent, or accompanied by provider-path instability?",
+  "semantic_hypothesis": null,
+  "semantic_successor_authorized": false,
+  "source_qualification_006": {
+    "closure_commit": "752d87e034fc6f614454086fc55571712da1a453",
+    "contract_test_sha256": "3a028cb60212adde7d6408ed928eaf2145f388c9e1bfa5ec7a68c16d61dd0384",
+    "disposition": "DEGRADED",
+    "execution_result_sha256": "2a1707c16412cf5adf967f644363ad946b893338482a54daa001c36d3f7d2c6d",
+    "freeze_commit": "860bf08afaac93db13c520b6bb15aaaa219684ce",
+    "freeze_sha256": "fe81cffb5d0ae1d4d53ed6f30e3fbff8994c4f312921153b9106983fa2f2ea85",
+    "historical_observations_in_primary_analysis": false,
+    "instrument_sha256": "72eb72aeb95f9727a9380902400c7d8e6891fba9447c30694193dad31f467674",
+    "live_log_sha256": "1960e9178bb901a4aaa4e2b51c0d79a8d379ae40f6a50c7c3ecc84a7daaecc6f",
+    "plan_sha256": "94016c49fcd848bf32814ab511399c04c8bb12032b955c56387980d57d035c5a",
+    "post_run_adjudication_sha256": "7492c77aacea982c7c7c7b206c480a8ebc2c52a347d74f0a5a8e0c0e8c206320",
+    "preregistration_sha256": "3dfd1d0314724711427d1861a0f28ad3deb512fedcc4835a05dbe559853baeb6",
+    "probe_spec_sha256": "262445c71ca34f41dd9d173a978ebcaa7bd71df2f313f0c9b090b9fd4a8925d1",
+    "provider_adapter_sha256": "c1c02303cec29eaef8cb96d1baeec735ef724d9c8a06e20a61b91388d4350339",
+    "receipt_sha256": "a2337e13b8673ccb17de0999dee5df4da120dfd9ecac4c5b7acd78b7e2ea01e6",
+    "rerun_authorized": false
+  },
+  "starting_sha": "752d87e034fc6f614454086fc55571712da1a453",
+  "status": "PREREGISTERED_NOT_IMPLEMENTED_NOT_EXECUTED",
+  "work_order": "OIC-NVIDIA-PROVIDER-LATENCY-STABILITY-001"
+}
