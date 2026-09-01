@@ -1,0 +1,53 @@
+{
+  "accepted_probes": 3,
+  "architecture_change_authorized": false,
+  "attempts": [
+    {
+      "elapsed_seconds": 33.415,
+      "marker_valid": true,
+      "outcome": "ACCEPTED",
+      "probe_id": "BASIC_TEXT"
+    },
+    {
+      "elapsed_seconds": 55.795,
+      "marker_valid": true,
+      "outcome": "ACCEPTED",
+      "probe_id": "JSON_MODE"
+    },
+    {
+      "elapsed_seconds": 41.457,
+      "marker_valid": true,
+      "outcome": "ACCEPTED",
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION"
+    }
+  ],
+  "degradation_class": "LATENCY_HEADROOM_EXCEEDED",
+  "disposition": "DEGRADED",
+  "evidence": {
+    "live_log_sha256": "1960e9178bb901a4aaa4e2b51c0d79a8d379ae40f6a50c7c3ecc84a7daaecc6f",
+    "receipt_sha256": "a2337e13b8673ccb17de0999dee5df4da120dfd9ecac4c5b7acd78b7e2ea01e6"
+  },
+  "freeze_commit": "860bf08afaac93db13c520b6bb15aaaa219684ce",
+  "headroom_violations": [
+    {
+      "elapsed_seconds": 55.795,
+      "excess_seconds": 10.795,
+      "latency_headroom_seconds": 45.0,
+      "probe_id": "JSON_MODE"
+    }
+  ],
+  "interpretation": "All three provider probes returned accepted responses with valid expected markers. The qualification nevertheless failed its frozen contemporaneous latency criterion because JSON_MODE required 55.795 seconds, exceeding the 45-second headroom by 10.795 seconds. Ontology 006 therefore remains unauthorized.",
+  "latency_headroom_seconds": 45.0,
+  "next_scientific_activity": "Preregister a separate provider-latency stability characterization before any new provider qualification.",
+  "observed_probes": 3,
+  "ontology_006_executed": false,
+  "ontology_006_target_commit": "34abc1bc44bd89d1b29c0d005a23eabfb78ca196",
+  "planned_probes": 3,
+  "qualification_retries": 0,
+  "rerun_authorized": false,
+  "semantic_hypothesis_evaluated": false,
+  "semantic_successor_authorized": false,
+  "status": "CLOSED_EXECUTED_DEGRADED",
+  "valid_markers": 3,
+  "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-006"
+}
