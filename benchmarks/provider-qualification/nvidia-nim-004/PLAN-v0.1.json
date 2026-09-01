@@ -1,0 +1,76 @@
+{
+  "architectural_change_authorized": false,
+  "authorization_rule": "Only QUALIFIED authorizes execution of the already-frozen OIC-DEFINITION-ONTOLOGY-STAGED-DECOMPOSITION-004.",
+  "base_sha": "3d3f7850ea43fe368648d34ff9b6d3f9fbfba846",
+  "canonicalization_performed": false,
+  "claim_ceiling": "Provider-path availability only. No semantic correctness, canonical meaning, institutional authority, production readiness, architecture, cross-provider reliability, or independent-validation claim.",
+  "decision_rule": {
+    "DEGRADED": "All three probes ACCEPTED but one or more elapsed_seconds > 45.0; successor remains unauthorized.",
+    "NOT_QUALIFIED": "Any provider error, response mismatch, missing probe, or incomplete execution; successor remains unauthorized.",
+    "QUALIFIED": "All three probes ACCEPTED, expected markers valid, and every elapsed_seconds <= 45.0."
+  },
+  "fresh_provider_qualification": true,
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "latency_headroom_seconds": 45.0,
+  "live_run_executed": false,
+  "model_call_made": false,
+  "pacing_seconds": 4.0,
+  "planned_probe_count": 3,
+  "probe_spec_sha256": "262445c71ca34f41dd9d173a978ebcaa7bd71df2f313f0c9b090b9fd4a8925d1",
+  "probes": [
+    {
+      "expected_mode": "TEXT_MARKER",
+      "expected_value": "OIC_PROVIDER_OK",
+      "max_tokens": 16,
+      "ordinal": 1,
+      "probe_id": "BASIC_TEXT",
+      "response_format": null,
+      "temperature": 0.0
+    },
+    {
+      "expected_mode": "JSON_STATUS",
+      "expected_value": "OIC_PROVIDER_OK",
+      "max_tokens": 64,
+      "ordinal": 2,
+      "probe_id": "JSON_MODE",
+      "response_format": {
+        "type": "json_object"
+      },
+      "temperature": 0.0
+    },
+    {
+      "expected_mode": "JSON_STATUS",
+      "expected_value": "OIC_PROVIDER_OK",
+      "max_tokens": 4096,
+      "ordinal": 3,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "response_format": {
+        "type": "json_object"
+      },
+      "temperature": 0.0
+    }
+  ],
+  "provider": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "timeout_seconds": 60.0
+  },
+  "provider_call_made": false,
+  "purpose": "Fresh provider-path availability qualification immediately before the frozen Ontology 004 staged-decomposition experiment.",
+  "retries": 0,
+  "self_adjudication": "NOT SELF-ADJUDICATED",
+  "semantic_hypothesis": null,
+  "semantic_successor_target": {
+    "commit_sha": "3d3f7850ea43fe368648d34ff9b6d3f9fbfba846",
+    "contract_test_sha256": "1946bf57c170abea5d9960a5449c6c2499516d4e27dc4bb7e8291b3268160b41",
+    "freeze_v0_2_sha256": "b100ffdfbc75fa1c0c8855ba2fc32fe625e5327f3a26c9ff8556eedb40b1b00a",
+    "instrument_sha256": "d9e11c533a20e885b72307a3511a3f87ffb16c2669db15ea5717b4a6c334ba28",
+    "plan_sha256": "90945b2016918ea66ce94a5d972dae881bbe23cb54060e069acbbe89656e7100",
+    "preregistration_sha256": "469ecf061a82b82857cd360a3426731b4f5cf1c5c02edc2c87fd64930b453dcb",
+    "request_materialization_sha256": "bb03876f765599fcf2630935195dfedf53d4ea759f13aba35f680f28bdf613e7",
+    "work_order": "OIC-DEFINITION-ONTOLOGY-STAGED-DECOMPOSITION-004"
+  },
+  "transport_probe_semantics_vs_003a": "UNCHANGED",
+  "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-004"
+}
