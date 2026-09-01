@@ -1,0 +1,79 @@
+{
+  "architecture_change_authorized": false,
+  "authorization_rule": "Only a formally closed QUALIFIED result from this exact Qualification 007 work order may authorize execution of the exact frozen Ontology 006 semantic-successor target. DEGRADED or NOT_QUALIFIED leaves Ontology 006 unauthorized.",
+  "base_sha": "36aa000f583359e7d5df30d4e453d06f90d9730f",
+  "canonicalization_performed": false,
+  "claim_ceiling": "Fresh immediate provider-path qualification for one NVIDIA endpoint/model and exactly three frozen probe shapes only. No semantic correctness, historical root-cause, canonical institutional meaning, Institutional IR, production readiness, architecture change, cross-provider reliability, or independent-validation claim.",
+  "decision_rule": {
+    "DEGRADED": "Exactly three terminal observations and all three probes ACCEPTED with valid markers, but one or more elapsed_seconds > 45.0.",
+    "NOT_QUALIFIED": "Any provider error, timeout, response mismatch, invalid marker, missing probe, incomplete execution, or other non-accepted terminal observation.",
+    "QUALIFIED": "Exactly three terminal observations; all three probes ACCEPTED; every expected marker valid; every elapsed_seconds <= 45.0."
+  },
+  "fresh_provider_qualification": true,
+  "historical_qualification_observations_reused": false,
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "latency_headroom_seconds": 45.0,
+  "live_run_executed": false,
+  "model_call_made": false,
+  "next_authorized_activity": "Implement, contract-test, materialize and statically freeze Provider Qualification 007 offline. Do not execute Qualification 007 live and do not execute Ontology 006.",
+  "ontology_006_executed": false,
+  "ontology_006_execution_authorized": false,
+  "pacing_seconds": 4.0,
+  "planned_probe_count": 3,
+  "prerequisite_recovery": {
+    "bounded_recovery_stability_established": true,
+    "classification": "BOUNDED_RECOVERY_STABILITY_OBSERVED",
+    "closure_commit": "36aa000f583359e7d5df30d4e453d06f90d9730f",
+    "execution_result_sha256": "c9c5c1da5b26c439407147e989350bbe869934bb55cbd59494d426d666880178",
+    "historical_observations_reused": false,
+    "live_log_sha256": "f54255341d79b5b9870c6baaa95ac57d9be867850892dee47a30649f96fbbc18",
+    "post_run_adjudication_sha256": "1a5581285dfff0380ca7b5e02db79246cbe61b69780ecb42a9f2ab9e2ead7311",
+    "provider_qualification_established": false,
+    "qualification_007_consideration_permitted": true,
+    "receipt_sha256": "1dd08e03883e360139edf4e20c91a0647d4eb1585e4f7f2bd78b4d7e84c95ad6",
+    "work_order": "OIC-NVIDIA-PROVIDER-RECOVERY-STABILITY-001"
+  },
+  "probe_source": {
+    "exact_semantics_rule": "Qualification 007 implementation must hash-verify and source the exact three frozen probe definitions and marker-validation semantics from Qualification 006. No prompt, response-format, token-budget, expected-marker, provider-path, timeout, pacing, or headroom reconstruction or modification is permitted.",
+    "probe_ids": [
+      "BASIC_TEXT",
+      "JSON_MODE",
+      "PRODUCTION_TOKEN_RESERVATION"
+    ],
+    "probe_spec_sha256": "262445c71ca34f41dd9d173a978ebcaa7bd71df2f313f0c9b090b9fd4a8925d1",
+    "source_instrument_sha256": "72eb72aeb95f9727a9380902400c7d8e6891fba9447c30694193dad31f467674",
+    "source_work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-006"
+  },
+  "provider": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "latency_headroom_seconds": 45.0,
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "timeout_seconds": 60.0
+  },
+  "provider_call_made": false,
+  "qualification_007_qualified": false,
+  "recovery_stability_observations_reused": false,
+  "replacement_probes_allowed": false,
+  "retries": 0,
+  "semantic_hypothesis": null,
+  "semantic_hypothesis_evaluated": false,
+  "semantic_successor_target": {
+    "commit_sha": "34abc1bc44bd89d1b29c0d005a23eabfb78ca196",
+    "contract_test_sha256": "07231f87fb029a5154a843c6e8fed5fe77a6d5ef23fcdf0af330a7d3dd7b7379",
+    "freeze_v0_2_sha256": "2acd8e2ebe0a6913721240008f06c28108ea01c85c4484958c1b849ef95b5719",
+    "instrument_sha256": "ddd069cf7317f86ad3c50b6e48291c4579efafb57a2a0ac3f420a5a4d7e080f8",
+    "live_run_executed": false,
+    "pair_count": 9,
+    "plan_sha256": "4ef705e97e74e4623251975fb0e71d9cd59e5eb380ab6b63ebb1d07571992816",
+    "preregistration_freeze_v0_1_sha256": "1dba54e248f7761e5c153b18a37d86ded55bba9a92e95bd3c9db52fa3826df27",
+    "preregistration_sha256": "5da9fd19c17fe24f9560438d047e2f7f201e07580f1990fba171d460176c1825",
+    "provider_adapter_sha256": "c1c02303cec29eaef8cb96d1baeec735ef724d9c8a06e20a61b91388d4350339",
+    "request_count": 18,
+    "request_materialization_sha256": "8b45a5755dc0ccc4df8d58f84f2408ef6e06e1847bb9b4e4e11963f3255e17bd",
+    "treatment_binding_sha256": "f95efb0189adc9368499684e6d3262651751c39fe8a5e422da94f8ef0111920a",
+    "work_order": "OIC-DEFINITION-ONTOLOGY-PREDICATE-FRAME-DISCRIMINATION-006"
+  },
+  "status": "PREREGISTERED_NOT_IMPLEMENTED_NOT_EXECUTED",
+  "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-007"
+}
