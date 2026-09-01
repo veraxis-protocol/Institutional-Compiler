@@ -1,0 +1,254 @@
+{
+  "adjudicability_gate": {
+    "complete_pairs_required": 9,
+    "failure_disposition": "NOT_ADJUDICABLE_PROVIDER_OR_BOUNDARY_FAILURE",
+    "provider_requests_accepted_required": 18,
+    "provider_requests_required": 18,
+    "rule": "No scientific disposition may be evaluated unless all 18 frozen provider requests are accepted and all 9 baseline/treatment pairs are complete."
+  },
+  "analysis_population": "ONTOLOGY_006_ONLY",
+  "architecture_change_authorized": false,
+  "arms": {
+    "A_BASELINE_B2": {
+      "b1_output_visible": false,
+      "candidate_input": "candidate_span only",
+      "condition": "Exact Ontology 005 B2 non-force prompt semantics.",
+      "normative_force_value_visible": false
+    },
+    "B_ROLE_GUIDED_B2": {
+      "b1_output_visible": false,
+      "candidate_input": "candidate_span only",
+      "condition": "Exact baseline B2 plus only the verbatim frozen action and object justifications from OIC-INTERPRETATION-RULESET-001 v0.1.",
+      "examples_added": false,
+      "gold_visible": false,
+      "new_ontology_rule_invented": false,
+      "normative_force_value_visible": false
+    }
+  },
+  "canonicalization_performed": false,
+  "claim_ceiling": "This experiment may establish only bounded evidence about whether restoring two already-frozen slot-role descriptions corrects the localized IIR-027 predicate-frame regression for one model/provider and three frozen synthetic specimens. It does not establish canonical institutional meaning, interpretation authority, legal validity, a revised IR ontology, production architecture, cross-model/provider generalization, or independent validation.",
+  "decision_rule_precedence": [
+    "REGRESSION",
+    "SUPPORTS_PREDICATE_FRAME_ROLE_GUIDANCE",
+    "REFUTES_PREDICATE_FRAME_ROLE_GUIDANCE",
+    "INCONCLUSIVE"
+  ],
+  "decision_rules": {
+    "INCONCLUSIVE": "Adjudicable result satisfying none of the preceding rules.",
+    "REFUTES_PREDICATE_FRAME_ROLE_GUIDANCE": "No regression; role-guided IIR-027 action is compatible at most 1/3 and there are zero paired improvements.",
+    "REGRESSION": "One or more role-guided-only defects occur under the frozen safety endpoint.",
+    "SUPPORTS_PREDICATE_FRAME_ROLE_GUIDANCE": "No regression; role-guided IIR-027 action is compatible 3/3; and at least 2/3 paired IIR-027 observations are baseline-defect / role-guided-compatible improvements."
+  },
+  "frozen_sources": {
+    "corpus_sha256": "462158c1f70e10838f09d02e1dc62136d30477535048852bbc110f1d6cf7f817",
+    "interpretation_ruleset_sha256": "8ba398eb20d346d66ce49c0f638babe2167930a07c3bd2946757fa41d6ccb114",
+    "treatment_binding_sha256": "f95efb0189adc9368499684e6d3262651751c39fe8a5e422da94f8ef0111920a"
+  },
+  "hypothesis": "Appending only the frozen action/object role justifications to the otherwise byte-preserved B2 non-force prompt will restore the governing predicate on IIR-027 without exposing the proposition's normative-force value or B1 output and without introducing new non-force defects on controls.",
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "interleaving": "Odd runs: baseline then role-guided. Even runs: role-guided then baseline.",
+  "live_run_executed": false,
+  "model_call_made": false,
+  "network_request_made": false,
+  "next_authorized_activity": "Implement the Ontology 006 experimental instrument offline, materialize all 18 exact requests, prove exact baseline-B2 parity against Ontology 005, test the frozen treatment delta and transport envelope, and statically freeze the instrument. Do not execute Provider Qualification 006 yet.",
+  "ontology_005_live_outputs_reused": false,
+  "planned_pairs": 9,
+  "planned_provider_requests": 18,
+  "predecessor": {
+    "closure_commit": "362a68074efc810d71da28a09079a5abd50e8def",
+    "execution_result_sha256": "f8ca5b789ae2f1831f207a71bc14ae4bd9459e8a9c2be6d8b7fd2d65dbe9b882",
+    "force_side_result": {
+      "control_b_only_force_defects": 0,
+      "primary_correct": 9,
+      "primary_planned": 9
+    },
+    "localized_regression": [
+      {
+        "run_index": 1,
+        "slot": "action",
+        "specimen_id": "IIR-027"
+      },
+      {
+        "run_index": 3,
+        "slot": "action",
+        "specimen_id": "IIR-027"
+      }
+    ],
+    "post_run_adjudication_sha256": "b45744f9a35129001ee6de64ee3d8f15d8c909b9f1483772e13dc4708a345156",
+    "regression_localization_sha256": "74259ff42e08718c82e8752a25c41214a1c1c48d3b97ff6994c28c5cfb095c63",
+    "request_materialization_sha256": "3c867101c0ef4ae1e27add45a8d980bd389c0f38f3608321557c0941d371bf29",
+    "rerun_authorized": false,
+    "scientific_disposition": "REGRESSION",
+    "work_order": "OIC-DEFINITION-ONTOLOGY-STAGED-DECOMPOSITION-005"
+  },
+  "production_code_changed": false,
+  "production_prompt_changed": false,
+  "provider_call_made": false,
+  "provider_prerequisite": {
+    "fresh_qualification_required": true,
+    "required_disposition": "QUALIFIED",
+    "required_semantic_successor_authorized": true,
+    "required_semantic_successor_target": "OIC-DEFINITION-ONTOLOGY-PREDICATE-FRAME-DISCRIMINATION-006",
+    "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-006"
+  },
+  "provider_request_plan": [
+    {
+      "arm": "A_BASELINE_B2",
+      "ordinal": 1,
+      "run_index": 1,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "B_ROLE_GUIDED_B2",
+      "ordinal": 2,
+      "run_index": 1,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "B_ROLE_GUIDED_B2",
+      "ordinal": 3,
+      "run_index": 2,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "A_BASELINE_B2",
+      "ordinal": 4,
+      "run_index": 2,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "A_BASELINE_B2",
+      "ordinal": 5,
+      "run_index": 3,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "B_ROLE_GUIDED_B2",
+      "ordinal": 6,
+      "run_index": 3,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "A_BASELINE_B2",
+      "ordinal": 7,
+      "run_index": 1,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "B_ROLE_GUIDED_B2",
+      "ordinal": 8,
+      "run_index": 1,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "B_ROLE_GUIDED_B2",
+      "ordinal": 9,
+      "run_index": 2,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "A_BASELINE_B2",
+      "ordinal": 10,
+      "run_index": 2,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "A_BASELINE_B2",
+      "ordinal": 11,
+      "run_index": 3,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "B_ROLE_GUIDED_B2",
+      "ordinal": 12,
+      "run_index": 3,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "A_BASELINE_B2",
+      "ordinal": 13,
+      "run_index": 1,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "B_ROLE_GUIDED_B2",
+      "ordinal": 14,
+      "run_index": 1,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "B_ROLE_GUIDED_B2",
+      "ordinal": 15,
+      "run_index": 2,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "A_BASELINE_B2",
+      "ordinal": 16,
+      "run_index": 2,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "A_BASELINE_B2",
+      "ordinal": 17,
+      "run_index": 3,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "B_ROLE_GUIDED_B2",
+      "ordinal": 18,
+      "run_index": 3,
+      "specimen_id": "IIR-028"
+    }
+  ],
+  "runs_per_specimen": 3,
+  "safety_endpoint": {
+    "plus_non_target_expected_slots_on_IIR_027": true,
+    "regression_rule": "Any B_ROLE_GUIDED_B2-only omission or incompatibility of a gold-expected non-force slot where paired baseline A_BASELINE_B2 is compatible is a REGRESSION.",
+    "specimens": [
+      "IIR-006",
+      "IIR-028"
+    ]
+  },
+  "scientific_question": "Is the Ontology 005 IIR-027 action-slot regression caused by B2 receiving slot names without the already-frozen Institutional IR action/object role semantics?",
+  "selected_specimens": [
+    {
+      "role": "SAFETY_CONTROL",
+      "specimen_id": "IIR-006"
+    },
+    {
+      "role": "TARGET_PREDICATE_FRAME",
+      "specimen_id": "IIR-027"
+    },
+    {
+      "role": "SAFETY_CONTROL",
+      "specimen_id": "IIR-028"
+    }
+  ],
+  "starting_sha": "362a68074efc810d71da28a09079a5abd50e8def",
+  "status": "PREREGISTERED_NOT_IMPLEMENTED_NOT_EXECUTED",
+  "target_endpoint": {
+    "gold_expected_value": "consider",
+    "gold_is_evaluator_only": true,
+    "slot": "action",
+    "specimen_id": "IIR-027",
+    "support_requires_paired_improvements_min": 2,
+    "support_requires_role_guided_compatible": 3,
+    "support_requires_role_guided_planned": 3
+  },
+  "transport_policy": {
+    "maximum_retries_per_semantic_request": 1,
+    "nominal_provider_calls": 18,
+    "provider_call_ceiling": 36,
+    "retry_delay_seconds": 4,
+    "retry_only_on_exact": {
+      "error_message": "NVIDIA NIM connection timed out",
+      "error_type": "ModelProviderError"
+    },
+    "same_model_request_object_required": true,
+    "same_request_projection_sha256_required": true,
+    "timeout_seconds": 60
+  },
+  "work_order": "OIC-DEFINITION-ONTOLOGY-PREDICATE-FRAME-DISCRIMINATION-006"
+}

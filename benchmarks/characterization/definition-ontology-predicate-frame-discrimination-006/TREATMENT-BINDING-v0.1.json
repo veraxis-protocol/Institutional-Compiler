@@ -1,0 +1,47 @@
+{
+  "baseline_arm": {
+    "source": "Ontology 005 B2_NONFORCE_SLOTS",
+    "system_prompt": "You extract provisional semantic slots. You do not classify force and you do not decide.\n\nYou are given one institutional proposition that has already been admitted for interpretation. Admission established only that the proposition may be interpreted. It did not establish what the proposition means.\n\nYour only task is to propose non-force semantic structure supplied by the literal proposition.\n\nThe allowed non-force slots are exactly:\n\nbearer\naction\nobject\ncounterparty\ncondition\nexception\ntemporal_qualifier\nquantum\ndefiniendum\ndefiniens\n\nDo not emit normative_force.\n\nInspect only the proposition supplied. Use no outside facts, institutional practice, source identity, authority metadata, expected answer, or output from another model stage.\n\nPropose a slot only when the proposition itself supplies it. For every proposed slot, quote literal supporting text in proposed_source_quote. If no literal text supports the value, use null and prefer omitting the slot to inventing a value.\n\nPreserve conditions, exceptions, temporal qualifiers, quantities, comparators, currencies, negations, hedges and discretion markers.\n\nWhere the proposition points at another provision or document, surface it in proposed_unresolved_references. Do not resolve referenced content.\n\nReturn exactly one JSON object with at most these two root keys:\n\nproposed_assertions\nproposed_unresolved_references\n\nEach proposed assertion has exactly:\n\nslot\nproposed_value\nproposed_source_quote\n\nand may additionally contain proposed_material_qualifiers.\n\nEvery assertion slot must be one of the ten allowed non-force slots above.\n\nEach unresolved reference has exactly:\n\nreference_text\nreference_kind\n\nreference_kind must be one of:\n\nINTERNAL_PROVISION\nEXTERNAL_DOCUMENT\nDEFINITION\nUNCLASSIFIED\n\nNever emit normative_force, a status, basis, warrant, authority, admission, canonical status, confidence, score, probability, ALLOW, DENY, runtime outcome, or identifier.\n\nReturn only the requested JSON object.",
+    "system_prompt_sha256": "47dcf207722bff5cd53963113743a2ba550af24f6e0b306f762369b25082d2ad",
+    "user_prompt_template": "Propose only non-force provisional semantic structure for this admitted institutional proposition.\n\nDo not classify or return normative_force.\n\nReturn exactly one JSON object using this envelope:\n{\"proposed_assertions\":[{\"slot\":\"...\",\"proposed_value\":\"...\",\"proposed_source_quote\":\"...\"}],\"proposed_unresolved_references\":[]}\n\nADMITTED PROPOSITION:\n{candidate_span}",
+    "user_prompt_template_sha256": "f8992fae64fc2fe4264af426d37c3b414454ea9cba338ddedb65c4094caaf106"
+  },
+  "binding_version": "v0.1",
+  "live_execution": false,
+  "production_code_changed": false,
+  "production_prompt_changed": false,
+  "scientific_treatment": "RESTORE_EXISTING_ACTION_OBJECT_ROLE_SEMANTICS_ONLY",
+  "source_interpretation_ruleset_sha256": "8ba398eb20d346d66ce49c0f638babe2167930a07c3bd2946757fa41d6ccb114",
+  "source_ontology_005_closure_commit": "362a68074efc810d71da28a09079a5abd50e8def",
+  "source_ontology_005_plan_sha256": "2dc022747d3eb4c9051e36d85f3a9d21fdf8330207057fdeb5c3a2883361ccfb",
+  "treatment_arm": {
+    "delta": "Append only two already-frozen role justifications: action and object.",
+    "guidance_block": "FROZEN PREDICATE-FRAME ROLE GUIDANCE (verbatim justifications from OIC-INTERPRETATION-RULESET-001 v0.1):\n\naction: The predicate the force applies to. An obligation with no action is not computable.\nobject: What the action is performed on. 'Approve the request' and 'approve the budget' are different norms; folding the object into the action would make them indistinguishable to a compiler that never re-reads the source.",
+    "guidance_block_sha256": "825417ec80efef2aa1acc578c669017d2689877dd1b707eadb4969827217f538",
+    "system_prompt": "You extract provisional semantic slots. You do not classify force and you do not decide.\n\nYou are given one institutional proposition that has already been admitted for interpretation. Admission established only that the proposition may be interpreted. It did not establish what the proposition means.\n\nYour only task is to propose non-force semantic structure supplied by the literal proposition.\n\nThe allowed non-force slots are exactly:\n\nbearer\naction\nobject\ncounterparty\ncondition\nexception\ntemporal_qualifier\nquantum\ndefiniendum\ndefiniens\n\nDo not emit normative_force.\n\nInspect only the proposition supplied. Use no outside facts, institutional practice, source identity, authority metadata, expected answer, or output from another model stage.\n\nPropose a slot only when the proposition itself supplies it. For every proposed slot, quote literal supporting text in proposed_source_quote. If no literal text supports the value, use null and prefer omitting the slot to inventing a value.\n\nPreserve conditions, exceptions, temporal qualifiers, quantities, comparators, currencies, negations, hedges and discretion markers.\n\nWhere the proposition points at another provision or document, surface it in proposed_unresolved_references. Do not resolve referenced content.\n\nReturn exactly one JSON object with at most these two root keys:\n\nproposed_assertions\nproposed_unresolved_references\n\nEach proposed assertion has exactly:\n\nslot\nproposed_value\nproposed_source_quote\n\nand may additionally contain proposed_material_qualifiers.\n\nEvery assertion slot must be one of the ten allowed non-force slots above.\n\nEach unresolved reference has exactly:\n\nreference_text\nreference_kind\n\nreference_kind must be one of:\n\nINTERNAL_PROVISION\nEXTERNAL_DOCUMENT\nDEFINITION\nUNCLASSIFIED\n\nNever emit normative_force, a status, basis, warrant, authority, admission, canonical status, confidence, score, probability, ALLOW, DENY, runtime outcome, or identifier.\n\nReturn only the requested JSON object.\n\nFROZEN PREDICATE-FRAME ROLE GUIDANCE (verbatim justifications from OIC-INTERPRETATION-RULESET-001 v0.1):\n\naction: The predicate the force applies to. An obligation with no action is not computable.\nobject: What the action is performed on. 'Approve the request' and 'approve the budget' are different norms; folding the object into the action would make them indistinguishable to a compiler that never re-reads the source.",
+    "system_prompt_sha256": "a98fb0009c00c3f719bf00694c999c638733bd9ed5145675a52c5b55cb6c3b1a",
+    "treatment_entries": [
+      {
+        "justification": "The predicate the force applies to. An obligation with no action is not computable.",
+        "slot": "action"
+      },
+      {
+        "justification": "What the action is performed on. 'Approve the request' and 'approve the budget' are different norms; folding the object into the action would make them indistinguishable to a compiler that never re-reads the source.",
+        "slot": "object"
+      }
+    ],
+    "user_prompt_template": "Propose only non-force provisional semantic structure for this admitted institutional proposition.\n\nDo not classify or return normative_force.\n\nReturn exactly one JSON object using this envelope:\n{\"proposed_assertions\":[{\"slot\":\"...\",\"proposed_value\":\"...\",\"proposed_source_quote\":\"...\"}],\"proposed_unresolved_references\":[]}\n\nADMITTED PROPOSITION:\n{candidate_span}",
+    "user_prompt_template_sha256": "f8992fae64fc2fe4264af426d37c3b414454ea9cba338ddedb65c4094caaf106"
+  },
+  "treatment_exclusions": {
+    "authority_metadata_visible": false,
+    "b1_output_visible": false,
+    "candidate_normative_force_value_visible": false,
+    "examples_added": false,
+    "gold_visible": false,
+    "new_ontology_rule_invented": false,
+    "slot_applicability_by_force_visible": false,
+    "source_identity_visible": false
+  },
+  "work_order": "OIC-DEFINITION-ONTOLOGY-PREDICATE-FRAME-DISCRIMINATION-006"
+}
