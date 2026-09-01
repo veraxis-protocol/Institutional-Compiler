@@ -1,0 +1,150 @@
+{
+  "credential_materialized": false,
+  "diagnostic_count": 6,
+  "diagnostic_order_fixed": true,
+  "diagnostics": [
+    {
+      "credential_required": false,
+      "diagnostic_id": "DNS_RESOLUTION",
+      "maximum_attempts": 1,
+      "model_inference": false,
+      "ordinal": 1,
+      "request_projection": {
+        "host": "integrate.api.nvidia.com",
+        "operation": "socket.getaddrinfo",
+        "port": 443
+      },
+      "request_projection_sha256": "fb7261cb1e0134f705ece5452308d2a42466d643dd610b8f96383449027192f3",
+      "timeout_seconds": 10.0
+    },
+    {
+      "credential_required": false,
+      "diagnostic_id": "TCP_CONNECT",
+      "maximum_attempts": 1,
+      "model_inference": false,
+      "ordinal": 2,
+      "request_projection": {
+        "host": "integrate.api.nvidia.com",
+        "operation": "socket.create_connection",
+        "port": 443
+      },
+      "request_projection_sha256": "b7b77747ff86b7129675186cadf61c02c437a451debd986c90d05e86145e1189",
+      "timeout_seconds": 10.0
+    },
+    {
+      "credential_required": false,
+      "diagnostic_id": "TLS_HANDSHAKE",
+      "maximum_attempts": 1,
+      "model_inference": false,
+      "ordinal": 3,
+      "request_projection": {
+        "certificate_verification": true,
+        "host": "integrate.api.nvidia.com",
+        "port": 443,
+        "server_hostname": "integrate.api.nvidia.com"
+      },
+      "request_projection_sha256": "9c8d3042cffa28642e81820f85277661a33d56753d50fb7d57b7d9d7e2929516",
+      "timeout_seconds": 10.0
+    },
+    {
+      "credential_required": false,
+      "diagnostic_id": "HTTP_ROUTE",
+      "maximum_attempts": 1,
+      "model_inference": false,
+      "ordinal": 4,
+      "request_projection": {
+        "authentication": null,
+        "body": {
+          "incident_probe": "deliberately_unauthenticated_and_invalid"
+        },
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        "host": "integrate.api.nvidia.com",
+        "method": "POST",
+        "path": "/v1/chat/completions",
+        "port": 443
+      },
+      "request_projection_sha256": "d0fe3e1214a3bb80d5244b9f6e8409f9cad6c8133f9aee5c4c726eb3d4253be7",
+      "timeout_seconds": 15.0
+    },
+    {
+      "credential_required": true,
+      "diagnostic_id": "AUTH_VALIDATION",
+      "maximum_attempts": 1,
+      "model_inference": false,
+      "ordinal": 5,
+      "request_projection": {
+        "body": {
+          "temperature": 0.0
+        },
+        "headers": {
+          "Accept": "application/json",
+          "Authorization": "Bearer <RUNTIME_NVIDIA_API_KEY>",
+          "Content-Type": "application/json"
+        },
+        "host": "integrate.api.nvidia.com",
+        "method": "POST",
+        "model_inference_intended": false,
+        "path": "/v1/chat/completions",
+        "port": 443
+      },
+      "request_projection_sha256": "09e337af1bdc47254322fe6e5ec9d8cb5c115beb7b41cb151d91a10413d9ba7b",
+      "timeout_seconds": 15.0
+    },
+    {
+      "credential_required": true,
+      "diagnostic_id": "TARGET_BASIC_TEXT",
+      "maximum_attempts": 1,
+      "model_inference": true,
+      "ordinal": 6,
+      "request_projection": {
+        "body": {
+          "chat_template_kwargs": {
+            "enable_thinking": false
+          },
+          "max_tokens": 16,
+          "messages": [
+            {
+              "content": "You are a provider transport qualification probe. Follow the requested output exactly.",
+              "role": "system"
+            },
+            {
+              "content": "Return exactly OIC_PROVIDER_OK and nothing else.",
+              "role": "user"
+            }
+          ],
+          "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+          "temperature": 0.0
+        },
+        "expected_marker": "OIC_PROVIDER_OK",
+        "headers": {
+          "Accept": "application/json",
+          "Authorization": "Bearer <RUNTIME_NVIDIA_API_KEY>",
+          "Content-Type": "application/json"
+        },
+        "host": "integrate.api.nvidia.com",
+        "method": "POST",
+        "model_inference_intended": true,
+        "path": "/v1/chat/completions",
+        "port": 443,
+        "source_probe_spec_sha256": "262445c71ca34f41dd9d173a978ebcaa7bd71df2f313f0c9b090b9fd4a8925d1"
+      },
+      "request_projection_sha256": "37d1db6add8e13b898738a390ae75b1a907cf8941a72127bedbd18379b5e7f6c",
+      "timeout_seconds": 60.0
+    }
+  ],
+  "live_run_executed": false,
+  "maximum_live_diagnostics": 6,
+  "maximum_model_inference_requests": 1,
+  "model_call_made": false,
+  "nvidia_network_request_made": false,
+  "provider_diagnostic_call_made": false,
+  "replacement_requests_allowed": false,
+  "retries": 0,
+  "source_qualification_006_probe_spec_sha256": "262445c71ca34f41dd9d173a978ebcaa7bd71df2f313f0c9b090b9fd4a8925d1",
+  "status": "MATERIALIZED_OFFLINE_NOT_EXECUTED",
+  "stop_on_earliest_layer_failure": true,
+  "work_order": "OIC-NVIDIA-PROVIDER-PATH-INCIDENT-001"
+}
