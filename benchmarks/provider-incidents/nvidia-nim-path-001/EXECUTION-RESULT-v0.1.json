@@ -1,0 +1,62 @@
+{
+  "actual_model_inference_requests": 1,
+  "architecture_change_authorized": false,
+  "claim_ceiling": "This result establishes only that the six frozen provider-path layers, including one target inference request, responded in this bounded later observation window. It does not establish the historical root cause of the 36-timeout event, stable provider recovery, provider qualification, semantic correctness, canonical institutional meaning, Institutional IR, production readiness, architecture change, cross-provider reliability, or independent validation.",
+  "classification": "TARGET_PATH_RESPONDED_DURING_INCIDENT_PROBE",
+  "evidence": {
+    "live_log_sha256": "e988079615b06c2e21301996d6b0c0d6858a024f5210f5691340d7980fad8d58",
+    "receipt_sha256": "ad80a1f5a9cc340d3ff46e872d22cc14a0b03193977c2f4d21f5860602e5f7ba"
+  },
+  "executed_diagnostics": 6,
+  "historical_36_timeout_event_reproduced": false,
+  "historical_latency_stability_001_result": "PROVIDER_PATH_UNSTABLE",
+  "historical_root_cause_established": false,
+  "interpretation": "The bounded incident investigation did not reproduce the persistent timeout condition previously observed in Latency Stability 001. DNS resolution, TCP connection, verified TLS, HTTP route reachability, authenticated request validation, and the frozen target BASIC_TEXT inference path all responded during this later incident window. The target inference returned HTTP 200 with the expected marker in 19.932 seconds. This rules out a currently persistent failure at those layers during this observation window, but does not establish the historical root cause or stable provider recovery.",
+  "layer_results": {
+    "AUTH_VALIDATION": {
+      "elapsed_seconds": 0.128,
+      "http_status": 400,
+      "outcome": "VALIDATION_REACHED"
+    },
+    "DNS_RESOLUTION": {
+      "elapsed_seconds": 0.497,
+      "outcome": "PASS"
+    },
+    "HTTP_ROUTE": {
+      "elapsed_seconds": 0.117,
+      "http_status": 400,
+      "outcome": "HTTP_RESPONSE"
+    },
+    "TARGET_BASIC_TEXT": {
+      "elapsed_seconds": 19.932,
+      "http_status": 200,
+      "marker_valid": true,
+      "outcome": "ACCEPTED"
+    },
+    "TCP_CONNECT": {
+      "elapsed_seconds": 0.041,
+      "outcome": "PASS"
+    },
+    "TLS_HANDSHAKE": {
+      "elapsed_seconds": 0.123,
+      "outcome": "PASS"
+    }
+  },
+  "maximum_model_inference_requests": 1,
+  "next_scientific_activity": "If continued NVIDIA use is required, preregister a separate bounded provider-recovery stability characterization before any new provider qualification. Do not create Qualification 007 directly from this single successful target observation and do not execute Ontology 006.",
+  "ontology_006_executed": false,
+  "ontology_006_execution_authorized": false,
+  "planned_maximum_diagnostics": 6,
+  "provider_recovery_stability_established": false,
+  "qualification_006_reclassified": false,
+  "qualification_007_authorized": false,
+  "replacement_requests_allowed": false,
+  "rerun_authorized": false,
+  "retries": 0,
+  "semantic_hypothesis_evaluated": false,
+  "semantic_successor_authorized": false,
+  "static_freeze_commit": "9d2233204f144ce47dd19949ecbf3710c4263021",
+  "status": "CLOSED_EXECUTED_TARGET_PATH_RESPONDED",
+  "target_path_response_observed": true,
+  "work_order": "OIC-NVIDIA-PROVIDER-PATH-INCIDENT-001"
+}
