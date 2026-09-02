@@ -1,0 +1,134 @@
+{
+  "base_crosswalk_closure_commit": "df96c6a6acf4364f2ad399e9e1a2591eadd8b801",
+  "canonicalization_authorized": false,
+  "characterization_algorithm": {
+    "candidate_key_expansion_authorized": false,
+    "evidence_rewrite_authorized": false,
+    "fields": [
+      "source_kind",
+      "source_locator",
+      "rights_basis",
+      "rights_evidence",
+      "rights_status",
+      "provenance_evidence",
+      "provenance_status",
+      "redistribution_status"
+    ],
+    "for_each_field_record": [
+      "prior_state",
+      "candidate_count",
+      "admissible_value_count",
+      "support_record_count",
+      "distinct_candidate_key_count",
+      "candidate_key_frequency",
+      "distinct_artifact_path_count",
+      "artifact_path_frequency",
+      "distinct_source_scope_pointer_count",
+      "source_scope_pointer_frequency",
+      "distinct_raw_value_fingerprint_count",
+      "raw_value_fingerprint_frequency",
+      "distinct_mapped_value_count",
+      "mapped_value_frequency",
+      "mapping_class_frequency",
+      "transformation_frequency"
+    ],
+    "mapped_value_capture": "Capture only mapped_value already present in preserved Crosswalk 001 support records. Do not derive a new mapped value.",
+    "normalization_rule_design_authorized": false,
+    "precedence_rule_design_authorized": false,
+    "raw_value_fingerprint": "SHA256 of canonical JSON serialization of each preserved raw_value; no semantic normalization, synonym folding, case folding, or value translation.",
+    "record_order": "PRESERVE_CROSSWALK_RECEIPT_ORDER",
+    "schema_mutation_authorized": false,
+    "semantic_interpretation_authorized": false,
+    "winner_selection_authorized": false
+  },
+  "claim_ceiling": "FAILURE_SURFACE_CHARACTERIZED establishes only a deterministic descriptive decomposition of why the frozen Crosswalk 001 output contained eight unresolved fields at the level of preserved candidate keys, artifacts, values, mappings and transformations. It does not establish causal root cause, a correct precedence rule, a correct normalization, legal rights, provenance truth, evidence sufficiency, or authorization to mutate evidence/schema or populate SOURCE_MANIFEST.csv.",
+  "closed_crosswalk_adjudication_sha256": "263ed4b92ede44cd0f896ba7b064ca4c59e8d23c44a9c0c4c81705ddd9bb9483",
+  "closed_crosswalk_result_sha256": "c5373e8a0fce35a50f2559c6c0457135fe8776487de49c82c7ee11686161ea67",
+  "contract_id": "OIC-CANADA-CROSSWALK-FAILURE-SURFACE-CHARACTERIZATION-CONTRACT-001",
+  "contract_version": "v0.1",
+  "control_envelope_authorized": false,
+  "crosswalk_001_rerun_authorized": false,
+  "failure_surface_classes": {
+    "MULTI_ADMISSIBLE_CONTRADICTION_SURFACE": "prior state CONTRADICTORY_NOT_ESTABLISHED with admissible_value_count > 1",
+    "UNEXPECTED_SURFACE_FAIL_CLOSED": "any preserved field state/count differs from the closed Crosswalk 001 execution result or cannot be reproduced from the preserved receipt",
+    "ZERO_ADMISSIBLE_VALUE_SURFACE": "prior state MULTIPLE_CANDIDATES_NOT_ESTABLISHED with admissible_value_count == 0"
+  },
+  "input_scope": {
+    "corroborating_markdown": "FORBIDDEN",
+    "inventory_receipt": "FORBIDDEN",
+    "network": "FORBIDDEN",
+    "real_evidence_files": "FORBIDDEN",
+    "receipt_sha256": "77d8a67a71e7eb073fa3f43825a1113a53effd948f69e7abee952e06767dbb92",
+    "source": "PRESERVED_CROSSWALK_001_ONE_SHOT_RECEIPT_ONLY",
+    "source_xml": "FORBIDDEN",
+    "unlisted_files": "FORBIDDEN"
+  },
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "normalization_authorized": false,
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "precedence_selection_authorized": false,
+  "preserved_crosswalk_receipt_sha256": "77d8a67a71e7eb073fa3f43825a1113a53effd948f69e7abee952e06767dbb92",
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "schema_resolution_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "FROZEN_NOT_EXECUTED",
+  "success_rule": "FAILURE_SURFACE_CHARACTERIZED only if all eight frozen unresolved fields reproduce their closed Crosswalk 001 state/counts and receive a complete deterministic descriptive profile. Otherwise FAILURE_SURFACE_INCOMPLETE_FAIL_CLOSED.",
+  "unresolved_field_count": 8,
+  "unresolved_fields": {
+    "provenance_evidence": {
+      "admissible_value_count": 3,
+      "candidate_count": 39,
+      "prior_state": "CONTRADICTORY_NOT_ESTABLISHED"
+    },
+    "provenance_status": {
+      "admissible_value_count": 0,
+      "candidate_count": 107,
+      "prior_state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED"
+    },
+    "redistribution_status": {
+      "admissible_value_count": 0,
+      "candidate_count": 44,
+      "prior_state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED"
+    },
+    "rights_basis": {
+      "admissible_value_count": 0,
+      "candidate_count": 66,
+      "prior_state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED"
+    },
+    "rights_evidence": {
+      "admissible_value_count": 4,
+      "candidate_count": 118,
+      "prior_state": "CONTRADICTORY_NOT_ESTABLISHED"
+    },
+    "rights_status": {
+      "admissible_value_count": 0,
+      "candidate_count": 37,
+      "prior_state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED"
+    },
+    "source_kind": {
+      "admissible_value_count": 0,
+      "candidate_count": 18,
+      "prior_state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED"
+    },
+    "source_locator": {
+      "admissible_value_count": 4,
+      "candidate_count": 144,
+      "prior_state": "CONTRADICTORY_NOT_ESTABLISHED"
+    }
+  }
+}

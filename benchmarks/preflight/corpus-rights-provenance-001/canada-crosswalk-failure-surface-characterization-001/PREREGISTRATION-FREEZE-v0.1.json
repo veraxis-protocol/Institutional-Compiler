@@ -1,0 +1,45 @@
+{
+  "artifact_sha256": {
+    "CHARACTERIZATION-CONTRACT-v0.1.json": "b84cdc8d59e189188898903392e45b2e38d8bcb3486d01c5f567ec0e3b46e26c",
+    "PLAN-v0.1.md": "f149741453324f1cebb3368f9aa0ebe1e8bc10b6503dd894e7d928b6c2ad1b21",
+    "closed_crosswalk_execution_result": "c5373e8a0fce35a50f2559c6c0457135fe8776487de49c82c7ee11686161ea67",
+    "closed_crosswalk_post_run_adjudication": "263ed4b92ede44cd0f896ba7b064ca4c59e8d23c44a9c0c4c81705ddd9bb9483",
+    "preserved_crosswalk_receipt": "77d8a67a71e7eb073fa3f43825a1113a53effd948f69e7abee952e06767dbb92"
+  },
+  "base_crosswalk_closure_commit": "df96c6a6acf4364f2ad399e9e1a2591eadd8b801",
+  "canonicalization_authorized": false,
+  "control_envelope_authorized": false,
+  "crosswalk_001_rerun_authorized": false,
+  "freeze_id": "OIC-CANADA-CROSSWALK-FAILURE-SURFACE-CHARACTERIZATION-001-FREEZE-v0.1",
+  "freeze_version": "v0.1",
+  "future_preserved_crosswalk_receipt_inspection_authorized_after_independent_verification_and_static_freeze": true,
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "next_authorized_step": "Independent verification of this preregistration. After verification, implement and statically freeze a descriptive failure-surface characterization instrument using synthetic Crosswalk-receipt fixtures only. Do not inspect the preserved real Crosswalk 001 receipt yet.",
+  "normalization_authorized": false,
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "precedence_selection_authorized": false,
+  "preserved_crosswalk_receipt_inspected_by_this_work_order": false,
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "real_evidence_reread_by_this_work_order": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "schema_resolution_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "source_xml_inspected_by_this_work_order": false,
+  "status": "PREREGISTERED_NOT_EXECUTED",
+  "unresolved_field_count": 8,
+  "work_order": "OIC-CANADA-CROSSWALK-FAILURE-SURFACE-CHARACTERIZATION-001"
+}
