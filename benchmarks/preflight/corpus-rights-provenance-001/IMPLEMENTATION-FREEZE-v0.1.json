@@ -1,0 +1,53 @@
+{
+  "canonicalization_authorized": false,
+  "claim_ceiling": "This implementation freeze establishes only that an offline validator and its synthetic/temp contract tests implement the frozen SOURCE_MANIFEST.csv structural preflight contract. It does not establish rights, provenance, legal clearance, actual corpus membership, semantic correctness, institutional authority, benchmark validity, production readiness, enterprise readiness, or authorization for blocked semantic/provider/runtime work.",
+  "contract_test_sha256": "3e9f29fa30f3654f7ad362699f3703ba721ec2ea5665fa261b6327b820aa33b6",
+  "control_envelope_authorized": false,
+  "corpus_evidence_inspected": false,
+  "corpus_provenance_established": false,
+  "corpus_rights_established": false,
+  "expected_population_inference_authorized": false,
+  "expected_population_required": true,
+  "freeze_id": "OIC-CORPUS-RIGHTS-PROVENANCE-PREFLIGHT-001-IMPLEMENTATION-FREEZE-v0.1",
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "manifest_adjudication_authorized": false,
+  "manifest_population_authorized": false,
+  "model_call_made": false,
+  "network_request_made": false,
+  "next_authorized_activity": "Independent verification of this implementation freeze. Do not create, populate, inspect, or adjudicate SOURCE_MANIFEST.csv until that verification is complete and a separately bounded corpus population/evidence execution step is authorized.",
+  "ontology_007r1_execution_authorized": false,
+  "plan_sha256": "3b377b5149a980c86cf6b4a402be23dc4884bba722bbecc868656f90864b43d7",
+  "preregistration_commit": "bfa6c65cb1a9dbfa4cd0a925d18bf9704d325175",
+  "preregistration_freeze_sha256": "8681ac70099edd5f4157ff4fe9b18dffc799c2f5efba4a3605a92933251e0422",
+  "production_interpretation_ruleset_change_authorized": false,
+  "provider_call_made": false,
+  "q011_creation_authorized": false,
+  "real_source_manifest_created": false,
+  "real_source_manifest_inspected": false,
+  "rego_compilation_authorized": false,
+  "repository_test_suite_validation": {
+    "classification": "PASS_WITH_TWO_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_deselection_count": 2,
+    "exceptions": [
+      {
+        "historical_test_sha256": "dfa7744af00ef557b8bcede330d738a1f1d79e53c60a74d60bc8855630304d80",
+        "nodeid": "tests/test_definition_ontology_predicate_frame_discrimination_006r1.py::test_static_preflight_does_not_require_q008",
+        "reason": "Frozen pre-Q008 lifecycle test asserts Qualification 008 result absence; Q008 now legitimately exists."
+      },
+      {
+        "historical_test_sha256": "c1ef0b1568fc16c70e6302d853a7a4a03c74dcf3ebfed18807b872c6f4887365",
+        "nodeid": "tests/test_definition_ontology_syntactic_predicate_carrier_discrimination_007.py::test_static_preflight_does_not_require_q009",
+        "reason": "Frozen pre-Q009 lifecycle test asserts Qualification 009 result absence; Q009 now legitimately exists."
+      }
+    ],
+    "historical_tests_modified": false,
+    "semantic_scope_effect": "NONE"
+  },
+  "runtime_evaluation_authorized": false,
+  "source_manifest_contract_sha256": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+  "status": "VALIDATOR_IMPLEMENTED_STATICALLY_FROZEN_NOT_ADJUDICATED",
+  "validator_mode": "OFFLINE_FAIL_CLOSED",
+  "validator_sha256": "952a7aebf418713749056d882fb0b985815796e803adf919eff2c178ac909ad6",
+  "work_order": "OIC-CORPUS-RIGHTS-PROVENANCE-PREFLIGHT-001"
+}
