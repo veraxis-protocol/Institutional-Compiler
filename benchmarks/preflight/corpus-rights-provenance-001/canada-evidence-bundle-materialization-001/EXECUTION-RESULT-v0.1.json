@@ -1,0 +1,97 @@
+{
+  "bundle_bytes_transformed_during_closure": false,
+  "candidate_002_adopted": false,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "claim_ceiling": "This closure establishes only deterministic CA-3 evidence-bundle materialization for rights_evidence and provenance_evidence. It does not establish rights, provenance truth, legal clearance, evidentiary priority, declaration values, Candidate 002 adoption, SOURCE_MANIFEST admissibility, production readiness, causal root cause, or cross-source generality.",
+  "control_envelope_authorized": false,
+  "cross_source_generality_established": false,
+  "declaration_fields_touched": [],
+  "disposition": "EVIDENCE_BUNDLES_MATERIALIZED_CA3",
+  "evaluation_execution_count": 1,
+  "evidence_bindings": {
+    "authorization_receipt_sha256": "8bb1d31805443810e42e60ce2765eb97481cd5c57fd391a09be3f2aac3573ca1",
+    "local_materialization_receipt_sha256": "b7eb57fe7b406d4ca5c47b3a75365d40ab4e059f29c4323588d2a5e61bc0f806",
+    "started_lock_sha256": "e2a80ae059bfcfcf124d871f53f2a1953a8be018060b2149f60459e232961667",
+    "stderr_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "evidentiary_priority_established": false,
+  "experiment_network_input_used": false,
+  "field_observations": {
+    "provenance_evidence": {
+      "bundle_sha256": "25e2ab8a6f192c9247fa6dcd6e6eac27a63b720b8e5bc904ec9339e8adcced74",
+      "evidentiary_priority_established": false,
+      "exact_reference_set_preserved": true,
+      "expected_reference_count": 3,
+      "legal_sufficiency_established": false,
+      "observed_reference_count": 3,
+      "precedence_assigned": false,
+      "tracked_destination_path": "benchmarks/preflight/corpus-rights-provenance-001/evidence-bundles/CA-3/provenance_evidence-bundle-v0.1.json"
+    },
+    "rights_evidence": {
+      "bundle_sha256": "3460f97cfd179ac8a57c52059115fc15e62f0e591526ab7043c1add12aafb85b",
+      "evidentiary_priority_established": false,
+      "exact_reference_set_preserved": true,
+      "expected_reference_count": 4,
+      "legal_sufficiency_established": false,
+      "observed_reference_count": 4,
+      "precedence_assigned": false,
+      "tracked_destination_path": "benchmarks/preflight/corpus-rights-provenance-001/evidence-bundles/CA-3/rights_evidence-bundle-v0.1.json"
+    }
+  },
+  "finding_count": 0,
+  "held_out_validation_required_for_generalization": true,
+  "implementation_freeze_sha256": "0ae04fdeba83204ee70bff26cf6b0d09e5ed47416b327147b6586dca192fc580",
+  "institutional_ir_authorized": false,
+  "instrument_sha256": "7550b3599c0f1e46fd12259ed795c8efeedf3e67399fda1d9fc22c89baab6651",
+  "interpretation": "For CA-3, the two evidence-reference fields were deterministically materialized as tracked bundle objects from the preserved Crosswalk 001 receipt. rights_evidence preserves exactly four distinct mapped references and provenance_evidence preserves exactly three. The tracked objects are exact-byte copies of the observed local one-shot bundle candidates. This establishes representation/materialization only; it does not establish evidentiary priority, legal sufficiency, rights, provenance truth, declaration values, Candidate 002 adoption, or manifest admissibility.",
+  "legal_clearance_established": false,
+  "legal_sufficiency_established": false,
+  "materialization_contract_sha256": "72c387ba7d46d235432ce5fb8e41debd303c952064d808ae66c7521715a2aa07",
+  "model_call_made": false,
+  "next_authorized_activity": "Independent verification of this formal closure only. The six declaration fields remain unresolved and out of scope. Any declaration-authority/admission study, Candidate 002 adoption decision, held-out validation, or SOURCE_MANIFEST population gate requires a separate preregistered work order.",
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "precedence_assigned": false,
+  "preserved_crosswalk_receipt_inspected_during_one_shot": true,
+  "provenance_established": false,
+  "provider_call_made": false,
+  "q011_creation_authorized": false,
+  "real_underlying_evidence_reread": false,
+  "rego_compilation_authorized": false,
+  "rerun_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_crosswalk_receipt_content_reopened_during_closure": false,
+  "source_crosswalk_receipt_sha256": "77d8a67a71e7eb073fa3f43825a1113a53effd948f69e7abee952e06767dbb92",
+  "source_manifest_created": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "static_implementation_commit": "30018976ed39cf0807bea97576f31b928719bb84",
+  "status": "CLOSED_EXECUTED_EVIDENCE_BUNDLES_MATERIALIZED_CA3",
+  "successor_declaration_or_manifest_population_work_auto_authorized": false,
+  "target_field_count": 2,
+  "tracked_bundle_file_count": 2,
+  "tracked_bundle_files_created_at_formal_closure": true,
+  "tracked_bundles": {
+    "provenance_evidence": {
+      "exact_observed_local_bytes_committed": true,
+      "path": "benchmarks/preflight/corpus-rights-provenance-001/evidence-bundles/CA-3/provenance_evidence-bundle-v0.1.json",
+      "reference_count": 3,
+      "sha256": "25e2ab8a6f192c9247fa6dcd6e6eac27a63b720b8e5bc904ec9339e8adcced74"
+    },
+    "rights_evidence": {
+      "exact_observed_local_bytes_committed": true,
+      "path": "benchmarks/preflight/corpus-rights-provenance-001/evidence-bundles/CA-3/rights_evidence-bundle-v0.1.json",
+      "reference_count": 4,
+      "sha256": "3460f97cfd179ac8a57c52059115fc15e62f0e591526ab7043c1add12aafb85b"
+    }
+  },
+  "underlying_evidence_rewritten": false,
+  "work_order": "OIC-CANADA-EVIDENCE-BUNDLE-MATERIALIZATION-001"
+}
