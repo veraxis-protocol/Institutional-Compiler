@@ -1,0 +1,271 @@
+{
+  "adjudicability_gate": {
+    "complete_pairs_required": 12,
+    "rule": "No localization classification may be evaluated unless all 24 observations terminate and all 12 matched pairs are complete. Otherwise classify INCOMPLETE_LOCALIZATION.",
+    "terminal_observations_required": 24
+  },
+  "architecture_change_authorized": false,
+  "arm_a": {
+    "arm_id": "A_JSON_64",
+    "max_tokens": 64,
+    "response_format": {
+      "type": "json_object"
+    },
+    "role": "structured-output low-reservation control",
+    "source_probe": "JSON_MODE"
+  },
+  "arm_b": {
+    "arm_id": "B_JSON_4096",
+    "max_tokens": 4096,
+    "response_format": {
+      "type": "json_object"
+    },
+    "role": "structured-output production-reservation condition",
+    "source_probe": "PRODUCTION_TOKEN_RESERVATION"
+  },
+  "canonicalization_performed": false,
+  "claim_ceiling": "This characterization may establish only a bounded association pattern between the requested max_tokens ceiling (64 versus 4096) and provider-path outcomes for one NVIDIA endpoint/model and one exact structured-output request. Even a reservation-size-specific failure pattern does not establish backend root cause, persistent provider unreliability, a general max-token defect, SLA availability, cross-provider behavior, Ontology 007 semantic behavior, canonical institutional meaning, Institutional IR, architecture change, or independent validation.",
+  "decision_rule_precedence": [
+    "SHARED_PROVIDER_PATH_FAILURE_PATTERN",
+    "RESERVATION_SIZE_SPECIFIC_FAILURE_PATTERN",
+    "CONTROL_SPECIFIC_FAILURE_PATTERN",
+    "SINGLE_FAILURE_ASYMMETRY_INCONCLUSIVE",
+    "NO_FAILURE_WITH_LATENCY_DEGRADATION",
+    "BOUNDED_NO_FAILURE_WINDOW",
+    "INCOMPLETE_LOCALIZATION"
+  ],
+  "decision_rules": {
+    "BOUNDED_NO_FAILURE_WINDOW": "All 24 observations ACCEPTED, all markers valid, and every elapsed_seconds <=45.0.",
+    "CONTROL_SPECIFIC_FAILURE_PATTERN": "All 24 observations terminal; A_JSON_64 has at least two non-ACCEPTED or marker-invalid observations; B_JSON_4096 has zero.",
+    "INCOMPLETE_LOCALIZATION": "Fewer than 24 terminal observations or fewer than 12 complete pairs.",
+    "NO_FAILURE_WITH_LATENCY_DEGRADATION": "All 24 observations ACCEPTED and marker-valid, but one or more elapsed_seconds exceeds 45.0.",
+    "RESERVATION_SIZE_SPECIFIC_FAILURE_PATTERN": "All 24 observations terminal; B_JSON_4096 has at least two non-ACCEPTED or marker-invalid observations; A_JSON_64 has zero.",
+    "SHARED_PROVIDER_PATH_FAILURE_PATTERN": "All 24 observations terminal and each arm has at least one non-ACCEPTED or marker-invalid observation.",
+    "SINGLE_FAILURE_ASYMMETRY_INCONCLUSIVE": "All 24 observations terminal and there is exactly one total non-ACCEPTED or marker-invalid observation."
+  },
+  "execution_plan": [
+    {
+      "arm": "A_JSON_64",
+      "execution_ordinal": 1,
+      "pair_index": 1,
+      "position_in_pair": 1
+    },
+    {
+      "arm": "B_JSON_4096",
+      "execution_ordinal": 2,
+      "pair_index": 1,
+      "position_in_pair": 2
+    },
+    {
+      "arm": "B_JSON_4096",
+      "execution_ordinal": 3,
+      "pair_index": 2,
+      "position_in_pair": 1
+    },
+    {
+      "arm": "A_JSON_64",
+      "execution_ordinal": 4,
+      "pair_index": 2,
+      "position_in_pair": 2
+    },
+    {
+      "arm": "A_JSON_64",
+      "execution_ordinal": 5,
+      "pair_index": 3,
+      "position_in_pair": 1
+    },
+    {
+      "arm": "B_JSON_4096",
+      "execution_ordinal": 6,
+      "pair_index": 3,
+      "position_in_pair": 2
+    },
+    {
+      "arm": "B_JSON_4096",
+      "execution_ordinal": 7,
+      "pair_index": 4,
+      "position_in_pair": 1
+    },
+    {
+      "arm": "A_JSON_64",
+      "execution_ordinal": 8,
+      "pair_index": 4,
+      "position_in_pair": 2
+    },
+    {
+      "arm": "A_JSON_64",
+      "execution_ordinal": 9,
+      "pair_index": 5,
+      "position_in_pair": 1
+    },
+    {
+      "arm": "B_JSON_4096",
+      "execution_ordinal": 10,
+      "pair_index": 5,
+      "position_in_pair": 2
+    },
+    {
+      "arm": "B_JSON_4096",
+      "execution_ordinal": 11,
+      "pair_index": 6,
+      "position_in_pair": 1
+    },
+    {
+      "arm": "A_JSON_64",
+      "execution_ordinal": 12,
+      "pair_index": 6,
+      "position_in_pair": 2
+    },
+    {
+      "arm": "A_JSON_64",
+      "execution_ordinal": 13,
+      "pair_index": 7,
+      "position_in_pair": 1
+    },
+    {
+      "arm": "B_JSON_4096",
+      "execution_ordinal": 14,
+      "pair_index": 7,
+      "position_in_pair": 2
+    },
+    {
+      "arm": "B_JSON_4096",
+      "execution_ordinal": 15,
+      "pair_index": 8,
+      "position_in_pair": 1
+    },
+    {
+      "arm": "A_JSON_64",
+      "execution_ordinal": 16,
+      "pair_index": 8,
+      "position_in_pair": 2
+    },
+    {
+      "arm": "A_JSON_64",
+      "execution_ordinal": 17,
+      "pair_index": 9,
+      "position_in_pair": 1
+    },
+    {
+      "arm": "B_JSON_4096",
+      "execution_ordinal": 18,
+      "pair_index": 9,
+      "position_in_pair": 2
+    },
+    {
+      "arm": "B_JSON_4096",
+      "execution_ordinal": 19,
+      "pair_index": 10,
+      "position_in_pair": 1
+    },
+    {
+      "arm": "A_JSON_64",
+      "execution_ordinal": 20,
+      "pair_index": 10,
+      "position_in_pair": 2
+    },
+    {
+      "arm": "A_JSON_64",
+      "execution_ordinal": 21,
+      "pair_index": 11,
+      "position_in_pair": 1
+    },
+    {
+      "arm": "B_JSON_4096",
+      "execution_ordinal": 22,
+      "pair_index": 11,
+      "position_in_pair": 2
+    },
+    {
+      "arm": "B_JSON_4096",
+      "execution_ordinal": 23,
+      "pair_index": 12,
+      "position_in_pair": 1
+    },
+    {
+      "arm": "A_JSON_64",
+      "execution_ordinal": 24,
+      "pair_index": 12,
+      "position_in_pair": 2
+    }
+  ],
+  "frozen_provider_bound_delta": {
+    "arm_a_value": 64,
+    "arm_b_value": 4096,
+    "expected_output_equal": true,
+    "only_changed_field": "max_tokens",
+    "response_format_equal": true,
+    "system_prompt_equal": true,
+    "temperature_equal": true,
+    "user_prompt_equal": true
+  },
+  "historical_observations_reused_as_new_observations": false,
+  "hypothesis_provenance": {
+    "causal_claim": false,
+    "generated_after_recovery_stability_002": true,
+    "independent_discovery": false
+  },
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "live_run_executed": false,
+  "model_call_made": false,
+  "network_request_made": false,
+  "next_authorized_activity": "Implement, contract-test, materialize and statically freeze Token Reservation Localization 001 offline. Do not execute it live. Do not create Q010 and do not execute Ontology 007.",
+  "ontology_007_executed": false,
+  "ontology_007_execution_authorized": false,
+  "order_balance": {
+    "arm_a_first_count": 6,
+    "arm_b_first_count": 6,
+    "each_arm_observation_count": 12,
+    "even_pairs": "B_THEN_A",
+    "odd_pairs": "A_THEN_B"
+  },
+  "pair_count": 12,
+  "paired_descriptive_outputs": [
+    "failure count by arm",
+    "B-only failure pairs",
+    "A-only failure pairs",
+    "shared-failure pairs",
+    "accepted latency range by arm",
+    "accepted latency median by arm"
+  ],
+  "planned_provider_calls": 24,
+  "provider": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "latency_headroom_seconds": 45.0,
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "timeout_seconds": 60.0
+  },
+  "provider_call_made": false,
+  "q010_authorized": false,
+  "q010_created": false,
+  "recovery_stability_002_rerun": false,
+  "scientific_question": "When all provider-bound request fields are held constant except max_tokens, does the 4096-token reservation condition exhibit a different provider-path failure pattern from the otherwise identical 64-token structured-output condition within a fresh paired window?",
+  "semantic_hypothesis": null,
+  "semantic_hypothesis_evaluated": false,
+  "source_binding": {
+    "probe_spec_sha256": "262445c71ca34f41dd9d173a978ebcaa7bd71df2f313f0c9b090b9fd4a8925d1",
+    "q009_instrument_sha256": "d7284716642467ace8ce4dd81bc5cbeb0b9219c69ef51ff9a61fa13e0d745363",
+    "q009_request_materialization_sha256": "e725fbf588ff4f304ebb5f1fd48b5f6bad64e1bb54d06aa3e528396c9362a485"
+  },
+  "starting_sha": "3fc985036110bc798b4c59c0fc00488692c487ce",
+  "status": "PREREGISTERED_NOT_IMPLEMENTED_NOT_EXECUTED",
+  "transport": {
+    "latency_headroom_seconds": 45.0,
+    "pacing_seconds": 4.0,
+    "replacement_observations_allowed": false,
+    "retries": 0,
+    "timeout_seconds": 60.0
+  },
+  "trigger": {
+    "execution_result_sha256": "b997d47e66652a2fc4ff99d7ae9d133cc2c28e2dcd49bc2b9a02bbd25ea22cf4",
+    "observed_failure_count": 2,
+    "observed_failure_probe": "PRODUCTION_TOKEN_RESERVATION",
+    "post_run_adjudication_sha256": "8fc1322440b2121fbd69f1a8d999f3cc867f32f1b60ff3639dde4bc975fc754e",
+    "primary_live_receipt_sha256": "ae7b38d90dfd16bf17739a7eb00a778445ea773d661ab5a53f7bca80ab98735b",
+    "root_cause": "NOT_ESTABLISHED",
+    "status": "CLOSED_RECOVERY_NOT_ESTABLISHED_PROVIDER_PATH_FAILURE",
+    "work_order": "OIC-NVIDIA-PROVIDER-RECOVERY-STABILITY-002"
+  },
+  "work_order": "OIC-NVIDIA-PROVIDER-TOKEN-RESERVATION-LOCALIZATION-001"
+}
