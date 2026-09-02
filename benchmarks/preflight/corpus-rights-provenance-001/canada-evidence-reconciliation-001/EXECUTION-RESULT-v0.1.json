@@ -1,0 +1,115 @@
+{
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "claim_ceiling": "This closure establishes only failure of the exact frozen CA-3 evidence-to-manifest reconciliation rule. It does not establish infringement, absence of rights, absence of provenance, legal invalidity, insufficiency of the underlying evidence under another explicitly preregistered crosswalk, semantic correctness, benchmark validity, production readiness, enterprise readiness, provider reliability, or authorization for canonicalization, Institutional IR, OCE, Rego, runtime, Q011, or Ontology 007R1.",
+  "control_envelope_authorized": false,
+  "disposition": "EVIDENCE_INSUFFICIENT_FAIL_CLOSED",
+  "evidence": {
+    "authorization_receipt_sha256": "7769ccb1923c72a1938869b9d0c143c3afdb8e2b1755b89c922b15c68c942ede",
+    "observation_receipt_sha256": "83e38b7f15f6ef6baeb158000866bbfa484c0072509d6b805bf8e9edc699d7c1",
+    "one_shot_lock_sha256": "ce6433d1e97808bb9cda6ebf22c64f7dc641a089ff17a06f08e290bc1460cee0",
+    "stderr_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "evidence_absence_established": false,
+  "evidence_shape_or_vocabulary_mismatch_established": false,
+  "finding_count": 10,
+  "findings": [
+    {
+      "code": "MISSING_EXPLICIT_SUPPORT",
+      "field": "source_kind",
+      "message": "No exact-key CA-3 evidence supports required field 'source_kind'."
+    },
+    {
+      "code": "MISSING_EXPLICIT_SUPPORT",
+      "field": "source_locator",
+      "message": "No exact-key CA-3 evidence supports required field 'source_locator'."
+    },
+    {
+      "code": "MISSING_EXPLICIT_SUPPORT",
+      "field": "local_path",
+      "message": "No exact-key CA-3 evidence supports required field 'local_path'."
+    },
+    {
+      "code": "MISSING_EXPLICIT_SUPPORT",
+      "field": "rights_basis",
+      "message": "No exact-key CA-3 evidence supports required field 'rights_basis'."
+    },
+    {
+      "code": "MISSING_EXPLICIT_SUPPORT",
+      "field": "rights_evidence",
+      "message": "No exact-key CA-3 evidence supports required field 'rights_evidence'."
+    },
+    {
+      "code": "MISSING_EXPLICIT_SUPPORT",
+      "field": "rights_status",
+      "message": "No exact-key CA-3 evidence supports required field 'rights_status'."
+    },
+    {
+      "code": "MISSING_EXPLICIT_SUPPORT",
+      "field": "provenance_evidence",
+      "message": "No exact-key CA-3 evidence supports required field 'provenance_evidence'."
+    },
+    {
+      "code": "MISSING_EXPLICIT_SUPPORT",
+      "field": "provenance_status",
+      "message": "No exact-key CA-3 evidence supports required field 'provenance_status'."
+    },
+    {
+      "code": "MISSING_EXPLICIT_SUPPORT",
+      "field": "redistribution_status",
+      "message": "No exact-key CA-3 evidence supports required field 'redistribution_status'."
+    },
+    {
+      "code": "MISSING_EXPLICIT_SUPPORT",
+      "field": "acquired_or_generated_at",
+      "message": "No exact-key CA-3 evidence supports required field 'acquired_or_generated_at'."
+    }
+  ],
+  "implementation_freeze_sha256": "e3173bb4c8f1aa56978e2826f7954837747071ea9e820b89791546a543fb5b8d",
+  "institutional_ir_authorized": false,
+  "interpretation": "The frozen read-only reconciler executed exactly once against the allowlisted machine-readable Canada evidence for the exact CA-3 population. Under the preregistered exact-key/no-alias extraction rule, only source_id and the permitted byte-derived content_hash were resolved. Ten required SOURCE_MANIFEST fields lacked explicit support under that frozen extraction rule. The result is therefore EVIDENCE_INSUFFICIENT_FAIL_CLOSED. This result does not establish that the underlying rights/provenance evidence is absent; it only establishes that the frozen evidence surface cannot populate the frozen manifest contract under the frozen exact-key reconciliation algorithm.",
+  "legal_clearance_established": false,
+  "missing_explicit_support_fields": [
+    "acquired_or_generated_at",
+    "local_path",
+    "provenance_evidence",
+    "provenance_status",
+    "redistribution_status",
+    "rights_basis",
+    "rights_evidence",
+    "rights_status",
+    "source_kind",
+    "source_locator"
+  ],
+  "model_call_made": false,
+  "network_request_made": false,
+  "next_authorized_activity": "Independent verification of this formal closure only. Do not rerun this reconciliation and do not create SOURCE_MANIFEST.csv. Any successor evidence-vocabulary inventory or crosswalk work requires a separately justified and preregistered work order.",
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provenance_established": false,
+  "provider_call_made": false,
+  "q011_creation_authorized": false,
+  "ready_for_manifest_population": false,
+  "reconciliation_execution_count": 1,
+  "rego_compilation_authorized": false,
+  "required_field_count": 12,
+  "rerun_authorized": false,
+  "resolved_field_names": [
+    "content_hash",
+    "source_id"
+  ],
+  "resolved_required_field_count": 2,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_created": false,
+  "source_manifest_creation_authorized": false,
+  "static_implementation_commit": "114f30bfb7981af915868bee5a8c9686161507d5",
+  "status": "CLOSED_EXECUTED_EVIDENCE_INSUFFICIENT_FAIL_CLOSED",
+  "successor_crosswalk_or_mapping_work_auto_authorized": false,
+  "work_order": "OIC-CANADA-CORPUS-EVIDENCE-RECONCILIATION-001"
+}
