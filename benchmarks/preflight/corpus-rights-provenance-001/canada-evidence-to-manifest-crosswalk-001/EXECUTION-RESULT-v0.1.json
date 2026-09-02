@@ -1,0 +1,157 @@
+{
+  "candidate_key_expansion_performed": false,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "claim_ceiling": "This closure establishes only the result of the frozen CA-3 evidence-to-manifest crosswalk contract. It does not establish that the underlying evidence is legally insufficient, that rights or provenance are absent, that any conflicting candidate is wrong, that the existing evidence artifacts should be rewritten, or that any particular successor schema/crosswalk repair will succeed. It does not authorize SOURCE_MANIFEST.csv population, canonicalization, Institutional IR, OCE, Rego, runtime, Q011, or Ontology 007R1.",
+  "control_envelope_authorized": false,
+  "corroborating_markdown_inspected": false,
+  "crosswalk_complete_established": false,
+  "crosswalk_contract_sha256": "f4517e2a927784a6e231da788eaf128a3394cad7e399d5473bb42c54ba352df3",
+  "crosswalk_execution_count": 1,
+  "crosswalk_mapping_established": false,
+  "disposition": "CROSSWALK_INCOMPLETE_FAIL_CLOSED",
+  "established_field_count": 4,
+  "established_fields": [
+    "source_id",
+    "local_path",
+    "content_hash",
+    "acquired_or_generated_at"
+  ],
+  "evidence": {
+    "authorization_receipt_sha256": "ee604084689f99ab6f0173ab84877be5b667b1ad2036c21262a13ef11c080bbb",
+    "crosswalk_receipt_sha256": "77d8a67a71e7eb073fa3f43825a1113a53effd948f69e7abee952e06767dbb92",
+    "one_shot_lock_sha256": "608a1a0abf217ba8ef78e9bbdae5d9dd01cf902bc9dcfd58c6ee81e663fd9428",
+    "stderr_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "field_results_summary": [
+    {
+      "admissible_value_count": 1,
+      "candidate_count": 30,
+      "state": "ESTABLISHED_DIRECT",
+      "target_field": "source_id",
+      "value": "CA-3"
+    },
+    {
+      "admissible_value_count": 0,
+      "candidate_count": 18,
+      "state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED",
+      "target_field": "source_kind"
+    },
+    {
+      "admissible_value_count": 4,
+      "candidate_count": 144,
+      "state": "CONTRADICTORY_NOT_ESTABLISHED",
+      "target_field": "source_locator"
+    },
+    {
+      "admissible_value_count": 1,
+      "candidate_count": 4,
+      "state": "ESTABLISHED_DIRECT",
+      "target_field": "local_path",
+      "value": "sources/CA-3.xml"
+    },
+    {
+      "admissible_value_count": 1,
+      "candidate_count": 86,
+      "state": "ESTABLISHED_DETERMINISTIC_DERIVATION",
+      "target_field": "content_hash",
+      "value": "sha256:6e89ad25847944ca2bd72bcbf02ec3d2942a234d373b6c10db44307e0fbdf2c3"
+    },
+    {
+      "admissible_value_count": 0,
+      "candidate_count": 66,
+      "state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED",
+      "target_field": "rights_basis"
+    },
+    {
+      "admissible_value_count": 4,
+      "candidate_count": 118,
+      "state": "CONTRADICTORY_NOT_ESTABLISHED",
+      "target_field": "rights_evidence"
+    },
+    {
+      "admissible_value_count": 0,
+      "candidate_count": 37,
+      "state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED",
+      "target_field": "rights_status"
+    },
+    {
+      "admissible_value_count": 3,
+      "candidate_count": 39,
+      "state": "CONTRADICTORY_NOT_ESTABLISHED",
+      "target_field": "provenance_evidence"
+    },
+    {
+      "admissible_value_count": 0,
+      "candidate_count": 107,
+      "state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED",
+      "target_field": "provenance_status"
+    },
+    {
+      "admissible_value_count": 0,
+      "candidate_count": 44,
+      "state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED",
+      "target_field": "redistribution_status"
+    },
+    {
+      "admissible_value_count": 1,
+      "candidate_count": 40,
+      "state": "ESTABLISHED_DIRECT",
+      "target_field": "acquired_or_generated_at",
+      "value": "2026-07-31T14:35:22.379578Z"
+    }
+  ],
+  "implementation_freeze_sha256": "737d2e1096ae257b5ec74401d875da9d2d14b4aad8a9b7b09239cce20a9b9e53",
+  "institutional_ir_authorized": false,
+  "instrument_sha256": "8116d22aa26b953eb0b355e2fb028c2bfa5e7d429d399b39818c956bc7c13d5b",
+  "interpretation": "The frozen crosswalk executed exactly once against the preserved Inventory 001 receipt and established 4 of 12 target manifest fields. source_id, local_path, content_hash, and acquired_or_generated_at survived the frozen scope and nonpromotion rules. Five fields remained MULTIPLE_CANDIDATES_NOT_ESTABLISHED and three remained CONTRADICTORY_NOT_ESTABLISHED. The all-12-fields success rule therefore requires CROSSWALK_INCOMPLETE_FAIL_CLOSED.",
+  "legal_clearance_established": false,
+  "model_call_made": false,
+  "network_request_made": false,
+  "network_used": false,
+  "next_authorized_activity": "Independent verification of this formal closure only. Do not rerun Crosswalk 001 and do not create SOURCE_MANIFEST.csv. Any successor evidence-schema resolution, normalization, or manifest-admission work requires a separately justified and preregistered work order.",
+  "not_established_field_count": 8,
+  "not_established_fields": [
+    "source_kind",
+    "source_locator",
+    "rights_basis",
+    "rights_evidence",
+    "rights_status",
+    "provenance_evidence",
+    "provenance_status",
+    "redistribution_status"
+  ],
+  "ontology_007r1_execution_authorized": false,
+  "partial_field_mapping_authorizes_manifest_population": false,
+  "partial_field_mapping_observed": true,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provenance_established": false,
+  "provider_call_made": false,
+  "q011_creation_authorized": false,
+  "real_evidence_reread": false,
+  "rego_compilation_authorized": false,
+  "rerun_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_created": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "source_xml_inspected": false,
+  "state_counts": {
+    "CONTRADICTORY_NOT_ESTABLISHED": 3,
+    "ESTABLISHED_DETERMINISTIC_DERIVATION": 1,
+    "ESTABLISHED_DIRECT": 3,
+    "MULTIPLE_CANDIDATES_NOT_ESTABLISHED": 5
+  },
+  "static_implementation_commit": "8f0726d8925edb5bc009501b22ca220fdc4fa6e9",
+  "status": "CLOSED_EXECUTED_CROSSWALK_INCOMPLETE_FAIL_CLOSED",
+  "successor_schema_resolution_work_auto_authorized": false,
+  "target_field_count": 12,
+  "tracked_crosswalk_created": false,
+  "work_order": "OIC-CANADA-EVIDENCE-TO-MANIFEST-CROSSWALK-001"
+}
