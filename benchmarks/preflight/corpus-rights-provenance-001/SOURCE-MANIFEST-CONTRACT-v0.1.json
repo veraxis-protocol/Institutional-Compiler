@@ -1,0 +1,139 @@
+{
+  "canonicalization_authorized": false,
+  "claim_ceiling": "A PASS establishes only that the specifically bounded corpus manifest satisfies this documentation preflight contract at the frozen repository state. It does not constitute legal advice or establish universal copyright clearance, semantic correctness, institutional authority, benchmark validity, production readiness, or enterprise readiness.",
+  "contract_id": "OIC-SOURCE-MANIFEST-CONTRACT-001",
+  "contract_version": "v0.1",
+  "control_envelope_authorized": false,
+  "encoding": "utf-8",
+  "fail_closed_conditions": [
+    "manifest absent",
+    "manifest has no data rows",
+    "header mismatch",
+    "required field missing or empty",
+    "duplicate source_id",
+    "unsupported source_kind",
+    "invalid content_hash",
+    "rights_status not verified",
+    "provenance_status not verified",
+    "redistribution_status unknown",
+    "rights_evidence missing",
+    "provenance_evidence missing",
+    "bounded corpus membership cannot be reconciled exactly to manifest rows"
+  ],
+  "fields": {
+    "acquired_or_generated_at": {
+      "required": true,
+      "rule": "RFC 3339 date-time identifying acquisition or generation time"
+    },
+    "content_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "required": true,
+      "semantic_alignment": "schemas/draft/source-document.schema.json#properties/content_hash"
+    },
+    "local_path": {
+      "required": true,
+      "rule": "repository-relative path to the bounded source object; must not use an absolute path or parent traversal"
+    },
+    "notes": {
+      "required": false,
+      "rule": "free text; must not substitute for any required evidence field"
+    },
+    "provenance_evidence": {
+      "required": true,
+      "rule": "non-empty URI or repository-relative tracked evidence reference supporting source origin"
+    },
+    "provenance_status": {
+      "allowed": [
+        "verified",
+        "rejected",
+        "unverified"
+      ],
+      "pass_value": "verified",
+      "required": true
+    },
+    "redistribution_status": {
+      "allowed": [
+        "permitted",
+        "not_permitted",
+        "unknown"
+      ],
+      "pass_rule": "must not be unknown; not_permitted does not by itself fail bounded internal evaluation if the recorded rights_basis permits that use",
+      "required": true
+    },
+    "rights_basis": {
+      "allowed": [
+        "public_domain",
+        "open_license",
+        "permission",
+        "synthetic_owned",
+        "other_documented_basis"
+      ],
+      "required": true
+    },
+    "rights_evidence": {
+      "required": true,
+      "rule": "non-empty URI or repository-relative tracked evidence reference supporting rights_basis"
+    },
+    "rights_status": {
+      "allowed": [
+        "verified",
+        "rejected",
+        "unverified"
+      ],
+      "pass_value": "verified",
+      "required": true
+    },
+    "source_id": {
+      "required": true,
+      "rule": "non-empty string; unique across manifest; must be the identifier used to bind the corresponding SourceDocument"
+    },
+    "source_kind": {
+      "allowed": [
+        "public",
+        "synthetic"
+      ],
+      "required": true
+    },
+    "source_locator": {
+      "required": true,
+      "rule": "canonical public locator when public, or stable synthetic origin identifier when synthetic"
+    }
+  },
+  "format": "csv",
+  "gate_pass_rule": "manifest exists, contains header plus at least one data row, exact header order matches this contract, every row passes, every bounded source intended for the corpus is represented exactly once, and no undeclared source is used by the bounded corpus evaluation",
+  "header_order": [
+    "source_id",
+    "source_kind",
+    "source_locator",
+    "local_path",
+    "content_hash",
+    "rights_basis",
+    "rights_evidence",
+    "rights_status",
+    "provenance_evidence",
+    "provenance_status",
+    "redistribution_status",
+    "acquired_or_generated_at",
+    "notes"
+  ],
+  "institutional_ir_authorized": false,
+  "manifest_path": "SOURCE_MANIFEST.csv",
+  "model_call_authorized": false,
+  "network_access_authorized": false,
+  "normalization_policy": "NONE: validator must report invalid evidence and must not silently repair, infer, fetch, rewrite, or normalize manifest values",
+  "provider_call_authorized": false,
+  "row_pass_rule": {
+    "content_hash_valid": true,
+    "no_inference_of_missing_evidence": true,
+    "provenance_status": "verified",
+    "redistribution_status": [
+      "permitted",
+      "not_permitted"
+    ],
+    "required_fields_nonempty": true,
+    "rights_status": "verified",
+    "source_id_unique": true
+  },
+  "runtime_authorized": false,
+  "status": "FROZEN_CONTRACT_NOT_EVALUATED"
+}

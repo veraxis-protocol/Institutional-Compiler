@@ -1,0 +1,45 @@
+{
+  "architecture_change_authorized": false,
+  "artifact_sha256": {
+    "PLAN-v0.1.md": "3b377b5149a980c86cf6b4a402be23dc4884bba722bbecc868656f90864b43d7",
+    "SOURCE-MANIFEST-CONTRACT-v0.1.json": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b"
+  },
+  "base_commit": "bab006f8fc5f4df10fb6a4b322c2dba34ccd79da",
+  "canonicalization_authorized": false,
+  "claim_ceiling": "This preregistration freezes only the corpus rights/provenance manifest contract and fail-closed preflight rule. It does not establish rights or provenance for any source, legal clearance, semantic correctness, institutional meaning or authority, benchmark validity, production readiness, enterprise readiness, or any authorization to execute blocked semantic/provider/runtime work.",
+  "control_envelope_authorized": false,
+  "corpus_evidence_inspected_by_this_work_order": false,
+  "corpus_provenance_established": false,
+  "corpus_rights_established": false,
+  "freeze_id": "OIC-CORPUS-RIGHTS-PROVENANCE-PREFLIGHT-001-FREEZE-v0.1",
+  "freeze_version": "v0.1",
+  "frozen_decision_rule": {
+    "fail_closed": "Absent, empty, malformed, incomplete, duplicate, unsupported, unverified, unknown, invalid-hash, missing-evidence, or population-mismatch state produces FAIL_CLOSED.",
+    "no_inference": true,
+    "no_silent_normalization": true,
+    "pass": "Only a completed SOURCE_MANIFEST.csv satisfying the exact frozen contract for every bounded corpus source may produce PASS."
+  },
+  "governing_repository_state": {
+    "provider_path_stop_rule_commit": "bab006f8fc5f4df10fb6a4b322c2dba34ccd79da",
+    "roadmap_md_blob_sha": "a4636a107e40962a4f65f37995c9ef31b9bbfa78",
+    "source_document_schema_blob_sha": "eeacb5db66b31c282408bff3d47243f94db5ceed",
+    "status_md_blob_sha": "5fecec4a39554ffa6b50bc30311aaf5d69404f99"
+  },
+  "institutional_ir_authorized": false,
+  "manifest_created_or_populated_by_this_work_order": false,
+  "manifest_path": "SOURCE_MANIFEST.csv",
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "next_authorized_step": "Implement an offline validator and contract tests against the frozen manifest contract without inspecting or populating corpus evidence. Static validation must complete before any manifest adjudication.",
+  "ontology_007r1_execution_authorized": false,
+  "preflight_gate_status_after_preregistration": "OPEN",
+  "production_interpretation_ruleset_change_authorized": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "rego_compilation_authorized": false,
+  "runtime_evaluation_authorized": false,
+  "status": "PREREGISTERED_NOT_EXECUTED",
+  "veip_execution_authorized": false,
+  "work_order": "OIC-CORPUS-RIGHTS-PROVENANCE-PREFLIGHT-001",
+  "ztl_execution_authorized": false
+}
