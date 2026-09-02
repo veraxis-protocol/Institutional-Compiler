@@ -1,0 +1,119 @@
+{
+  "allowlist_id": "OIC-CANADA-CORPUS-EVIDENCE-ALLOWLIST-001",
+  "base_commit": "272df4bd6e1c10c60854cb30f4ca8f06c96fe1e6",
+  "corroborating_evidence_rule": "May corroborate primary machine-readable evidence but may not by itself supply a missing PASS-critical fact or override a conflict in primary evidence.",
+  "corroborating_human_readable_evidence": [
+    {
+      "git_blob_sha": "89d4e46041067f6f6a085fa632b55c39bc1e7d4d",
+      "path": "benchmarks/corpus/canada/freeze-v0.1/RIGHTS-CLEARANCE-v0.1.md"
+    },
+    {
+      "git_blob_sha": "1c211ae51fd875bb82667fd0bd6768388d2d2312",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/CANADA-COUNSEL-REVIEW-DOSSIER-v0.1.md"
+    },
+    {
+      "git_blob_sha": "995092df6d77ad9f6d826a4b7cb75b4bd21c8546",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/CANADA-RIGHTS-RESOLUTION-LEDGER-v0.1.md"
+    },
+    {
+      "git_blob_sha": "0e344c4be9c4487f2d1715cf2e23ebbc69e96efb",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/CANADABUYS-PERMISSION-REQUEST-EN-v0.1.md"
+    },
+    {
+      "git_blob_sha": "9afc03c6cea1792e6a7bba98511094ff71c20076",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/CANADABUYS-PERMISSION-REQUEST-FR-v0.1.md"
+    },
+    {
+      "git_blob_sha": "072ffdd79a455890cb4fed8dbea60613ce7e1e98",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/EXTERNAL-ACTION-REGISTER-v0.1.md"
+    },
+    {
+      "git_blob_sha": "49b36bf90c2bf530b605bf36a10127b05408dbb9",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/TBS-RIGHTS-EVIDENCE-REVIEW-v0.1.md"
+    },
+    {
+      "git_blob_sha": "5bcb782d146ef24d6676e008ec0dbbf25cf4ce44",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/TBS-TERMS-RECAPTURE-PROTOCOL-v0.1.md"
+    }
+  ],
+  "external_action_allowed": false,
+  "network_fetch_allowed": false,
+  "new_evidence_creation_allowed": false,
+  "permission_request_send_allowed": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ],
+    "sources": [
+      {
+        "content_access_policy": "BYTE_HASH_ONLY_NO_PARSE_NO_RENDER_NO_TEXT_EXTRACTION",
+        "git_blob_sha": "9d89e621e40854a192a41193a507a766af30214b",
+        "path": "benchmarks/corpus/canada/freeze-v0.1/sources/CA-3.xml",
+        "source_id": "CA-3"
+      }
+    ]
+  },
+  "primary_machine_readable_evidence": [
+    {
+      "git_blob_sha": "dc2a89d919fb07352fc4d4861c7456fe301bb7dc",
+      "path": "benchmarks/corpus/canada/freeze-v0.1/ACQUISITION-FREEZE-v0.1.json",
+      "role": "acquisition_metadata"
+    },
+    {
+      "git_blob_sha": "69dccc38d37aee6c99e9e784a286906c025b6cbf",
+      "path": "benchmarks/corpus/canada/freeze-v0.1/INDEX.json",
+      "role": "frozen_population_index"
+    },
+    {
+      "git_blob_sha": "dace02fdaaf9f38d2ae6d0fc9a223c19c806e718",
+      "path": "benchmarks/corpus/canada/freeze-v0.1/RIGHTS-CLEARANCE-v0.1.json",
+      "role": "frozen_rights_clearance_record"
+    },
+    {
+      "git_blob_sha": "656d685f09c3ac3b86ef17713d2a7b764cded79c",
+      "path": "benchmarks/corpus/canada/freeze-v0.1/RIGHTS-EVIDENCE-LEDGER-v0.1.json",
+      "role": "frozen_rights_evidence_ledger"
+    },
+    {
+      "git_blob_sha": "52f8585f8733b1e37ac4fb6c72dcdbad84ccec1e",
+      "path": "benchmarks/corpus/canada/freeze-v0.1/receipts/CA-3.receipt.json",
+      "role": "source_acquisition_receipt"
+    },
+    {
+      "git_blob_sha": "ab16914b5d6b2ca1bc176162e8d5e2ebdd57ca2a",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/CANADA-COUNSEL-REVIEW-DOSSIER-v0.1.json",
+      "role": "counsel_review_dossier"
+    },
+    {
+      "git_blob_sha": "ac46f710c184093ede56180a0dda363647162b85",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/CANADA-RIGHTS-RESOLUTION-LEDGER-v0.1.json",
+      "role": "rights_resolution_ledger"
+    },
+    {
+      "git_blob_sha": "88a5307abcd3dae45f51987dc86f6bdda820ba40",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/CANADABUYS-PERMISSION-REQUEST-v0.1.json",
+      "role": "permission_request_record"
+    },
+    {
+      "git_blob_sha": "2c280acbefe9fcbc526207c9d5259bb6c303f659",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/EXTERNAL-ACTION-REGISTER-v0.1.json",
+      "role": "external_action_register"
+    },
+    {
+      "git_blob_sha": "8ffc67eb5380f4f9641b92ddc36b4b4ed2baec74",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/TBS-RIGHTS-EVIDENCE-REVIEW-v0.1.json",
+      "role": "rights_evidence_review"
+    },
+    {
+      "git_blob_sha": "3e15d8c96ad03c1a3ba55c32c27cadeea94ec3ab",
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/TBS-TERMS-RECAPTURE-PROTOCOL-v0.1.json",
+      "role": "terms_recapture_protocol"
+    }
+  ],
+  "source_byte_hashing_allowed": true,
+  "source_content_semantic_inspection_allowed": false,
+  "status": "FROZEN_NOT_INSPECTED",
+  "unlisted_evidence_inspection_allowed": false,
+  "version": "v0.1"
+}
