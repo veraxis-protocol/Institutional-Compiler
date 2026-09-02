@@ -1,0 +1,253 @@
+{
+  "balanced_probe_positions": true,
+  "historical_observations_reused": false,
+  "live_run_executed": false,
+  "localization_001_rerun": false,
+  "model_call_made": false,
+  "network_request_made": false,
+  "ontology_007r1_executed": false,
+  "ontology_007r1_execution_authorized": false,
+  "pacing_seconds": 4.0,
+  "provider": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "latency_headroom_seconds": 45.0,
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "timeout_seconds": 60.0
+  },
+  "provider_call_made": false,
+  "provider_qualification_established": false,
+  "qualification_009_rerun": false,
+  "qualification_010_formally_closed": false,
+  "qualification_010_qualified": false,
+  "recovery_stability_002_rerun": false,
+  "replacement_probes_allowed": false,
+  "request_count": 9,
+  "request_projection_semantics": "BYTE_IDENTICAL_BY_PROBE_ID",
+  "requests": [
+    {
+      "execution_ordinal": 1,
+      "network_request_made": false,
+      "position": 1,
+      "probe_id": "BASIC_TEXT",
+      "provider_constructed": false,
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "ordinal": 1,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "88a85c276212c33caa88e27c5c99bbac8bbe5260a2fe3d970833d1428d9c6dc9",
+      "round": 1,
+      "source_q009_ordinal": 1
+    },
+    {
+      "execution_ordinal": 2,
+      "network_request_made": false,
+      "position": 2,
+      "probe_id": "JSON_MODE",
+      "provider_constructed": false,
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "ordinal": 2,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "ea0884a0131d059337f1a7d00d29b8d45eeda7e4edb133c1f99942632f231ba9",
+      "round": 1,
+      "source_q009_ordinal": 2
+    },
+    {
+      "execution_ordinal": 3,
+      "network_request_made": false,
+      "position": 3,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "provider_constructed": false,
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "ordinal": 3,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "0f01c28176a9e2704ffcef271ee66e6aaf7b33af4d9655a1ca3245af026fdd08",
+      "round": 1,
+      "source_q009_ordinal": 3
+    },
+    {
+      "execution_ordinal": 4,
+      "network_request_made": false,
+      "position": 1,
+      "probe_id": "JSON_MODE",
+      "provider_constructed": false,
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "ordinal": 2,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "ea0884a0131d059337f1a7d00d29b8d45eeda7e4edb133c1f99942632f231ba9",
+      "round": 2,
+      "source_q009_ordinal": 2
+    },
+    {
+      "execution_ordinal": 5,
+      "network_request_made": false,
+      "position": 2,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "provider_constructed": false,
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "ordinal": 3,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "0f01c28176a9e2704ffcef271ee66e6aaf7b33af4d9655a1ca3245af026fdd08",
+      "round": 2,
+      "source_q009_ordinal": 3
+    },
+    {
+      "execution_ordinal": 6,
+      "network_request_made": false,
+      "position": 3,
+      "probe_id": "BASIC_TEXT",
+      "provider_constructed": false,
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "ordinal": 1,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "88a85c276212c33caa88e27c5c99bbac8bbe5260a2fe3d970833d1428d9c6dc9",
+      "round": 2,
+      "source_q009_ordinal": 1
+    },
+    {
+      "execution_ordinal": 7,
+      "network_request_made": false,
+      "position": 1,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "provider_constructed": false,
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "ordinal": 3,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "0f01c28176a9e2704ffcef271ee66e6aaf7b33af4d9655a1ca3245af026fdd08",
+      "round": 3,
+      "source_q009_ordinal": 3
+    },
+    {
+      "execution_ordinal": 8,
+      "network_request_made": false,
+      "position": 2,
+      "probe_id": "BASIC_TEXT",
+      "provider_constructed": false,
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "ordinal": 1,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "88a85c276212c33caa88e27c5c99bbac8bbe5260a2fe3d970833d1428d9c6dc9",
+      "round": 3,
+      "source_q009_ordinal": 1
+    },
+    {
+      "execution_ordinal": 9,
+      "network_request_made": false,
+      "position": 3,
+      "probe_id": "JSON_MODE",
+      "provider_constructed": false,
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "ordinal": 2,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "ea0884a0131d059337f1a7d00d29b8d45eeda7e4edb133c1f99942632f231ba9",
+      "round": 3,
+      "source_q009_ordinal": 2
+    }
+  ],
+  "retries": 0,
+  "round_count": 3,
+  "semantic_successor_target": {
+    "authorization_repair_binding_sha256": "a6acc0f22a7872d007f39cde8e8da662b12e6bde824869ee6fd9812858bb8b2d",
+    "contract_test_sha256": "873c716f55ea0005320866bd21765f3d930faeffb7e7a1aa3ff53945263a430c",
+    "freeze_v0_2_sha256": "8411a24dc31f2975af51def6c2352ec284ec6490acdf3269859230412435050d",
+    "instrument_sha256": "d3a65a906e3bb165458f0ca6fc0afc96f88d376d1d01bb20f577ab4a9189c830",
+    "pair_count": 9,
+    "plan_sha256": "7558595f9f5caca541b03dd65f9bfeb2dddd8f05138ec9b47c06764904ba785d",
+    "preregistration_commit": "9505b78eb58d38795ca1075b3c0b48414470977e",
+    "preregistration_freeze_v0_1_sha256": "c696e50eecd9d7416b5ab311dcfc1e41d01f75ec3b7aaa2826484f0cefd09027",
+    "preregistration_sha256": "1f550475326da56fb89df660de28967c149d7be7e67146a55e2aa8019a7f354b",
+    "qualification_selection_mode": "EXPLICIT_PATH_ONLY",
+    "request_materialization_sha256": "9faa8e9881b4bad0f9252cf0a3bdcf689e59e82357307c29488ab4ed5969bc57",
+    "semantic_request_count": 18,
+    "semantic_request_equivalence": "BYTE_IDENTICAL_TO_FROZEN_ONTOLOGY_007",
+    "source_o007_instrument_sha256": "be752c975a6da03e9a0237aa7df09f38caf81a2e416b23584e3d86d998fa0834",
+    "source_o007_request_materialization_sha256": "02567faee5aa55e830207b271023bf555a6f02417433731319ab0a869020f96a",
+    "specific_qualification_number_hardcoded": false,
+    "work_order": "OIC-DEFINITION-ONTOLOGY-SYNTACTIC-PREDICATE-CARRIER-DISCRIMINATION-007R1"
+  },
+  "source_q009_request_materialization_sha256": "e725fbf588ff4f304ebb5f1fd48b5f6bad64e1bb54d06aa3e528396c9362a485",
+  "status": "MATERIALIZED_OFFLINE_NOT_EXECUTED",
+  "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-010"
+}
