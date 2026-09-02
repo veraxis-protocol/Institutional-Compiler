@@ -1,0 +1,356 @@
+{
+  "accepted_provider_requests": 18,
+  "adjudicable": true,
+  "architecture_change_authorized": false,
+  "boundary_rejections": 0,
+  "canonicalization_performed": false,
+  "claim_ceiling": "This result establishes only bounded evidence that the tested addition of the already-frozen action/object role descriptions does not repair the localized IIR-027 predicate-frame failure for this one model/provider and three frozen synthetic specimens. It does not establish the root cause, canonical institutional meaning, interpretation authority, legal validity, a revised IR ontology, production architecture, cross-model/provider generalization, or independent validation.",
+  "complete_pairs": 9,
+  "evidence": {
+    "live_log_sha256": "a418c6328b07afd5a2258f881c8b23ae370dec628251c8e637b4c68c054bbc02",
+    "provider_qualification_008_execution_result_sha256": "e206a0cdbed7c3a15e2f0db3f23e335cc6d8e5917e44b21dbf2b80abe90d5e8e",
+    "receipt_sha256": "3faaf5543c14f692d78ff4fa81f086bb3b9a1f766a944d9ea990240da22d5b3c"
+  },
+  "execution_head": "8d71c6a590b254bc722564b4265866ad81d6d725",
+  "hypothesis_status": "REFUTED_WITHIN_FROZEN_SCOPE",
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "interpretation": "The frozen predicate-frame role-guidance hypothesis is refuted within the preregistered scope. Appending only the already-frozen action/object role descriptions did not restore the IIR-027 action predicate: the role-guided arm was compatible in 0 of 3 runs and produced 0 of 3 paired improvements. No role-guided-only safety defect occurred. Therefore this tested role-description intervention is insufficient to explain or repair the localized predicate-frame failure. The underlying cause remains not established.",
+  "live_run_executed": true,
+  "next_authorized_activity": "Independent verification of this formal closure only. After that verification, a fresh bounded diagnostic hypothesis may be designed and separately preregistered. No O006R1 rerun and no successor semantic experiment is authorized by this closure.",
+  "planned_pairs": 9,
+  "planned_provider_requests": 18,
+  "provider_errors": 0,
+  "provider_qualification_008_status": "CLOSED_QUALIFIED",
+  "rerun_authorized": false,
+  "revision_of": "OIC-DEFINITION-ONTOLOGY-PREDICATE-FRAME-DISCRIMINATION-006",
+  "safety_endpoint": {
+    "role_guided_only_defect_count": 0,
+    "role_guided_only_defect_instances": []
+  },
+  "scientific_disposition": "REFUTES_PREDICATE_FRAME_ROLE_GUIDANCE",
+  "semantic_analysis": {
+    "architecture_change_authorized": false,
+    "boundary_rejections": 0,
+    "descriptive_only": true,
+    "disposition": "REFUTES_PREDICATE_FRAME_ROLE_GUIDANCE",
+    "provider_errors": 0,
+    "safety_endpoint": {
+      "observations": [
+        {
+          "baseline_compatible": true,
+          "run_index": 1,
+          "slot": "action",
+          "specimen_id": "IIR-006",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 1,
+          "slot": "bearer",
+          "specimen_id": "IIR-006",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 1,
+          "slot": "counterparty",
+          "specimen_id": "IIR-006",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": false,
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-006",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-006",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 2,
+          "slot": "bearer",
+          "specimen_id": "IIR-006",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 2,
+          "slot": "counterparty",
+          "specimen_id": "IIR-006",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": false,
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-006",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-006",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 3,
+          "slot": "bearer",
+          "specimen_id": "IIR-006",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 3,
+          "slot": "counterparty",
+          "specimen_id": "IIR-006",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": false,
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-006",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": false,
+          "run_index": 1,
+          "slot": "bearer",
+          "specimen_id": "IIR-027",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": false,
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-027",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 2,
+          "slot": "bearer",
+          "specimen_id": "IIR-027",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": false,
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-027",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 3,
+          "slot": "bearer",
+          "specimen_id": "IIR-027",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-027",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 1,
+          "slot": "action",
+          "specimen_id": "IIR-028",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 1,
+          "slot": "bearer",
+          "specimen_id": "IIR-028",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 1,
+          "slot": "object",
+          "specimen_id": "IIR-028",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-028",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 2,
+          "slot": "bearer",
+          "specimen_id": "IIR-028",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 2,
+          "slot": "object",
+          "specimen_id": "IIR-028",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-028",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 3,
+          "slot": "bearer",
+          "specimen_id": "IIR-028",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        },
+        {
+          "baseline_compatible": true,
+          "run_index": 3,
+          "slot": "object",
+          "specimen_id": "IIR-028",
+          "treatment_compatible": true,
+          "treatment_only_defect": false
+        }
+      ],
+      "role_guided_only_defect_count": 0,
+      "role_guided_only_defect_instances": []
+    },
+    "target_endpoint": {
+      "expected_value": "consider",
+      "observations": [
+        {
+          "baseline_compatible": true,
+          "baseline_value": "consider quarterly reconciliation of suspense accounts",
+          "expected_value": "consider",
+          "paired_improvement": false,
+          "run_index": 1,
+          "slot": "action",
+          "specimen_id": "IIR-027",
+          "treatment_compatible": false,
+          "treatment_value": "reconciliation"
+        },
+        {
+          "baseline_compatible": false,
+          "baseline_value": "reconciliation",
+          "expected_value": "consider",
+          "paired_improvement": false,
+          "run_index": 2,
+          "slot": "action",
+          "specimen_id": "IIR-027",
+          "treatment_compatible": false,
+          "treatment_value": "reconciliation"
+        },
+        {
+          "baseline_compatible": false,
+          "baseline_value": "reconciliation",
+          "expected_value": "consider",
+          "paired_improvement": false,
+          "run_index": 3,
+          "slot": "action",
+          "specimen_id": "IIR-027",
+          "treatment_compatible": false,
+          "treatment_value": "reconciliation"
+        }
+      ],
+      "paired_improvements": 0,
+      "paired_planned": 3,
+      "role_guided_compatible": 0,
+      "role_guided_planned": 3,
+      "slot": "action",
+      "specimen_id": "IIR-027"
+    }
+  },
+  "semantic_execution_delegation": "DIRECT_TO_HASH_FROZEN_ONTOLOGY_006_IMPLEMENTATION",
+  "semantic_request_equivalence": "18_OF_18_BYTE_IDENTICAL_TO_FROZEN_O006",
+  "status": "CLOSED_REFUTES_PREDICATE_FRAME_ROLE_GUIDANCE",
+  "successor_experiment_authorized": false,
+  "target_endpoint": {
+    "expected_value": "consider",
+    "observations": [
+      {
+        "baseline_compatible": true,
+        "baseline_value": "consider quarterly reconciliation of suspense accounts",
+        "expected_value": "consider",
+        "paired_improvement": false,
+        "run_index": 1,
+        "slot": "action",
+        "specimen_id": "IIR-027",
+        "treatment_compatible": false,
+        "treatment_value": "reconciliation"
+      },
+      {
+        "baseline_compatible": false,
+        "baseline_value": "reconciliation",
+        "expected_value": "consider",
+        "paired_improvement": false,
+        "run_index": 2,
+        "slot": "action",
+        "specimen_id": "IIR-027",
+        "treatment_compatible": false,
+        "treatment_value": "reconciliation"
+      },
+      {
+        "baseline_compatible": false,
+        "baseline_value": "reconciliation",
+        "expected_value": "consider",
+        "paired_improvement": false,
+        "run_index": 3,
+        "slot": "action",
+        "specimen_id": "IIR-027",
+        "treatment_compatible": false,
+        "treatment_value": "reconciliation"
+      }
+    ],
+    "paired_improvements": 0,
+    "paired_planned": 3,
+    "role_guided_compatible": 0,
+    "role_guided_planned": 3,
+    "slot": "action",
+    "specimen_id": "IIR-027"
+  },
+  "transport_call_ceiling": 36,
+  "transport_calls_observed": 18,
+  "work_order": "OIC-DEFINITION-ONTOLOGY-PREDICATE-FRAME-DISCRIMINATION-006R1"
+}
