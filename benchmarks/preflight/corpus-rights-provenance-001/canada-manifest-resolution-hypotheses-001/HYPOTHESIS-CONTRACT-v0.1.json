@@ -1,0 +1,175 @@
+{
+  "base_failure_surface_closure_commit": "28a9eb16ebe08b88e132aea81a00e6c8248fa27f",
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "claim_ceiling": "This work order freezes competing resolution mechanisms suggested by the observed failure surfaces. Even after evaluation it can establish only bounded structural feasibility or refutation on CA-3. It cannot establish a correct schema repair, legal rights, provenance truth, manifest admissibility, production readiness, or downstream authority.",
+  "closed_failure_surface_adjudication_sha256": "348e981cfbed65483936cd3785341fb90c93067d79c507f693eaa6c327b497dd",
+  "closed_failure_surface_result_sha256": "b29831c5685f238492826db3f0f737a125f86001defa4adfa894054aba27062e",
+  "contract_id": "OIC-CANADA-MANIFEST-RESOLUTION-HYPOTHESES-CONTRACT-001",
+  "contract_version": "v0.1",
+  "control_envelope_authorized": false,
+  "evaluation_dimensions": [
+    "current_manifest_contract_compatible",
+    "requires_manifest_contract_change",
+    "requires_new_explicit_evidence_or_metadata_declaration",
+    "requires_new_semantic_projection",
+    "requires_precedence_rule",
+    "preserves_all_observed_distinct_values",
+    "deterministic_replay_possible",
+    "introduces_legal_or_institutional_semantic_promotion_risk",
+    "independently_testable_on_current_CA3_only",
+    "requires_held_out_source_for_generalization_claim"
+  ],
+  "evaluation_rule": "Future evaluation may determine structural properties of each frozen hypothesis against the preserved Crosswalk 001 support surface. It may not declare any hypothesis correct, adopt a winner, mutate the manifest contract, rewrite evidence, or populate SOURCE_MANIFEST.csv.",
+  "evidence_rewrite_authorized": false,
+  "field_hypotheses": {
+    "provenance_evidence": [
+      {
+        "hypothesis_id": "PE-PRECEDENCE",
+        "mechanism": "SINGLE_REFERENCE_PRECEDENCE",
+        "proposal": "Keep the singular manifest field and define a separately frozen rule selecting one sufficient provenance reference while preserving the full provenance set elsewhere."
+      },
+      {
+        "hypothesis_id": "PE-COLLECTION",
+        "mechanism": "TYPED_MULTI_REFERENCE_COLLECTION",
+        "proposal": "Revise the manifest representation so provenance_evidence can preserve an ordered or typed collection of supporting references rather than collapsing multiple admissible references to one scalar."
+      }
+    ],
+    "provenance_status": [
+      {
+        "hypothesis_id": "PS-DECLARATION",
+        "mechanism": "EXPLICIT_MANIFEST_ALIGNED_DECLARATION",
+        "proposal": "Introduce an explicit provenance_status adjudication state verified|rejected|unverified, separate from capture or source workflow states."
+      },
+      {
+        "hypothesis_id": "PS-PROJECTION",
+        "mechanism": "DETERMINISTIC_PROJECTION",
+        "proposal": "Define a separately frozen projection from existing provenance-related states to verified|rejected|unverified only if equivalence is explicit."
+      }
+    ],
+    "redistribution_status": [
+      {
+        "hypothesis_id": "RD-DECLARATION",
+        "mechanism": "EXPLICIT_MANIFEST_ALIGNED_DECLARATION",
+        "proposal": "Introduce an explicit redistribution_status permitted|not_permitted|unknown independent of internal-use rights."
+      },
+      {
+        "hypothesis_id": "RD-PROJECTION",
+        "mechanism": "DETERMINISTIC_PROJECTION",
+        "proposal": "Define a separately frozen projection to redistribution_status only from evidence explicitly about redistribution permission; internal-use permission must not be promoted."
+      }
+    ],
+    "rights_basis": [
+      {
+        "hypothesis_id": "RB-DECLARATION",
+        "mechanism": "EXPLICIT_MANIFEST_ALIGNED_DECLARATION",
+        "proposal": "Introduce an explicit rights_basis classification using one of public_domain|open_license|permission|synthetic_owned|other_documented_basis, with evidence references kept separate."
+      },
+      {
+        "hypothesis_id": "RB-PROJECTION",
+        "mechanism": "DETERMINISTIC_PROJECTION",
+        "proposal": "Define a separately frozen projection from existing rights evidence vocabulary to a manifest rights_basis enum only where the underlying evidence explicitly supplies the classification premise."
+      }
+    ],
+    "rights_evidence": [
+      {
+        "hypothesis_id": "RE-PRECEDENCE",
+        "mechanism": "SINGLE_REFERENCE_PRECEDENCE",
+        "proposal": "Keep the singular manifest field and define a separately frozen rule selecting one sufficient rights evidence reference while preserving the full evidence set elsewhere."
+      },
+      {
+        "hypothesis_id": "RE-COLLECTION",
+        "mechanism": "TYPED_MULTI_REFERENCE_COLLECTION",
+        "proposal": "Revise the manifest representation so rights_evidence can preserve an ordered or typed collection of supporting references rather than collapsing multiple admissible references to one scalar."
+      }
+    ],
+    "rights_status": [
+      {
+        "hypothesis_id": "RS-DECLARATION",
+        "mechanism": "EXPLICIT_MANIFEST_ALIGNED_DECLARATION",
+        "proposal": "Introduce an explicit rights_status adjudication state verified|rejected|unverified rather than reusing workflow or reviewer states."
+      },
+      {
+        "hypothesis_id": "RS-PROJECTION",
+        "mechanism": "DETERMINISTIC_PROJECTION",
+        "proposal": "Define a separately frozen projection from existing rights disposition states to verified|rejected|unverified only if equivalence can be established without legal or semantic promotion."
+      }
+    ],
+    "source_kind": [
+      {
+        "hypothesis_id": "SK-DECLARATION",
+        "mechanism": "EXPLICIT_MANIFEST_ALIGNED_DECLARATION",
+        "proposal": "Introduce an explicit source_kind declaration at the bounded source metadata/admission layer using only the frozen manifest enum public|synthetic; do not derive it from acquisition/rendering roles."
+      },
+      {
+        "hypothesis_id": "SK-PROJECTION",
+        "mechanism": "DETERMINISTIC_PROJECTION",
+        "proposal": "Define a separately frozen deterministic projection from existing source metadata to public|synthetic, but only if every semantic premise is explicit and replayable."
+      }
+    ],
+    "source_locator": [
+      {
+        "hypothesis_id": "SL-DECLARATION",
+        "mechanism": "EXPLICIT_CANONICAL_LOCATOR_DECLARATION",
+        "proposal": "Introduce an explicit canonical source locator distinct from acquisition, landing-page, provenance, rights, and robots URLs."
+      },
+      {
+        "hypothesis_id": "SL-PRECEDENCE",
+        "mechanism": "ROLE_BASED_CANONICAL_PRECEDENCE",
+        "proposal": "Keep the singular manifest field but define a separately frozen role-based precedence rule that selects exactly one source-object locator and rejects non-source roles."
+      }
+    ]
+  },
+  "future_input_scope": {
+    "closed_failure_surface_result": "ALLOWED",
+    "corroborating_markdown": "FORBIDDEN",
+    "inventory_001_receipt": "FORBIDDEN",
+    "network": "FORBIDDEN",
+    "preserved_crosswalk_001_receipt": "ALLOWED_AFTER_INDEPENDENT_VERIFICATION_AND_STATIC_FREEZE",
+    "real_evidence_files": "FORBIDDEN",
+    "source_manifest_contract": "ALLOWED",
+    "source_xml": "FORBIDDEN"
+  },
+  "generalization_rule": "CA-3 may support bounded feasibility/refutation of a mechanism on CA-3 only. It cannot establish cross-source generality. Any claim that a resolution mechanism is generally valid requires separately frozen held-out source validation.",
+  "hypotheses_evaluated": false,
+  "hypothesis_count": 16,
+  "institutional_ir_authorized": false,
+  "manifest_contract_change_authorized": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "observed_surface_partition": {
+    "multi_admissible_contradiction_surface_fields": [
+      "source_locator",
+      "rights_evidence",
+      "provenance_evidence"
+    ],
+    "zero_admissible_value_surface_fields": [
+      "source_kind",
+      "rights_basis",
+      "rights_status",
+      "provenance_status",
+      "redistribution_status"
+    ]
+  },
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "preserved_crosswalk_receipt_sha256": "77d8a67a71e7eb073fa3f43825a1113a53effd948f69e7abee952e06767dbb92",
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "schema_mutation_authorized": false,
+  "source_manifest_contract_sha256": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "FROZEN_HYPOTHESES_NOT_EVALUATED",
+  "winner_selected": false,
+  "winner_selection_rule": "NO_WINNER_SELECTION_IN_HYPOTHESES_001"
+}

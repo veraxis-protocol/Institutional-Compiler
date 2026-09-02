@@ -1,0 +1,47 @@
+{
+  "artifact_sha256": {
+    "HYPOTHESIS-CONTRACT-v0.1.json": "5e2c794b424a707927660350d32daf162eb33c58cebe1a7160d11a97d4f50d40",
+    "PLAN-v0.1.md": "a30c28198777e89963b5818860fec59b31e59fb83b80894bd1f2fded4849bbb8",
+    "SOURCE-MANIFEST-CONTRACT-v0.1.json": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+    "closed_failure_surface_execution_result": "b29831c5685f238492826db3f0f737a125f86001defa4adfa894054aba27062e",
+    "closed_failure_surface_post_run_adjudication": "348e981cfbed65483936cd3785341fb90c93067d79c507f693eaa6c327b497dd",
+    "preserved_crosswalk_001_receipt": "77d8a67a71e7eb073fa3f43825a1113a53effd948f69e7abee952e06767dbb92"
+  },
+  "base_failure_surface_closure_commit": "28a9eb16ebe08b88e132aea81a00e6c8248fa27f",
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "control_envelope_authorized": false,
+  "evidence_rewrite_authorized": false,
+  "freeze_id": "OIC-CANADA-MANIFEST-RESOLUTION-HYPOTHESES-001-FREEZE-v0.1",
+  "freeze_version": "v0.1",
+  "frozen_hypothesis_count": 16,
+  "future_preserved_crosswalk_receipt_inspection_authorized_after_independent_verification_and_static_freeze": true,
+  "hypotheses_evaluated": false,
+  "institutional_ir_authorized": false,
+  "manifest_contract_change_authorized": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "next_authorized_step": "Independent verification of this preregistration. After verification, implement and statically freeze a deterministic structural hypothesis-evaluation instrument using synthetic support fixtures only. Do not inspect the preserved real Crosswalk 001 receipt yet.",
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "preserved_crosswalk_receipt_inspected_by_this_work_order": false,
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "real_evidence_reread_by_this_work_order": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "schema_mutation_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "PREREGISTERED_HYPOTHESES_NOT_EVALUATED",
+  "unresolved_field_count": 8,
+  "winner_selected": false,
+  "work_order": "OIC-CANADA-MANIFEST-RESOLUTION-HYPOTHESES-001"
+}
