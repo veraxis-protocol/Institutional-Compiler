@@ -1,0 +1,423 @@
+{
+  "candidate_key_expansion_performed": false,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "characterization_contract_sha256": "b84cdc8d59e189188898903392e45b2e38d8bcb3486d01c5f567ec0e3b46e26c",
+  "characterization_execution_count": 1,
+  "claim_ceiling": "This closure establishes only the deterministic descriptive partition of the eight Crosswalk 001 unresolved fields into five zero-admissible surfaces and three multi-admissible contradiction surfaces, with the preserved frequency/fingerprint profiles bound in this result. It does not establish causal root cause, which candidate is institutionally correct, a valid precedence rule, a valid normalization, a valid schema repair, legal rights, provenance truth, evidence sufficiency, or authority to mutate evidence/schema or populate SOURCE_MANIFEST.csv. It does not authorize canonicalization, Institutional IR, OCE, Rego, runtime, Q011, or Ontology 007R1.",
+  "control_envelope_authorized": false,
+  "corroborating_markdown_inspected": false,
+  "disposition": "FAILURE_SURFACE_CHARACTERIZED",
+  "evidence": {
+    "authorization_receipt_sha256": "fd5c44937d07596c18175ce707ccba95e4bf5e9c2d45e097f3fcd4675b03a38a",
+    "characterization_receipt_sha256": "18c7297a769b28c56e755c31e533653de3d38e6675e41a4ccf9ba99eaa38ef47",
+    "one_shot_lock_sha256": "8fb29ff59f0f2b899593e6d0c78b751033e58a1c2d1bd939ee7a1464e0cd1f38",
+    "stderr_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "evidence_rewrite_performed": false,
+  "finding_count": 0,
+  "implementation_freeze_sha256": "cbeb55b2d670f1d8a81490cc153fb66e3ec367e6209e22e219639be0f6448c00",
+  "institutional_ir_authorized": false,
+  "instrument_sha256": "d22eac0a272dc014b427022c0f8c0fe46cc6a108fbceae79ef3d5c4dc815013d",
+  "interpretation": "The frozen descriptive characterization executed exactly once against the preserved Crosswalk 001 receipt and reproduced all eight unresolved fields with zero findings. Five fields occupy a ZERO_ADMISSIBLE_VALUE_SURFACE: candidate vocabulary exists but no target value survived the frozen Crosswalk 001 admissibility/nonpromotion rules. Three fields occupy a MULTI_ADMISSIBLE_CONTRADICTION_SURFACE: multiple distinct target values survived and no precedence rule was authorized.",
+  "inventory_receipt_inspected": false,
+  "legal_clearance_established": false,
+  "model_call_made": false,
+  "multi_admissible_contradiction_surface_fields": [
+    "source_locator",
+    "rights_evidence",
+    "provenance_evidence"
+  ],
+  "network_request_made": false,
+  "network_used": false,
+  "new_semantic_mapping_performed": false,
+  "next_authorized_activity": "Independent verification of this formal closure only. Do not rerun the characterization and do not create SOURCE_MANIFEST.csv. A successor resolution-hypothesis study may be considered only under a separately justified and preregistered work order, and should preserve the observed distinction between zero-admissible and contradiction surfaces.",
+  "normalization_authorized": false,
+  "normalization_performed": false,
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "precedence_assignment_performed": false,
+  "precedence_selection_authorized": false,
+  "profiles": [
+    {
+      "admissible_value_count": 0,
+      "artifact_path_frequency": {
+        "benchmarks/corpus/canada/freeze-v0.1/RIGHTS-CLEARANCE-v0.1.json": 1,
+        "benchmarks/corpus/canada/freeze-v0.1/receipts/CA-3.receipt.json": 2
+      },
+      "candidate_count": 18,
+      "candidate_key_frequency": {
+        "acquisition_target_role": 2,
+        "rendering_role": 1
+      },
+      "distinct_artifact_path_count": 2,
+      "distinct_candidate_key_count": 2,
+      "distinct_mapped_value_count": 0,
+      "distinct_raw_value_fingerprint_count": 1,
+      "distinct_source_scope_pointer_count": 2,
+      "findings": [],
+      "mapped_value_frequency": {},
+      "mapping_class_frequency": {},
+      "new_mapping_derived": false,
+      "normalization_performed": false,
+      "precedence_assigned": false,
+      "prior_state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED",
+      "profile_complete": true,
+      "raw_value_fingerprint_frequency": {
+        "5e38d00219b99d28e4f2ec7d2ee9c31ed484c9c0df5e4ca495c0774db83fbfe9": 3
+      },
+      "source_scope_pointer_frequency": {
+        "": 2,
+        "/records/2": 1
+      },
+      "support_record_count": 3,
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "source_kind",
+      "transformation_frequency": {},
+      "winner_selected": false
+    },
+    {
+      "admissible_value_count": 4,
+      "artifact_path_frequency": {
+        "benchmarks/corpus/canada/freeze-v0.1/INDEX.json": 2,
+        "benchmarks/corpus/canada/freeze-v0.1/RIGHTS-CLEARANCE-v0.1.json": 4,
+        "benchmarks/corpus/canada/freeze-v0.1/receipts/CA-3.receipt.json": 3
+      },
+      "candidate_count": 144,
+      "candidate_key_frequency": {
+        "acquisition_target_url": 3,
+        "final_url": 2,
+        "provenance_url": 2,
+        "requested_url": 2
+      },
+      "distinct_artifact_path_count": 3,
+      "distinct_candidate_key_count": 4,
+      "distinct_mapped_value_count": 4,
+      "distinct_raw_value_fingerprint_count": 4,
+      "distinct_source_scope_pointer_count": 3,
+      "findings": [],
+      "mapped_value_frequency": {
+        "https://laws-lois.justice.gc.ca/eng/XML/SI-97-5.xml": 1,
+        "https://laws-lois.justice.gc.ca/eng/XML/SOR-87-402.xml": 5,
+        "https://laws-lois.justice.gc.ca/eng/regulations/sor-87-402/index.html": 2,
+        "https://laws-lois.justice.gc.ca/robots.txt": 1
+      },
+      "mapping_class_frequency": {
+        "ESTABLISHED_DIRECT": 9
+      },
+      "new_mapping_derived": false,
+      "normalization_performed": false,
+      "precedence_assigned": false,
+      "prior_state": "CONTRADICTORY_NOT_ESTABLISHED",
+      "profile_complete": true,
+      "raw_value_fingerprint_frequency": {
+        "0b00318ed58b4f29fa7eb9673d009bddd37eb7b010884d03db5fa5234f8e49f6": 1,
+        "5d65f60036353712213b837c0b607a3ee4652f108ceb5be0d5b1371e0e808ea1": 5,
+        "6cc305a4d9b8fd5e0d4c02f90b3fe378d98314d5c7e23a26db54e4397c315bd5": 1,
+        "b0677dbd8383c10f4335126fe91bfe1461f930471d363a8f5c7dc30e13b7304b": 2
+      },
+      "source_scope_pointer_frequency": {
+        "": 3,
+        "/entries/0": 2,
+        "/records/2": 4
+      },
+      "support_record_count": 9,
+      "surface_class": "MULTI_ADMISSIBLE_CONTRADICTION_SURFACE",
+      "target_field": "source_locator",
+      "transformation_frequency": {
+        "EXACT_HTTP_URI_IDENTITY": 9
+      },
+      "winner_selected": false
+    },
+    {
+      "admissible_value_count": 0,
+      "artifact_path_frequency": {
+        "benchmarks/corpus/canada/freeze-v0.1/RIGHTS-CLEARANCE-v0.1.json": 4
+      },
+      "candidate_count": 66,
+      "candidate_key_frequency": {
+        "automated_retrieval_basis": 1,
+        "copyright_owner": 1,
+        "rights_notice_url": 1,
+        "terms_of_use_url": 1
+      },
+      "distinct_artifact_path_count": 1,
+      "distinct_candidate_key_count": 4,
+      "distinct_mapped_value_count": 0,
+      "distinct_raw_value_fingerprint_count": 4,
+      "distinct_source_scope_pointer_count": 1,
+      "findings": [],
+      "mapped_value_frequency": {},
+      "mapping_class_frequency": {},
+      "new_mapping_derived": false,
+      "normalization_performed": false,
+      "precedence_assigned": false,
+      "prior_state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED",
+      "profile_complete": true,
+      "raw_value_fingerprint_frequency": {
+        "0cb79a3a3df3f7900d70db31823b4de54e4591f8f1e2ab2d7dccc0ad1a91356a": 1,
+        "4130f94df0d65415d62802b64e7c0b74183434534c149be05f294105d6762881": 1,
+        "7681713134836c020e3307c5decf3343bda2cd1b4bf04949ec24f1f7294a12a3": 1,
+        "b0041cca4ab62508fe821cdc157891f9f31682356b167d5357078ae317018ce5": 1
+      },
+      "source_scope_pointer_frequency": {
+        "/records/2": 4
+      },
+      "support_record_count": 4,
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "rights_basis",
+      "transformation_frequency": {},
+      "winner_selected": false
+    },
+    {
+      "admissible_value_count": 4,
+      "artifact_path_frequency": {
+        "benchmarks/corpus/canada/freeze-v0.1/RIGHTS-CLEARANCE-v0.1.json": 4
+      },
+      "candidate_count": 118,
+      "candidate_key_frequency": {
+        "evidence_id": 2,
+        "rights_notice_url": 1,
+        "terms_of_use_url": 1
+      },
+      "distinct_artifact_path_count": 1,
+      "distinct_candidate_key_count": 3,
+      "distinct_mapped_value_count": 4,
+      "distinct_raw_value_fingerprint_count": 4,
+      "distinct_source_scope_pointer_count": 1,
+      "findings": [],
+      "mapped_value_frequency": {
+        "ROBOTS-LAWS-LOIS": 1,
+        "SI-97-5-REPRODUCTION-ORDER": 1,
+        "https://laws-lois.justice.gc.ca/eng/regulations/SI-97-5/index.html": 1,
+        "https://www.canada.ca/en/transparency/terms.html": 1
+      },
+      "mapping_class_frequency": {
+        "ESTABLISHED_DIRECT": 4
+      },
+      "new_mapping_derived": false,
+      "normalization_performed": false,
+      "precedence_assigned": false,
+      "prior_state": "CONTRADICTORY_NOT_ESTABLISHED",
+      "profile_complete": true,
+      "raw_value_fingerprint_frequency": {
+        "0cb79a3a3df3f7900d70db31823b4de54e4591f8f1e2ab2d7dccc0ad1a91356a": 1,
+        "61c48de6167878956a6eb14dae34d50ba5018891e1725b3ec374bf14f93d5c6e": 1,
+        "6c897e5e4aafa423b3c73bc68b07b993a3315cd7c47b9f2e658501581bb320d7": 1,
+        "b0041cca4ab62508fe821cdc157891f9f31682356b167d5357078ae317018ce5": 1
+      },
+      "source_scope_pointer_frequency": {
+        "/records/2": 4
+      },
+      "support_record_count": 4,
+      "surface_class": "MULTI_ADMISSIBLE_CONTRADICTION_SURFACE",
+      "target_field": "rights_evidence",
+      "transformation_frequency": {
+        "EXACT_EVIDENCE_REFERENCE_IDENTITY": 4
+      },
+      "winner_selected": false
+    },
+    {
+      "admissible_value_count": 0,
+      "artifact_path_frequency": {
+        "benchmarks/corpus/canada/freeze-v0.1/INDEX.json": 1,
+        "benchmarks/corpus/canada/freeze-v0.1/RIGHTS-CLEARANCE-v0.1.json": 2,
+        "benchmarks/corpus/canada/freeze-v0.1/receipts/CA-3.receipt.json": 1
+      },
+      "candidate_count": 37,
+      "candidate_key_frequency": {
+        "authoritative_source_status": 1,
+        "reviewer_disposition": 1,
+        "rights_disposition": 2
+      },
+      "distinct_artifact_path_count": 3,
+      "distinct_candidate_key_count": 3,
+      "distinct_mapped_value_count": 0,
+      "distinct_raw_value_fingerprint_count": 2,
+      "distinct_source_scope_pointer_count": 3,
+      "findings": [],
+      "mapped_value_frequency": {},
+      "mapping_class_frequency": {},
+      "new_mapping_derived": false,
+      "normalization_performed": false,
+      "precedence_assigned": false,
+      "prior_state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED",
+      "profile_complete": true,
+      "raw_value_fingerprint_frequency": {
+        "320779b679c071d0a96b060eb79568f9dad7ac9b7c024c38ce2a4ec729aa3e10": 1,
+        "48144b790a45c6c2a608b63887e327d400b36c526cd20b982322841453188630": 3
+      },
+      "source_scope_pointer_frequency": {
+        "": 1,
+        "/entries/0": 1,
+        "/records/2": 2
+      },
+      "support_record_count": 4,
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "rights_status",
+      "transformation_frequency": {},
+      "winner_selected": false
+    },
+    {
+      "admissible_value_count": 3,
+      "artifact_path_frequency": {
+        "benchmarks/corpus/canada/freeze-v0.1/INDEX.json": 2,
+        "benchmarks/corpus/canada/freeze-v0.1/RIGHTS-CLEARANCE-v0.1.json": 1,
+        "benchmarks/corpus/canada/freeze-v0.1/receipts/CA-3.receipt.json": 2
+      },
+      "candidate_count": 39,
+      "candidate_key_frequency": {
+        "provenance_url": 2,
+        "receipt_id": 2,
+        "receipt_path": 1
+      },
+      "distinct_artifact_path_count": 3,
+      "distinct_candidate_key_count": 3,
+      "distinct_mapped_value_count": 3,
+      "distinct_raw_value_fingerprint_count": 3,
+      "distinct_source_scope_pointer_count": 3,
+      "findings": [],
+      "mapped_value_frequency": {
+        "OIC-CA-FREEZE-CA-3-v0.1": 2,
+        "https://laws-lois.justice.gc.ca/eng/regulations/sor-87-402/index.html": 2,
+        "receipts/CA-3.receipt.json": 1
+      },
+      "mapping_class_frequency": {
+        "ESTABLISHED_DIRECT": 5
+      },
+      "new_mapping_derived": false,
+      "normalization_performed": false,
+      "precedence_assigned": false,
+      "prior_state": "CONTRADICTORY_NOT_ESTABLISHED",
+      "profile_complete": true,
+      "raw_value_fingerprint_frequency": {
+        "807cb081d41c8dafbd7eedee8a2fa148725418a46a6caaadde779d96ca941d55": 2,
+        "8df5daca6e6a2829e832e045ad26c738d4430fcdbcab7cf0218599a1785b6212": 1,
+        "b0677dbd8383c10f4335126fe91bfe1461f930471d363a8f5c7dc30e13b7304b": 2
+      },
+      "source_scope_pointer_frequency": {
+        "": 2,
+        "/entries/0": 2,
+        "/records/2": 1
+      },
+      "support_record_count": 5,
+      "surface_class": "MULTI_ADMISSIBLE_CONTRADICTION_SURFACE",
+      "target_field": "provenance_evidence",
+      "transformation_frequency": {
+        "EXACT_EVIDENCE_REFERENCE_IDENTITY": 5
+      },
+      "winner_selected": false
+    },
+    {
+      "admissible_value_count": 0,
+      "artifact_path_frequency": {
+        "benchmarks/corpus/canada/freeze-v0.1/RIGHTS-CLEARANCE-v0.1.json": 3
+      },
+      "candidate_count": 107,
+      "candidate_key_frequency": {
+        "authoritative_source_status": 1,
+        "captured": 2
+      },
+      "distinct_artifact_path_count": 1,
+      "distinct_candidate_key_count": 2,
+      "distinct_mapped_value_count": 0,
+      "distinct_raw_value_fingerprint_count": 3,
+      "distinct_source_scope_pointer_count": 1,
+      "findings": [],
+      "mapped_value_frequency": {},
+      "mapping_class_frequency": {},
+      "new_mapping_derived": false,
+      "normalization_performed": false,
+      "precedence_assigned": false,
+      "prior_state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED",
+      "profile_complete": true,
+      "raw_value_fingerprint_frequency": {
+        "320779b679c071d0a96b060eb79568f9dad7ac9b7c024c38ce2a4ec729aa3e10": 1,
+        "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b": 1,
+        "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa": 1
+      },
+      "source_scope_pointer_frequency": {
+        "/records/2": 3
+      },
+      "support_record_count": 3,
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "provenance_status",
+      "transformation_frequency": {},
+      "winner_selected": false
+    },
+    {
+      "admissible_value_count": 0,
+      "artifact_path_frequency": {
+        "benchmarks/corpus/canada/freeze-v0.1/RIGHTS-CLEARANCE-v0.1.json": 2
+      },
+      "candidate_count": 44,
+      "candidate_key_frequency": {
+        "modification_restrictions": 1,
+        "public_repository_redistribution_permission": 1
+      },
+      "distinct_artifact_path_count": 1,
+      "distinct_candidate_key_count": 2,
+      "distinct_mapped_value_count": 0,
+      "distinct_raw_value_fingerprint_count": 2,
+      "distinct_source_scope_pointer_count": 1,
+      "findings": [],
+      "mapped_value_frequency": {},
+      "mapping_class_frequency": {},
+      "new_mapping_derived": false,
+      "normalization_performed": false,
+      "precedence_assigned": false,
+      "prior_state": "MULTIPLE_CANDIDATES_NOT_ESTABLISHED",
+      "profile_complete": true,
+      "raw_value_fingerprint_frequency": {
+        "53b1d89e167fceaf280a6e22a5ef99c8cb3986a4c0368e3f760c33bedca4fdfc": 1,
+        "67de032c77f88b51b90e6e8a551db53f2ac2f4facfbe66243874a6ca8e8d0587": 1
+      },
+      "source_scope_pointer_frequency": {
+        "/records/2": 2
+      },
+      "support_record_count": 2,
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "redistribution_status",
+      "transformation_frequency": {},
+      "winner_selected": false
+    }
+  ],
+  "provenance_established": false,
+  "provider_call_made": false,
+  "q011_creation_authorized": false,
+  "real_evidence_reread": false,
+  "rego_compilation_authorized": false,
+  "rerun_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "schema_mutation_performed": false,
+  "schema_resolution_authorized": false,
+  "source_manifest_created": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "source_xml_inspected": false,
+  "static_implementation_commit": "c0149df109d231aaf621f4fd297c26eb9f411b5b",
+  "status": "CLOSED_EXECUTED_FAILURE_SURFACE_CHARACTERIZED",
+  "successor_resolution_hypothesis_work_auto_authorized": false,
+  "surface_class_counts": {
+    "MULTI_ADMISSIBLE_CONTRADICTION_SURFACE": 3,
+    "ZERO_ADMISSIBLE_VALUE_SURFACE": 5
+  },
+  "surface_partition_established": true,
+  "unresolved_field_expected_count": 8,
+  "unresolved_field_profile_count": 8,
+  "winner_selection_performed": false,
+  "work_order": "OIC-CANADA-CROSSWALK-FAILURE-SURFACE-CHARACTERIZATION-001",
+  "zero_admissible_value_surface_fields": [
+    "source_kind",
+    "rights_basis",
+    "rights_status",
+    "provenance_status",
+    "redistribution_status"
+  ]
+}
