@@ -1,0 +1,46 @@
+{
+  "artifact_sha256": {
+    "EVIDENCE-ALLOWLIST-v0.1.json": "8dc6fac14ab38390231a7561668e39075ace9446c1d3736674f496818293ef95",
+    "INVENTORY-CONTRACT-v0.1.json": "3cc411a2ed2d48babc563dbb08ec0798a4146b35ae5c4646480ea34f3b008eaa",
+    "PLAN-v0.1.md": "0e464c532a259b19f136b76ca9d3471caeb8b0d98f9a88823bfc6f43b699b638",
+    "closed_reconciliation_adjudication": "bf005b89055648c36fb60306bc2cc3fc0163ef7113a5b59ae05fa3bcf7d4c1de",
+    "closed_reconciliation_result": "a8aeabd60d8cc2aba5ecbb2b06e1565bb394da273c7e80224de97ea324071070"
+  },
+  "base_closure_commit": "ae3e36341bfce7fc47f27881b7b3fc68d7966917",
+  "canonicalization_authorized": false,
+  "closed_reconciliation_rerun_authorized": false,
+  "control_envelope_authorized": false,
+  "corroborating_markdown_inspection_authorized": false,
+  "crosswalk_creation_authorized": false,
+  "evidence_contents_inspected_by_this_work_order": false,
+  "freeze_id": "OIC-CANADA-EVIDENCE-VOCABULARY-INVENTORY-001-FREEZE-v0.1",
+  "freeze_version": "v0.1",
+  "future_primary_machine_readable_inventory_authorized_after_independent_verification": true,
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "next_authorized_step": "Independent verification of this preregistration. After verification, implement and statically freeze an offline inventory instrument using synthetic fixtures only. Do not inspect the real evidence yet.",
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "population_inference_authorized": false,
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "semantic_mapping_authorized": false,
+  "source_manifest_adjudication_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_xml_inspected_by_this_work_order": false,
+  "source_xml_inspection_authorized": false,
+  "status": "PREREGISTERED_NOT_EXECUTED",
+  "unlisted_evidence_inspection_authorized": false,
+  "work_order": "OIC-CANADA-EVIDENCE-VOCABULARY-INVENTORY-001"
+}

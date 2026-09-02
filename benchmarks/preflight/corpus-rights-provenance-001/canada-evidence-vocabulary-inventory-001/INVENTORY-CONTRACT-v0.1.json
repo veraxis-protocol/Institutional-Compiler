@@ -1,0 +1,75 @@
+{
+  "base_closure_commit": "ae3e36341bfce7fc47f27881b7b3fc68d7966917",
+  "canonicalization_authorized": false,
+  "claim_ceiling": "INVENTORY_COMPLETE establishes only a deterministic descriptive inventory of the frozen machine-readable evidence vocabulary. It does not establish any mapping to SOURCE_MANIFEST.csv, rights, provenance, legal clearance, evidence sufficiency, semantic correctness, or downstream compiler/runtime authorization.",
+  "closed_reconciliation_result_sha256": "a8aeabd60d8cc2aba5ecbb2b06e1565bb394da273c7e80224de97ea324071070",
+  "contract_id": "OIC-CANADA-EVIDENCE-VOCABULARY-INVENTORY-CONTRACT-001",
+  "contract_version": "v0.1",
+  "control_envelope_authorized": false,
+  "crosswalk_creation_authorized": false,
+  "decision_rule": {
+    "INVENTORY_COMPLETE": "Every frozen primary machine-readable allowlisted artifact matches its Git blob identity, parses as JSON under the frozen duplicate-key policy, and is exhaustively inventoried under the frozen traversal/capture algorithm.",
+    "INVENTORY_INCOMPLETE_FAIL_CLOSED": "Any allowlisted primary artifact is missing, has identity drift, cannot be parsed under the frozen policy, or cannot be completely inventoried.",
+    "precedence": [
+      "INVENTORY_INCOMPLETE_FAIL_CLOSED",
+      "INVENTORY_COMPLETE"
+    ]
+  },
+  "evidence_allowlist_sha256": "8dc6fac14ab38390231a7561668e39075ace9446c1d3736674f496818293ef95",
+  "future_execution_outputs": {
+    "crosswalk": "FORBIDDEN",
+    "inventory_receipt": "LOCAL_ONE_SHOT_FIRST",
+    "source_manifest": "FORBIDDEN",
+    "tracked_inventory": "ONLY_AFTER_FORMAL_CLOSURE"
+  },
+  "inspection_scope": {
+    "corroborating_markdown": "FORBIDDEN",
+    "network": "FORBIDDEN",
+    "primary_machine_readable_evidence": "ALLOWLIST_ONLY",
+    "source_xml": "FORBIDDEN",
+    "unlisted_files": "FORBIDDEN"
+  },
+  "institutional_ir_authorized": false,
+  "inventory_algorithm": {
+    "alias_generation_authorized": false,
+    "array_recording": {
+      "record_length": true,
+      "traverse_elements": true
+    },
+    "duplicate_key_handling": "FAIL_CLOSED_IF_JSON_PARSER_DETECTS_OR_PRESERVES_DUPLICATE_KEYS; NO SILENT COLLAPSE AUTHORIZED",
+    "json_parse_required": true,
+    "key_normalization_authorized": false,
+    "manifest_field_mapping_authorized": false,
+    "provenance_interpretation_authorized": false,
+    "record_every_object_key": true,
+    "record_json_pointer": true,
+    "record_key_exactly": true,
+    "record_value_type": true,
+    "rights_interpretation_authorized": false,
+    "scalar_capture": {
+      "boolean": "EXACT",
+      "null": "EXACT",
+      "number": "EXACT",
+      "string_length_gt_256": "SHA256_AND_UTF8_BYTE_LENGTH_ONLY",
+      "string_length_le_256": "EXACT"
+    },
+    "semantic_mapping_authorized": false,
+    "traversal": "DEPTH_FIRST_DOCUMENT_ORDER"
+  },
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "population_inference_authorized": false,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "rego_compilation_authorized": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_adjudication_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "status": "FROZEN_NOT_EXECUTED"
+}
