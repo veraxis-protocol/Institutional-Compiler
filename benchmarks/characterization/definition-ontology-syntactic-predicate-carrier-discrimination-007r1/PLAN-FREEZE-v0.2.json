@@ -1,0 +1,59 @@
+{
+  "architecture_change_authorized": false,
+  "authorization_repair_binding_sha256": "a6acc0f22a7872d007f39cde8e8da662b12e6bde824869ee6fd9812858bb8b2d",
+  "canonicalization_performed": false,
+  "contract_test_sha256": "873c716f55ea0005320866bd21765f3d930faeffb7e7a1aa3ff53945263a430c",
+  "freeze_id": "OIC-DEFINITION-ONTOLOGY-SYNTACTIC-PREDICATE-CARRIER-DISCRIMINATION-007R1-PLAN-FREEZE-v0.2",
+  "freeze_version": "v0.2",
+  "implicit_latest_qualification_selection": false,
+  "institutional_ir_constructed": false,
+  "instrument_sha256": "d3a65a906e3bb165458f0ca6fc0afc96f88d376d1d01bb20f577ab4a9189c830",
+  "live_run_executed": false,
+  "model_call_made": false,
+  "next_authorized_activity": "Complete offline validation and repository suite. Do not execute 007R1 live or create Q010 until this static freeze is independently verified.",
+  "nvidia_network_request_made": false,
+  "ontology_007r1_executed": false,
+  "ontology_007r1_execution_authorized": false,
+  "pair_count": 9,
+  "plan_sha256": "7558595f9f5caca541b03dd65f9bfeb2dddd8f05138ec9b47c06764904ba785d",
+  "preregistration_commit": "9505b78eb58d38795ca1075b3c0b48414470977e",
+  "preregistration_freeze_v0_1_sha256": "c696e50eecd9d7416b5ab311dcfc1e41d01f75ec3b7aaa2826484f0cefd09027",
+  "preregistration_sha256": "1f550475326da56fb89df660de28967c149d7be7e67146a55e2aa8019a7f354b",
+  "production_interpretation_ruleset_changed": false,
+  "provider_call_made": false,
+  "q010_authorized": false,
+  "q010_created": false,
+  "qualification_artifact_must_be_tracked": true,
+  "qualification_must_bind_exact_static_target": true,
+  "qualification_selection_mode": "EXPLICIT_PATH_ONLY",
+  "repair_class": "AUTHORIZATION_BINDING_ONLY",
+  "repository_test_suite_validation": {
+    "classification": "PASS_WITH_TWO_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_deselection_count": 2,
+    "exceptions": [
+      {
+        "historical_test_sha256": "dfa7744af00ef557b8bcede330d738a1f1d79e53c60a74d60bc8855630304d80",
+        "nodeid": "tests/test_definition_ontology_predicate_frame_discrimination_006r1.py::test_static_preflight_does_not_require_q008",
+        "reason": "Frozen pre-Q008 lifecycle test asserts Qualification 008 result absence; Q008 now legitimately exists."
+      },
+      {
+        "historical_test_sha256": "c1ef0b1568fc16c70e6302d853a7a4a03c74dcf3ebfed18807b872c6f4887365",
+        "nodeid": "tests/test_definition_ontology_syntactic_predicate_carrier_discrimination_007.py::test_static_preflight_does_not_require_q009",
+        "reason": "Frozen pre-Q009 lifecycle test asserts Qualification 009 result absence; Q009 now legitimately exists."
+      }
+    ],
+    "historical_tests_modified": false,
+    "ontology_007r1_design_changed": false,
+    "semantic_scope_effect": "NONE"
+  },
+  "request_materialization_sha256": "9faa8e9881b4bad0f9252cf0a3bdcf689e59e82357307c29488ab4ed5969bc57",
+  "semantic_decision_rules": "DELEGATED_UNCHANGED_TO_FROZEN_ONTOLOGY_007",
+  "semantic_request_count": 18,
+  "semantic_request_equivalence": "BYTE_IDENTICAL_TO_FROZEN_ONTOLOGY_007",
+  "source_o007_contract_test_sha256": "c1ef0b1568fc16c70e6302d853a7a4a03c74dcf3ebfed18807b872c6f4887365",
+  "source_o007_instrument_sha256": "be752c975a6da03e9a0237aa7df09f38caf81a2e416b23584e3d86d998fa0834",
+  "source_o007_request_materialization_sha256": "02567faee5aa55e830207b271023bf555a6f02417433731319ab0a869020f96a",
+  "specific_qualification_number_hardcoded": false,
+  "status": "INSTRUMENT_IMPLEMENTED_STATICALLY_FROZEN_NOT_EXECUTED",
+  "work_order": "OIC-DEFINITION-ONTOLOGY-SYNTACTIC-PREDICATE-CARRIER-DISCRIMINATION-007R1"
+}
