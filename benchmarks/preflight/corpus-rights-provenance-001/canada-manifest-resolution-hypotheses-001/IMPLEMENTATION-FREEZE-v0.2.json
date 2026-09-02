@@ -1,0 +1,77 @@
+{
+  "actual_precedence_rule_created": false,
+  "actual_semantic_projection_created": false,
+  "artifact_sha256": {
+    "HYPOTHESIS-CONTRACT-v0.1.json": "5e2c794b424a707927660350d32daf162eb33c58cebe1a7160d11a97d4f50d40",
+    "PLAN-v0.1.md": "a30c28198777e89963b5818860fec59b31e59fb83b80894bd1f2fded4849bbb8",
+    "PREREGISTRATION-FREEZE-v0.1.json": "3e80695413b730c8dac8a893e01053a0393d0fd30d40a22ab0a52d7091779e91",
+    "SOURCE-MANIFEST-CONTRACT-v0.1.json": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+    "closed_failure_surface_execution_result": "b29831c5685f238492826db3f0f737a125f86001defa4adfa894054aba27062e",
+    "preserved_crosswalk_001_receipt": "77d8a67a71e7eb073fa3f43825a1113a53effd948f69e7abee952e06767dbb92",
+    "scripts/evaluate_canada_manifest_resolution_hypotheses_001.py": "f14c38af05d3be2fa63a5f2cace0b7997cb5ca25a2698898ff42ae959c2c8b1e",
+    "tests/contract/test_canada_manifest_resolution_hypotheses_001.py": "940561661215573761094235aba0d22e44bb02fa6a280ec27107f0d9f0d373d2"
+  },
+  "base_preregistration_commit": "21a9b1fb551c556089abce933d1bb3c5d412005f",
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "control_envelope_authorized": false,
+  "evaluation_policy": {
+    "actual_precedence_rule_creation": "FORBIDDEN",
+    "actual_semantic_projection_creation": "FORBIDDEN",
+    "dimension_value_domain": [
+      "TRUE",
+      "FALSE",
+      "NOT_ESTABLISHED"
+    ],
+    "evidence_rewrite": "FORBIDDEN",
+    "hypothesis_adoption": "FORBIDDEN",
+    "manifest_contract_mutation": "FORBIDDEN",
+    "output_type": "STRUCTURAL_PROPERTY_MATRIX_ONLY",
+    "schema_mutation": "FORBIDDEN",
+    "source_manifest_creation": "FORBIDDEN",
+    "winner_selection": "FORBIDDEN"
+  },
+  "evidence_rewritten": false,
+  "freeze_id": "OIC-CANADA-MANIFEST-RESOLUTION-HYPOTHESES-001-IMPLEMENTATION-FREEZE-v0.2",
+  "freeze_version": "v0.2",
+  "frozen_hypothesis_population": {
+    "field_count": 8,
+    "hypothesis_count": 16,
+    "winner_selection": "FORBIDDEN"
+  },
+  "generality_rule": "CA3_BOUNDED_ONLY_HELDOUT_REQUIRED_FOR_CROSS_SOURCE_GENERALIZATION",
+  "hypotheses_evaluated": false,
+  "institutional_ir_authorized": false,
+  "manifest_contract_changed": false,
+  "mechanism_structural_rules": {
+    "DETERMINISTIC_PROJECTION": "CURRENT_CONTRACT_COMPATIBLE_BUT_ACTUAL_PROJECTION_RULE_NOT_FROZEN",
+    "EXPLICIT_CANONICAL_LOCATOR_DECLARATION": "CURRENT_CONTRACT_COMPATIBLE_BUT_REQUIRES_NEW_CANONICAL_DECLARATION",
+    "EXPLICIT_MANIFEST_ALIGNED_DECLARATION": "CURRENT_CONTRACT_COMPATIBLE_BUT_REQUIRES_NEW_EXPLICIT_DECLARATION",
+    "ROLE_BASED_CANONICAL_PRECEDENCE": "CURRENT_CONTRACT_COMPATIBLE_BUT_ACTUAL_PRECEDENCE_RULE_NOT_FROZEN",
+    "SINGLE_REFERENCE_PRECEDENCE": "CURRENT_CONTRACT_COMPATIBLE_BUT_ACTUAL_PRECEDENCE_SUFFICIENCY_RULE_NOT_FROZEN",
+    "TYPED_MULTI_REFERENCE_COLLECTION": "PRESERVES_DISTINCT_VALUES_BUT_REQUIRES_MANIFEST_CONTRACT_CHANGE"
+  },
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "next_authorized_step": "Independent verification of this static implementation freeze. After verification only, one read-only structural evaluation of all 16 frozen hypotheses against the preserved Crosswalk 001 receipt may be separately authorized. Do not select a winner, create an actual precedence/projection rule, change the manifest contract, or create SOURCE_MANIFEST.csv.",
+  "ontology_007r1_execution_authorized": false,
+  "preserved_crosswalk_receipt_inspected_during_static_implementation": false,
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "real_evidence_reread_during_static_implementation": false,
+  "rego_compilation_authorized": false,
+  "repository_test_suite_validation": {
+    "classification": "PASS_WITH_TWO_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_deselection_count": 2,
+    "historical_tests_modified": false,
+    "semantic_scope_effect": "NONE"
+  },
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "schema_mutated": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "status": "INSTRUMENT_IMPLEMENTED_STATICALLY_FROZEN_HYPOTHESES_NOT_EVALUATED",
+  "winner_selected": false
+}
