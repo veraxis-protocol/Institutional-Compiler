@@ -1,0 +1,818 @@
+{
+  "actual_precedence_rule_created": false,
+  "actual_semantic_projection_created": false,
+  "assessment_counts": {
+    "REQUIRES_MANIFEST_CONTRACT_CHANGE": 2,
+    "REQUIRES_NEW_EXPLICIT_DECLARATION": 6,
+    "REQUIRES_SEPARATELY_FROZEN_RULE": 8
+  },
+  "bounded_ca3_structural_evaluation_only": true,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "claim_ceiling": "This closure establishes only the bounded CA-3 structural properties of the 16 frozen resolution hypotheses. It does not establish which hypothesis is correct, preferred, institutionally valid, legally sufficient, or generally applicable. It does not establish a valid precedence rule, semantic projection, manifest-contract revision, rights determination, provenance determination, or evidence sufficiency. Cross-source generality remains unestablished and requires separately frozen held-out validation. SOURCE_MANIFEST.csv population and all downstream compiler/runtime activity remain unauthorized.",
+  "control_envelope_authorized": false,
+  "corroborating_markdown_inspected": false,
+  "cross_source_generality_established": false,
+  "disposition": "HYPOTHESES_STRUCTURALLY_EVALUATED",
+  "evaluated_hypothesis_count": 16,
+  "evaluation_dimensions": [
+    "current_manifest_contract_compatible",
+    "requires_manifest_contract_change",
+    "requires_new_explicit_evidence_or_metadata_declaration",
+    "requires_new_semantic_projection",
+    "requires_precedence_rule",
+    "preserves_all_observed_distinct_values",
+    "deterministic_replay_possible",
+    "introduces_legal_or_institutional_semantic_promotion_risk",
+    "independently_testable_on_current_CA3_only",
+    "requires_held_out_source_for_generalization_claim"
+  ],
+  "evaluation_execution_count": 1,
+  "evaluations": [
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_SEPARATELY_FROZEN_RULE",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "NOT_ESTABLISHED",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "FALSE",
+        "requires_new_semantic_projection": "FALSE",
+        "requires_precedence_rule": "TRUE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "PE-PRECEDENCE",
+      "manifest_contract_mutated": false,
+      "mechanism": "SINGLE_REFERENCE_PRECEDENCE",
+      "notes": [
+        "A single-reference result fits the current scalar contract, but selecting sufficiency among multiple admissible evidence references requires a separately frozen institutional precedence/sufficiency rule."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "provenance_url",
+          "receipt_id",
+          "receipt_path"
+        ],
+        "distinct_artifact_path_count": 3,
+        "distinct_candidate_key_count": 3,
+        "distinct_mapped_value_count": 3,
+        "mapping_classes": [
+          "ESTABLISHED_DIRECT"
+        ],
+        "support_record_count": 5,
+        "transformations": [
+          "EXACT_EVIDENCE_REFERENCE_IDENTITY"
+        ]
+      },
+      "surface_class": "MULTI_ADMISSIBLE_CONTRADICTION_SURFACE",
+      "target_field": "provenance_evidence",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_MANIFEST_CONTRACT_CHANGE",
+      "dimensions": {
+        "current_manifest_contract_compatible": "FALSE",
+        "deterministic_replay_possible": "TRUE",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "FALSE",
+        "preserves_all_observed_distinct_values": "TRUE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "TRUE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "FALSE",
+        "requires_new_semantic_projection": "FALSE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "PE-COLLECTION",
+      "manifest_contract_mutated": false,
+      "mechanism": "TYPED_MULTI_REFERENCE_COLLECTION",
+      "notes": [
+        "A typed multi-reference collection preserves the observed evidence set without winner selection, but the current manifest field is scalar and therefore this mechanism requires a separately authorized contract change."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "provenance_url",
+          "receipt_id",
+          "receipt_path"
+        ],
+        "distinct_artifact_path_count": 3,
+        "distinct_candidate_key_count": 3,
+        "distinct_mapped_value_count": 3,
+        "mapping_classes": [
+          "ESTABLISHED_DIRECT"
+        ],
+        "support_record_count": 5,
+        "transformations": [
+          "EXACT_EVIDENCE_REFERENCE_IDENTITY"
+        ]
+      },
+      "surface_class": "MULTI_ADMISSIBLE_CONTRADICTION_SURFACE",
+      "target_field": "provenance_evidence",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_NEW_EXPLICIT_DECLARATION",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "TRUE",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "TRUE",
+        "requires_new_semantic_projection": "FALSE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "PS-DECLARATION",
+      "manifest_contract_mutated": false,
+      "mechanism": "EXPLICIT_MANIFEST_ALIGNED_DECLARATION",
+      "notes": [
+        "Structurally compatible with the current scalar/enum manifest shape, but the required declaration does not exist in the preserved Crosswalk 001 support surface."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "authoritative_source_status",
+          "captured"
+        ],
+        "distinct_artifact_path_count": 1,
+        "distinct_candidate_key_count": 2,
+        "distinct_mapped_value_count": 0,
+        "mapping_classes": [],
+        "support_record_count": 3,
+        "transformations": []
+      },
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "provenance_status",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_SEPARATELY_FROZEN_RULE",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "NOT_ESTABLISHED",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "FALSE",
+        "requires_new_semantic_projection": "TRUE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "PS-PROJECTION",
+      "manifest_contract_mutated": false,
+      "mechanism": "DETERMINISTIC_PROJECTION",
+      "notes": [
+        "A projection mechanism is conceptually compatible with the current target field shape, but no projection function is authorized or frozen here; replayability therefore remains NOT_ESTABLISHED.",
+        "Projection would carry explicit legal/institutional semantic-promotion risk and requires a separate preregistered mapping study."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "authoritative_source_status",
+          "captured"
+        ],
+        "distinct_artifact_path_count": 1,
+        "distinct_candidate_key_count": 2,
+        "distinct_mapped_value_count": 0,
+        "mapping_classes": [],
+        "support_record_count": 3,
+        "transformations": []
+      },
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "provenance_status",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_NEW_EXPLICIT_DECLARATION",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "TRUE",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "TRUE",
+        "requires_new_semantic_projection": "FALSE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "RD-DECLARATION",
+      "manifest_contract_mutated": false,
+      "mechanism": "EXPLICIT_MANIFEST_ALIGNED_DECLARATION",
+      "notes": [
+        "Structurally compatible with the current scalar/enum manifest shape, but the required declaration does not exist in the preserved Crosswalk 001 support surface."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "modification_restrictions",
+          "public_repository_redistribution_permission"
+        ],
+        "distinct_artifact_path_count": 1,
+        "distinct_candidate_key_count": 2,
+        "distinct_mapped_value_count": 0,
+        "mapping_classes": [],
+        "support_record_count": 2,
+        "transformations": []
+      },
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "redistribution_status",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_SEPARATELY_FROZEN_RULE",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "NOT_ESTABLISHED",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "FALSE",
+        "requires_new_semantic_projection": "TRUE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "RD-PROJECTION",
+      "manifest_contract_mutated": false,
+      "mechanism": "DETERMINISTIC_PROJECTION",
+      "notes": [
+        "A projection mechanism is conceptually compatible with the current target field shape, but no projection function is authorized or frozen here; replayability therefore remains NOT_ESTABLISHED.",
+        "Projection would carry explicit legal/institutional semantic-promotion risk and requires a separate preregistered mapping study."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "modification_restrictions",
+          "public_repository_redistribution_permission"
+        ],
+        "distinct_artifact_path_count": 1,
+        "distinct_candidate_key_count": 2,
+        "distinct_mapped_value_count": 0,
+        "mapping_classes": [],
+        "support_record_count": 2,
+        "transformations": []
+      },
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "redistribution_status",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_NEW_EXPLICIT_DECLARATION",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "TRUE",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "TRUE",
+        "requires_new_semantic_projection": "FALSE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "RB-DECLARATION",
+      "manifest_contract_mutated": false,
+      "mechanism": "EXPLICIT_MANIFEST_ALIGNED_DECLARATION",
+      "notes": [
+        "Structurally compatible with the current scalar/enum manifest shape, but the required declaration does not exist in the preserved Crosswalk 001 support surface."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "automated_retrieval_basis",
+          "copyright_owner",
+          "rights_notice_url",
+          "terms_of_use_url"
+        ],
+        "distinct_artifact_path_count": 1,
+        "distinct_candidate_key_count": 4,
+        "distinct_mapped_value_count": 0,
+        "mapping_classes": [],
+        "support_record_count": 4,
+        "transformations": []
+      },
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "rights_basis",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_SEPARATELY_FROZEN_RULE",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "NOT_ESTABLISHED",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "FALSE",
+        "requires_new_semantic_projection": "TRUE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "RB-PROJECTION",
+      "manifest_contract_mutated": false,
+      "mechanism": "DETERMINISTIC_PROJECTION",
+      "notes": [
+        "A projection mechanism is conceptually compatible with the current target field shape, but no projection function is authorized or frozen here; replayability therefore remains NOT_ESTABLISHED.",
+        "Projection would carry explicit legal/institutional semantic-promotion risk and requires a separate preregistered mapping study."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "automated_retrieval_basis",
+          "copyright_owner",
+          "rights_notice_url",
+          "terms_of_use_url"
+        ],
+        "distinct_artifact_path_count": 1,
+        "distinct_candidate_key_count": 4,
+        "distinct_mapped_value_count": 0,
+        "mapping_classes": [],
+        "support_record_count": 4,
+        "transformations": []
+      },
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "rights_basis",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_SEPARATELY_FROZEN_RULE",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "NOT_ESTABLISHED",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "FALSE",
+        "requires_new_semantic_projection": "FALSE",
+        "requires_precedence_rule": "TRUE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "RE-PRECEDENCE",
+      "manifest_contract_mutated": false,
+      "mechanism": "SINGLE_REFERENCE_PRECEDENCE",
+      "notes": [
+        "A single-reference result fits the current scalar contract, but selecting sufficiency among multiple admissible evidence references requires a separately frozen institutional precedence/sufficiency rule."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "evidence_id",
+          "rights_notice_url",
+          "terms_of_use_url"
+        ],
+        "distinct_artifact_path_count": 1,
+        "distinct_candidate_key_count": 3,
+        "distinct_mapped_value_count": 4,
+        "mapping_classes": [
+          "ESTABLISHED_DIRECT"
+        ],
+        "support_record_count": 4,
+        "transformations": [
+          "EXACT_EVIDENCE_REFERENCE_IDENTITY"
+        ]
+      },
+      "surface_class": "MULTI_ADMISSIBLE_CONTRADICTION_SURFACE",
+      "target_field": "rights_evidence",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_MANIFEST_CONTRACT_CHANGE",
+      "dimensions": {
+        "current_manifest_contract_compatible": "FALSE",
+        "deterministic_replay_possible": "TRUE",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "FALSE",
+        "preserves_all_observed_distinct_values": "TRUE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "TRUE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "FALSE",
+        "requires_new_semantic_projection": "FALSE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "RE-COLLECTION",
+      "manifest_contract_mutated": false,
+      "mechanism": "TYPED_MULTI_REFERENCE_COLLECTION",
+      "notes": [
+        "A typed multi-reference collection preserves the observed evidence set without winner selection, but the current manifest field is scalar and therefore this mechanism requires a separately authorized contract change."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "evidence_id",
+          "rights_notice_url",
+          "terms_of_use_url"
+        ],
+        "distinct_artifact_path_count": 1,
+        "distinct_candidate_key_count": 3,
+        "distinct_mapped_value_count": 4,
+        "mapping_classes": [
+          "ESTABLISHED_DIRECT"
+        ],
+        "support_record_count": 4,
+        "transformations": [
+          "EXACT_EVIDENCE_REFERENCE_IDENTITY"
+        ]
+      },
+      "surface_class": "MULTI_ADMISSIBLE_CONTRADICTION_SURFACE",
+      "target_field": "rights_evidence",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_NEW_EXPLICIT_DECLARATION",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "TRUE",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "TRUE",
+        "requires_new_semantic_projection": "FALSE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "RS-DECLARATION",
+      "manifest_contract_mutated": false,
+      "mechanism": "EXPLICIT_MANIFEST_ALIGNED_DECLARATION",
+      "notes": [
+        "Structurally compatible with the current scalar/enum manifest shape, but the required declaration does not exist in the preserved Crosswalk 001 support surface."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "authoritative_source_status",
+          "reviewer_disposition",
+          "rights_disposition"
+        ],
+        "distinct_artifact_path_count": 3,
+        "distinct_candidate_key_count": 3,
+        "distinct_mapped_value_count": 0,
+        "mapping_classes": [],
+        "support_record_count": 4,
+        "transformations": []
+      },
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "rights_status",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_SEPARATELY_FROZEN_RULE",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "NOT_ESTABLISHED",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "FALSE",
+        "requires_new_semantic_projection": "TRUE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "RS-PROJECTION",
+      "manifest_contract_mutated": false,
+      "mechanism": "DETERMINISTIC_PROJECTION",
+      "notes": [
+        "A projection mechanism is conceptually compatible with the current target field shape, but no projection function is authorized or frozen here; replayability therefore remains NOT_ESTABLISHED.",
+        "Projection would carry explicit legal/institutional semantic-promotion risk and requires a separate preregistered mapping study."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "authoritative_source_status",
+          "reviewer_disposition",
+          "rights_disposition"
+        ],
+        "distinct_artifact_path_count": 3,
+        "distinct_candidate_key_count": 3,
+        "distinct_mapped_value_count": 0,
+        "mapping_classes": [],
+        "support_record_count": 4,
+        "transformations": []
+      },
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "rights_status",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_NEW_EXPLICIT_DECLARATION",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "TRUE",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "TRUE",
+        "requires_new_semantic_projection": "FALSE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "SK-DECLARATION",
+      "manifest_contract_mutated": false,
+      "mechanism": "EXPLICIT_MANIFEST_ALIGNED_DECLARATION",
+      "notes": [
+        "Structurally compatible with the current scalar/enum manifest shape, but the required declaration does not exist in the preserved Crosswalk 001 support surface."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "acquisition_target_role",
+          "rendering_role"
+        ],
+        "distinct_artifact_path_count": 2,
+        "distinct_candidate_key_count": 2,
+        "distinct_mapped_value_count": 0,
+        "mapping_classes": [],
+        "support_record_count": 3,
+        "transformations": []
+      },
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "source_kind",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_SEPARATELY_FROZEN_RULE",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "NOT_ESTABLISHED",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "FALSE",
+        "requires_new_semantic_projection": "TRUE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "SK-PROJECTION",
+      "manifest_contract_mutated": false,
+      "mechanism": "DETERMINISTIC_PROJECTION",
+      "notes": [
+        "A projection mechanism is conceptually compatible with the current target field shape, but no projection function is authorized or frozen here; replayability therefore remains NOT_ESTABLISHED."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "acquisition_target_role",
+          "rendering_role"
+        ],
+        "distinct_artifact_path_count": 2,
+        "distinct_candidate_key_count": 2,
+        "distinct_mapped_value_count": 0,
+        "mapping_classes": [],
+        "support_record_count": 3,
+        "transformations": []
+      },
+      "surface_class": "ZERO_ADMISSIBLE_VALUE_SURFACE",
+      "target_field": "source_kind",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_NEW_EXPLICIT_DECLARATION",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "TRUE",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "TRUE",
+        "requires_new_semantic_projection": "FALSE",
+        "requires_precedence_rule": "FALSE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "SL-DECLARATION",
+      "manifest_contract_mutated": false,
+      "mechanism": "EXPLICIT_CANONICAL_LOCATOR_DECLARATION",
+      "notes": [
+        "The manifest already expects one canonical locator. An explicit canonical declaration fits that shape but assigns institutional canonicality and must be separately admitted."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "acquisition_target_url",
+          "final_url",
+          "provenance_url",
+          "requested_url"
+        ],
+        "distinct_artifact_path_count": 3,
+        "distinct_candidate_key_count": 4,
+        "distinct_mapped_value_count": 4,
+        "mapping_classes": [
+          "ESTABLISHED_DIRECT"
+        ],
+        "support_record_count": 9,
+        "transformations": [
+          "EXACT_HTTP_URI_IDENTITY"
+        ]
+      },
+      "surface_class": "MULTI_ADMISSIBLE_CONTRADICTION_SURFACE",
+      "target_field": "source_locator",
+      "winner_selected": false
+    },
+    {
+      "actual_precedence_rule_created": false,
+      "actual_semantic_projection_created": false,
+      "bounded_structural_assessment": "REQUIRES_SEPARATELY_FROZEN_RULE",
+      "dimensions": {
+        "current_manifest_contract_compatible": "TRUE",
+        "deterministic_replay_possible": "NOT_ESTABLISHED",
+        "independently_testable_on_current_CA3_only": "TRUE",
+        "introduces_legal_or_institutional_semantic_promotion_risk": "TRUE",
+        "preserves_all_observed_distinct_values": "FALSE",
+        "requires_held_out_source_for_generalization_claim": "TRUE",
+        "requires_manifest_contract_change": "FALSE",
+        "requires_new_explicit_evidence_or_metadata_declaration": "FALSE",
+        "requires_new_semantic_projection": "FALSE",
+        "requires_precedence_rule": "TRUE"
+      },
+      "evidence_mutated": false,
+      "findings": [],
+      "hypothesis_adopted": false,
+      "hypothesis_id": "SL-PRECEDENCE",
+      "manifest_contract_mutated": false,
+      "mechanism": "ROLE_BASED_CANONICAL_PRECEDENCE",
+      "notes": [
+        "The current support surface contains distinguishable locator roles, but Hypotheses 001 freezes no precedence ordering; deterministic replayability of an actual canonical-selection rule remains NOT_ESTABLISHED."
+      ],
+      "profile_receipt_crosscheck_pass": true,
+      "support_summary": {
+        "candidate_keys": [
+          "acquisition_target_url",
+          "final_url",
+          "provenance_url",
+          "requested_url"
+        ],
+        "distinct_artifact_path_count": 3,
+        "distinct_candidate_key_count": 4,
+        "distinct_mapped_value_count": 4,
+        "mapping_classes": [
+          "ESTABLISHED_DIRECT"
+        ],
+        "support_record_count": 9,
+        "transformations": [
+          "EXACT_HTTP_URI_IDENTITY"
+        ]
+      },
+      "surface_class": "MULTI_ADMISSIBLE_CONTRADICTION_SURFACE",
+      "target_field": "source_locator",
+      "winner_selected": false
+    }
+  ],
+  "evidence": {
+    "authorization_receipt_sha256": "37d978b87fb926b25be8e61f549219af5b8e6a72b1c11d7c96734d778cdf3848",
+    "hypothesis_evaluation_receipt_sha256": "dd7c792f3bd015b32b68eeeeaad937b2d8a4ed53dad01859d6284c7878a71530",
+    "one_shot_lock_sha256": "e3ec52f0284f5cdc5355bae2d3262d5be94cb1e8bacb34bea170f2a73c9d9908",
+    "stderr_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "evidence_rewrite_performed": false,
+  "explicit_declaration_hypothesis_ids": [
+    "PS-DECLARATION",
+    "RB-DECLARATION",
+    "RD-DECLARATION",
+    "RS-DECLARATION",
+    "SK-DECLARATION",
+    "SL-DECLARATION"
+  ],
+  "finding_count": 0,
+  "frozen_hypothesis_count": 16,
+  "held_out_validation_required_for_generalization": true,
+  "hypothesis_adopted": false,
+  "hypothesis_contract_sha256": "5e2c794b424a707927660350d32daf162eb33c58cebe1a7160d11a97d4f50d40",
+  "implementation_freeze_sha256": "3ba9109ddb87978d7c3cf7649a9728bc7f3b30bb88b93bf31399c9e55dc88c92",
+  "institutional_ir_authorized": false,
+  "instrument_sha256": "f14c38af05d3be2fa63a5f2cace0b7997cb5ca25a2698898ff42ae959c2c8b1e",
+  "interpretation": "All 16 preregistered resolution hypotheses were structurally evaluated against the preserved CA-3 Crosswalk 001 support surface with zero findings. Six mechanisms fit the current manifest shape but require new explicit declarations; eight fit the current manifest shape only after a separately frozen projection/precedence/sufficiency rule; two typed multi-reference mechanisms preserve all observed evidence values but require a SOURCE-MANIFEST contract change. No mechanism was ranked, selected, adopted, or executed as a repair.",
+  "inventory_001_receipt_inspected": false,
+  "legal_clearance_established": false,
+  "manifest_contract_change_hypothesis_ids": [
+    "PE-COLLECTION",
+    "RE-COLLECTION"
+  ],
+  "manifest_contract_change_performed": false,
+  "model_call_made": false,
+  "network_request_made": false,
+  "network_used": false,
+  "next_authorized_activity": "Independent verification of this formal closure only. Do not rerun Hypotheses 001 and do not select or adopt a winner. Any successor mechanism-selection, declaration-contract, precedence-rule, projection-rule, manifest-contract revision, or held-out validation work requires a separately justified and preregistered work order.",
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provenance_established": false,
+  "provider_call_made": false,
+  "q011_creation_authorized": false,
+  "ranking_performed": false,
+  "real_evidence_reread": false,
+  "rego_compilation_authorized": false,
+  "rerun_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "schema_mutation_performed": false,
+  "separately_frozen_rule_hypothesis_ids": [
+    "PE-PRECEDENCE",
+    "PS-PROJECTION",
+    "RB-PROJECTION",
+    "RD-PROJECTION",
+    "RE-PRECEDENCE",
+    "RS-PROJECTION",
+    "SK-PROJECTION",
+    "SL-PRECEDENCE"
+  ],
+  "source_manifest_created": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "source_xml_inspected": false,
+  "static_implementation_commit": "8d52116471b0b79ff5d952f030283ec1b5c9bc90",
+  "status": "CLOSED_EXECUTED_HYPOTHESES_STRUCTURALLY_EVALUATED",
+  "successor_resolution_selection_work_auto_authorized": false,
+  "winner_selected": false,
+  "work_order": "OIC-CANADA-MANIFEST-RESOLUTION-HYPOTHESES-001"
+}
