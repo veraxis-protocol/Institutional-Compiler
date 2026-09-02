@@ -1,0 +1,87 @@
+{
+  "base_candidate_002_closure_commit": "927ec95022d6d380a4d65064d8d3d681d2a8f9e3",
+  "bundle_materialization_executed": false,
+  "bundle_schema": {
+    "bundle_version": "oic-evidence-bundle-0.1",
+    "canonical_serialization": "JSON_UTF8_SORT_KEYS_COMPACT_TRAILING_NEWLINE",
+    "duplicate_reference_policy": "DEDUPLICATE_EXACT_STRING_IDENTITY_ONLY",
+    "evidentiary_priority_established": false,
+    "legal_sufficiency_established": false,
+    "ordering_semantics": "LEXICOGRAPHIC_SERIALIZATION_ONLY_NO_AUTHORITY",
+    "reference_extraction_rule": "Use only distinct non-null mapped_value strings already present in the preserved Crosswalk 001 support records for the exact target field. Do not derive, normalize, dereference, fetch, translate, rank, or supplement any reference.",
+    "reference_set_rule": "EXACT_SET_PRESERVATION",
+    "required_fields": [
+      "bundle_version",
+      "source_id",
+      "target_field",
+      "source_crosswalk_receipt_sha256",
+      "ordering_semantics",
+      "evidence_references",
+      "reference_count",
+      "legal_sufficiency_established",
+      "evidentiary_priority_established",
+      "underlying_evidence_rewritten"
+    ],
+    "underlying_evidence_rewritten": false
+  },
+  "candidate_002_adoption_authorized": false,
+  "candidate_002_execution_result_sha256": "64c4e39f74e10072dcf6bb360bb8c6edc568a723d2b7d2041dd4208206161a0c",
+  "candidate_002_post_run_adjudication_sha256": "39e75832402bd14cfcb4976a9ee10aab9ff24632517ba333062c2ff916bd167a",
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "claim_ceiling": "A successful materialization establishes only deterministic tracked-bundle candidate bytes for the two evidence-reference fields on CA-3. Bundle membership does not establish legal sufficiency, evidentiary priority, rights, provenance truth, declaration values, candidate adoption, manifest admissibility, or cross-source generality.",
+  "contract_id": "OIC-CANADA-EVIDENCE-BUNDLE-MATERIALIZATION-CONTRACT-001",
+  "contract_version": "v0.1",
+  "control_envelope_authorized": false,
+  "declaration_fields_in_scope": [],
+  "future_input_scope": {
+    "candidate_002_closure_result": "TRACKED_ALLOWED",
+    "corroborating_markdown": "FORBIDDEN",
+    "inventory_001_receipt": "FORBIDDEN",
+    "network": "FORBIDDEN",
+    "preserved_crosswalk_001_receipt": "ALLOWED_AFTER_INDEPENDENT_VERIFICATION_AND_STATIC_FREEZE",
+    "real_underlying_evidence_files": "FORBIDDEN",
+    "source_xml": "FORBIDDEN"
+  },
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "one_shot_execution_rule": {
+    "execution_count": 1,
+    "formal_closure_may_commit_observed_bundle_bytes": true,
+    "future_local_output_only": true,
+    "rerun_authorized": false,
+    "started_lock_required_before_receipt_content_read": true,
+    "tracked_bundle_files_created_during_execution": false
+  },
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "preserved_crosswalk_001_receipt_sha256": "77d8a67a71e7eb073fa3f43825a1113a53effd948f69e7abee952e06767dbb92",
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "real_tracked_bundles_created": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "FROZEN_NOT_EXECUTED",
+  "success_rule": "EVIDENCE_BUNDLES_MATERIALIZED_CA3 only if exactly two deterministic bundle candidates are produced from the preserved Crosswalk 001 receipt, rights_evidence preserves exactly four distinct mapped references, provenance_evidence preserves exactly three distinct mapped references, both sets match the receipt exactly, no precedence or legal-sufficiency promotion occurs, no underlying evidence is rewritten, and no tracked repository file is created during the one-shot execution. Otherwise EVIDENCE_BUNDLE_MATERIALIZATION_INCOMPLETE_FAIL_CLOSED.",
+  "target_fields": {
+    "provenance_evidence": {
+      "expected_distinct_admissible_reference_count": 3,
+      "tracked_bundle_path": "benchmarks/preflight/corpus-rights-provenance-001/evidence-bundles/CA-3/provenance_evidence-bundle-v0.1.json"
+    },
+    "rights_evidence": {
+      "expected_distinct_admissible_reference_count": 4,
+      "tracked_bundle_path": "benchmarks/preflight/corpus-rights-provenance-001/evidence-bundles/CA-3/rights_evidence-bundle-v0.1.json"
+    }
+  }
+}

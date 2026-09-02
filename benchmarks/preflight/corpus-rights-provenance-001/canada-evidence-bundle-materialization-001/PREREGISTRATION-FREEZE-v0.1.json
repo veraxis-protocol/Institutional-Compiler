@@ -1,0 +1,45 @@
+{
+  "artifact_sha256": {
+    "BUNDLE-MATERIALIZATION-CONTRACT-v0.1.json": "72c387ba7d46d235432ce5fb8e41debd303c952064d808ae66c7521715a2aa07",
+    "PLAN-v0.1.md": "bf5984554eee59f700fb44fe1e3167ee54ad19680f0c66b4bc2127f5eabc1f72",
+    "candidate_002_execution_result": "64c4e39f74e10072dcf6bb360bb8c6edc568a723d2b7d2041dd4208206161a0c",
+    "candidate_002_post_run_adjudication": "39e75832402bd14cfcb4976a9ee10aab9ff24632517ba333062c2ff916bd167a",
+    "preserved_crosswalk_001_receipt": "77d8a67a71e7eb073fa3f43825a1113a53effd948f69e7abee952e06767dbb92"
+  },
+  "base_candidate_002_closure_commit": "927ec95022d6d380a4d65064d8d3d681d2a8f9e3",
+  "bundle_materialization_executed": false,
+  "candidate_002_adoption_authorized": false,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "control_envelope_authorized": false,
+  "declaration_fields_in_scope": [],
+  "expected_provenance_evidence_reference_count": 3,
+  "expected_rights_evidence_reference_count": 4,
+  "freeze_id": "OIC-CANADA-EVIDENCE-BUNDLE-MATERIALIZATION-001-FREEZE-v0.1",
+  "freeze_version": "v0.1",
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "next_authorized_step": "Independent verification of this preregistration. After verification, implement and statically freeze a deterministic bundle materializer using synthetic receipt fixtures only. Do not inspect the preserved Crosswalk 001 receipt yet.",
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "preserved_crosswalk_receipt_inspected_by_this_work_order": false,
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "real_tracked_bundles_created": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "PREREGISTERED_NOT_EXECUTED",
+  "target_field_count": 2,
+  "work_order": "OIC-CANADA-EVIDENCE-BUNDLE-MATERIALIZATION-001"
+}
