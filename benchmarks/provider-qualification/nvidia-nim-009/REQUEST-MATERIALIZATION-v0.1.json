@@ -1,0 +1,100 @@
+{
+  "historical_qualification_observations_reused": false,
+  "live_run_executed": false,
+  "model_call_made": false,
+  "network_request_made": false,
+  "ontology_007_executed": false,
+  "ontology_007_execution_authorized": false,
+  "pacing_seconds": 4.0,
+  "provider": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "latency_headroom_seconds": 45.0,
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "timeout_seconds": 60.0
+  },
+  "provider_call_made": false,
+  "provider_qualification_established": false,
+  "q008_authorization_reused": false,
+  "q008_observations_reused": false,
+  "qualification_009_formally_closed": false,
+  "qualification_009_qualified": false,
+  "recovery_stability_observations_reused": false,
+  "replacement_probes_allowed": false,
+  "request_count": 3,
+  "requests": [
+    {
+      "ordinal": 1,
+      "probe_id": "BASIC_TEXT",
+      "request_projection": {
+        "expected_mode": "TEXT_MARKER",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 16,
+        "ordinal": 1,
+        "probe_id": "BASIC_TEXT",
+        "response_format": null,
+        "system_prompt": "You are a provider transport qualification probe. Follow the requested output exactly.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly OIC_PROVIDER_OK and nothing else."
+      },
+      "request_projection_sha256": "88a85c276212c33caa88e27c5c99bbac8bbe5260a2fe3d970833d1428d9c6dc9"
+    },
+    {
+      "ordinal": 2,
+      "probe_id": "JSON_MODE",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 64,
+        "ordinal": 2,
+        "probe_id": "JSON_MODE",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "ea0884a0131d059337f1a7d00d29b8d45eeda7e4edb133c1f99942632f231ba9"
+    },
+    {
+      "ordinal": 3,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "request_projection": {
+        "expected_mode": "JSON_STATUS",
+        "expected_value": "OIC_PROVIDER_OK",
+        "max_tokens": 4096,
+        "ordinal": 3,
+        "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+        "response_format": {
+          "type": "json_object"
+        },
+        "system_prompt": "You are a provider structured-output qualification probe. Return only the requested JSON object.",
+        "temperature": 0.0,
+        "user_prompt": "Return exactly {\"status\":\"OIC_PROVIDER_OK\"} as JSON and nothing else."
+      },
+      "request_projection_sha256": "0f01c28176a9e2704ffcef271ee66e6aaf7b33af4d9655a1ca3245af026fdd08"
+    }
+  ],
+  "retries": 0,
+  "semantic_successor_target": {
+    "contract_test_sha256": "c1ef0b1568fc16c70e6302d853a7a4a03c74dcf3ebfed18807b872c6f4887365",
+    "freeze_v0_2_sha256": "7fbe8fe83f410acae85b5890ec4d32c39e54ce24d33dfd61c974cd235af976bb",
+    "instrument_sha256": "be752c975a6da03e9a0237aa7df09f38caf81a2e416b23584e3d86d998fa0834",
+    "pair_count": 9,
+    "plan_sha256": "3e57e122ed718372bbe89bca33c9103bc9f47caca83ce86436ac5bbe63cc64ad",
+    "preregistration_commit": "227354320680151789409ec8722a183a4e093596",
+    "preregistration_freeze_v0_1_sha256": "b6ed2b7648e9c9c7cdfc421b73030f1004c40c94358e8638cde99a6bc27e0e9d",
+    "preregistration_sha256": "a186e0fc3e46a2d277c5960b323ae9ffad8d012b5780264c595aab2996ec626e",
+    "provider_adapter_sha256": "c1c02303cec29eaef8cb96d1baeec735ef724d9c8a06e20a61b91388d4350339",
+    "request_count": 18,
+    "request_materialization_sha256": "02567faee5aa55e830207b271023bf555a6f02417433731319ab0a869020f96a",
+    "source_o006_instrument_sha256": "ddd069cf7317f86ad3c50b6e48291c4579efafb57a2a0ac3f420a5a4d7e080f8",
+    "source_o006_request_materialization_sha256": "8b45a5755dc0ccc4df8d58f84f2408ef6e06e1847bb9b4e4e11963f3255e17bd",
+    "treatment_binding_sha256": "35d4eedc13ae6d1c2e510bd0feb53e717a363f4dd71aa8c5d6954138b0bc158b",
+    "work_order": "OIC-DEFINITION-ONTOLOGY-SYNTACTIC-PREDICATE-CARRIER-DISCRIMINATION-007"
+  },
+  "source_probe_spec_sha256": "262445c71ca34f41dd9d173a978ebcaa7bd71df2f313f0c9b090b9fd4a8925d1",
+  "source_qualification_006_instrument_sha256": "72eb72aeb95f9727a9380902400c7d8e6891fba9447c30694193dad31f467674",
+  "status": "MATERIALIZED_OFFLINE_NOT_EXECUTED",
+  "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-009"
+}
