@@ -1,0 +1,199 @@
+{
+  "adjudicability_gate": {
+    "complete_rounds_required": 6,
+    "rule": "No recovery/stability classification may be evaluated unless all 18 planned observations terminate and all six rounds are complete. Otherwise classify INCOMPLETE_CHARACTERIZATION.",
+    "terminal_observations_required": 18
+  },
+  "architecture_change_authorized": false,
+  "canonicalization_performed": false,
+  "claim_ceiling": "This characterization may establish only whether bounded short-window recovery/stability was observed across 18 fresh provider-path observations on one NVIDIA endpoint/model using three exact frozen probes. It cannot establish persistent provider reliability, root cause, SLA-level availability, cross-provider generalization, Ontology 007 semantic behavior, a production interpretation rule, Institutional IR, architecture change, or independent validation.",
+  "decision_rule_precedence": [
+    "RECOVERY_NOT_ESTABLISHED_PROVIDER_PATH_FAILURE",
+    "RECOVERY_OBSERVED_WITH_LATENCY_DEGRADATION",
+    "BOUNDED_RECOVERY_STABILITY_OBSERVED",
+    "INCOMPLETE_CHARACTERIZATION"
+  ],
+  "decision_rules": {
+    "BOUNDED_RECOVERY_STABILITY_OBSERVED": "All 18 observations ACCEPTED, all expected markers valid, and every elapsed_seconds <=45.0.",
+    "INCOMPLETE_CHARACTERIZATION": "Fewer than 18 terminal observations or fewer than six complete rounds.",
+    "RECOVERY_NOT_ESTABLISHED_PROVIDER_PATH_FAILURE": "All 18 observations terminal and one or more observations has PROVIDER_ERROR, RESPONSE_MISMATCH, invalid marker, or other non-ACCEPTED outcome.",
+    "RECOVERY_OBSERVED_WITH_LATENCY_DEGRADATION": "All 18 observations ACCEPTED and marker-valid, but one or more elapsed_seconds exceeds 45.0."
+  },
+  "execution_plan": [
+    {
+      "ordinal": 1,
+      "position_in_round": 1,
+      "probe_id": "BASIC_TEXT",
+      "round_index": 1
+    },
+    {
+      "ordinal": 2,
+      "position_in_round": 2,
+      "probe_id": "JSON_MODE",
+      "round_index": 1
+    },
+    {
+      "ordinal": 3,
+      "position_in_round": 3,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "round_index": 1
+    },
+    {
+      "ordinal": 4,
+      "position_in_round": 1,
+      "probe_id": "BASIC_TEXT",
+      "round_index": 2
+    },
+    {
+      "ordinal": 5,
+      "position_in_round": 2,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "round_index": 2
+    },
+    {
+      "ordinal": 6,
+      "position_in_round": 3,
+      "probe_id": "JSON_MODE",
+      "round_index": 2
+    },
+    {
+      "ordinal": 7,
+      "position_in_round": 1,
+      "probe_id": "JSON_MODE",
+      "round_index": 3
+    },
+    {
+      "ordinal": 8,
+      "position_in_round": 2,
+      "probe_id": "BASIC_TEXT",
+      "round_index": 3
+    },
+    {
+      "ordinal": 9,
+      "position_in_round": 3,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "round_index": 3
+    },
+    {
+      "ordinal": 10,
+      "position_in_round": 1,
+      "probe_id": "JSON_MODE",
+      "round_index": 4
+    },
+    {
+      "ordinal": 11,
+      "position_in_round": 2,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "round_index": 4
+    },
+    {
+      "ordinal": 12,
+      "position_in_round": 3,
+      "probe_id": "BASIC_TEXT",
+      "round_index": 4
+    },
+    {
+      "ordinal": 13,
+      "position_in_round": 1,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "round_index": 5
+    },
+    {
+      "ordinal": 14,
+      "position_in_round": 2,
+      "probe_id": "BASIC_TEXT",
+      "round_index": 5
+    },
+    {
+      "ordinal": 15,
+      "position_in_round": 3,
+      "probe_id": "JSON_MODE",
+      "round_index": 5
+    },
+    {
+      "ordinal": 16,
+      "position_in_round": 1,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "round_index": 6
+    },
+    {
+      "ordinal": 17,
+      "position_in_round": 2,
+      "probe_id": "JSON_MODE",
+      "round_index": 6
+    },
+    {
+      "ordinal": 18,
+      "position_in_round": 3,
+      "probe_id": "BASIC_TEXT",
+      "round_index": 6
+    }
+  ],
+  "historical_observations_used_in_decision_rule": false,
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "live_run_executed": false,
+  "model_call_made": false,
+  "network_request_made": false,
+  "next_authorized_activity": "Implement, contract-test, materialize and statically freeze Recovery Stability 002 offline. Do not execute it live. Do not create Q010 and do not execute Ontology 007.",
+  "ontology_007_executed": false,
+  "ontology_007_execution_authorized": false,
+  "order_balance": {
+    "each_probe_each_position_count": 2,
+    "each_probe_total_observations": 6,
+    "method": "ALL_SIX_PERMUTATIONS_ONCE"
+  },
+  "planned_provider_calls": 18,
+  "probe_count_per_round": 3,
+  "probe_source": {
+    "exact_request_projection_required": true,
+    "probe_ids": [
+      "BASIC_TEXT",
+      "JSON_MODE",
+      "PRODUCTION_TOKEN_RESERVATION"
+    ],
+    "source_probe_spec_sha256": "262445c71ca34f41dd9d173a978ebcaa7bd71df2f313f0c9b090b9fd4a8925d1",
+    "source_request_materialization_sha256": "e725fbf588ff4f304ebb5f1fd48b5f6bad64e1bb54d06aa3e528396c9362a485",
+    "source_work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-009"
+  },
+  "provider": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "latency_headroom_seconds": 45.0,
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "timeout_seconds": 60.0
+  },
+  "provider_call_made": false,
+  "purpose": "Provider-path recovery/stability characterization only.",
+  "q009_observations_reused_as_new_observations": false,
+  "q009_rerun": false,
+  "q010_authorized": false,
+  "q010_created": false,
+  "round_count": 6,
+  "scientific_question": "Following the single Q009 JSON_MODE provider timeout, does the same NVIDIA endpoint/model exhibit bounded short-window recovery across repeated executions of the exact three frozen provider probes, or does the recovery window contain another provider-path failure or latency-headroom violation?",
+  "semantic_hypothesis": null,
+  "semantic_hypothesis_evaluated": false,
+  "starting_sha": "128b0f91c736b98d413e8d1f2338f81d03cd777c",
+  "status": "PREREGISTERED_NOT_IMPLEMENTED_NOT_EXECUTED",
+  "transport": {
+    "latency_headroom_seconds": 45.0,
+    "pacing_seconds": 4.0,
+    "replacement_observations_allowed": false,
+    "retries": 0,
+    "timeout_seconds": 60.0
+  },
+  "trigger": {
+    "execution_result_sha256": "aec9de532f179b0024eb4a0ea0574deb7a87bf82ea7a54dc45c5dc84b71f74c2",
+    "failed_probe": "JSON_MODE",
+    "failure_class": "PROVIDER_TIMEOUT",
+    "failure_elapsed_seconds": 60.075,
+    "instrument_sha256": "d7284716642467ace8ce4dd81bc5cbeb0b9219c69ef51ff9a61fa13e0d745363",
+    "live_log_sha256": "6c373696a189f010f7b10e325571dd0b5e82bfaeb69159d8544527885e9ca419",
+    "live_receipt_sha256": "239c2c44d5b9ac3d597b1a34e5be02ddc41beee4e41a525d9f183c88662997ec",
+    "post_run_adjudication_sha256": "4906070a3a826dbd56886bcea70ba3c62f9c6b8671d19ce56937a0bcb51c4587",
+    "request_materialization_sha256": "e725fbf588ff4f304ebb5f1fd48b5f6bad64e1bb54d06aa3e528396c9362a485",
+    "static_freeze_sha256": "b96a76e0f5496c47fec20e32acb58cc888965556b83b68d16028cb58b8c84634",
+    "status": "CLOSED_EXECUTED_NOT_QUALIFIED",
+    "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-009"
+  },
+  "work_order": "OIC-NVIDIA-PROVIDER-RECOVERY-STABILITY-002"
+}
