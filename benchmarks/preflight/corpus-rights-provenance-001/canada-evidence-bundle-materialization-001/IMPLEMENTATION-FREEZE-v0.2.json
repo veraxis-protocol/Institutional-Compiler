@@ -1,0 +1,89 @@
+{
+  "artifact_sha256": {
+    "BUNDLE-MATERIALIZATION-CONTRACT-v0.1.json": "72c387ba7d46d235432ce5fb8e41debd303c952064d808ae66c7521715a2aa07",
+    "PLAN-v0.1.md": "bf5984554eee59f700fb44fe1e3167ee54ad19680f0c66b4bc2127f5eabc1f72",
+    "PREREGISTRATION-FREEZE-v0.1.json": "8d714e990d03aea74be6cb975465e4cc2f30b49c7768901915774f30f485a7cf",
+    "candidate_002_execution_result": "64c4e39f74e10072dcf6bb360bb8c6edc568a723d2b7d2041dd4208206161a0c",
+    "candidate_002_post_run_adjudication": "39e75832402bd14cfcb4976a9ee10aab9ff24632517ba333062c2ff916bd167a",
+    "preserved_crosswalk_001_receipt": "77d8a67a71e7eb073fa3f43825a1113a53effd948f69e7abee952e06767dbb92",
+    "scripts/materialize_canada_evidence_bundles_001.py": "7550b3599c0f1e46fd12259ed795c8efeedf3e67399fda1d9fc22c89baab6651",
+    "tests/contract/test_canada_evidence_bundle_materialization_001.py": "d924cad57cfb330738dbf11adcfffb0e324b8f9e6c288bd8dc28d64841ec166e"
+  },
+  "base_preregistration_commit": "dc52826c6a28e9fd22ea468f694bf2a7f62dc782",
+  "bundle_contract": {
+    "bundle_version": "oic-evidence-bundle-0.1",
+    "canonical_serialization": "JSON_UTF8_SORT_KEYS_COMPACT_TRAILING_NEWLINE",
+    "evidentiary_priority_promotion": "FORBIDDEN",
+    "exact_reference_set_preservation": true,
+    "legal_sufficiency_promotion": "FORBIDDEN",
+    "underlying_evidence_rewrite": "FORBIDDEN"
+  },
+  "bundle_materialization_executed": false,
+  "candidate_002_adopted": false,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "control_envelope_authorized": false,
+  "declaration_fields_touched": [],
+  "extraction_algorithm": {
+    "deduplication": "EXACT_STRING_IDENTITY_ONLY",
+    "dereference_or_fetch": "FORBIDDEN",
+    "field_results_interface": "target_field/state/admissible_value_count/support",
+    "include": "NON_NULL_STRINGS_ONLY",
+    "normalization": "NONE",
+    "ordering": "LEXICOGRAPHIC_SERIALIZATION_ONLY_NO_AUTHORITY",
+    "source": "PRESERVED_CROSSWALK_001_RECEIPT_ONLY_AFTER_ONE_SHOT_AUTHORIZATION",
+    "supplement_or_infer": "FORBIDDEN",
+    "support_value_key": "mapped_value"
+  },
+  "freeze_id": "OIC-CANADA-EVIDENCE-BUNDLE-MATERIALIZATION-001-IMPLEMENTATION-FREEZE-v0.2",
+  "freeze_version": "v0.2",
+  "future_execution_policy": {
+    "execution_count": 1,
+    "formal_closure_may_copy_exact_observed_local_bundle_bytes": true,
+    "output_directory": "REPOSITORY_DOT_LOCAL_ONLY",
+    "permanent_started_lock_required": true,
+    "rerun_after_started": false,
+    "tracked_bundle_files_created_during_execution": false
+  },
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "next_authorized_step": "Independent verification of this static implementation freeze. After verification only, one read-only execution may inspect the preserved Crosswalk 001 receipt and write exactly two candidate bundle files under .local/. Do not create tracked bundle files until formal closure, and do not touch declaration fields or SOURCE_MANIFEST.csv.",
+  "ontology_007r1_execution_authorized": false,
+  "preserved_crosswalk_receipt_inspected_during_static_implementation": false,
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "real_tracked_bundles_created": false,
+  "real_underlying_evidence_reread": false,
+  "rego_compilation_authorized": false,
+  "repository_test_suite_validation": {
+    "classification": "PASS_WITH_TWO_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_deselection_count": 2,
+    "historical_tests_modified": false,
+    "semantic_scope_effect": "NONE",
+    "session_environment_recovery": {
+      "dependency_contract_gates_after_recovery": "PASS",
+      "reason": "TEMPORARY_PRIOR_VENV_MISSING_AND_ANACONDA_ENV_NOT_DEV_LOCKED",
+      "recovery_method": "FRESH_PYTHON_3_12_VENV_FROM_HASH_LOCKED_REQUIREMENTS_DEV_TXT",
+      "required": true,
+      "scientific_scope_effect": "NONE"
+    }
+  },
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "status": "INSTRUMENT_IMPLEMENTED_STATICALLY_FROZEN_NOT_EXECUTED",
+  "target_fields": {
+    "provenance_evidence": {
+      "expected_distinct_mapped_reference_count": 3,
+      "tracked_destination": "benchmarks/preflight/corpus-rights-provenance-001/evidence-bundles/CA-3/provenance_evidence-bundle-v0.1.json"
+    },
+    "rights_evidence": {
+      "expected_distinct_mapped_reference_count": 4,
+      "tracked_destination": "benchmarks/preflight/corpus-rights-provenance-001/evidence-bundles/CA-3/rights_evidence-bundle-v0.1.json"
+    }
+  }
+}
