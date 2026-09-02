@@ -1,0 +1,48 @@
+{
+  "artifact_sha256": {
+    "CROSSWALK-CONTRACT-v0.1.json": "f4517e2a927784a6e231da788eaf128a3394cad7e399d5473bb42c54ba352df3",
+    "PLAN-v0.1.md": "c3251d5dfec07206e0cf9af5832a872d15b746707f08b30d3e7e05e39536c9b2",
+    "SOURCE-MANIFEST-CONTRACT-v0.1.json": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+    "closed_inventory_execution_result": "e57b482e39f1cad3fb4de8f64724f249cc5155bd2b2874b38426503acc2d3283",
+    "closed_inventory_post_run_adjudication": "08b01e28943e71a6a090d8a5d0fdc26ecee6adb0a2589c9fba02395b99d7235f"
+  },
+  "base_inventory_closure_commit": "2fd064d574c14ea711519eec7e0cef560de93a2d",
+  "canonicalization_authorized": false,
+  "control_envelope_authorized": false,
+  "corroborating_markdown_inspection_authorized": false,
+  "crosswalk_complete_established": false,
+  "crosswalk_execution_authorized_now": false,
+  "freeze_id": "OIC-CANADA-EVIDENCE-TO-MANIFEST-CROSSWALK-001-FREEZE-v0.1",
+  "freeze_version": "v0.1",
+  "future_preserved_inventory_receipt_inspection_authorized_after_independent_verification_and_static_freeze": true,
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "manifest_mapping_established": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "next_authorized_step": "Independent verification of this preregistration. After verification, implement and statically freeze a deterministic crosswalk instrument using synthetic inventory-record fixtures only. Do not inspect the preserved real inventory receipt yet.",
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "real_evidence_reread_authorized": false,
+  "real_evidence_reread_by_this_work_order": false,
+  "record_level_inventory_receipt_inspected_by_this_work_order": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "source_xml_inspected_by_this_work_order": false,
+  "source_xml_inspection_authorized": false,
+  "status": "PREREGISTERED_NOT_EXECUTED",
+  "target_field_count": 12,
+  "unlisted_file_inspection_authorized": false,
+  "work_order": "OIC-CANADA-EVIDENCE-TO-MANIFEST-CROSSWALK-001"
+}

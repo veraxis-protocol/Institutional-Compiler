@@ -1,0 +1,188 @@
+{
+  "base_inventory_closure_commit": "2fd064d574c14ea711519eec7e0cef560de93a2d",
+  "candidate_key_allowlist_by_target": {
+    "acquired_or_generated_at": [
+      "retrieval_utc",
+      "capture_utc",
+      "evidence_capture_utc"
+    ],
+    "content_hash": [
+      "sha256",
+      "evidence_sha256",
+      "evidence_hashes"
+    ],
+    "local_path": [
+      "frozen_bytes_path",
+      "storage_location",
+      "receipt_path",
+      "evidence_bytes_location"
+    ],
+    "provenance_evidence": [
+      "provenance_url",
+      "receipt_path",
+      "receipt_id",
+      "evidence_references",
+      "evidence_bytes_location",
+      "evidence_sha256"
+    ],
+    "provenance_status": [
+      "authoritative_source_status",
+      "current_technical_disposition",
+      "ledger_status",
+      "captured",
+      "capture_note"
+    ],
+    "redistribution_status": [
+      "public_repository_redistribution_permission",
+      "modification_restrictions",
+      "source_specific_limitations",
+      "attribution_requirements"
+    ],
+    "rights_basis": [
+      "internal_research_use_basis",
+      "automated_retrieval_basis",
+      "disposition_basis",
+      "rights_notice_url",
+      "terms_of_use_url",
+      "copyright_owner"
+    ],
+    "rights_evidence": [
+      "evidence_references",
+      "rights_notice_url",
+      "terms_of_use_url",
+      "owner_disposition_reference",
+      "evidence_id",
+      "evidence_sha256"
+    ],
+    "rights_status": [
+      "rights_disposition",
+      "current_rights_disposition",
+      "reviewer_disposition",
+      "authoritative_source_status",
+      "freeze_disposition",
+      "ledger_status"
+    ],
+    "source_id": [
+      "source_id"
+    ],
+    "source_kind": [
+      "kind",
+      "rendering_role",
+      "acquisition_target_role"
+    ],
+    "source_locator": [
+      "official_url",
+      "official_urls",
+      "final_url",
+      "requested_url",
+      "acquisition_target_url",
+      "provenance_url",
+      "url"
+    ]
+  },
+  "candidate_key_rule": "Only exact key names frozen above may be considered for each target field in Crosswalk 001. Presence of a candidate key does not imply mapping, semantic equivalence, admissibility, or contract satisfaction.",
+  "canonicalization_authorized": false,
+  "claim_ceiling": "CROSSWALK_COMPLETE would establish only a deterministic, traceable evidence-vocabulary-to-manifest-field mapping for the exact CA-3 population under this frozen contract. It would not itself establish legal rights, provenance truth, copyright clearance, semantic correctness, benchmark validity, production readiness, enterprise readiness, or downstream compiler/runtime authorization. CROSSWALK_INCOMPLETE_FAIL_CLOSED would establish only that this frozen mapping contract cannot establish all required target fields.",
+  "closed_inventory_result_sha256": "e57b482e39f1cad3fb4de8f64724f249cc5155bd2b2874b38426503acc2d3283",
+  "conflict_rule": "If admissible candidate records support materially different values for the same target field and no explicit version/supersession relation in the preserved inventory record resolves the conflict, the field is CONTRADICTORY_NOT_ESTABLISHED.",
+  "contract_id": "OIC-CANADA-EVIDENCE-TO-MANIFEST-CROSSWALK-CONTRACT-001",
+  "contract_version": "v0.1",
+  "control_envelope_authorized": false,
+  "crosswalk_output_boundary": {
+    "local_one_shot_receipt_first": true,
+    "source_manifest_creation": "FORBIDDEN",
+    "source_manifest_population": "FORBIDDEN",
+    "tracked_crosswalk_during_future_execution": "FORBIDDEN_UNTIL_POST_EXECUTION_CLOSURE"
+  },
+  "crosswalk_success_rule": "CROSSWALK_COMPLETE only if all 12 target fields are ESTABLISHED. Otherwise CROSSWALK_INCOMPLETE_FAIL_CLOSED.",
+  "deterministic_derivation_policy": {
+    "boolean_to_redistribution_status": "May map TRUE->permitted and FALSE->not_permitted only if the underlying evidence field explicitly denotes public repository redistribution permission for CA-3. Otherwise NOT_ESTABLISHED.",
+    "general_rule": "A derived target value is admissible only when the transformation is deterministic, fully specified in the tracked crosswalk result, and the source evidence explicitly supplies every semantic premise needed for the target value. No unstated legal, institutional, or semantic assumption is allowed.",
+    "hash_selection": "A hash may map to content_hash only if the evidence explicitly binds that digest to the frozen CA-3 source object bytes. Evidence artifact hashes do not qualify.",
+    "status_translation": "Internal workflow/disposition labels may not be silently translated to rights_status or provenance_status. Any translation requires explicit evidence semantics showing equivalence to the manifest contract state.",
+    "timestamp_selection": "A timestamp may map to acquired_or_generated_at only if its documented role is the acquisition/generation event for CA-3. Capture/review/log timestamps do not qualify merely because they are RFC3339."
+  },
+  "establishment_rule": "A target field is ESTABLISHED only if exactly one admissible target value survives all frozen scope, provenance, transformation, nonpromotion, and conflict rules.",
+  "institutional_ir_authorized": false,
+  "mapping_admissibility": {
+    "artifact_git_blob_required": true,
+    "artifact_path_required": true,
+    "exact_key_required": true,
+    "exact_record_provenance_required": true,
+    "filename_only_scope_inference_authorized": false,
+    "government_authorship_inference_authorized": false,
+    "json_pointer_required": true,
+    "missing_value_inference_authorized": false,
+    "owner_assertion_alone_counts_as_rights_verification": false,
+    "permission_request_counts_as_permission": false,
+    "post_observation_candidate_key_expansion_authorized": false,
+    "public_availability_inference_authorized": false,
+    "silent_enum_translation_authorized": false,
+    "silent_synonym_substitution_authorized": false,
+    "source_scope_may_be_established_by": [
+      "exact source_id == CA-3 in the same or enclosing structural record",
+      "explicit applies_to_source_ids/source_ids relation containing CA-3",
+      "frozen single-source artifact identity where the artifact contract itself binds exactly to CA-3"
+    ],
+    "source_scope_to_ca3_required": true
+  },
+  "mapping_classes": [
+    "ESTABLISHED_DIRECT",
+    "ESTABLISHED_DETERMINISTIC_DERIVATION",
+    "MULTIPLE_CANDIDATES_NOT_ESTABLISHED",
+    "CONTRADICTORY_NOT_ESTABLISHED",
+    "MISSING_NOT_ESTABLISHED",
+    "OUT_OF_SCOPE_NOT_ESTABLISHED"
+  ],
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "population_inference_authorized": false,
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "real_evidence_reread_authorized": false,
+  "record_level_inspection_scope": {
+    "corroborating_markdown": "FORBIDDEN",
+    "network": "FORBIDDEN",
+    "real_evidence_files": "FORBIDDEN",
+    "receipt_sha256": "13032b0199bb1793bab0c246d0e687b1aa9942131fb19f321e9bf36fe408d0b9",
+    "source": "PRESERVED_ONE_SHOT_INVENTORY_RECEIPT_ONLY",
+    "source_xml": "FORBIDDEN",
+    "unlisted_files": "FORBIDDEN"
+  },
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_contract_sha256": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "source_xml_inspection_authorized": false,
+  "status": "FROZEN_NOT_EXECUTED",
+  "target_manifest_fields": [
+    "source_id",
+    "source_kind",
+    "source_locator",
+    "local_path",
+    "content_hash",
+    "rights_basis",
+    "rights_evidence",
+    "rights_status",
+    "provenance_evidence",
+    "provenance_status",
+    "redistribution_status",
+    "acquired_or_generated_at"
+  ],
+  "target_specific_nonpromotion_rules": {
+    "provenance_status": "A URL, receipt path, or captured flag alone cannot establish provenance_status=verified unless the evidence explicitly supports the provenance verification state for CA-3.",
+    "redistribution_status": "Internal-use permission cannot be promoted to public redistribution permission.",
+    "rights_basis": "Public availability, government source identity, automated retrieval permission, or internal research use do not by themselves establish a contract-allowed rights_basis.",
+    "rights_status": "Draft permission requests, pending counsel review, owner assertions, or absence of objection cannot establish rights_status=verified."
+  }
+}
