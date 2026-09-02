@@ -1,0 +1,50 @@
+{
+  "artifact_sha256": {
+    "CANDIDATE-CONTRACT-v0.1.json": "778f0a3501cd170f2cad222a828e4b1179667a1b6a2c86ca08876bd575cb470b",
+    "PLAN-v0.1.md": "bc7e72b66517363c35788190586d4306f1369a5062856e0941acddf95d756178",
+    "SOURCE-MANIFEST-CONTRACT-v0.1.json": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+    "closed_failure_surface_execution_result": "b29831c5685f238492826db3f0f737a125f86001defa4adfa894054aba27062e",
+    "closed_hypotheses_execution_result": "3159feb0de49253c43a318d8d1b84f2f11d19f3e74620b73d3158e6ff29186d7",
+    "closed_hypotheses_post_run_adjudication": "1d8be346802d4978db836cecd0db51abf466552fc840b900d3412933af77ecd8"
+  },
+  "base_hypotheses_closure_commit": "1de29529c40a044d637e78428b6ed4188dd877d9",
+  "candidate_adopted": false,
+  "candidate_evaluated": false,
+  "candidate_unresolved_field_count": 8,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "control_envelope_authorized": false,
+  "declaration_values_created": false,
+  "evidence_bundles_created": false,
+  "evidence_rewrite_authorized": false,
+  "explicit_declaration_field_count": 6,
+  "freeze_id": "OIC-CANADA-MANIFEST-RESOLUTION-CANDIDATE-002-FREEZE-v0.1",
+  "freeze_version": "v0.1",
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "local_crosswalk_receipt_inspected_by_this_work_order": false,
+  "manifest_contract_change_authorized": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "next_authorized_step": "Independent verification of this preregistration. After verification, implement and statically freeze a deterministic structural evaluator using tracked frozen inputs and synthetic evidence-bundle fixtures only. Do not create real declarations, evidence bundles, or SOURCE_MANIFEST.csv.",
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "real_evidence_reread_by_this_work_order": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "schema_mutation_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "PREREGISTERED_CANDIDATE_NOT_EVALUATED",
+  "tracked_evidence_bundle_reference_field_count": 2,
+  "work_order": "OIC-CANADA-MANIFEST-RESOLUTION-CANDIDATE-002"
+}
