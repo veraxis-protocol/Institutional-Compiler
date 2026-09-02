@@ -1,0 +1,60 @@
+{
+  "architecture_change_authorized": false,
+  "defect_established": {
+    "classification": "FROZEN_QUALIFICATION_ARTIFACT_HARD_BIND",
+    "future_q010_can_satisfy_frozen_o007": false,
+    "q009_formally_closed_not_qualified": true,
+    "q009_rerun_authorized": false,
+    "qualification_result_path_hardcoded": "benchmarks/provider-qualification/nvidia-nim-009/EXECUTION-RESULT-v0.1.json",
+    "qualification_work_order_hardcoded": "OIC-NVIDIA-PROVIDER-QUALIFICATION-009"
+  },
+  "future_provider_qualification_created": false,
+  "model_call_made": false,
+  "network_request_made_to_nvidia": false,
+  "only_authorized_implementation_delta": "Replace the hard-coded Q009 result-path/work-order dependency with an explicit target-bound qualification-artifact contract. No semantic request, treatment, specimen, ordering, adjudication, or claim-ceiling delta is authorized.",
+  "ontology_007r1_executed": false,
+  "ontology_007r1_execution_authorized": false,
+  "provider_call_made": false,
+  "q010_authorized": false,
+  "q010_created": false,
+  "qualification_artifact_contract": {
+    "architecture_change_authorized_must_be_false": true,
+    "artifact_must_be_git_tracked": true,
+    "implicit_latest_selection": false,
+    "independent_validation_claim_must_be_false": true,
+    "provider_qualification_established": true,
+    "qualification_artifact_may_be_q010_or_later": true,
+    "qualification_artifact_work_order_number_is_not_semantic_authority": true,
+    "qualification_rerun_authorized": false,
+    "repository_state_must_be_clean": true,
+    "required_live_disposition": "QUALIFIED",
+    "required_status": "CLOSED_EXECUTED_QUALIFIED",
+    "selection_mode": "EXPLICIT_PATH_ONLY",
+    "semantic_hypothesis_evaluated_must_be_false": true,
+    "semantic_hypothesis_must_be_null": true,
+    "semantic_successor_target_must_exactly_match_007r1": true,
+    "specific_qualification_number_hardcoded": false
+  },
+  "repair_class": "AUTHORIZATION_BINDING_ONLY",
+  "semantic_preservation_contract": {
+    "analysis_population": "ONTOLOGY_007_ONLY",
+    "arm_a": "UNCHANGED",
+    "arm_b": "UNCHANGED",
+    "claim_ceiling": "UNCHANGED",
+    "decision_rules": "UNCHANGED",
+    "pair_count": 9,
+    "production_interpretation_ruleset_changed": false,
+    "request_count": 18,
+    "request_order": "MUST_BE_IDENTICAL_TO_FROZEN_ONTOLOGY_007",
+    "semantic_hypothesis_changed": false,
+    "semantic_request_bytes": "MUST_BE_BYTE_IDENTICAL_TO_FROZEN_ONTOLOGY_007",
+    "specimens": [
+      "IIR-006",
+      "IIR-027",
+      "IIR-028"
+    ],
+    "treatment_guidance": "UNCHANGED"
+  },
+  "source_experiment": "OIC-DEFINITION-ONTOLOGY-SYNTACTIC-PREDICATE-CARRIER-DISCRIMINATION-007",
+  "work_order": "OIC-DEFINITION-ONTOLOGY-SYNTACTIC-PREDICATE-CARRIER-DISCRIMINATION-007R1"
+}
