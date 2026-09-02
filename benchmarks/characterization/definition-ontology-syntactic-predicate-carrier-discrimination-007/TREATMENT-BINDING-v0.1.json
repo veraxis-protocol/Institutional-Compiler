@@ -1,0 +1,63 @@
+{
+  "architecture_change_authorized": false,
+  "arm_a": {
+    "arm_id": "A_ROLE_GUIDED_B2",
+    "definition": "Exact frozen Ontology 006 B_ROLE_GUIDED_B2 request surface.",
+    "source_request_by_specimen": {
+      "IIR-006": {
+        "candidate_span": "The Board delegates approval of exceptions to the Risk Committee.",
+        "request_sha256": "9b6cca3e87710aebc17f071a27c61202c164a6df6d44cf8bccc7154e7d7636eb"
+      },
+      "IIR-027": {
+        "candidate_span": "Departments should consider quarterly reconciliation of suspense accounts.",
+        "request_sha256": "f2ec63bc8144da86fa8c7fdff51770912cc9d38efc949de3680876d12b974a59"
+      },
+      "IIR-028": {
+        "candidate_span": "The reviewer may request additional documentation.",
+        "request_sha256": "2c4076b3ad107bf176c0db0f18753646446359f6b0b28f81a84c1c100d5f7100"
+      }
+    }
+  },
+  "arm_b": {
+    "append_location": "SYSTEM_PROMPT_SUFFIX",
+    "appended_text": "\n\nFROZEN EXPERIMENTAL SYNTACTIC PREDICATE-CARRIER GUIDANCE:\n\nFor the action slot, identify the lexical verbal head that functions as the clause's governing predicate. If an auxiliary or modal governs that lexical verb, the governed lexical verb remains the action candidate. Do not promote a noun or nominalized event inside that verb's complement to action merely because it denotes an activity. Keep such nominal material in the object or complement unless the literal clause structure itself makes it the governing predicate. This is a source-syntactic carrier rule only. Do not infer or emit normative force.",
+    "appended_text_sha256": "e4504875d2a58b3abcf0925af356bac6fce2056d07d6158c7bedc0a1980f830f",
+    "arm_id": "B_SYNTAX_CARRIER_GUIDED_B2",
+    "definition": "Exact Arm A request plus only the frozen experimental syntactic predicate-carrier guidance."
+  },
+  "binding_id": "OIC-ONTOLOGY-007-SYNTACTIC-PREDICATE-CARRIER-TREATMENT-v0.1",
+  "experimental_guidance_only": true,
+  "forbidden_treatment_deltas": [
+    "candidate span",
+    "candidate identity",
+    "normative-force value",
+    "B1 output",
+    "gold expected answer",
+    "authority metadata",
+    "source identity",
+    "examples specific to IIR-027",
+    "provider",
+    "model",
+    "temperature",
+    "response schema",
+    "max token budget",
+    "slot vocabulary",
+    "production interpretation ruleset",
+    "canonicalization semantics",
+    "Institutional IR architecture"
+  ],
+  "model_call_made": false,
+  "network_request_made": false,
+  "production_ruleset_modified": false,
+  "provider_call_made": false,
+  "registered_interpretation_rule": false,
+  "source_commit": "cae2646a68fa3964a7d3ef9d4723374481431e4e",
+  "source_interpretation_ruleset_sha256": "8ba398eb20d346d66ce49c0f638babe2167930a07c3bd2946757fa41d6ccb114",
+  "source_manifest_sha256": "8b45a5755dc0ccc4df8d58f84f2408ef6e06e1847bb9b4e4e11963f3255e17bd",
+  "source_o006_instrument_sha256": "ddd069cf7317f86ad3c50b6e48291c4579efafb57a2a0ac3f420a5a4d7e080f8",
+  "status": "FROZEN_EXPERIMENTAL_TREATMENT_NOT_IMPLEMENTED_NOT_EXECUTED",
+  "treatment_delta_only": [
+    "append exact frozen syntactic predicate-carrier guidance"
+  ],
+  "work_order": "OIC-DEFINITION-ONTOLOGY-SYNTACTIC-PREDICATE-CARRIER-DISCRIMINATION-007"
+}

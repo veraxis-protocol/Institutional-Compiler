@@ -1,0 +1,246 @@
+{
+  "adjudicability_gate": {
+    "complete_pairs_required": 9,
+    "failure_disposition": "NOT_ADJUDICABLE_PROVIDER_OR_BOUNDARY_FAILURE",
+    "provider_requests_accepted_required": 18,
+    "provider_requests_required": 18,
+    "rule": "No scientific disposition may be evaluated unless all 18 frozen provider requests are accepted and all 9 paired comparisons are complete."
+  },
+  "analysis_population": "ONTOLOGY_007_ONLY",
+  "architecture_change_authorized": false,
+  "arms": {
+    "A_ROLE_GUIDED_B2": {
+      "condition": "Exact frozen Ontology 006 B_ROLE_GUIDED_B2 request.",
+      "prior_live_outputs_reused": false
+    },
+    "B_SYNTAX_CARRIER_GUIDED_B2": {
+      "condition": "Exact Arm A plus only the frozen experimental syntactic predicate-carrier guidance.",
+      "new_registered_ontology_rule": false,
+      "prior_live_outputs_reused": false
+    }
+  },
+  "canonicalization_performed": false,
+  "claim_ceiling": "This experiment may establish only bounded evidence about whether an explicit source-syntactic predicate-carrier constraint corrects the localized IIR-027 governing-verb versus event-nominalization selection failure for one model/provider and three frozen synthetic specimens. It does not establish root cause generally, a registered interpretation rule, canonical institutional meaning, interpretation authority, legal validity, a revised IR ontology, production architecture, cross-model/provider generalization, or independent validation.",
+  "decision_rule_precedence": [
+    "REGRESSION",
+    "SUPPORTS_SYNTACTIC_PREDICATE_CARRIER_HYPOTHESIS",
+    "REFUTES_SYNTACTIC_PREDICATE_CARRIER_HYPOTHESIS",
+    "INCONCLUSIVE"
+  ],
+  "decision_rules": {
+    "INCONCLUSIVE": "Adjudicable result satisfying none of the preceding rules.",
+    "REFUTES_SYNTACTIC_PREDICATE_CARRIER_HYPOTHESIS": "No regression; syntax-guided IIR-027 action is compatible at most 1/3 and there are zero paired improvements.",
+    "REGRESSION": "One or more treatment-only defects occur under the frozen safety endpoint.",
+    "SUPPORTS_SYNTACTIC_PREDICATE_CARRIER_HYPOTHESIS": "No regression; syntax-guided IIR-027 action is compatible 3/3; and at least 2/3 paired target observations are Arm-A-defect / Arm-B-compatible improvements."
+  },
+  "hypothesis": "When the admitted proposition contains both a clause-governing lexical verb and an embedded event nominalization, the current role descriptions underdetermine which predicate carrier belongs in the action slot. Appending only the frozen experimental source-syntactic predicate-carrier guidance will restore the governing IIR-027 action without introducing treatment-only non-force defects on the frozen controls.",
+  "hypothesis_generation": {
+    "candidate_span_omission_supported": false,
+    "generated_after_observing_predecessor": true,
+    "independent_discovery_claim": false,
+    "observation_used_for_hypothesis_selection": "IIR-027 contains both literal governing verb 'consider' and event nominalization 'reconciliation'; predecessor role-guided treatment selected 'reconciliation' in all three target runs."
+  },
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "interleaving": "Odd runs A then B; even runs B then A.",
+  "live_run_executed": false,
+  "model_call_made": false,
+  "network_request_made": false,
+  "next_authorized_activity": "Implement and contract-test Ontology 007 offline, materialize all 18 requests, prove Arm A exact parity against frozen Ontology 006 B_ROLE_GUIDED_B2 and prove Arm B differs only by the frozen treatment suffix, then statically freeze. Do not create Qualification 009 yet.",
+  "ontology_007_execution_authorized": false,
+  "planned_pairs": 9,
+  "planned_provider_requests": 18,
+  "predecessor": {
+    "execution_result_sha256": "b42fce2b10ddd25aceae00baf5c6e42dc14bf6b13625e95d78a75927e072834b",
+    "hypothesis_status": "REFUTED_WITHIN_FROZEN_SCOPE",
+    "post_run_adjudication_sha256": "3dfe364c9fc67ad4230c72c08437a07b4032ab12a37a6349958ee762f5e2dc9e",
+    "rerun_authorized": false,
+    "scientific_disposition": "REFUTES_PREDICATE_FRAME_ROLE_GUIDANCE",
+    "successor_experiment_automatically_authorized": false,
+    "work_order": "OIC-DEFINITION-ONTOLOGY-PREDICATE-FRAME-DISCRIMINATION-006R1"
+  },
+  "predecessor_live_outputs_reused_as_provider_responses": false,
+  "predecessor_live_outputs_reused_in_new_analysis": false,
+  "production_code_changed": false,
+  "production_interpretation_ruleset_changed": false,
+  "provider_call_made": false,
+  "provider_prerequisite": {
+    "formal_closure_required": true,
+    "fresh_qualification_required": true,
+    "must_bind_exact_frozen_ontology_007_artifact_set": true,
+    "qualification_009_created": false,
+    "qualification_009_executed": false,
+    "qualification_009_qualified": false,
+    "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-009"
+  },
+  "provider_request_plan": [
+    {
+      "arm": "A_ROLE_GUIDED_B2",
+      "ordinal": 1,
+      "run_index": 1,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "B_SYNTAX_CARRIER_GUIDED_B2",
+      "ordinal": 2,
+      "run_index": 1,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "B_SYNTAX_CARRIER_GUIDED_B2",
+      "ordinal": 3,
+      "run_index": 2,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "A_ROLE_GUIDED_B2",
+      "ordinal": 4,
+      "run_index": 2,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "A_ROLE_GUIDED_B2",
+      "ordinal": 5,
+      "run_index": 3,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "B_SYNTAX_CARRIER_GUIDED_B2",
+      "ordinal": 6,
+      "run_index": 3,
+      "specimen_id": "IIR-006"
+    },
+    {
+      "arm": "A_ROLE_GUIDED_B2",
+      "ordinal": 7,
+      "run_index": 1,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "B_SYNTAX_CARRIER_GUIDED_B2",
+      "ordinal": 8,
+      "run_index": 1,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "B_SYNTAX_CARRIER_GUIDED_B2",
+      "ordinal": 9,
+      "run_index": 2,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "A_ROLE_GUIDED_B2",
+      "ordinal": 10,
+      "run_index": 2,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "A_ROLE_GUIDED_B2",
+      "ordinal": 11,
+      "run_index": 3,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "B_SYNTAX_CARRIER_GUIDED_B2",
+      "ordinal": 12,
+      "run_index": 3,
+      "specimen_id": "IIR-027"
+    },
+    {
+      "arm": "A_ROLE_GUIDED_B2",
+      "ordinal": 13,
+      "run_index": 1,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "B_SYNTAX_CARRIER_GUIDED_B2",
+      "ordinal": 14,
+      "run_index": 1,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "B_SYNTAX_CARRIER_GUIDED_B2",
+      "ordinal": 15,
+      "run_index": 2,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "A_ROLE_GUIDED_B2",
+      "ordinal": 16,
+      "run_index": 2,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "A_ROLE_GUIDED_B2",
+      "ordinal": 17,
+      "run_index": 3,
+      "specimen_id": "IIR-028"
+    },
+    {
+      "arm": "B_SYNTAX_CARRIER_GUIDED_B2",
+      "ordinal": 18,
+      "run_index": 3,
+      "specimen_id": "IIR-028"
+    }
+  ],
+  "runs_per_specimen": 3,
+  "safety_endpoint": {
+    "control_specimens": [
+      "IIR-006",
+      "IIR-028"
+    ],
+    "plus_non_target_expected_slots_on_IIR_027": true,
+    "regression_rule": "Any B_SYNTAX_CARRIER_GUIDED_B2-only omission or incompatibility of a gold-expected non-force slot where paired A_ROLE_GUIDED_B2 is compatible is a REGRESSION."
+  },
+  "scientific_question": "Is the localized IIR-027 action-slot failure caused by competition between the clause-governing lexical verb and an embedded event nominalization, such that an explicit source-syntactic predicate-carrier constraint restores the governing action?",
+  "selected_specimens": [
+    {
+      "role": "STRUCTURAL_NOMINALIZATION_CONTROL",
+      "specimen_id": "IIR-006",
+      "structure": "governing lexical verb plus embedded event nominalization"
+    },
+    {
+      "role": "TARGET_MODAL_PLUS_EVENT_NOMINALIZATION",
+      "specimen_id": "IIR-027",
+      "structure": "modal auxiliary plus governing lexical verb plus embedded event nominalization"
+    },
+    {
+      "role": "MODAL_NON_NOMINALIZATION_CONTROL",
+      "specimen_id": "IIR-028",
+      "structure": "modal auxiliary plus governing lexical verb plus ordinary object"
+    }
+  ],
+  "source_artifacts": {
+    "interpretation_ruleset_sha256": "8ba398eb20d346d66ce49c0f638babe2167930a07c3bd2946757fa41d6ccb114",
+    "o006_instrument_sha256": "ddd069cf7317f86ad3c50b6e48291c4579efafb57a2a0ac3f420a5a4d7e080f8",
+    "o006_plan_sha256": "4ef705e97e74e4623251975fb0e71d9cd59e5eb380ab6b63ebb1d07571992816",
+    "o006_request_materialization_sha256": "8b45a5755dc0ccc4df8d58f84f2408ef6e06e1847bb9b4e4e11963f3255e17bd",
+    "treatment_binding_sha256": "35d4eedc13ae6d1c2e510bd0feb53e717a363f4dd71aa8c5d6954138b0bc158b"
+  },
+  "starting_sha": "cae2646a68fa3964a7d3ef9d4723374481431e4e",
+  "status": "PREREGISTERED_NOT_IMPLEMENTED_NOT_EXECUTED",
+  "target_endpoint": {
+    "gold_expected_value": "consider",
+    "gold_is_evaluator_only": true,
+    "slot": "action",
+    "specimen_id": "IIR-027",
+    "support_requires_paired_improvements_min": 2,
+    "support_requires_treatment_compatible": 3,
+    "support_requires_treatment_planned": 3
+  },
+  "transport_policy": {
+    "inherit_from_frozen_o006": true,
+    "maximum_retries_per_semantic_request": 1,
+    "nominal_provider_calls": 18,
+    "provider_call_ceiling": 36,
+    "retry_delay_seconds": 4,
+    "retry_only_on_exact": {
+      "error_message": "NVIDIA NIM connection timed out",
+      "error_type": "ModelProviderError"
+    },
+    "same_model_request_object_required": true,
+    "same_request_projection_sha256_required": true,
+    "timeout_seconds": 60
+  },
+  "work_order": "OIC-DEFINITION-ONTOLOGY-SYNTACTIC-PREDICATE-CARRIER-DISCRIMINATION-007"
+}
