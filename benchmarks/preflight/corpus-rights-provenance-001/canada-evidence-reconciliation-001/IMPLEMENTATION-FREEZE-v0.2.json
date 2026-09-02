@@ -1,0 +1,53 @@
+{
+  "adjudication_created": false,
+  "artifact_sha256": {
+    "EVIDENCE-ALLOWLIST-v0.1.json": "8dc6fac14ab38390231a7561668e39075ace9446c1d3736674f496818293ef95",
+    "PLAN-v0.1.md": "8b35004a1c6c02340bb9b55da68ad7caf406dbcf7c2f3e29f553fa5801bdb0c4",
+    "PREREGISTRATION-FREEZE-v0.1.json": "47e92034a8eaa899c82085a4f3ec2ddcaa922f8c798750358d618807b25790bd",
+    "SOURCE-MANIFEST-CONTRACT-v0.1.json": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+    "scripts/reconcile_canada_corpus_evidence_001.py": "7028725b310ee98f7ebf392b8c470a5403d71117758bf38aba69da0e98fa9f65",
+    "tests/contract/test_canada_corpus_evidence_reconciliation_001.py": "55023cca17f13fae0f23246b9d5eed2ba32d88b941a156a20bd4940113f8cc39"
+  },
+  "base_preregistration_commit": "9e70c338053afd8dff509adce7cc74e475a51487",
+  "canonicalization_authorized": false,
+  "control_envelope_authorized": false,
+  "execution_result_created": false,
+  "extraction_algorithm": {
+    "aliases_authorized": false,
+    "content_hash": "BYTE_SHA256_ONLY",
+    "corroborating_markdown_pass_critical_authorized": false,
+    "exact_contract_field_names_only": true,
+    "fuzzy_mapping_authorized": false,
+    "missing_value_inference_authorized": false,
+    "multiple_distinct_primary_values": "FAIL_CLOSED",
+    "nested_context_inheritance": true,
+    "nested_exact_source_id_overrides_parent": true,
+    "pass_critical_primary_evidence_only": true,
+    "required_source_context_value": "CA-3",
+    "source_context_key": "source_id"
+  },
+  "freeze_id": "OIC-CANADA-CORPUS-EVIDENCE-RECONCILIATION-001-IMPLEMENTATION-FREEZE-v0.2",
+  "freeze_version": "v0.2",
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "next_authorized_step": "Independent verification of this static implementation freeze. After verification only, execute the instrument exactly once with --execute-read-only against the frozen allowlisted primary evidence. Do not create SOURCE_MANIFEST.csv.",
+  "ontology_007r1_execution_authorized": false,
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "real_evidence_inspected_during_static_implementation": false,
+  "rego_compilation_authorized": false,
+  "repository_test_suite_validation": {
+    "classification": "PASS_WITH_TWO_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_deselection_count": 2,
+    "historical_tests_modified": false,
+    "semantic_scope_effect": "NONE"
+  },
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_xml_content_inspected_during_static_implementation": false,
+  "status": "INSTRUMENT_IMPLEMENTED_STATICALLY_FROZEN_NOT_EXECUTED"
+}
