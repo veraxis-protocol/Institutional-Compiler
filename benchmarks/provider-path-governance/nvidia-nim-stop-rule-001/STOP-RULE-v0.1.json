@@ -1,0 +1,143 @@
+{
+  "claim_ceiling": "This stop rule establishes only that additional near-identical qualification or characterization on the unchanged NVIDIA provider path is not scientifically justified for the purpose of releasing Ontology 007R1. It does not establish persistent NVIDIA instability, a provider failure rate, a backend root cause, a request-shape cause, max-token causation, Ontology 007R1 semantic correctness or incorrectness, canonical institutional meaning, Institutional IR, production readiness, architecture change, or cross-provider behavior.",
+  "evidence_basis": {
+    "qualification_009": {
+      "execution_result_sha256": "aec9de532f179b0024eb4a0ea0574deb7a87bf82ea7a54dc45c5dc84b71f74c2",
+      "failed_probe": "JSON_MODE",
+      "rerun_authorized": false,
+      "status": "CLOSED_EXECUTED_NOT_QUALIFIED"
+    },
+    "qualification_010": {
+      "accepted_marker_valid": 8,
+      "execution_result_sha256": "81c0e223b0c9f244872ca8c6141f69b7b9d5c846763d7cf9cb476bf24c428051",
+      "failed_probe": "BASIC_TEXT",
+      "post_run_adjudication_sha256": "161535fd8b9feddb252f7d7d4b9513d8649c45f79f8ec16bcaf9cd68021e8e02",
+      "rerun_authorized": false,
+      "status": "CLOSED_EXECUTED_NOT_QUALIFIED",
+      "terminal_observations": 9
+    },
+    "recovery_stability_002": {
+      "accepted_marker_valid": 16,
+      "execution_result_sha256": "b997d47e66652a2fc4ff99d7ae9d133cc2c28e2dcd49bc2b9a02bbd25ea22cf4",
+      "root_cause": "NOT_ESTABLISHED",
+      "status": "CLOSED_RECOVERY_NOT_ESTABLISHED_PROVIDER_PATH_FAILURE",
+      "terminal_observations": 18
+    },
+    "token_reservation_localization_001": {
+      "execution_result_sha256": "95787c569b12eac46fef54a918818a4cc74a68bb105970225fa004e010c1589e",
+      "max_tokens_association_established": false,
+      "root_cause": "NOT_ESTABLISHED",
+      "status": "CLOSED_SINGLE_FAILURE_ASYMMETRY_INCONCLUSIVE"
+    }
+  },
+  "material_reopen_conditions": [
+    {
+      "condition": "The provider endpoint identity, routing surface, or versioned service implementation materially changes.",
+      "id": "MATERIAL-ENDPOINT-CHANGE",
+      "required_evidence": "A tracked evidence artifact identifying the old and new provider-path state and why the change is relevant to the observed failure surface."
+    },
+    {
+      "condition": "The exact provider model identity or version changes.",
+      "id": "MATERIAL-MODEL-CHANGE",
+      "required_evidence": "A tracked model/provider compatibility record and a new separately preregistered qualification."
+    },
+    {
+      "condition": "The OIC NVIDIA provider adapter changes in a way that can materially affect transport, timeout, response handling, or request execution.",
+      "id": "MATERIAL-ADAPTER-CHANGE",
+      "required_evidence": "A new adapter digest plus tests establishing the bounded transport-relevant delta."
+    },
+    {
+      "condition": "The provider supplies independently inspectable evidence of an incident resolution or service change relevant to the observed timeout/provider-error surface.",
+      "id": "MATERIAL-PROVIDER-RESOLUTION",
+      "required_evidence": "A tracked source record identifying the provider statement and its relevance to this exact path."
+    },
+    {
+      "condition": "The controlled execution environment changes materially at the network, region, routing, client, or transport layer.",
+      "id": "MATERIAL-EXECUTION-PATH-CHANGE",
+      "required_evidence": "A frozen before/after environment description showing the specific path-level delta."
+    },
+    {
+      "condition": "A different provider or materially different endpoint is selected for the same semantic target.",
+      "id": "MATERIAL-ALTERNATIVE-PROVIDER-PATH",
+      "required_evidence": "A new provider-path work order and fresh target-bound qualification design."
+    }
+  ],
+  "model_call_made": false,
+  "network_request_made": false,
+  "next_authorized_activity": "Proceed with unrelated offline OIC work. The exact NVIDIA provider path remains blocked for Ontology 007R1 until a material reopen condition is established and independently verified.",
+  "non_reopen_conditions": [
+    "Passage of time alone.",
+    "Desire to obtain a passing qualification.",
+    "One or more ad-hoc successful calls.",
+    "A manual spot check.",
+    "Changing only probe ordering.",
+    "Changing only sample count.",
+    "Relaxing the timeout.",
+    "Relaxing the 45-second qualification headroom.",
+    "Relaxing the qualification decision rule.",
+    "Adding retries after a frozen failure.",
+    "Reusing accepted observations from Q009, RS002, Localization001, or Q010.",
+    "Running the same endpoint/model/adapter qualification again without a material change."
+  ],
+  "ontology_007r1_state": {
+    "execution_authorized": false,
+    "execution_block_reason": "PROVIDER_QUALIFICATION_PREREQUISITE_NOT_ESTABLISHED",
+    "implemented": true,
+    "semantic_hypothesis_evaluated": false,
+    "semantic_hypothesis_refuted": false,
+    "semantic_hypothesis_supported": false,
+    "semantic_requests_preserved_vs_o007": true,
+    "statically_frozen": true
+  },
+  "provider_call_made": false,
+  "reopen_protocol": {
+    "automatic_reauthorization": false,
+    "step_1": "Establish at least one material reopen condition with a tracked evidence artifact.",
+    "step_2": "Independently verify that the claimed material change is real and relevant to the provider path.",
+    "step_3": "Preregister a new successor qualification work order. No work-order number is pre-authorized by this stop rule.",
+    "step_4": "Freeze a fresh target-bound population before any live call.",
+    "step_5": "Execute at most once under the new frozen rule.",
+    "step_6": "Formally close and independently verify the successor result before considering 007R1 authorization."
+  },
+  "scientific_synthesis": {
+    "bounded_provider_stability_established": false,
+    "failure_observed_across_multiple_probe_types": true,
+    "failure_probe_examples": [
+      "JSON_MODE",
+      "PRODUCTION_TOKEN_RESERVATION",
+      "BASIC_TEXT"
+    ],
+    "max_tokens_4096_failure_association_established": false,
+    "ontology_007r1_refuted": false,
+    "ontology_007r1_supported": false,
+    "persistent_provider_failure_rate_established": false,
+    "provider_root_cause_established": false,
+    "semantic_hypothesis_evaluated": false,
+    "single_request_shape_failure_mechanism_established": false
+  },
+  "scope": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "blocked_semantic_target": "OIC-DEFINITION-ONTOLOGY-SYNTACTIC-PREDICATE-CARRIER-DISCRIMINATION-007R1",
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "provider": "nvidia-nim",
+    "target_static_commit": "55c4dcc09aafb5170c40dbb4b8f78cece1f8327c",
+    "target_static_freeze_sha256": "8411a24dc31f2975af51def6c2352ec284ec6490acdf3269859230412435050d"
+  },
+  "source_closure_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+  "status": "ACTIVE_PROVIDER_PATH_STOP_RULE",
+  "stop_rule": {
+    "ad_hoc_calls_for_pass_seeking_authorized": false,
+    "architecture_change_authorized": false,
+    "classification": "PROVIDER_PREREQUISITE_BLOCKED_PENDING_MATERIAL_CHANGE",
+    "historical_accepted_observations_may_be_reused_for_future_qualification": false,
+    "near_identical_provider_characterization_authorized": false,
+    "ontology_007r1_execution_authorized": false,
+    "production_interpretation_ruleset_change_authorized": false,
+    "q009_rerun_authorized": false,
+    "q010_rerun_authorized": false,
+    "q011_creation_authorized": false,
+    "semantic_result_may_be_inferred_from_provider_failures": false,
+    "unchanged_path_requalification_authorized": false
+  },
+  "work_order": "OIC-NVIDIA-PROVIDER-PATH-STOP-RULE-001"
+}
