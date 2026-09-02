@@ -1,0 +1,100 @@
+{
+  "accepted_observations_above_45_seconds": 0,
+  "adjudicable": true,
+  "architecture_change_authorized": false,
+  "arm_a": {
+    "accepted_marker_valid": 12,
+    "arm": "A_JSON_64",
+    "failure_count": 0,
+    "max_tokens": 64,
+    "observations": 12
+  },
+  "arm_b": {
+    "accepted_marker_valid": 11,
+    "arm": "B_JSON_4096",
+    "failure_count": 1,
+    "max_tokens": 4096,
+    "observations": 12
+  },
+  "canonicalization_performed": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "claim_ceiling": "This closure establishes only that one B_JSON_4096 response mismatch occurred in a complete 24-observation matched-pair window while A_JSON_64 had zero failures. The preregistered threshold for RESERVATION_SIZE_SPECIFIC_FAILURE_PATTERN was not met. The result does not establish an association between max_tokens=4096 and provider failure, NVIDIA backend root cause, persistent provider unreliability, SLA availability, cross-provider behavior, Ontology 007 semantic behavior, canonical institutional meaning, Institutional IR, architecture change, or independent validation.",
+  "complete_pairs": 12,
+  "evidence": {
+    "auxiliary_live_log": {
+      "available_at_closure": true,
+      "reconstructed": false,
+      "sha256": "98449b0c74c2dcc76b6fc3db6561c089cc06b0ec65fbb992865f79178916c9d3",
+      "status": "VERIFIED_AT_CLOSURE"
+    },
+    "primary_live_receipt": {
+      "available_at_closure": true,
+      "sha256": "e6d58f54786945e8be8e615b94843a2e8ac1a79c30e06836d4dfab7ed1f47c6d",
+      "status": "VERIFIED_AT_CLOSURE"
+    }
+  },
+  "failure_observations": [
+    {
+      "arm": "B_JSON_4096",
+      "elapsed_seconds": 10.447,
+      "execution_ordinal": 15,
+      "marker_valid": false,
+      "max_tokens": 4096,
+      "outcome": "RESPONSE_MISMATCH",
+      "pair_index": 8,
+      "position_in_pair": 1
+    }
+  ],
+  "frozen_threshold_for_reservation_size_specific_pattern": "B_JSON_4096 must contain at least two non-ACCEPTED or marker-invalid observations while A_JSON_64 contains zero.",
+  "historical_observations_reused_as_new_observations": false,
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "live_run_executed": true,
+  "localization_001_formally_closed": true,
+  "max_tokens_association_established": false,
+  "next_authorized_activity": "Formal closure only is completed here. Do not rerun Localization 001, create Q010, or execute Ontology 007. Any further provider-path work must be separately justified and preregistered.",
+  "ontology_007_executed": false,
+  "ontology_007_execution_authorized": false,
+  "paired_summary": {
+    "a_only_failure_pairs": 0,
+    "accepted_latency_by_arm": {
+      "A_JSON_64": {
+        "accepted_count": 12,
+        "maximum_seconds": 10.335,
+        "median_seconds": 0.8109999999999999,
+        "minimum_seconds": 0.514
+      },
+      "B_JSON_4096": {
+        "accepted_count": 11,
+        "maximum_seconds": 4.187,
+        "median_seconds": 0.708,
+        "minimum_seconds": 0.502
+      }
+    },
+    "b_only_failure_pairs": 1,
+    "failure_count_by_arm": {
+      "A_JSON_64": 0,
+      "B_JSON_4096": 1
+    },
+    "shared_failure_pairs": 0
+  },
+  "persistent_provider_unreliability_established": false,
+  "provider_bound_delta": "MAX_TOKENS_ONLY",
+  "q010_authorized": false,
+  "q010_created": false,
+  "recovery_stability_002_rerun": false,
+  "replacement_observations_allowed": false,
+  "rerun_authorized": false,
+  "reservation_size_specific_pattern_established": false,
+  "retries": 0,
+  "scientific_disposition": "SINGLE_FAILURE_ASYMMETRY_INCONCLUSIVE",
+  "semantic_hypothesis": null,
+  "semantic_hypothesis_evaluated": false,
+  "single_failure_asymmetry_established": true,
+  "static_freeze_commit": "847a7250fb054566e9f9488eaa63f4371f260b1d",
+  "static_freeze_v0_2_sha256": "3705cd87dba1789fd57166fe4c2a2601200a6cb619f390a0edb9fab52c1ac237",
+  "status": "CLOSED_SINGLE_FAILURE_ASYMMETRY_INCONCLUSIVE",
+  "successor_provider_qualification_authorized": false,
+  "terminal_observations": 24,
+  "work_order": "OIC-NVIDIA-PROVIDER-TOKEN-RESERVATION-LOCALIZATION-001"
+}
