@@ -1,0 +1,151 @@
+{
+  "architecture_change_authorized": false,
+  "balance_contract": {
+    "each_probe_position_1_count": 1,
+    "each_probe_position_2_count": 1,
+    "each_probe_position_3_count": 1,
+    "each_probe_total_observations": 3
+  },
+  "base_sha": "55c4dcc09aafb5170c40dbb4b8f78cece1f8327c",
+  "canonicalization_performed": false,
+  "claim_ceiling": "Immediate provider-path qualification for one NVIDIA endpoint/model and the exact statically frozen Ontology 007R1 target only. A QUALIFIED result establishes only that nine frozen probes in this one bounded window were accepted, marker-valid and within the 45-second headroom. It does not establish persistent provider reliability, SLA performance, max-token causation, backend root cause, Ontology 007R1 semantic correctness, canonical institutional meaning, Institutional IR, production readiness, architecture change, cross-provider generalization, or independent validation.",
+  "decision_precedence": [
+    "INCOMPLETE",
+    "NOT_QUALIFIED",
+    "DEGRADED",
+    "QUALIFIED"
+  ],
+  "decision_rule": {
+    "DEGRADED": "Exactly nine terminal observations; all nine ACCEPTED and marker-valid; one or more elapsed_seconds > 45.0.",
+    "INCOMPLETE": "Fewer than nine terminal observations or fewer than three complete rounds.",
+    "NOT_QUALIFIED": "Exactly nine terminal observations and any provider error, timeout, response mismatch, invalid marker, or other non-ACCEPTED observation.",
+    "QUALIFIED": "Exactly nine terminal observations; all nine ACCEPTED and marker-valid; every elapsed_seconds <= 45.0."
+  },
+  "formal_authorization_rule": "A Q010 live disposition never by itself authorizes Ontology 007R1. Only a formally closed, git-tracked Q010 execution result with status CLOSED_EXECUTED_QUALIFIED, live_disposition QUALIFIED, provider_qualification_established=true, rerun_authorized=false, semantic_hypothesis=null, semantic_hypothesis_evaluated=false, architecture_change_authorized=false, independent_validation_claim=false, and semantic_successor_target exactly equal to this frozen 007R1 descriptor can satisfy the 007R1 qualification-artifact contract. Independent verification of that closure commit is required before semantic execution.",
+  "fresh_provider_qualification": true,
+  "historical_qualification_observations_reused": false,
+  "independent_validation_claim": false,
+  "institutional_ir_constructed": false,
+  "localization_001_rerun": false,
+  "model_call_made": false,
+  "network_request_made": false,
+  "next_authorized_activity": "Implement, contract-test, materialize and statically freeze Q010 offline. Do not execute Q010 live and do not execute Ontology 007R1.",
+  "ontology_007r1_executed": false,
+  "ontology_007r1_execution_authorized": false,
+  "pacing_seconds": 4.0,
+  "planned_probe_count": 9,
+  "probe_schedule": [
+    {
+      "ordinal": 1,
+      "position": 1,
+      "probe_id": "BASIC_TEXT",
+      "round": 1
+    },
+    {
+      "ordinal": 2,
+      "position": 2,
+      "probe_id": "JSON_MODE",
+      "round": 1
+    },
+    {
+      "ordinal": 3,
+      "position": 3,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "round": 1
+    },
+    {
+      "ordinal": 4,
+      "position": 1,
+      "probe_id": "JSON_MODE",
+      "round": 2
+    },
+    {
+      "ordinal": 5,
+      "position": 2,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "round": 2
+    },
+    {
+      "ordinal": 6,
+      "position": 3,
+      "probe_id": "BASIC_TEXT",
+      "round": 2
+    },
+    {
+      "ordinal": 7,
+      "position": 1,
+      "probe_id": "PRODUCTION_TOKEN_RESERVATION",
+      "round": 3
+    },
+    {
+      "ordinal": 8,
+      "position": 2,
+      "probe_id": "BASIC_TEXT",
+      "round": 3
+    },
+    {
+      "ordinal": 9,
+      "position": 3,
+      "probe_id": "JSON_MODE",
+      "round": 3
+    }
+  ],
+  "probe_source": {
+    "historical_latencies_reused": false,
+    "historical_outcomes_reused": false,
+    "historical_responses_reused": false,
+    "request_projection_semantics": "BYTE_IDENTICAL_BY_PROBE_ID",
+    "source_request_materialization_sha256": "e725fbf588ff4f304ebb5f1fd48b5f6bad64e1bb54d06aa3e528396c9362a485",
+    "source_work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-009"
+  },
+  "probe_types": [
+    "BASIC_TEXT",
+    "JSON_MODE",
+    "PRODUCTION_TOKEN_RESERVATION"
+  ],
+  "provider": {
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "latency_headroom_seconds": 45.0,
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "provider_adapter_sha256": "c1c02303cec29eaef8cb96d1baeec735ef724d9c8a06e20a61b91388d4350339",
+    "timeout_seconds": 60.0
+  },
+  "provider_call_made": false,
+  "provider_evidence_synthesis_sha256": "0bfb663817a5c749eb52814779068eb216af51cff916132029d955d5f4b05b2c",
+  "provider_qualification_established": false,
+  "qualification_009_rerun": false,
+  "qualification_010_executed": false,
+  "qualification_010_implemented": false,
+  "qualification_010_live_execution_authorized": false,
+  "qualification_attempt_count": 1,
+  "recovery_stability_002_rerun": false,
+  "recovery_stability_observations_reused": false,
+  "replacement_probes_allowed": false,
+  "rerun_authorized": false,
+  "retries": 0,
+  "round_count": 3,
+  "semantic_hypothesis": null,
+  "semantic_hypothesis_evaluated": false,
+  "semantic_successor_target": {
+    "authorization_repair_binding_sha256": "a6acc0f22a7872d007f39cde8e8da662b12e6bde824869ee6fd9812858bb8b2d",
+    "contract_test_sha256": "873c716f55ea0005320866bd21765f3d930faeffb7e7a1aa3ff53945263a430c",
+    "freeze_v0_2_sha256": "8411a24dc31f2975af51def6c2352ec284ec6490acdf3269859230412435050d",
+    "instrument_sha256": "d3a65a906e3bb165458f0ca6fc0afc96f88d376d1d01bb20f577ab4a9189c830",
+    "pair_count": 9,
+    "plan_sha256": "7558595f9f5caca541b03dd65f9bfeb2dddd8f05138ec9b47c06764904ba785d",
+    "preregistration_commit": "9505b78eb58d38795ca1075b3c0b48414470977e",
+    "preregistration_freeze_v0_1_sha256": "c696e50eecd9d7416b5ab311dcfc1e41d01f75ec3b7aaa2826484f0cefd09027",
+    "preregistration_sha256": "1f550475326da56fb89df660de28967c149d7be7e67146a55e2aa8019a7f354b",
+    "qualification_selection_mode": "EXPLICIT_PATH_ONLY",
+    "request_materialization_sha256": "9faa8e9881b4bad0f9252cf0a3bdcf689e59e82357307c29488ab4ed5969bc57",
+    "semantic_request_count": 18,
+    "semantic_request_equivalence": "BYTE_IDENTICAL_TO_FROZEN_ONTOLOGY_007",
+    "source_o007_instrument_sha256": "be752c975a6da03e9a0237aa7df09f38caf81a2e416b23584e3d86d998fa0834",
+    "source_o007_request_materialization_sha256": "02567faee5aa55e830207b271023bf555a6f02417433731319ab0a869020f96a",
+    "specific_qualification_number_hardcoded": false,
+    "work_order": "OIC-DEFINITION-ONTOLOGY-SYNTACTIC-PREDICATE-CARRIER-DISCRIMINATION-007R1"
+  },
+  "status": "PREREGISTERED_NOT_IMPLEMENTED_NOT_EXECUTED",
+  "token_reservation_localization_observations_reused": false,
+  "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-010"
+}

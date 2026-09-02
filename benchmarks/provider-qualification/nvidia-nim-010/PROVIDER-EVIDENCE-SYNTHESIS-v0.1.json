@@ -1,0 +1,61 @@
+{
+  "architecture_change_authorized": false,
+  "claim_ceiling": "This synthesis justifies one fresh immediate provider-path qualification for the exact statically frozen Ontology 007R1 target. It does not establish provider stability, max-token causation, backend root cause, SLA reliability, semantic correctness, canonical institutional meaning, Institutional IR, architecture change, or independent validation.",
+  "evidence_synthesis": {
+    "bounded_provider_stability_established": false,
+    "fresh_exact_target_qualification_required_for_007r1": true,
+    "max_tokens_4096_failure_association_established": false,
+    "persistent_provider_failure_established": false,
+    "provider_root_cause_established": false,
+    "q009_can_authorize_007r1": false
+  },
+  "model_call_made": false,
+  "network_request_made": false,
+  "ontology_007r1_executed": false,
+  "ontology_007r1_execution_authorized": false,
+  "prior_evidence": {
+    "qualification_009": {
+      "accepted_marker_valid": 2,
+      "execution_result_sha256": "aec9de532f179b0024eb4a0ea0574deb7a87bf82ea7a54dc45c5dc84b71f74c2",
+      "failure": "JSON_MODE_PROVIDER_TIMEOUT",
+      "planned": 3,
+      "rerun_authorized": false,
+      "status": "CLOSED_EXECUTED_NOT_QUALIFIED"
+    },
+    "recovery_stability_002": {
+      "accepted_marker_valid": 16,
+      "execution_result_sha256": "b997d47e66652a2fc4ff99d7ae9d133cc2c28e2dcd49bc2b9a02bbd25ea22cf4",
+      "root_cause": "NOT_ESTABLISHED",
+      "status": "CLOSED_RECOVERY_NOT_ESTABLISHED_PROVIDER_PATH_FAILURE",
+      "terminal": 18
+    },
+    "token_reservation_localization_001": {
+      "arm_a_accepted": 12,
+      "arm_b_accepted": 11,
+      "b_only_failures": 1,
+      "causal_root_cause": "NOT_ESTABLISHED",
+      "execution_result_sha256": "95787c569b12eac46fef54a918818a4cc74a68bb105970225fa004e010c1589e",
+      "max_tokens_association_established": false,
+      "status": "CLOSED_SINGLE_FAILURE_ASYMMETRY_INCONCLUSIVE",
+      "terminal": 24
+    }
+  },
+  "provider_call_made": false,
+  "qualification_010_design_justified": true,
+  "qualification_010_executed": false,
+  "qualification_010_live_execution_authorized": false,
+  "qualification_010_rerun_authorized": false,
+  "semantic_hypothesis": null,
+  "semantic_hypothesis_evaluated": false,
+  "source_static_target_commit": "55c4dcc09aafb5170c40dbb4b8f78cece1f8327c",
+  "source_static_target_freeze_sha256": "8411a24dc31f2975af51def6c2352ec284ec6490acdf3269859230412435050d",
+  "synthesis_class": "PRE_QUALIFICATION_PROVIDER_EVIDENCE_SYNTHESIS",
+  "why_q010_is_not_q009_rerun": [
+    "Q009 is permanently closed and is not rerun.",
+    "Q009 targeted frozen Ontology 007, not the new exact 007R1 target.",
+    "007R1 exists because the old semantic executable contained an unsatisfiable hard-coded qualification binding.",
+    "Intervening recovery/localization observations are not reused as Q010 qualification observations.",
+    "Q010 uses a new preregistered nine-call balanced qualification population and is executed at most once."
+  ],
+  "work_order": "OIC-NVIDIA-PROVIDER-QUALIFICATION-010"
+}
