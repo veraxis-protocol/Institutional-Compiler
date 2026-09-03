@@ -1,0 +1,126 @@
+{
+  "accepted_publisher_declaration_evidence": [
+    {
+      "evidence_type": "HTTP_LINK_HEADER_CANONICAL",
+      "requirement": "Publisher-controlled HTTPS response contains exactly one Link relation with rel=canonical resolving to an HTTPS URL within the permitted publisher domain boundary."
+    },
+    {
+      "evidence_type": "HTML_LINK_REL_CANONICAL",
+      "requirement": "Publisher-controlled HTML contains exactly one <link rel=canonical href=...> resolving to an HTTPS URL within the permitted publisher domain boundary."
+    }
+  ],
+  "artifact_bindings": {
+    "navigation_seed_path": "benchmarks/corpus/canada/freeze-v0.1/INDEX.json",
+    "navigation_seed_sha256": "87649c72244d5a3f6d467258536db0bb7ef585907a30c7fca3056dfd7a976880",
+    "real_authority_acquisition_design_adjudication_sha256": "801fe467f6b1fe32978eb2d5a0250a30a826ff1fcf10f9babfe5f8d01d71daa7",
+    "real_authority_acquisition_design_result_sha256": "52a3290276e79c49690b3e39ddff388e1f7c1cc830deabfa7e031b27c52f92d4",
+    "synthetic_sufficiency_result_sha256": "0335208b2fae5d4ad7be72d258ff31132f8debf6d8806f343c0042d212546721"
+  },
+  "authority_channel_selected_for_manifest_population": false,
+  "base_real_authority_design_closure_commit": "39783fc61d3b1892757a110d51d22f545d85f949",
+  "candidate_002_adopted": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "contract_id": "OIC-CANADA-PUBLISHER-CANONICAL-LOCATOR-EVIDENCE-ACQUISITION-001",
+  "contract_version": "v0.1",
+  "cross_source_generality_established": false,
+  "declaration_values_created": false,
+  "execution_performed": false,
+  "explicitly_non_admissible_as_canonical_declaration": [
+    "acquisition target URL alone",
+    "acquisition final URL alone",
+    "successful HTTP retrieval",
+    "page title",
+    "publisher identity alone",
+    "navigation links",
+    "sitemap membership alone",
+    "search-engine canonicalization",
+    "third-party citations",
+    "JSON-LD @id alone",
+    "OpenGraph URL alone",
+    "redirect destination alone",
+    "repository reviewer judgment"
+  ],
+  "external_actor_contacted": false,
+  "fail_closed_rule": "Any missing, multiple, conflicting, cross-domain, non-HTTPS, oversized, unattributable, or non-preregistered evidence form yields NOT_ESTABLISHED or INCOMPLETE. The evaluator may not infer canonicality.",
+  "if_established_claim_ceiling": "An ESTABLISHED outcome would establish only that a pre-existing publisher-issued canonical-locator authority act was observed for CA-3/source_locator under the frozen evidence contract. It would not create or populate a manifest declaration value, establish source_kind, rights, provenance, redistribution permission, legal clearance, full manifest admissibility, or cross-source generality.",
+  "if_not_established_claim_ceiling": "A NOT_ESTABLISHED outcome would establish only that the bounded public publisher evidence acquisition did not find an admissible canonical declaration under this contract. It would not establish that no such authority act exists elsewhere.",
+  "legal_clearance_established": false,
+  "model_call_authorized": false,
+  "navigation_seed_policy": {
+    "future_allowed_semantic_fields": [
+      "CA-3.source_id",
+      "CA-3.target_url",
+      "CA-3.final_url"
+    ],
+    "path": "benchmarks/corpus/canada/freeze-v0.1/INDEX.json",
+    "promotion_to_authority_evidence": false,
+    "semantic_read_before_execution": false,
+    "sha256": "87649c72244d5a3f6d467258536db0bb7ef585907a30c7fca3056dfd7a976880",
+    "use": "NETWORK_NAVIGATION_SEED_ONLY_NOT_AUTHORITY_EVIDENCE"
+  },
+  "network_acquisition_policy": {
+    "active_interaction": false,
+    "actor_contact": false,
+    "authorized_during_preregistration": false,
+    "credentialed_requests": false,
+    "email_or_message_contact": false,
+    "form_submission": false,
+    "future_execution_requires_independent_static_verification": true,
+    "javascript_execution": false,
+    "maximum_redirects": 5,
+    "maximum_response_bytes": 2000000,
+    "method_allowlist": [
+      "HEAD",
+      "GET"
+    ],
+    "one_shot_required": true,
+    "permanent_started_lock_required": true,
+    "redirect_policy": "FAIL_CLOSED_ON_REDIRECT_OUTSIDE_SEED_REGISTRABLE_DOMAIN",
+    "scheme_allowlist": [
+      "https"
+    ]
+  },
+  "network_request_made": false,
+  "new_real_derivation_rule_created": false,
+  "new_real_world_evidence_acquired": false,
+  "possible_execution_outcomes": [
+    "PUBLISHER_CANONICAL_LOCATOR_AUTHORITY_EVIDENCE_ESTABLISHED_CA3",
+    "PUBLISHER_CANONICAL_LOCATOR_AUTHORITY_EVIDENCE_NOT_ESTABLISHED_CA3",
+    "ACQUISITION_INCOMPLETE_FAIL_CLOSED"
+  ],
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "real_authority_act_created": false,
+  "real_authority_established": false,
+  "research_question": "Does a pre-existing publisher-issued canonical-locator declaration exist in public official evidence for CA-3/source_locator that is sufficient to establish the external publisher canonical-locator authority act without contacting the publisher or OIC creating the act?",
+  "rights_established": false,
+  "selection_rule": {
+    "eligibility": [
+      "actor_origin == EXTERNAL",
+      "preexisting_internal_delegation_required == false",
+      "currently_real_authority_established == false",
+      "no actor contact required for evidence-discovery attempt"
+    ],
+    "ordering_metric": "ASCENDING_SYNTHETIC_CHANGED_LEVER_COUNT",
+    "population": "STRUCTURALLY_SUFFICIENT_EXTERNAL_CHANNEL_FAMILIES_ONLY",
+    "selected_family": "PUBLISHER_CANONICAL_LOCATOR_DECLARATION",
+    "selected_field": "source_locator",
+    "selected_synthetic_changed_lever_count": 1,
+    "selection_is_authority_determination": false,
+    "selection_is_legal_preference": false,
+    "selection_reason": "Bounded research-efficiency pilot: smallest structurally sufficient external intervention surface, with publisher identity already present in the frozen baseline and no actor contact required.",
+    "tie_breaker": "LEXICOGRAPHIC_CHANNEL_FAMILY_ID"
+  },
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "standing_evidence_requirements": {
+    "act_integrity_or_digest_binding": "Raw response headers/body and parsed evidence receipt are SHA-256 bound.",
+    "actor_identity_evidence": "Publisher-controlled domain provenance plus frozen publisher identity binding.",
+    "authority_basis_evidence_external_to_oic_evaluator": "The canonical declaration is emitted by the source publisher's controlled web response, not by OIC or a third party.",
+    "ca3_scope_evidence": "The admissible canonical relation is observed on the page reached from the exact CA-3 navigation seed.",
+    "completed_act_evidence": "Exactly one admissible canonical relation is present in the publisher-controlled response.",
+    "target_field_scope_evidence": "The evidence type is explicitly a canonical-locator declaration and therefore scoped only to source_locator."
+  },
+  "status": "PREREGISTERED_ACQUISITION_NOT_EXECUTED",
+  "success_rule": "ESTABLISHED only if exactly one preregistered admissible canonical declaration is observed from the publisher-controlled response, all six standing-evidence requirements are satisfied, zero acquisition findings occur, and no out-of-bound network behavior occurs."
+}
