@@ -1,0 +1,79 @@
+{
+  "acquisition_receipts": {
+    "FEDERAL-LAW-ORDER": {
+      "final_url": "https://laws-lois.justice.gc.ca/eng/regulations/SI-97-5/FullText.html",
+      "redirect_count": 0,
+      "requested_url": "https://laws-lois.justice.gc.ca/eng/regulations/SI-97-5/FullText.html",
+      "response_count": 1,
+      "status": 200
+    },
+    "JUS-CLEARANCE-FORM": {
+      "final_url": "https://www.justice.gc.ca/eng/terms-avis/copyright-droitdauteur.html",
+      "redirect_count": 0,
+      "requested_url": "https://www.justice.gc.ca/eng/terms-avis/copyright-droitdauteur.html",
+      "response_count": 1,
+      "status": 200
+    },
+    "JUS-TERMS": {
+      "final_url": "https://www.justice.gc.ca/eng/terms-avis/index.html",
+      "redirect_count": 0,
+      "requested_url": "https://www.justice.gc.ca/eng/terms-avis/index.html",
+      "response_count": 1,
+      "status": 200
+    },
+    "JUSTICE-LAWS-FAQ": {
+      "final_url": "https://laws-lois.justice.gc.ca/eng/FAQ/",
+      "redirect_count": 0,
+      "requested_url": "https://laws-lois.justice.gc.ca/eng/FAQ/",
+      "response_count": 1,
+      "status": 200
+    }
+  },
+  "authorization_receipt_sha256": "5fb87814850652612814077dded712eaacec838fd0f92a7d1f4607a49d320af1",
+  "candidate_actor_qualification_supported": true,
+  "disposition": "CANDIDATE_INSTITUTIONAL_ACTOR_QUALIFICATION_SUPPORTED_CA3",
+  "email_sent": false,
+  "evaluation": {
+    "candidate_actor": "Department of Justice Canada — Communications Branch — Copyright administrator",
+    "candidate_actor_qualification_supported": true,
+    "external_actor_contact_authorized": false,
+    "finding_count": 0,
+    "findings": [],
+    "outcome": "CANDIDATE_INSTITUTIONAL_ACTOR_QUALIFICATION_SUPPORTED_CA3",
+    "qualification_class": "publisher_or_crown-copyright-licensing_authority_with_direct_disposition_authority",
+    "qualification_findings": {
+      "actor_identity_explicit": true,
+      "authority_basis_reference_present": true,
+      "ca3_is_justice_laws_material": true,
+      "copyright_or_reproduction_role_explicit": true,
+      "exact_source_url_intake_supported": true,
+      "federal_law_reproduction_order_recognized": true,
+      "justice_material_scope_explicit": true
+    },
+    "redistribution_status_value_observed": null,
+    "rights_basis_value_observed": null,
+    "rights_disposition_request_send_authorized": false,
+    "source_manifest_population_authorized": false
+  },
+  "external_actor_contacted": false,
+  "form_submitted": false,
+  "public_get_requests_made": 4,
+  "raw_evidence_sha256": {
+    "FEDERAL-LAW-ORDER/response-00-body.bin": "d8f5b344839ae0541dc3f04a73116cfa730fa32ed543d0e35ecf53367e3c2609",
+    "FEDERAL-LAW-ORDER/response-00-headers.json": "e358733b4ff736ecf18c290a68f5072d00e02277d94a0e196867199959264e90",
+    "JUS-CLEARANCE-FORM/response-00-body.bin": "1ddded4f3c1176ebcb7340a996992ad5c905c4dcc9bcdb34746a1b693666e53a",
+    "JUS-CLEARANCE-FORM/response-00-headers.json": "43b32775923b80fdcb93627283167d5b7f9b10f50bab7d91816b0f9b498ade17",
+    "JUS-TERMS/response-00-body.bin": "f5d4c0ea43641706750bf48d3bc10c9bb2d6bdb04e02951e671a8928eafaec7b",
+    "JUS-TERMS/response-00-headers.json": "8845ad40749afe9c9093ea6a87c4824bc9b958be292cdeae30e996abc07666de",
+    "JUSTICE-LAWS-FAQ/response-00-body.bin": "d709fd263733d8f4f22901517b91015b23864b964fbca7603cec2f686f2aa314",
+    "JUSTICE-LAWS-FAQ/response-00-headers.json": "b5feaff22f6306251ee23294137c779784f86da46bd6b8a9719b42a9667d1d6d"
+  },
+  "redistribution_status_value_observed": null,
+  "rights_basis_value_observed": null,
+  "rights_disposition_request_sent": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "started_lock_sha256": "764394ca17ba0dc217ed0d2318dc11fc3a6e7f4db06237e61a35c2292b67a394",
+  "status": "PUBLIC_QUALIFICATION_EVIDENCE_ACQUISITION_EXECUTED",
+  "work_order": "OIC-CANADA-EXTERNAL-RIGHTS-ACTOR-QUALIFICATION-001"
+}
