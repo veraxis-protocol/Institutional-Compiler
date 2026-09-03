@@ -1,0 +1,77 @@
+{
+  "acquisition": {
+    "external_actor_contacted": false,
+    "navigation_seed_semantics_read": true,
+    "network_request_made": true,
+    "new_real_world_evidence_acquired": true,
+    "raw_evidence_sha256": {
+      "parsed-evaluation.json": "6f8d1d35105cffa8610dc69b0abccdf9313852023e46ae4d703d2813cbfa1775",
+      "response-00-body.bin": "6e89ad25847944ca2bd72bcbf02ec3d2942a234d373b6c10db44307e0fbdf2c3",
+      "response-00-headers.json": "75309cc803a70525b3ad3b6a6057a53014025337012b8a39624c4dd8bd5aba80"
+    },
+    "response_records_received": 1,
+    "seed_metadata": {
+      "final_url": "https://laws-lois.justice.gc.ca/eng/XML/SOR-87-402.xml",
+      "source_id": "CA-3",
+      "target_url": null
+    }
+  },
+  "authority_channel_selected_for_manifest_population": false,
+  "base_verified_static_commit": "d519a9caf2e22a9676b3f318c22251c6536330fc",
+  "candidate_002_adopted": false,
+  "canonical_declaration_evaluation": {
+    "accepted_evidence_forms": [
+      "HTTP_LINK_HEADER_CANONICAL",
+      "HTML_LINK_REL_CANONICAL"
+    ],
+    "admissible_canonical_declaration_count": 0,
+    "canonical_declarations": [],
+    "finding_count": 0,
+    "findings": [],
+    "standing_requirements": {
+      "act_integrity_or_digest_binding": true,
+      "actor_identity_evidence": false,
+      "authority_basis_evidence_external_to_oic_evaluator": false,
+      "ca3_scope_evidence": true,
+      "completed_act_evidence": false,
+      "target_field_scope_evidence": false
+    }
+  },
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "claim_ceiling": "This NOT_ESTABLISHED result establishes only that the bounded public publisher acquisition did not observe either preregistered admissible canonical declaration form for CA-3/source_locator. It does not establish that no canonical-locator authority act exists elsewhere, and it does not authorize inference from the acquisition URL, final URL, successful retrieval, redirects, publisher identity, XML content, or other metadata.",
+  "cross_source_generality_established": false,
+  "declaration_values_created": false,
+  "disposition": "PUBLISHER_CANONICAL_LOCATOR_AUTHORITY_EVIDENCE_NOT_ESTABLISHED_CA3",
+  "full_manifest_admissibility_established": false,
+  "legal_clearance_established": false,
+  "new_real_derivation_rule_created": false,
+  "next_scientific_seam": "The publisher canonical-locator public-evidence path is closed as NOT_ESTABLISHED for this bounded acquisition. Any successor must be separately preregistered and must not rerun this one-shot or infer a source_locator value from the final URL.",
+  "observed_result": {
+    "admissible_canonical_declaration_observed": false,
+    "bounded_public_publisher_acquisition_completed": true,
+    "publisher_canonical_locator_authority_evidence_established": false,
+    "publisher_response_observed": true
+  },
+  "one_shot": {
+    "authorization_receipt_sha256": "9554746e29eee74eb21e2003596fc6705966d1ffbfaf06dc7bbe6c9380f6dcaf",
+    "consumed": true,
+    "execution_log_sha256": "521a54ab7e85b34c4b4672d02dcaf44bd34907dc683951b21ae1573cdb45fe22",
+    "execution_receipt_sha256": "a3d734169f8f69b25ee477da6ce3ed4d6e9c020b026b5bcf816b0762bd696c81",
+    "live_result_sha256": "a7fc53d1b9aa8d2907c530598e835b79f7840c9c51625ab5aa4c3f7e7c2f0022",
+    "rerun_authorized": false,
+    "started_lock_sha256": "cd4358d5e6eb4915f3a7987fb7eee97bb2a7ae76983e4838c46814897c774789"
+  },
+  "provenance_established": false,
+  "real_authority_act_created_by_oic": false,
+  "real_authority_established": false,
+  "redistribution_permission_established": false,
+  "rights_established": false,
+  "selected_family": "PUBLISHER_CANONICAL_LOCATOR_DECLARATION",
+  "selected_field": "source_locator",
+  "source_kind_established": false,
+  "source_locator_value_established": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "status": "CLOSED_EXECUTED_PUBLISHER_CANONICAL_LOCATOR_AUTHORITY_EVIDENCE_NOT_ESTABLISHED_CA3",
+  "work_order": "OIC-CANADA-PUBLISHER-CANONICAL-LOCATOR-EVIDENCE-ACQUISITION-001"
+}
