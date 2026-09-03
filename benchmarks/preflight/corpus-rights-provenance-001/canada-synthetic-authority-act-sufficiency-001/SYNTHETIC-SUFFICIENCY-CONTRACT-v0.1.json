@@ -1,0 +1,326 @@
+{
+  "ablation_rule": "For each independent fact lever that was added or changed by a full-completion specimen, create one ablation restoring exactly that lever to its observed baseline while keeping the other intervention levers completed. This tests fact-lever minimality, not independent standing-dimension necessity.",
+  "ablation_success_rule": "A specimen satisfies the bounded fact-lever minimality hypothesis only if every independently representable added-lever ablation returns CHANNEL_NOT_ESTABLISHED. Coupled dimensions remain explicitly coupled.",
+  "artifact_bindings": {
+    "authority_discrimination_execution_result_sha256": "3ba392b85f937bcdfc4eb603b62448e4013bc7c91aa73bb4f5608b1c0c82c3b0",
+    "authority_gap_execution_result_sha256": "f8aeebbf5c5372258c9eda5a349e826d8e75661974b7d28ca385d634d7a2a046",
+    "authority_gap_post_run_adjudication_sha256": "005299cdd9bbbc6719d443abec6e9ab458977a29de68bdb585e988969a440b30",
+    "standing_discriminator_v0_2_sha256": "6d9be5309b64476fab9e0b0782a4ca67c2caf82f7c1af71c5658abbcb19275f0"
+  },
+  "authority_channel_selected": false,
+  "base_authority_gap_closure_commit": "46f808c9e78271719ee6864c1020505e556370e6",
+  "baseline_facts_sha_semantics": "The baseline is tracked closed-result data only. The six governance documents are not reopened.",
+  "baseline_facts_source": "normalized_authority_facts frozen in the closed Authority Discrimination 001 execution result",
+  "candidate_002_adopted": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "claim_ceiling": "This study may establish only whether synthetically completing the independent frozen v0.2 fact levers for each lowest-gap channel is sufficient for the frozen discriminator to recognize standing, and whether the independently representable added levers are necessary within that synthetic construction. It cannot establish real authority, lawful authority, a correct actor, declaration values, rights, provenance truth, legal clearance, SOURCE_MANIFEST admissibility, causal root cause, or cross-source generality.",
+  "contract_id": "OIC-CANADA-SYNTHETIC-AUTHORITY-ACT-SUFFICIENCY-CONTRACT-001",
+  "contract_version": "v0.1",
+  "cross_source_generality_established": false,
+  "declaration_values_created": false,
+  "execution_policy": {
+    "deterministic_offline": true,
+    "deterministic_replay_allowed": true,
+    "new_observational_evidence_consumed": false,
+    "one_shot_required": false
+  },
+  "forbidden_interventions": [
+    "creating a real authority act",
+    "naming a real actor as authorized without external establishment",
+    "creating a declaration value",
+    "creating or modifying SOURCE_MANIFEST.csv",
+    "modifying the frozen discriminator",
+    "modifying the frozen authority facts baseline",
+    "inventing a new real derivation rule",
+    "reading the six governance documents",
+    "reading .local one-shot receipts",
+    "using network/provider/model input"
+  ],
+  "full_completion_rule": "Starting from the frozen observed facts snapshot, set only the specimen's frozen synthetic_fact_levers to the values required for that channel to represent a complete synthetic authority act/rule. Do not alter unrelated facts.",
+  "interpretation_boundary": [
+    "synthetic PASS means structural sufficiency under the frozen discriminator only",
+    "synthetic PASS does not establish real standing",
+    "synthetic PASS does not establish legal authority",
+    "synthetic PASS does not identify the correct institutional actor",
+    "synthetic PASS does not authorize declaration materialization",
+    "ablation failure demonstrates only frozen fact-lever dependence",
+    "lowest-gap specimen inclusion does not imply preference"
+  ],
+  "intervention_unit": "FROZEN_DISCRIMINATOR_FACT_LEVER",
+  "legal_clearance_established": false,
+  "lever_coupling_rule": "A single v0.2 Facts lever may satisfy multiple recorded standing dimensions because the frozen discriminator intentionally couples some semantics. The study must not claim independent dimension necessity where the discriminator exposes only a coupled fact lever.",
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "new_real_derivation_rule_created": false,
+  "observed_facts_snapshot": {
+    "counsel_basis": false,
+    "counsel_disposition": false,
+    "counsel_fields": [],
+    "counsel_identity": false,
+    "existing_rules": [],
+    "institutional_admission": false,
+    "institutional_basis": false,
+    "institutional_fields": [],
+    "institutional_identity": false,
+    "manifest_fields": [
+      "provenance_status",
+      "redistribution_status",
+      "rights_basis",
+      "rights_status",
+      "source_kind",
+      "source_locator"
+    ],
+    "provenance_admission": false,
+    "provenance_basis": false,
+    "provenance_evidence_binding": true,
+    "provenance_identity": false,
+    "publisher_identity": true,
+    "publisher_locator_decl": false,
+    "rights_adjudication": false,
+    "rights_basis": false,
+    "rights_evidence_binding": true,
+    "rights_identity": false,
+    "source_origin_basis": false,
+    "source_origin_decl": false,
+    "source_origin_identity": false,
+    "temporal_scope": true
+  },
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ],
+    "synthetic_specimen_count": 9,
+    "target_field_count": 6
+  },
+  "positive_success_rule": "A specimen satisfies the structural sufficiency hypothesis only if the frozen v0.2 discriminator returns an authorized standing assessment for the exact target field/channel after full synthetic completion.",
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "real_authority_act_created": false,
+  "real_authority_established": false,
+  "rights_established": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "specimen_selection_rule": "Include every channel listed at the exact lowest_observed_gap_cardinality for each of the six target fields in the closed Authority Gap result. Ties are preserved. No channel is selected as preferred.",
+  "specimens": [
+    {
+      "channel_id": "PS-INSTITUTIONAL-PROVENANCE",
+      "channel_type": "INSTITUTIONAL_PROVENANCE_ADMISSION_DECLARATION",
+      "declaration_value": null,
+      "full_completion_hypothesis": "STANDING_RECOGNIZED_BY_FROZEN_DISCRIMINATOR",
+      "observed_gap_cardinality": 5,
+      "observed_gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "observed_missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "real_authority_act": false,
+      "single_lever_ablation_hypothesis": "STANDING_NOT_RECOGNIZED_WHEN_EACH_ADDED_INDEPENDENT_LEVER_IS_REMOVED",
+      "specimen_id": "SYN-PS-INSTITUTIONAL-PROVENANCE",
+      "synthetic_fact_levers": [
+        "provenance_admission",
+        "provenance_identity",
+        "provenance_basis"
+      ],
+      "target_field": "provenance_status"
+    },
+    {
+      "channel_id": "RD-EXTERNAL-RIGHTS-AUTHORITY",
+      "channel_type": "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION",
+      "declaration_value": null,
+      "full_completion_hypothesis": "STANDING_RECOGNIZED_BY_FROZEN_DISCRIMINATOR",
+      "observed_gap_cardinality": 5,
+      "observed_gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "observed_missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "real_authority_act": false,
+      "single_lever_ablation_hypothesis": "STANDING_NOT_RECOGNIZED_WHEN_EACH_ADDED_INDEPENDENT_LEVER_IS_REMOVED",
+      "specimen_id": "SYN-RD-EXTERNAL-RIGHTS-AUTHORITY",
+      "synthetic_fact_levers": [
+        "counsel_disposition",
+        "counsel_identity",
+        "counsel_basis",
+        "counsel_fields[target_field]"
+      ],
+      "target_field": "redistribution_status"
+    },
+    {
+      "channel_id": "RD-INSTITUTIONAL-ADJUDICATION",
+      "channel_type": "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION",
+      "declaration_value": null,
+      "full_completion_hypothesis": "STANDING_RECOGNIZED_BY_FROZEN_DISCRIMINATOR",
+      "observed_gap_cardinality": 5,
+      "observed_gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "observed_missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "real_authority_act": false,
+      "single_lever_ablation_hypothesis": "STANDING_NOT_RECOGNIZED_WHEN_EACH_ADDED_INDEPENDENT_LEVER_IS_REMOVED",
+      "specimen_id": "SYN-RD-INSTITUTIONAL-ADJUDICATION",
+      "synthetic_fact_levers": [
+        "rights_adjudication",
+        "rights_identity",
+        "rights_basis"
+      ],
+      "target_field": "redistribution_status"
+    },
+    {
+      "channel_id": "RB-EXTERNAL-RIGHTS-AUTHORITY",
+      "channel_type": "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION",
+      "declaration_value": null,
+      "full_completion_hypothesis": "STANDING_RECOGNIZED_BY_FROZEN_DISCRIMINATOR",
+      "observed_gap_cardinality": 5,
+      "observed_gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "observed_missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "real_authority_act": false,
+      "single_lever_ablation_hypothesis": "STANDING_NOT_RECOGNIZED_WHEN_EACH_ADDED_INDEPENDENT_LEVER_IS_REMOVED",
+      "specimen_id": "SYN-RB-EXTERNAL-RIGHTS-AUTHORITY",
+      "synthetic_fact_levers": [
+        "counsel_disposition",
+        "counsel_identity",
+        "counsel_basis",
+        "counsel_fields[target_field]"
+      ],
+      "target_field": "rights_basis"
+    },
+    {
+      "channel_id": "RB-INSTITUTIONAL-ADJUDICATION",
+      "channel_type": "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION",
+      "declaration_value": null,
+      "full_completion_hypothesis": "STANDING_RECOGNIZED_BY_FROZEN_DISCRIMINATOR",
+      "observed_gap_cardinality": 5,
+      "observed_gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "observed_missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "real_authority_act": false,
+      "single_lever_ablation_hypothesis": "STANDING_NOT_RECOGNIZED_WHEN_EACH_ADDED_INDEPENDENT_LEVER_IS_REMOVED",
+      "specimen_id": "SYN-RB-INSTITUTIONAL-ADJUDICATION",
+      "synthetic_fact_levers": [
+        "rights_adjudication",
+        "rights_identity",
+        "rights_basis"
+      ],
+      "target_field": "rights_basis"
+    },
+    {
+      "channel_id": "RS-INSTITUTIONAL-ADJUDICATION",
+      "channel_type": "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION",
+      "declaration_value": null,
+      "full_completion_hypothesis": "STANDING_RECOGNIZED_BY_FROZEN_DISCRIMINATOR",
+      "observed_gap_cardinality": 5,
+      "observed_gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "observed_missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "real_authority_act": false,
+      "single_lever_ablation_hypothesis": "STANDING_NOT_RECOGNIZED_WHEN_EACH_ADDED_INDEPENDENT_LEVER_IS_REMOVED",
+      "specimen_id": "SYN-RS-INSTITUTIONAL-ADJUDICATION",
+      "synthetic_fact_levers": [
+        "rights_adjudication",
+        "rights_identity",
+        "rights_basis"
+      ],
+      "target_field": "rights_status"
+    },
+    {
+      "channel_id": "SK-INSTITUTIONAL-ADMISSION",
+      "channel_type": "INSTITUTIONAL_ADMISSION_DECLARATION",
+      "declaration_value": null,
+      "full_completion_hypothesis": "STANDING_RECOGNIZED_BY_FROZEN_DISCRIMINATOR",
+      "observed_gap_cardinality": 5,
+      "observed_gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "observed_missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "real_authority_act": false,
+      "single_lever_ablation_hypothesis": "STANDING_NOT_RECOGNIZED_WHEN_EACH_ADDED_INDEPENDENT_LEVER_IS_REMOVED",
+      "specimen_id": "SYN-SK-INSTITUTIONAL-ADMISSION",
+      "synthetic_fact_levers": [
+        "institutional_admission",
+        "institutional_identity",
+        "institutional_basis",
+        "institutional_fields[target_field]"
+      ],
+      "target_field": "source_kind"
+    },
+    {
+      "channel_id": "SK-SOURCE-ORIGIN",
+      "channel_type": "EXPLICIT_SOURCE_ORIGIN_DECLARATION",
+      "declaration_value": null,
+      "full_completion_hypothesis": "STANDING_RECOGNIZED_BY_FROZEN_DISCRIMINATOR",
+      "observed_gap_cardinality": 5,
+      "observed_gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "observed_missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "real_authority_act": false,
+      "single_lever_ablation_hypothesis": "STANDING_NOT_RECOGNIZED_WHEN_EACH_ADDED_INDEPENDENT_LEVER_IS_REMOVED",
+      "specimen_id": "SYN-SK-SOURCE-ORIGIN",
+      "synthetic_fact_levers": [
+        "source_origin_decl",
+        "source_origin_identity",
+        "source_origin_basis"
+      ],
+      "target_field": "source_kind"
+    },
+    {
+      "channel_id": "SL-PUBLISHER-CANONICAL",
+      "channel_type": "PUBLISHER_CANONICAL_LOCATOR_DECLARATION",
+      "declaration_value": null,
+      "full_completion_hypothesis": "STANDING_RECOGNIZED_BY_FROZEN_DISCRIMINATOR",
+      "observed_gap_cardinality": 4,
+      "observed_gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "observed_missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "real_authority_act": false,
+      "single_lever_ablation_hypothesis": "STANDING_NOT_RECOGNIZED_WHEN_EACH_ADDED_INDEPENDENT_LEVER_IS_REMOVED",
+      "specimen_id": "SYN-SL-PUBLISHER-CANONICAL",
+      "synthetic_fact_levers": [
+        "publisher_locator_decl",
+        "publisher_identity"
+      ],
+      "target_field": "source_locator"
+    }
+  ],
+  "status": "FROZEN_HYPOTHESES_NOT_EXECUTED",
+  "synthetic_specimens_executed": false
+}

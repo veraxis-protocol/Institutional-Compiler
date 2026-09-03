@@ -1,0 +1,44 @@
+{
+  "artifact_sha256": {
+    "PLAN-v0.1.md": "8297a6a6d5f95ada8c3e0a363c0060eec5eb65370ba6d011d1f5cda2fab66e32",
+    "SYNTHETIC-SUFFICIENCY-CONTRACT-v0.1.json": "01fd348956c8251483de4d713c62a754508ef8304d2a1381c84cef616c0e8d7b",
+    "authority_discrimination_execution_result": "3ba392b85f937bcdfc4eb603b62448e4013bc7c91aa73bb4f5608b1c0c82c3b0",
+    "authority_gap_execution_result": "f8aeebbf5c5372258c9eda5a349e826d8e75661974b7d28ca385d634d7a2a046",
+    "authority_gap_post_run_adjudication": "005299cdd9bbbc6719d443abec6e9ab458977a29de68bdb585e988969a440b30",
+    "standing_discriminator_v0_2": "6d9be5309b64476fab9e0b0782a4ca67c2caf82f7c1af71c5658abbcb19275f0"
+  },
+  "authority_channel_selected": false,
+  "base_authority_gap_closure_commit": "46f808c9e78271719ee6864c1020505e556370e6",
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "declaration_values_created": false,
+  "freeze_id": "OIC-CANADA-SYNTHETIC-AUTHORITY-ACT-SUFFICIENCY-001-FREEZE-v0.1",
+  "freeze_version": "v0.1",
+  "input_scope": {
+    "closed_gap_result": true,
+    "closed_normalized_authority_facts": true,
+    "frozen_discriminator": true,
+    "local_receipts": false,
+    "network": false,
+    "six_governance_documents": false
+  },
+  "legal_clearance_established": false,
+  "new_real_derivation_rule_created": false,
+  "next_authorized_step": "Independent verification of this preregistration. After verification, implement and statically freeze deterministic synthetic full-completion and fact-lever ablation evaluators. Do not create real authority acts or declaration values.",
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ],
+    "synthetic_specimen_count": 9,
+    "target_field_count": 6
+  },
+  "provenance_established": false,
+  "real_authority_act_created": false,
+  "real_authority_established": false,
+  "rights_established": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "PREREGISTERED_HYPOTHESES_NOT_EXECUTED",
+  "synthetic_specimens_executed": false,
+  "work_order": "OIC-CANADA-SYNTHETIC-AUTHORITY-ACT-SUFFICIENCY-001"
+}
