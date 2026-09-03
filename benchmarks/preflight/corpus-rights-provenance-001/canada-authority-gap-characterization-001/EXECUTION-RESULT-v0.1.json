@@ -1,0 +1,664 @@
+{
+  "action_class_frequency_overall": {
+    "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED": 16,
+    "EXISTING_DETERMINISTIC_RULE_REQUIRED": 6,
+    "EXPLICIT_AUTHORITY_BASIS_REQUIRED": 16,
+    "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED": 15,
+    "EXPLICIT_CA3_SCOPE_REQUIRED": 16,
+    "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED": 16
+  },
+  "action_class_frequency_per_field": {
+    "provenance_status": {
+      "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED": 2,
+      "EXISTING_DETERMINISTIC_RULE_REQUIRED": 1,
+      "EXPLICIT_AUTHORITY_BASIS_REQUIRED": 2,
+      "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED": 2,
+      "EXPLICIT_CA3_SCOPE_REQUIRED": 2,
+      "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED": 2
+    },
+    "redistribution_status": {
+      "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED": 3,
+      "EXISTING_DETERMINISTIC_RULE_REQUIRED": 1,
+      "EXPLICIT_AUTHORITY_BASIS_REQUIRED": 3,
+      "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED": 3,
+      "EXPLICIT_CA3_SCOPE_REQUIRED": 3,
+      "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED": 3
+    },
+    "rights_basis": {
+      "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED": 3,
+      "EXISTING_DETERMINISTIC_RULE_REQUIRED": 1,
+      "EXPLICIT_AUTHORITY_BASIS_REQUIRED": 3,
+      "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED": 3,
+      "EXPLICIT_CA3_SCOPE_REQUIRED": 3,
+      "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED": 3
+    },
+    "rights_status": {
+      "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED": 2,
+      "EXISTING_DETERMINISTIC_RULE_REQUIRED": 1,
+      "EXPLICIT_AUTHORITY_BASIS_REQUIRED": 2,
+      "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED": 2,
+      "EXPLICIT_CA3_SCOPE_REQUIRED": 2,
+      "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED": 2
+    },
+    "source_kind": {
+      "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED": 3,
+      "EXISTING_DETERMINISTIC_RULE_REQUIRED": 1,
+      "EXPLICIT_AUTHORITY_BASIS_REQUIRED": 3,
+      "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED": 3,
+      "EXPLICIT_CA3_SCOPE_REQUIRED": 3,
+      "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED": 3
+    },
+    "source_locator": {
+      "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED": 3,
+      "EXISTING_DETERMINISTIC_RULE_REQUIRED": 1,
+      "EXPLICIT_AUTHORITY_BASIS_REQUIRED": 3,
+      "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED": 2,
+      "EXPLICIT_CA3_SCOPE_REQUIRED": 3,
+      "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED": 3
+    }
+  },
+  "authority_channel_selected": false,
+  "authority_established": false,
+  "candidate_002_adopted": false,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "channel_gap_count": 16,
+  "channel_gaps": [
+    {
+      "authorized_channel": false,
+      "channel_id": "PS-EXISTING-RULE",
+      "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION",
+      "descriptive_only": true,
+      "gap_cardinality": 6,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field|deterministic_replay_possible_if_rule_based",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXISTING_DETERMINISTIC_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "deterministic_replay_possible_if_rule_based"
+      ],
+      "preferred_channel": false,
+      "target_field": "provenance_status"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "PS-INSTITUTIONAL-PROVENANCE",
+      "channel_type": "INSTITUTIONAL_PROVENANCE_ADMISSION_DECLARATION",
+      "descriptive_only": true,
+      "gap_cardinality": 5,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "preferred_channel": false,
+      "target_field": "provenance_status"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "RD-EXISTING-RULE",
+      "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION",
+      "descriptive_only": true,
+      "gap_cardinality": 6,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field|deterministic_replay_possible_if_rule_based",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXISTING_DETERMINISTIC_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "deterministic_replay_possible_if_rule_based"
+      ],
+      "preferred_channel": false,
+      "target_field": "redistribution_status"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "RD-EXTERNAL-RIGHTS-AUTHORITY",
+      "channel_type": "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION",
+      "descriptive_only": true,
+      "gap_cardinality": 5,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "preferred_channel": false,
+      "target_field": "redistribution_status"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "RD-INSTITUTIONAL-ADJUDICATION",
+      "channel_type": "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION",
+      "descriptive_only": true,
+      "gap_cardinality": 5,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "preferred_channel": false,
+      "target_field": "redistribution_status"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "RB-EXISTING-RULE",
+      "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION",
+      "descriptive_only": true,
+      "gap_cardinality": 6,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field|deterministic_replay_possible_if_rule_based",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXISTING_DETERMINISTIC_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "deterministic_replay_possible_if_rule_based"
+      ],
+      "preferred_channel": false,
+      "target_field": "rights_basis"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "RB-EXTERNAL-RIGHTS-AUTHORITY",
+      "channel_type": "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION",
+      "descriptive_only": true,
+      "gap_cardinality": 5,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "preferred_channel": false,
+      "target_field": "rights_basis"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "RB-INSTITUTIONAL-ADJUDICATION",
+      "channel_type": "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION",
+      "descriptive_only": true,
+      "gap_cardinality": 5,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "preferred_channel": false,
+      "target_field": "rights_basis"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "RS-EXISTING-RULE",
+      "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION",
+      "descriptive_only": true,
+      "gap_cardinality": 6,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field|deterministic_replay_possible_if_rule_based",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXISTING_DETERMINISTIC_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "deterministic_replay_possible_if_rule_based"
+      ],
+      "preferred_channel": false,
+      "target_field": "rights_status"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "RS-INSTITUTIONAL-ADJUDICATION",
+      "channel_type": "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION",
+      "descriptive_only": true,
+      "gap_cardinality": 5,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "preferred_channel": false,
+      "target_field": "rights_status"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "SK-EXISTING-RULE",
+      "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION",
+      "descriptive_only": true,
+      "gap_cardinality": 6,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field|deterministic_replay_possible_if_rule_based",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXISTING_DETERMINISTIC_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "deterministic_replay_possible_if_rule_based"
+      ],
+      "preferred_channel": false,
+      "target_field": "source_kind"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "SK-INSTITUTIONAL-ADMISSION",
+      "channel_type": "INSTITUTIONAL_ADMISSION_DECLARATION",
+      "descriptive_only": true,
+      "gap_cardinality": 5,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "preferred_channel": false,
+      "target_field": "source_kind"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "SK-SOURCE-ORIGIN",
+      "channel_type": "EXPLICIT_SOURCE_ORIGIN_DECLARATION",
+      "descriptive_only": true,
+      "gap_cardinality": 5,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "preferred_channel": false,
+      "target_field": "source_kind"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "SL-EXISTING-RULE",
+      "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION",
+      "descriptive_only": true,
+      "gap_cardinality": 6,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field|deterministic_replay_possible_if_rule_based",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXISTING_DETERMINISTIC_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "deterministic_replay_possible_if_rule_based"
+      ],
+      "preferred_channel": false,
+      "target_field": "source_locator"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "SL-INSTITUTIONAL-ADMISSION",
+      "channel_type": "INSTITUTIONAL_ADMISSION_DECLARATION",
+      "descriptive_only": true,
+      "gap_cardinality": 5,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_identity_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_identity_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "preferred_channel": false,
+      "target_field": "source_locator"
+    },
+    {
+      "authorized_channel": false,
+      "channel_id": "SL-PUBLISHER-CANONICAL",
+      "channel_type": "PUBLISHER_CANONICAL_LOCATOR_DECLARATION",
+      "descriptive_only": true,
+      "gap_cardinality": 4,
+      "gap_signature": "authority_act_or_rule_explicit|authority_basis_explicit|authority_scope_covers_ca3|authority_scope_covers_target_field",
+      "implied_action_classes": [
+        "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+        "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+        "EXPLICIT_CA3_SCOPE_REQUIRED",
+        "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED"
+      ],
+      "missing_dimensions": [
+        "authority_act_or_rule_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field"
+      ],
+      "preferred_channel": false,
+      "target_field": "source_locator"
+    }
+  ],
+  "claim_ceiling": "This study may characterize only the structure of missing standing dimensions already observed in the closed CA-3 authority-discrimination result. It cannot establish authority, identify the legally correct actor, recommend or select a channel, create a declaration value or derivation rule, establish rights/provenance/legal clearance, authorize SOURCE_MANIFEST population, infer causal root cause, or establish cross-source generality.",
+  "control_envelope_authorized": false,
+  "cross_source_generality_established": false,
+  "declaration_values_created": false,
+  "deterministic_replay_authorized": true,
+  "disposition": "AUTHORITY_GAPS_CHARACTERIZED_CA3",
+  "finding_count": 0,
+  "findings": [],
+  "frequency_is_priority": false,
+  "held_out_validation_required_for_generalization": true,
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "lowest_gap_implies_preference": false,
+  "lowest_observed_gap_cardinality_per_field": {
+    "provenance_status": {
+      "channel_count_at_lowest_cardinality": 1,
+      "channel_ids_at_lowest_cardinality": [
+        "PS-INSTITUTIONAL-PROVENANCE"
+      ],
+      "descriptive_only": true,
+      "lowest_observed_gap_cardinality": 5,
+      "selection_or_preference_implied": false
+    },
+    "redistribution_status": {
+      "channel_count_at_lowest_cardinality": 2,
+      "channel_ids_at_lowest_cardinality": [
+        "RD-EXTERNAL-RIGHTS-AUTHORITY",
+        "RD-INSTITUTIONAL-ADJUDICATION"
+      ],
+      "descriptive_only": true,
+      "lowest_observed_gap_cardinality": 5,
+      "selection_or_preference_implied": false
+    },
+    "rights_basis": {
+      "channel_count_at_lowest_cardinality": 2,
+      "channel_ids_at_lowest_cardinality": [
+        "RB-EXTERNAL-RIGHTS-AUTHORITY",
+        "RB-INSTITUTIONAL-ADJUDICATION"
+      ],
+      "descriptive_only": true,
+      "lowest_observed_gap_cardinality": 5,
+      "selection_or_preference_implied": false
+    },
+    "rights_status": {
+      "channel_count_at_lowest_cardinality": 1,
+      "channel_ids_at_lowest_cardinality": [
+        "RS-INSTITUTIONAL-ADJUDICATION"
+      ],
+      "descriptive_only": true,
+      "lowest_observed_gap_cardinality": 5,
+      "selection_or_preference_implied": false
+    },
+    "source_kind": {
+      "channel_count_at_lowest_cardinality": 2,
+      "channel_ids_at_lowest_cardinality": [
+        "SK-INSTITUTIONAL-ADMISSION",
+        "SK-SOURCE-ORIGIN"
+      ],
+      "descriptive_only": true,
+      "lowest_observed_gap_cardinality": 5,
+      "selection_or_preference_implied": false
+    },
+    "source_locator": {
+      "channel_count_at_lowest_cardinality": 1,
+      "channel_ids_at_lowest_cardinality": [
+        "SL-PUBLISHER-CANONICAL"
+      ],
+      "descriptive_only": true,
+      "lowest_observed_gap_cardinality": 4,
+      "selection_or_preference_implied": false
+    }
+  },
+  "missing_dimension_frequency_overall": {
+    "authority_act_or_rule_explicit": 16,
+    "authority_basis_explicit": 16,
+    "authority_identity_explicit": 15,
+    "authority_scope_covers_ca3": 16,
+    "authority_scope_covers_target_field": 16,
+    "deterministic_replay_possible_if_rule_based": 6
+  },
+  "missing_dimension_frequency_per_channel_type": {
+    "EXISTING_CONTRACT_DEFINED_DERIVATION": {
+      "authority_act_or_rule_explicit": 6,
+      "authority_basis_explicit": 6,
+      "authority_identity_explicit": 6,
+      "authority_scope_covers_ca3": 6,
+      "authority_scope_covers_target_field": 6,
+      "deterministic_replay_possible_if_rule_based": 6
+    },
+    "EXPLICIT_SOURCE_ORIGIN_DECLARATION": {
+      "authority_act_or_rule_explicit": 1,
+      "authority_basis_explicit": 1,
+      "authority_identity_explicit": 1,
+      "authority_scope_covers_ca3": 1,
+      "authority_scope_covers_target_field": 1
+    },
+    "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION": {
+      "authority_act_or_rule_explicit": 2,
+      "authority_basis_explicit": 2,
+      "authority_identity_explicit": 2,
+      "authority_scope_covers_ca3": 2,
+      "authority_scope_covers_target_field": 2
+    },
+    "INSTITUTIONAL_ADMISSION_DECLARATION": {
+      "authority_act_or_rule_explicit": 2,
+      "authority_basis_explicit": 2,
+      "authority_identity_explicit": 2,
+      "authority_scope_covers_ca3": 2,
+      "authority_scope_covers_target_field": 2
+    },
+    "INSTITUTIONAL_PROVENANCE_ADMISSION_DECLARATION": {
+      "authority_act_or_rule_explicit": 1,
+      "authority_basis_explicit": 1,
+      "authority_identity_explicit": 1,
+      "authority_scope_covers_ca3": 1,
+      "authority_scope_covers_target_field": 1
+    },
+    "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION": {
+      "authority_act_or_rule_explicit": 3,
+      "authority_basis_explicit": 3,
+      "authority_identity_explicit": 3,
+      "authority_scope_covers_ca3": 3,
+      "authority_scope_covers_target_field": 3
+    },
+    "PUBLISHER_CANONICAL_LOCATOR_DECLARATION": {
+      "authority_act_or_rule_explicit": 1,
+      "authority_basis_explicit": 1,
+      "authority_scope_covers_ca3": 1,
+      "authority_scope_covers_target_field": 1
+    }
+  },
+  "missing_dimension_frequency_per_field": {
+    "provenance_status": {
+      "authority_act_or_rule_explicit": 2,
+      "authority_basis_explicit": 2,
+      "authority_identity_explicit": 2,
+      "authority_scope_covers_ca3": 2,
+      "authority_scope_covers_target_field": 2,
+      "deterministic_replay_possible_if_rule_based": 1
+    },
+    "redistribution_status": {
+      "authority_act_or_rule_explicit": 3,
+      "authority_basis_explicit": 3,
+      "authority_identity_explicit": 3,
+      "authority_scope_covers_ca3": 3,
+      "authority_scope_covers_target_field": 3,
+      "deterministic_replay_possible_if_rule_based": 1
+    },
+    "rights_basis": {
+      "authority_act_or_rule_explicit": 3,
+      "authority_basis_explicit": 3,
+      "authority_identity_explicit": 3,
+      "authority_scope_covers_ca3": 3,
+      "authority_scope_covers_target_field": 3,
+      "deterministic_replay_possible_if_rule_based": 1
+    },
+    "rights_status": {
+      "authority_act_or_rule_explicit": 2,
+      "authority_basis_explicit": 2,
+      "authority_identity_explicit": 2,
+      "authority_scope_covers_ca3": 2,
+      "authority_scope_covers_target_field": 2,
+      "deterministic_replay_possible_if_rule_based": 1
+    },
+    "source_kind": {
+      "authority_act_or_rule_explicit": 3,
+      "authority_basis_explicit": 3,
+      "authority_identity_explicit": 3,
+      "authority_scope_covers_ca3": 3,
+      "authority_scope_covers_target_field": 3,
+      "deterministic_replay_possible_if_rule_based": 1
+    },
+    "source_locator": {
+      "authority_act_or_rule_explicit": 3,
+      "authority_basis_explicit": 3,
+      "authority_identity_explicit": 2,
+      "authority_scope_covers_ca3": 3,
+      "authority_scope_covers_target_field": 3,
+      "deterministic_replay_possible_if_rule_based": 1
+    }
+  },
+  "new_derivation_rule_created": false,
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "failed_channel_count": 16,
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ],
+    "target_field_count": 6
+  },
+  "provenance_established": false,
+  "provider_model_network_calls": 0,
+  "q011_creation_authorized": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_authority_discrimination_result_sha256": "3ba392b85f937bcdfc4eb603b62448e4013bc7c91aa73bb4f5608b1c0c82c3b0",
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "status": "EXECUTED_DETERMINISTIC_CLOSED_RESULT_ANALYSIS",
+  "work_order": "OIC-CANADA-AUTHORITY-GAP-CHARACTERIZATION-001"
+}
