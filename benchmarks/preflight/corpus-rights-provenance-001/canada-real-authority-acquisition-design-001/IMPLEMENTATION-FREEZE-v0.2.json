@@ -1,0 +1,70 @@
+{
+  "artifact_sha256": {
+    "PLAN-v0.1.md": "f1e3416d14c873a4bfc478e99398ebf857bd868ec6dcfdf7fe3580be78ce3327",
+    "PREREGISTRATION-FREEZE-v0.1.json": "827cd4acb4df60093fd6e29c8713744387e557e749961af4288f2c159c05321d",
+    "REAL-AUTHORITY-ACQUISITION-DESIGN-CONTRACT-v0.1.json": "ae39d1be9b3907ce345f5b47de65297cb018e09313e61d1bbb2fb15a1568eabf",
+    "scripts/characterize_canada_real_authority_acquisition_design_001.py": "31c09832a89998e26f24243b37400363e92da2e397e7dc76309b2d9f01eb547e",
+    "synthetic_sufficiency_execution_result": "0335208b2fae5d4ad7be72d258ff31132f8debf6d8806f343c0042d212546721",
+    "synthetic_sufficiency_post_run_adjudication": "e49649c515ae59bda4254579548d1a99ca97fd241c29ac112e765a3c85538d81",
+    "tests/contract/test_canada_real_authority_acquisition_design_001.py": "66378d1581f0d6ad1f18bf251cce88440ea2b2dff713e6febb976dad71f21335"
+  },
+  "authority_channel_selected": false,
+  "base_preregistration_commit": "44f5202fd815efdf5757af8e9c2b9bdeb38be1b7",
+  "candidate_002_adopted": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "declaration_values_created": false,
+  "design_executed": false,
+  "external_actor_contacted": false,
+  "freeze_id": "OIC-CANADA-REAL-AUTHORITY-ACQUISITION-DESIGN-001-IMPLEMENTATION-FREEZE-v0.2",
+  "freeze_version": "v0.2",
+  "future_execution_policy": {
+    "deterministic_replay_allowed": true,
+    "external_actor_contact": false,
+    "internal_delegation_creation": false,
+    "local_receipts_read": false,
+    "network": false,
+    "new_observational_evidence_consumed": false,
+    "one_shot_required": false,
+    "real_authority_act_creation": false,
+    "six_governance_documents_read": false,
+    "tracked_result_creation_after_independent_static_verification": true
+  },
+  "internal_delegation_created": false,
+  "legal_clearance_established": false,
+  "new_real_derivation_rule_created": false,
+  "next_authorized_step": "Independent verification of this static freeze. After verification, execute deterministic acquisition-design characterization against the frozen synthetic-sufficiency closure. Do not contact external actors or create internal delegations or authority acts.",
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ],
+    "successful_channel_family_count": 6,
+    "successful_synthetic_specimen_count": 9,
+    "target_field_count": 6
+  },
+  "provenance_established": false,
+  "real_authority_act_created": false,
+  "real_authority_established": false,
+  "real_authority_evidence_acquired": false,
+  "repository_test_suite_validation": {
+    "classification": "PASS_WITH_THREE_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_historical_deselection_count": 3,
+    "historical_tests_modified": false,
+    "semantic_scope_effect": "NONE"
+  },
+  "rights_established": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "static_properties": {
+    "external_internal_partition_validation_supported": true,
+    "field_coverage_reconstruction_supported": true,
+    "minimum_cover_recomputation_supported": true,
+    "oic_self_issuance_fail_closed_supported": true,
+    "real_authority_evidence_vector_validation_supported": true,
+    "real_source_result_bytes_hash_verified": true,
+    "real_source_result_semantics_analyzed": false,
+    "six_family_reconstruction_supported": true,
+    "synthetic_promotion_fail_closed_supported": true
+  },
+  "status": "INSTRUMENT_STATICALLY_FROZEN_DESIGN_NOT_EXECUTED"
+}
