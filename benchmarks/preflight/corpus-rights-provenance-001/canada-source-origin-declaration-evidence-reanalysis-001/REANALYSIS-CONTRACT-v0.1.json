@@ -1,0 +1,141 @@
+{
+  "accepted_declaration_forms": [
+    {
+      "evidence_type": "HTTP_EXPLICIT_SOURCE_KIND_HEADER",
+      "rule": "A publisher-controlled raw HTTP response header whose field name case-insensitively equals Source-Kind or X-Source-Kind and whose OWS-trimmed value case-insensitively equals exactly one frozen enum token: public or synthetic."
+    },
+    {
+      "evidence_type": "MARKUP_EXPLICIT_SOURCE_KIND_ELEMENT",
+      "rule": "An XML/HTML element whose local name exactly equals one of source_kind, source-kind, sourceKind and whose text value, after XML/HTML character decoding and outer-whitespace trimming only, case-insensitively equals public or synthetic."
+    },
+    {
+      "evidence_type": "MARKUP_EXPLICIT_SOURCE_KIND_ATTRIBUTE",
+      "rule": "An XML/HTML attribute whose local name exactly equals one of source_kind, source-kind, sourceKind and whose value, after character decoding and outer-whitespace trimming only, case-insensitively equals public or synthetic."
+    },
+    {
+      "evidence_type": "HTML_META_EXPLICIT_SOURCE_KIND",
+      "rule": "An HTML meta element with name or property exactly equal to one of source_kind, source-kind, sourceKind and content exactly equal after outer-whitespace trimming, case-insensitively, to public or synthetic."
+    },
+    {
+      "evidence_type": "EXACT_SOURCE_KIND_LABEL_VALUE",
+      "rule": "Publisher-controlled body text contains an exact standalone label-value statement using source_kind, source-kind, or source kind, followed by ':' or '=', whose complete value token is exactly public or synthetic. No semantic synonym mapping is allowed."
+    }
+  ],
+  "authority_channel_selected_for_manifest_population": false,
+  "base_prior_acquisition_closure_commit": "7241ef1d30ae609e9ffd667664096ca930e6e91f",
+  "cardinality_and_conflict_rule": {
+    "conflicting_values": "REANALYSIS_INCOMPLETE_FAIL_CLOSED",
+    "exactly_one_admissible_declaration": "Evaluate all six standing requirements; ESTABLISHED only if all pass.",
+    "multiple_admissible_declarations": "REANALYSIS_INCOMPLETE_FAIL_CLOSED even if values are identical; act identity is ambiguous.",
+    "zero_admissible_declarations": "SOURCE_ORIGIN_DECLARATION_AUTHORITY_EVIDENCE_NOT_ESTABLISHED_CA3"
+  },
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "contract_id": "OIC-CANADA-SOURCE-ORIGIN-DECLARATION-EVIDENCE-REANALYSIS-001",
+  "contract_version": "v0.1",
+  "cross_source_generality_established": false,
+  "declaration_value_created_by_oic": false,
+  "execution_policy": {
+    "deterministic_replay_allowed": true,
+    "network_authorized": false,
+    "new_observational_evidence_consumed": false,
+    "one_shot_required": false,
+    "provider_model_calls_authorized": false,
+    "raw_response_semantic_read_after_independent_static_verification": true,
+    "raw_response_semantic_read_authorized_now": false
+  },
+  "explicitly_non_admissible": [
+    "HTTP Content-Type or MIME type",
+    "XML or HTML serialization format",
+    ".xml or other filename suffix",
+    "government-domain hosting by itself",
+    "publisher identity by itself",
+    "successful public HTTP retrieval",
+    "public accessibility",
+    "the prior final_url",
+    "redirect history",
+    "document title",
+    "root element such as Regulation",
+    "the words official, regulation, statute, law, government, or Canada without an explicit source_kind label",
+    "OpenGraph metadata not explicitly keyed source_kind/source-kind/sourceKind",
+    "JSON-LD type or @id not explicitly keyed source_kind/source-kind/sourceKind",
+    "OIC/reviewer classification",
+    "mapping official to public",
+    "mapping government-hosted to public",
+    "mapping non-synthetic-looking content to public"
+  ],
+  "external_actor_contacted": false,
+  "frozen_input_bindings": {
+    "prior_acquisition_adjudication_sha256": "0778124e18dc7eb6b16b3b411282e8882c0259fb6ec3dec8397785f45ceb294f",
+    "prior_acquisition_result_sha256": "f796371b8ec92ad491d0f5bd2b8163e25974fbc1fc80cd117c427407d639a775",
+    "prior_execution_receipt_sha256": "a3d734169f8f69b25ee477da6ce3ed4d6e9c020b026b5bcf816b0762bd696c81",
+    "prior_parsed_canonical_evaluation_sha256": "6f8d1d35105cffa8610dc69b0abccdf9313852023e46ae4d703d2813cbfa1775",
+    "prior_raw_response_body_sha256": "6e89ad25847944ca2bd72bcbf02ec3d2942a234d373b6c10db44307e0fbdf2c3",
+    "prior_raw_response_headers_sha256": "75309cc803a70525b3ad3b6a6057a53014025337012b8a39624c4dd8bd5aba80",
+    "real_authority_design_result_sha256": "52a3290276e79c49690b3e39ddff388e1f7c1cc830deabfa7e031b27c52f92d4",
+    "source_manifest_contract_sha256": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+    "synthetic_sufficiency_result_sha256": "0335208b2fae5d4ad7be72d258ff31132f8debf6d8806f343c0042d212546721"
+  },
+  "if_established_claim_ceiling": "An ESTABLISHED result may establish only that the already-acquired publisher/content-issuer response contains one explicit source_kind declaration with a literal frozen enum value and that all six frozen standing requirements are satisfied for CA-3/source_kind. It may record the externally declared value as observed. It may not claim OIC created that value, may not populate SOURCE_MANIFEST.csv, and does not establish source_locator, rights, provenance, redistribution permission, legal clearance, full manifest admissibility, causal root cause, or generality.",
+  "if_not_established_claim_ceiling": "A NOT_ESTABLISHED result establishes only that this preregistered secondary analysis of the exact frozen response did not find an admissible explicit source_kind declaration. It does not establish that no such declaration exists elsewhere or authorize inference of public from government hosting, XML format, accessibility, or the final URL.",
+  "input_scope": {
+    "new_network_acquisition": false,
+    "prior_one_shot_rerun": false,
+    "prior_receipt_semantics_read": false,
+    "prior_response_already_acquired": true,
+    "raw_body_semantics_read_before_execution": false,
+    "raw_headers_semantics_read_before_execution": false,
+    "response_record_count": 1,
+    "source_id": "CA-3"
+  },
+  "legal_clearance_established": false,
+  "new_real_world_evidence_acquired": false,
+  "possible_outcomes": [
+    "SOURCE_ORIGIN_DECLARATION_AUTHORITY_EVIDENCE_ESTABLISHED_CA3",
+    "SOURCE_ORIGIN_DECLARATION_AUTHORITY_EVIDENCE_NOT_ESTABLISHED_CA3",
+    "SOURCE_ORIGIN_DECLARATION_REANALYSIS_INCOMPLETE_FAIL_CLOSED"
+  ],
+  "provenance_established": false,
+  "raw_response_semantics_read": false,
+  "reanalysis_executed": false,
+  "redistribution_permission_established": false,
+  "research_question": "Does the already-frozen publisher-controlled CA-3 response contain a completed, attributable source-origin declaration explicitly scoped to source_kind and literally declaring exactly one frozen allowed value (public or synthetic), sufficient under the frozen external source-origin authority family without OIC inferring the value?",
+  "rights_established": false,
+  "selection_rule": {
+    "excluded_closed_family": "PUBLISHER_CANONICAL_LOCATOR_DECLARATION",
+    "next_unselected_changed_lever_count": 4,
+    "next_unselected_external_family": "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION",
+    "ordering_metric": "ASCENDING_SYNTHETIC_CHANGED_LEVER_COUNT",
+    "population": "REMAINING_STRUCTURALLY_SUFFICIENT_EXTERNAL_CHANNEL_FAMILIES_AFTER_CLOSED_CANONICAL_PATH",
+    "selected_changed_lever_count": 3,
+    "selected_family": "EXPLICIT_SOURCE_ORIGIN_DECLARATION",
+    "selected_field": "source_kind",
+    "selection_is_authority_determination": false,
+    "selection_is_legal_preference": false,
+    "tie_breaker": "LEXICOGRAPHIC_CHANNEL_FAMILY_ID"
+  },
+  "source_kind_value_established": false,
+  "source_kind_value_observed": null,
+  "source_locator_established": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "source_origin_authority_evidence_established": false,
+  "standing_evidence_requirements": {
+    "act_integrity_or_digest_binding": "The raw headers/body and prior acquisition receipt remain byte-identical to their frozen SHA-256 bindings.",
+    "actor_identity_evidence": "The explicit source_kind declaration must occur in the exact raw publisher response already bound to CA-3 by the closed acquisition result.",
+    "authority_basis_evidence_external_to_oic_evaluator": "The declaration must be emitted inside the publisher/content issuer's own bound response; OIC may recognize but may not author or synthesize it.",
+    "ca3_scope_evidence": "The declaration is contained in the exact response record already bound to CA-3 by the consumed acquisition closure.",
+    "completed_act_evidence": "Exactly one admissible explicit source_kind declaration form is present.",
+    "target_field_scope_evidence": "The declaration key/label explicitly names source_kind/source-kind/sourceKind; document type, MIME type, or generic origin metadata is insufficient."
+  },
+  "status": "PREREGISTERED_REANALYSIS_NOT_EXECUTED",
+  "target_manifest_field": {
+    "allowed_values": [
+      "public",
+      "synthetic"
+    ],
+    "candidate_value_preselected": false,
+    "field": "source_kind",
+    "normalization_policy": "NONE",
+    "reason": "The reanalysis tests both frozen allowed enum values and may not select or infer a desired value in advance."
+  }
+}
