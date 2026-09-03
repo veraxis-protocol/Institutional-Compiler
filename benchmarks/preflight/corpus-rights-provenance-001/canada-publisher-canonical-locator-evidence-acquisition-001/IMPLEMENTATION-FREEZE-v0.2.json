@@ -1,0 +1,79 @@
+{
+  "artifact_sha256": {
+    "ACQUISITION-CONTRACT-v0.1.json": "95db83b9d6d8cf81d35c40af0064e0ddc27920ce178bbc6af2ac979f51e109ed",
+    "PLAN-v0.1.md": "6369d86fcf7d0f5919e395052c0837196835c77b30df9df7037f3c2283a65081",
+    "PREREGISTRATION-FREEZE-v0.1.json": "d7e707469454d135ffed64730b9fc37b214528a4d89fe1f4da7e961564fff612",
+    "navigation_seed_bytes": "87649c72244d5a3f6d467258536db0bb7ef585907a30c7fca3056dfd7a976880",
+    "scripts/acquire_canada_publisher_canonical_locator_evidence_001.py": "88a54d756ea46c398bbaa8bd5307c83f57dba4759b36164ff865c7618a8a8fc5",
+    "tests/contract/test_canada_publisher_canonical_locator_evidence_acquisition_001.py": "5fae184c1e1f46d40ffbe93219abbc76e4453c6db85fe46ebdb5b838df5b19a5"
+  },
+  "authority_channel_selected_for_manifest_population": false,
+  "base_preregistration_commit": "f836ce94ec0f2c0f7eb1ec16596da2807e0c265a",
+  "candidate_002_adopted": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "declaration_values_created": false,
+  "external_actor_contacted": false,
+  "freeze_id": "OIC-CANADA-PUBLISHER-CANONICAL-LOCATOR-EVIDENCE-ACQUISITION-001-IMPLEMENTATION-FREEZE-v0.2",
+  "freeze_version": "v0.2",
+  "future_live_execution_policy": {
+    "actor_contact": false,
+    "credentialed_requests": false,
+    "explicit_authorization_receipt_required": true,
+    "form_submission": false,
+    "independent_static_verification_required": true,
+    "javascript_execution": false,
+    "maximum_redirects": 5,
+    "maximum_response_bytes": 2000000,
+    "method_allowlist": [
+      "GET"
+    ],
+    "one_shot_required": true,
+    "permanent_started_lock_required": true,
+    "provider_model_calls": false,
+    "rerun_after_started_lock": false,
+    "scheme_allowlist": [
+      "https"
+    ],
+    "started_lock_before_navigation_semantic_read": true,
+    "started_lock_before_network_request": true
+  },
+  "legal_clearance_established": false,
+  "live_acquisition_executed": false,
+  "navigation_seed_semantics_read": false,
+  "network_request_made": false,
+  "new_real_derivation_rule_created": false,
+  "new_real_world_evidence_acquired": false,
+  "next_authorized_step": "Independent verification of this static freeze. Only after verification may a separate one-shot execution wrapper create the explicit authorization receipt and permanent STARTED lock, semantically read the three allowed CA-3 navigation-seed fields, and perform the bounded live publisher acquisition exactly once.",
+  "provenance_established": false,
+  "real_authority_act_created": false,
+  "real_authority_established": false,
+  "repository_test_suite_validation": {
+    "classification": "PASS_WITH_THREE_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_historical_deselection_count": 3,
+    "historical_tests_modified": false,
+    "semantic_scope_effect": "NONE"
+  },
+  "rights_established": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "static_properties": {
+    "canada_registrable_domain_boundary_tested": true,
+    "cross_domain_canonical_fail_closed_tested": true,
+    "cross_domain_redirect_fail_closed_tested": true,
+    "html_link_canonical_parser_tested": true,
+    "http_link_canonical_parser_tested": true,
+    "https_only_tested": true,
+    "multiple_canonical_fail_closed_tested": true,
+    "navigation_seed_allowed_field_projection_tested": true,
+    "navigation_seed_real_semantics_read": false,
+    "navigation_seed_recursive_ca3_reader_tested": true,
+    "new_real_world_evidence_acquired": false,
+    "non_admissible_metadata_ignored_tested": true,
+    "permanent_started_lock_create_once_tested": true,
+    "publisher_identity_preexisting_gate_tested": true,
+    "raw_response_digest_binding_tested": true,
+    "real_network_request_made": false,
+    "same_domain_redirect_tested": true
+  },
+  "status": "INSTRUMENT_STATICALLY_FROZEN_LIVE_ACQUISITION_NOT_EXECUTED"
+}
