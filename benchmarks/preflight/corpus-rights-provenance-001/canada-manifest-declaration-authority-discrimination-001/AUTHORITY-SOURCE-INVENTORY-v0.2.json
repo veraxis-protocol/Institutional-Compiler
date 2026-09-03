@@ -1,0 +1,90 @@
+{
+  "authority_channel_selected": false,
+  "authority_channels_evaluated": false,
+  "declaration_values_created": false,
+  "excluded_inputs": [
+    {
+      "class": "SOURCE_XML_OR_POLICY_CONTENT",
+      "reason": "FORBIDDEN_BY_PREREGISTRATION"
+    },
+    {
+      "class": "CROSSWALK_RECEIPTS",
+      "reason": "FORBIDDEN_BY_PREREGISTRATION"
+    },
+    {
+      "class": "RAW_RIGHTS_EVIDENCE_BYTES",
+      "reason": "NOT_REQUIRED_FOR_STANDING"
+    },
+    {
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/CANADA-RIGHTS-RESOLUTION-LEDGER-v0.1.json",
+      "reason": "EXPLICITLY_EXCLUDES_CA-3"
+    },
+    {
+      "class": "HISTORICAL_SOURCE_MANIFEST_ROWS",
+      "reason": "NOT_ESTABLISHMENT_AUTHORITY"
+    }
+  ],
+  "input_count": 6,
+  "inputs": [
+    {
+      "artifact_role": "MANIFEST_RESULT_SHAPE_CONTRACT",
+      "declaration_creation_authorized": false,
+      "path": "benchmarks/preflight/corpus-rights-provenance-001/SOURCE-MANIFEST-CONTRACT-v0.1.json",
+      "semantic_use": "STANDING_ROLE_SCOPE_AND_TRANSITION_GATE_ONLY",
+      "sha256": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+      "value_extraction_authorized": false
+    },
+    {
+      "artifact_role": "ENGINEERING_RIGHTS_REVIEW_RECORD",
+      "declaration_creation_authorized": false,
+      "path": "benchmarks/corpus/canada/freeze-v0.1/RIGHTS-CLEARANCE-v0.1.json",
+      "semantic_use": "STANDING_ROLE_SCOPE_AND_TRANSITION_GATE_ONLY",
+      "sha256": "b1f0b9bae2a3ace795f9c756c297f7bc9d9ebe3d4a0ded350bca0af17f6041f7",
+      "value_extraction_authorized": false
+    },
+    {
+      "artifact_role": "ACQUISITION_CONTROL_RECORD",
+      "declaration_creation_authorized": false,
+      "path": "benchmarks/corpus/canada/freeze-v0.1/ACQUISITION-FREEZE-v0.1.json",
+      "semantic_use": "STANDING_ROLE_SCOPE_AND_TRANSITION_GATE_ONLY",
+      "sha256": "25799aad6de8c982c93d7ba79a62210603d01ebdc48a38d4be7353919257f59b",
+      "value_extraction_authorized": false
+    },
+    {
+      "artifact_role": "ACQUISITION_INDEX",
+      "declaration_creation_authorized": false,
+      "path": "benchmarks/corpus/canada/freeze-v0.1/INDEX.json",
+      "semantic_use": "STANDING_ROLE_SCOPE_AND_TRANSITION_GATE_ONLY",
+      "sha256": "87649c72244d5a3f6d467258536db0bb7ef585907a30c7fca3056dfd7a976880",
+      "value_extraction_authorized": false
+    },
+    {
+      "artifact_role": "UNSUBMITTED_COUNSEL_REVIEW_REQUEST",
+      "declaration_creation_authorized": false,
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/CANADA-COUNSEL-REVIEW-DOSSIER-v0.1.json",
+      "semantic_use": "STANDING_ROLE_SCOPE_AND_TRANSITION_GATE_ONLY",
+      "sha256": "6576071b37e62339ea1b0f82332904a628d023cdbd8795840d994dde4f26ab40",
+      "value_extraction_authorized": false
+    },
+    {
+      "artifact_role": "ACTOR_AND_PENDING_ACTION_REGISTER",
+      "declaration_creation_authorized": false,
+      "path": "benchmarks/corpus/canada/rights-resolution-v0.1/EXTERNAL-ACTION-REGISTER-v0.1.json",
+      "semantic_use": "STANDING_ROLE_SCOPE_AND_TRANSITION_GATE_ONLY",
+      "sha256": "1bdac1a078c64439b1e2f4c53ec794f4d6ef5baa566d6b0755322ca1a9bfa09c",
+      "value_extraction_authorized": false
+    }
+  ],
+  "inventory_id": "OIC-CANADA-MANIFEST-DECLARATION-AUTHORITY-SOURCE-INVENTORY-001",
+  "inventory_version": "v0.2",
+  "new_derivation_rule_created": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "preregistration_commit": "18338f5d0da0daf2763a5f78fdf7d6065286cc05",
+  "source_manifest_created": false,
+  "status": "FROZEN_INPUT_INVENTORY_NOT_EVALUATED"
+}

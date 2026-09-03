@@ -1,0 +1,76 @@
+{
+  "artifact_sha256": {
+    "AUTHORITY-SOURCE-INVENTORY-v0.2.json": "10fa7c20d36ba541468675611bdedc5941758fa39eb1b803c4239a9e86ab1899",
+    "evaluate_authority_discrimination_v0.2.py": "6d9be5309b64476fab9e0b0782a4ca67c2caf82f7c1af71c5658abbcb19275f0",
+    "test_canada_manifest_declaration_authority_discrimination_001.py": "35c3b177ccd7772974d89daf81f83ee656f1cf3c14dd2df50352ab6cade00cf0"
+  },
+  "authority_channel_hypothesis_count": 16,
+  "authority_channel_selected": false,
+  "authority_channels_evaluated": false,
+  "base_preregistration_commit": "18338f5d0da0daf2763a5f78fdf7d6065286cc05",
+  "candidate_002_adopted": false,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "control_envelope_authorized": false,
+  "declaration_values_created": false,
+  "freeze_id": "OIC-CANADA-MANIFEST-DECLARATION-AUTHORITY-DISCRIMINATION-001-IMPLEMENTATION-FREEZE-v0.2",
+  "freeze_version": "v0.2",
+  "frozen_authority_input_count": 6,
+  "future_one_shot_policy": {
+    "authority_channel_selected_during_execution": false,
+    "declaration_values_created_during_execution": false,
+    "execution_count": 1,
+    "new_derivation_rule_created_during_execution": false,
+    "output_scope": ".local_ONLY_DURING_EXECUTION",
+    "permanent_started_lock_required": true,
+    "real_input_set": "EXACTLY_AUTHORITY-SOURCE-INVENTORY-v0.2.json",
+    "rerun_after_started": false,
+    "tracked_result_created_during_execution": false
+  },
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "new_derivation_rule_created": false,
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "rego_compilation_authorized": false,
+  "repository_test_suite_validation": {
+    "additional_state_sensitive_test": {
+      "node_id": "tests/contract/test_canada_evidence_bundle_materialization_001.py::test_tracked_bundle_destinations_and_source_manifest_remain_absent",
+      "reason": "Its frozen postcondition requires the CA-3 tracked evidence-bundle destinations to be absent. Bundle Materialization 001 subsequently closed successfully and intentionally committed those exact bundle paths. The historical test remains unchanged and is deselected only for repository-state compatibility.",
+      "superseding_state": {
+        "bundle_materialization_closure_commit": "8d2ed331aa9d08738ce41fc01d91a6efade2644d",
+        "provenance_evidence_bundle_sha256": "25e2ab8a6f192c9247fa6dcd6e6eac27a63b720b8e5bc904ec9339e8adcced74",
+        "rights_evidence_bundle_sha256": "3460f97cfd179ac8a57c52059115fc15e62f0e591526ab7043c1add12aafb85b"
+      }
+    },
+    "classification": "PASS_WITH_THREE_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_historical_deselection_count": 3,
+    "historical_tests_modified": false,
+    "semantic_scope_effect": "NONE"
+  },
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "static_capability": {
+    "contract_requiredness_is_not_value_derivation": true,
+    "engineering_workflow_metadata_never_self_promotes": true,
+    "evaluator_self_issuance_forbidden": true,
+    "pending_external_action_never_self_promotes": true,
+    "synthetic_negative_channels_supported": true,
+    "synthetic_positive_channels_supported": true
+  },
+  "status": "INSTRUMENT_IMPLEMENTED_STATICALLY_FROZEN_AUTHORITY_NOT_EVALUATED",
+  "target_declaration_field_count": 6,
+  "tracked_evidence_bundles_modified": false
+}
