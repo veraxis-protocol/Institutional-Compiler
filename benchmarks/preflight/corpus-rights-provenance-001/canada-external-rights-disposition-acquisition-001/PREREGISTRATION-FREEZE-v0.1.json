@@ -1,0 +1,38 @@
+{
+  "actor_preselected": false,
+  "actor_qualification_established": false,
+  "artifact_sha256": {
+    "ACQUISITION-CONTRACT-v0.1.json": "e9d3e4755a077c4b2503332098e16f0ad69557eb0704e62954939432cad60bfa",
+    "PLAN-v0.1.md": "fe9e57ebfa8838884dbc0f4f5c8a8c3f6314bd264f1638b4cebc82ed1194c8e7",
+    "RIGHTS-DISPOSITION-REQUEST-SCHEMA-v0.1.json": "ed605a7f812657dd8dd05b53f3b8127177e5361c9997450bc199025ca8a1c745",
+    "authority_discrimination_result": "3ba392b85f937bcdfc4eb603b62448e4013bc7c91aa73bb4f5608b1c0c82c3b0",
+    "publisher_canonical_acquisition_result": "f796371b8ec92ad491d0f5bd2b8163e25974fbc1fc80cd117c427407d639a775",
+    "real_authority_design_result": "52a3290276e79c49690b3e39ddff388e1f7c1cc830deabfa7e031b27c52f92d4",
+    "source_manifest_contract": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+    "source_origin_reanalysis_result": "0cb892cf6b79f9f13866a6a675d5856b3656ee4ffda58dd138947435ca7f0534"
+  },
+  "base_source_origin_closure_commit": "5500d1b620368072b3321084e8a95c4c961a650c",
+  "candidate_values_preselected": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "completed_external_disposition_received": false,
+  "contact_authorized_now": false,
+  "declaration_values_created_by_oic": false,
+  "external_actor_contacted": false,
+  "freeze_id": "OIC-CANADA-EXTERNAL-RIGHTS-DISPOSITION-ACQUISITION-001-FREEZE-v0.1",
+  "freeze_version": "v0.1",
+  "legal_clearance_established": false,
+  "next_authorized_step": "Independent verification. Then implement and statically freeze actor qualification, bounded request generation, received-disposition ingestion, and authority evaluation against synthetic fixtures only. No external contact before separate explicit authorization.",
+  "request_sent": false,
+  "required_actor_class": "QUALIFIED_EXTERNAL_RIGHTS_AUTHORITY",
+  "response_ingestion_authorized_now": false,
+  "rights_status_established": false,
+  "selected_family": "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION",
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "PREREGISTERED_EXTERNAL_CONTACT_NOT_AUTHORIZED",
+  "target_fields": [
+    "rights_basis",
+    "redistribution_status"
+  ],
+  "work_order": "OIC-CANADA-EXTERNAL-RIGHTS-DISPOSITION-ACQUISITION-001"
+}

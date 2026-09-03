@@ -1,0 +1,128 @@
+{
+  "claim_boundary": "A completed external disposition matching this schema may become candidate real authority evidence for CA-3 rights_basis and redistribution_status only. It is not automatically admitted into SOURCE_MANIFEST.csv and does not establish rights_status, provenance, source_kind, source_locator, legal clearance generally, or cross-source generality.",
+  "completed_act_requirements": {
+    "attributable_to_actor": true,
+    "covers_both_target_fields_in_same_act": true,
+    "date_or_timestamp_required": true,
+    "draft_is_not_a_completed_act": true,
+    "final_or_completed_status_required": true,
+    "oic_generated_answer_is_not_a_completed_act": true,
+    "pending_request_is_not_a_completed_act": true,
+    "written_disposition_required": true
+  },
+  "integrity_binding": {
+    "attachments_or_references_preserved_when_material": true,
+    "raw_received_act_must_be_preserved": true,
+    "sha256_digest_required": true
+  },
+  "not_requested": [
+    "source_kind",
+    "source_locator",
+    "rights_status",
+    "provenance_status",
+    "provenance_evidence",
+    "manifest population",
+    "general legal opinion outside CA-3 and the two named fields"
+  ],
+  "request_output_shape": {
+    "act": {
+      "actor_attestation": null,
+      "issued_at": null,
+      "status": null
+    },
+    "actor": {
+      "authority_basis": null,
+      "authority_basis_reference": null,
+      "name": null,
+      "role_or_capacity": null
+    },
+    "disposition": {
+      "limitations_or_conditions": [],
+      "redistribution_status": null,
+      "redistribution_status_reason": null,
+      "rights_basis": null,
+      "rights_basis_reason": null,
+      "supporting_evidence_references": []
+    },
+    "scope": {
+      "redistribution_status": true,
+      "rights_basis": true,
+      "source_id": "CA-3"
+    }
+  },
+  "required_disposition_fields": {
+    "redistribution_status": {
+      "allowed": [
+        "permitted",
+        "not_permitted",
+        "unknown"
+      ],
+      "candidate_preselected": false,
+      "normalization": "NONE",
+      "required": true
+    },
+    "rights_basis": {
+      "allowed": [
+        "public_domain",
+        "open_license",
+        "permission",
+        "synthetic_owned",
+        "other_documented_basis"
+      ],
+      "candidate_preselected": false,
+      "normalization": "NONE",
+      "required": true
+    }
+  },
+  "required_external_actor_evidence": {
+    "actor_full_name": {
+      "required": true,
+      "rule": "Explicit attributable natural-person or institutional actor identity."
+    },
+    "actor_role_or_professional_capacity": {
+      "required": true,
+      "rule": "Role/capacity establishing why this actor is qualified to answer the rights question."
+    },
+    "authority_basis": {
+      "required": true,
+      "rule": "Evidence independent of OIC establishing the actor's professional, institutional, statutory, contractual, or delegated basis to issue the rights disposition for the stated scope."
+    },
+    "authority_basis_reference": {
+      "required": true,
+      "rule": "Durable public or supplied evidence reference supporting the authority basis."
+    }
+  },
+  "required_reasoning_and_evidence": {
+    "limitations_or_conditions": {
+      "required": true,
+      "rule": "Explicitly state any limitations, conditions, uncertainty, or scope restrictions; use an empty list only when none are asserted."
+    },
+    "redistribution_status_reason": {
+      "required": true,
+      "rule": "Short factual/legal basis for the selected redistribution_status enum."
+    },
+    "rights_basis_reason": {
+      "required": true,
+      "rule": "Short factual/legal basis for the selected rights_basis enum."
+    },
+    "supporting_evidence_references": {
+      "min_items": 1,
+      "required": true,
+      "rule": "References supporting the disposition; may include statute, regulation, licence, policy, permission, or other authoritative material."
+    }
+  },
+  "required_scope_statements": {
+    "ca3_scope_explicit": true,
+    "redistribution_status_scope_explicit": true,
+    "rights_basis_scope_explicit": true,
+    "scope_may_not_be_inferred_from_email_thread_context": true
+  },
+  "schema_id": "OIC-CANADA-EXTERNAL-RIGHTS-DISPOSITION-REQUEST-SCHEMA-001",
+  "schema_version": "v0.1",
+  "source_scope": {
+    "request_may_not_substitute_unbound_source_description": true,
+    "source_id": "CA-3",
+    "source_identity_must_be_bound_by_digest_or_exact_locator": true
+  },
+  "status": "PREREGISTERED_REQUEST_SHAPE_NOT_SENT"
+}

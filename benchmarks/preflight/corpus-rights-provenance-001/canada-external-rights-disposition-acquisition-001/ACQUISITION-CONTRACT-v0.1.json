@@ -1,0 +1,114 @@
+{
+  "acquisition_mode": {
+    "actor_contact_authorized_now": false,
+    "actor_preselected": false,
+    "contact_channel_preselected": false,
+    "mode": "BOUNDED_WRITTEN_EXTERNAL_DISPOSITION_REQUEST",
+    "one_external_act_should_cover_both_target_fields": true,
+    "reason": "The frozen family structurally supports both fields; a single completed act minimizes external contact while preserving exact field scope.",
+    "request_send_authorized_now": false,
+    "response_ingestion_authorized_now": false
+  },
+  "actor_qualification_contract": {
+    "acceptable_qualification_classes": [
+      "licensed_or_authorized_counsel_with_relevant_canadian_copyright_or_public-sector-rights_competence",
+      "publisher_or_crown-copyright-licensing_authority_with_direct_disposition_authority",
+      "other_institutional_rights_officer_with_documented_authority_over_the_specific_material"
+    ],
+    "mere_title_or_self_description_sufficient": false,
+    "oic_may_self_designate_actor_as_qualified": false,
+    "professional_or_institutional_authority_reference_required": true,
+    "qualification_must_be_established_independently_of_oic": true,
+    "required_actor_class": "QUALIFIED_EXTERNAL_RIGHTS_AUTHORITY"
+  },
+  "artifact_bindings": {
+    "authority_discrimination_result_sha256": "3ba392b85f937bcdfc4eb603b62448e4013bc7c91aa73bb4f5608b1c0c82c3b0",
+    "publisher_canonical_acquisition_result_sha256": "f796371b8ec92ad491d0f5bd2b8163e25974fbc1fc80cd117c427407d639a775",
+    "real_authority_acquisition_design_result_sha256": "52a3290276e79c49690b3e39ddff388e1f7c1cc830deabfa7e031b27c52f92d4",
+    "rights_disposition_request_schema_sha256": "ed605a7f812657dd8dd05b53f3b8127177e5361c9997450bc199025ca8a1c745",
+    "source_manifest_contract_sha256": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+    "source_origin_reanalysis_result_sha256": "0cb892cf6b79f9f13866a6a675d5856b3656ee4ffda58dd138947435ca7f0534"
+  },
+  "base_source_origin_closure_commit": "5500d1b620368072b3321084e8a95c4c961a650c",
+  "completed_act_rule": "A pending request, acknowledgement, scheduling message, draft, informal comment, or engineering interpretation is not a completed rights disposition. The qualifying act must be final/completed, attributable, written, and explicitly answer both frozen target fields.",
+  "contract_id": "OIC-CANADA-EXTERNAL-RIGHTS-DISPOSITION-ACQUISITION-001",
+  "contract_version": "v0.1",
+  "current_state": {
+    "causal_root_cause": "NOT_ESTABLISHED",
+    "completed_external_disposition_received": false,
+    "declaration_values_created_by_oic": false,
+    "external_actor_contacted": false,
+    "external_actor_identified_and_qualified": false,
+    "external_rights_authority_evidence_established": false,
+    "legal_clearance_established": false,
+    "redistribution_status_value_observed": null,
+    "request_sent": false,
+    "rights_basis_value_observed": null,
+    "rights_status_established": false,
+    "source_manifest_created": false,
+    "source_manifest_population_authorized": false
+  },
+  "hard_prohibitions": [
+    "do_not_preselect_rights_basis",
+    "do_not_preselect_redistribution_status",
+    "do_not_map_crown_or_government_status_into_manifest_enums_without_external_act",
+    "do_not_treat_pending_counsel_request_as_disposition",
+    "do_not_treat_oic_generated_legal_analysis_as_external_authority",
+    "do_not_create_or_populate_SOURCE_MANIFEST.csv",
+    "do_not_promote_external_disposition_into_rights_status"
+  ],
+  "if_established_claim_ceiling": "An ESTABLISHED outcome may establish only external authority evidence and externally declared values for CA-3 rights_basis and redistribution_status under the frozen contract. It does not itself establish rights_status, source_kind, source_locator, provenance, general legal clearance, full SOURCE_MANIFEST admissibility, causal root cause, or cross-source generality. It does not authorize automatic manifest population.",
+  "if_not_established_claim_ceiling": "A NOT_ESTABLISHED outcome establishes only that the bounded acquisition did not obtain a completed qualifying external rights disposition under this contract. It does not establish that no qualified authority or lawful rights basis exists.",
+  "next_authorized_step": "After independent verification, implement and statically freeze the actor qualification checker, outbound request packet generator, received-act ingestion schema, and authority evaluator using synthetic fixtures only. Do not contact or send anything to an external actor before that static instrument is independently verified and a separate explicit contact authorization is issued.",
+  "possible_future_outcomes": [
+    "EXTERNAL_RIGHTS_DISPOSITION_AUTHORITY_EVIDENCE_ESTABLISHED_CA3",
+    "EXTERNAL_RIGHTS_DISPOSITION_AUTHORITY_EVIDENCE_NOT_ESTABLISHED_CA3",
+    "EXTERNAL_RIGHTS_DISPOSITION_ACQUISITION_INCOMPLETE_FAIL_CLOSED"
+  ],
+  "research_question": "Can one qualified external rights authority issue a completed, attributable written disposition explicitly covering CA-3, rights_basis, and redistribution_status, with independently established authority basis and durably bound evidence, without OIC selecting or creating the substantive answer?",
+  "selection_rule": {
+    "closed_not_established_families": [
+      "PUBLISHER_CANONICAL_LOCATOR_DECLARATION",
+      "EXPLICIT_SOURCE_ORIGIN_DECLARATION"
+    ],
+    "external_family_population": [
+      "PUBLISHER_CANONICAL_LOCATOR_DECLARATION",
+      "EXPLICIT_SOURCE_ORIGIN_DECLARATION",
+      "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION"
+    ],
+    "selected_family": "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION",
+    "selection_basis": "ONLY_REMAINING_STRUCTURALLY_SUFFICIENT_EXTERNAL_FAMILY",
+    "selection_is_authority_determination": false,
+    "selection_is_legal_preference": false
+  },
+  "standing_requirements": [
+    "actor_identity_evidence",
+    "authority_basis_evidence_external_to_oic_evaluator",
+    "completed_act_evidence",
+    "ca3_scope_evidence",
+    "rights_basis_scope_evidence",
+    "redistribution_status_scope_evidence",
+    "act_integrity_or_digest_binding"
+  ],
+  "status": "PREREGISTERED_EXTERNAL_CONTACT_NOT_AUTHORIZED",
+  "target_enum_contract": {
+    "candidate_values_preselected": false,
+    "normalization_policy": "NONE",
+    "redistribution_status": [
+      "permitted",
+      "not_permitted",
+      "unknown"
+    ],
+    "rights_basis": [
+      "public_domain",
+      "open_license",
+      "permission",
+      "synthetic_owned",
+      "other_documented_basis"
+    ]
+  },
+  "target_fields": [
+    "rights_basis",
+    "redistribution_status"
+  ]
+}
