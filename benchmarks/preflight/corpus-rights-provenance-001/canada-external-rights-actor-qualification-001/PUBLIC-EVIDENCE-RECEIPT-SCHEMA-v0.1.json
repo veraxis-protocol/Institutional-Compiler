@@ -1,0 +1,43 @@
+{
+  "claim_boundary": "A public-evidence receipt proves only what official pages returned during the bounded GET acquisition. It is not external contact with the candidate office and it is not a rights disposition.",
+  "integrity_rules": {
+    "all_four_sources_required_for_supported_outcome": true,
+    "raw_body_preserved": true,
+    "raw_headers_preserved": true,
+    "sha256_binding_required": true
+  },
+  "required_per_response_fields": [
+    "source_id",
+    "requested_url",
+    "final_url",
+    "status",
+    "headers_sha256",
+    "body_sha256",
+    "redirect_count"
+  ],
+  "required_source_ids": [
+    "JUS-TERMS",
+    "JUS-CLEARANCE-FORM",
+    "JUSTICE-LAWS-FAQ",
+    "FEDERAL-LAW-ORDER"
+  ],
+  "schema_id": "OIC-CANADA-EXTERNAL-RIGHTS-ACTOR-QUALIFICATION-001-PUBLIC-EVIDENCE-RECEIPT",
+  "status": "STATIC_SCHEMA_REAL_PUBLIC_EVIDENCE_NOT_ACQUIRED",
+  "transport_rules": {
+    "allowed_domains": [
+      "justice.gc.ca",
+      "www.justice.gc.ca",
+      "laws-lois.justice.gc.ca"
+    ],
+    "automatic_retry_forbidden": true,
+    "cross_allowed_domain_redirects_permitted": true,
+    "email_forbidden": true,
+    "form_submission_forbidden": true,
+    "https_only": true,
+    "max_redirects": 5,
+    "method": "GET",
+    "post_put_patch_delete_forbidden": true,
+    "redirect_outside_allowed_domains_forbidden": true
+  },
+  "version": "v0.1"
+}
