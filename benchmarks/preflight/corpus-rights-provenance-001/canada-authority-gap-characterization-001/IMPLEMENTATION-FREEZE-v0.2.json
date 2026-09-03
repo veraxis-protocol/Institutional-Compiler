@@ -1,0 +1,72 @@
+{
+  "analysis_executed": false,
+  "artifact_sha256": {
+    "GAP-CHARACTERIZATION-CONTRACT-v0.1.json": "a786194125497d82c74c3aa50fb01acc26d044a6139a2963abf5ed24cb60eec6",
+    "PLAN-v0.1.md": "908268cb85eacd639e2e56cbe9407ff9c8b3d0f9dd24904c53e5e29b5ee3c39b",
+    "PREREGISTRATION-FREEZE-v0.1.json": "b6d513178098cce17b53c793a6e4aad4c87abd8afeb41fbf662bdb21bad8fd6d",
+    "authority_discrimination_execution_result": "3ba392b85f937bcdfc4eb603b62448e4013bc7c91aa73bb4f5608b1c0c82c3b0",
+    "authority_discrimination_post_run_adjudication": "31a108a3f8831068dc4b51234ed89088a422989c2c8d56947633b6e62f2cb743",
+    "scripts/characterize_canada_authority_gaps_001.py": "9acc1b5656345d603259eb505806c3d9c98e66de9f23707e5977010c4a164368",
+    "tests/contract/test_canada_authority_gap_characterization_001.py": "9a07a4b97fa843c0c81d795ed2877197a4c477cbf58516adbb77c752dc95e581"
+  },
+  "authority_channel_selected": false,
+  "authority_established": false,
+  "base_preregistration_commit": "f44d91532de611a0fb49e455a06f046bc00bdc8a",
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "declaration_values_created": false,
+  "freeze_id": "OIC-CANADA-AUTHORITY-GAP-CHARACTERIZATION-001-IMPLEMENTATION-FREEZE-v0.2",
+  "freeze_version": "v0.2",
+  "future_execution_policy": {
+    "deterministic_replay_allowed": true,
+    "exact_input": "AUTHORITY_DISCRIMINATION_EXECUTION_RESULT_SHA256_BOUND",
+    "local_receipts_read": false,
+    "network": false,
+    "one_shot_required": false,
+    "reason": "FROZEN_TRACKED_CLOSED_RESULT_ONLY_NO_NEW_EVIDENCE",
+    "six_governance_documents_read": false,
+    "tracked_result_creation_after_independent_static_verification": true
+  },
+  "legal_clearance_established": false,
+  "new_derivation_rule_created": false,
+  "next_authorized_step": "Independent verification of this static freeze. After verification, execute deterministic gap characterization against the exact frozen closed authority-discrimination result and create the tracked result and adjudication. Do not reopen governance documents.",
+  "population": {
+    "failed_channel_count": 16,
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ],
+    "target_field_count": 6
+  },
+  "provenance_established": false,
+  "repository_test_suite_validation": {
+    "classification": "PASS_WITH_THREE_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_historical_deselection_count": 3,
+    "historical_tests_modified": false,
+    "semantic_scope_effect": "NONE"
+  },
+  "rights_established": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "static_properties": {
+    "frequency_priority_inference_forbidden": true,
+    "lowest_gap_preference_inference_forbidden": true,
+    "source_result_bytes_hash_verified": true,
+    "source_result_semantics_analyzed": false,
+    "synthetic_exact_gap_signature_tests": true,
+    "synthetic_frequency_tests": true,
+    "synthetic_lowest_gap_tie_tests": true,
+    "synthetic_unknown_dimension_fail_closed_test": true
+  },
+  "static_recovery": {
+    "characterizer_logic_changed": false,
+    "classification": "SYNTHETIC_FIXTURE_EXPECTATION_CORRECTION",
+    "correction": "EXPECTED_6_TO_7",
+    "failed_assertion": "authority_identity_explicit synthetic frequency expected 6",
+    "preregistration_changed": false,
+    "real_closed_result_semantics_analyzed_before_freeze": false,
+    "recomputed_fixture_value": 7,
+    "required": true,
+    "scientific_scope_effect": "NONE"
+  },
+  "status": "INSTRUMENT_STATICALLY_FROZEN_ANALYSIS_NOT_EXECUTED"
+}
