@@ -1,0 +1,64 @@
+{
+  "artifact_sha256": {
+    "PLAN-v0.1.md": "8297a6a6d5f95ada8c3e0a363c0060eec5eb65370ba6d011d1f5cda2fab66e32",
+    "PREREGISTRATION-FREEZE-v0.1.json": "046e49cddfd08f9dbf41f94002f8d6cc922f521e87df4d3f4d40088bef17ec98",
+    "SYNTHETIC-SUFFICIENCY-CONTRACT-v0.1.json": "01fd348956c8251483de4d713c62a754508ef8304d2a1381c84cef616c0e8d7b",
+    "authority_discrimination_execution_result": "3ba392b85f937bcdfc4eb603b62448e4013bc7c91aa73bb4f5608b1c0c82c3b0",
+    "authority_gap_execution_result": "f8aeebbf5c5372258c9eda5a349e826d8e75661974b7d28ca385d634d7a2a046",
+    "scripts/evaluate_canada_synthetic_authority_act_sufficiency_001.py": "82bff6804402c24071f588ce703f5240cda9e1c1b490faaa5963c4d8cf388f22",
+    "standing_discriminator_v0_2": "6d9be5309b64476fab9e0b0782a4ca67c2caf82f7c1af71c5658abbcb19275f0",
+    "tests/contract/test_canada_synthetic_authority_act_sufficiency_001.py": "aad6bac98d0c7f79db48b78f1fe3b1ec0aa7d8355eebf8df64e92e61303590c5"
+  },
+  "authority_channel_selected": false,
+  "base_preregistration_commit": "1f962742868e85b850db6f8209978390b4d8f6f5",
+  "candidate_002_adopted": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "declaration_values_created": false,
+  "freeze_id": "OIC-CANADA-SYNTHETIC-AUTHORITY-ACT-SUFFICIENCY-001-IMPLEMENTATION-FREEZE-v0.2",
+  "freeze_version": "v0.2",
+  "future_execution_policy": {
+    "deterministic_replay_allowed": true,
+    "local_receipts_read": false,
+    "network": false,
+    "new_observational_evidence_consumed": false,
+    "one_shot_required": false,
+    "six_governance_documents_read": false,
+    "tracked_result_creation_after_independent_static_verification": true
+  },
+  "legal_clearance_established": false,
+  "new_real_derivation_rule_created": false,
+  "next_authorized_step": "Independent verification of this static freeze. After verification, execute the nine frozen synthetic specimens and their independently representable added-lever ablations. Synthetic PASS must not be promoted to real authority.",
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ],
+    "synthetic_specimen_count": 9,
+    "target_field_count": 6
+  },
+  "provenance_established": false,
+  "real_authority_act_created": false,
+  "real_authority_established": false,
+  "repository_test_suite_validation": {
+    "classification": "PASS_WITH_THREE_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_historical_deselection_count": 3,
+    "historical_tests_modified": false,
+    "semantic_scope_effect": "NONE"
+  },
+  "rights_established": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "static_properties": {
+    "baseline_snapshot_shape_fail_closed": true,
+    "coupled_dimensions_not_claimed_independent": true,
+    "duplicate_levers_fail_closed": true,
+    "full_completion_evaluation_supported": true,
+    "independent_added_lever_ablation_supported": true,
+    "preexisting_levers_excluded_from_intervention_count": true,
+    "real_specimen_contract_bytes_hash_verified": true,
+    "real_specimen_population_executed": false,
+    "unsupported_levers_fail_closed": true
+  },
+  "status": "INSTRUMENT_STATICALLY_FROZEN_SYNTHETIC_SPECIMENS_NOT_EXECUTED",
+  "synthetic_specimens_executed": false
+}
