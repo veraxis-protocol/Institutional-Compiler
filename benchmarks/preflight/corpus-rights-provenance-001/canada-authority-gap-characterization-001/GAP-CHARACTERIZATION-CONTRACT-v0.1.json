@@ -1,0 +1,102 @@
+{
+  "action_class_rule": "Action classes are fixed labels derived one-to-one from recorded missing standing dimensions. They identify what kind of explicit institutional property would have to exist for that dimension to pass. They do not identify a specific actor, legal conclusion, declaration value, or executable remediation.",
+  "analysis_outputs": [
+    "exact_missing_dimensions_per_channel",
+    "gap_signature_per_channel",
+    "missing_dimension_frequency_overall",
+    "missing_dimension_frequency_per_field",
+    "missing_dimension_frequency_per_channel_type",
+    "lowest_observed_gap_cardinality_per_field",
+    "channels_at_lowest_observed_gap_cardinality_per_field",
+    "action_classes_implied_by_missing_dimensions",
+    "action_class_frequency_overall",
+    "action_class_frequency_per_field"
+  ],
+  "authority_channel_selected": false,
+  "authority_established": false,
+  "base_authority_discrimination_closure_commit": "b631a7f1ecca9665c6199713749a04b6360337f3",
+  "candidate_002_adopted": false,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "claim_ceiling": "This study may characterize only the structure of missing standing dimensions already observed in the closed CA-3 authority-discrimination result. It cannot establish authority, identify the legally correct actor, recommend or select a channel, create a declaration value or derivation rule, establish rights/provenance/legal clearance, authorize SOURCE_MANIFEST population, infer causal root cause, or establish cross-source generality.",
+  "contract_id": "OIC-CANADA-AUTHORITY-GAP-CHARACTERIZATION-CONTRACT-001",
+  "contract_version": "v0.1",
+  "control_envelope_authorized": false,
+  "cross_source_generality_established": false,
+  "declaration_values_created": false,
+  "dimension_to_action_class": {
+    "authority_act_or_rule_explicit": "COMPLETED_AUTHORITY_ACT_OR_EXISTING_RULE_REQUIRED",
+    "authority_basis_explicit": "EXPLICIT_AUTHORITY_BASIS_REQUIRED",
+    "authority_identity_explicit": "EXPLICIT_AUTHORIZED_ACTOR_IDENTITY_REQUIRED",
+    "authority_scope_covers_ca3": "EXPLICIT_CA3_SCOPE_REQUIRED",
+    "authority_scope_covers_target_field": "EXPLICIT_TARGET_FIELD_SCOPE_REQUIRED",
+    "deterministic_replay_possible_if_rule_based": "EXISTING_DETERMINISTIC_RULE_REQUIRED",
+    "evidence_binding_explicit_where_required": "EXPLICIT_EVIDENCE_BINDING_REQUIRED",
+    "manifest_contract_accepts_result_shape": "MANIFEST_CONTRACT_SHAPE_COMPATIBILITY_REQUIRED",
+    "no_evaluator_self_issuance": "NONREMEDIABLE_BY_EVALUATOR_SELF_ISSUANCE",
+    "no_promotion_from_workflow_or_observation_metadata": "NONREMEDIABLE_BY_METADATA_PROMOTION",
+    "temporal_or_version_scope_explicit_where_required": "EXPLICIT_TEMPORAL_OR_VERSION_SCOPE_REQUIRED"
+  },
+  "execution_policy": {
+    "deterministic_offline": true,
+    "one_shot_required": false,
+    "reason_one_shot_not_required": "INPUT_IS_ALREADY_FROZEN_TRACKED_CLOSED_RESULT_NO_NEW_OBSERVATION",
+    "rerun_semantics": "DETERMINISTIC_REPLAY_ALLOWED_BECAUSE_NO_NEW_EVIDENCE_IS_CONSUMED",
+    "tracked_result_may_be_created_after_static_verification": true
+  },
+  "forbidden_inferences": [
+    "frequency implies priority",
+    "lowest gap cardinality implies preferred channel",
+    "lowest gap cardinality implies easiest lawful channel",
+    "publisher identity implies publisher authority",
+    "pending counsel workflow implies counsel authority",
+    "engineering review implies institutional adjudication",
+    "acquisition success implies provenance admission",
+    "missing authority act may be supplied by evaluator",
+    "missing deterministic rule may be invented by evaluator",
+    "action class implies declaration value"
+  ],
+  "frequency_rule": "Frequency is exact count of failed channels containing the dimension or mapped action class. Counts are descriptive only and do not imply importance, priority, causal weight, or institutional preference.",
+  "gap_signature_rule": "For each frozen failed channel, gap_signature is the lexicographically sorted exact set of missing_dimensions already recorded in the closed execution result. No dimension may be added, removed, reinterpreted, weighted, or inferred.",
+  "held_out_validation_required_for_generalization": true,
+  "input_bindings": {
+    "authority_discrimination_execution_result_sha256": "3ba392b85f937bcdfc4eb603b62448e4013bc7c91aa73bb4f5608b1c0c82c3b0",
+    "authority_discrimination_post_run_adjudication_sha256": "31a108a3f8831068dc4b51234ed89088a422989c2c8d56947633b6e62f2cb743"
+  },
+  "input_scope": {
+    "crosswalk_receipts": "FORBIDDEN",
+    "local_one_shot_receipts": "FORBIDDEN",
+    "network": "FORBIDDEN",
+    "raw_evidence": "FORBIDDEN",
+    "six_governance_documents": "FORBIDDEN",
+    "source_xml_or_policy_content": "FORBIDDEN",
+    "tracked_authority_discrimination_execution_result": "ALLOWED",
+    "tracked_authority_discrimination_post_run_adjudication": "HASH_BINDING_AND_CLAIM_CEILING_ONLY"
+  },
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "lowest_gap_cardinality_rule": "For each target field, compute the minimum exact count of missing_dimensions among its frozen candidate channels and list every channel tied at that cardinality. This is descriptive proximity only. It does not select, rank, recommend, authorize, or prefer a channel.",
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "new_derivation_rule_created": false,
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "failed_channel_count": 16,
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ],
+    "target_field_count": 6
+  },
+  "possible_result": "The analysis may show multiple equally low-cardinality channels for a field or no meaningful reduction beyond the common authority-act dimensions. That is valid and must not trigger selection.",
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "FROZEN_ANALYSIS_NOT_EXECUTED",
+  "success_rule": "AUTHORITY_GAPS_CHARACTERIZED_CA3 if all sixteen frozen failed channels are reproduced exactly from the closed result, every recorded missing_dimension is mapped through the frozen one-to-one action-class table, all six fields receive a gap-cardinality characterization, and zero analysis findings occur."
+}

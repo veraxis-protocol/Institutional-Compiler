@@ -1,0 +1,53 @@
+{
+  "analysis_executed": false,
+  "artifact_sha256": {
+    "GAP-CHARACTERIZATION-CONTRACT-v0.1.json": "a786194125497d82c74c3aa50fb01acc26d044a6139a2963abf5ed24cb60eec6",
+    "PLAN-v0.1.md": "908268cb85eacd639e2e56cbe9407ff9c8b3d0f9dd24904c53e5e29b5ee3c39b",
+    "authority_discrimination_execution_result": "3ba392b85f937bcdfc4eb603b62448e4013bc7c91aa73bb4f5608b1c0c82c3b0",
+    "authority_discrimination_post_run_adjudication": "31a108a3f8831068dc4b51234ed89088a422989c2c8d56947633b6e62f2cb743"
+  },
+  "authority_channel_selected": false,
+  "authority_established": false,
+  "base_authority_discrimination_closure_commit": "b631a7f1ecca9665c6199713749a04b6360337f3",
+  "candidate_002_adopted": false,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "control_envelope_authorized": false,
+  "declaration_values_created": false,
+  "freeze_id": "OIC-CANADA-AUTHORITY-GAP-CHARACTERIZATION-001-FREEZE-v0.1",
+  "freeze_version": "v0.1",
+  "input_scope": {
+    "closed_execution_result_only": true,
+    "crosswalk_receipts": false,
+    "local_receipts": false,
+    "network": false,
+    "raw_evidence": false,
+    "six_governance_documents": false,
+    "source_xml": false
+  },
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "new_derivation_rule_created": false,
+  "next_authorized_step": "Independent verification of this preregistration. After verification, implement and statically freeze a deterministic gap characterizer that reads only the exact closed Authority Discrimination execution result. Do not reopen the six governance documents and do not create declaration values or authority acts.",
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "failed_channel_count": 16,
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ],
+    "target_field_count": 6
+  },
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "PREREGISTERED_NOT_EXECUTED",
+  "work_order": "OIC-CANADA-AUTHORITY-GAP-CHARACTERIZATION-001"
+}
