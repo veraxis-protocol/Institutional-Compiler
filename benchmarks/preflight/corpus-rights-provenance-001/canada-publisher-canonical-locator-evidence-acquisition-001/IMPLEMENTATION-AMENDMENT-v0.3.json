@@ -1,0 +1,52 @@
+{
+  "accepted_canonical_evidence_forms_changed": false,
+  "amended_execution_invariants": {
+    "all_post_started_domain_preflight_failures_return_structured_incomplete": true,
+    "all_post_started_network_failures_return_structured_incomplete": true,
+    "all_post_started_seed_parse_failures_return_structured_incomplete": true,
+    "post_network_boundary_failure_reports_network_request_true": true,
+    "pre_network_failure_reports_network_request_false": true,
+    "started_lock_blocks_rerun_after_any_terminal_result": true,
+    "started_lock_created_before_navigation_semantic_read": true,
+    "started_lock_created_before_network_request": true
+  },
+  "amendment_id": "OIC-CANADA-PUBLISHER-CANONICAL-LOCATOR-EVIDENCE-ACQUISITION-001-IMPLEMENTATION-AMENDMENT-v0.3",
+  "amendment_version": "v0.3",
+  "artifact_sha256": {
+    "ACQUISITION-CONTRACT-v0.1.json": "95db83b9d6d8cf81d35c40af0064e0ddc27920ce178bbc6af2ac979f51e109ed",
+    "IMPLEMENTATION-FREEZE-v0.2.json": "868f1ede7dbedcac2a0ae9c9ad0375f8c71504dd4072347cb654eeb92dca7fcb",
+    "PREREGISTRATION-FREEZE-v0.1.json": "d7e707469454d135ffed64730b9fc37b214528a4d89fe1f4da7e961564fff612",
+    "navigation_seed_bytes": "87649c72244d5a3f6d467258536db0bb7ef585907a30c7fca3056dfd7a976880",
+    "v0.2_acquisition_instrument": "88a54d756ea46c398bbaa8bd5307c83f57dba4759b36164ff865c7618a8a8fc5",
+    "v0.2_contract_tests": "5fae184c1e1f46d40ffbe93219abbc76e4453c6db85fe46ebdb5b838df5b19a5",
+    "v0.3_acquisition_instrument": "dc1dd4effde2f76570d4c25ba9ad71b40e35630e4f2a706ce0e69b777578393c",
+    "v0.3_contract_tests": "bbd049cdeeb6a0a3dc070575bd1a79faf145fe42de7de4e9c8fe7545c231bb0f"
+  },
+  "base_static_commit": "adfb54124b3aa55b3e563cc1bf2e5ccee65a87c0",
+  "claim_ceiling_changed": false,
+  "declaration_values_created": false,
+  "domain_policy_changed": false,
+  "evidence_contract_changed": false,
+  "external_actor_contacted": false,
+  "new_real_world_evidence_acquired": false,
+  "next_authorized_step": "Independent verification of this v0.3 execution-safety amendment. Only after verification may the separate one-shot live execution wrapper create an explicit authorization receipt and permanent STARTED lock and perform the bounded acquisition exactly once.",
+  "one_shot_policy_changed": false,
+  "real_authority_act_created": false,
+  "real_authority_established": false,
+  "real_navigation_seed_semantics_read": false,
+  "real_network_request_made": false,
+  "real_started_lock_created": false,
+  "reason": "The v0.2 live execution created the permanent STARTED lock before navigation-seed semantic parsing, but seed parsing/domain-preflight exceptions occurred outside the structured fail-closed boundary. Such a failure could consume the one-shot without producing a structured INCOMPLETE result.",
+  "repository_test_suite_validation": {
+    "classification": "PASS_WITH_THREE_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_historical_deselection_count": 3,
+    "historical_tests_modified": false,
+    "semantic_scope_effect": "NONE"
+  },
+  "scientific_contract_effect": "NONE",
+  "scope": "Move all post-STARTED navigation semantic parsing and deterministic domain preflight inside the structured one-shot failure boundary; record navigation/network telemetry accurately; add local-fixture tests proving pre-network and post-network failures return terminal INCOMPLETE results and rerun remains blocked.",
+  "selection_rule_changed": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "status": "EXECUTION_SAFETY_AMENDMENT_STATICALLY_TESTED_LIVE_ACQUISITION_NOT_EXECUTED"
+}

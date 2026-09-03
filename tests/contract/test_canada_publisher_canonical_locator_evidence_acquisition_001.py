@@ -314,3 +314,136 @@ def test_raw_evidence_writes_digest_bound_files(tmp_path):
     assert "parsed-evaluation.json" in digests
     for name, digest in digests.items():
         assert digest == m.sha256(directory / name)
+
+
+def test_seed_semantic_failure_after_started_returns_structured_incomplete(tmp_path):
+    auth = tmp_path / "authorization.json"
+    auth.write_text('{"authorized":true}\n', encoding="utf-8")
+    lock = tmp_path / "STARTED.json"
+    evidence = tmp_path / "evidence"
+
+    def seed_loader(_path):
+        return {"not_ca3": True}
+
+    def must_not_acquire(_url):
+        raise AssertionError("network acquirer must not run")
+
+    result = m.execute_live(
+        auth,
+        evidence,
+        lock,
+        seed_loader=seed_loader,
+        acquirer=must_not_acquire,
+    )
+
+    assert lock.exists()
+    assert result["outcome"] == m.INCOMPLETE
+    assert result["status"] == "LIVE_ACQUISITION_EXECUTED_FAIL_CLOSED"
+    assert result["navigation_seed_semantics_read"] is True
+    assert result["network_request_made"] is False
+    assert result["new_real_world_evidence_acquired"] is False
+    assert result["seed_metadata"] is None
+    assert result["finding_count"] == 1
+    assert result["declaration_values_created"] is False
+    assert result["source_manifest_population_authorized"] is False
+
+
+def test_domain_preflight_failure_after_started_is_incomplete_without_network(tmp_path):
+    auth = tmp_path / "authorization.json"
+    auth.write_text('{"authorized":true}\n', encoding="utf-8")
+    lock = tmp_path / "STARTED.json"
+    evidence = tmp_path / "evidence"
+
+    def seed_loader(_path):
+        return {
+            "x": {
+                "source_id": "CA-3",
+                "target_url": "https://example.com/a",
+                "final_url": None,
+            }
+        }
+
+    def must_not_acquire(_url):
+        raise AssertionError("network acquirer must not run")
+
+    result = m.execute_live(
+        auth,
+        evidence,
+        lock,
+        seed_loader=seed_loader,
+        acquirer=must_not_acquire,
+    )
+
+    assert lock.exists()
+    assert result["outcome"] == m.INCOMPLETE
+    assert result["navigation_seed_semantics_read"] is True
+    assert result["network_request_made"] is False
+    assert result["new_real_world_evidence_acquired"] is False
+    assert result["seed_metadata"]["source_id"] == "CA-3"
+    assert "outside frozen Canada" in result["findings"][0]
+
+
+def test_network_failure_after_request_boundary_is_structured_incomplete(tmp_path):
+    auth = tmp_path / "authorization.json"
+    auth.write_text('{"authorized":true}\n', encoding="utf-8")
+    lock = tmp_path / "STARTED.json"
+    evidence = tmp_path / "evidence"
+
+    def seed_loader(_path):
+        return {
+            "x": {
+                "source_id": "CA-3",
+                "target_url": "https://laws-lois.justice.gc.ca/a",
+                "final_url": None,
+            }
+        }
+
+    def failing_acquirer(_url):
+        raise m.AcquisitionError("synthetic network failure")
+
+    result = m.execute_live(
+        auth,
+        evidence,
+        lock,
+        seed_loader=seed_loader,
+        acquirer=failing_acquirer,
+    )
+
+    assert lock.exists()
+    assert result["outcome"] == m.INCOMPLETE
+    assert result["navigation_seed_semantics_read"] is True
+    assert result["network_request_made"] is True
+    assert result["new_real_world_evidence_acquired"] is True
+    assert "synthetic network failure" in result["findings"][0]
+
+
+def test_started_lock_prevents_second_execution_even_after_fail_closed(tmp_path):
+    auth = tmp_path / "authorization.json"
+    auth.write_text('{"authorized":true}\n', encoding="utf-8")
+    lock = tmp_path / "STARTED.json"
+    evidence = tmp_path / "evidence"
+
+    def bad_seed(_path):
+        return {"bad": True}
+
+    first = m.execute_live(
+        auth,
+        evidence,
+        lock,
+        seed_loader=bad_seed,
+        acquirer=lambda _url: [],
+    )
+    assert first["outcome"] == m.INCOMPLETE
+
+    try:
+        m.execute_live(
+            auth,
+            evidence,
+            lock,
+            seed_loader=bad_seed,
+            acquirer=lambda _url: [],
+        )
+    except FileExistsError:
+        pass
+    else:
+        raise AssertionError("consumed STARTED lock must block rerun")

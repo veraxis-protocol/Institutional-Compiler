@@ -544,6 +544,9 @@ def execute_live(
     authorization_receipt: Path,
     evidence_dir: Path,
     started_lock: Path,
+    *,
+    seed_loader=load_json,
+    acquirer=acquire_with_bounded_redirects,
 ) -> dict[str, Any]:
     verify_bound_bytes_only()
 
@@ -563,15 +566,32 @@ def execute_live(
         },
     )
 
-    seed_doc = load_json(NAV_SEED)
-    seed = extract_ca3_navigation_seed(seed_doc)
-    start_url = choose_navigation_url(seed)
+    navigation_seed_semantics_read = False
+    network_request_made = False
+    seed: dict[str, Any] | None = None
 
     try:
-        records = acquire_with_bounded_redirects(start_url)
+        # Once STARTED exists, every subsequent failure must return a structured
+        # one-shot result. No exception may escape merely because seed semantics
+        # are malformed or the domain preflight fails.
+        seed_doc = seed_loader(NAV_SEED)
+        navigation_seed_semantics_read = True
+        seed = extract_ca3_navigation_seed(seed_doc)
+        start_url = choose_navigation_url(seed)
+
+        # Complete all deterministic URL/domain validation before recording that
+        # network I/O has begun.
+        start_host = urlsplit(start_url).hostname
+        if start_host is None:
+            raise ValueError("navigation URL missing hostname")
+        registrable_domain(start_host)
+
+        network_request_made = True
+        records = acquirer(start_url)
         evaluation = evaluate_final_response(records)
         receipt = response_receipt(records)
         raw_digests = write_raw_evidence(evidence_dir, records, evaluation)
+
         return {
             "work_order":
                 "OIC-CANADA-PUBLISHER-CANONICAL-LOCATOR-EVIDENCE-ACQUISITION-001",
@@ -580,9 +600,9 @@ def execute_live(
             "started_lock_sha256": started_sha,
             "authorization_receipt_sha256": sha256(authorization_receipt),
             "navigation_seed_sha256": NAV_SEED_SHA256,
-            "navigation_seed_semantics_read": True,
-            "network_request_made": True,
-            "new_real_world_evidence_acquired": True,
+            "navigation_seed_semantics_read": navigation_seed_semantics_read,
+            "network_request_made": network_request_made,
+            "new_real_world_evidence_acquired": network_request_made,
             "external_actor_contacted": False,
             "seed_metadata": seed,
             "response_receipt": receipt,
@@ -594,8 +614,8 @@ def execute_live(
             "source_manifest_population_authorized": False,
         }
     except Exception as exc:
-        # STARTED remains consumed. The later closure wrapper must treat this as
-        # one-shot INCOMPLETE; it must not rerun.
+        # STARTED remains consumed. This is the terminal result for this one-shot
+        # even when failure occurs before the first network request.
         return {
             "work_order":
                 "OIC-CANADA-PUBLISHER-CANONICAL-LOCATOR-EVIDENCE-ACQUISITION-001",
@@ -604,10 +624,11 @@ def execute_live(
             "started_lock_sha256": started_sha,
             "authorization_receipt_sha256": sha256(authorization_receipt),
             "navigation_seed_sha256": NAV_SEED_SHA256,
-            "navigation_seed_semantics_read": True,
-            "network_request_made": True,
-            "new_real_world_evidence_acquired": True,
+            "navigation_seed_semantics_read": navigation_seed_semantics_read,
+            "network_request_made": network_request_made,
+            "new_real_world_evidence_acquired": network_request_made,
             "external_actor_contacted": False,
+            "seed_metadata": seed,
             "finding_count": 1,
             "findings": [f"{type(exc).__name__}: {exc}"],
             "real_authority_act_created_by_oic": False,
@@ -615,7 +636,6 @@ def execute_live(
             "source_manifest_created": False,
             "source_manifest_population_authorized": False,
         }
-
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
