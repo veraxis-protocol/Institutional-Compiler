@@ -1,0 +1,621 @@
+{
+  "assessment_counts": {
+    "AUTHORIZED_DECLARATION_CHANNEL_ESTABLISHED": 0,
+    "AUTHORIZED_EXISTING_RULE_CHANNEL_ESTABLISHED": 0,
+    "CHANNEL_NOT_ESTABLISHED": 16
+  },
+  "authority_channel_selected": false,
+  "candidate_002_adopted": false,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "channel_count_evaluated": 16,
+  "channel_count_expected": 16,
+  "channel_evaluations": [
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "SK-INSTITUTIONAL-ADMISSION",
+      "channel_type": "INSTITUTIONAL_ADMISSION_DECLARATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": true,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "source_kind"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "SK-SOURCE-ORIGIN",
+      "channel_type": "EXPLICIT_SOURCE_ORIGIN_DECLARATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": true,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "source_kind"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "SK-EXISTING-RULE",
+      "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": false,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit",
+        "deterministic_replay_possible_if_rule_based"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "source_kind"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "SL-PUBLISHER-CANONICAL",
+      "channel_type": "PUBLISHER_CANONICAL_LOCATOR_DECLARATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": true,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": true,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "source_locator"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "SL-INSTITUTIONAL-ADMISSION",
+      "channel_type": "INSTITUTIONAL_ADMISSION_DECLARATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": true,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "source_locator"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "SL-EXISTING-RULE",
+      "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": false,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit",
+        "deterministic_replay_possible_if_rule_based"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "source_locator"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "RB-EXTERNAL-RIGHTS-AUTHORITY",
+      "channel_type": "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": true,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "rights_basis"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "RB-INSTITUTIONAL-ADJUDICATION",
+      "channel_type": "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": true,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "rights_basis"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "RB-EXISTING-RULE",
+      "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": false,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit",
+        "deterministic_replay_possible_if_rule_based"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "rights_basis"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "RS-INSTITUTIONAL-ADJUDICATION",
+      "channel_type": "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": true,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "rights_status"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "RS-EXISTING-RULE",
+      "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": false,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit",
+        "deterministic_replay_possible_if_rule_based"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "rights_status"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "PS-INSTITUTIONAL-PROVENANCE",
+      "channel_type": "INSTITUTIONAL_PROVENANCE_ADMISSION_DECLARATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": true,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "provenance_status"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "PS-EXISTING-RULE",
+      "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": false,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit",
+        "deterministic_replay_possible_if_rule_based"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "provenance_status"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "RD-EXTERNAL-RIGHTS-AUTHORITY",
+      "channel_type": "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": true,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "redistribution_status"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "RD-INSTITUTIONAL-ADJUDICATION",
+      "channel_type": "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": true,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "redistribution_status"
+    },
+    {
+      "assessment": "CHANNEL_NOT_ESTABLISHED",
+      "authority_act_created_by_evaluator": false,
+      "channel_id": "RD-EXISTING-RULE",
+      "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION",
+      "declaration_value_created": false,
+      "dimensions": {
+        "authority_act_or_rule_explicit": false,
+        "authority_basis_explicit": false,
+        "authority_identity_explicit": false,
+        "authority_scope_covers_ca3": false,
+        "authority_scope_covers_target_field": false,
+        "deterministic_replay_possible_if_rule_based": false,
+        "evidence_binding_explicit_where_required": true,
+        "manifest_contract_accepts_result_shape": true,
+        "no_evaluator_self_issuance": true,
+        "no_promotion_from_workflow_or_observation_metadata": true,
+        "temporal_or_version_scope_explicit_where_required": true
+      },
+      "missing_dimensions": [
+        "authority_identity_explicit",
+        "authority_basis_explicit",
+        "authority_scope_covers_ca3",
+        "authority_scope_covers_target_field",
+        "authority_act_or_rule_explicit",
+        "deterministic_replay_possible_if_rule_based"
+      ],
+      "new_derivation_rule_created": false,
+      "standing_established": false,
+      "target_field": "redistribution_status"
+    }
+  ],
+  "claim_ceiling": "This closure establishes only that none of the sixteen frozen CA-3 candidate authority channels is established by the exact six frozen governance documents under the frozen v0.3 adapter and v0.2 standing discriminator. It does not establish that no lawful or institutional authority channel can exist, nor any declaration value, rights, provenance truth, legal clearance, redistribution permission, SOURCE_MANIFEST admissibility, causal root cause, or cross-source generality.",
+  "control_envelope_authorized": false,
+  "cross_source_generality_established": false,
+  "declaration_values_created": false,
+  "disposition": "AUTHORITY_SURFACE_DISCRIMINATED_CA3",
+  "evaluation_execution_count": 1,
+  "evidence_bindings": {
+    "authority_discrimination_contract_sha256": "41c150bb1587d55355e28435ce0352a885309068cffc5155c90af506a34e04ef",
+    "authority_source_inventory_sha256": "10fa7c20d36ba541468675611bdedc5941758fa39eb1b803c4239a9e86ab1899",
+    "authorization_receipt_sha256": "408708da9de4742ea95a00aed49b985be02b1cbd75190ed2e79aa7d5dae3ad5c",
+    "execution_log_sha256": "990602d2991eba75e8f85021f7e17a0ed4fa2fd81b33f89f30893f8933d2b2a5",
+    "implementation_freeze_v0_2_sha256": "2fcf439d448a35d1fb2d59cfd7dafbd663be50bc4937891889f959cd1368ce4e",
+    "local_authority_discrimination_receipt_sha256": "39e6cf3ec1ac2372fde0e18ae00d4c1c6eb6d96a3df392aae10440a67b608aba",
+    "real_input_adapter_contract_sha256": "21de93f31a5cb5bc4bcdecc72c095d7baac84ef664f630a83eac7383ffde36a0",
+    "real_input_adapter_freeze_sha256": "454731762ffc50e8a2e7f7c311fd8f8623da968d28d896b835c7dfea7959d434",
+    "real_input_adapter_sha256": "c11708ff7bdb0c2bdff00c819c2b167de651b19fe0b90f981fc33dc49d98418e",
+    "standing_discriminator_sha256": "6d9be5309b64476fab9e0b0782a4ca67c2caf82f7c1af71c5658abbcb19275f0",
+    "started_lock_sha256": "344382ae8af94ce36c0e64b63272fc71feda1342128e09e6deee71707b41bfe4"
+  },
+  "experiment_network_input_used": false,
+  "field_outcomes": {
+    "provenance_status": {
+      "outcome": "AUTHORITY_NOT_ESTABLISHED",
+      "passing_channel_count": 0,
+      "passing_channel_ids": []
+    },
+    "redistribution_status": {
+      "outcome": "AUTHORITY_NOT_ESTABLISHED",
+      "passing_channel_count": 0,
+      "passing_channel_ids": []
+    },
+    "rights_basis": {
+      "outcome": "AUTHORITY_NOT_ESTABLISHED",
+      "passing_channel_count": 0,
+      "passing_channel_ids": []
+    },
+    "rights_status": {
+      "outcome": "AUTHORITY_NOT_ESTABLISHED",
+      "passing_channel_count": 0,
+      "passing_channel_ids": []
+    },
+    "source_kind": {
+      "outcome": "AUTHORITY_NOT_ESTABLISHED",
+      "passing_channel_count": 0,
+      "passing_channel_ids": []
+    },
+    "source_locator": {
+      "outcome": "AUTHORITY_NOT_ESTABLISHED",
+      "passing_channel_count": 0,
+      "passing_channel_ids": []
+    }
+  },
+  "finding_count": 0,
+  "held_out_validation_required_for_generalization": true,
+  "institutional_ir_authorized": false,
+  "interpretation": "The frozen CA-3 authority surface was fully discriminated across all six remaining declaration fields and all sixteen preregistered candidate authority channels. No channel satisfied the frozen standing dimensions. This establishes absence of an established channel within the frozen governance surface, not absence of possible authority in the world. No declaration value may be populated from the current surface.",
+  "legal_clearance_established": false,
+  "model_call_made": false,
+  "new_derivation_rule_created": false,
+  "next_authorized_activity": "Independent verification of this closure. After verification, a separately preregistered receipt-only authority-gap characterization may aggregate the missing standing dimensions across the sixteen failed channels and identify the minimal external institutional acts or already-authorized rule surfaces required to establish standing. It must not reopen the six governance documents or create declaration values.",
+  "normalized_authority_facts": {
+    "counsel_basis": false,
+    "counsel_disposition": false,
+    "counsel_fields": [],
+    "counsel_identity": false,
+    "existing_rules": [],
+    "institutional_admission": false,
+    "institutional_basis": false,
+    "institutional_fields": [],
+    "institutional_identity": false,
+    "manifest_fields": [
+      "provenance_status",
+      "redistribution_status",
+      "rights_basis",
+      "rights_status",
+      "source_kind",
+      "source_locator"
+    ],
+    "provenance_admission": false,
+    "provenance_basis": false,
+    "provenance_evidence_binding": true,
+    "provenance_identity": false,
+    "publisher_identity": true,
+    "publisher_locator_decl": false,
+    "rights_adjudication": false,
+    "rights_basis": false,
+    "rights_evidence_binding": true,
+    "rights_identity": false,
+    "source_origin_basis": false,
+    "source_origin_decl": false,
+    "source_origin_identity": false,
+    "temporal_scope": true
+  },
+  "ontology_007r1_execution_authorized": false,
+  "passing_channel_count": 0,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provenance_established": false,
+  "provider_call_made": false,
+  "q011_creation_authorized": false,
+  "real_governance_documents_reopened_during_closure": false,
+  "real_input_count": 6,
+  "real_input_semantics_evaluated_during_one_shot": true,
+  "rego_compilation_authorized": false,
+  "rerun_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_created": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "static_commit": "60f4ff3659f21d2e4eaca23c08300eba73894770",
+  "status": "CLOSED_EXECUTED_AUTHORITY_NOT_ESTABLISHED_CA3",
+  "substantive_outcome": "ALL_FROZEN_CHANNELS_NOT_ESTABLISHED",
+  "successor_declaration_materialization_auto_authorized": false,
+  "target_field_count": 6,
+  "tracked_evidence_bundles_modified": false,
+  "work_order": "OIC-CANADA-MANIFEST-DECLARATION-AUTHORITY-DISCRIMINATION-001"
+}
