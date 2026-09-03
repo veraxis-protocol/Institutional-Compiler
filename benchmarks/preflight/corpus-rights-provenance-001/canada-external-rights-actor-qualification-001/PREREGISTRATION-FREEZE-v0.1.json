@@ -1,0 +1,24 @@
+{
+  "artifact_sha256": {
+    "PLAN-v0.1.md": "8e71217f0dbafe7a8dbc4003bc5168959ad337f1df4bc2ccc34f059ce251ea2d",
+    "PUBLIC-AUTHORITY-EVIDENCE-INVENTORY-v0.1.json": "b5c440d78cf5ed01f29f57a17968b2703b6bc137c177d7c9009fe3784b2520ac",
+    "QUALIFICATION-CONTRACT-v0.1.json": "2f4d2ab37a44063767274795cec75fce497235d34e8fab8dc42849813c66f2b0"
+  },
+  "base_static_commit": "0db9c00c165f905fb96f66fd783010fe2a3069b9",
+  "candidate_actor": "Department of Justice Canada — Communications Branch — Copyright administrator",
+  "candidate_actor_qualification_supported": false,
+  "candidate_actor_selected": true,
+  "candidate_qualification_class": "publisher_or_crown-copyright-licensing_authority_with_direct_disposition_authority",
+  "email_authorized_now": false,
+  "external_actor_contact_authorized_now": false,
+  "form_submission_authorized_now": false,
+  "freeze_id": "OIC-CANADA-EXTERNAL-RIGHTS-ACTOR-QUALIFICATION-001-FREEZE-v0.1",
+  "next_authorized_step": "Independent verification followed by static implementation of a GET-only public evidence acquirer/evaluator. No public fetch or external contact before independent static verification.",
+  "public_evidence_acquired": false,
+  "public_get_requests_authorized_now": false,
+  "redistribution_status_value_observed": null,
+  "rights_basis_value_observed": null,
+  "rights_disposition_request_send_authorized_now": false,
+  "source_manifest_population_authorized": false,
+  "status": "PREREGISTERED_CANDIDATE_ACTOR_PUBLIC_EVIDENCE_NOT_ACQUIRED"
+}

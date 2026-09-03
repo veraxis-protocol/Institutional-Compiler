@@ -1,0 +1,71 @@
+{
+  "candidate_actor": {
+    "actor_full_name": "Department of Justice Canada — Communications Branch — Copyright administrator",
+    "actor_type": "INSTITUTIONAL_ACTOR",
+    "candidate_only": true,
+    "qualification_class": "publisher_or_crown-copyright-licensing_authority_with_direct_disposition_authority",
+    "qualification_established": false
+  },
+  "fetch_policy": {
+    "allowed_domains": [
+      "justice.gc.ca",
+      "www.justice.gc.ca",
+      "laws-lois.justice.gc.ca"
+    ],
+    "email_forbidden": true,
+    "form_submission_forbidden": true,
+    "future_get_only": true,
+    "post_put_patch_delete_forbidden": true,
+    "raw_response_preservation_required": true,
+    "redirect_outside_allowed_domains_forbidden": true,
+    "sha256_binding_required": true
+  },
+  "inventory_id": "OIC-CANADA-EXTERNAL-RIGHTS-ACTOR-QUALIFICATION-001-PUBLIC-EVIDENCE",
+  "qualification_claim_boundary": "Public pages may establish that the named institutional office is a candidate Crown-copyright/reproduction authority and may establish the office's public scope. They do not yet establish that the office has issued the requested CA-3 rights_basis/redistribution_status disposition.",
+  "sources": [
+    {
+      "expected_relevance": [
+        "Department of Justice Canada controls permission/reproduction terms for its site materials",
+        "Communications Branch Copyright administrator is named for commercial reproduction permission",
+        "Department provides copyright ownership/restrictions contact",
+        "page separately states Reproduction of Federal Law Order",
+        "legal materials may be reproduced subject to stated conditions"
+      ],
+      "official_domain": "justice.gc.ca",
+      "source_id": "JUS-TERMS",
+      "url": "https://www.justice.gc.ca/eng/terms-avis/index.html"
+    },
+    {
+      "expected_relevance": [
+        "form is expressly for Department of Justice Canada works",
+        "exact source URL is a supported work identifier",
+        "all correspondence is directed to Communications Branch Copyright administrator",
+        "copyright-droitdauteur@justice.gc.ca is listed for clearance correspondence"
+      ],
+      "official_domain": "justice.gc.ca",
+      "source_id": "JUS-CLEARANCE-FORM",
+      "url": "https://www.justice.gc.ca/eng/terms-avis/copyright-droitdauteur.html"
+    },
+    {
+      "expected_relevance": [
+        "Justice Laws Website publishes XML for consolidated federal Acts and regulations",
+        "FAQ explicitly states Reproduction of Federal Law Order permits reproduction of federal Acts and regulations subject to conditions"
+      ],
+      "official_domain": "laws-lois.justice.gc.ca",
+      "source_id": "JUSTICE-LAWS-FAQ",
+      "url": "https://laws-lois.justice.gc.ca/eng/FAQ/"
+    },
+    {
+      "expected_relevance": [
+        "official completed authority instrument",
+        "licenses reproduction of federal law without charge or request for permission",
+        "requires accuracy and non-official-version representation"
+      ],
+      "official_domain": "laws-lois.justice.gc.ca",
+      "source_id": "FEDERAL-LAW-ORDER",
+      "url": "https://laws-lois.justice.gc.ca/eng/regulations/SI-97-5/FullText.html"
+    }
+  ],
+  "status": "PREREGISTERED_PUBLIC_EVIDENCE_NOT_FETCHED",
+  "version": "v0.1"
+}

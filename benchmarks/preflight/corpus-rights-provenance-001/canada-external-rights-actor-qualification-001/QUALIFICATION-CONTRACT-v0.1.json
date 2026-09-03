@@ -1,0 +1,55 @@
+{
+  "artifact_bindings": {
+    "actor_qualification_schema_sha256": "0def9b32cc1156f6984a29119b35d8ebd528a1cf2c97b523d386f0096d60a6fa",
+    "external_rights_implementation_freeze_sha256": "39a27e4b71607f23a7e8273cca8b41af66fa117fdb7ca9adcfb8d337c11d0b2d",
+    "public_evidence_inventory_sha256": "b5c440d78cf5ed01f29f57a17968b2703b6bc137c177d7c9009fe3784b2520ac"
+  },
+  "base_static_commit": "0db9c00c165f905fb96f66fd783010fe2a3069b9",
+  "candidate_actor": {
+    "actor_full_name": "Department of Justice Canada — Communications Branch — Copyright administrator",
+    "actor_type": "INSTITUTIONAL_ACTOR",
+    "qualification_class": "publisher_or_crown-copyright-licensing_authority_with_direct_disposition_authority",
+    "selection_basis": "OFFICIAL_JUSTICE_CANADA_COPYRIGHT_AND_REPRODUCTION_ADMINISTRATION_SURFACE",
+    "selection_is_contact_authorization": false,
+    "selection_is_legal_conclusion": false
+  },
+  "contract_id": "OIC-CANADA-EXTERNAL-RIGHTS-ACTOR-QUALIFICATION-001",
+  "current_state": {
+    "candidate_actor_qualification_supported": false,
+    "candidate_actor_selected": true,
+    "real_actor_contacted": false,
+    "redistribution_status_value_observed": null,
+    "rights_basis_value_observed": null,
+    "rights_disposition_request_sent": false,
+    "source_manifest_population_authorized": false
+  },
+  "execution_policy": {
+    "email_authorized_now": false,
+    "external_actor_contact_authorized_now": false,
+    "form_submission_authorized_now": false,
+    "provider_model_calls_authorized": false,
+    "public_get_requests_authorized_now": false,
+    "real_rights_disposition_ingestion_authorized_now": false,
+    "request_send_authorized_now": false
+  },
+  "if_not_established_claim_ceiling": "NOT_ESTABLISHED means only that the frozen public evidence was insufficient to establish this candidate office's qualification under the contract.",
+  "if_supported_claim_ceiling": "SUPPORTED may establish only that the public authority surface supports using this institutional office as the candidate recipient for a bounded CA-3 rights disposition request. It does not establish the substantive rights answer, does not establish that any future responder personally possesses authority, and does not authorize contact or request transmission.",
+  "next_authorized_step": "After independent verification, statically freeze a bounded GET-only public qualification evidence acquirer/evaluator. Do not fetch or contact before that static instrument is independently verified.",
+  "qualification_outcomes": [
+    "CANDIDATE_INSTITUTIONAL_ACTOR_QUALIFICATION_SUPPORTED_CA3",
+    "CANDIDATE_INSTITUTIONAL_ACTOR_QUALIFICATION_NOT_ESTABLISHED_CA3",
+    "CANDIDATE_INSTITUTIONAL_ACTOR_QUALIFICATION_INCOMPLETE_FAIL_CLOSED"
+  ],
+  "qualification_question": "Do the frozen official public sources independently establish that the candidate institutional actor administers or directly handles copyright/reproduction authority for Department of Justice Canada materials and has sufficient institutional scope to receive a bounded CA-3 rights disposition request covering rights_basis and redistribution_status?",
+  "required_public_evidence_findings": {
+    "actor_identity_explicit": true,
+    "authority_basis_reference_present": true,
+    "ca3_is_justice_laws_material": true,
+    "copyright_or_reproduction_role_explicit": true,
+    "exact_source_url_intake_supported": true,
+    "federal_law_reproduction_order_recognized": true,
+    "justice_material_scope_explicit": true
+  },
+  "status": "PREREGISTERED_CANDIDATE_ACTOR_PUBLIC_EVIDENCE_NOT_ACQUIRED",
+  "version": "v0.1"
+}
