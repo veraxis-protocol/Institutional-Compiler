@@ -1,0 +1,44 @@
+{
+  "artifact_sha256": {
+    "PLAN-v0.1.md": "f1e3416d14c873a4bfc478e99398ebf857bd868ec6dcfdf7fe3580be78ce3327",
+    "REAL-AUTHORITY-ACQUISITION-DESIGN-CONTRACT-v0.1.json": "ae39d1be9b3907ce345f5b47de65297cb018e09313e61d1bbb2fb15a1568eabf",
+    "synthetic_sufficiency_execution_result": "0335208b2fae5d4ad7be72d258ff31132f8debf6d8806f343c0042d212546721",
+    "synthetic_sufficiency_post_run_adjudication": "e49649c515ae59bda4254579548d1a99ca97fd241c29ac112e765a3c85538d81"
+  },
+  "authority_channel_selected": false,
+  "base_synthetic_sufficiency_closure_commit": "62f481de220a322d04fb519349ad344bbe7723b5",
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "declaration_values_created": false,
+  "design_executed": false,
+  "external_actor_contacted": false,
+  "freeze_id": "OIC-CANADA-REAL-AUTHORITY-ACQUISITION-DESIGN-001-FREEZE-v0.1",
+  "freeze_version": "v0.1",
+  "input_scope": {
+    "closed_synthetic_sufficiency_result": true,
+    "external_authority_evidence": false,
+    "local_receipts": false,
+    "network": false,
+    "six_governance_documents": false
+  },
+  "internal_delegation_created": false,
+  "legal_clearance_established": false,
+  "new_real_derivation_rule_created": false,
+  "next_authorized_step": "Independent verification of this preregistration. After verification, implement and statically freeze deterministic real-authority acquisition-design characterization. Do not contact actors or create authority acts.",
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ],
+    "successful_channel_family_count": 6,
+    "successful_synthetic_specimen_count": 9,
+    "target_field_count": 6
+  },
+  "provenance_established": false,
+  "real_authority_act_created": false,
+  "real_authority_established": false,
+  "rights_established": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "PREREGISTERED_DESIGN_NOT_EXECUTED",
+  "work_order": "OIC-CANADA-REAL-AUTHORITY-ACQUISITION-DESIGN-001"
+}

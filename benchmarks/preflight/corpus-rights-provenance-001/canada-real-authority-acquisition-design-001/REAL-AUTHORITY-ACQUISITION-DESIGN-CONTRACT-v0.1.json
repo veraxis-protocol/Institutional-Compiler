@@ -1,0 +1,241 @@
+{
+  "artifact_bindings": {
+    "synthetic_sufficiency_execution_result_sha256": "0335208b2fae5d4ad7be72d258ff31132f8debf6d8806f343c0042d212546721",
+    "synthetic_sufficiency_post_run_adjudication_sha256": "e49649c515ae59bda4254579548d1a99ca97fd241c29ac112e765a3c85538d81"
+  },
+  "authority_channel_selected": false,
+  "base_synthetic_sufficiency_closure_commit": "62f481de220a322d04fb519349ad344bbe7723b5",
+  "candidate_002_adopted": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "channel_family_requirements": {
+    "EXPLICIT_SOURCE_ORIGIN_DECLARATION": {
+      "actor_origin": "EXTERNAL",
+      "authority_basis_requirement": "Evidence external to OIC that the identified actor has standing to declare the source-origin classification for the covered source.",
+      "completed_act_requirement": "A completed, attributable declaration act explicitly covering CA-3 and source_kind.",
+      "currently_real_authority_established": false,
+      "oic_self_issuance_permitted": false,
+      "preexisting_internal_delegation_required": false,
+      "real_authority_evidence_required": [
+        "actor_identity_evidence",
+        "authority_basis_evidence_external_to_oic_evaluator",
+        "completed_act_evidence",
+        "ca3_scope_evidence",
+        "target_field_scope_evidence",
+        "act_integrity_or_digest_binding"
+      ],
+      "realization_mode": "EXTERNAL_DECLARATION_ACT",
+      "required_actor_class": "SOURCE_PUBLISHER_OR_CONTENT_ISSUER",
+      "scope_requirement": "Explicit CA-3 scope and explicit source_kind field scope.",
+      "structurally_supported_target_fields": [
+        "source_kind"
+      ],
+      "synthetic_result_promotable_to_real_authority": false
+    },
+    "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION": {
+      "actor_origin": "EXTERNAL",
+      "authority_basis_requirement": "Evidence external to OIC establishing the actor's authority basis for the rights question being answered.",
+      "completed_act_requirement": "A completed, attributable rights disposition explicitly covering CA-3 and each target manifest field claimed.",
+      "currently_real_authority_established": false,
+      "oic_self_issuance_permitted": false,
+      "preexisting_internal_delegation_required": false,
+      "real_authority_evidence_required": [
+        "actor_identity_evidence",
+        "authority_basis_evidence_external_to_oic_evaluator",
+        "completed_act_evidence",
+        "ca3_scope_evidence",
+        "target_field_scope_evidence",
+        "act_integrity_or_digest_binding"
+      ],
+      "realization_mode": "EXTERNAL_RIGHTS_DISPOSITION_ACT",
+      "required_actor_class": "QUALIFIED_EXTERNAL_RIGHTS_AUTHORITY",
+      "scope_requirement": "Explicit CA-3 scope plus exact target-field scope.",
+      "structurally_supported_target_fields": [
+        "redistribution_status",
+        "rights_basis"
+      ],
+      "synthetic_result_promotable_to_real_authority": false
+    },
+    "INSTITUTIONAL_ADMISSION_DECLARATION": {
+      "actor_origin": "INTERNAL_INSTITUTIONAL",
+      "authority_basis_requirement": "A pre-existing organizational charter, delegation, policy, or other authority basis not created by the OIC evaluator and covering manifest admission.",
+      "completed_act_requirement": "A completed, attributable institutional manifest-admission act.",
+      "currently_real_authority_established": false,
+      "oic_self_issuance_permitted": false,
+      "preexisting_internal_delegation_required": true,
+      "real_authority_evidence_required": [
+        "actor_identity_evidence",
+        "authority_basis_evidence_external_to_oic_evaluator",
+        "completed_act_evidence",
+        "ca3_scope_evidence",
+        "target_field_scope_evidence",
+        "act_integrity_or_digest_binding"
+      ],
+      "realization_mode": "PREEXISTING_DELEGATION_PLUS_COMPLETED_INTERNAL_ACT",
+      "required_actor_class": "AUTHORIZED_INTERNAL_MANIFEST_ADMISSION_ACTOR",
+      "scope_requirement": "Delegation and act must explicitly cover CA-3 and source_kind.",
+      "structurally_supported_target_fields": [
+        "source_kind"
+      ],
+      "synthetic_result_promotable_to_real_authority": false
+    },
+    "INSTITUTIONAL_PROVENANCE_ADMISSION_DECLARATION": {
+      "actor_origin": "INTERNAL_INSTITUTIONAL",
+      "authority_basis_requirement": "A pre-existing organizational charter, delegation, policy, or other authority basis not created by the OIC evaluator and covering provenance admission.",
+      "completed_act_requirement": "A completed, attributable institutional provenance-admission act.",
+      "currently_real_authority_established": false,
+      "oic_self_issuance_permitted": false,
+      "preexisting_internal_delegation_required": true,
+      "real_authority_evidence_required": [
+        "actor_identity_evidence",
+        "authority_basis_evidence_external_to_oic_evaluator",
+        "completed_act_evidence",
+        "ca3_scope_evidence",
+        "target_field_scope_evidence",
+        "act_integrity_or_digest_binding"
+      ],
+      "realization_mode": "PREEXISTING_DELEGATION_PLUS_COMPLETED_INTERNAL_ACT",
+      "required_actor_class": "AUTHORIZED_INTERNAL_PROVENANCE_ADMISSION_ACTOR",
+      "scope_requirement": "Delegation and act must explicitly cover CA-3 and provenance_status.",
+      "structurally_supported_target_fields": [
+        "provenance_status"
+      ],
+      "synthetic_result_promotable_to_real_authority": false
+    },
+    "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION": {
+      "actor_origin": "INTERNAL_INSTITUTIONAL",
+      "authority_basis_requirement": "A pre-existing organizational charter, delegation, policy, or other authority basis not created by the OIC evaluator and covering rights adjudication for the relevant scope.",
+      "completed_act_requirement": "A completed, attributable institutional rights adjudication act.",
+      "currently_real_authority_established": false,
+      "oic_self_issuance_permitted": false,
+      "preexisting_internal_delegation_required": true,
+      "real_authority_evidence_required": [
+        "actor_identity_evidence",
+        "authority_basis_evidence_external_to_oic_evaluator",
+        "completed_act_evidence",
+        "ca3_scope_evidence",
+        "target_field_scope_evidence",
+        "act_integrity_or_digest_binding"
+      ],
+      "realization_mode": "PREEXISTING_DELEGATION_PLUS_COMPLETED_INTERNAL_ACT",
+      "required_actor_class": "AUTHORIZED_INTERNAL_RIGHTS_ADJUDICATOR",
+      "scope_requirement": "Delegation and act must explicitly cover CA-3 and the exact target fields.",
+      "structurally_supported_target_fields": [
+        "redistribution_status",
+        "rights_basis",
+        "rights_status"
+      ],
+      "synthetic_result_promotable_to_real_authority": false
+    },
+    "PUBLISHER_CANONICAL_LOCATOR_DECLARATION": {
+      "actor_origin": "EXTERNAL",
+      "authority_basis_requirement": "Evidence external to OIC that the actor is the publisher or otherwise has standing to designate the canonical locator.",
+      "completed_act_requirement": "A completed, attributable canonical-locator declaration explicitly covering CA-3 and source_locator.",
+      "currently_real_authority_established": false,
+      "oic_self_issuance_permitted": false,
+      "preexisting_internal_delegation_required": false,
+      "real_authority_evidence_required": [
+        "actor_identity_evidence",
+        "authority_basis_evidence_external_to_oic_evaluator",
+        "completed_act_evidence",
+        "ca3_scope_evidence",
+        "target_field_scope_evidence",
+        "act_integrity_or_digest_binding"
+      ],
+      "realization_mode": "EXTERNAL_CANONICAL_LOCATOR_DECLARATION_ACT",
+      "required_actor_class": "SOURCE_PUBLISHER",
+      "scope_requirement": "Explicit CA-3 scope and explicit source_locator field scope.",
+      "structurally_supported_target_fields": [
+        "source_locator"
+      ],
+      "synthetic_result_promotable_to_real_authority": false
+    }
+  },
+  "claim_ceiling": "This study may design the evidence and actor-class requirements for real-world instantiation of the six structurally sufficient authority channel families. It cannot establish that any actor actually has authority, that any authority act exists, that any minimum cover set is legally preferred, or any declaration value, rights/provenance truth, legal clearance, SOURCE_MANIFEST admissibility, causal root cause, or cross-source generality.",
+  "contract_id": "OIC-CANADA-REAL-AUTHORITY-ACQUISITION-DESIGN-CONTRACT-001",
+  "contract_version": "v0.1",
+  "cross_source_generality_established": false,
+  "declaration_values_created": false,
+  "design_executed": false,
+  "external_actor_contacted": false,
+  "forbidden_during_design": [
+    "contacting an external actor",
+    "creating a real authority act",
+    "creating an internal delegation or charter",
+    "naming the repository owner as an authority merely by ownership",
+    "creating a declaration value",
+    "creating or modifying SOURCE_MANIFEST.csv",
+    "reading the six governance documents",
+    "reading .local receipts",
+    "network/provider/model calls"
+  ],
+  "internal_delegation_created": false,
+  "legal_clearance_established": false,
+  "minimum_channel_family_cover": {
+    "cover_set_count": 2,
+    "cover_sets": [
+      [
+        "EXPLICIT_SOURCE_ORIGIN_DECLARATION",
+        "INSTITUTIONAL_PROVENANCE_ADMISSION_DECLARATION",
+        "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION",
+        "PUBLISHER_CANONICAL_LOCATOR_DECLARATION"
+      ],
+      [
+        "INSTITUTIONAL_ADMISSION_DECLARATION",
+        "INSTITUTIONAL_PROVENANCE_ADMISSION_DECLARATION",
+        "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION",
+        "PUBLISHER_CANONICAL_LOCATOR_DECLARATION"
+      ]
+    ],
+    "interpretation": "Descriptive field coverage only. A minimum cover set does not imply legal correctness, institutional preference, lower risk, lower cost, or authorization to instantiate any family.",
+    "minimum_family_count": 4
+  },
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "new_real_derivation_rule_created": false,
+  "path_classes": {
+    "EXTERNAL_ACTOR_PATH": {
+      "families": [
+        "EXPLICIT_SOURCE_ORIGIN_DECLARATION",
+        "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION",
+        "PUBLISHER_CANONICAL_LOCATOR_DECLARATION"
+      ],
+      "next_real_step_class": "OBTAIN_OR_IDENTIFY_PREEXISTING_EXTERNAL_AUTHORITY_ACT"
+    },
+    "INTERNAL_GOVERNANCE_PATH": {
+      "families": [
+        "INSTITUTIONAL_ADMISSION_DECLARATION",
+        "INSTITUTIONAL_PROVENANCE_ADMISSION_DECLARATION",
+        "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION"
+      ],
+      "next_real_step_class": "ESTABLISH_PREEXISTING_GOVERNANCE_BASIS_THEN_EXECUTE_AUTHORIZED_ACT"
+    }
+  },
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ],
+    "successful_channel_family_count": 6,
+    "successful_synthetic_specimen_count": 9,
+    "target_field_count": 6
+  },
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "real_authority_act_created": false,
+  "real_authority_admissibility_requirements": [
+    "actor identity must be explicit and attributable",
+    "authority basis must be established independently of the OIC evaluator",
+    "authority basis must cover the act class",
+    "authority basis must cover CA-3 or an explicitly applicable source class",
+    "completed act must explicitly cover the target manifest field or fields",
+    "act evidence must be durably bound by digest or equivalent integrity reference",
+    "no OIC evaluator may issue, invent, or self-authorize the authority act",
+    "synthetic specimen output may not be promoted into real authority evidence"
+  ],
+  "real_authority_established": false,
+  "rights_established": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "FROZEN_DESIGN_NOT_EXECUTED",
+  "success_rule": "REAL_AUTHORITY_ACQUISITION_SURFACE_DESIGNED_CA3 if all six successful channel families are assigned an actor-origin class, required real authority evidence, realization mode, scope requirements, and no-self-issuance boundary; all minimum field-cover sets are computed exactly; and zero design findings occur."
+}
