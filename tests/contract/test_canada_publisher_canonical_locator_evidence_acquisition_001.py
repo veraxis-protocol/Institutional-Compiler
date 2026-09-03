@@ -413,7 +413,8 @@ def test_network_failure_after_request_boundary_is_structured_incomplete(tmp_pat
     assert result["outcome"] == m.INCOMPLETE
     assert result["navigation_seed_semantics_read"] is True
     assert result["network_request_made"] is True
-    assert result["new_real_world_evidence_acquired"] is True
+    assert result["response_records_received"] == 0
+    assert result["new_real_world_evidence_acquired"] is False
     assert "synthetic network failure" in result["findings"][0]
 
 
@@ -447,3 +448,170 @@ def test_started_lock_prevents_second_execution_even_after_fail_closed(tmp_path)
         pass
     else:
         raise AssertionError("consumed STARTED lock must block rerun")
+
+
+def test_redirect_failure_carries_already_received_response_records():
+    first = response(
+        "https://laws-lois.justice.gc.ca/a",
+        302,
+        headers=(("Location", "https://canada.ca/out"),),
+    )
+
+    def requester(url, method):
+        assert url == "https://laws-lois.justice.gc.ca/a"
+        assert method == "GET"
+        return first
+
+    try:
+        m.acquire_with_bounded_redirects(
+            "https://laws-lois.justice.gc.ca/a",
+            requester=requester,
+        )
+    except m.AcquisitionError as exc:
+        assert len(exc.records) == 1
+        assert exc.records[0] == first
+        assert "redirect inadmissible" in str(exc)
+    else:
+        raise AssertionError("cross-domain redirect should fail with trace")
+
+
+def test_zero_response_network_failure_is_not_reported_as_evidence_acquired(tmp_path):
+    auth = tmp_path / "authorization.json"
+    auth.write_text('{"authorized":true}\n', encoding="utf-8")
+    lock = tmp_path / "STARTED.json"
+    evidence = tmp_path / "evidence"
+
+    def seed_loader(_path):
+        return {
+            "x": {
+                "source_id": "CA-3",
+                "target_url": "https://laws-lois.justice.gc.ca/a",
+                "final_url": None,
+            }
+        }
+
+    def failing_acquirer(_url):
+        raise m.AcquisitionError("dns failure before response")
+
+    result = m.execute_live(
+        auth,
+        evidence,
+        lock,
+        seed_loader=seed_loader,
+        acquirer=failing_acquirer,
+    )
+
+    assert result["outcome"] == m.INCOMPLETE
+    assert result["network_request_made"] is True
+    assert result["response_records_received"] == 0
+    assert result["new_real_world_evidence_acquired"] is False
+    assert result["response_receipt"] is None
+    assert result["raw_evidence_sha256"] == {}
+
+
+def test_partial_response_failure_preserves_and_hash_binds_observed_evidence(tmp_path):
+    auth = tmp_path / "authorization.json"
+    auth.write_text('{"authorized":true}\n', encoding="utf-8")
+    lock = tmp_path / "STARTED.json"
+    evidence = tmp_path / "evidence"
+
+    observed = response(
+        "https://laws-lois.justice.gc.ca/a",
+        302,
+        headers=(("Location", "https://canada.ca/out"),),
+        body=b"redirect-body",
+    )
+
+    def seed_loader(_path):
+        return {
+            "x": {
+                "source_id": "CA-3",
+                "target_url": "https://laws-lois.justice.gc.ca/a",
+                "final_url": None,
+            }
+        }
+
+    def partial_acquirer(_url):
+        raise m.AcquisitionError(
+            "redirect escaped boundary",
+            records=[observed],
+        )
+
+    result = m.execute_live(
+        auth,
+        evidence,
+        lock,
+        seed_loader=seed_loader,
+        acquirer=partial_acquirer,
+    )
+
+    assert result["outcome"] == m.INCOMPLETE
+    assert result["network_request_made"] is True
+    assert result["response_records_received"] == 1
+    assert result["new_real_world_evidence_acquired"] is True
+    assert result["response_receipt"]["response_count"] == 1
+    assert result["raw_evidence_sha256"]
+    assert (evidence / "response-00-headers.json").is_file()
+    assert (evidence / "response-00-body.bin").read_bytes() == b"redirect-body"
+    assert (evidence / "parsed-evaluation.json").is_file()
+    for name, digest in result["raw_evidence_sha256"].items():
+        assert digest == m.sha256(evidence / name)
+
+
+def test_existing_evidence_directory_fails_before_started_lock(tmp_path):
+    auth = tmp_path / "authorization.json"
+    auth.write_text('{"authorized":true}\n', encoding="utf-8")
+    lock = tmp_path / "STARTED.json"
+    evidence = tmp_path / "evidence"
+    evidence.mkdir()
+
+    try:
+        m.execute_live(
+            auth,
+            evidence,
+            lock,
+            seed_loader=lambda _path: {},
+            acquirer=lambda _url: [],
+        )
+    except SystemExit as exc:
+        assert "evidence directory already exists" in str(exc)
+    else:
+        raise AssertionError("existing evidence directory should fail pre-STARTED")
+
+    assert not lock.exists()
+
+
+def test_success_reports_received_response_count_and_real_evidence(tmp_path):
+    auth = tmp_path / "authorization.json"
+    auth.write_text('{"authorized":true}\n', encoding="utf-8")
+    lock = tmp_path / "STARTED.json"
+    evidence = tmp_path / "evidence"
+
+    observed = response(
+        "https://laws-lois.justice.gc.ca/a",
+        200,
+        headers=(
+            ("Link", '<https://www.justice.gc.ca/canon>; rel="canonical"'),
+        ),
+        body=b"ok",
+    )
+
+    result = m.execute_live(
+        auth,
+        evidence,
+        lock,
+        seed_loader=lambda _path: {
+            "x": {
+                "source_id": "CA-3",
+                "target_url": "https://laws-lois.justice.gc.ca/a",
+                "final_url": None,
+            }
+        },
+        acquirer=lambda _url: [observed],
+    )
+
+    assert result["outcome"] == m.ESTABLISHED
+    assert result["network_request_made"] is True
+    assert result["response_records_received"] == 1
+    assert result["new_real_world_evidence_acquired"] is True
+    assert result["response_receipt"]["response_count"] == 1

@@ -172,7 +172,14 @@ class ResponseRecord:
 
 
 class AcquisitionError(RuntimeError):
-    pass
+    def __init__(
+        self,
+        message: str,
+        *,
+        records: Sequence["ResponseRecord"] = (),
+    ) -> None:
+        super().__init__(message)
+        self.records = tuple(records)
 
 
 def _request_once(url: str, method: str = "GET") -> ResponseRecord:
@@ -237,31 +244,60 @@ def acquire_with_bounded_redirects(
     records: list[ResponseRecord] = []
 
     for hop in range(MAX_REDIRECTS + 1):
-        record = requester(current, "GET")
+        try:
+            record = requester(current, "GET")
+        except Exception as exc:
+            inherited = (
+                list(exc.records)
+                if isinstance(exc, AcquisitionError)
+                else []
+            )
+            if inherited:
+                records.extend(inherited)
+            raise AcquisitionError(
+                f"request failed: {type(exc).__name__}: {exc}",
+                records=records,
+            ) from exc
+
         records.append(record)
 
         if record.status in {301, 302, 303, 307, 308}:
             locations = record.header_map.get("location", [])
             if len(locations) != 1:
                 raise AcquisitionError(
-                    "redirect must contain exactly one Location header"
+                    "redirect must contain exactly one Location header",
+                    records=records,
                 )
             if hop >= MAX_REDIRECTS:
-                raise AcquisitionError("maximum redirects exceeded")
-
-            nxt = normalize_https_url(urljoin(current, locations[0]))
-            next_host = urlsplit(nxt).hostname
-            assert next_host is not None
-            if registrable_domain(next_host) != seed_registrable:
                 raise AcquisitionError(
-                    "redirect escaped seed registrable-domain boundary"
+                    "maximum redirects exceeded",
+                    records=records,
                 )
+
+            try:
+                nxt = normalize_https_url(urljoin(current, locations[0]))
+                next_host = urlsplit(nxt).hostname
+                if next_host is None:
+                    raise ValueError("redirect URL missing hostname")
+                if registrable_domain(next_host) != seed_registrable:
+                    raise ValueError(
+                        "redirect escaped seed registrable-domain boundary"
+                    )
+            except Exception as exc:
+                raise AcquisitionError(
+                    f"redirect inadmissible: {type(exc).__name__}: {exc}",
+                    records=records,
+                ) from exc
+
             current = nxt
             continue
 
         return records
 
-    raise AcquisitionError("redirect loop exceeded")
+    raise AcquisitionError(
+        "redirect loop exceeded",
+        records=records,
+    )
 
 
 _LINK_SPLIT_RE = re.compile(r'\s*,\s*(?=<)')
@@ -552,6 +588,21 @@ def execute_live(
 
     if not authorization_receipt.is_file():
         raise SystemExit("FAIL: explicit authorization receipt missing")
+    if evidence_dir.exists():
+        raise SystemExit("FAIL: evidence directory already exists")
+
+    # Verify that the evidence destination can be created before the irreversible
+    # STARTED lock is consumed.
+    evidence_parent = evidence_dir.parent
+    evidence_parent.mkdir(parents=True, exist_ok=True)
+    probe = evidence_parent / f".{evidence_dir.name}.write-probe"
+    fd = os.open(probe, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    try:
+        os.write(fd, b"preflight\n")
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+        probe.unlink()
 
     # STARTED is permanent and created before semantic seed read or network I/O.
     started_sha = create_started_lock(
@@ -569,18 +620,14 @@ def execute_live(
     navigation_seed_semantics_read = False
     network_request_made = False
     seed: dict[str, Any] | None = None
+    records: list[ResponseRecord] = []
 
     try:
-        # Once STARTED exists, every subsequent failure must return a structured
-        # one-shot result. No exception may escape merely because seed semantics
-        # are malformed or the domain preflight fails.
         seed_doc = seed_loader(NAV_SEED)
         navigation_seed_semantics_read = True
         seed = extract_ca3_navigation_seed(seed_doc)
         start_url = choose_navigation_url(seed)
 
-        # Complete all deterministic URL/domain validation before recording that
-        # network I/O has begun.
         start_host = urlsplit(start_url).hostname
         if start_host is None:
             raise ValueError("navigation URL missing hostname")
@@ -588,6 +635,9 @@ def execute_live(
 
         network_request_made = True
         records = acquirer(start_url)
+        if not records:
+            raise AcquisitionError("acquirer returned zero response records")
+
         evaluation = evaluate_final_response(records)
         receipt = response_receipt(records)
         raw_digests = write_raw_evidence(evidence_dir, records, evaluation)
@@ -602,7 +652,8 @@ def execute_live(
             "navigation_seed_sha256": NAV_SEED_SHA256,
             "navigation_seed_semantics_read": navigation_seed_semantics_read,
             "network_request_made": network_request_made,
-            "new_real_world_evidence_acquired": network_request_made,
+            "response_records_received": len(records),
+            "new_real_world_evidence_acquired": bool(records),
             "external_actor_contacted": False,
             "seed_metadata": seed,
             "response_receipt": receipt,
@@ -614,8 +665,35 @@ def execute_live(
             "source_manifest_population_authorized": False,
         }
     except Exception as exc:
-        # STARTED remains consumed. This is the terminal result for this one-shot
-        # even when failure occurs before the first network request.
+        partial_records = list(records)
+        if isinstance(exc, AcquisitionError) and exc.records:
+            partial_records = list(exc.records)
+
+        findings = [f"{type(exc).__name__}: {exc}"]
+        receipt = None
+        raw_digests: dict[str, str] = {}
+
+        if partial_records:
+            incomplete_evaluation = {
+                "outcome": INCOMPLETE,
+                "finding_count": 1,
+                "findings": findings,
+                "declaration_value_created": False,
+                "source_manifest_population_authorized": False,
+            }
+            try:
+                receipt = response_receipt(partial_records)
+                raw_digests = write_raw_evidence(
+                    evidence_dir,
+                    partial_records,
+                    incomplete_evaluation,
+                )
+            except Exception as persistence_exc:
+                findings.append(
+                    "EVIDENCE_PERSISTENCE_FAILURE: "
+                    f"{type(persistence_exc).__name__}: {persistence_exc}"
+                )
+
         return {
             "work_order":
                 "OIC-CANADA-PUBLISHER-CANONICAL-LOCATOR-EVIDENCE-ACQUISITION-001",
@@ -626,11 +704,14 @@ def execute_live(
             "navigation_seed_sha256": NAV_SEED_SHA256,
             "navigation_seed_semantics_read": navigation_seed_semantics_read,
             "network_request_made": network_request_made,
-            "new_real_world_evidence_acquired": network_request_made,
+            "response_records_received": len(partial_records),
+            "new_real_world_evidence_acquired": bool(partial_records),
             "external_actor_contacted": False,
             "seed_metadata": seed,
-            "finding_count": 1,
-            "findings": [f"{type(exc).__name__}: {exc}"],
+            "response_receipt": receipt,
+            "raw_evidence_sha256": raw_digests,
+            "finding_count": len(findings),
+            "findings": findings,
             "real_authority_act_created_by_oic": False,
             "declaration_values_created": False,
             "source_manifest_created": False,

@@ -1,0 +1,55 @@
+{
+  "amended_execution_invariants": {
+    "evidence_destination_preflight_occurs_before_started": true,
+    "network_attempt_and_evidence_receipt_are_distinct": true,
+    "new_real_world_evidence_requires_at_least_one_response_record": true,
+    "partial_response_trace_is_included_in_terminal_result": true,
+    "partial_response_trace_is_sha256_bound": true,
+    "partial_response_trace_survives_terminal_acquisition_error": true,
+    "rerun_after_started_remains_forbidden": true,
+    "started_lock_still_precedes_navigation_semantic_read": true,
+    "started_lock_still_precedes_network_request": true
+  },
+  "amendment_id": "OIC-CANADA-PUBLISHER-CANONICAL-LOCATOR-EVIDENCE-ACQUISITION-001-IMPLEMENTATION-AMENDMENT-v0.4",
+  "amendment_version": "v0.4",
+  "artifact_sha256": {
+    "v0.4_acquisition_instrument": "440f2842dce249250627ff09b3337cadfa57630811bfad9fa84a477e4c79c18b",
+    "v0.4_contract_tests": "5de4769387486c9a942e2f649b82f2e574c7b3ce0b5739611c3d996741de88aa"
+  },
+  "base_v0_3_commit": "7e77de256739eb9d67f9a31f7475716180878e55",
+  "canonical_evidence_forms_changed": false,
+  "claim_ceiling_changed": false,
+  "declaration_values_created": false,
+  "domain_policy_changed": false,
+  "evidence_admissibility_contract_changed": false,
+  "external_actor_contacted": false,
+  "new_real_world_evidence_acquired": false,
+  "next_authorized_step": "Independent verification of this v0.4 evidence-preservation amendment. Only after verification may the one-shot live acquisition be authorized.",
+  "one_shot_policy_changed": false,
+  "real_authority_act_created": false,
+  "real_authority_established": false,
+  "real_navigation_seed_semantics_read": false,
+  "real_network_request_made": false,
+  "real_response_records_received": 0,
+  "real_started_lock_created": false,
+  "reason": "Preserve response records already observed before a terminal acquisition failure and distinguish network attempt from actual evidence receipt. The first static v0.4 run exposed one inherited v0.3 test expectation that still treated a zero-response network failure as evidence acquired.",
+  "repository_test_suite_validation": {
+    "classification": "PASS_WITH_THREE_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_historical_deselection_count": 3,
+    "historical_tests_modified": false,
+    "semantic_scope_effect": "NONE"
+  },
+  "scientific_contract_effect": "NONE",
+  "selection_rule_changed": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "static_recovery": {
+    "acquisition_instrument_changed_by_recovery": false,
+    "classification": "STALE_INHERITED_TEST_EXPECTATION",
+    "failed_test": "test_network_failure_after_request_boundary_is_structured_incomplete",
+    "new_expectation": "new_real_world_evidence_acquired == FALSE when response_records_received == 0",
+    "old_expectation": "new_real_world_evidence_acquired == TRUE",
+    "scientific_scope_effect": "NONE"
+  },
+  "status": "EVIDENCE_PRESERVATION_AMENDMENT_STATICALLY_TESTED_LIVE_ACQUISITION_NOT_EXECUTED"
+}
