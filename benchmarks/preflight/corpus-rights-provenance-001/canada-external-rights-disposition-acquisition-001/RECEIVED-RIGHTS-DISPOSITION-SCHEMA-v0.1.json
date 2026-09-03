@@ -1,0 +1,53 @@
+{
+  "act_status_allowed": [
+    "final",
+    "completed"
+  ],
+  "claim_boundary": "Schema validity alone does not establish external authority. The received act must also bind to independently qualified actor evidence and pass all standing requirements.",
+  "fixed_source_id": "CA-3",
+  "normalization_policy": "NONE",
+  "real_disposition_ingested": false,
+  "redistribution_status_allowed": [
+    "permitted",
+    "not_permitted",
+    "unknown"
+  ],
+  "required_fields": [
+    "source_id",
+    "actor_full_name",
+    "actor_role_or_professional_capacity",
+    "act_status",
+    "issued_at",
+    "rights_basis",
+    "redistribution_status",
+    "rights_basis_reason",
+    "redistribution_status_reason",
+    "supporting_evidence_references",
+    "limitations_or_conditions",
+    "actor_attestation",
+    "raw_act_sha256"
+  ],
+  "requirements": {
+    "actor_attestation_nonempty": true,
+    "both_target_fields_in_same_act": true,
+    "issued_at_nonempty": true,
+    "limitations_or_conditions_must_be_list": true,
+    "pending_or_draft_rejected": true,
+    "raw_act_sha256_pattern": "^sha256:[0-9a-f]{64}$",
+    "redistribution_status_reason_nonempty": true,
+    "rights_basis_reason_nonempty": true,
+    "supporting_evidence_references_min_items": 1,
+    "unknown_redistribution_does_not_imply_manifest_pass": true,
+    "unknown_redistribution_is_valid_external_value": true
+  },
+  "rights_basis_allowed": [
+    "public_domain",
+    "open_license",
+    "permission",
+    "synthetic_owned",
+    "other_documented_basis"
+  ],
+  "schema_id": "OIC-CANADA-RECEIVED-EXTERNAL-RIGHTS-DISPOSITION-001",
+  "schema_version": "v0.1",
+  "status": "STATIC_SCHEMA_REAL_DISPOSITION_NOT_INGESTED"
+}

@@ -1,0 +1,42 @@
+{
+  "acceptable_qualification_classes": [
+    "licensed_or_authorized_counsel_with_relevant_canadian_copyright_or_public-sector-rights_competence",
+    "publisher_or_crown-copyright-licensing_authority_with_direct_disposition_authority",
+    "other_institutional_rights_officer_with_documented_authority_over_the_specific_material"
+  ],
+  "claim_boundary": "Static or synthetic structural completeness does not establish that a real actor is qualified. A real qualification determination additionally requires independently verified authority evidence outside OIC.",
+  "possible_assessments": [
+    "ACTOR_QUALIFICATION_EVIDENCE_STRUCTURALLY_COMPLETE",
+    "ACTOR_QUALIFICATION_EVIDENCE_INCOMPLETE"
+  ],
+  "real_actor_qualification_established": false,
+  "real_actor_selected": false,
+  "required_actor_class": "QUALIFIED_EXTERNAL_RIGHTS_AUTHORITY",
+  "required_fields": [
+    "actor_full_name",
+    "actor_role_or_professional_capacity",
+    "qualification_class",
+    "authority_basis",
+    "authority_basis_reference",
+    "authority_reference_independently_verified",
+    "authority_scope_covers_ca3",
+    "authority_scope_covers_rights_basis",
+    "authority_scope_covers_redistribution_status"
+  ],
+  "rules": {
+    "actor_full_name_nonempty": true,
+    "actor_role_or_professional_capacity_nonempty": true,
+    "authority_basis_nonempty": true,
+    "authority_basis_reference_nonempty": true,
+    "authority_reference_independently_verified_must_be_true_for_real_qualification": true,
+    "authority_scope_covers_ca3_must_be_true": true,
+    "authority_scope_covers_redistribution_status_must_be_true": true,
+    "authority_scope_covers_rights_basis_must_be_true": true,
+    "mere_title_or_self_description_is_insufficient": true,
+    "oic_self_designation_is_forbidden": true,
+    "qualification_class_must_be_frozen_enum": true
+  },
+  "schema_id": "OIC-CANADA-EXTERNAL-RIGHTS-ACTOR-QUALIFICATION-EVIDENCE-001",
+  "schema_version": "v0.1",
+  "status": "STATIC_SCHEMA_REAL_ACTOR_NOT_EVALUATED"
+}
