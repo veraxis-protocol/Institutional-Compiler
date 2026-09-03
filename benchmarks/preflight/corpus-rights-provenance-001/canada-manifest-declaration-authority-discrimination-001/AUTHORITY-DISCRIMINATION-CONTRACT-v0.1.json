@@ -1,0 +1,182 @@
+{
+  "anti_promotion_rules": [
+    "presence of evidence does not itself establish rights_basis",
+    "presence of a rights instrument does not itself establish rights_status",
+    "acquisition success does not itself establish provenance_status",
+    "acquisition URL or final URL does not itself become source_locator",
+    "public accessibility does not itself establish source_kind",
+    "rights_basis does not automatically establish redistribution_status",
+    "rights_status does not automatically establish redistribution_status",
+    "review workflow state does not become a manifest value without an authorized declaration channel",
+    "the evaluator may identify standing but may not issue a declaration",
+    "the evaluator may not create or freeze a new derivation rule"
+  ],
+  "artifact_bindings": {
+    "bundle_materialization_execution_result_sha256": "a25c4c78b21bed046f2917753a6489f019f7d079b08b977645977b4dad325ba5",
+    "bundle_materialization_post_run_adjudication_sha256": "3a7b2d61b304148d216eb96f6150ea19b5c77aac88573084f9e86fae31303490",
+    "candidate_002_execution_result_sha256": "64c4e39f74e10072dcf6bb360bb8c6edc568a723d2b7d2041dd4208206161a0c",
+    "provenance_evidence_bundle_sha256": "25e2ab8a6f192c9247fa6dcd6e6eac27a63b720b8e5bc904ec9339e8adcced74",
+    "rights_evidence_bundle_sha256": "3460f97cfd179ac8a57c52059115fc15e62f0e591526ab7043c1add12aafb85b",
+    "source_manifest_contract_sha256": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b"
+  },
+  "authority_channel_selected": false,
+  "authority_channels_evaluated": false,
+  "base_bundle_materialization_closure_commit": "8d2ed331aa9d08738ce41fc01d91a6efade2644d",
+  "candidate_002_adopted": false,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "channel_assessments": [
+    "AUTHORIZED_DECLARATION_CHANNEL_ESTABLISHED",
+    "AUTHORIZED_EXISTING_RULE_CHANNEL_ESTABLISHED",
+    "CHANNEL_NOT_ESTABLISHED"
+  ],
+  "channel_count": 16,
+  "channel_types": [
+    "EXPLICIT_SOURCE_ORIGIN_DECLARATION",
+    "PUBLISHER_CANONICAL_LOCATOR_DECLARATION",
+    "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION",
+    "INSTITUTIONAL_ADMISSION_DECLARATION",
+    "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION",
+    "INSTITUTIONAL_PROVENANCE_ADMISSION_DECLARATION",
+    "EXISTING_CONTRACT_DEFINED_DERIVATION"
+  ],
+  "claim_ceiling": "This study may establish only whether a frozen establishment channel has standing to issue or derive a future manifest declaration for CA-3. It cannot establish the declaration value itself, rights, provenance truth, legal clearance, redistribution permission, Candidate 002 adoption, SOURCE_MANIFEST admissibility, or cross-source generality.",
+  "contract_id": "OIC-CANADA-MANIFEST-DECLARATION-AUTHORITY-DISCRIMINATION-CONTRACT-001",
+  "contract_version": "v0.1",
+  "control_envelope_authorized": false,
+  "declaration_values_created": false,
+  "field_authority_channel_hypotheses": {
+    "provenance_status": [
+      {
+        "channel_id": "PS-INSTITUTIONAL-PROVENANCE",
+        "channel_type": "INSTITUTIONAL_PROVENANCE_ADMISSION_DECLARATION"
+      },
+      {
+        "channel_id": "PS-EXISTING-RULE",
+        "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION"
+      }
+    ],
+    "redistribution_status": [
+      {
+        "channel_id": "RD-EXTERNAL-RIGHTS-AUTHORITY",
+        "channel_type": "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION"
+      },
+      {
+        "channel_id": "RD-INSTITUTIONAL-ADJUDICATION",
+        "channel_type": "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION"
+      },
+      {
+        "channel_id": "RD-EXISTING-RULE",
+        "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION"
+      }
+    ],
+    "rights_basis": [
+      {
+        "channel_id": "RB-EXTERNAL-RIGHTS-AUTHORITY",
+        "channel_type": "EXTERNAL_RIGHTS_AUTHORITY_DECLARATION"
+      },
+      {
+        "channel_id": "RB-INSTITUTIONAL-ADJUDICATION",
+        "channel_type": "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION"
+      },
+      {
+        "channel_id": "RB-EXISTING-RULE",
+        "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION"
+      }
+    ],
+    "rights_status": [
+      {
+        "channel_id": "RS-INSTITUTIONAL-ADJUDICATION",
+        "channel_type": "INSTITUTIONAL_RIGHTS_ADJUDICATION_DECLARATION"
+      },
+      {
+        "channel_id": "RS-EXISTING-RULE",
+        "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION"
+      }
+    ],
+    "source_kind": [
+      {
+        "channel_id": "SK-INSTITUTIONAL-ADMISSION",
+        "channel_type": "INSTITUTIONAL_ADMISSION_DECLARATION"
+      },
+      {
+        "channel_id": "SK-SOURCE-ORIGIN",
+        "channel_type": "EXPLICIT_SOURCE_ORIGIN_DECLARATION"
+      },
+      {
+        "channel_id": "SK-EXISTING-RULE",
+        "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION"
+      }
+    ],
+    "source_locator": [
+      {
+        "channel_id": "SL-PUBLISHER-CANONICAL",
+        "channel_type": "PUBLISHER_CANONICAL_LOCATOR_DECLARATION"
+      },
+      {
+        "channel_id": "SL-INSTITUTIONAL-ADMISSION",
+        "channel_type": "INSTITUTIONAL_ADMISSION_DECLARATION"
+      },
+      {
+        "channel_id": "SL-EXISTING-RULE",
+        "channel_type": "EXISTING_CONTRACT_DEFINED_DERIVATION"
+      }
+    ]
+  },
+  "field_outcome_rule": "A field may have zero, one, or multiple establishment channels with standing. This work order does not rank channels and does not choose or create a declaration value. If no channel satisfies every required standing dimension, the field outcome is AUTHORITY_NOT_ESTABLISHED.",
+  "future_authority_source_inventory_policy": {
+    "crosswalk_receipts": "FORBIDDEN",
+    "network": "FORBIDDEN",
+    "source_xml_or_policy_content": "FORBIDDEN",
+    "static_freeze_must_enumerate_exact_tracked_inputs_before_evaluation": true,
+    "tracked_governance_or_admission_artifacts": "ELIGIBLE_ONLY_IF_EXACT_PATH_AND_SHA256_FROZEN_IN_IMPLEMENTATION_FREEZE",
+    "tracked_rights_or_provenance_review_artifacts": "ELIGIBLE_ONLY_FOR_STANDING/ROLE/TRANSITION-GATE SEMANTICS",
+    "value_extraction_or_declaration_creation": "FORBIDDEN"
+  },
+  "generalization_rule": "Any result is bounded to CA-3 and the exact frozen authority artifacts. Held-out validation is required before claiming cross-source authority architecture.",
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "new_derivation_rule_created": false,
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "standing_test_dimensions": [
+    "authority_identity_explicit",
+    "authority_basis_explicit",
+    "authority_scope_covers_ca3",
+    "authority_scope_covers_target_field",
+    "authority_act_or_rule_explicit",
+    "evidence_binding_explicit_where_required",
+    "temporal_or_version_scope_explicit_where_required",
+    "manifest_contract_accepts_result_shape",
+    "no_evaluator_self_issuance",
+    "no_promotion_from_workflow_or_observation_metadata",
+    "deterministic_replay_possible_if_rule_based"
+  ],
+  "status": "FROZEN_HYPOTHESES_NOT_EVALUATED",
+  "success_rule": "AUTHORITY_SURFACE_DISCRIMINATED_CA3 if all six fields and all frozen candidate channels are evaluated against the standing dimensions with zero instrument findings. This disposition does not require any channel to pass. A field with no passing channel remains AUTHORITY_NOT_ESTABLISHED.",
+  "target_field_count": 6,
+  "target_fields": [
+    "source_kind",
+    "source_locator",
+    "rights_basis",
+    "rights_status",
+    "provenance_status",
+    "redistribution_status"
+  ],
+  "tracked_evidence_bundles_modified": false
+}

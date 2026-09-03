@@ -1,0 +1,49 @@
+{
+  "artifact_sha256": {
+    "AUTHORITY-DISCRIMINATION-CONTRACT-v0.1.json": "41c150bb1587d55355e28435ce0352a885309068cffc5155c90af506a34e04ef",
+    "PLAN-v0.1.md": "b5b39a679ca8c471a9d425cde029f08791956afab0f089454dd0668dd0f427b5",
+    "SOURCE-MANIFEST-CONTRACT-v0.1.json": "3bf96bd6e6854a7beb048206f73465588df8f9b3182e1280ed7ec7878280559b",
+    "bundle_materialization_execution_result": "a25c4c78b21bed046f2917753a6489f019f7d079b08b977645977b4dad325ba5",
+    "bundle_materialization_post_run_adjudication": "3a7b2d61b304148d216eb96f6150ea19b5c77aac88573084f9e86fae31303490",
+    "candidate_002_execution_result": "64c4e39f74e10072dcf6bb360bb8c6edc568a723d2b7d2041dd4208206161a0c",
+    "provenance_evidence_bundle": "25e2ab8a6f192c9247fa6dcd6e6eac27a63b720b8e5bc904ec9339e8adcced74",
+    "rights_evidence_bundle": "3460f97cfd179ac8a57c52059115fc15e62f0e591526ab7043c1add12aafb85b"
+  },
+  "authority_channel_hypothesis_count": 16,
+  "authority_channel_selected": false,
+  "authority_channels_evaluated": false,
+  "authority_source_inventory_frozen": false,
+  "base_bundle_materialization_closure_commit": "8d2ed331aa9d08738ce41fc01d91a6efade2644d",
+  "candidate_002_adopted": false,
+  "canonicalization_authorized": false,
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "control_envelope_authorized": false,
+  "declaration_values_created": false,
+  "freeze_id": "OIC-CANADA-MANIFEST-DECLARATION-AUTHORITY-DISCRIMINATION-001-FREEZE-v0.1",
+  "freeze_version": "v0.1",
+  "institutional_ir_authorized": false,
+  "legal_clearance_established": false,
+  "model_call_authorized": false,
+  "network_request_authorized": false,
+  "new_derivation_rule_created": false,
+  "next_authorized_step": "Independent verification of this preregistration. After verification, construct a tracked authority-source inventory and statically freeze a deterministic authority-discrimination evaluator. Every future tracked input must be bound by exact repository path and SHA-256 before evaluation. No declaration value may be created.",
+  "ontology_007r1_execution_authorized": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provenance_established": false,
+  "provider_call_authorized": false,
+  "q011_creation_authorized": false,
+  "rego_compilation_authorized": false,
+  "rights_established": false,
+  "runtime_evaluation_authorized": false,
+  "source_manifest_creation_authorized": false,
+  "source_manifest_population_authorized": false,
+  "status": "PREREGISTERED_HYPOTHESES_NOT_EVALUATED",
+  "target_declaration_field_count": 6,
+  "tracked_evidence_bundles_modified": false,
+  "work_order": "OIC-CANADA-MANIFEST-DECLARATION-AUTHORITY-DISCRIMINATION-001"
+}
