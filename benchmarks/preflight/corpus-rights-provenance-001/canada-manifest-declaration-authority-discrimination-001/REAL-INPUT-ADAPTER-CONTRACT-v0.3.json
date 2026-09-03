@@ -1,0 +1,119 @@
+{
+  "accepted_explicit_structures": {
+    "provenance_status": [
+      "CA3_ACQUISITION_INDEX_ENTRY.institutional_provenance_admission",
+      "SOURCE_MANIFEST_CONTRACT.manifest_value_derivation_rules"
+    ],
+    "redistribution_status": [
+      "CA3_RIGHTS_RECORD.institutional_rights_adjudication",
+      "CA3_COUNSEL_QUESTION.counsel_disposition",
+      "SOURCE_MANIFEST_CONTRACT.manifest_value_derivation_rules"
+    ],
+    "rights_basis": [
+      "CA3_RIGHTS_RECORD.institutional_rights_adjudication",
+      "CA3_COUNSEL_QUESTION.counsel_disposition",
+      "SOURCE_MANIFEST_CONTRACT.manifest_value_derivation_rules"
+    ],
+    "rights_status": [
+      "CA3_RIGHTS_RECORD.institutional_rights_adjudication",
+      "SOURCE_MANIFEST_CONTRACT.manifest_value_derivation_rules"
+    ],
+    "source_kind": [
+      "CA3_RIGHTS_RECORD.source_origin_declaration",
+      "CA3_RIGHTS_RECORD.institutional_manifest_admission",
+      "SOURCE_MANIFEST_CONTRACT.manifest_value_derivation_rules"
+    ],
+    "source_locator": [
+      "CA3_RIGHTS_RECORD.publisher_canonical_locator_declaration",
+      "CA3_RIGHTS_RECORD.institutional_manifest_admission",
+      "SOURCE_MANIFEST_CONTRACT.manifest_value_derivation_rules"
+    ]
+  },
+  "anti_promotion_rules": [
+    "publisher identity alone is not a declaration",
+    "acquisition_target_role alone is not a locator declaration",
+    "reviewer_disposition alone is not institutional adjudication",
+    "rights_disposition alone is not institutional adjudication",
+    "counsel request or pending action is not counsel disposition",
+    "acquisition receipt or successful retrieval is not provenance admission",
+    "manifest requiredness or enum membership is not a value derivation rule",
+    "URLs are never converted into source_locator by the adapter",
+    "evidence bundle membership is not legal sufficiency",
+    "the adapter may not create an authority act or declaration value"
+  ],
+  "artifact_bindings": {
+    "authority_source_inventory_v0_2_sha256": "10fa7c20d36ba541468675611bdedc5941758fa39eb1b803c4239a9e86ab1899",
+    "implementation_freeze_v0_2_sha256": "2fcf439d448a35d1fb2d59cfd7dafbd663be50bc4937891889f959cd1368ce4e",
+    "standing_discriminator_v0_2_sha256": "6d9be5309b64476fab9e0b0782a4ca67c2caf82f7c1af71c5658abbcb19275f0"
+  },
+  "authority_channel_selected": false,
+  "authority_channels_evaluated": false,
+  "base_static_v0_2_commit": "fd70c6470f03dfae9f9a940cf6876874b3b67c0e",
+  "claim_ceiling": "The adapter freeze establishes only a deterministic, conservative mapping from the exact frozen governance document shapes into the already-frozen v0.2 Facts structure. It establishes no real channel standing, declaration value, rights, provenance truth, legal clearance, redistribution permission, manifest admissibility, or generality.",
+  "contract_id": "OIC-CANADA-MANIFEST-DECLARATION-AUTHORITY-REAL-INPUT-ADAPTER-001",
+  "contract_version": "v0.3",
+  "declaration_values_created": false,
+  "evidence_binding_rule": {
+    "provenance_binding": "true only when the unique CA-3 acquisition index entry contains nonempty receipt_id and sha256 and CA-3 is listed in the acquisition freeze committed_to_repository_source_ids",
+    "rights_binding": "true only when CA-3 rights record contains at least one explicit evidence_hashes entry with nonempty evidence_id and either a nonempty sha256 or explicit http_status"
+  },
+  "explicit_act_requirements": {
+    "counsel_disposition": [
+      "actor_identity_nonempty",
+      "authority_basis_nonempty",
+      "act_complete_true",
+      "target_manifest_fields_subset_rights_basis_rights_status_redistribution_status",
+      "question_scope_includes_CA3"
+    ],
+    "institutional_manifest_admission": [
+      "actor_identity_nonempty",
+      "authority_basis_nonempty",
+      "act_complete_true",
+      "target_fields_nonempty_subset_of_six"
+    ],
+    "institutional_provenance_admission": [
+      "actor_identity_nonempty",
+      "authority_basis_nonempty",
+      "act_complete_true",
+      "target_field_provenance_status"
+    ],
+    "institutional_rights_adjudication": [
+      "actor_identity_nonempty",
+      "authority_basis_nonempty",
+      "act_complete_true",
+      "target_fields_subset_rights_basis_rights_status_redistribution_status"
+    ],
+    "manifest_value_derivation_rule": [
+      "rule_id_nonempty",
+      "authority_basis_nonempty",
+      "deterministic_replay_true",
+      "target_field_one_of_six",
+      "scope_explicitly_includes_CA3"
+    ],
+    "publisher_canonical_locator_declaration": [
+      "declarant_identity_nonempty",
+      "authority_basis_nonempty",
+      "act_complete_true",
+      "target_field_source_locator"
+    ],
+    "source_origin_declaration": [
+      "declarant_identity_nonempty",
+      "authority_basis_nonempty",
+      "act_complete_true",
+      "target_field_source_kind"
+    ]
+  },
+  "mapping_principle": "Map only explicit authority-bearing structures into v0.2 Facts. Absence of an explicit authority act, identity, basis, scoped field coverage, or deterministic rule is mapped to false. Observational, workflow, engineering-review, acquisition, publisher, URL, or required-field metadata never self-promotes into authority.",
+  "new_derivation_rule_created": false,
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "real_evaluation_during_adapter_freeze": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "status": "FROZEN_ADAPTER_NOT_REAL_EVALUATED",
+  "temporal_version_scope_rule": "true only when CA-3 acquisition entry contains nonempty retrieval_utc and acquisition freeze contains nonempty acquisition_tool_version. This establishes record version/temporal scope only, not declaration authority."
+}

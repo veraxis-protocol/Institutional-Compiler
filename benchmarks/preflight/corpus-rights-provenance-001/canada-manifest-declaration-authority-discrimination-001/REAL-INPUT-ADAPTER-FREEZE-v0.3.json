@@ -1,0 +1,66 @@
+{
+  "adapter_properties": {
+    "acquisition_success_self_promotes": false,
+    "declaration_value_creation_allowed": false,
+    "engineering_disposition_self_promotes": false,
+    "explicit_authority_acts_only": true,
+    "manifest_requiredness_self_promotes": false,
+    "new_rule_creation_allowed": false,
+    "pending_counsel_workflow_self_promotes": false,
+    "publisher_presence_self_promotes": false,
+    "url_presence_self_promotes": false
+  },
+  "artifact_sha256": {
+    "AUTHORITY-DISCRIMINATION-CONTRACT-v0.1.json": "41c150bb1587d55355e28435ce0352a885309068cffc5155c90af506a34e04ef",
+    "AUTHORITY-SOURCE-INVENTORY-v0.2.json": "10fa7c20d36ba541468675611bdedc5941758fa39eb1b803c4239a9e86ab1899",
+    "IMPLEMENTATION-FREEZE-v0.2.json": "2fcf439d448a35d1fb2d59cfd7dafbd663be50bc4937891889f959cd1368ce4e",
+    "REAL-INPUT-ADAPTER-CONTRACT-v0.3.json": "21de93f31a5cb5bc4bcdecc72c095d7baac84ef664f630a83eac7383ffde36a0",
+    "evaluate_authority_discrimination_v0.2.py": "6d9be5309b64476fab9e0b0782a4ca67c2caf82f7c1af71c5658abbcb19275f0",
+    "extract_authority_facts_v0.3.py": "c11708ff7bdb0c2bdff00c819c2b167de651b19fe0b90f981fc33dc49d98418e",
+    "test_canada_manifest_declaration_authority_fact_adapter_001.py": "2c621db8967f02235d57c7a6d4e566d19a5060b5395cda202b507b37cdea24d8"
+  },
+  "authority_channel_selected": false,
+  "authority_channels_evaluated": false,
+  "base_static_v0_2_commit": "fd70c6470f03dfae9f9a940cf6876874b3b67c0e",
+  "causal_root_cause": "NOT_ESTABLISHED",
+  "declaration_values_created": false,
+  "freeze_id": "OIC-CANADA-MANIFEST-DECLARATION-AUTHORITY-REAL-INPUT-ADAPTER-FREEZE-001",
+  "freeze_version": "v0.3",
+  "frozen_real_input_count": 6,
+  "future_one_shot_policy": {
+    "adapter": "extract_authority_facts_v0.3.py",
+    "authority_channel_selected_during_execution": false,
+    "declaration_values_created_during_execution": false,
+    "discriminator": "evaluate_authority_discrimination_v0.2.py",
+    "execution_count": 1,
+    "new_derivation_rule_created_during_execution": false,
+    "output_scope": ".local_ONLY_DURING_EXECUTION",
+    "permanent_started_lock_required": true,
+    "real_input_set": "EXACT_SIX_INPUTS_FROM_AUTHORITY-SOURCE-INVENTORY-v0.2.json",
+    "rerun_after_started": false,
+    "tracked_result_created_during_execution": false
+  },
+  "legal_clearance_established": false,
+  "new_derivation_rule_created": false,
+  "next_authorized_step": "Independent verification of this v0.3 adapter freeze. Only after verification may one read-only authority-discrimination execution parse the six inventory-bound governance documents, map them through the frozen v0.3 adapter, and evaluate all sixteen channels through the frozen v0.2 discriminator. No declaration value may be created.",
+  "population": {
+    "source_count": 1,
+    "source_ids": [
+      "CA-3"
+    ]
+  },
+  "provenance_established": false,
+  "real_input_bytes_hash_verified_during_static_freeze": true,
+  "real_input_semantics_evaluated_during_static_freeze": false,
+  "repository_test_suite_validation": {
+    "classification": "PASS_WITH_THREE_HISTORICAL_STATE_SENSITIVE_TESTS_DESELECTED",
+    "exact_historical_deselection_count": 3,
+    "historical_tests_modified": false,
+    "semantic_scope_effect": "NONE"
+  },
+  "rights_established": false,
+  "source_manifest_created": false,
+  "source_manifest_population_authorized": false,
+  "status": "REAL_INPUT_ADAPTER_STATICALLY_FROZEN_AUTHORITY_NOT_EVALUATED",
+  "tracked_evidence_bundles_modified": false
+}
