@@ -24,6 +24,35 @@ STALE_ZTL_TEXT = (
     "must not merge before PR #18",
 )
 ADMITTED_PRE_GATE_HEAD = "4065e6a7c02badd3356f4c74be0815079d836aca"
+PROMOTION_BASE = "9ad37fc80d8f34318c6212ed702de5eab3551cf5"
+PROMOTION_SOURCE = "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54"
+AUTHORIZED_PATHS_SHA256 = "23b12fef0f72c41e11456361132b522ca645555b793e93be10815fd9529f78c1"
+HISTORICAL_GATE_SHA256 = "58231eeda2266eb58e2ec5ec4ac70d0f3bf40a47264b77a8d8f6c69db9a94896"
+BOUNDED_SRC_OIC_PATHS = frozenset(
+    {
+        "src/oic/model_provider.py",
+        "src/oic/frozen_synthetic_provider.py",
+        "src/oic/candidate_extraction.py",
+        "src/oic/review_docket.py",
+        "src/oic/admission.py",
+        "src/oic/interpretation_proposal.py",
+        "src/oic/admission_specs/__init__.py",
+        "src/oic/admission_specs/ADMISSION-INPUT-v0.1.schema.json",
+        "src/oic/admission_specs/ADMISSION-RECEIPT-v0.1.schema.json",
+        "src/oic/admission_specs/AUTHORITY-EVIDENCE-v0.1.schema.json",
+        "src/oic/admission_specs/STATE-INPUT-MAPPING-v0.1.json",
+    }
+)
+CEILINGS = {
+    "nvidia": "NOT_QUALIFIED",
+    "canada_redistribution": "UNRESOLVED",
+    "ontology_007r1": "UNEXECUTED_EXECUTION_UNAUTHORIZED",
+    "production_compilation": "UNESTABLISHED",
+    "runtime_authorization": "UNESTABLISHED",
+    "institutional_ir_closure": "UNESTABLISHED",
+    "negative_stability_live_result": "DEFERRED",
+    "independent_validation": False,
+}
 ADMITTED_SRC_OIC_PATHS = frozenset(
     {
         "src/oic/__init__.py",
@@ -63,8 +92,14 @@ def discover_unadmitted_production_paths(root: Path) -> list[str]:
     if result.returncode != 0:
         raise GateEvidenceError("cannot enumerate tracked src/oic production paths")
     current = {line for line in result.stdout.splitlines() if line}
-    added = sorted(current - ADMITTED_SRC_OIC_PATHS)
-    missing = sorted(ADMITTED_SRC_OIC_PATHS - current)
+    current.update(
+        path.relative_to(root).as_posix()
+        for path in (root / "src/oic").rglob("*")
+        if path.is_file() and "__pycache__" not in path.parts
+    )
+    admitted = ADMITTED_SRC_OIC_PATHS | BOUNDED_SRC_OIC_PATHS
+    added = sorted(current - admitted)
+    missing = sorted(path for path in admitted if not (root / path).is_file())
     return added + [f"MISSING:{path}" for path in missing]
 
 
@@ -174,6 +209,91 @@ def validate_evidence(
     _require(not semantic_paths, "semantic implementation appeared before gate opening")
 
 
+def validate_bounded_record(root: Path) -> None:
+    """Validate the owner-pinned bounded surface, never a self-declared general OPEN gate."""
+    record = json.loads((root / "docs/capabilities/CAPABILITY_MATRIX.json").read_bytes())
+    _require(isinstance(record, dict), "invalid capability matrix")
+    _require(
+        set(record)
+        == {
+            "work_order",
+            "promotion_base",
+            "source_commit",
+            "state",
+            "production_semantic_gate",
+            "authorized_maximum_paths",
+            "actual_changed_paths",
+            "source_provenance",
+            "ceilings",
+            "capabilities",
+        },
+        "capability matrix fields expanded",
+    )
+    capabilities = record.get("capabilities")
+    names = [
+        "grounded_candidate_extraction",
+        "review_divergence",
+        "synthetic_authority_evidence_admission",
+        "provisional_eleven_slot_decomposition",
+        "unresolved_reference_preservation",
+        "offline_deterministic_receipt",
+    ]
+    _require(
+        isinstance(capabilities, list) and len(capabilities) == len(names),
+        "capability set expanded",
+    )
+    for capability, name in zip(capabilities, names, strict=True):
+        _require(
+            capability
+            == {
+                "name": name,
+                "implemented": True,
+                "tested": "LOCAL_TESTS_PASSED",
+                "documented": True,
+                "deferred": "generalization_and_independent_validation",
+                "evidence_ceiling": (
+                    "Synthetic frozen replay only; no model accuracy, institutional "
+                    "meaning, legal validity, or runtime permission."
+                ),
+            },
+            "capability claim expanded",
+        )
+    _require(record.get("work_order") == "OIC-SEMANTIC-PROMOTION-001", "wrong work order")
+    _require(record.get("promotion_base") == PROMOTION_BASE, "wrong promotion base")
+    _require(record.get("source_commit") == PROMOTION_SOURCE, "wrong promotion source")
+    _require(record.get("state") == "BOUNDED_REFERENCE_IMPLEMENTATION", "bounded state expanded")
+    _require(record.get("production_semantic_gate") == "BLOCKED", "production gate expanded")
+    _require(record.get("ceilings") == CEILINGS, "evidence ceiling expanded")
+    provenance = record.get("source_provenance")
+    _require(
+        hashlib.sha256(
+            json.dumps(provenance, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest()
+        == "15d7ae49ade2bbbf0888803ef3e647c3eb9e0255f60c5da43f90726a2693f482",
+        "source provenance changed",
+    )
+    for entry in provenance:
+        _require(
+            hashlib.sha256((root / entry["path"]).read_bytes()).hexdigest() == entry["sha256"],
+            f"exact promoted source changed: {entry['path']}",
+        )
+    paths = record.get("authorized_maximum_paths")
+    _require(isinstance(paths, list) and all(isinstance(p, str) for p in paths), "invalid paths")
+    _require(
+        hashlib.sha256(("\n".join(paths) + "\n").encode()).hexdigest() == AUTHORIZED_PATHS_SHA256,
+        "capability matrix cannot self-extend the owner allowlist",
+    )
+    _require(record.get("actual_changed_paths") == paths, "changed-path record differs")
+    for path in paths:
+        _require((root / path).is_file(), f"missing required bounded path: {path}")
+    _require(not discover_unadmitted_production_paths(root), "unauthorized production surface")
+    gate = root / "docs/gates/OIC-SEMANTIC-CODE-START-GATE-CLOSURE-v0.1.md"
+    _require(
+        hashlib.sha256(gate.read_bytes()).hexdigest() == HISTORICAL_GATE_SHA256,
+        "historical gate receipt changed",
+    )
+
+
 def load_and_validate(root: Path) -> None:
     def load(path: str) -> dict[str, Any]:
         value: dict[str, Any] = json.loads((root / path).read_text(encoding="utf-8"))
@@ -208,6 +328,7 @@ def load_and_validate(root: Path) -> None:
         active_text,
         semantic_paths=semantic_paths,
     )
+    validate_bounded_record(root)
 
 
 if __name__ == "__main__":
@@ -216,4 +337,4 @@ if __name__ == "__main__":
     except (GateEvidenceError, OSError, KeyError, json.JSONDecodeError) as exc:
         print(f"FAIL semantic code-start gate evidence: {exc}")
         sys.exit(1)
-    print("PASS semantic code-start prerequisite evidence; gate remains NOT OPEN")
+    print("PASS bounded reference implementation; broader production semantic gate BLOCKED")

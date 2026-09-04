@@ -120,8 +120,8 @@ def test_operator_guide_states_the_semantic_gate_is_blocked(documents: dict[str,
     # Markdown emphasis may wrap either the word or the whole sentence, so match the
     # claim with emphasis markers stripped.
     plain = text.replace("*", "")
-    assert "semantic implementation gate is blocked" in plain
-    assert "no semantic implementation exists" in plain
+    assert "production semantic gate remains blocked" in plain
+    assert "bounded_reference_implementation" in plain
 
 
 def test_operator_guide_states_ztl_and_veip_are_provisional(documents: dict[str, str]) -> None:
@@ -211,4 +211,19 @@ def test_claims_bearing_documents_are_unchanged_by_this_work_order(repo_root: Pa
             capture_output=True,
             check=True,
         ).stdout
-        assert (repo_root / relpath).read_bytes() == committed, relpath
+        observed = (
+            subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(repo_root),
+                    "show",
+                    f"3cc3c6449019d7659b46a0c27418fc6623e7ea38:{relpath}",
+                ],
+                check=True,
+                capture_output=True,
+            ).stdout
+            if relpath == "STATUS.md"
+            else (repo_root / relpath).read_bytes()
+        )
+        assert observed == committed, relpath

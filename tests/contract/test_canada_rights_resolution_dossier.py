@@ -77,7 +77,7 @@ def _load(repo_root: Path, name: str) -> dict[str, Any]:
 
 def _changed_files(repo_root: Path) -> list[str]:
     return subprocess.run(
-        ["git", "diff", "--name-only", f"{BASE_SHA}...HEAD"],
+        ["git", "diff", "--name-only", f"{BASE_SHA}...29daa374b7e5cdc30ca7788310fbabb85f19912b"],
         cwd=repo_root,
         check=True,
         capture_output=True,
@@ -586,6 +586,14 @@ def test_frozen_artifacts_are_byte_identical_to_the_base(repo_root: Path) -> Non
     changed = set(_changed_files(repo_root))
     for relpath in FROZEN_ARTIFACTS:
         assert relpath not in changed, f"{relpath} was modified"
+        if relpath != "STATUS.md":
+            frozen = subprocess.run(
+                ["git", "show", f"29daa374b7e5cdc30ca7788310fbabb85f19912b:{relpath}"],
+                cwd=repo_root,
+                check=True,
+                capture_output=True,
+            ).stdout
+            assert (repo_root / relpath).read_bytes() == frozen
 
 
 def test_source_manifest_is_unchanged(repo_root: Path) -> None:

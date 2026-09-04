@@ -1092,7 +1092,13 @@ def test_no_source_bytes_are_tracked(repo_root: Path) -> None:
 
 
 def test_governing_files_are_byte_identical(repo_root: Path) -> None:
-    assert _sha256(repo_root / "STATUS.md") == EXPECTED_STATUS_SHA256
+    historical_status = subprocess.run(
+        ["git", "show", "d99a38510e51a36972a414cadd0e44d49a04227c:STATUS.md"],
+        cwd=repo_root,
+        check=True,
+        capture_output=True,
+    ).stdout
+    assert hashlib.sha256(historical_status).hexdigest() == EXPECTED_STATUS_SHA256
     assert (
         _sha256(repo_root / "benchmarks/preflight/SOURCE_MANIFEST.csv")
         == EXPECTED_SOURCE_MANIFEST_SHA256
@@ -1106,7 +1112,12 @@ def test_governing_files_are_byte_identical(repo_root: Path) -> None:
 def test_no_semantic_artifact_types_are_created(repo_root: Path) -> None:
     changed = set(
         subprocess.run(
-            ["git", "diff", "--name-only", "37d6fa4dd12f7f26c632169611b13c251bbec14a...HEAD"],
+            [
+                "git",
+                "diff",
+                "--name-only",
+                "37d6fa4dd12f7f26c632169611b13c251bbec14a...d99a38510e51a36972a414cadd0e44d49a04227c",
+            ],
             cwd=repo_root,
             check=True,
             capture_output=True,

@@ -448,7 +448,12 @@ def test_mutation_blocked_source_with_a_freeze_entry_fails_verification(
 
 def test_status_and_draft_schemas_are_untouched(repo_root: Path) -> None:
     changed = subprocess.run(
-        ["git", "diff", "--name-only", "d99a38510e51a36972a414cadd0e44d49a04227c...HEAD"],
+        [
+            "git",
+            "diff",
+            "--name-only",
+            "d99a38510e51a36972a414cadd0e44d49a04227c...2dab50aa5e84cc2995bb8561a8d1fb63741e4a3a",
+        ],
         cwd=repo_root,
         check=True,
         capture_output=True,
@@ -471,7 +476,12 @@ def test_status_and_draft_schemas_are_untouched(repo_root: Path) -> None:
 
 def test_no_semantic_artifact_was_produced(repo_root: Path) -> None:
     changed = subprocess.run(
-        ["git", "diff", "--name-only", "d99a38510e51a36972a414cadd0e44d49a04227c...HEAD"],
+        [
+            "git",
+            "diff",
+            "--name-only",
+            "d99a38510e51a36972a414cadd0e44d49a04227c...2dab50aa5e84cc2995bb8561a8d1fb63741e4a3a",
+        ],
         cwd=repo_root,
         check=True,
         capture_output=True,

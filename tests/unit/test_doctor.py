@@ -194,6 +194,8 @@ def test_doctor_never_describes_ztl_or_veip_as_active(report: DoctorReport, forb
 
 
 def test_semantic_gate_is_blocked(report: DoctorReport) -> None:
+    bounded = next(c for c in report.gates if c.name == "bounded synthetic reference path")
+    assert bounded.status == "BOUNDED_REFERENCE_IMPLEMENTATION"
     check = next(c for c in report.gates if c.name == "semantic implementation gate")
     assert check.status == SEMANTIC_GATE_STATUS == "BLOCKED"
 

@@ -162,6 +162,7 @@ def _isolated_gate_tree(repo_root: Path, tmp_path: Path) -> Path:
 def test_t1_production_detector_accepts_exact_baseline(repo_root: Path) -> None:
     module = _module(repo_root)
     assert module.discover_unadmitted_production_paths(repo_root) == []
+    assert module.ADMITTED_SRC_OIC_PATHS.isdisjoint(module.BOUNDED_SRC_OIC_PATHS)
 
 
 @pytest.mark.parametrize(

@@ -1,0 +1,329 @@
+{
+  "work_order": "OIC-SEMANTIC-PROMOTION-001",
+  "promotion_base": "9ad37fc80d8f34318c6212ed702de5eab3551cf5",
+  "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+  "state": "BOUNDED_REFERENCE_IMPLEMENTATION",
+  "production_semantic_gate": "BLOCKED",
+  "authorized_maximum_paths": [
+    "AGENTS.md",
+    "Makefile",
+    "README.md",
+    "STATUS.md",
+    "VERSIONING.md",
+    "benchmarks/characterization/candidate-semantics-003/CORPUS-v0.3.json",
+    "benchmarks/characterization/candidate-semantics-004/CORPUS-v0.4.json",
+    "benchmarks/characterization/candidate-semantics-005/CORPUS-v0.5.json",
+    "benchmarks/demo/bounded-semantic-path/PROVIDER-OUTPUT.json",
+    "benchmarks/demo/bounded-semantic-path/SOURCE.txt",
+    "design/admission-boundary-001/ADMISSION-CONTRACT-v0.1.md",
+    "design/admission-boundary-001/ADMISSION-INPUT-v0.1.schema.json",
+    "design/admission-boundary-001/ADMISSION-RECEIPT-v0.1.schema.json",
+    "design/admission-boundary-001/AUTHORITY-EVIDENCE-v0.1.schema.json",
+    "design/admission-boundary-001/STATE-INPUT-MAPPING-v0.1.json",
+    "design/admission-boundary-001/TEST-VECTORS-FREEZE-v0.2.json",
+    "design/admission-boundary-001/TEST-VECTORS-v0.2.json",
+    "design/admission-boundary-001/VECTOR-CROSSWALK-v0.1.json",
+    "docker/README.md",
+    "docker/compose.yaml",
+    "docs/SDLC-V1.2-STATUS.md",
+    "docs/capabilities/CAPABILITY_MATRIX.json",
+    "docs/operations/FOUNDATION.md",
+    "pyproject.toml",
+    "scripts/demo_bounded_semantic_path.py",
+    "scripts/falsify_infrastructure.py",
+    "scripts/verify_code_start_gate.py",
+    "src/oic/__init__.py",
+    "src/oic/admission.py",
+    "src/oic/admission_specs/ADMISSION-INPUT-v0.1.schema.json",
+    "src/oic/admission_specs/ADMISSION-RECEIPT-v0.1.schema.json",
+    "src/oic/admission_specs/AUTHORITY-EVIDENCE-v0.1.schema.json",
+    "src/oic/admission_specs/STATE-INPUT-MAPPING-v0.1.json",
+    "src/oic/admission_specs/__init__.py",
+    "src/oic/candidate_extraction.py",
+    "src/oic/doctor.py",
+    "src/oic/frozen_synthetic_provider.py",
+    "src/oic/interpretation_proposal.py",
+    "src/oic/model_provider.py",
+    "src/oic/review_docket.py",
+    "tests/contract/admission_probes.py",
+    "tests/contract/test_admission_runtime_001_vectors.py",
+    "tests/contract/test_admission_runtime_mutations.py",
+    "tests/contract/test_canada_acquisition_freeze.py",
+    "tests/contract/test_canada_acquisition_preflight.py",
+    "tests/contract/test_canada_rights_resolution_dossier.py",
+    "tests/contract/test_claims_discipline.py",
+    "tests/contract/test_semantic_code_start_gate_closure.py",
+    "tests/contract/test_semantic_promotion.py",
+    "tests/contract/test_warrant_contract.py",
+    "tests/unit/test_admission.py",
+    "tests/unit/test_candidate_extraction.py",
+    "tests/unit/test_cli.py",
+    "tests/unit/test_doctor.py",
+    "tests/unit/test_frozen_synthetic_provider.py",
+    "tests/unit/test_interpretation_proposal.py",
+    "tests/unit/test_model_provider.py",
+    "tests/unit/test_review_docket.py"
+  ],
+  "actual_changed_paths": [
+    "AGENTS.md",
+    "Makefile",
+    "README.md",
+    "STATUS.md",
+    "VERSIONING.md",
+    "benchmarks/characterization/candidate-semantics-003/CORPUS-v0.3.json",
+    "benchmarks/characterization/candidate-semantics-004/CORPUS-v0.4.json",
+    "benchmarks/characterization/candidate-semantics-005/CORPUS-v0.5.json",
+    "benchmarks/demo/bounded-semantic-path/PROVIDER-OUTPUT.json",
+    "benchmarks/demo/bounded-semantic-path/SOURCE.txt",
+    "design/admission-boundary-001/ADMISSION-CONTRACT-v0.1.md",
+    "design/admission-boundary-001/ADMISSION-INPUT-v0.1.schema.json",
+    "design/admission-boundary-001/ADMISSION-RECEIPT-v0.1.schema.json",
+    "design/admission-boundary-001/AUTHORITY-EVIDENCE-v0.1.schema.json",
+    "design/admission-boundary-001/STATE-INPUT-MAPPING-v0.1.json",
+    "design/admission-boundary-001/TEST-VECTORS-FREEZE-v0.2.json",
+    "design/admission-boundary-001/TEST-VECTORS-v0.2.json",
+    "design/admission-boundary-001/VECTOR-CROSSWALK-v0.1.json",
+    "docker/README.md",
+    "docker/compose.yaml",
+    "docs/SDLC-V1.2-STATUS.md",
+    "docs/capabilities/CAPABILITY_MATRIX.json",
+    "docs/operations/FOUNDATION.md",
+    "pyproject.toml",
+    "scripts/demo_bounded_semantic_path.py",
+    "scripts/falsify_infrastructure.py",
+    "scripts/verify_code_start_gate.py",
+    "src/oic/__init__.py",
+    "src/oic/admission.py",
+    "src/oic/admission_specs/ADMISSION-INPUT-v0.1.schema.json",
+    "src/oic/admission_specs/ADMISSION-RECEIPT-v0.1.schema.json",
+    "src/oic/admission_specs/AUTHORITY-EVIDENCE-v0.1.schema.json",
+    "src/oic/admission_specs/STATE-INPUT-MAPPING-v0.1.json",
+    "src/oic/admission_specs/__init__.py",
+    "src/oic/candidate_extraction.py",
+    "src/oic/doctor.py",
+    "src/oic/frozen_synthetic_provider.py",
+    "src/oic/interpretation_proposal.py",
+    "src/oic/model_provider.py",
+    "src/oic/review_docket.py",
+    "tests/contract/admission_probes.py",
+    "tests/contract/test_admission_runtime_001_vectors.py",
+    "tests/contract/test_admission_runtime_mutations.py",
+    "tests/contract/test_canada_acquisition_freeze.py",
+    "tests/contract/test_canada_acquisition_preflight.py",
+    "tests/contract/test_canada_rights_resolution_dossier.py",
+    "tests/contract/test_claims_discipline.py",
+    "tests/contract/test_semantic_code_start_gate_closure.py",
+    "tests/contract/test_semantic_promotion.py",
+    "tests/contract/test_warrant_contract.py",
+    "tests/unit/test_admission.py",
+    "tests/unit/test_candidate_extraction.py",
+    "tests/unit/test_cli.py",
+    "tests/unit/test_doctor.py",
+    "tests/unit/test_frozen_synthetic_provider.py",
+    "tests/unit/test_interpretation_proposal.py",
+    "tests/unit/test_model_provider.py",
+    "tests/unit/test_review_docket.py"
+  ],
+  "source_provenance": [
+    {
+      "path": "src/oic/model_provider.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "ccc3ff7bc8efba8361cc73ee3dd930c2dc38acb50b1ed026a5e653eccf9adbca"
+    },
+    {
+      "path": "src/oic/candidate_extraction.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "95be231dd19c8188d06700955b2dea1e69d77bf7edfc891db442e771520184b7"
+    },
+    {
+      "path": "src/oic/review_docket.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "da3b3e4aaabee18df9d17de1070dabb08bb6dee1a496ca6535ca0b58e02655fa"
+    },
+    {
+      "path": "src/oic/admission.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "9c33785a956daa5f2bda7f4eee1ec76901c348ee18d94d26f5bedafa4fff5c84"
+    },
+    {
+      "path": "src/oic/interpretation_proposal.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "921a569952ff8d1f3c3acd2f3b3a27be6f3c41ae4a1cc78d8f809317166a7ce0"
+    },
+    {
+      "path": "src/oic/admission_specs/__init__.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "76455eed5038171d7201b004e0e254170d1f79f9fd7966acd54bb6661a2ecd6e"
+    },
+    {
+      "path": "src/oic/admission_specs/ADMISSION-INPUT-v0.1.schema.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "bfa5fc3c755bfbc472d2be74fede06173d5ac4db029986da0c4a07b9b5759d3e"
+    },
+    {
+      "path": "src/oic/admission_specs/ADMISSION-RECEIPT-v0.1.schema.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "c70782201912231491e06239611bbd542dcdbb91da061a4ed9403111dc4ef40e"
+    },
+    {
+      "path": "src/oic/admission_specs/AUTHORITY-EVIDENCE-v0.1.schema.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "f1d91532a1a50be1f5d969ce8134bdb445f4a62fee0e62565437c2c4be196c98"
+    },
+    {
+      "path": "src/oic/admission_specs/STATE-INPUT-MAPPING-v0.1.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "9ed244f0a4a7f892943720f13b30b672968bfa5e20f584ca03c3195fe69e421c"
+    },
+    {
+      "path": "design/admission-boundary-001/ADMISSION-CONTRACT-v0.1.md",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "ad4c656831b679a9396b15a8a9ae32448cf63707711916e4f3a8fa5ed34e8cd2"
+    },
+    {
+      "path": "design/admission-boundary-001/ADMISSION-INPUT-v0.1.schema.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "bfa5fc3c755bfbc472d2be74fede06173d5ac4db029986da0c4a07b9b5759d3e"
+    },
+    {
+      "path": "design/admission-boundary-001/ADMISSION-RECEIPT-v0.1.schema.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "c70782201912231491e06239611bbd542dcdbb91da061a4ed9403111dc4ef40e"
+    },
+    {
+      "path": "design/admission-boundary-001/AUTHORITY-EVIDENCE-v0.1.schema.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "f1d91532a1a50be1f5d969ce8134bdb445f4a62fee0e62565437c2c4be196c98"
+    },
+    {
+      "path": "design/admission-boundary-001/STATE-INPUT-MAPPING-v0.1.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "9ed244f0a4a7f892943720f13b30b672968bfa5e20f584ca03c3195fe69e421c"
+    },
+    {
+      "path": "design/admission-boundary-001/TEST-VECTORS-FREEZE-v0.2.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "9f250c07447be532a022c3b4bf7e712283fc5567caefa541585fbbf643f048de"
+    },
+    {
+      "path": "design/admission-boundary-001/TEST-VECTORS-v0.2.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "969ddf9a853155ce6ed27f30f1c41e76f7a1ff37a42071d2141d9966907add81"
+    },
+    {
+      "path": "design/admission-boundary-001/VECTOR-CROSSWALK-v0.1.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "1b5dbf0fc25ccb9bbd14fbbb8092bd1e4a61008509b29370ad25c4d07008afbd"
+    },
+    {
+      "path": "tests/unit/test_candidate_extraction.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "898689ee7acd10f874003bf07a501e8597a99a3996f392b08bf4c6e477746a84"
+    },
+    {
+      "path": "tests/unit/test_review_docket.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "c7b390987229e6ab53391f7e414161d7c5ea702fb746e4bae9436e9550b3ffbb"
+    },
+    {
+      "path": "tests/unit/test_admission.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "d79df2468c81cc708764282ef1e5827231128269e920883099664027cdaf0277"
+    },
+    {
+      "path": "tests/unit/test_interpretation_proposal.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "87aac14e4ac97ea4be8f152797c00cf085f4989234c62a87d503be8e2a6fa821"
+    },
+    {
+      "path": "tests/contract/admission_probes.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "ec640e025085dcea651f1a4649d32e21eca001c6424ea991b060b9d7e6ce11fe"
+    },
+    {
+      "path": "tests/contract/test_admission_runtime_001_vectors.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "a62a7474a5f5aa85fd0ca2b92041d0f72024b1b9a22808ed87e76e03b513f368"
+    },
+    {
+      "path": "tests/contract/test_admission_runtime_mutations.py",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "86e4d5880f9f0090be9f1d7a7d65759e66d12d61056555bca80a7f94d675cd9e"
+    },
+    {
+      "path": "benchmarks/characterization/candidate-semantics-003/CORPUS-v0.3.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "8555d59112b07ee6c438136b79602c3b2658e2ff96abfa5deb4563a09883db5a"
+    },
+    {
+      "path": "benchmarks/characterization/candidate-semantics-004/CORPUS-v0.4.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "594cbee619f467ef949690cd56014eb4f8b3c5ba9527596c6e4bef3f242d5386"
+    },
+    {
+      "path": "benchmarks/characterization/candidate-semantics-005/CORPUS-v0.5.json",
+      "source_commit": "3fcdec63b7e546d9b369e0e8664d5d67be6a3b54",
+      "sha256": "2d8c5f3f4be2028e00179b4b8eee464b325b8d9efbaf19875b8b783a6139dbf0"
+    }
+  ],
+  "ceilings": {
+    "nvidia": "NOT_QUALIFIED",
+    "canada_redistribution": "UNRESOLVED",
+    "ontology_007r1": "UNEXECUTED_EXECUTION_UNAUTHORIZED",
+    "production_compilation": "UNESTABLISHED",
+    "runtime_authorization": "UNESTABLISHED",
+    "institutional_ir_closure": "UNESTABLISHED",
+    "negative_stability_live_result": "DEFERRED",
+    "independent_validation": false
+  },
+  "capabilities": [
+    {
+      "name": "grounded_candidate_extraction",
+      "implemented": true,
+      "tested": "LOCAL_TESTS_PASSED",
+      "documented": true,
+      "deferred": "generalization_and_independent_validation",
+      "evidence_ceiling": "Synthetic frozen replay only; no model accuracy, institutional meaning, legal validity, or runtime permission."
+    },
+    {
+      "name": "review_divergence",
+      "implemented": true,
+      "tested": "LOCAL_TESTS_PASSED",
+      "documented": true,
+      "deferred": "generalization_and_independent_validation",
+      "evidence_ceiling": "Synthetic frozen replay only; no model accuracy, institutional meaning, legal validity, or runtime permission."
+    },
+    {
+      "name": "synthetic_authority_evidence_admission",
+      "implemented": true,
+      "tested": "LOCAL_TESTS_PASSED",
+      "documented": true,
+      "deferred": "generalization_and_independent_validation",
+      "evidence_ceiling": "Synthetic frozen replay only; no model accuracy, institutional meaning, legal validity, or runtime permission."
+    },
+    {
+      "name": "provisional_eleven_slot_decomposition",
+      "implemented": true,
+      "tested": "LOCAL_TESTS_PASSED",
+      "documented": true,
+      "deferred": "generalization_and_independent_validation",
+      "evidence_ceiling": "Synthetic frozen replay only; no model accuracy, institutional meaning, legal validity, or runtime permission."
+    },
+    {
+      "name": "unresolved_reference_preservation",
+      "implemented": true,
+      "tested": "LOCAL_TESTS_PASSED",
+      "documented": true,
+      "deferred": "generalization_and_independent_validation",
+      "evidence_ceiling": "Synthetic frozen replay only; no model accuracy, institutional meaning, legal validity, or runtime permission."
+    },
+    {
+      "name": "offline_deterministic_receipt",
+      "implemented": true,
+      "tested": "LOCAL_TESTS_PASSED",
+      "documented": true,
+      "deferred": "generalization_and_independent_validation",
+      "evidence_ceiling": "Synthetic frozen replay only; no model accuracy, institutional meaning, legal validity, or runtime permission."
+    }
+  ]
+}
