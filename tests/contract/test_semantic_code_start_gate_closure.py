@@ -167,7 +167,14 @@ def test_t1_production_detector_accepts_exact_baseline(repo_root: Path) -> None:
 
 @pytest.mark.parametrize(
     "relpath",
-    ("src/oic/semantic_parser.py", "src/oic/helper.py", "src/oic/newmodule/engine.py"),
+    (
+        "src/oic/semantic_parser.py",
+        "src/oic/helper.py",
+        "src/oic/newmodule/engine.py",
+        "src/oic/__pycache__lookalike/engine.py",
+        "src/oic/cache.pyc.json",
+        "src/oic/unadmitted.json",
+    ),
 )
 def test_t2_t3_t4_detector_refuses_any_new_tracked_path(
     repo_root: Path, tmp_path: Path, relpath: str
@@ -218,5 +225,26 @@ def test_t7_working_tree_cannot_self_extend_immutable_baseline(
     added = root / "src/oic/future_admitted.py"
     added.write_text("# existence does not confer admission\n", encoding="utf-8")
     subprocess.run(["git", "-C", str(root), "add", "src/oic/future_admitted.py"], check=True)
+    cache_paths = (
+        "src/oic/__pycache__/fixture.cpython-312.pyc",
+        "src/oic/nested/__pycache__/cache-data",
+        "src/oic/fixture.pyc",
+        "src/oic/fixture.pyo",
+    )
+    for tracked in (True, False):
+        paths = cache_paths if tracked else tuple(path + ".pyc" for path in cache_paths)
+        for relpath in paths:
+            cache = root / relpath
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            cache.write_bytes(b"deterministic cache artifact; not imported\n")
+        if tracked:
+            subprocess.run(["git", "-C", str(root), "add", "--", *paths], check=True)
+    tracked_paths = subprocess.run(
+        ["git", "-C", str(root), "ls-files", "--", "src/oic"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.splitlines()
+    assert set(cache_paths) <= set(tracked_paths)
     assert "src/oic/future_admitted.py" not in module.ADMITTED_SRC_OIC_PATHS
     assert module.discover_unadmitted_production_paths(root) == ["src/oic/future_admitted.py"]

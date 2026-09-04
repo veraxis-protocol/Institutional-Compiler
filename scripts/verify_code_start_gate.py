@@ -8,7 +8,7 @@ import json
 import shutil
 import subprocess
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 EXPECTED_ZTL = {
@@ -78,6 +78,11 @@ def _require(condition: bool, message: str) -> None:
         raise GateEvidenceError(message)
 
 
+def _is_python_cache_artifact(path: str) -> bool:
+    normalized = PurePosixPath(path)
+    return "__pycache__" in normalized.parts or normalized.suffix in {".pyc", ".pyo"}
+
+
 def discover_unadmitted_production_paths(root: Path) -> list[str]:
     """Compare tracked ``src/oic`` paths with the immutable pre-gate baseline."""
     git = shutil.which("git")
@@ -91,12 +96,13 @@ def discover_unadmitted_production_paths(root: Path) -> list[str]:
     )
     if result.returncode != 0:
         raise GateEvidenceError("cannot enumerate tracked src/oic production paths")
-    current = {line for line in result.stdout.splitlines() if line}
+    current = {PurePosixPath(line).as_posix() for line in result.stdout.splitlines() if line}
     current.update(
         path.relative_to(root).as_posix()
         for path in (root / "src/oic").rglob("*")
-        if path.is_file() and "__pycache__" not in path.parts
+        if path.is_file()
     )
+    current = {path for path in current if not _is_python_cache_artifact(path)}
     admitted = ADMITTED_SRC_OIC_PATHS | BOUNDED_SRC_OIC_PATHS
     added = sorted(current - admitted)
     missing = sorted(path for path in admitted if not (root / path).is_file())
