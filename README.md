@@ -1,6 +1,6 @@
 # Open Institutional Compiler
 
-- **Status:** OWNER-AUTHORIZED BOOTSTRAP - PRE-EXTERNAL-REVIEW
+- **Status:** BOUNDED_REFERENCE_IMPLEMENTATION — pending independent validation
 - **Bootstrap date:** 2026-07-29
 - **Governing design:** TDD-OIC-001 v1.1
 
@@ -17,14 +17,27 @@ Target capability:
 > evidentiary standard required to authorize, explain, audit, or correct those
 > actions.
 
-**What exists today:** a tested, non-semantic Python infrastructure package for
+**What exists today:** a Python infrastructure package for
 offline schema validation, historical bootstrap verification, current manifest
 verification, environment and gate diagnostics, and reproducible CI and SBOM
-checks. It is not a functioning institutional compiler.
+checks, plus a deterministic offline synthetic reference path: grounded candidates,
+divergent review records, supplied authority-evidence admission, provisional eleven-slot
+interpretation, unresolved references, and canonical evidence receipts. It is not a
+production institutional compiler.
 
-**What is blocked:** semantic implementation remains blocked pending the corpus
-provenance and ZTL/VEIP interface evidence listed in [`STATUS.md`](STATUS.md).
-Nothing in this README opens that gate or promotes the repository's maturity.
+**What is blocked:** production compilation and runtime authorization remain unestablished.
+The broader production semantic gate remains BLOCKED. The separately owner-admitted
+synthetic slice does not qualify a model provider or broaden corpus rights.
+
+Run `make demo` (or `python -B scripts/demo_bounded_semantic_path.py`) in the installed
+environment. It emits canonical JSON, makes no network request, needs no model credentials,
+and writes no repository files. Two review records remain divergent; missing/malformed
+authority evidence is refused. The eleven slots are provisional, not canonical meaning.
+The initial bounded verification passed 477 tests locally on Windows. Canonical Linux
+verification of this release candidate and independent validation remain pending.
+See [`CAPABILITY_MATRIX.json`](docs/capabilities/CAPABILITY_MATRIX.json) for exact provenance
+and ceilings. NVIDIA is NOT_QUALIFIED; Canada redistribution is UNRESOLVED; Ontology 007R1
+is unexecuted and execution-unauthorized. No model accuracy or legal validity is claimed.
 
 ## Research paper
 
@@ -305,9 +318,9 @@ semantic OIC-Bench results.
 | Schema validation | MEASURED - 9/9 |
 | Bootstrap integrity | MEASURED - 52/52 |
 | Infrastructure falsification harness | MEASURED - 4/4 |
-| Full repository test suite | MEASURED - 1232 passed, 1 intentional skip |
+| Prior main Linux baseline | MEASURED - 1255 passed, 1 intentional skip; not candidate acceptance |
 | Manifest | MEASURED - INCOMPLETE, required exit 3 |
-| Semantic implementation gate | BLOCKED |
+| Bounded synthetic path / production semantic gate | BOUNDED_REFERENCE_IMPLEMENTATION / BLOCKED |
 | OIC-Bench preflight design | PREREGISTERED |
 | Semantic OIC-Bench preflight | NOT YET RUN |
 | Full OIC-Bench v0.1 | NOT YET RUN |
@@ -339,7 +352,7 @@ gate.
 
 ### Stage 1 - Source-to-control reference
 
-**STATUS: NEXT - BLOCKED by the semantic code-start gate**
+**STATUS: BOUNDED SYNTHETIC SUBSET IMPLEMENTED; full source-to-control path BLOCKED**
 
 Target path:
 
@@ -406,7 +419,7 @@ conformance, and community governance.
 
 ## Current phase
 
-This repository authorizes contract-first, non-semantic infrastructure work.
+OIC-SEMANTIC-PROMOTION-001 admits the bounded offline synthetic reference path only.
 It currently implements four infrastructure CLI commands:
 
 - `oic validate-schema`
@@ -414,9 +427,9 @@ It currently implements four infrastructure CLI commands:
 - `oic verify-manifest`
 - `oic doctor`
 
-It does not implement document interpretation, candidate extraction,
-institutional admission, Institutional IR production, Open Control Envelope
-generation, Rego compilation, or runtime semantic decisions.
+The separate demo exercises candidate extraction, supplied synthetic admission evidence,
+and provisional interpretation. It does not implement Institutional IR production,
+Open Control Envelope generation, Rego compilation, or runtime semantic decisions.
 
 Run the safe non-semantic checks after the hash-locked installation described
 in [`docs/operations/CI.md`](docs/operations/CI.md):
@@ -432,7 +445,7 @@ must not be normalized into success.
 
 ## First executable objective
 
-The first semantic objective remains blocked. When its prerequisites are
+The full production source-to-control objective remains blocked. When its prerequisites are
 authorized, a bounded set of public or synthetic procurement governing sources
 is intended to flow through:
 
@@ -489,8 +502,8 @@ boundaries include:
 
 ## Public limitations
 
-The repository is a governance, contract, and non-semantic infrastructure
-foundation. It is not a functioning institutional compiler. Current scope,
+The repository is an infrastructure foundation with a bounded synthetic reference path.
+It is not a production institutional compiler. Current scope,
 provisional interfaces, corpus restrictions, human-judgment boundaries, and
 benchmark limitations are recorded in [`LIMITATIONS.md`](LIMITATIONS.md).
 
@@ -506,7 +519,7 @@ things. Passing tests or CI does not establish semantic correctness,
 institutional validity, compliance, comparative advantage, or owner acceptance.
 
 The permitted, evidence-gated, and forbidden claims are recorded in
-[`CLAIMS.md`](CLAIMS.md). Semantic implementation remains blocked by
+[`CLAIMS.md`](CLAIMS.md). The broader production semantic gate remains blocked by
 [`STATUS.md`](STATUS.md).
 
 ## Citation

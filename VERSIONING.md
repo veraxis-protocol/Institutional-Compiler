@@ -1,8 +1,10 @@
 # Versioning
 
 OIC is `0.1.0a0`: pre-release infrastructure with provisional compatibility.
-Pin an exact commit when reproducing it. No semantic compiler API or runtime
-contract exists.
+Pin an exact commit when reproducing it. Bounded candidate, admission-reference and
+provisional interpretation APIs now exist; no production compiler/runtime contract exists.
+The capability matrix records their source provenance and evidence ceilings. Frozen local
+replay is not provider qualification or independent validation.
 
 ## Provisional public surfaces
 

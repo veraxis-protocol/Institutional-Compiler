@@ -1,10 +1,13 @@
 # Agent operating boundary
 
-This repository is a non-semantic infrastructure foundation. The semantic OIC
-code-start gate remains **BLOCKED** by `STATUS.md`. No agent may implement or
-claim document interpretation, candidate extraction, institutional admission,
-Open Control Envelope generation, Rego compilation, or runtime semantic
-decisions under this work order.
+This repository contains infrastructure and the owner-admitted synthetic reference
+path under OIC-SEMANTIC-PROMOTION-001. That work order alone permits its exact 58-path
+maximum on `oic-weekly-convergence-2026-09-03`. The active capability matrix records
+the bounded surface; it cannot authorize its own extension. No later work is authorized
+by this file. After return, wait for a new deposited WO and explicit execution signal.
+The broader production semantic gate remains **BLOCKED** by `STATUS.md`. No Open Control
+Envelope generation, Rego compilation, real corpus fetch, live provider call, production
+runtime decision, rights expansion, or merge to main is authorized by this promotion.
 
 ## Safe commands
 

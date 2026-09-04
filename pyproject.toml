@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "oic"
 version = "0.1.0a0"
-description = "Open Institutional Compiler - non-semantic infrastructure foundation"
+description = "Open Institutional Compiler - infrastructure and bounded synthetic reference path"
 readme = "README.md"
 license = "PolyForm-Noncommercial-1.0.0"
 license-files = ["LICENSE"]
