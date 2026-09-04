@@ -27,6 +27,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 oic = ["py.typed"]
+"oic.admission_specs" = ["*.json"]
 
 # --------------------------------------------------------------------------
 # Ruff
