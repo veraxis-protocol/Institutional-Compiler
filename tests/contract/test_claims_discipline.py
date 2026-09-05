@@ -85,6 +85,21 @@ NEGATIONS = (
 #: Y, or Z").
 _CONTEXT = 220
 
+GATE_F_EXCLUSIONS = (
+    "semantic correctness",
+    "model accuracy",
+    "institutional validity",
+    "legal effect",
+    "provider qualification",
+    "rights resolution",
+    "ontology execution",
+    "production compilation",
+    "runtime authorization",
+    "institutional-IR closure",
+    "enterprise readiness",
+    "benchmark superiority",
+)
+
 
 @pytest.fixture(scope="module")
 def documents(repo_root: Path) -> dict[str, str]:
@@ -221,6 +236,7 @@ def _assert_status_claims(text: str, capability_matrix: dict[str, object]) -> No
     state = capability_matrix["state"]
     gate = capability_matrix["production_semantic_gate"]
     ceilings = capability_matrix["ceilings"]
+    evidence = capability_matrix.get("independent_validation_evidence")
     assert isinstance(state, str) and state.lower() in normalized
     assert isinstance(gate, str) and f"production semantic gate: {gate.lower()}" in normalized
     assert isinstance(ceilings, dict)
@@ -230,13 +246,33 @@ def _assert_status_claims(text: str, capability_matrix: dict[str, object]) -> No
         "ontology_007r1": "ontology 007r1: unexecuted and execution-unauthorized",
         "production_compilation": "production compilation and runtime authorization: unestablished",
         "runtime_authorization": "production compilation and runtime authorization: unestablished",
-        "institutional_ir_closure": "institutional-ir closure",
+        "institutional_ir_closure": "institutional-ir closure: unestablished",
         "negative_stability_live_result": "negative-stability live outcome: deferred",
     }
     for key, phrase in required.items():
         assert key in ceilings and phrase in normalized, f"missing STATUS.md ceiling: {key}"
-    assert ceilings.get("independent_validation") is False
-    assert "pending independent validation" in normalized
+    independently_validated = ceilings.get("independent_validation")
+    assert isinstance(independently_validated, bool)
+    if independently_validated:
+        assert isinstance(evidence, dict)
+        assert evidence.get("status") == "GATE_F_PASS"
+        assert evidence.get("work_order") == "OIC-INDEPENDENT-GATE-F-005"
+        candidate = evidence.get("candidate_commit")
+        tree = evidence.get("candidate_tree")
+        assert isinstance(candidate, str) and candidate in normalized
+        assert isinstance(tree, str) and tree in normalized
+        assert "independent gate f repository validation passed" in normalized, (
+            "missing STATUS.md independent Gate F validation statement"
+        )
+        assert "1714 passed, 0 failed, 0 errors, 1 declared skip, 93.5% coverage" in normalized
+        assert "merge remains pending gate g and owner authorization" in normalized
+        assert "does not establish semantic correctness" in normalized
+        assert evidence.get("exclusions") == list(GATE_F_EXCLUSIONS)
+        for exclusion in GATE_F_EXCLUSIONS:
+            assert exclusion.lower() in normalized
+    else:
+        assert evidence is None
+        assert "pending independent validation" in normalized
     for phrase in FORBIDDEN_ABSOLUTELY:
         assert phrase not in normalized, f"forbidden STATUS.md claim: {phrase}"
     for phrase in (
@@ -246,6 +282,8 @@ def _assert_status_claims(text: str, capability_matrix: dict[str, object]) -> No
         "ontology 007r1 executed",
         "runtime authorized",
         "independently validated",
+        "semantic correctness established",
+        "gate g passed",
     ):
         assert phrase not in normalized, f"unsupported STATUS.md escalation: {phrase}"
 
@@ -265,3 +303,82 @@ def test_status_reports_active_bounded_state_and_ceilings(repo_root: Path) -> No
     forbidden_claim = status + "\nThe system is production complete.\n"
     with pytest.raises(AssertionError, match="production complete"):
         _assert_status_claims(forbidden_claim, matrix)
+
+    validation_marker = "independent gate f repository validation passed"
+    assert validation_marker in " ".join(status.lower().replace("*", "").split())
+    missing_evidence, replacement_count = re.subn(
+        re.escape(validation_marker),
+        "repository validation marker removed",
+        status,
+        flags=re.IGNORECASE,
+    )
+    assert replacement_count > 0
+    assert missing_evidence != status
+    missing_normalized = " ".join(missing_evidence.lower().replace("*", "").split())
+    assert validation_marker not in missing_normalized
+    with pytest.raises(
+        AssertionError,
+        match=re.escape("missing STATUS.md independent Gate F validation statement"),
+    ):
+        _assert_status_claims(missing_evidence, matrix)
+
+    forged_matrix = json.loads(json.dumps(matrix))
+    forged_matrix["independent_validation_evidence"]["candidate_commit"] = "0" * 40
+    with pytest.raises(AssertionError):
+        _assert_status_claims(status, forged_matrix)
+
+    broad_claim = status + "\nThe implementation is independently validated.\n"
+    with pytest.raises(AssertionError, match="independently validated"):
+        _assert_status_claims(broad_claim, matrix)
+
+    pending_matrix = json.loads(json.dumps(matrix))
+    pending_matrix["ceilings"]["independent_validation"] = False
+    del pending_matrix["independent_validation_evidence"]
+    pending_status = status.replace(
+        "SCOPED INDEPENDENT GATE F REPOSITORY VALIDATION PASSED",
+        "PENDING INDEPENDENT VALIDATION",
+    )
+    _assert_status_claims(pending_status, pending_matrix)
+
+
+def test_gate_f_exclusions_are_exact_and_present_in_both_front_doors(repo_root: Path) -> None:
+    matrix = json.loads(
+        (repo_root / "docs/capabilities/CAPABILITY_MATRIX.json").read_text(encoding="utf-8")
+    )
+    assert matrix["independent_validation_evidence"]["exclusions"] == list(GATE_F_EXCLUSIONS)
+    for relpath in ("README.md", "STATUS.md"):
+        normalized = " ".join((repo_root / relpath).read_text(encoding="utf-8").lower().split())
+        for exclusion in GATE_F_EXCLUSIONS:
+            assert exclusion.lower() in normalized, (
+                f"missing {relpath} Gate F exclusion: {exclusion}"
+            )
+
+
+@pytest.mark.parametrize("mutation", ("delete", "substitute", "reorder", "add"))
+def test_matrix_gate_f_exclusion_mutations_fail_closed(repo_root: Path, mutation: str) -> None:
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "bounded_gate_claims", repo_root / "scripts/verify_code_start_gate.py"
+    )
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    evidence = json.loads(
+        json.dumps(
+            json.loads(
+                (repo_root / "docs/capabilities/CAPABILITY_MATRIX.json").read_text(encoding="utf-8")
+            )["independent_validation_evidence"]
+        )
+    )
+    exclusions = evidence["exclusions"]
+    if mutation == "delete":
+        exclusions.pop(0)
+    elif mutation == "substitute":
+        exclusions[0] = "semantic validity"
+    elif mutation == "reorder":
+        exclusions[0], exclusions[1] = exclusions[1], exclusions[0]
+    else:
+        exclusions.append("production readiness")
+    with pytest.raises(module.GateEvidenceError, match="evidence forged"):
+        module.validate_independent_validation_evidence(evidence)

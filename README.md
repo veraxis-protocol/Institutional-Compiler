@@ -1,6 +1,6 @@
 # Open Institutional Compiler
 
-- **Status:** BOUNDED_REFERENCE_IMPLEMENTATION — pending independent validation
+- **Status:** BOUNDED_REFERENCE_IMPLEMENTATION — scoped independent Gate F repository validation passed; merge pending Gate G and owner authorization
 - **Bootstrap date:** 2026-07-29
 - **Governing design:** TDD-OIC-001 v1.1
 
@@ -33,8 +33,19 @@ Run `make demo` (or `python -B scripts/demo_bounded_semantic_path.py`) in the in
 environment. It emits canonical JSON, makes no network request, needs no model credentials,
 and writes no repository files. Two review records remain divergent; missing/malformed
 authority evidence is refused. The eleven slots are provisional, not canonical meaning.
-The initial bounded verification passed 477 tests locally on Windows. Canonical Linux
-verification of this release candidate and independent validation remain pending.
+Independent Gate F repository validation passed for candidate
+`c0108a7a80585d6f5732407d4904ba815073ecd2` (tree
+`1d12b17aad7977c939090909171183be166cfd50`): canonical Linux execution reported
+1714 passed, 0 failed, 0 errors, 1 declared skip, 93.5% coverage, and two
+byte-identical offline demo runs with SHA-256
+`0f9d01bb0dfc488505e027ac7bd8aecf869578e379b5a977cd9d642f2101a39a`. This establishes reproducibility, boundary integrity, the
+specified fail-closed properties, packaging, and the named adversarial checks for
+that exact candidate only. It does not establish semantic correctness, model
+accuracy, institutional validity, legal effect, provider qualification, rights
+resolution, ontology execution, production compilation, runtime authorization,
+institutional-IR closure, enterprise readiness, or benchmark superiority. It
+also does not establish legal validity or production readiness. Merge remains
+pending Gate G and owner authorization.
 See [`CAPABILITY_MATRIX.json`](docs/capabilities/CAPABILITY_MATRIX.json) for exact provenance
 and ceilings. NVIDIA is NOT_QUALIFIED; Canada redistribution is UNRESOLVED; Ontology 007R1
 is unexecuted and execution-unauthorized. No model accuracy or legal validity is claimed.

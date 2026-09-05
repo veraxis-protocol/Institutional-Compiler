@@ -140,7 +140,6 @@ def test_historical_gate_rewrite_is_refused(repo_root: Path, gate_tree: Path) ->
         ("nvidia", "QUALIFIED"),
         ("canada_redistribution", "CLEAR"),
         ("runtime_authorization", "ESTABLISHED"),
-        ("independent_validation", True),
         ("production_compilation", "ESTABLISHED"),
         ("ontology_007r1", "EXECUTED"),
     ],
@@ -172,4 +171,28 @@ def test_capability_claim_self_extension_is_refused(repo_root: Path, gate_tree: 
     matrix["capabilities"][0]["independent_validation"] = True
     path.write_text(json.dumps(matrix), encoding="utf-8")
     with pytest.raises(module.GateEvidenceError, match="capability claim expanded"):
+        module.validate_bounded_record(gate_tree)
+
+
+def test_independent_validation_evidence_removal_is_refused(
+    repo_root: Path, gate_tree: Path
+) -> None:
+    module = gate(repo_root)
+    path = gate_tree / "docs/capabilities/CAPABILITY_MATRIX.json"
+    matrix = json.loads(path.read_bytes())
+    del matrix["independent_validation_evidence"]
+    path.write_text(json.dumps(matrix), encoding="utf-8")
+    with pytest.raises(module.GateEvidenceError):
+        module.validate_bounded_record(gate_tree)
+
+
+def test_forged_independent_validation_evidence_is_refused(
+    repo_root: Path, gate_tree: Path
+) -> None:
+    module = gate(repo_root)
+    path = gate_tree / "docs/capabilities/CAPABILITY_MATRIX.json"
+    matrix = json.loads(path.read_bytes())
+    matrix["independent_validation_evidence"]["candidate_commit"] = "0" * 40
+    path.write_text(json.dumps(matrix), encoding="utf-8")
+    with pytest.raises(module.GateEvidenceError, match="evidence forged"):
         module.validate_bounded_record(gate_tree)

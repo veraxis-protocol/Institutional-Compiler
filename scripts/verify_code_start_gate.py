@@ -51,8 +51,49 @@ CEILINGS = {
     "runtime_authorization": "UNESTABLISHED",
     "institutional_ir_closure": "UNESTABLISHED",
     "negative_stability_live_result": "DEFERRED",
-    "independent_validation": False,
+    "independent_validation": True,
 }
+
+INDEPENDENT_VALIDATION_EVIDENCE = {
+    "status": "GATE_F_PASS",
+    "work_order": "OIC-INDEPENDENT-GATE-F-005",
+    "candidate_commit": "c0108a7a80585d6f5732407d4904ba815073ecd2",
+    "candidate_tree": "1d12b17aad7977c939090909171183be166cfd50",
+    "canonical_linux": {
+        "passed": 1714,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 1,
+        "coverage_percent": 93.5,
+    },
+    "demo_sha256": "0f9d01bb0dfc488505e027ac7bd8aecf869578e379b5a977cd9d642f2101a39a",
+    "scope": (
+        "Scoped independent Gate F repository validation of this exact candidate: "
+        "reproducibility, boundary integrity, specified fail-closed properties, "
+        "packaging, and named adversarial checks."
+    ),
+    "exclusions": [
+        "semantic correctness",
+        "model accuracy",
+        "institutional validity",
+        "legal effect",
+        "provider qualification",
+        "rights resolution",
+        "ontology execution",
+        "production compilation",
+        "runtime authorization",
+        "institutional-IR closure",
+        "enterprise readiness",
+        "benchmark superiority",
+    ],
+}
+
+
+def validate_independent_validation_evidence(evidence: object) -> None:
+    """Accept only the exact owner-adjudicated Gate F evidence record."""
+    _require(evidence == INDEPENDENT_VALIDATION_EVIDENCE, "independent validation evidence forged")
+
+
 ADMITTED_SRC_OIC_PATHS = frozenset(
     {
         "src/oic/__init__.py",
@@ -231,6 +272,7 @@ def validate_bounded_record(root: Path) -> None:
             "actual_changed_paths",
             "source_provenance",
             "ceilings",
+            "independent_validation_evidence",
             "capabilities",
         },
         "capability matrix fields expanded",
@@ -254,9 +296,9 @@ def validate_bounded_record(root: Path) -> None:
             == {
                 "name": name,
                 "implemented": True,
-                "tested": "LOCAL_TESTS_PASSED",
+                "tested": "SCOPED_INDEPENDENT_GATE_F_REPOSITORY_VALIDATION_PASSED",
                 "documented": True,
-                "deferred": "generalization_and_independent_validation",
+                "deferred": "generalization",
                 "evidence_ceiling": (
                     "Synthetic frozen replay only; no model accuracy, institutional "
                     "meaning, legal validity, or runtime permission."
@@ -270,6 +312,7 @@ def validate_bounded_record(root: Path) -> None:
     _require(record.get("state") == "BOUNDED_REFERENCE_IMPLEMENTATION", "bounded state expanded")
     _require(record.get("production_semantic_gate") == "BLOCKED", "production gate expanded")
     _require(record.get("ceilings") == CEILINGS, "evidence ceiling expanded")
+    validate_independent_validation_evidence(record.get("independent_validation_evidence"))
     provenance = record.get("source_provenance")
     _require(
         hashlib.sha256(
