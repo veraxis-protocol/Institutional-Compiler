@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/design/admission-boundary-001/ADMISSION-RECEIPT-v0.1.schema.json",
+  "title": "Admission Boundary 001 Receipt (design draft)",
+  "description": "Design-only immutable deterministic admission outcome; not an implemented runtime schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "admission_receipt_id",
+    "candidate_unit_id",
+    "candidate_projection_digest",
+    "source_id",
+    "source_version",
+    "source_digest",
+    "authority_evidence_refs",
+    "authority_evidence_digests",
+    "evaluation_time",
+    "evaluation_scope",
+    "admission_state",
+    "reason_code",
+    "evaluator_id",
+    "evaluator_version",
+    "ruleset_id",
+    "ruleset_digest",
+    "input_digest",
+    "evidence_digest"
+  ],
+  "properties": {
+    "admission_receipt_id": {
+      "type": "string",
+      "pattern": "^admrec-sha256:[0-9a-f]{64}$"
+    },
+    "candidate_unit_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidate_projection_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "authority_evidence_refs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "authority_evidence_digests": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/sha256"
+      }
+    },
+    "evaluation_time": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "evaluation_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "jurisdiction",
+        "applicability"
+      ],
+      "properties": {
+        "jurisdiction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "applicability": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "admission_state": {
+      "enum": [
+        "ADMITTED",
+        "CANDIDATE_INPUT_INVALID",
+        "SOURCE_NOT_REGISTERED",
+        "SOURCE_VERSION_MISMATCH",
+        "SOURCE_DIGEST_MISMATCH",
+        "MISSING_AUTHORITY_EVIDENCE",
+        "NOT_YET_EFFECTIVE",
+        "EXPIRED",
+        "SUPERSEDED",
+        "REVOKED",
+        "OUT_OF_SCOPE",
+        "CONFLICTING_AUTHORITY",
+        "AUTHORITY_REGISTRY_UNAVAILABLE",
+        "AUTHORITY_EVIDENCE_STALE",
+        "ADMISSION_NOT_ESTABLISHED"
+      ]
+    },
+    "reason_code": {
+      "enum": [
+        "OIC-ADM-0000",
+        "OIC-ADM-1001",
+        "OIC-ADM-1002",
+        "OIC-ADM-1003",
+        "OIC-ADM-1004",
+        "OIC-ADM-1005",
+        "OIC-ADM-1006",
+        "OIC-ADM-1007",
+        "OIC-ADM-1008",
+        "OIC-ADM-1009",
+        "OIC-ADM-1010",
+        "OIC-ADM-1011",
+        "OIC-ADM-1012",
+        "OIC-ADM-1013",
+        "OIC-ADM-1099"
+      ]
+    },
+    "evaluator_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evaluator_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ruleset_id": {
+      "const": "OIC-ADMISSION-BOUNDARY-001"
+    },
+    "ruleset_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "input_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "evidence_digest": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "admission_state": {
+            "const": "ADMITTED"
+          }
+        },
+        "required": [
+          "admission_state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "reason_code": {
+            "const": "OIC-ADM-0000"
+          },
+          "authority_evidence_refs": {
+            "minItems": 1
+          },
+          "authority_evidence_digests": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    }
+  }
+}

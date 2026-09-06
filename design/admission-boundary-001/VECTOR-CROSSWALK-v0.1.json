@@ -1,0 +1,1100 @@
+{
+  "crosswalk_id": "OIC-ADMISSION-BOUNDARY-001-v0.1-to-v0.2",
+  "v0_1_corpus_sha256": "2181cada7cda18a0bde77db89a7eaf701ad044253c3e179024ac7f51d50bc8e7",
+  "entry_count": 30,
+  "transformation_classes": [
+    "identity",
+    "explicit_expansion_of_already_present_facts",
+    "addition_of_previously_unspecified_design_data"
+  ],
+  "field_class_justifications": [
+    {
+      "field_class": "candidate_projection_normalization",
+      "authority_bearing": false,
+      "justification": "Makes the existing scenario candidate an exact typed boundary projection; unit_type remains provisional and source text is unchanged."
+    },
+    {
+      "field_class": "source_lifecycle_fixture_values",
+      "authority_bearing": true,
+      "justification": "Required to make every source registration temporally explicit. Values are visible synthetic fixture data and do not assert real-world authority."
+    },
+    {
+      "field_class": "issuer_and_admission_authority_fixture_ids",
+      "authority_bearing": true,
+      "justification": "Required by the frozen evidence schema. Explicit synthetic identifiers replace no real authentication and are never runtime defaults."
+    },
+    {
+      "field_class": "delegation_basis_fixture_ids",
+      "authority_bearing": true,
+      "justification": "Required by the frozen warrant schema. Explicit synthetic values exercise binding only and confer no real-world mandate."
+    },
+    {
+      "field_class": "evidence_jurisdiction_standing_and_adoption",
+      "authority_bearing": true,
+      "justification": "Makes evidence scope/lifecycle complete using visible synthetic fixture facts; no adapter infers them at execution time."
+    },
+    {
+      "field_class": "registry_observation_and_evaluator_ruleset_ids",
+      "authority_bearing": false,
+      "justification": "Names the trusted seam and frozen evaluation assumptions without authenticating them through JSON."
+    },
+    {
+      "field_class": "deterministic_digests_and_expected_receipts",
+      "authority_bearing": false,
+      "justification": "Mechanical canonical projections bind fixture bytes and expected evidence; hashes are not signatures or authority."
+    }
+  ],
+  "entries": [
+    {
+      "v0_1_vector_id": "ADM-001",
+      "v0_2_vector_id": "ADM-001",
+      "preserved": {
+        "title": "adopted registered policy with exact active warrant",
+        "threat_tags": [
+          "positive",
+          "automatic_machine_verifiable_warrant"
+        ],
+        "expected_admission_state": "ADMITTED",
+        "reason_code": "OIC-ADM-0000",
+        "falsifier": "Any non-ADMITTED result with the exact authenticated active evidence, or admission for broader scope than the warrant.",
+        "claim_ceiling": "Eligibility for Institutional IR interpretation only; no legal validity or execution authorization."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-002",
+      "v0_2_vector_id": "ADM-002",
+      "preserved": {
+        "title": "explicit institutionally approved one-source warrant",
+        "threat_tags": [
+          "positive",
+          "explicit_institutional_approval"
+        ],
+        "expected_admission_state": "ADMITTED",
+        "reason_code": "OIC-ADM-0000",
+        "falsifier": "The evaluator ignores or expands the institutionally approved warrant.",
+        "claim_ceiling": "Eligibility for Institutional IR interpretation only; no legal validity or execution authorization."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-003",
+      "v0_2_vector_id": "ADM-003",
+      "preserved": {
+        "title": "authoritative-looking fake memo",
+        "threat_tags": [
+          "authoritative_looking_fake_memo"
+        ],
+        "expected_admission_state": "SOURCE_NOT_REGISTERED",
+        "reason_code": "OIC-ADM-1002",
+        "falsifier": "Official style, vocabulary, or model confidence causes admission without registration.",
+        "claim_ceiling": "Fail-closed design expectation only; not a finding that the text is false."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "identity_empty_array",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1"
+      ],
+      "no_default_warrant": true
+    },
+    {
+      "v0_1_vector_id": "ADM-004",
+      "v0_2_vector_id": "ADM-004",
+      "preserved": {
+        "title": "perfectly grounded extraction from an unwarranted draft",
+        "threat_tags": [
+          "perfect_grounding_from_draft"
+        ],
+        "expected_admission_state": "MISSING_AUTHORITY_EVIDENCE",
+        "reason_code": "OIC-ADM-1005",
+        "falsifier": "Literal grounding or draft registration alone produces ADMITTED.",
+        "claim_ceiling": "Fail-closed design expectation only; not a judgment on future adoption."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "identity_empty_array",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1"
+      ],
+      "no_default_warrant": true
+    },
+    {
+      "v0_1_vector_id": "ADM-005",
+      "v0_2_vector_id": "ADM-005",
+      "preserved": {
+        "title": "valid policy name with forged source metadata",
+        "threat_tags": [
+          "valid_policy_forged_source_metadata"
+        ],
+        "expected_admission_state": "SOURCE_DIGEST_MISMATCH",
+        "reason_code": "OIC-ADM-1004",
+        "falsifier": "A familiar source identity permits different bytes to inherit its warrant.",
+        "claim_ceiling": "Integrity-binding expectation only; no claim that SHA-256 authenticates the issuer."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-006",
+      "v0_2_vector_id": "ADM-006",
+      "preserved": {
+        "title": "valid authority presented for the wrong version",
+        "threat_tags": [
+          "valid_authority_wrong_version"
+        ],
+        "expected_admission_state": "SOURCE_VERSION_MISMATCH",
+        "reason_code": "OIC-ADM-1003",
+        "falsifier": "Authority for v3 is silently reused for v4.",
+        "claim_ceiling": "Exact-version admission expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-007",
+      "v0_2_vector_id": "ADM-007",
+      "preserved": {
+        "title": "expired source",
+        "threat_tags": [
+          "expired_source"
+        ],
+        "expected_admission_state": "EXPIRED",
+        "reason_code": "OIC-ADM-1007",
+        "falsifier": "Past effectiveness is treated as current admission authority.",
+        "claim_ceiling": "Time-bounded eligibility expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-008",
+      "v0_2_vector_id": "ADM-008",
+      "preserved": {
+        "title": "superseded source",
+        "threat_tags": [
+          "superseded_source"
+        ],
+        "expected_admission_state": "SUPERSEDED",
+        "reason_code": "OIC-ADM-1008",
+        "falsifier": "A superseded source remains eligible without an explicit applicable exception warrant.",
+        "claim_ceiling": "Lifecycle eligibility expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-009",
+      "v0_2_vector_id": "ADM-009",
+      "preserved": {
+        "title": "revoked source",
+        "threat_tags": [
+          "revoked_source"
+        ],
+        "expected_admission_state": "REVOKED",
+        "reason_code": "OIC-ADM-1009",
+        "falsifier": "A revoked source remains eligible at or after revocation.",
+        "claim_ceiling": "Lifecycle eligibility expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-010",
+      "v0_2_vector_id": "ADM-010",
+      "preserved": {
+        "title": "valid evidence in the wrong jurisdiction",
+        "threat_tags": [
+          "wrong_department_or_jurisdiction"
+        ],
+        "expected_admission_state": "OUT_OF_SCOPE",
+        "reason_code": "OIC-ADM-1010",
+        "falsifier": "Authority for department-a is expanded to department-b.",
+        "claim_ceiling": "Scope-bounded eligibility expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-011",
+      "v0_2_vector_id": "ADM-011",
+      "preserved": {
+        "title": "policy text copied to an unauthoritative website",
+        "threat_tags": [
+          "copied_policy_unauthoritative_website"
+        ],
+        "expected_admission_state": "SOURCE_NOT_REGISTERED",
+        "reason_code": "OIC-ADM-1002",
+        "falsifier": "Identical copied text inherits the canonical source's standing.",
+        "claim_ceiling": "Source-instance eligibility expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-012",
+      "v0_2_vector_id": "ADM-012",
+      "preserved": {
+        "title": "legitimate policy quoted inside commentary",
+        "threat_tags": [
+          "legitimate_policy_quoted_in_commentary"
+        ],
+        "expected_admission_state": "MISSING_AUTHORITY_EVIDENCE",
+        "reason_code": "OIC-ADM-1005",
+        "falsifier": "A quotation in commentary borrows an unbound policy warrant.",
+        "claim_ceiling": "Authority-binding expectation only; not a semantic judgment on the quotation."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "identity_empty_array",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1"
+      ],
+      "no_default_warrant": true
+    },
+    {
+      "v0_1_vector_id": "ADM-013",
+      "v0_2_vector_id": "ADM-013",
+      "preserved": {
+        "title": "model labels descriptive text as mandate",
+        "threat_tags": [
+          "model_labels_descriptive_as_mandate",
+          "candidate_type_no_authority"
+        ],
+        "expected_admission_state": "ADMITTED",
+        "reason_code": "OIC-ADM-0000",
+        "falsifier": "The provisional mandate label creates extra standing or admission is misreported as semantic correctness.",
+        "claim_ceiling": "Eligibility only; the likely extraction defect remains for later interpretation/review and is not approved."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-014",
+      "v0_2_vector_id": "ADM-014",
+      "preserved": {
+        "title": "model labels a valid mandate as advisory",
+        "threat_tags": [
+          "model_labels_valid_mandate_as_advisory",
+          "candidate_type_no_authority"
+        ],
+        "expected_admission_state": "ADMITTED",
+        "reason_code": "OIC-ADM-0000",
+        "falsifier": "The advisory label removes source authority or admission repairs the model label.",
+        "claim_ceiling": "Eligibility only; admission neither validates nor repairs provisional unit_type."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-015",
+      "v0_2_vector_id": "ADM-015",
+      "preserved": {
+        "title": "source digest mismatch after registered retrieval",
+        "threat_tags": [
+          "source_digest_mismatch"
+        ],
+        "expected_admission_state": "SOURCE_DIGEST_MISMATCH",
+        "reason_code": "OIC-ADM-1004",
+        "falsifier": "Digest mismatch is ignored because identity and version match.",
+        "claim_ceiling": "Integrity-binding expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-016",
+      "v0_2_vector_id": "ADM-016",
+      "preserved": {
+        "title": "authority registry unavailable",
+        "threat_tags": [
+          "authority_registry_unavailable"
+        ],
+        "expected_admission_state": "AUTHORITY_REGISTRY_UNAVAILABLE",
+        "reason_code": "OIC-ADM-1012",
+        "falsifier": "Unavailable current evidence is replaced with assumption or model judgment.",
+        "claim_ceiling": "Availability fail-closed expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "identity_empty_array",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1"
+      ],
+      "no_default_warrant": true
+    },
+    {
+      "v0_1_vector_id": "ADM-017",
+      "v0_2_vector_id": "ADM-017",
+      "preserved": {
+        "title": "conflicting active warrants",
+        "threat_tags": [
+          "conflicting_warrants"
+        ],
+        "expected_admission_state": "CONFLICTING_AUTHORITY",
+        "reason_code": "OIC-ADM-1011",
+        "falsifier": "The evaluator or model chooses a favorable warrant without a frozen precedence rule.",
+        "claim_ceiling": "Conflict fail-closed expectation only; not denial of the proposition."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-018",
+      "v0_2_vector_id": "ADM-018",
+      "preserved": {
+        "title": "stale cached authority evidence",
+        "threat_tags": [
+          "stale_cached_authority_evidence"
+        ],
+        "expected_admission_state": "AUTHORITY_EVIDENCE_STALE",
+        "reason_code": "OIC-ADM-1013",
+        "falsifier": "Evidence outside the configured freshness bound is treated as current.",
+        "claim_ceiling": "Freshness fail-closed expectation only; freshness duration remains institution-defined."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-019",
+      "v0_2_vector_id": "ADM-019",
+      "preserved": {
+        "title": "newer lower authority overlaps older higher authority",
+        "threat_tags": [
+          "newer_lower_vs_older_higher_authority",
+          "overlapping_scope"
+        ],
+        "expected_admission_state": "CONFLICTING_AUTHORITY",
+        "reason_code": "OIC-ADM-1011",
+        "falsifier": "Recency alone overrides institutional authority rank or vice versa without a versioned precedence rule.",
+        "claim_ceiling": "Conflict preregistration only; no universal hierarchy is asserted."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-020",
+      "v0_2_vector_id": "ADM-020",
+      "preserved": {
+        "title": "perfect provenance with no authority basis",
+        "threat_tags": [
+          "perfect_provenance_no_authority",
+          "provenance_alone"
+        ],
+        "expected_admission_state": "MISSING_AUTHORITY_EVIDENCE",
+        "reason_code": "OIC-ADM-1005",
+        "falsifier": "Complete provenance is treated as an institutional warrant.",
+        "claim_ceiling": "Authority distinction expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "identity_empty_array",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1"
+      ],
+      "no_default_warrant": true
+    },
+    {
+      "v0_1_vector_id": "ADM-021",
+      "v0_2_vector_id": "ADM-021",
+      "preserved": {
+        "title": "valid warrant outside applicability scope",
+        "threat_tags": [
+          "valid_authority_candidate_outside_scope"
+        ],
+        "expected_admission_state": "OUT_OF_SCOPE",
+        "reason_code": "OIC-ADM-1010",
+        "falsifier": "An employee-only warrant is expanded to contractors.",
+        "claim_ceiling": "Scope-bounded eligibility expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-022",
+      "v0_2_vector_id": "ADM-022",
+      "preserved": {
+        "title": "authority established but effectiveness not reached",
+        "threat_tags": [
+          "authority_effectiveness_not_reached"
+        ],
+        "expected_admission_state": "NOT_YET_EFFECTIVE",
+        "reason_code": "OIC-ADM-1006",
+        "falsifier": "Future effective authority is treated as currently eligible.",
+        "claim_ceiling": "Time-bounded eligibility expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-023",
+      "v0_2_vector_id": "ADM-023",
+      "preserved": {
+        "title": "publication precedes institutional effectiveness",
+        "threat_tags": [
+          "publication_not_effectiveness"
+        ],
+        "expected_admission_state": "NOT_YET_EFFECTIVE",
+        "reason_code": "OIC-ADM-1006",
+        "falsifier": "Publication timestamp substitutes for effective_from.",
+        "claim_ceiling": "Temporal distinction expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-024",
+      "v0_2_vector_id": "ADM-024",
+      "preserved": {
+        "title": "revocation evidence after a prior admission",
+        "threat_tags": [
+          "revocation_after_prior_admission",
+          "immutable_receipt"
+        ],
+        "expected_admission_state": "REVOKED",
+        "reason_code": "OIC-ADM-1009",
+        "falsifier": "The prior receipt is mutated or prior admission suppresses the later revoked result.",
+        "claim_ceiling": "New time-specific eligibility result only; the historical receipt remains immutable."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-025",
+      "v0_2_vector_id": "ADM-025",
+      "preserved": {
+        "title": "candidate lacks source anchor",
+        "threat_tags": [
+          "candidate_input_invalid",
+          "source_grounding_seam"
+        ],
+        "expected_admission_state": "CANDIDATE_INPUT_INVALID",
+        "reason_code": "OIC-ADM-1001",
+        "falsifier": "Admission reconstructs or guesses missing grounding instead of rejecting the input reference.",
+        "claim_ceiling": "Input-contract expectation only; admission does not redo extraction."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-026",
+      "v0_2_vector_id": "ADM-026",
+      "preserved": {
+        "title": "deterministic repeat A",
+        "threat_tags": [
+          "positive",
+          "deterministic_repeat",
+          "idempotence_pair_A"
+        ],
+        "expected_admission_state": "ADMITTED",
+        "reason_code": "OIC-ADM-0000",
+        "falsifier": "Its receipt projection differs from ADM-027 under the same evaluator and ruleset assumptions.",
+        "claim_ceiling": "Deterministic design expectation only; no runtime implementation exists."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-027",
+      "v0_2_vector_id": "ADM-027",
+      "preserved": {
+        "title": "deterministic repeat B",
+        "threat_tags": [
+          "positive",
+          "deterministic_repeat",
+          "idempotence_pair_B"
+        ],
+        "expected_admission_state": "ADMITTED",
+        "reason_code": "OIC-ADM-0000",
+        "falsifier": "Its receipt projection differs from ADM-026 under the same evaluator and ruleset assumptions.",
+        "claim_ceiling": "Deterministic design expectation only; no runtime implementation exists."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-028",
+      "v0_2_vector_id": "ADM-028",
+      "preserved": {
+        "title": "authenticated evidence with disputed unranked authority basis",
+        "threat_tags": [
+          "generic_fail_safe",
+          "maybe_authoritative"
+        ],
+        "expected_admission_state": "ADMISSION_NOT_ESTABLISHED",
+        "reason_code": "OIC-ADM-1099",
+        "falsifier": "Maybe-authoritative or suspended evidence becomes ADMITTED, or the generic state hides a more specific frozen condition.",
+        "claim_ceiling": "Generic fail-safe expectation only; no denial of the proposition."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-029",
+      "v0_2_vector_id": "ADM-029",
+      "preserved": {
+        "title": "draft with exact institutionally approved draft-purpose warrant",
+        "threat_tags": [
+          "positive",
+          "draft_with_explicit_purpose_warrant"
+        ],
+        "expected_admission_state": "ADMITTED",
+        "reason_code": "OIC-ADM-0000",
+        "falsifier": "The draft is admitted beyond its exact purpose or rejected despite an authenticated exact draft-purpose warrant.",
+        "claim_ceiling": "Eligibility within the pilot design-evaluation scope only; not general operative standing."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    },
+    {
+      "v0_1_vector_id": "ADM-030",
+      "v0_2_vector_id": "ADM-030",
+      "preserved": {
+        "title": "active source with revoked admission warrant",
+        "threat_tags": [
+          "revoked_warrant"
+        ],
+        "expected_admission_state": "REVOKED",
+        "reason_code": "OIC-ADM-1009",
+        "falsifier": "Active source status overrides a revoked admission warrant.",
+        "claim_ceiling": "Warrant-lifecycle eligibility expectation only."
+      },
+      "overall_transformation": "addition_of_previously_unspecified_design_data",
+      "component_transformations": {
+        "scenario_metadata": "identity",
+        "candidate_projection": "explicit_expansion_of_already_present_facts_plus_non_authority_schema_state_normalization",
+        "registry_availability_freshness": "explicit_expansion_of_already_present_facts",
+        "compact_authority_evidence": "addition_of_previously_unspecified_design_data",
+        "evaluator_ruleset_identity": "addition_of_previously_unspecified_non_authority_design_data",
+        "digests_and_receipt": "deterministic_syntactic_materialization"
+      },
+      "authority_bearing_additions": [
+        "source_registration.adopted_at/published_at/effective_from/effective_until/superseded_at/revoked_at when absent in v0.1",
+        "authority_evidence[].issued_at",
+        "authority_evidence[].issuer_id",
+        "authority_evidence[].jurisdiction",
+        "authority_evidence[].source_standing",
+        "authority_evidence[].adopted_at",
+        "authority_evidence[].superseded_at",
+        "authority_evidence[].admission_warrant.admission_authority_id",
+        "authority_evidence[].admission_warrant.delegation_basis_ref",
+        "authority_evidence[].admission_warrant.jurisdiction"
+      ],
+      "no_default_warrant": false
+    }
+  ],
+  "independent_validation_claim": false,
+  "self_adjudication": "NOT SELF-ADJUDICATED"
+}

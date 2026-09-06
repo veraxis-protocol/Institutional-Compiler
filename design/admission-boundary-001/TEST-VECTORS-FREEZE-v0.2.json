@@ -1,0 +1,46 @@
+{
+  "freeze_id": "OIC-ADMISSION-BOUNDARY-001-EXECUTABLE-TEST-VECTORS-FREEZE-v0.2",
+  "freeze_state": "FROZEN BEFORE ADMISSION RUNTIME IMPLEMENTATION",
+  "starting_design_sha": "e445c25a4f657c59fbfe32617f46153ac678150c",
+  "historical_v0_1": {
+    "corpus_sha256": "2181cada7cda18a0bde77db89a7eaf701ad044253c3e179024ac7f51d50bc8e7",
+    "freeze_sha256": "566b5ad56a4c24c51b4547de0aed394bf31f59f7248a1c99596e85e116deef12",
+    "preserved_vectors": 30
+  },
+  "executable_corpus": {
+    "path": "design/admission-boundary-001/TEST-VECTORS-v0.2.json",
+    "sha256": "969ddf9a853155ce6ed27f30f1c41e76f7a1ff37a42071d2141d9966907add81",
+    "bytes": 209358,
+    "legacy_vectors": 30,
+    "precedence_diagnostics": 8,
+    "total_vectors": 38
+  },
+  "crosswalk": {
+    "path": "design/admission-boundary-001/VECTOR-CROSSWALK-v0.1.json",
+    "sha256": "1b5dbf0fc25ccb9bbd14fbbb8092bd1e4a61008509b29370ad25c4d07008afbd",
+    "entries": 30
+  },
+  "schemas": {
+    "admission_input": "design/admission-boundary-001/ADMISSION-INPUT-v0.1.schema.json",
+    "admission_input_sha256": "bfa5fc3c755bfbc472d2be74fede06173d5ac4db029986da0c4a07b9b5759d3e",
+    "authority_evidence_disposition": "PRESERVED BYTE-IDENTICAL AND DESIGNATED EXECUTABLE",
+    "authority_evidence_sha256": "f1d91532a1a50be1f5d969ce8134bdb445f4a62fee0e62565437c2c4be196c98",
+    "receipt": "design/admission-boundary-001/ADMISSION-RECEIPT-v0.1.schema.json",
+    "receipt_sha256": "c70782201912231491e06239611bbd542dcdbb91da061a4ed9403111dc4ef40e"
+  },
+  "state_mapping": {
+    "path": "design/admission-boundary-001/STATE-INPUT-MAPPING-v0.1.json",
+    "file_sha256": "9ed244f0a4a7f892943720f13b30b672968bfa5e20f584ca03c3195fe69e421c",
+    "ruleset_digest": "sha256:794ff36a702964ef32b3bc7b68cc9286e06665e20744975db5f4ef692e685b6c",
+    "terminal_states": 15,
+    "first_terminal_state_wins": true
+  },
+  "canonicalization_id": "OIC-ADMISSION-CANONICAL-JSON-v0.1",
+  "canonicalization_contract_sha256": "110d6f6612f356bb002d0b49b0ca8b93abf0d2ea4e84f66efe233099132f02d1",
+  "evidence_order": "ascending tuple (evidence_id, evidence_digest)",
+  "mutation_rule": "Any change requires an explicitly authorized successor corpus and preserved v0.1/v0.2 records; do not edit expected results after observing an implementation.",
+  "runtime_implementation": false,
+  "institutional_ir_implementation": false,
+  "independent_validation_claim": false,
+  "self_adjudication": "NOT SELF-ADJUDICATED"
+}

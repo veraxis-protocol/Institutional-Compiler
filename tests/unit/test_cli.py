@@ -350,6 +350,8 @@ def test_doctor_json_output_parses(capsys: pytest.CaptureFixture[str], repo_root
     assert {boundary["name"] for boundary in payload["boundaries"]} == {"ZTL", "VEIP"}
     gate = next(c for c in payload["gates"] if c["name"] == "semantic implementation gate")
     assert gate["status"] == "BLOCKED"
+    bounded = next(c for c in payload["gates"] if c["name"] == "bounded synthetic reference path")
+    assert bounded["status"] == "BOUNDED_REFERENCE_IMPLEMENTATION"
 
 
 # ---------------------------------------------------------------------------

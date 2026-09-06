@@ -329,11 +329,16 @@ def run_doctor(root: Path | None = None) -> DoctorReport:
 
     gates = (
         CheckResult(
+            name="bounded synthetic reference path",
+            status="BOUNDED_REFERENCE_IMPLEMENTATION",
+            note="local frozen replay only; not production authorization or independent validation",
+        ),
+        CheckResult(
             name="semantic implementation gate",
             status=SEMANTIC_GATE_STATUS,
             note=(
-                "blocked until the preflight corpus manifest and the ZTL/VEIP provisional "
-                "interface records are completed (STATUS.md)"
+                "broader production semantic gate remains blocked; the separately admitted "
+                "synthetic reference path grants no runtime authorization (STATUS.md)"
             ),
         ),
         CheckResult(

@@ -265,8 +265,11 @@ enforcement artifact (none exists to produce).
 
 ## 8. Current limitations
 
-- **This is not a compiler.** No semantic implementation exists. See `LIMITATIONS.md`.
-- **The semantic implementation gate is BLOCKED** and nothing here opens it.
+- **BOUNDED_REFERENCE_IMPLEMENTATION** provides an offline synthetic path, not a production
+  compiler. See `docs/capabilities/CAPABILITY_MATRIX.json` and `LIMITATIONS.md`.
+- **The broader production semantic gate remains BLOCKED**. Historical receipts are unchanged.
+  `make demo` needs no model credentials and emits deterministic canonical JSON without writes.
+  Initial bounded tests: 477 passed on Windows; independent validation is not established.
 - **Preflight corpus provenance is OPEN.** `SOURCE_MANIFEST.csv` has no rows.
 - **ZTL and VEIP are PROVISIONAL / NOT CONFIGURED.** Their interfaces are unfrozen
   (ADR-009, ADR-010) and no adapter, container, or call exists.

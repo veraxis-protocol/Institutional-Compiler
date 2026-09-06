@@ -1,0 +1,323 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/design/admission-boundary-001/ADMISSION-INPUT-v0.1.schema.json",
+  "title": "Admission Boundary 001 Executable Input",
+  "description": "Exact design-only input object for a future deterministic admission evaluator. This schema implements no evaluator and confers no authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "candidate",
+    "source_registration",
+    "authority_evidence",
+    "evaluation_time",
+    "evaluation_scope",
+    "evaluator",
+    "ruleset"
+  ],
+  "properties": {
+    "candidate": {
+      "$ref": "#/$defs/candidate_projection"
+    },
+    "source_registration": {
+      "$ref": "#/$defs/source_registration"
+    },
+    "authority_evidence": {
+      "type": "array",
+      "description": "Stored in ascending (evidence_id, evidence_digest) order. Empty is explicit missing evidence; no default warrant exists.",
+      "items": {
+        "$ref": "https://openinstitutionalcompiler.org/design/admission-boundary-001/AUTHORITY-EVIDENCE-v0.1.schema.json"
+      }
+    },
+    "evaluation_time": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "evaluation_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "jurisdiction",
+        "applicability"
+      ],
+      "properties": {
+        "jurisdiction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "applicability": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluator_id",
+        "evaluator_version"
+      ],
+      "properties": {
+        "evaluator_id": {
+          "const": "oic-admission-reference-evaluator"
+        },
+        "evaluator_version": {
+          "const": "0.1-preregistered"
+        }
+      }
+    },
+    "ruleset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruleset_id",
+        "ruleset_digest"
+      ],
+      "properties": {
+        "ruleset_id": {
+          "const": "OIC-ADMISSION-BOUNDARY-001"
+        },
+        "ruleset_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "nullable_timestamp": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source_anchor_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "anchor_id",
+        "source_id",
+        "node_id",
+        "quote",
+        "page",
+        "bbox",
+        "content_hash"
+      ],
+      "properties": {
+        "anchor_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "node_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "page": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "bbox": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "content_hash": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "candidate_projection": {
+      "type": "object",
+      "description": "Untrusted serialized Candidate Normative Unit projection. source_anchors permits zero items so CANDIDATE_INPUT_INVALID remains representable as a schema-valid boundary input.",
+      "additionalProperties": false,
+      "required": [
+        "unit_id",
+        "candidate_span",
+        "unit_type",
+        "interpretation_state",
+        "epistemic_state",
+        "source_anchors"
+      ],
+      "properties": {
+        "unit_id": {
+          "type": "string",
+          "pattern": "^cnu-[0-9a-f]{24}$"
+        },
+        "candidate_span": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unit_type": {
+          "description": "Provisional model-proposed type. It is never an authority-bearing field.",
+          "enum": [
+            "definition",
+            "mandate",
+            "delegation",
+            "obligation",
+            "prohibition",
+            "permission",
+            "power",
+            "condition",
+            "exception",
+            "evidence_duty",
+            "review_duty",
+            "escalation",
+            "remedy",
+            "temporal_trigger",
+            "discretion",
+            "advisory"
+          ]
+        },
+        "interpretation_state": {
+          "const": "extracted"
+        },
+        "epistemic_state": {
+          "const": "uncertain"
+        },
+        "source_anchors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_anchor_projection"
+          }
+        }
+      }
+    },
+    "source_registration": {
+      "type": "object",
+      "description": "Institution-controlled source and registry observation consumed at the authenticated registry seam; the JSON value does not itself authenticate the seam.",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "source_version",
+        "source_digest",
+        "registered",
+        "registry_observation",
+        "source_standing",
+        "jurisdiction",
+        "applicability_scope",
+        "adopted_at",
+        "published_at",
+        "effective_from",
+        "effective_until",
+        "superseded_at",
+        "revoked_at"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "registered": {
+          "type": "boolean"
+        },
+        "registry_observation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "registry_boundary_id",
+            "observation_id",
+            "availability",
+            "freshness"
+          ],
+          "properties": {
+            "registry_boundary_id": {
+              "const": "institution-controlled-authority-registry"
+            },
+            "observation_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "availability": {
+              "enum": [
+                "AVAILABLE",
+                "UNAVAILABLE"
+              ]
+            },
+            "freshness": {
+              "enum": [
+                "FRESH",
+                "STALE",
+                "NOT_OBSERVED"
+              ]
+            }
+          }
+        },
+        "source_standing": {
+          "enum": [
+            "ADOPTED",
+            "DRAFT",
+            "COMMENTARY",
+            "UNKNOWN"
+          ]
+        },
+        "jurisdiction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "applicability_scope": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "adopted_at": {
+          "$ref": "#/$defs/nullable_timestamp"
+        },
+        "published_at": {
+          "$ref": "#/$defs/nullable_timestamp"
+        },
+        "effective_from": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "effective_until": {
+          "$ref": "#/$defs/nullable_timestamp"
+        },
+        "superseded_at": {
+          "$ref": "#/$defs/nullable_timestamp"
+        },
+        "revoked_at": {
+          "$ref": "#/$defs/nullable_timestamp"
+        }
+      }
+    }
+  }
+}

@@ -2,7 +2,8 @@
 
 Infrastructure only: PostgreSQL 17, MinIO, and OPA. There is **no application container**
 and no ZTL or VEIP container. Starting this stack enables no compiler behaviour — the
-semantic implementation gate is BLOCKED (`STATUS.md`).
+broader production semantic gate is BLOCKED (`STATUS.md`). The offline synthetic demo
+runs separately without this stack and establishes no runtime permission.
 
 OPA starts with no bundle, no policy, and no data. PostgreSQL starts with an empty
 database and no migrations. Nothing here evaluates a control or stores an artifact.
@@ -92,7 +93,7 @@ re-resolve a digest, and how to update a pin.
 
 | Absent | Why |
 |---|---|
-| Application container | No semantic implementation exists to run |
+| Application container | None; the bounded synthetic reference path runs offline without services |
 | ZTL container | Interface provisional and unfrozen (ADR-009) |
 | VEIP container | Interface provisional and unfrozen (ADR-010) |
 | OPA policy or bundle | This repository generates no Rego and evaluates no control |

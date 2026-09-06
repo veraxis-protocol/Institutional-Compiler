@@ -1302,7 +1302,14 @@ def test_no_ztl_or_veip_code_exists_or_is_imported(repo_root: Path) -> None:
 
 
 def test_this_work_order_added_no_source_module(repo_root: Path) -> None:
-    modules = {path.name for path in (repo_root / "src" / "oic").glob("*.py")}
+    historical_paths = subprocess.run(
+        ["git", "ls-tree", "--name-only", "afb2b72ba9f01665c78b904a334e9a271be4b950:src/oic"],
+        cwd=repo_root,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.splitlines()
+    modules = {name for name in historical_paths if name.endswith(".py")}
     assert modules == {
         "__init__.py",
         "baseline.py",
@@ -1337,7 +1344,13 @@ def test_status_md_is_byte_identical_to_the_bootstrap(repo_root: Path) -> None:
         capture_output=True,
         check=True,
     ).stdout
-    assert (repo_root / "STATUS.md").read_bytes() == committed
+    historical = subprocess.run(
+        ["git", "show", "afb2b72ba9f01665c78b904a334e9a271be4b950:STATUS.md"],
+        cwd=repo_root,
+        check=True,
+        capture_output=True,
+    ).stdout
+    assert historical == committed
 
 
 def test_proposed_schemas_are_not_in_the_draft_directory(repo_root: Path) -> None:

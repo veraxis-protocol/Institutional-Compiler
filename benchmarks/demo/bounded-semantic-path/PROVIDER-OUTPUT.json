@@ -1,0 +1,20 @@
+{
+  "format": "SYNTHETIC-REPLAY-001",
+  "exchanges": [
+    {
+      "request_sha256": "2edb792c1463b75756aba8e66eaf87e01becb6d2c12df705629144cd13b7b153",
+      "content": "{\"candidates\":[{\"candidate_span\":\"When a request exceeds 100 tokens, the fictional Keeper must send two notices to the fictional Clerk within seven days, except during a declared outage; 'notice' means a written message, subject to section SYN-9.\",\"unit_type\":\"mandate\"}]}",
+      "model": "synthetic-review-A"
+    },
+    {
+      "request_sha256": "2edb792c1463b75756aba8e66eaf87e01becb6d2c12df705629144cd13b7b153",
+      "content": "{\"candidates\":[{\"candidate_span\":\"When a request exceeds 100 tokens, the fictional Keeper must send two notices to the fictional Clerk within seven days, except during a declared outage; 'notice' means a written message, subject to section SYN-9.\",\"unit_type\":\"advisory\"}]}",
+      "model": "synthetic-review-B"
+    },
+    {
+      "request_sha256": "3d6b3ccddc6993a78115a9fc01f357b53d94bff34f85262fceebcdcd8f195ce6",
+      "content": "{\"proposed_assertions\":[{\"proposed_source_quote\":\"must\",\"proposed_value\":\"OBLIGATION\",\"slot\":\"normative_force\"},{\"proposed_source_quote\":\"fictional Keeper\",\"proposed_value\":\"fictional Keeper\",\"slot\":\"bearer\"},{\"proposed_source_quote\":\"send\",\"proposed_value\":\"send\",\"slot\":\"action\"},{\"proposed_source_quote\":\"notices\",\"proposed_value\":\"notices\",\"slot\":\"object\"},{\"proposed_source_quote\":\"fictional Clerk\",\"proposed_value\":\"fictional Clerk\",\"slot\":\"counterparty\"},{\"proposed_source_quote\":\"When a request exceeds 100 tokens\",\"proposed_value\":\"When a request exceeds 100 tokens\",\"slot\":\"condition\"},{\"proposed_source_quote\":\"except during a declared outage\",\"proposed_value\":\"except during a declared outage\",\"slot\":\"exception\"},{\"proposed_source_quote\":\"within seven days\",\"proposed_value\":\"within seven days\",\"slot\":\"temporal_qualifier\"},{\"proposed_source_quote\":\"two\",\"proposed_value\":\"two\",\"slot\":\"quantum\"},{\"proposed_source_quote\":\"'notice'\",\"proposed_value\":\"notice\",\"slot\":\"definiendum\"},{\"proposed_source_quote\":\"a written message\",\"proposed_value\":\"a written message\",\"slot\":\"definiens\"}],\"proposed_unresolved_references\":[{\"reference_kind\":\"INTERNAL_PROVISION\",\"reference_text\":\"section SYN-9\"}]}",
+      "model": "synthetic-proposal"
+    }
+  ]
+}

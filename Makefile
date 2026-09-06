@@ -1,4 +1,4 @@
-.PHONY: verify falsify
+.PHONY: verify falsify demo
 
 PYTHON ?= python
 
@@ -11,3 +11,6 @@ verify:
 
 falsify:
 	$(PYTHON) scripts/falsify_infrastructure.py
+
+demo:
+	@$(PYTHON) -B scripts/demo_bounded_semantic_path.py

@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openinstitutionalcompiler.org/design/admission-boundary-001/AUTHORITY-EVIDENCE-v0.1.schema.json",
+  "title": "Admission Boundary 001 Authority Evidence (design draft)",
+  "description": "Design-only minimum machine-verifiable authority and admission-warrant evidence; not an implemented runtime schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_id",
+    "evidence_digest",
+    "issued_at",
+    "source_id",
+    "source_version",
+    "source_digest",
+    "issuer_id",
+    "authority_basis_ref",
+    "jurisdiction",
+    "applicability_scope",
+    "source_standing",
+    "adopted_at",
+    "effective_from",
+    "effective_until",
+    "superseded_at",
+    "revoked_at",
+    "admission_warrant"
+  ],
+  "properties": {
+    "evidence_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "issued_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "issuer_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority_basis_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "jurisdiction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "applicability_scope": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "source_standing": {
+      "enum": [
+        "ADOPTED",
+        "DRAFT",
+        "COMMENTARY",
+        "UNKNOWN"
+      ]
+    },
+    "adopted_at": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "effective_from": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "effective_until": {
+      "$ref": "#/$defs/nullable_timestamp"
+    },
+    "superseded_at": {
+      "$ref": "#/$defs/nullable_timestamp"
+    },
+    "revoked_at": {
+      "$ref": "#/$defs/nullable_timestamp"
+    },
+    "admission_warrant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "warrant_id",
+        "admission_authority_id",
+        "delegation_basis_ref",
+        "source_id",
+        "source_version",
+        "source_digest",
+        "jurisdiction",
+        "applicability_scope",
+        "effective_from",
+        "effective_until",
+        "revoked_at",
+        "status"
+      ],
+      "properties": {
+        "warrant_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "admission_authority_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "delegation_basis_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "jurisdiction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "applicability_scope": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "effective_from": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "effective_until": {
+          "$ref": "#/$defs/nullable_timestamp"
+        },
+        "revoked_at": {
+          "$ref": "#/$defs/nullable_timestamp"
+        },
+        "status": {
+          "enum": [
+            "ACTIVE",
+            "SUSPENDED",
+            "REVOKED"
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "nullable_timestamp": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

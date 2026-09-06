@@ -1,0 +1,116 @@
+{
+  "mapping_id": "OIC-ADMISSION-BOUNDARY-001-STATE-INPUT-MAPPING-v0.1",
+  "ruleset_id": "OIC-ADMISSION-BOUNDARY-001",
+  "first_terminal_state_wins": true,
+  "entries": [
+    {
+      "precedence": 1,
+      "state": "CANDIDATE_INPUT_INVALID",
+      "reason_code": "OIC-ADM-1001",
+      "observable_fields": ["candidate.unit_id", "candidate.candidate_span", "candidate.source_anchors"],
+      "required_observable_facts": "Candidate identity/span is invalid, source_anchors is empty, or an anchor is inconsistent with source_registration."
+    },
+    {
+      "precedence": 2,
+      "state": "AUTHORITY_REGISTRY_UNAVAILABLE",
+      "reason_code": "OIC-ADM-1012",
+      "observable_fields": ["source_registration.registry_observation.availability"],
+      "required_observable_facts": "availability equals UNAVAILABLE."
+    },
+    {
+      "precedence": 3,
+      "state": "AUTHORITY_EVIDENCE_STALE",
+      "reason_code": "OIC-ADM-1013",
+      "observable_fields": ["source_registration.registry_observation.freshness"],
+      "required_observable_facts": "availability equals AVAILABLE and freshness equals STALE."
+    },
+    {
+      "precedence": 4,
+      "state": "SOURCE_NOT_REGISTERED",
+      "reason_code": "OIC-ADM-1002",
+      "observable_fields": ["source_registration.registered"],
+      "required_observable_facts": "registered equals false."
+    },
+    {
+      "precedence": 5,
+      "state": "SOURCE_VERSION_MISMATCH",
+      "reason_code": "OIC-ADM-1003",
+      "observable_fields": ["source_registration.source_version", "authority_evidence[].source_version", "authority_evidence[].admission_warrant.source_version"],
+      "required_observable_facts": "At least one applicable evidence or warrant version differs from source_registration.source_version."
+    },
+    {
+      "precedence": 6,
+      "state": "SOURCE_DIGEST_MISMATCH",
+      "reason_code": "OIC-ADM-1004",
+      "observable_fields": ["candidate.source_anchors[].content_hash", "source_registration.source_digest", "authority_evidence[].source_digest", "authority_evidence[].admission_warrant.source_digest"],
+      "required_observable_facts": "Any applicable candidate anchor, evidence, or warrant digest differs from source_registration.source_digest."
+    },
+    {
+      "precedence": 7,
+      "state": "MISSING_AUTHORITY_EVIDENCE",
+      "reason_code": "OIC-ADM-1005",
+      "observable_fields": ["authority_evidence", "authority_evidence[].authority_basis_ref", "authority_evidence[].admission_warrant"],
+      "required_observable_facts": "authority_evidence is empty or no complete applicable authority basis and admission warrant exists."
+    },
+    {
+      "precedence": 8,
+      "state": "OUT_OF_SCOPE",
+      "reason_code": "OIC-ADM-1010",
+      "observable_fields": ["evaluation_scope", "source_registration.jurisdiction", "source_registration.applicability_scope", "authority_evidence[].jurisdiction", "authority_evidence[].applicability_scope", "authority_evidence[].admission_warrant.jurisdiction", "authority_evidence[].admission_warrant.applicability_scope"],
+      "required_observable_facts": "The requested jurisdiction or applicability is absent from the source, evidence, or warrant scope."
+    },
+    {
+      "precedence": 9,
+      "state": "NOT_YET_EFFECTIVE",
+      "reason_code": "OIC-ADM-1006",
+      "observable_fields": ["evaluation_time", "source_registration.effective_from", "authority_evidence[].effective_from", "authority_evidence[].admission_warrant.effective_from"],
+      "required_observable_facts": "evaluation_time precedes any applicable required effective_from."
+    },
+    {
+      "precedence": 10,
+      "state": "EXPIRED",
+      "reason_code": "OIC-ADM-1007",
+      "observable_fields": ["evaluation_time", "source_registration.effective_until", "authority_evidence[].effective_until", "authority_evidence[].admission_warrant.effective_until"],
+      "required_observable_facts": "evaluation_time is at or after any applicable non-null effective_until."
+    },
+    {
+      "precedence": 11,
+      "state": "SUPERSEDED",
+      "reason_code": "OIC-ADM-1008",
+      "observable_fields": ["evaluation_time", "source_registration.superseded_at", "authority_evidence[].superseded_at"],
+      "required_observable_facts": "evaluation_time is at or after an applicable non-null superseded_at."
+    },
+    {
+      "precedence": 12,
+      "state": "REVOKED",
+      "reason_code": "OIC-ADM-1009",
+      "observable_fields": ["evaluation_time", "source_registration.revoked_at", "authority_evidence[].revoked_at", "authority_evidence[].admission_warrant.revoked_at", "authority_evidence[].admission_warrant.status"],
+      "required_observable_facts": "Applicable source/evidence/warrant is REVOKED or evaluation_time is at or after a non-null revoked_at."
+    },
+    {
+      "precedence": 13,
+      "state": "CONFLICTING_AUTHORITY",
+      "reason_code": "OIC-ADM-1011",
+      "observable_fields": ["authority_evidence[].evidence_id", "authority_evidence[].authority_basis_ref", "authority_evidence[].admission_warrant.warrant_id", "ruleset.ruleset_digest"],
+      "required_observable_facts": "Two or more applicable evidence objects conflict and the frozen ruleset contains no unique institutional precedence resolution."
+    },
+    {
+      "precedence": 14,
+      "state": "ADMISSION_NOT_ESTABLISHED",
+      "reason_code": "OIC-ADM-1099",
+      "observable_fields": ["authority_evidence[].source_standing", "authority_evidence[].admission_warrant.status"],
+      "required_observable_facts": "An otherwise unclassified disputed or suspended authority condition prevents a positive finding and no earlier specific state applies."
+    },
+    {
+      "precedence": 15,
+      "state": "ADMITTED",
+      "reason_code": "OIC-ADM-0000",
+      "observable_fields": ["candidate", "source_registration", "authority_evidence", "evaluation_time", "evaluation_scope", "evaluator", "ruleset"],
+      "required_observable_facts": "All prior checks pass and at least one complete active evidence object and exact admission warrant establish the requested scope and time."
+    }
+  ],
+  "runtime_permission_states": [],
+  "successor_ir_state": "ADMITTED",
+  "independent_validation_claim": false,
+  "self_adjudication": "NOT SELF-ADJUDICATED"
+}
