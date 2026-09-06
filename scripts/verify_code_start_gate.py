@@ -94,6 +94,65 @@ def validate_independent_validation_evidence(evidence: object) -> None:
     _require(evidence == INDEPENDENT_VALIDATION_EVIDENCE, "independent validation evidence forged")
 
 
+GATE_G_PROMOTION_EVIDENCE = {
+    "status": "GATE_G_PASS",
+    "work_order": "OIC-INDEPENDENT-GATE-G-001",
+    "candidate_commit": "a2b5053771ce510fb35ce09f3e99f545c21ac20e",
+    "candidate_tree": "b8e31ec4786a2fd1aca976a6ff047deeee63ef15",
+    "canonical_linux": {
+        "passed": 1720,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 1,
+        "declared_skip": "tests/contract/test_canada_acquisition_preflight.py:574",
+        "coverage_percent": 93.5,
+    },
+    "demo_sha256": "0f9d01bb0dfc488505e027ac7bd8aecf869578e379b5a977cd9d642f2101a39a",
+    "promotion": {
+        "pull_request": 40,
+        "pull_request_url": "https://github.com/veraxis-protocol/Institutional-Compiler/pull/40",
+        "base_before_merge": "9ad37fc80d8f34318c6212ed702de5eab3551cf5",
+        "merge_commit": "c4a325c551ce8904dfcc5b9fe81b05109726a334",
+        "merge_first_parent": "9ad37fc80d8f34318c6212ed702de5eab3551cf5",
+        "merge_second_parent": "a2b5053771ce510fb35ce09f3e99f545c21ac20e",
+        "merge_tree": "b8e31ec4786a2fd1aca976a6ff047deeee63ef15",
+        "merge_method": "merge_commit",
+        "approved_by": "inventor1975",
+        "approved_at": "2026-09-06T08:12:51Z",
+        "merged_at": "2026-09-06T08:14:03Z",
+    },
+    "scope": (
+        "Scoped independent Gate G acceptance of this exact candidate: identity and "
+        "boundary, claims audit, adversarial fail-closed challenges, canonical Linux "
+        "execution, deterministic offline demo, packaging, and repository integrity. "
+        "Pull request 40 merged this exact tree into main without modification."
+    ),
+    "exclusions": [
+        "semantic correctness",
+        "model accuracy",
+        "institutional validity",
+        "legal effect",
+        "provider qualification",
+        "rights resolution",
+        "ontology execution",
+        "production compilation",
+        "runtime authorization",
+        "institutional-IR closure",
+        "enterprise readiness",
+        "benchmark superiority",
+    ],
+}
+
+
+def validate_gate_g_promotion_evidence(evidence: object) -> None:
+    """Accept only the exact owner-adjudicated Gate G promotion evidence record.
+
+    The merge second parent must be the Gate G candidate and the merge tree must be
+    the validated tree, so a forged, mutated or removed promotion record fails closed.
+    """
+    _require(evidence == GATE_G_PROMOTION_EVIDENCE, "gate g promotion evidence forged")
+
+
 ADMITTED_SRC_OIC_PATHS = frozenset(
     {
         "src/oic/__init__.py",
@@ -273,6 +332,7 @@ def validate_bounded_record(root: Path) -> None:
             "source_provenance",
             "ceilings",
             "independent_validation_evidence",
+            "gate_g_promotion_evidence",
             "capabilities",
         },
         "capability matrix fields expanded",
@@ -313,6 +373,7 @@ def validate_bounded_record(root: Path) -> None:
     _require(record.get("production_semantic_gate") == "BLOCKED", "production gate expanded")
     _require(record.get("ceilings") == CEILINGS, "evidence ceiling expanded")
     validate_independent_validation_evidence(record.get("independent_validation_evidence"))
+    validate_gate_g_promotion_evidence(record.get("gate_g_promotion_evidence"))
     provenance = record.get("source_provenance")
     _require(
         hashlib.sha256(
