@@ -432,6 +432,46 @@ def test_gate_f_exclusions_are_exact_and_present_in_both_front_doors(repo_root: 
             )
 
 
+def _normalize_readme_claims(text: str) -> str:
+    """Remove presentation syntax while preserving the words that carry a claim."""
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", text.casefold()).split())
+
+
+def _assert_readme_independent_validation_is_scoped(
+    text: str, gate_f: dict[str, object], gate_g: dict[str, object]
+) -> None:
+    normalized = _normalize_readme_claims(text)
+    subject = (
+        r"(?:this\s+)?(?:current\s+repository(?:\s+head)?|repository\s+head|"
+        r"current\s+(?:head|commit|revision|release)|release|main)"
+    )
+    validation = r"(?:independently\s+validated|independent\s+validation)"
+    bridge = r"(?:\s+[a-z0-9]+){0,5}\s+"
+    unscoped = re.search(
+        rf"\b(?:{subject}{bridge}{validation}|{validation}{bridge}{subject})\b",
+        normalized,
+    )
+    assert unscoped is None, f"unscoped README independent-validation claim: {unscoped.group(0)!r}"
+
+    for label, marker, evidence in (
+        (
+            "Gate F",
+            "independent gate f repository validation passed for candidate",
+            gate_f,
+        ),
+        ("Gate G", "independent gate g validation passed for candidate", gate_g),
+    ):
+        candidate_commit = evidence["candidate_commit"]
+        candidate_tree = evidence["candidate_tree"]
+        assert isinstance(candidate_commit, str)
+        assert isinstance(candidate_tree, str)
+        scoped_claim = f"{marker} {candidate_commit} tree {candidate_tree}".lower()
+        assert scoped_claim in normalized, (
+            f"README.md {label} independent-validation statement is not bound "
+            "to its exact candidate commit and tree"
+        )
+
+
 def test_readme_numeric_claims_are_bound_to_their_source_evidence(repo_root: Path) -> None:
     """Close GG001-M01: every README validation claim must name its source candidate.
 
@@ -472,14 +512,30 @@ def test_readme_numeric_claims_are_bound_to_their_source_evidence(repo_root: Pat
     ):
         assert f"{passed} passed" in normalized, f"missing README result for {anchor_label}"
 
-    stripped = readme.replace(gate_f["candidate_commit"], "REDACTED")
-    assert stripped != readme
-    stripped_normalized = " ".join(stripped.lower().replace("*", "").split())
-    assert gate_f["candidate_commit"].lower() not in stripped_normalized
+    _assert_readme_independent_validation_is_scoped(readme, gate_f, gate_g)
 
-    # README must also refuse an unscoped current-head validation claim.
-    for phrase in ("this repository is validated", "main is independently validated"):
-        assert phrase not in normalized, f"unscoped README validation claim: {phrase}"
+    unscoped_claims = (
+        "This current repository head is independently validated.",
+        "**THIS   CURRENT**\nrepository HEAD -- is independently validated!!!",
+        "The current head is independently validated.",
+        "This release has independent validation.",
+        "Main is independently validated.",
+    )
+    for claim in unscoped_claims:
+        mutated = f"{readme}\n{claim}\n"
+        assert _normalize_readme_claims(claim) in _normalize_readme_claims(mutated)
+        with pytest.raises(AssertionError, match="unscoped README independent-validation claim"):
+            _assert_readme_independent_validation_is_scoped(mutated, gate_f, gate_g)
+
+    scoped_claims = (
+        "Independent Gate F repository validation passed for candidate "
+        f"{gate_f['candidate_commit']} (tree {gate_f['candidate_tree']}).",
+        "Independent Gate G validation passed for candidate "
+        f"{gate_g['candidate_commit']} (tree {gate_g['candidate_tree']}).",
+    )
+    normalized_claims = _normalize_readme_claims(readme)
+    for claim in scoped_claims:
+        assert _normalize_readme_claims(claim) in normalized_claims
 
 
 @pytest.mark.parametrize("mutation", ("delete", "substitute", "reorder", "add"))
