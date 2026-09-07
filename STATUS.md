@@ -1,6 +1,26 @@
 # Project Status
 
-## Current status
+## Current state — 2026-09-07
+
+**PR #40 was merged into `main` on 2026-09-06**, merge commit
+`c4a325c551ce8904dfcc5b9fe81b05109726a334`, tree
+`b8e31ec4786a2fd1aca976a6ff047deeee63ef15`.
+
+The section below says a merge remains pending. That sentence predates the merge. It is
+**retained unchanged as historical text** and superseded by this block; the validation figures
+it reports (promotion base `9ad37fc8`, candidate `c0108a7a`, tree `1d12b17a`, 1714 passing)
+belong to that historical Gate-F candidate and are not a statement about the current head.
+
+On `main` today: bounded candidate admission and provisional interpretation are present.
+Semantic implementation has not started, and the broader production semantic gate remains
+**BLOCKED**. **ZTL runtime attachment remains BLOCKED** — the institutional semantic act that
+would produce an admitted canonical proposition does not exist, so there is no lawful input
+for a logic kernel.
+
+No semantic correctness, runtime authorization, institutional validity, or independent
+reproduction is established by this block.
+
+## Current status (historical — superseded 2026-09-07)
 
 **BOUNDED_REFERENCE_IMPLEMENTATION — SCOPED INDEPENDENT GATE F REPOSITORY VALIDATION PASSED**
 

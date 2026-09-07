@@ -1,5 +1,49 @@
 # Open Institutional Compiler
 
+> ## Current state — 2026-09-07
+>
+> **PR #40 was merged into `main` on 2026-09-06** (merge commit
+> `c4a325c551ce8904dfcc5b9fe81b05109726a334`, tree
+> `b8e31ec4786a2fd1aca976a6ff047deeee63ef15`). Statements elsewhere in this file and in
+> `STATUS.md` that describe a merge as still pending predate that merge. **They are retained
+> unchanged as historical text and are superseded by this block, not deleted.**
+>
+> This state has **two matured sides and one missing centre**, and both halves are true at once.
+>
+> **Side one — the OIC admission plane is materially implemented.** Present on `main` today:
+>
+> - **bounded candidate admission** — a frozen admission runtime with fifteen terminal states
+>   and recomputable receipts;
+> - **provisional interpretation** — model-proposed semantic structure, explicitly marked
+>   provisional and untrusted.
+>
+> **Side two — ZTL reasoning and warrant semantics have materially matured**, well beyond the
+> July dossier in `adapters/ztl/`. See [`adapters/ztl/CURRENT-STATE-001.md`](adapters/ztl/CURRENT-STATE-001.md).
+> This is a statement about the dependency's own maturity, not a claim that OIC uses it.
+>
+> **The missing centre.** Between those two sides, three institutional transitions do not
+> exist:
+>
+>     institutional semantic admission
+>       → stable admitted proposition
+>         → evidence-bearing formalization
+>
+> What remains blocked, and is *not* made less blocked by either side maturing:
+>
+> - **semantic implementation has not started.** The semantic code-start gate is
+>   `READY FOR SEPARATE EXACT-HEAD REVIEW / NOT OPEN` — see
+>   [`docs/gates/OIC-SEMANTIC-CODE-START-GATE-CLOSURE-v0.1.md`](docs/gates/OIC-SEMANTIC-CODE-START-GATE-CLOSURE-v0.1.md).
+> - **ZTL runtime attachment is blocked.** No institutional act converts a reviewed
+>   interpretation proposal into admitted canonical meaning, and no canonical formal object
+>   exists for a logic kernel to receive. The pipeline ends at a provisional proposal.
+>
+> The boundary itself is described in
+> [`docs/architecture/OIC-ZTL-MATURATION-DELTA-001.md`](docs/architecture/OIC-ZTL-MATURATION-DELTA-001.md)
+> and [`docs/architecture/OIC-ZTL-LAYER-OWNERSHIP-001.md`](docs/architecture/OIC-ZTL-LAYER-OWNERSHIP-001.md).
+>
+> Nothing in this block establishes semantic correctness, runtime authorization,
+> institutional validity, or independent reproduction.
+
 - **Status:** BOUNDED_REFERENCE_IMPLEMENTATION — scoped independent Gate F repository validation passed; merge pending Gate G and owner authorization
 - **Bootstrap date:** 2026-07-29
 - **Governing design:** TDD-OIC-001 v1.1
