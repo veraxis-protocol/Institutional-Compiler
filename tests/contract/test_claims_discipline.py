@@ -230,6 +230,57 @@ def test_static_claims_documents_are_unchanged_by_this_work_order(repo_root: Pat
         assert observed == committed, relpath
 
 
+#: Pre-merge wording that the completed PR #40 promotion makes false. A front-door
+#: document that reintroduces any of these is stale and must fail closed.
+STALE_PRE_MERGE_PHRASES = (
+    "merge remains pending gate g and owner authorization",
+    "merge pending gate g and owner authorization",
+    "no merge is authorized",
+    "gate g and owner merge authorization remain pending",
+)
+
+
+def _assert_promotion_claims(normalized: str, promotion: object) -> None:
+    """Require the shipped text to carry the exact Gate G promotion anchors.
+
+    Every anchor is read from the live capability matrix rather than hard-coded here,
+    so changing an anchor in the matrix without changing the shipped document fails
+    closed, and changing the document without the matrix fails closed too.
+    """
+    assert isinstance(promotion, dict), "missing gate_g_promotion_evidence"
+    assert promotion.get("status") == "GATE_G_PASS"
+    assert promotion.get("work_order") == "OIC-INDEPENDENT-GATE-G-001"
+    detail = promotion.get("promotion")
+    assert isinstance(detail, dict), "missing promotion detail"
+
+    for key in ("candidate_commit", "candidate_tree"):
+        value = promotion.get(key)
+        assert isinstance(value, str) and value in normalized, (
+            f"missing Gate G promotion anchor: {key}"
+        )
+    for key in ("merge_commit", "merge_first_parent", "merge_second_parent"):
+        value = detail.get(key)
+        assert isinstance(value, str) and value in normalized, (
+            f"missing Gate G promotion anchor: {key}"
+        )
+
+    pull_request = detail.get("pull_request")
+    assert isinstance(pull_request, int)
+    assert f"pull request {pull_request}" in normalized, "missing pull request reference"
+    approver = detail.get("approved_by")
+    assert isinstance(approver, str) and approver.lower() in normalized
+    merged_at = detail.get("merged_at")
+    assert isinstance(merged_at, str) and merged_at.lower() in normalized
+
+    assert "independent gate g validation passed" in normalized, (
+        "missing independent Gate G validation statement"
+    )
+    assert promotion.get("exclusions") == list(GATE_F_EXCLUSIONS)
+
+    for phrase in STALE_PRE_MERGE_PHRASES:
+        assert phrase not in normalized, f"stale pre-merge assertion reintroduced: {phrase}"
+
+
 def _assert_status_claims(text: str, capability_matrix: dict[str, object]) -> None:
     """Require the active bounded state and ceilings; reject affirmative escalation."""
     normalized = " ".join(text.lower().replace("*", "").split())
@@ -237,6 +288,7 @@ def _assert_status_claims(text: str, capability_matrix: dict[str, object]) -> No
     gate = capability_matrix["production_semantic_gate"]
     ceilings = capability_matrix["ceilings"]
     evidence = capability_matrix.get("independent_validation_evidence")
+    promotion = capability_matrix.get("gate_g_promotion_evidence")
     assert isinstance(state, str) and state.lower() in normalized
     assert isinstance(gate, str) and f"production semantic gate: {gate.lower()}" in normalized
     assert isinstance(ceilings, dict)
@@ -265,13 +317,14 @@ def _assert_status_claims(text: str, capability_matrix: dict[str, object]) -> No
             "missing STATUS.md independent Gate F validation statement"
         )
         assert "1714 passed, 0 failed, 0 errors, 1 declared skip, 93.5% coverage" in normalized
-        assert "merge remains pending gate g and owner authorization" in normalized
         assert "does not establish semantic correctness" in normalized
         assert evidence.get("exclusions") == list(GATE_F_EXCLUSIONS)
         for exclusion in GATE_F_EXCLUSIONS:
             assert exclusion.lower() in normalized
+        _assert_promotion_claims(normalized, promotion)
     else:
         assert evidence is None
+        assert promotion is None
         assert "pending independent validation" in normalized
     for phrase in FORBIDDEN_ABSOLUTELY:
         assert phrase not in normalized, f"forbidden STATUS.md claim: {phrase}"
@@ -331,11 +384,36 @@ def test_status_reports_active_bounded_state_and_ceilings(repo_root: Path) -> No
     with pytest.raises(AssertionError, match="independently validated"):
         _assert_status_claims(broad_claim, matrix)
 
+    stale_claim = status + "\nMerge remains pending Gate G and owner authorization.\n"
+    with pytest.raises(AssertionError, match="stale pre-merge assertion reintroduced"):
+        _assert_status_claims(stale_claim, matrix)
+
+    drifted_matrix = json.loads(json.dumps(matrix))
+    drifted_matrix["gate_g_promotion_evidence"]["promotion"]["merge_commit"] = "0" * 40
+    with pytest.raises(AssertionError, match="missing Gate G promotion anchor: merge_commit"):
+        _assert_status_claims(status, drifted_matrix)
+
+    removed_promotion = json.loads(json.dumps(matrix))
+    del removed_promotion["gate_g_promotion_evidence"]
+    with pytest.raises(AssertionError, match="missing gate_g_promotion_evidence"):
+        _assert_status_claims(status, removed_promotion)
+
+    gate_g_marker = "independent gate g validation passed"
+    dropped_gate_g = re.sub(
+        re.escape(gate_g_marker), "gate g marker removed", status, flags=re.IGNORECASE
+    )
+    assert dropped_gate_g != status
+    with pytest.raises(
+        AssertionError, match=re.escape("missing independent Gate G validation statement")
+    ):
+        _assert_status_claims(dropped_gate_g, matrix)
+
     pending_matrix = json.loads(json.dumps(matrix))
     pending_matrix["ceilings"]["independent_validation"] = False
     del pending_matrix["independent_validation_evidence"]
+    del pending_matrix["gate_g_promotion_evidence"]
     pending_status = status.replace(
-        "SCOPED INDEPENDENT GATE F REPOSITORY VALIDATION PASSED",
+        "SCOPED INDEPENDENT GATE G VALIDATION PASSED AND MERGED TO MAIN",
         "PENDING INDEPENDENT VALIDATION",
     )
     _assert_status_claims(pending_status, pending_matrix)
@@ -352,6 +430,113 @@ def test_gate_f_exclusions_are_exact_and_present_in_both_front_doors(repo_root: 
             assert exclusion.lower() in normalized, (
                 f"missing {relpath} Gate F exclusion: {exclusion}"
             )
+
+
+def _normalize_readme_claims(text: str) -> str:
+    """Remove presentation syntax while preserving the words that carry a claim."""
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", text.casefold()).split())
+
+
+def _assert_readme_independent_validation_is_scoped(
+    text: str, gate_f: dict[str, object], gate_g: dict[str, object]
+) -> None:
+    normalized = _normalize_readme_claims(text)
+    subject = (
+        r"(?:this\s+)?(?:current\s+repository(?:\s+head)?|repository\s+head|"
+        r"current\s+(?:head|commit|revision|release)|release|main|implementation)"
+    )
+    validation = r"(?:independently\s+validated|independent\s+validation)"
+    bridge = r"(?:\s+[a-z0-9]+){0,5}\s+"
+    unscoped = re.search(
+        rf"\b(?:{subject}{bridge}{validation}|{validation}{bridge}{subject})\b",
+        normalized,
+    )
+    assert unscoped is None, f"unscoped README independent-validation claim: {unscoped.group(0)!r}"
+
+    for label, marker, evidence in (
+        (
+            "Gate F",
+            "independent gate f repository validation passed for candidate",
+            gate_f,
+        ),
+        ("Gate G", "independent gate g validation passed for candidate", gate_g),
+    ):
+        candidate_commit = evidence["candidate_commit"]
+        candidate_tree = evidence["candidate_tree"]
+        assert isinstance(candidate_commit, str)
+        assert isinstance(candidate_tree, str)
+        scoped_claim = f"{marker} {candidate_commit} tree {candidate_tree}".lower()
+        assert scoped_claim in normalized, (
+            f"README.md {label} independent-validation statement is not bound "
+            "to its exact candidate commit and tree"
+        )
+
+
+def test_readme_numeric_claims_are_bound_to_their_source_evidence(repo_root: Path) -> None:
+    """Close GG001-M01: every README validation claim must name its source candidate.
+
+    The Gate F and Gate G numeric results are only meaningful next to the exact commit
+    and tree that produced them. This control reads the anchors from the live matrix,
+    so stripping the citation from README.md while leaving the numbers in place fails
+    closed, and so does changing an anchor in the matrix alone.
+    """
+    matrix = json.loads(
+        (repo_root / "docs/capabilities/CAPABILITY_MATRIX.json").read_text(encoding="utf-8")
+    )
+    readme = (repo_root / "README.md").read_text(encoding="utf-8")
+    normalized = " ".join(readme.lower().replace("*", "").split())
+
+    gate_f = matrix["independent_validation_evidence"]
+    gate_g = matrix["gate_g_promotion_evidence"]
+
+    required_anchors = {
+        "gate_f_candidate_commit": gate_f["candidate_commit"],
+        "gate_f_candidate_tree": gate_f["candidate_tree"],
+        "gate_g_candidate_commit": gate_g["candidate_commit"],
+        "gate_g_candidate_tree": gate_g["candidate_tree"],
+        "merge_commit": gate_g["promotion"]["merge_commit"],
+        "merge_first_parent": gate_g["promotion"]["merge_first_parent"],
+        "merge_second_parent": gate_g["promotion"]["merge_second_parent"],
+    }
+    for label, anchor in required_anchors.items():
+        assert isinstance(anchor, str) and anchor.lower() in normalized, (
+            f"README.md numeric claim is unscoped: missing {label}"
+        )
+
+    # A numeric result may not appear without the commit that produced it.
+    gate_f_passed = gate_f["canonical_linux"]["passed"]
+    gate_g_passed = gate_g["canonical_linux"]["passed"]
+    for passed, anchor_label in (
+        (gate_f_passed, "gate_f_candidate_commit"),
+        (gate_g_passed, "gate_g_candidate_commit"),
+    ):
+        assert f"{passed} passed" in normalized, f"missing README result for {anchor_label}"
+
+    _assert_readme_independent_validation_is_scoped(readme, gate_f, gate_g)
+
+    unscoped_claims = (
+        "This current repository head is independently validated.",
+        "**THIS   CURRENT**\nrepository HEAD -- is independently validated!!!",
+        "The current head is independently validated.",
+        "This release has independent validation.",
+        "*This   Implementation* is independently validated.",
+        "Main is independently validated.",
+    )
+    for claim in unscoped_claims:
+        mutated = f"{readme}\n{claim}\n"
+        assert _normalize_readme_claims(claim) in _normalize_readme_claims(mutated)
+        with pytest.raises(AssertionError, match="unscoped README independent-validation claim"):
+            _assert_readme_independent_validation_is_scoped(mutated, gate_f, gate_g)
+
+    scoped_claims = (
+        "Independent Gate F repository validation passed for candidate "
+        f"{gate_f['candidate_commit']} (tree {gate_f['candidate_tree']}).",
+        "Independent Gate G validation passed for candidate "
+        f"{gate_g['candidate_commit']} (tree {gate_g['candidate_tree']}).",
+    )
+    normalized_claims = _normalize_readme_claims(readme)
+    for claim in scoped_claims:
+        assert _normalize_readme_claims(claim) in normalized_claims
 
 
 @pytest.mark.parametrize("mutation", ("delete", "substitute", "reorder", "add"))

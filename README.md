@@ -1,6 +1,6 @@
 # Open Institutional Compiler
 
-- **Status:** BOUNDED_REFERENCE_IMPLEMENTATION — scoped independent Gate F repository validation passed; merge pending Gate G and owner authorization
+- **Status:** BOUNDED_REFERENCE_IMPLEMENTATION — scoped independent Gate G validation passed for candidate `a2b5053771ce510fb35ce09f3e99f545c21ac20e` and merged to `main` as `c4a325c551ce8904dfcc5b9fe81b05109726a334`
 - **Bootstrap date:** 2026-07-29
 - **Governing design:** TDD-OIC-001 v1.1
 
@@ -44,8 +44,19 @@ that exact candidate only. It does not establish semantic correctness, model
 accuracy, institutional validity, legal effect, provider qualification, rights
 resolution, ontology execution, production compilation, runtime authorization,
 institutional-IR closure, enterprise readiness, or benchmark superiority. It
-also does not establish legal validity or production readiness. Merge remains
-pending Gate G and owner authorization.
+also does not establish legal validity or production readiness. It is not
+validation of any later commit.
+Independent Gate G validation passed for candidate
+`a2b5053771ce510fb35ce09f3e99f545c21ac20e` (tree
+`b8e31ec4786a2fd1aca976a6ff047deeee63ef15`): canonical Linux execution reported
+1720 passed, 0 failed, 0 errors, 1 declared skip, 93.5% coverage, and the same
+byte-identical offline demo digest. Pull request 40 merged that exact tree into
+`main` as merge commit `c4a325c551ce8904dfcc5b9fe81b05109726a334` (first parent
+`9ad37fc80d8f34318c6212ed702de5eab3551cf5`, second parent
+`a2b5053771ce510fb35ce09f3e99f545c21ac20e`), approved by `inventor1975` and
+merged at 2026-09-06T08:14:03Z. That result carries the same twelve exclusions
+and the same ceilings, is scoped to that exact candidate and tree, and is not
+validation of any later commit.
 See [`CAPABILITY_MATRIX.json`](docs/capabilities/CAPABILITY_MATRIX.json) for exact provenance
 and ceilings. NVIDIA is NOT_QUALIFIED; Canada redistribution is UNRESOLVED; Ontology 007R1
 is unexecuted and execution-unauthorized. No model accuracy or legal validity is claimed.
