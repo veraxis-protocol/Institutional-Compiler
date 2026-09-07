@@ -305,6 +305,49 @@
       "benchmark superiority"
     ]
   },
+  "gate_g_promotion_evidence": {
+    "status": "GATE_G_PASS",
+    "work_order": "OIC-INDEPENDENT-GATE-G-001",
+    "candidate_commit": "a2b5053771ce510fb35ce09f3e99f545c21ac20e",
+    "candidate_tree": "b8e31ec4786a2fd1aca976a6ff047deeee63ef15",
+    "canonical_linux": {
+      "passed": 1720,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 1,
+      "declared_skip": "tests/contract/test_canada_acquisition_preflight.py:574",
+      "coverage_percent": 93.5
+    },
+    "demo_sha256": "0f9d01bb0dfc488505e027ac7bd8aecf869578e379b5a977cd9d642f2101a39a",
+    "promotion": {
+      "pull_request": 40,
+      "pull_request_url": "https://github.com/veraxis-protocol/Institutional-Compiler/pull/40",
+      "base_before_merge": "9ad37fc80d8f34318c6212ed702de5eab3551cf5",
+      "merge_commit": "c4a325c551ce8904dfcc5b9fe81b05109726a334",
+      "merge_first_parent": "9ad37fc80d8f34318c6212ed702de5eab3551cf5",
+      "merge_second_parent": "a2b5053771ce510fb35ce09f3e99f545c21ac20e",
+      "merge_tree": "b8e31ec4786a2fd1aca976a6ff047deeee63ef15",
+      "merge_method": "merge_commit",
+      "approved_by": "inventor1975",
+      "approved_at": "2026-09-06T08:12:51Z",
+      "merged_at": "2026-09-06T08:14:03Z"
+    },
+    "scope": "Scoped independent Gate G acceptance of this exact candidate: identity and boundary, claims audit, adversarial fail-closed challenges, canonical Linux execution, deterministic offline demo, packaging, and repository integrity. Pull request 40 merged this exact tree into main without modification.",
+    "exclusions": [
+      "semantic correctness",
+      "model accuracy",
+      "institutional validity",
+      "legal effect",
+      "provider qualification",
+      "rights resolution",
+      "ontology execution",
+      "production compilation",
+      "runtime authorization",
+      "institutional-IR closure",
+      "enterprise readiness",
+      "benchmark superiority"
+    ]
+  },
   "capabilities": [
     {
       "name": "grounded_candidate_extraction",

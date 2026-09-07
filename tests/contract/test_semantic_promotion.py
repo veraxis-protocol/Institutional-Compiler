@@ -196,3 +196,62 @@ def test_forged_independent_validation_evidence_is_refused(
     path.write_text(json.dumps(matrix), encoding="utf-8")
     with pytest.raises(module.GateEvidenceError, match="evidence forged"):
         module.validate_bounded_record(gate_tree)
+
+
+def test_gate_g_promotion_evidence_removal_is_refused(repo_root: Path, gate_tree: Path) -> None:
+    module = gate(repo_root)
+    path = gate_tree / "docs/capabilities/CAPABILITY_MATRIX.json"
+    matrix = json.loads(path.read_bytes())
+    del matrix["gate_g_promotion_evidence"]
+    path.write_text(json.dumps(matrix), encoding="utf-8")
+    with pytest.raises(module.GateEvidenceError):
+        module.validate_bounded_record(gate_tree)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("candidate_commit", "0" * 40),
+        ("candidate_tree", "0" * 40),
+        ("status", "GATE_G_FAIL"),
+        ("work_order", "OIC-INDEPENDENT-GATE-G-999"),
+    ],
+)
+def test_forged_gate_g_promotion_evidence_is_refused(
+    repo_root: Path, gate_tree: Path, field: str, value: str
+) -> None:
+    module = gate(repo_root)
+    path = gate_tree / "docs/capabilities/CAPABILITY_MATRIX.json"
+    matrix = json.loads(path.read_bytes())
+    matrix["gate_g_promotion_evidence"][field] = value
+    path.write_text(json.dumps(matrix), encoding="utf-8")
+    with pytest.raises(module.GateEvidenceError, match="gate g promotion evidence forged"):
+        module.validate_bounded_record(gate_tree)
+
+
+@pytest.mark.parametrize(
+    "field",
+    ["merge_commit", "merge_first_parent", "merge_second_parent", "merge_tree", "approved_by"],
+)
+def test_forged_gate_g_merge_topology_is_refused(
+    repo_root: Path, gate_tree: Path, field: str
+) -> None:
+    """A forged merge parent, tree, commit or approver must fail closed."""
+    module = gate(repo_root)
+    path = gate_tree / "docs/capabilities/CAPABILITY_MATRIX.json"
+    matrix = json.loads(path.read_bytes())
+    matrix["gate_g_promotion_evidence"]["promotion"][field] = "forged"
+    path.write_text(json.dumps(matrix), encoding="utf-8")
+    with pytest.raises(module.GateEvidenceError, match="gate g promotion evidence forged"):
+        module.validate_bounded_record(gate_tree)
+
+
+def test_gate_g_promotion_evidence_matches_the_gate_g_candidate(repo_root: Path) -> None:
+    """The recorded merge must carry the Gate G candidate as its second parent."""
+    module = gate(repo_root)
+    evidence = module.GATE_G_PROMOTION_EVIDENCE
+    promotion = evidence["promotion"]
+    assert promotion["merge_second_parent"] == evidence["candidate_commit"]
+    assert promotion["merge_tree"] == evidence["candidate_tree"]
+    assert promotion["merge_first_parent"] == promotion["base_before_merge"]
+    assert evidence["exclusions"] == module.INDEPENDENT_VALIDATION_EVIDENCE["exclusions"]
