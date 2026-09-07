@@ -1,6 +1,6 @@
 # Open Institutional Compiler
 
-- **Status:** BOUNDED_REFERENCE_IMPLEMENTATION — scoped independent Gate G validation passed for candidate `a2b5053771ce510fb35ce09f3e99f545c21ac20e` and merged to `main` as `c4a325c551ce8904dfcc5b9fe81b05109726a334`
+- **Status:** BOUNDED_REFERENCE_IMPLEMENTATION — scoped independent Gate G validation passed for candidate `a2b5053771ce510fb35ce09f3e99f545c21ac20e` and merged to `main` as `c4a325c551ce8904dfcc5b9fe81b05109726a334`; a later claim-control continuity repair, candidate `4576fea067d33c2c0f8e8fc2d49bb506c52b2f1c`, was merged as `8ebac66965997748061d8cc0f1bfde73cb7b216a`, which independent review does not cover
 - **Bootstrap date:** 2026-07-29
 - **Governing design:** TDD-OIC-001 v1.1
 
@@ -57,6 +57,17 @@ byte-identical offline demo digest. Pull request 40 merged that exact tree into
 merged at 2026-09-06T08:14:03Z. That result carries the same twelve exclusions
 and the same ceilings, is scoped to that exact candidate and tree, and is not
 validation of any later commit.
+Pull request 41 subsequently merged candidate
+`4576fea067d33c2c0f8e8fc2d49bb506c52b2f1c` (tree
+`6e450750d7b6b1d1f0b493b050ed7d866d42b264`) into `main` as merge commit
+`8ebac66965997748061d8cc0f1bfde73cb7b216a`, first parent
+`c4a325c551ce8904dfcc5b9fe81b05109726a334`. That candidate changes claim-control
+text only: it adds the subject term `implementation` to the README unscoped-claim
+alternation and adds the matching regression case, closing SAK001C-F01/SAK001-F01
+pending independent confirmation. It changes no runtime, verifier, matrix,
+benchmark or claim content. Independent review does not cover merge commit
+`8ebac66965997748061d8cc0f1bfde73cb7b216a` or candidate
+`4576fea067d33c2c0f8e8fc2d49bb506c52b2f1c`.
 See [`CAPABILITY_MATRIX.json`](docs/capabilities/CAPABILITY_MATRIX.json) for exact provenance
 and ceilings. NVIDIA is NOT_QUALIFIED; Canada redistribution is UNRESOLVED; Ontology 007R1
 is unexecuted and execution-unauthorized. No model accuracy or legal validity is claimed.
@@ -353,6 +364,38 @@ semantic OIC-Bench results.
 These results verify repository infrastructure. They are not semantic OIC-Bench
 results. The benchmark preflight metrics remain proposed or preregistered and
 not measured. Experimental branch results are not accepted benchmark evidence.
+
+### What has actually been measured
+
+Nothing in OIC-Bench has been measured. Every figure below is repository or
+bounded-implementation evidence, scoped to the exact candidate that produced it.
+
+- Independent Gate F repository validation, candidate
+  `c0108a7a80585d6f5732407d4904ba815073ecd2`, tree
+  `1d12b17aad7977c939090909171183be166cfd50`: 1714 passed, 0 failed, 0 errors,
+  1 declared skip, 93.5% coverage.
+- Independent Gate G validation, candidate
+  `a2b5053771ce510fb35ce09f3e99f545c21ac20e`, tree
+  `b8e31ec4786a2fd1aca976a6ff047deeee63ef15`: 1720 passed, 0 failed, 0 errors,
+  1 declared skip, 93.5% coverage, zero critical and zero major findings.
+- Deterministic offline path: two separate-process runs emit byte-identical
+  canonical JSON, SHA-256
+  `0f9d01bb0dfc488505e027ac7bd8aecf869578e379b5a977cd9d642f2101a39a`. At Gate G
+  both runs executed with no network interfaces and no DNS available, so the
+  offline property is demonstrated rather than merely supported.
+- The exact composition of that path is one synthetic fictional sentence yielding
+  two divergent candidate units, eleven provisional interpretation slots, one
+  preserved unresolved reference, one supplied synthetic authority record, and
+  three refusal paths. Institutional admission is false. These are counts from a
+  single fixture. They are not a source-support rate, an ambiguity measurement, or
+  any other benchmark quantity.
+- Infrastructure verification: schemas 9/9, bootstrap 52/52, falsification harness
+  4/4, and manifest verification deliberately `INCOMPLETE` at exit 3.
+
+Test counts measure the test suite. They do not measure whether compiled controls
+behave correctly, and they are not benchmark results. No practitioner study,
+baseline arm, human-time instrumentation or adjudicated behavioural-quality scale
+exists, so no comparative statement is supported in either direction.
 
 ## Development roadmap
 

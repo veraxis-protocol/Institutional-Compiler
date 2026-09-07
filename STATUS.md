@@ -34,6 +34,20 @@ two byte-identical offline demo runs with SHA-256
 byte-identical to the validated tree. Each result above is scoped to the exact
 commit and tree that produced it and to nothing later.
 
+Pull request 41 subsequently merged candidate
+`4576fea067d33c2c0f8e8fc2d49bb506c52b2f1c`, tree
+`6e450750d7b6b1d1f0b493b050ed7d866d42b264`, into `main` as merge commit
+`8ebac66965997748061d8cc0f1bfde73cb7b216a`, first parent
+`c4a325c551ce8904dfcc5b9fe81b05109726a334`. That candidate changes claim-control
+text only: it adds the subject term `implementation` to the README unscoped-claim
+alternation and adds the matching case to the internal regression tuple, closing
+SAK001C-F01/SAK001-F01 pending independent confirmation. It changes no runtime,
+verifier, matrix, benchmark or claim content, and the merged tree is byte-identical
+to the candidate tree. Independent review does not cover merge commit
+`8ebac66965997748061d8cc0f1bfde73cb7b216a` or candidate
+`4576fea067d33c2c0f8e8fc2d49bb506c52b2f1c`; the Gate F and Gate G results above
+remain scoped to the exact earlier candidates that produced them.
+
 NVIDIA: NOT_QUALIFIED and excluded from the demo. Canada redistribution: UNRESOLVED.
 Ontology 007R1: unexecuted and execution-unauthorized. Institutional-IR closure:
 UNESTABLISHED. Production compilation and runtime authorization: UNESTABLISHED. Negative-stability
@@ -60,6 +74,40 @@ production readiness, public quality, universal novelty, or legal compliance.
 
 **Broader production semantic gate:** BLOCKED. Historical NOT OPEN receipts remain
 unchanged; the active capability matrix supersedes only the bounded synthetic surface.
+
+## Bounded results established, and what they are not
+
+Nothing in OIC-Bench has been measured. Every figure below is repository or
+bounded-implementation evidence, scoped to the exact candidate that produced it.
+All eight preregistered OIC-Bench rows in `README.md` remain TARGET - NOT MEASURED,
+and the provisional comparative target remains PROVISIONAL TARGET - NOT MEASURED -
+NOT CALIBRATED.
+
+- Independent Gate F repository validation, candidate
+  `c0108a7a80585d6f5732407d4904ba815073ecd2`, tree
+  `1d12b17aad7977c939090909171183be166cfd50`: 1714 passed, 0 failed, 0 errors,
+  1 declared skip, 93.5% coverage.
+- Independent Gate G validation, candidate
+  `a2b5053771ce510fb35ce09f3e99f545c21ac20e`, tree
+  `b8e31ec4786a2fd1aca976a6ff047deeee63ef15`: 1720 passed, 0 failed, 0 errors,
+  1 declared skip, 93.5% coverage, zero critical and zero major findings.
+- Deterministic offline path: two separate-process runs emit byte-identical
+  canonical JSON, SHA-256
+  `0f9d01bb0dfc488505e027ac7bd8aecf869578e379b5a977cd9d642f2101a39a`. At Gate G
+  both runs executed with no network interfaces and no DNS available.
+- The exact composition of that path is one synthetic fictional sentence yielding
+  two divergent candidate units, eleven provisional interpretation slots, one
+  preserved unresolved reference, one supplied synthetic authority record, and
+  three refusal paths, with institutional admission false. These are counts from a
+  single fixture, not a source-support rate, an ambiguity measurement, or any other
+  benchmark quantity.
+- Infrastructure verification: schemas 9/9, bootstrap 52/52, falsification harness
+  4/4, and manifest verification deliberately INCOMPLETE at exit 3.
+
+Test counts measure the test suite. They do not measure whether compiled controls
+behave correctly, and they are not benchmark results. No practitioner study,
+baseline arm, human-time instrumentation or adjudicated behavioural-quality scale
+exists, so no comparative statement of any kind is supported.
 
 The reference path does not confer real institutional authority or runtime permission.
 After this work order, another deposited authorization plus explicit execution signal is required.

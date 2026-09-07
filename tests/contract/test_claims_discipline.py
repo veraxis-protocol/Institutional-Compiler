@@ -567,3 +567,157 @@ def test_matrix_gate_f_exclusion_mutations_fail_closed(repo_root: Path, mutation
         exclusions.append("production readiness")
     with pytest.raises(module.GateEvidenceError, match="evidence forged"):
         module.validate_independent_validation_evidence(evidence)
+
+
+#: Anchors for the PR #41 continuity merge. These are deliberately literal rather than read
+#: from the capability matrix: the matrix records the Gate F and Gate G candidates and is
+#: outside the authorized path set for the work order that recorded this merge, so binding
+#: the front doors to it here would couple two independently governed artifacts.
+POST_MERGE_CONTINUITY_ANCHORS = (
+    "8ebac66965997748061d8cc0f1bfde73cb7b216a",
+    "4576fea067d33c2c0f8e8fc2d49bb506c52b2f1c",
+    "c4a325c551ce8904dfcc5b9fe81b05109726a334",
+    "6e450750d7b6b1d1f0b493b050ed7d866d42b264",
+)
+
+#: Prose the continuity merge record must carry in both front doors.
+POST_MERGE_CONTINUITY_PHRASES = (
+    "pull request 41",
+    "sak001c-f01/sak001-f01 pending independent confirmation",
+    "independent review does not cover merge commit",
+)
+
+#: Misdescriptions of the continuity candidate. It closes the state-acknowledgment finding,
+#: not the Gate G README-citation finding, and the front doors must not say otherwise.
+POST_MERGE_CONTINUITY_MISDESCRIPTIONS = (
+    "gg001-m01",
+    "is not independently validated",
+    "are not independently validated",
+)
+
+#: The eight preregistered OIC-Bench benchmarks. Every one must remain an unmeasured target.
+OIC_BENCH_ROWS = (
+    "Source-supported executable fields",
+    "Unsupported executable-field rate",
+    "Unknown-to-false conversions",
+    "Authority Reconstruction F1",
+    "Ambiguity recall",
+    "False-resolution rate",
+    "Behavioral conformance",
+    "Change-impact recall",
+)
+
+#: Markers for the bounded-results disclosure. Each states a fact that is true of the
+#: bounded evidence and false of an OIC-Bench measurement.
+BOUNDED_DISCLOSURE_PHRASES = (
+    "nothing in oic-bench has been measured",
+    "test counts measure the test suite",
+    "they are not benchmark results",
+)
+
+
+def _assert_post_merge_continuity(text: str) -> None:
+    """Require the PR #41 continuity merge to be recorded, scoped and not overstated."""
+    normalized = " ".join(text.lower().replace("*", "").split())
+    for anchor in POST_MERGE_CONTINUITY_ANCHORS:
+        assert anchor in normalized, f"missing continuity anchor: {anchor}"
+    for phrase in POST_MERGE_CONTINUITY_PHRASES:
+        assert phrase in normalized, f"missing continuity statement: {phrase}"
+    for phrase in POST_MERGE_CONTINUITY_MISDESCRIPTIONS:
+        assert phrase not in normalized, f"continuity merge is misdescribed: {phrase}"
+
+
+def _assert_bounded_results_disclosure(text: str) -> None:
+    """Require the bounded-results disclosure and refuse a benchmark reading of it."""
+    normalized = " ".join(text.lower().replace("*", "").split())
+    for phrase in BOUNDED_DISCLOSURE_PHRASES:
+        assert phrase in normalized, f"missing bounded-results disclosure: {phrase}"
+    for candidate, passed in (
+        ("c0108a7a80585d6f5732407d4904ba815073ecd2", "1714 passed"),
+        ("a2b5053771ce510fb35ce09f3e99f545c21ac20e", "1720 passed"),
+    ):
+        assert candidate in normalized, f"bounded result is unscoped: missing {candidate}"
+        assert passed in normalized, f"bounded result is missing its count: {passed}"
+
+
+@pytest.mark.parametrize("relpath", ("README.md", "STATUS.md"))
+def test_post_merge_continuity_is_recorded_in_both_front_doors(
+    repo_root: Path, relpath: str
+) -> None:
+    """Both front doors must record the PR #41 merge without overstating its review status.
+
+    Fail-closed coverage: removing any anchor, dropping the non-coverage statement, or
+    reattributing the candidate to Gate G finding GG001-M01 must each fail.
+    """
+    text = (repo_root / relpath).read_text(encoding="utf-8")
+    _assert_post_merge_continuity(text)
+
+    for anchor in POST_MERGE_CONTINUITY_ANCHORS:
+        stripped = text.replace(anchor, "0" * 40)
+        with pytest.raises(AssertionError, match="missing continuity anchor"):
+            _assert_post_merge_continuity(stripped)
+
+    dropped = re.sub(
+        r"Independent review does not cover merge commit",
+        "Review notes",
+        text,
+        flags=re.IGNORECASE,
+    )
+    assert dropped != text
+    with pytest.raises(AssertionError, match="missing continuity statement"):
+        _assert_post_merge_continuity(dropped)
+
+    misattributed = text + "\nThe continuity candidate closes GG001-M01.\n"
+    with pytest.raises(AssertionError, match="continuity merge is misdescribed"):
+        _assert_post_merge_continuity(misattributed)
+
+    misclassified = text + "\nThe current main is not independently validated.\n"
+    with pytest.raises(AssertionError, match="continuity merge is misdescribed"):
+        _assert_post_merge_continuity(misclassified)
+
+
+@pytest.mark.parametrize("relpath", ("README.md", "STATUS.md"))
+def test_bounded_results_disclosure_is_present_and_scoped(repo_root: Path, relpath: str) -> None:
+    """Bounded results must be disclosed as bounded, with each figure bound to its candidate."""
+    text = (repo_root / relpath).read_text(encoding="utf-8")
+    _assert_bounded_results_disclosure(text)
+
+    for phrase in BOUNDED_DISCLOSURE_PHRASES:
+        removed = re.sub(re.escape(phrase), "removed", text, flags=re.IGNORECASE)
+        assert removed != text, f"disclosure phrase not found for mutation: {phrase}"
+        with pytest.raises(AssertionError, match="missing bounded-results disclosure"):
+            _assert_bounded_results_disclosure(removed)
+
+    unscoped = text.replace("c0108a7a80585d6f5732407d4904ba815073ecd2", "an earlier candidate")
+    with pytest.raises(AssertionError, match="bounded result is unscoped"):
+        _assert_bounded_results_disclosure(unscoped)
+
+
+def test_oic_bench_rows_remain_unmeasured_targets(repo_root: Path) -> None:
+    """All eight preregistered rows stay TARGET - NOT MEASURED, and the comparative target too.
+
+    Promotion of any row is the single most consequential unsupported claim this repository
+    could publish, so it fails closed here rather than depending on review.
+    """
+    readme = (repo_root / "README.md").read_text(encoding="utf-8")
+
+    for row in OIC_BENCH_ROWS:
+        pattern = re.compile(
+            rf"^\|\s*{re.escape(row)}\s*\|[^|]*\|\s*TARGET - NOT MEASURED\s*\|$",
+            re.MULTILINE,
+        )
+        assert pattern.search(readme), f"OIC-Bench row is not an unmeasured target: {row}"
+
+    assert "PROVISIONAL TARGET - NOT MEASURED - NOT CALIBRATED" in readme, (
+        "the provisional comparative target lost its uncalibrated status"
+    )
+
+    promoted = readme.replace(
+        "| Ambiguity recall | >=0.85 | TARGET - NOT MEASURED |",
+        "| Ambiguity recall | >=0.85 | MEASURED - 0.91 |",
+    )
+    assert promoted != readme
+    pattern = re.compile(
+        r"^\|\s*Ambiguity recall\s*\|[^|]*\|\s*TARGET - NOT MEASURED\s*\|$", re.MULTILINE
+    )
+    assert pattern.search(promoted) is None, "row promotion was not detected"
