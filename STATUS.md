@@ -1,5 +1,34 @@
 # Project Status
 
+## OIC↔ZTL boundary — 2026-09-07
+
+Gate G promotion is recorded in the section below. This block adds what it does not say:
+**where the boundary with ZTL is, and why nothing crosses it yet.**
+
+On `main` today: **bounded candidate admission** and **provisional interpretation** are
+present. Separately, **ZTL reasoning and warrant semantics have materially matured** well
+beyond the July dossier in `adapters/ztl/` — a statement about the dependency, not a claim
+that OIC uses it.
+
+Between those two matured sides, three institutional transitions **do not exist**:
+
+    institutional semantic admission
+      → stable admitted proposition
+        → evidence-bearing formalization
+
+Therefore: semantic implementation has not started, the broader production semantic gate
+remains **BLOCKED**, and **ZTL runtime attachment remains BLOCKED** — the institutional
+semantic act that would produce an admitted canonical proposition does not exist, so there is
+no lawful input for a logic kernel. Neither side maturing makes that blockage smaller.
+
+The boundary is described in `docs/architecture/OIC-ZTL-MATURATION-DELTA-001.md` and
+`docs/architecture/OIC-ZTL-LAYER-OWNERSHIP-001.md`; the current dependency state in
+`adapters/ztl/CURRENT-STATE-001.md`; the falsifiability hierarchy in
+`docs/darpa/OIC-ZTL-DARPA-CROSSWALK-001.md`.
+
+No semantic correctness, runtime authorization, institutional validity, or independent
+reproduction is established by this block. `tier_1_reproduction` remains **NOT ESTABLISHED**.
+
 ## Current status
 
 **BOUNDED_REFERENCE_IMPLEMENTATION — SCOPED INDEPENDENT GATE G VALIDATION PASSED AND MERGED TO MAIN**
