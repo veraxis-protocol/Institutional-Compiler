@@ -587,13 +587,26 @@ POST_MERGE_CONTINUITY_PHRASES = (
     "independent review does not cover merge commit",
 )
 
-#: Misdescriptions of the continuity candidate. It closes the state-acknowledgment finding,
-#: not the Gate G README-citation finding, and the front doors must not say otherwise.
+#: Misclassified review wording. The claim controls read "independently validated" as an
+#: unscoped assertion, so the front doors must phrase non-coverage a different way.
 POST_MERGE_CONTINUITY_MISDESCRIPTIONS = (
-    "gg001-m01",
     "is not independently validated",
     "are not independently validated",
 )
+
+#: References that identify the continuity candidate published as PR 41.
+CONTINUITY_CANDIDATE_REFERENCES = (
+    "4576fea067d33c2c0f8e8fc2d49bb506c52b2f1c",
+    "pull request 41",
+    "pr 41",
+)
+
+#: Verbs that assert a finding was disposed of by the text they appear in.
+CLOSURE_MARKERS = ("clos", "resolv", "fixes", "fixed")
+
+#: Characters of context inspected either side of a GG001-M01 mention. Wide enough to span a
+#: sentence and its neighbour, so a claim split across a clause boundary is still caught.
+GG001_CONTEXT = 240
 
 #: The eight preregistered OIC-Bench benchmarks. Every one must remain an unmeasured target.
 OIC_BENCH_ROWS = (
@@ -615,6 +628,85 @@ BOUNDED_DISCLOSURE_PHRASES = (
     "they are not benchmark results",
 )
 
+#: Headings that open the bounded-results disclosure in each front door.
+BOUNDED_DISCLOSURE_HEADINGS = {
+    "README.md": "### What has actually been measured",
+    "STATUS.md": "## Bounded results established, and what they are not",
+}
+
+#: Producing candidate commit to its tree. Every numeric bounded-result bullet must name a
+#: candidate from this mapping together with that candidate's tree, so no figure can travel
+#: without the exact repository state that produced it.
+BOUNDED_RESULT_BINDINGS = {
+    "c0108a7a80585d6f5732407d4904ba815073ecd2": "1d12b17aad7977c939090909171183be166cfd50",
+    "a2b5053771ce510fb35ce09f3e99f545c21ac20e": "b8e31ec4786a2fd1aca976a6ff047deeee63ef15",
+}
+
+#: The absence statement must be bounded to the evidence universe and date that support it.
+PRACTITIONER_BOUNDING_PHRASES = (
+    "within the authorized oic evidence universe examined by oic-nim-evidence-crosswalk-001 "
+    "as of 2026-09-07",
+    "not a claim about any work outside it",
+)
+
+#: Substrings of the bounding phrases that survive on a single source line. The phrases above
+#: are asserted against whitespace-normalized text so hard wrapping cannot defeat them; these
+#: anchors exist so a mutation can delete a bound from the raw file.
+PRACTITIONER_BOUNDING_LINE_ANCHORS = (
+    "OIC-NIM-EVIDENCE-CROSSWALK-001 as of 2026-09-07",
+    "not a claim about any",
+)
+
+#: Unbounded absolute phrasings of the same statement. These assert something about all work
+#: everywhere, which no evidence in the authorized universe supports.
+PRACTITIONER_UNBOUNDED_WORDINGS = (
+    "exists, so no comparative statement is supported in either direction",
+    "exists, so no comparative statement of any kind is supported",
+)
+
+
+def _bounded_result_bullets(text: str, relpath: str) -> list[str]:
+    """Return the bullet items of the bounded-results disclosure, each joined to one line."""
+    heading = BOUNDED_DISCLOSURE_HEADINGS[relpath]
+    assert heading in text, f"missing bounded-results heading in {relpath}"
+    section = text.split(heading, 1)[1]
+    for line in section.splitlines():
+        if line.startswith("#"):
+            section = section.split("\n" + line, 1)[0]
+            break
+    bullets: list[str] = []
+    for line in section.splitlines():
+        if line.startswith("- "):
+            bullets.append(line[2:].strip())
+        elif line.startswith("  ") and bullets:
+            bullets[-1] += " " + line.strip()
+    assert bullets, f"no bounded-results bullets found in {relpath}"
+    return bullets
+
+
+def _assert_bounded_results_are_candidate_bound(text: str, relpath: str) -> None:
+    """Every bounded-result bullet must carry its producing candidate commit and tree."""
+    for bullet in _bounded_result_bullets(text, relpath):
+        normalized = " ".join(bullet.lower().replace("`", "").split())
+        cited = [c for c in BOUNDED_RESULT_BINDINGS if c in normalized]
+        assert cited, f"bounded-result bullet names no producing candidate: {bullet[:80]!r}"
+        for candidate in cited:
+            tree = BOUNDED_RESULT_BINDINGS[candidate]
+            assert tree in normalized, (
+                f"bounded-result bullet cites candidate {candidate} without its tree {tree}"
+            )
+
+
+def _assert_practitioner_absence_is_bounded(text: str) -> None:
+    """The practitioner/baseline absence statement must name its evidence universe and date."""
+    normalized = " ".join(text.lower().replace("*", "").split())
+    for phrase in PRACTITIONER_BOUNDING_PHRASES:
+        assert phrase in normalized, f"practitioner absence statement is unbounded: {phrase}"
+    for phrase in PRACTITIONER_UNBOUNDED_WORDINGS:
+        assert phrase not in normalized, (
+            f"practitioner absence statement asserts an unbounded universal: {phrase}"
+        )
+
 
 def _assert_post_merge_continuity(text: str) -> None:
     """Require the PR #41 continuity merge to be recorded, scoped and not overstated."""
@@ -625,6 +717,32 @@ def _assert_post_merge_continuity(text: str) -> None:
         assert phrase in normalized, f"missing continuity statement: {phrase}"
     for phrase in POST_MERGE_CONTINUITY_MISDESCRIPTIONS:
         assert phrase not in normalized, f"continuity merge is misdescribed: {phrase}"
+    _assert_gg001_is_not_attributed_to_the_continuity_candidate(normalized)
+
+
+def _assert_gg001_is_not_attributed_to_the_continuity_candidate(normalized: str) -> None:
+    """Reject only a contextual misattribution of GG001-M01 to the continuity candidate.
+
+    GG001-M01 is a real Gate G finding and the repository is free to discuss it accurately.
+    What must fail closed is text that credits candidate 4576fea/PR 41 with disposing of it,
+    because that candidate closes the state-acknowledgment finding SAK001C-F01/SAK001-F01.
+    A bare prohibition on the identifier would forbid honest history, so the control is
+    scoped to co-occurrence of the finding, a continuity reference and a closure verb.
+    """
+    start = 0
+    while True:
+        found = normalized.find("gg001-m01", start)
+        if found < 0:
+            return
+        start = found + len("gg001-m01")
+        window = normalized[max(0, found - GG001_CONTEXT) : start + GG001_CONTEXT]
+        if not any(marker in window for marker in CLOSURE_MARKERS):
+            continue
+        cited = [ref for ref in CONTINUITY_CANDIDATE_REFERENCES if ref in window]
+        assert not cited, (
+            "continuity merge is misdescribed: GG001-M01 is attributed to the continuity "
+            f"candidate near {cited[0]!r}"
+        )
 
 
 def _assert_bounded_results_disclosure(text: str) -> None:
@@ -667,7 +785,7 @@ def test_post_merge_continuity_is_recorded_in_both_front_doors(
     with pytest.raises(AssertionError, match="missing continuity statement"):
         _assert_post_merge_continuity(dropped)
 
-    misattributed = text + "\nThe continuity candidate closes GG001-M01.\n"
+    misattributed = text + "\nGG001-M01 is closed by pull request 41.\n"
     with pytest.raises(AssertionError, match="continuity merge is misdescribed"):
         _assert_post_merge_continuity(misattributed)
 
@@ -721,3 +839,83 @@ def test_oic_bench_rows_remain_unmeasured_targets(repo_root: Path) -> None:
         r"^\|\s*Ambiguity recall\s*\|[^|]*\|\s*TARGET - NOT MEASURED\s*\|$", re.MULTILINE
     )
     assert pattern.search(promoted) is None, "row promotion was not detected"
+
+
+@pytest.mark.parametrize("relpath", ("README.md", "STATUS.md"))
+def test_gg001_control_permits_history_and_rejects_misattribution(
+    repo_root: Path, relpath: str
+) -> None:
+    """GG001-M01 may be discussed accurately; crediting the continuity candidate must fail.
+
+    The predecessor control banned the bare identifier, which would have forbidden honest
+    history. This proves both halves: an accurate historical mention passes, and every way of
+    attributing the finding to candidate 4576fea/PR 41 fails closed.
+    """
+    text = (repo_root / relpath).read_text(encoding="utf-8")
+    _assert_post_merge_continuity(text)
+
+    historical = text + (
+        "\nGate G recorded finding GG001-M01 against candidate "
+        "a2b5053771ce510fb35ce09f3e99f545c21ac20e as MINOR and non-blocking.\n"
+    )
+    _assert_post_merge_continuity(historical)
+
+    unrelated_closure = text + (
+        "\nGG001-M01 was resolved by a later work order that this document does not describe.\n"
+    )
+    _assert_post_merge_continuity(unrelated_closure)
+
+    for reference in CONTINUITY_CANDIDATE_REFERENCES:
+        misattributed = text + f"\nGG001-M01 is closed by {reference}.\n"
+        with pytest.raises(AssertionError, match="GG001-M01 is attributed"):
+            _assert_post_merge_continuity(misattributed)
+
+        reversed_order = text + f"\n{reference} closes finding GG001-M01.\n"
+        with pytest.raises(AssertionError, match="GG001-M01 is attributed"):
+            _assert_post_merge_continuity(reversed_order)
+
+
+@pytest.mark.parametrize("relpath", ("README.md", "STATUS.md"))
+def test_every_bounded_result_bullet_is_candidate_and_tree_bound(
+    repo_root: Path, relpath: str
+) -> None:
+    """No bounded figure may travel without the exact candidate commit and tree behind it."""
+    text = (repo_root / relpath).read_text(encoding="utf-8")
+    _assert_bounded_results_are_candidate_bound(text, relpath)
+
+    bullets = _bounded_result_bullets(text, relpath)
+    assert len(bullets) >= 5, f"expected the full bounded-results list in {relpath}"
+    for candidate, tree in BOUNDED_RESULT_BINDINGS.items():
+        assert any(candidate in b for b in bullets), f"no bullet cites candidate {candidate}"
+        assert any(tree in b for b in bullets), f"no bullet cites tree {tree}"
+
+    for tree in BOUNDED_RESULT_BINDINGS.values():
+        stripped = text.replace(f", tree\n  `{tree}`", "").replace(f"tree\n  `{tree}`", "")
+        assert stripped != text, f"tree citation not found for mutation: {tree}"
+        with pytest.raises(AssertionError, match="without its tree"):
+            _assert_bounded_results_are_candidate_bound(stripped, relpath)
+
+    for candidate in BOUNDED_RESULT_BINDINGS:
+        anonymised = text.replace(candidate, "an earlier candidate")
+        with pytest.raises(AssertionError, match="names no producing candidate|without its tree"):
+            _assert_bounded_results_are_candidate_bound(anonymised, relpath)
+
+
+@pytest.mark.parametrize("relpath", ("README.md", "STATUS.md"))
+def test_practitioner_absence_statement_is_bounded_to_its_evidence(
+    repo_root: Path, relpath: str
+) -> None:
+    """The absence of a practitioner baseline is a fact about one evidence set on one date."""
+    text = (repo_root / relpath).read_text(encoding="utf-8")
+    _assert_practitioner_absence_is_bounded(text)
+
+    for anchor in PRACTITIONER_BOUNDING_LINE_ANCHORS:
+        assert anchor in text, f"bounding anchor not found for mutation: {anchor}"
+        removed = text.replace(anchor, "removed")
+        with pytest.raises(AssertionError, match="practitioner absence statement is unbounded"):
+            _assert_practitioner_absence_is_bounded(removed)
+
+    for phrase in PRACTITIONER_UNBOUNDED_WORDINGS:
+        unbounded = text + f"\nNo practitioner study or baseline arm {phrase}.\n"
+        with pytest.raises(AssertionError, match="asserts an unbounded universal"):
+            _assert_practitioner_absence_is_bounded(unbounded)

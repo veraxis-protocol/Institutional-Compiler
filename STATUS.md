@@ -91,23 +91,36 @@ NOT CALIBRATED.
   `a2b5053771ce510fb35ce09f3e99f545c21ac20e`, tree
   `b8e31ec4786a2fd1aca976a6ff047deeee63ef15`: 1720 passed, 0 failed, 0 errors,
   1 declared skip, 93.5% coverage, zero critical and zero major findings.
-- Deterministic offline path: two separate-process runs emit byte-identical
-  canonical JSON, SHA-256
-  `0f9d01bb0dfc488505e027ac7bd8aecf869578e379b5a977cd9d642f2101a39a`. At Gate G
-  both runs executed with no network interfaces and no DNS available.
-- The exact composition of that path is one synthetic fictional sentence yielding
-  two divergent candidate units, eleven provisional interpretation slots, one
-  preserved unresolved reference, one supplied synthetic authority record, and
+- Deterministic offline path, candidate
+  `c0108a7a80585d6f5732407d4904ba815073ecd2`, tree
+  `1d12b17aad7977c939090909171183be166cfd50`, and again at candidate
+  `a2b5053771ce510fb35ce09f3e99f545c21ac20e`, tree
+  `b8e31ec4786a2fd1aca976a6ff047deeee63ef15`: two separate-process runs emit
+  byte-identical canonical JSON, SHA-256
+  `0f9d01bb0dfc488505e027ac7bd8aecf869578e379b5a977cd9d642f2101a39a`. At the
+  second of those candidates both runs executed with no network interfaces and no
+  DNS available.
+- Bounded synthetic path composition, candidate
+  `a2b5053771ce510fb35ce09f3e99f545c21ac20e`, tree
+  `b8e31ec4786a2fd1aca976a6ff047deeee63ef15`: one synthetic fictional sentence
+  yields two divergent candidate units, eleven provisional interpretation slots,
+  one preserved unresolved reference, one supplied synthetic authority record, and
   three refusal paths, with institutional admission false. These are counts from a
   single fixture, not a source-support rate, an ambiguity measurement, or any other
   benchmark quantity.
-- Infrastructure verification: schemas 9/9, bootstrap 52/52, falsification harness
-  4/4, and manifest verification deliberately INCOMPLETE at exit 3.
+- Infrastructure verification, candidate
+  `a2b5053771ce510fb35ce09f3e99f545c21ac20e`, tree
+  `b8e31ec4786a2fd1aca976a6ff047deeee63ef15`: schemas 9/9, bootstrap 52/52,
+  falsification harness 4/4, and manifest verification deliberately INCOMPLETE at
+  exit 3.
 
 Test counts measure the test suite. They do not measure whether compiled controls
-behave correctly, and they are not benchmark results. No practitioner study,
-baseline arm, human-time instrumentation or adjudicated behavioural-quality scale
-exists, so no comparative statement of any kind is supported.
+behave correctly, and they are not benchmark results. Within the authorized OIC evidence universe examined by
+OIC-NIM-EVIDENCE-CROSSWALK-001 as of 2026-09-07, no practitioner study, baseline
+arm, human-time instrumentation or adjudicated behavioural-quality scale is
+present, so no comparative statement is supported from that evidence. That is a
+statement about that bounded evidence set on that date, not a claim about any
+work outside it.
 
 The reference path does not confer real institutional authority or runtime permission.
 After this work order, another deposited authorization plus explicit execution signal is required.
