@@ -443,7 +443,7 @@ def _assert_readme_independent_validation_is_scoped(
     normalized = _normalize_readme_claims(text)
     subject = (
         r"(?:this\s+)?(?:current\s+repository(?:\s+head)?|repository\s+head|"
-        r"current\s+(?:head|commit|revision|release)|release|main)"
+        r"current\s+(?:head|commit|revision|release)|release|main|implementation)"
     )
     validation = r"(?:independently\s+validated|independent\s+validation)"
     bridge = r"(?:\s+[a-z0-9]+){0,5}\s+"
@@ -519,6 +519,7 @@ def test_readme_numeric_claims_are_bound_to_their_source_evidence(repo_root: Pat
         "**THIS   CURRENT**\nrepository HEAD -- is independently validated!!!",
         "The current head is independently validated.",
         "This release has independent validation.",
+        "*This   Implementation* is independently validated.",
         "Main is independently validated.",
     )
     for claim in unscoped_claims:
