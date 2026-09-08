@@ -6,6 +6,29 @@
 
 [![Research Paper DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22160516.svg)](https://doi.org/10.5281/zenodo.22160516)
 
+## Role in Open Institutional Computation
+
+**Category:** Open Institutional Computation
+
+OIC addresses the upstream institutional-compilation problem: the governed path
+by which human-readable institutional sources may become source-grounded,
+explicitly admitted, machine-operational control state without allowing the
+model, compiler, developer, or runtime to manufacture institutional authority.
+
+Institutional authority remains externally constituted.
+Machine extraction may propose meaning.
+Authorized institutional admission is required for admitted meaning.
+
+OIC operates upstream of VEIP and runtime enforcement.
+
+Canonical category thesis:
+https://github.com/veraxis-protocol/institutional-continuity/blob/main/THESIS.md
+
+This section states an architectural role. It is not a capability claim and does
+not modify any status, ceiling, or exclusion recorded elsewhere in this file, in
+`STATUS.md`, in `CLAIMS.md`, or in `docs/capabilities/CAPABILITY_MATRIX.json`.
+Those documents govern the exact demonstrated scope.
+
 Open Institutional Compiler (OIC) is developing a reviewable path from the
 human-readable sources that govern a regulated enterprise to the explicit
 controls its software and authorization systems can evaluate.
