@@ -1,0 +1,537 @@
+{
+  "document_id": "OAM-PMP-MISSION-CANDIDATES-v0.1",
+  "status": "PUBLIC_PORTAL_EVIDENCE_ONLY_NO_DOWNLOADS",
+  "observed_utc": "2026-07-31T20:49:46Z",
+  "observation_method": "READ_ONLY_PUBLIC_PORTAL_INSPECTION_NO_ARTIFACT_DOWNLOAD",
+  "candidates": [
+    {
+      "candidate_id": "PMP-CASE-001",
+      "reference": "44/FES/2026",
+      "public_buyer": "Direction Provinciale du MEN Fès",
+      "title_fr": "Achat de fournitures de bureau de reprographie et imprimés destinés à la formation continue, aux établissements scolaires et aux services administratifs relevant de la direction provinciale à Fès, en lot unique",
+      "procurement_category": "GOODS_SUPPLIES",
+      "procedure_type": "Appel d'offres ouvert",
+      "publication_date": "2026-07-17",
+      "submission_deadline": "2026-09-04T10:00:00+01:00",
+      "official_portal_url": "https://www.marchespublics.gov.ma/index.php5?orgAcronyme=p8x&page=entreprise.EntrepriseDetailConsultation&refConsultation=1024549",
+      "structured_consultation_record": {
+        "evidence_id": "PMP-CASE-001-NOTICE",
+        "language": "fr",
+        "record_type": "OFFICIAL_STRUCTURED_CONSULTATION_RECORD",
+        "exact_official_url": "https://www.marchespublics.gov.ma/index.php5?orgAcronyme=p8x&page=entreprise.EntrepriseDetailConsultation&refConsultation=1024549"
+      },
+      "verified_tender_document_artifacts": [
+        {
+          "artifact_id": "PMP-CASE-001-DCE-001",
+          "artifact_type": "DOSSIER_DE_CONSULTATION_DCE",
+          "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDemandeTelechargementDce&refConsultation=1024549&orgAcronyme=p8x",
+          "source_candidate_id": "PMP-CASE-001",
+          "public_accessibility_state": "PUBLIC_LINK_TO_DOWNLOAD_REQUEST_FORM",
+          "login_required": false,
+          "captcha_required": false,
+          "access_control_bypass_required": false,
+          "form_submission_required_for_bytes": true,
+          "observed_utc": "2026-07-31T20:49:46Z",
+          "distinct_from_structured_consultation_record": true,
+          "portal_displayed_size": "375.42 KiB",
+          "bytes_acquired": false
+        }
+      ],
+      "verified_commission_or_evaluation_artifacts": [],
+      "verified_award_or_result_artifacts": [],
+      "state": "OPEN_DEADLINE_FUTURE_AT_OBSERVATION",
+      "explicit_official_current_open_state": true,
+      "synthetic": false,
+      "engineering_disposition": "LINK_AND_RECEIPT_ONLY",
+      "mandatory_gate": {
+        "eligible": true,
+        "criteria": {
+          "stable_official_procurement_reference": {"passed": true, "evidence_refs": ["reference", "official_portal_url"]},
+          "official_french_notice_or_consultation_record": {"passed": true, "evidence_refs": ["PMP-CASE-001-NOTICE"]},
+          "buyer_and_procedure_metadata": {"passed": true, "evidence_refs": ["public_buyer", "procedure_type"]},
+          "verified_real_tender_document_artifact": {"passed": true, "evidence_refs": ["PMP-CASE-001-DCE-001"]},
+          "verified_award_or_result_or_explicit_open_state": {"passed": true, "evidence_refs": ["explicit_official_current_open_state"]},
+          "no_login_captcha_or_access_control_bypass": {"passed": true, "evidence_refs": ["PMP-CASE-001-DCE-001"]},
+          "no_synthetic_object": {"passed": true, "evidence_refs": ["synthetic"]},
+          "all_urls_on_permitted_official_domain": {"passed": true, "evidence_refs": ["official_portal_url", "PMP-CASE-001-DCE-001"]}
+        }
+      },
+      "missing_objects": [
+        "DCE contents and specifications not inspected or acquired",
+        "Administrative and technical clauses not verified",
+        "Evaluation grid not available",
+        "Commission minutes and award not available for this open case",
+        "Programme prévisionnel link not established",
+        "Exact artifact bytes not acquired"
+      ]
+    },
+    {
+      "candidate_id": "PMP-CASE-002",
+      "reference": "14/2026",
+      "public_buyer": "Directeur Régional d'Agriculture de la Région Béni Mellal-Khénifra",
+      "title_fr": "Achat de matériel et mobilier de bureau au profit du Centre Régional des Jeunes Entrepreneurs Agricoles et Agro-alimentaires relevant de la Direction Régionale de l’Agriculture de Béni Mellal-Khénifra en lot unique",
+      "procurement_category": "GOODS_SUPPLIES",
+      "procedure_type": "Appel d'offres ouvert simplifié",
+      "publication_date": "2026-07-22",
+      "submission_deadline": "2026-09-03T11:00:00+01:00",
+      "official_portal_url": "https://www.marchespublics.gov.ma/index.php5?orgAcronyme=q1s&page=entreprise.EntrepriseDetailConsultation&refConsultation=1017000",
+      "structured_consultation_record": {
+        "evidence_id": "PMP-CASE-002-NOTICE",
+        "language": "fr",
+        "record_type": "OFFICIAL_STRUCTURED_CONSULTATION_RECORD",
+        "exact_official_url": "https://www.marchespublics.gov.ma/index.php5?orgAcronyme=q1s&page=entreprise.EntrepriseDetailConsultation&refConsultation=1017000"
+      },
+      "verified_tender_document_artifacts": [
+        {
+          "artifact_id": "PMP-CASE-002-DCE-001",
+          "artifact_type": "DOSSIER_DE_CONSULTATION_DCE",
+          "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDemandeTelechargementDce&refConsultation=1017000&orgAcronyme=q1s",
+          "source_candidate_id": "PMP-CASE-002",
+          "public_accessibility_state": "PUBLIC_LINK_TO_DOWNLOAD_REQUEST_FORM",
+          "login_required": false,
+          "captcha_required": false,
+          "access_control_bypass_required": false,
+          "form_submission_required_for_bytes": true,
+          "observed_utc": "2026-07-31T20:49:46Z",
+          "distinct_from_structured_consultation_record": true,
+          "portal_displayed_size": "725.5 KiB",
+          "bytes_acquired": false
+        }
+      ],
+      "verified_commission_or_evaluation_artifacts": [],
+      "verified_award_or_result_artifacts": [],
+      "state": "OPEN_DEADLINE_FUTURE_AT_OBSERVATION",
+      "explicit_official_current_open_state": true,
+      "synthetic": false,
+      "engineering_disposition": "LINK_AND_RECEIPT_ONLY",
+      "mandatory_gate": {
+        "eligible": true,
+        "criteria": {
+          "stable_official_procurement_reference": {"passed": true, "evidence_refs": ["reference", "official_portal_url"]},
+          "official_french_notice_or_consultation_record": {"passed": true, "evidence_refs": ["PMP-CASE-002-NOTICE"]},
+          "buyer_and_procedure_metadata": {"passed": true, "evidence_refs": ["public_buyer", "procedure_type"]},
+          "verified_real_tender_document_artifact": {"passed": true, "evidence_refs": ["PMP-CASE-002-DCE-001"]},
+          "verified_award_or_result_or_explicit_open_state": {"passed": true, "evidence_refs": ["explicit_official_current_open_state"]},
+          "no_login_captcha_or_access_control_bypass": {"passed": true, "evidence_refs": ["PMP-CASE-002-DCE-001"]},
+          "no_synthetic_object": {"passed": true, "evidence_refs": ["synthetic"]},
+          "all_urls_on_permitted_official_domain": {"passed": true, "evidence_refs": ["official_portal_url", "PMP-CASE-002-DCE-001"]}
+        }
+      },
+      "missing_objects": [
+        "DCE contents and specifications not inspected or acquired",
+        "Administrative and technical clauses not verified",
+        "Evaluation grid not available",
+        "Commission minutes and award not available for this open case",
+        "Programme prévisionnel link not established",
+        "Exact artifact bytes not acquired"
+      ]
+    },
+    {
+      "candidate_id": "PMP-CASE-003",
+      "reference": "22/2026",
+      "public_buyer": "Ministère de la Justice",
+      "title_fr": "Achat de fournitures de classement et d’archivage pour le compte des Juridictions du Royaume en lot unique",
+      "procurement_category": "GOODS_SUPPLIES",
+      "procedure_type": "Appel d'offres ouvert",
+      "publication_date": "2026-07-23",
+      "submission_deadline": "2026-09-03T10:00:00+01:00",
+      "official_portal_url": "https://www.marchespublics.gov.ma/index.php5?orgAcronyme=t5y&page=entreprise.EntrepriseDetailConsultation&refConsultation=1012408",
+      "structured_consultation_record": {
+        "evidence_id": "PMP-CASE-003-NOTICE",
+        "language": "fr",
+        "record_type": "OFFICIAL_STRUCTURED_CONSULTATION_RECORD",
+        "exact_official_url": "https://www.marchespublics.gov.ma/index.php5?orgAcronyme=t5y&page=entreprise.EntrepriseDetailConsultation&refConsultation=1012408"
+      },
+      "verified_tender_document_artifacts": [
+        {
+          "artifact_id": "PMP-CASE-003-DCE-001",
+          "artifact_type": "DOSSIER_DE_CONSULTATION_DCE",
+          "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDemandeTelechargementDce&refConsultation=1012408&orgAcronyme=t5y",
+          "source_candidate_id": "PMP-CASE-003",
+          "public_accessibility_state": "PUBLIC_LINK_TO_DOWNLOAD_REQUEST_FORM",
+          "login_required": false,
+          "captcha_required": false,
+          "access_control_bypass_required": false,
+          "form_submission_required_for_bytes": true,
+          "observed_utc": "2026-07-31T20:49:46Z",
+          "distinct_from_structured_consultation_record": true,
+          "portal_displayed_size": "9.41 MiB",
+          "bytes_acquired": false
+        }
+      ],
+      "verified_commission_or_evaluation_artifacts": [],
+      "verified_award_or_result_artifacts": [],
+      "state": "OPEN_DEADLINE_FUTURE_AT_OBSERVATION",
+      "explicit_official_current_open_state": true,
+      "synthetic": false,
+      "engineering_disposition": "LINK_AND_RECEIPT_ONLY",
+      "mandatory_gate": {
+        "eligible": true,
+        "criteria": {
+          "stable_official_procurement_reference": {"passed": true, "evidence_refs": ["reference", "official_portal_url"]},
+          "official_french_notice_or_consultation_record": {"passed": true, "evidence_refs": ["PMP-CASE-003-NOTICE"]},
+          "buyer_and_procedure_metadata": {"passed": true, "evidence_refs": ["public_buyer", "procedure_type"]},
+          "verified_real_tender_document_artifact": {"passed": true, "evidence_refs": ["PMP-CASE-003-DCE-001"]},
+          "verified_award_or_result_or_explicit_open_state": {"passed": true, "evidence_refs": ["explicit_official_current_open_state"]},
+          "no_login_captcha_or_access_control_bypass": {"passed": true, "evidence_refs": ["PMP-CASE-003-DCE-001"]},
+          "no_synthetic_object": {"passed": true, "evidence_refs": ["synthetic"]},
+          "all_urls_on_permitted_official_domain": {"passed": true, "evidence_refs": ["official_portal_url", "PMP-CASE-003-DCE-001"]}
+        }
+      },
+      "missing_objects": [
+        "DCE contents and specifications not inspected or acquired",
+        "Administrative and technical clauses not verified",
+        "Evaluation grid not available",
+        "Commission minutes and award not available for this open case",
+        "Programme prévisionnel link not established",
+        "Exact artifact bytes not acquired"
+      ]
+    },
+    {
+      "candidate_id": "PMP-CASE-004",
+      "reference": "14/2026",
+      "public_buyer": "Secrétariat Général du Gouvernement",
+      "title_fr": "Achat de matériel de bureau pour le compte du Secrétariat Général du Gouvernement",
+      "procurement_category": "GOODS_SUPPLIES",
+      "procedure_type": "Appel d'offres ouvert simplifié",
+      "publication_date": "2026-07-10",
+      "submission_deadline": "2026-07-22T10:30:00+01:00",
+      "official_portal_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1015612&orgAcronyme=g0u",
+      "structured_consultation_record": {
+        "evidence_id": "PMP-CASE-004-NOTICE",
+        "language": "fr",
+        "record_type": "OFFICIAL_STRUCTURED_CONSULTATION_RECORD",
+        "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1015612&orgAcronyme=g0u"
+      },
+      "verified_tender_document_artifacts": [
+        {
+          "artifact_id": "PMP-CASE-004-DCE-001",
+          "artifact_type": "DOSSIER_DE_CONSULTATION_DCE",
+          "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDemandeTelechargementDce&refConsultation=1015612&orgAcronyme=g0u",
+          "source_candidate_id": "PMP-CASE-004",
+          "public_accessibility_state": "PUBLIC_LINK_TO_DOWNLOAD_REQUEST_FORM",
+          "login_required": false,
+          "captcha_required": false,
+          "access_control_bypass_required": false,
+          "form_submission_required_for_bytes": true,
+          "observed_utc": "2026-07-31T20:49:46Z",
+          "distinct_from_structured_consultation_record": true,
+          "portal_displayed_size": "1.76 MiB",
+          "bytes_acquired": false
+        }
+      ],
+      "verified_commission_or_evaluation_artifacts": [
+        {
+          "artifact_id": "PMP-CASE-004-PV-001",
+          "artifact_type": "PUBLIC_EXTRAIT_DE_PV",
+          "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.ExtraitPV&refConsultation=1015612&orgAcronyme=g0u",
+          "source_candidate_id": "PMP-CASE-004",
+          "public_accessibility_state": "PUBLIC_STRUCTURED_HTML",
+          "login_required": false,
+          "captcha_required": false,
+          "access_control_bypass_required": false,
+          "observed_utc": "2026-07-31T20:49:46Z",
+          "distinct_from_structured_consultation_record": true,
+          "bytes_acquired": false
+        }
+      ],
+      "verified_award_or_result_artifacts": [
+        {
+          "artifact_id": "PMP-CASE-004-RESULT-001",
+          "artifact_type": "DEFINITIVE_RESULT_NOTICE",
+          "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1029218&orgAcronyme=g0u",
+          "attached_notice_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDownloadAvisJAL&refConsultation=1029218&orgAcronyme=g0u&idAvis=527659",
+          "source_candidate_id": "PMP-CASE-004",
+          "public_accessibility_state": "PUBLIC_RESULT_RECORD_WITH_ATTACHED_NOTICE_LINK",
+          "cross_record_linkage_id": "PMP-CASE-004-LINK-001",
+          "result_evidence_eligible": true,
+          "login_required": false,
+          "captcha_required": false,
+          "access_control_bypass_required": false,
+          "observed_utc": "2026-07-31T20:49:46Z",
+          "distinct_from_structured_consultation_record": true,
+          "bytes_acquired": false
+        }
+      ],
+      "cross_record_linkage": {
+        "linkage_id": "PMP-CASE-004-LINK-001",
+        "original_consultation_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1015612&orgAcronyme=g0u",
+        "result_record_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1029218&orgAcronyme=g0u",
+        "original_refConsultation": "1015612",
+        "result_refConsultation": "1029218",
+        "observed_procurement_reference": {
+          "original_record": "14/2026",
+          "result_record": "14/2026"
+        },
+        "observed_buyer": {
+          "original_record": {
+            "display_name": null,
+            "display_name_observation": "NOT_EXPOSED_AS_A_DISTINCT_FIELD_ON_PUBLIC_RECORD",
+            "portal_organization_acronym": "g0u"
+          },
+          "result_record": {
+            "display_name": null,
+            "display_name_observation": "NOT_EXPOSED_AS_A_DISTINCT_FIELD_ON_PUBLIC_RECORD",
+            "portal_organization_acronym": "g0u"
+          }
+        },
+        "observed_procurement_object": {
+          "original_record": "Achat de matériel de bureau pour le compte du Secrétariat Général du Gouvernement",
+          "result_record": "Achat de matériel de bureau pour le compte du Secrétariat Général du Gouvernement"
+        },
+        "observed_procedure_or_lot_information": {
+          "original_record": null,
+          "result_record": null,
+          "observation": "NOT_EXPOSED_ON_EITHER_PUBLIC_RECORD"
+        },
+        "explicit_portal_linkage_field": {
+          "field_name": null,
+          "value": null,
+          "observation": "NO_EXPLICIT_ORIGINAL_TO_RESULT_LINKAGE_FIELD_EXPOSED"
+        },
+        "normalized_matching_fields": [
+          {
+            "field": "procurement_reference",
+            "original": "14/2026",
+            "result": "14/2026",
+            "evidence_refs": ["PMP-CASE-004-LINK-ORIGINAL", "PMP-CASE-004-LINK-RESULT"]
+          },
+          {
+            "field": "buyer_portal_organization_acronym",
+            "original": "g0u",
+            "result": "g0u",
+            "evidence_refs": ["PMP-CASE-004-LINK-ORIGINAL", "PMP-CASE-004-LINK-RESULT"]
+          },
+          {
+            "field": "procurement_object",
+            "original": "achat de matériel de bureau pour le compte du secrétariat général du gouvernement",
+            "result": "achat de matériel de bureau pour le compte du secrétariat général du gouvernement",
+            "evidence_refs": ["PMP-CASE-004-LINK-ORIGINAL", "PMP-CASE-004-LINK-RESULT"]
+          }
+        ],
+        "mismatch_fields": [
+          {
+            "field": "refConsultation",
+            "original": "1015612",
+            "result": "1029218",
+            "recorded_linkage_basis": "Separate portal record identifiers are reconciled by the exact matching procurement reference, procurement object and portal organization acronym.",
+            "evidence_refs": ["PMP-CASE-004-LINK-ORIGINAL", "PMP-CASE-004-LINK-RESULT"]
+          }
+        ],
+        "evidence_references": [
+          {
+            "evidence_id": "PMP-CASE-004-LINK-ORIGINAL",
+            "record_role": "ORIGINAL_CONSULTATION",
+            "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1015612&orgAcronyme=g0u",
+            "observed_fields": ["refConsultation=1015612", "reference=14/2026", "orgAcronyme=g0u", "object=Achat de matériel de bureau pour le compte du Secrétariat Général du Gouvernement"]
+          },
+          {
+            "evidence_id": "PMP-CASE-004-LINK-RESULT",
+            "record_role": "DEFINITIVE_RESULT",
+            "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1029218&orgAcronyme=g0u",
+            "observed_fields": ["refConsultation=1029218", "reference=14/2026", "orgAcronyme=g0u", "object=Achat de matériel de bureau pour le compte du Secrétariat Général du Gouvernement"]
+          }
+        ],
+        "observed_utc": "2026-07-31T21:23:40Z",
+        "linkage_result": "VERIFIED_MATCH"
+      },
+      "state": "DEFINITIVE_RESULT_PUBLISHED",
+      "explicit_official_current_open_state": false,
+      "synthetic": false,
+      "engineering_disposition": "LINK_AND_RECEIPT_ONLY",
+      "mandatory_gate": {
+        "eligible": true,
+        "criteria": {
+          "stable_official_procurement_reference": {"passed": true, "evidence_refs": ["reference", "official_portal_url"]},
+          "official_french_notice_or_consultation_record": {"passed": true, "evidence_refs": ["PMP-CASE-004-NOTICE"]},
+          "buyer_and_procedure_metadata": {"passed": true, "evidence_refs": ["public_buyer", "procedure_type"]},
+          "verified_real_tender_document_artifact": {"passed": true, "evidence_refs": ["PMP-CASE-004-DCE-001"]},
+          "verified_award_or_result_or_explicit_open_state": {"passed": true, "evidence_refs": ["PMP-CASE-004-RESULT-001"]},
+          "no_login_captcha_or_access_control_bypass": {"passed": true, "evidence_refs": ["PMP-CASE-004-DCE-001", "PMP-CASE-004-PV-001", "PMP-CASE-004-RESULT-001"]},
+          "no_synthetic_object": {"passed": true, "evidence_refs": ["synthetic"]},
+          "all_urls_on_permitted_official_domain": {"passed": true, "evidence_refs": ["official_portal_url", "PMP-CASE-004-DCE-001", "PMP-CASE-004-PV-001", "PMP-CASE-004-RESULT-001"]}
+        }
+      },
+      "missing_objects": [
+        "DCE contents and specifications not inspected or acquired",
+        "Administrative and technical clauses not verified",
+        "Evaluation criteria grid not verified as a distinct artifact",
+        "Programme prévisionnel link not established",
+        "Exact artifact bytes not acquired"
+      ]
+    },
+    {
+      "candidate_id": "PMP-CASE-005",
+      "reference": "13/2026",
+      "public_buyer": "Secrétariat Général du Gouvernement",
+      "title_fr": "Achat de toners pour le compte du Secrétariat Général du Gouvernement",
+      "procurement_category": "GOODS_SUPPLIES",
+      "procedure_type": "Appel d'offres ouvert simplifié",
+      "publication_date": "2026-06-19",
+      "submission_deadline": "2026-07-02T10:30:00+01:00",
+      "official_portal_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1010827&orgAcronyme=g0u",
+      "structured_consultation_record": {
+        "evidence_id": "PMP-CASE-005-NOTICE",
+        "language": "fr",
+        "record_type": "OFFICIAL_STRUCTURED_CONSULTATION_RECORD",
+        "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1010827&orgAcronyme=g0u"
+      },
+      "verified_tender_document_artifacts": [
+        {
+          "artifact_id": "PMP-CASE-005-DCE-001",
+          "artifact_type": "DOSSIER_DE_CONSULTATION_DCE",
+          "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDemandeTelechargementDce&refConsultation=1010827&orgAcronyme=g0u",
+          "source_candidate_id": "PMP-CASE-005",
+          "public_accessibility_state": "PUBLIC_LINK_TO_DOWNLOAD_REQUEST_FORM",
+          "login_required": false,
+          "captcha_required": false,
+          "access_control_bypass_required": false,
+          "form_submission_required_for_bytes": true,
+          "observed_utc": "2026-07-31T20:49:46Z",
+          "distinct_from_structured_consultation_record": true,
+          "portal_displayed_size": "1.7 MiB",
+          "bytes_acquired": false
+        }
+      ],
+      "verified_commission_or_evaluation_artifacts": [
+        {
+          "artifact_id": "PMP-CASE-005-PV-001",
+          "artifact_type": "PUBLIC_EXTRAIT_DE_PV",
+          "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.ExtraitPV&refConsultation=1010827&orgAcronyme=g0u",
+          "source_candidate_id": "PMP-CASE-005",
+          "public_accessibility_state": "PUBLIC_STRUCTURED_HTML",
+          "login_required": false,
+          "captcha_required": false,
+          "access_control_bypass_required": false,
+          "observed_utc": "2026-07-31T20:49:46Z",
+          "distinct_from_structured_consultation_record": true,
+          "bytes_acquired": false
+        }
+      ],
+      "verified_award_or_result_artifacts": [
+        {
+          "artifact_id": "PMP-CASE-005-RESULT-001",
+          "artifact_type": "DEFINITIVE_RESULT_NOTICE",
+          "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1029211&orgAcronyme=g0u",
+          "attached_notice_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDownloadAvisJAL&refConsultation=1029211&orgAcronyme=g0u&idAvis=527649",
+          "source_candidate_id": "PMP-CASE-005",
+          "public_accessibility_state": "PUBLIC_RESULT_RECORD_WITH_ATTACHED_NOTICE_LINK",
+          "cross_record_linkage_id": "PMP-CASE-005-LINK-001",
+          "result_evidence_eligible": true,
+          "login_required": false,
+          "captcha_required": false,
+          "access_control_bypass_required": false,
+          "observed_utc": "2026-07-31T20:49:46Z",
+          "distinct_from_structured_consultation_record": true,
+          "bytes_acquired": false
+        }
+      ],
+      "cross_record_linkage": {
+        "linkage_id": "PMP-CASE-005-LINK-001",
+        "original_consultation_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1010827&orgAcronyme=g0u",
+        "result_record_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1029211&orgAcronyme=g0u",
+        "original_refConsultation": "1010827",
+        "result_refConsultation": "1029211",
+        "observed_procurement_reference": {
+          "original_record": "13/2026",
+          "result_record": "13/2026"
+        },
+        "observed_buyer": {
+          "original_record": {
+            "display_name": null,
+            "display_name_observation": "NOT_EXPOSED_AS_A_DISTINCT_FIELD_ON_PUBLIC_RECORD",
+            "portal_organization_acronym": "g0u"
+          },
+          "result_record": {
+            "display_name": null,
+            "display_name_observation": "NOT_EXPOSED_AS_A_DISTINCT_FIELD_ON_PUBLIC_RECORD",
+            "portal_organization_acronym": "g0u"
+          }
+        },
+        "observed_procurement_object": {
+          "original_record": "Achat de toners pour le compte du Secrétariat Général du Gouvernement",
+          "result_record": "Achat de toners pour le compte du Secrétariat Général du Gouvernement"
+        },
+        "observed_procedure_or_lot_information": {
+          "original_record": null,
+          "result_record": null,
+          "observation": "NOT_EXPOSED_ON_EITHER_PUBLIC_RECORD"
+        },
+        "explicit_portal_linkage_field": {
+          "field_name": null,
+          "value": null,
+          "observation": "NO_EXPLICIT_ORIGINAL_TO_RESULT_LINKAGE_FIELD_EXPOSED"
+        },
+        "normalized_matching_fields": [
+          {
+            "field": "procurement_reference",
+            "original": "13/2026",
+            "result": "13/2026",
+            "evidence_refs": ["PMP-CASE-005-LINK-ORIGINAL", "PMP-CASE-005-LINK-RESULT"]
+          },
+          {
+            "field": "buyer_portal_organization_acronym",
+            "original": "g0u",
+            "result": "g0u",
+            "evidence_refs": ["PMP-CASE-005-LINK-ORIGINAL", "PMP-CASE-005-LINK-RESULT"]
+          },
+          {
+            "field": "procurement_object",
+            "original": "achat de toners pour le compte du secrétariat général du gouvernement",
+            "result": "achat de toners pour le compte du secrétariat général du gouvernement",
+            "evidence_refs": ["PMP-CASE-005-LINK-ORIGINAL", "PMP-CASE-005-LINK-RESULT"]
+          }
+        ],
+        "mismatch_fields": [
+          {
+            "field": "refConsultation",
+            "original": "1010827",
+            "result": "1029211",
+            "recorded_linkage_basis": "Separate portal record identifiers are reconciled by the exact matching procurement reference, procurement object and portal organization acronym.",
+            "evidence_refs": ["PMP-CASE-005-LINK-ORIGINAL", "PMP-CASE-005-LINK-RESULT"]
+          }
+        ],
+        "evidence_references": [
+          {
+            "evidence_id": "PMP-CASE-005-LINK-ORIGINAL",
+            "record_role": "ORIGINAL_CONSULTATION",
+            "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1010827&orgAcronyme=g0u",
+            "observed_fields": ["refConsultation=1010827", "reference=13/2026", "orgAcronyme=g0u", "object=Achat de toners pour le compte du Secrétariat Général du Gouvernement"]
+          },
+          {
+            "evidence_id": "PMP-CASE-005-LINK-RESULT",
+            "record_role": "DEFINITIVE_RESULT",
+            "exact_official_url": "https://www.marchespublics.gov.ma/index.php?page=entreprise.EntrepriseDetailConsultation&refConsultation=1029211&orgAcronyme=g0u",
+            "observed_fields": ["refConsultation=1029211", "reference=13/2026", "orgAcronyme=g0u", "object=Achat de toners pour le compte du Secrétariat Général du Gouvernement"]
+          }
+        ],
+        "observed_utc": "2026-07-31T21:23:40Z",
+        "linkage_result": "VERIFIED_MATCH"
+      },
+      "state": "DEFINITIVE_RESULT_PUBLISHED",
+      "explicit_official_current_open_state": false,
+      "synthetic": false,
+      "engineering_disposition": "LINK_AND_RECEIPT_ONLY",
+      "mandatory_gate": {
+        "eligible": true,
+        "criteria": {
+          "stable_official_procurement_reference": {"passed": true, "evidence_refs": ["reference", "official_portal_url"]},
+          "official_french_notice_or_consultation_record": {"passed": true, "evidence_refs": ["PMP-CASE-005-NOTICE"]},
+          "buyer_and_procedure_metadata": {"passed": true, "evidence_refs": ["public_buyer", "procedure_type"]},
+          "verified_real_tender_document_artifact": {"passed": true, "evidence_refs": ["PMP-CASE-005-DCE-001"]},
+          "verified_award_or_result_or_explicit_open_state": {"passed": true, "evidence_refs": ["PMP-CASE-005-RESULT-001"]},
+          "no_login_captcha_or_access_control_bypass": {"passed": true, "evidence_refs": ["PMP-CASE-005-DCE-001", "PMP-CASE-005-PV-001", "PMP-CASE-005-RESULT-001"]},
+          "no_synthetic_object": {"passed": true, "evidence_refs": ["synthetic"]},
+          "all_urls_on_permitted_official_domain": {"passed": true, "evidence_refs": ["official_portal_url", "PMP-CASE-005-DCE-001", "PMP-CASE-005-PV-001", "PMP-CASE-005-RESULT-001"]}
+        }
+      },
+      "missing_objects": [
+        "DCE contents and specifications not inspected or acquired",
+        "Administrative and technical clauses not verified",
+        "Evaluation criteria grid not verified as a distinct artifact",
+        "Programme prévisionnel link not established",
+        "Exact artifact bytes not acquired"
+      ]
+    }
+  ]
+}
