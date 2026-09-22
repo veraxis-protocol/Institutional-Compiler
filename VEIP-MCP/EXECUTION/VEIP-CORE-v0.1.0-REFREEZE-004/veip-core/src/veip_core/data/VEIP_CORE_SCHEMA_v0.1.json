@@ -1,0 +1,435 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veraxis.io/schemas/v0.1/VEIP_CORE_SCHEMA_v0.1.json",
+  "title": "VEIP Core JSON Schema v0.1",
+  "description": "Frozen JSON Schema for VEIP Core Interface Contract v0.1. Defines exact request/result contracts, evaluation contexts, strict UTC/hex canonical representations, evidence pack manifest projections, engine error interfaces, and dimension-separated adjudication structures with deterministic ordering rules.",
+  "$defs": {
+    "RFC3339UTCTimestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+      "description": "Strict ISO-8601 UTC timestamp without fractional seconds ending in 'Z'. Enforces exact byte-level determinism."
+    },
+    "SHA256HexCanonical": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Strict lowercase 64-character hex-encoded SHA-256 digest."
+    },
+    "UUIDv4": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "description": "Strict lowercase RFC 4122 UUIDv4 enforcing exact byte-level determinism."
+    },
+    "SemVer": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+
+    "DimensionState": {
+      "type": "string",
+      "enum": [
+        "ESTABLISHED_WITHIN_SCOPE",
+        "NOT_ESTABLISHED",
+        "UNAVAILABLE"
+      ]
+    },
+    "ChannelIndependenceState": {
+      "type": "string",
+      "enum": [
+        "NOT_ESTABLISHED"
+      ],
+      "description": "In v0.1, pure core defaults to NOT_ESTABLISHED pending institutional warrant object contracts."
+    },
+    "RequestedDimension": {
+      "type": "string",
+      "enum": [
+        "CLAIM_SUPPORT",
+        "OUTCOME",
+        "CURRENTNESS",
+        "TASK_COMPLETION"
+      ]
+    },
+
+    "RelianceProjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requested_dimension", "state"],
+      "properties": {
+        "requested_dimension": {
+          "$ref": "#/$defs/RequestedDimension"
+        },
+        "state": {
+          "$ref": "#/$defs/DimensionState"
+        }
+      }
+    },
+    "RelianceContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requested_dimension"],
+      "properties": {
+        "requested_dimension": {
+          "$ref": "#/$defs/RequestedDimension"
+        }
+      }
+    },
+
+    "CurrentnessRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule_id"],
+      "properties": {
+        "rule_id": { "type": "string" },
+        "maximum_age_seconds": { "type": "integer", "minimum": 0 },
+        "valid_from": { "$ref": "#/$defs/RFC3339UTCTimestamp" },
+        "valid_until": { "$ref": "#/$defs/RFC3339UTCTimestamp" }
+      }
+    },
+
+    "EvaluationContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evaluation_timestamp"],
+      "properties": {
+        "evaluation_timestamp": { "$ref": "#/$defs/RFC3339UTCTimestamp" },
+        "replay_snapshot": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["observed_receipt_nonces"],
+          "properties": {
+            "observed_receipt_nonces": {
+              "type": "array",
+              "items": { "type": "string" },
+              "uniqueItems": true
+            }
+          }
+        },
+        "scope_registry_snapshot": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["active_extents"],
+          "properties": {
+            "active_extents": {
+              "type": "array",
+              "items": { "type": "string" },
+              "uniqueItems": true
+            }
+          }
+        },
+        "channel_warrant_snapshot": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["warrant_id", "bound_channels"],
+          "properties": {
+            "warrant_id": { "type": "string" },
+            "bound_channels": {
+              "type": "array",
+              "items": { "type": "string" },
+              "uniqueItems": true
+            }
+          }
+        },
+        "currentness_rules": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/CurrentnessRule" }
+        }
+      }
+    },
+
+    "ReceiptIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_id", "nonce"],
+      "properties": {
+        "receipt_id": { "type": "string" },
+        "nonce": { "type": "string" },
+        "issuer_ref": { "type": "string" },
+        "issued_at": { "$ref": "#/$defs/RFC3339UTCTimestamp" }
+      }
+    },
+
+    "EvidenceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "payload_sha256", "source_type"],
+      "properties": {
+        "evidence_id": { "type": "string" },
+        "payload_sha256": { "$ref": "#/$defs/SHA256HexCanonical" },
+        "source_type": { "type": "string" },
+        "channel_ref": { "type": "string" },
+        "receipt": { "$ref": "#/$defs/ReceiptIdentity" },
+        "observed_at": { "$ref": "#/$defs/RFC3339UTCTimestamp" },
+        "subject_ref": { "type": "string" },
+        "extent_ref": { "type": "string" },
+        "run_id": { "type": "string" },
+        "payload": { "type": "object" }
+      }
+    },
+
+    "EvidenceReferencePack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pack_id", "manifest_sha256", "references"],
+      "properties": {
+        "pack_id": { "type": "string" },
+        "manifest_sha256": {
+          "$ref": "#/$defs/SHA256HexCanonical",
+          "description": "SHA-256 over RFC 8785 JCS of ManifestReferenceProjection array: [{evidence_id, payload_sha256, source_type, channel_ref?, receipt?, observed_at?, subject_ref?, extent_ref?, run_id?}] sorted ascending by evidence_id (all evidence_ids unique; payload omitted)."
+        },
+        "references": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/EvidenceReference" }
+        }
+      }
+    },
+
+    "ReasonCode": {
+      "type": "string",
+      "enum": [
+        "MISSING_OBSERVATION_SUBJECT_OR_EXTENT",
+        "EVIDENCE_DIGEST_MISMATCH",
+        "RECEIPT_REPLAYED",
+        "RECEIPT_RUN_MISMATCH",
+        "RECEIPT_WRONG_SUBJECT_OR_EXTENT",
+        "EXTENT_MATCHES_NOTHING",
+        "CHANNEL_NOT_LISTED_IN_WARRANT",
+        "CHANNEL_BINDING_NOT_ESTABLISHED",
+        "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+        "EVIDENCE_REF_UNRESOLVED",
+        "OUTCOME_NOT_OBSERVED",
+        "EVIDENCE_STALE",
+        "HOST_SUMMARY_NOT_PROVENANCE_BOUND"
+      ]
+    },
+
+    "DimensionsMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_support",
+        "execution",
+        "outcome",
+        "currentness",
+        "provenance_binding",
+        "channel_independence",
+        "task_completion"
+      ],
+      "properties": {
+        "claim_support": { "$ref": "#/$defs/DimensionState" },
+        "execution": { "$ref": "#/$defs/DimensionState" },
+        "outcome": { "$ref": "#/$defs/DimensionState" },
+        "currentness": { "$ref": "#/$defs/DimensionState" },
+        "provenance_binding": { "$ref": "#/$defs/DimensionState" },
+        "channel_independence": { "$ref": "#/$defs/ChannelIndependenceState" },
+        "task_completion": { "$ref": "#/$defs/DimensionState" }
+      }
+    },
+
+    "ClaimEvaluationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "assertion",
+        "reliance_context",
+        "evaluation_context",
+        "evidence_pack"
+      ],
+      "properties": {
+        "expected_engine_version": { "$ref": "#/$defs/SemVer" },
+        "claim_id": { "$ref": "#/$defs/UUIDv4" },
+        "assertion": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["predicate", "subject_ref"],
+          "properties": {
+            "predicate": { "type": "string" },
+            "subject_ref": { "type": "string" },
+            "extent_ref": { "type": "string" },
+            "context_parameters": { "type": "object" }
+          }
+        },
+        "reliance_context": { "$ref": "#/$defs/RelianceContext" },
+        "evaluation_context": { "$ref": "#/$defs/EvaluationContext" },
+        "evidence_pack": { "$ref": "#/$defs/EvidenceReferencePack" }
+      }
+    },
+
+    "CompletionEvaluationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "requested_outcome",
+        "execution_evidence_refs",
+        "outcome_evidence_refs",
+        "reliance_context",
+        "evaluation_context",
+        "evidence_pack"
+      ],
+      "properties": {
+        "expected_engine_version": { "$ref": "#/$defs/SemVer" },
+        "request_id": { "$ref": "#/$defs/UUIDv4" },
+        "requested_outcome": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["proposition", "subject_ref"],
+          "properties": {
+            "proposition": { "type": "string" },
+            "subject_ref": { "type": "string" },
+            "extent_ref": { "type": "string" }
+          }
+        },
+        "execution_evidence_refs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "outcome_evidence_refs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "reliance_context": { "$ref": "#/$defs/RelianceContext" },
+        "evaluation_context": { "$ref": "#/$defs/EvaluationContext" },
+        "evidence_pack": { "$ref": "#/$defs/EvidenceReferencePack" }
+      }
+    },
+
+    "ExplanationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adjudication_target", "verbosity_level"],
+      "properties": {
+        "expected_engine_version": { "$ref": "#/$defs/SemVer" },
+        "adjudication_target": {
+          "oneOf": [
+            { "$ref": "#/$defs/ClaimEvaluationResult" },
+            { "$ref": "#/$defs/CompletionEvaluationResult" }
+          ]
+        },
+        "verbosity_level": {
+          "type": "string",
+          "enum": ["SUMMARY", "DETAILED", "FULL_AUDIT"]
+        }
+      }
+    },
+
+    "ClaimEvaluationResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engine_version",
+        "claim_id",
+        "reliance_projection",
+        "dimensions",
+        "reason_codes",
+        "canonical_hash"
+      ],
+      "properties": {
+        "engine_version": { "$ref": "#/$defs/SemVer" },
+        "claim_id": { "$ref": "#/$defs/UUIDv4" },
+        "reliance_projection": { "$ref": "#/$defs/RelianceProjection" },
+        "dimensions": { "$ref": "#/$defs/DimensionsMap" },
+        "reason_codes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ReasonCode" },
+          "uniqueItems": true,
+          "description": "MUST be emitted in lexicographic ascending order by exact reason-code string to preserve byte-level determinism."
+        },
+        "canonical_hash": {
+          "$ref": "#/$defs/SHA256HexCanonical",
+          "description": "SHA-256 over RFC 8785 JCS of this object with canonical_hash omitted."
+        }
+      }
+    },
+
+    "CompletionEvaluationResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engine_version",
+        "request_id",
+        "reliance_projection",
+        "dimensions",
+        "reason_codes",
+        "canonical_hash"
+      ],
+      "properties": {
+        "engine_version": { "$ref": "#/$defs/SemVer" },
+        "request_id": { "$ref": "#/$defs/UUIDv4" },
+        "reliance_projection": { "$ref": "#/$defs/RelianceProjection" },
+        "dimensions": { "$ref": "#/$defs/DimensionsMap" },
+        "reason_codes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ReasonCode" },
+          "uniqueItems": true,
+          "description": "MUST be emitted in lexicographic ascending order by exact reason-code string to preserve byte-level determinism."
+        },
+        "canonical_hash": {
+          "$ref": "#/$defs/SHA256HexCanonical",
+          "description": "SHA-256 over RFC 8785 JCS of this object with canonical_hash omitted."
+        }
+      }
+    },
+
+    "BoundaryExplanationResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engine_version",
+        "target_canonical_hash",
+        "summary",
+        "code_breakdown"
+      ],
+      "properties": {
+        "engine_version": { "$ref": "#/$defs/SemVer" },
+        "target_canonical_hash": { "$ref": "#/$defs/SHA256HexCanonical" },
+        "summary": { "type": "string" },
+        "code_breakdown": {
+          "type": "array",
+          "description": "MUST strictly match the order of the canonical lexicographically sorted reason_codes array from the adjudication target.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code", "description", "dimension_impact"],
+            "properties": {
+              "code": { "$ref": "#/$defs/ReasonCode" },
+              "description": { "type": "string" },
+              "dimension_impact": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "EngineError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["error_code", "message", "engine_version"],
+      "properties": {
+        "error_code": {
+          "type": "string",
+          "enum": [
+            "SCHEMA_INVALID",
+            "ENGINE_VERSION_MISMATCH",
+            "DUPLICATE_EVIDENCE_ID",
+            "MANIFEST_HASH_MISMATCH"
+          ]
+        },
+        "message": { "type": "string" },
+        "engine_version": { "$ref": "#/$defs/SemVer" },
+        "details": { "type": "object" }
+      }
+    }
+  },
+
+  "oneOf": [
+    { "$ref": "#/$defs/ClaimEvaluationRequest" },
+    { "$ref": "#/$defs/CompletionEvaluationRequest" },
+    { "$ref": "#/$defs/ExplanationRequest" },
+    { "$ref": "#/$defs/ClaimEvaluationResult" },
+    { "$ref": "#/$defs/CompletionEvaluationResult" },
+    { "$ref": "#/$defs/BoundaryExplanationResult" },
+    { "$ref": "#/$defs/EngineError" }
+  ]
+}

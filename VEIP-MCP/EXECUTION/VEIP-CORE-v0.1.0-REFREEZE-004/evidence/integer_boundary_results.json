@@ -1,0 +1,57 @@
+{
+  "test_date": "2026-09-22",
+  "engine_version": "0.1.0",
+  "max_safe_integer": 9007199254740991,
+  "policy": "Integers outside [-9007199254740991, 9007199254740991] are REJECTED with ValueError",
+  "overall": "PASS",
+  "cases": [
+    {
+      "case": "max_safe",
+      "value": "9007199254740991",
+      "result": "9007199254740991",
+      "status": "ACCEPTED"
+    },
+    {
+      "case": "neg_max_safe",
+      "value": "-9007199254740991",
+      "result": "-9007199254740991",
+      "status": "ACCEPTED"
+    },
+    {
+      "case": "zero",
+      "value": "0",
+      "result": "0",
+      "status": "ACCEPTED"
+    },
+    {
+      "case": "max_safe_plus_1",
+      "value": "9007199254740992",
+      "error": "JCS integer exceeds safe IEEE-754 domain: 9007199254740992",
+      "status": "REJECTED"
+    },
+    {
+      "case": "neg_max_safe_minus_1",
+      "value": "-9007199254740992",
+      "error": "JCS integer exceeds safe IEEE-754 domain: -9007199254740992",
+      "status": "REJECTED"
+    },
+    {
+      "case": "two_pow_53",
+      "value": "9007199254740992",
+      "error": "JCS integer exceeds safe IEEE-754 domain: 9007199254740992",
+      "status": "REJECTED"
+    },
+    {
+      "case": "neg_two_pow_53",
+      "value": "-9007199254740992",
+      "error": "JCS integer exceeds safe IEEE-754 domain: -9007199254740992",
+      "status": "REJECTED"
+    },
+    {
+      "case": "two_pow_68",
+      "value": "295147905179352825856",
+      "error": "JCS integer exceeds safe IEEE-754 domain: 295147905179352825856",
+      "status": "REJECTED"
+    }
+  ]
+}
