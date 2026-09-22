@@ -1,0 +1,55 @@
+{
+  "baseline_test_suite": "25/25 PASS",
+  "date": "2026-09-22",
+  "determinism": {
+    "all_identical": true,
+    "canonical_sha256": "f1ca2e5805342e2bb69ca27aa04bffa6261faf29023fe1c9def52f6df5543497",
+    "jsonl_used": "11_LIVE_SDK_RAW_EXPORT.jsonl",
+    "parse_count": 3
+  },
+  "h1_dropbox_file_id": "id:AdzSIi2kJ_kAAAAAAAA42Q",
+  "h1_normative_files_modified": false,
+  "h1_zip_sha256_status": "NOT_COMPUTED_PROXY_BLOCKS_CDN",
+  "parser_assertions": {
+    "P1_evidence_at_claim_status": [
+      "pending"
+    ],
+    "P2_evidence_after_claim_status": [
+      "succeeded"
+    ],
+    "P3_native_spans_present": true,
+    "P4_native_spans_agent_visible": false,
+    "P5_record_count": 5,
+    "P6_trace_id": "trace_0123456789abcdef0123456789abcdef",
+    "P7_canonical_bytes_deterministic": true,
+    "P8_canonical_sha256": "f1ca2e5805342e2bb69ca27aa04bffa6261faf29023fe1c9def52f6df5543497"
+  },
+  "probe_runs": [
+    {
+      "normalized_sha256": "e13cda6c2f833737c6d7d835a0b86b3b5c7219a5ca4cc4e38c194909aef1dd1b",
+      "raw_export_sha256": "0b4f1890030264c3638962232f4724739ce5d684a39a6fa6cb25cda64c404ca7",
+      "record_count": 5,
+      "result": "PASS",
+      "run": 1
+    },
+    {
+      "normalized_sha256": "78a2cd019229075392c710ac28666ca641a5c0eba4672051b95f33a8e3d708ec",
+      "raw_export_sha256": "dff00215b62d7bf30b44bec3468a1e76f48b33594abaf7b3aef216c3c00716ec",
+      "record_count": 5,
+      "result": "PASS",
+      "run": 2
+    },
+    {
+      "normalized_sha256": "f1ca2e5805342e2bb69ca27aa04bffa6261faf29023fe1c9def52f6df5543497",
+      "raw_export_sha256": "383f70c1486fdd74f3942a1ec5d0da8166f863da4f80750b8cab3497e1637b44",
+      "record_count": 5,
+      "result": "PASS",
+      "run": 3
+    }
+  ],
+  "producer_statement": "NOT_SELF_ADJUDICATED",
+  "result": "PASS",
+  "sdk_version": "0.22.3",
+  "sdk_wheel_sha256": "41dec9e2e703db32a627bf0290f3721a6ca37405603a8cb654213356dbb8ee9d",
+  "work_order": "VEIP-MCP-H1-LIVE-SDK-COMPAT-001"
+}

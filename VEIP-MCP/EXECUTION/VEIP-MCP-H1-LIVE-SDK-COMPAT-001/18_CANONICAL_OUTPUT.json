@@ -1,0 +1,124 @@
+{
+  "events": [
+    {
+      "agent_visible": false,
+      "event_id": "span_fbe06b2965eb42b780d9bfb6",
+      "event_seq": 1,
+      "kind": "user_request",
+      "observed_at": "2026-09-22T19:39:02.267328Z",
+      "payload": {
+        "event_seq": 1,
+        "observed_at": "2026-09-22T19:39:02.267328+00:00",
+        "text": "Issue the refund"
+      },
+      "source_ref": {
+        "native_id": "span_fbe06b2965eb42b780d9bfb6",
+        "raw_record_sha256": "b508fdef0e58577292f6e5dc5f7aa2c58b372f1c45f3244e36f8e0c7e465e8a6",
+        "record_index": 0,
+        "source_file_sha256": "383f70c1486fdd74f3942a1ec5d0da8166f863da4f80750b8cab3497e1637b44"
+      },
+      "source_system": "instrumented_host",
+      "trace_id": "trace_0123456789abcdef0123456789abcdef"
+    },
+    {
+      "agent_visible": false,
+      "event_id": "span_83bab1c8d9ef4f888145d263",
+      "event_seq": null,
+      "kind": "native_span",
+      "observed_at": "2026-09-22T19:39:02.267606Z",
+      "payload": {
+        "ended_at": "2026-09-22T19:39:02.267606+00:00",
+        "error": null,
+        "id": "span_83bab1c8d9ef4f888145d263",
+        "object": "trace.span",
+        "parent_id": null,
+        "span_data": {
+          "input": "{\"amount\":250}",
+          "mcp_data": null,
+          "name": "refund_api",
+          "output": "{\"status\":\"accepted\"}",
+          "type": "function"
+        },
+        "started_at": "2026-09-22T19:39:02.267602+00:00",
+        "trace_id": "trace_0123456789abcdef0123456789abcdef"
+      },
+      "source_ref": {
+        "native_id": "span_83bab1c8d9ef4f888145d263",
+        "raw_record_sha256": "ec2fd9d433c520871af89769d53ab2e14752e037ce51ed063fd2215531a09633",
+        "record_index": 1,
+        "source_file_sha256": "383f70c1486fdd74f3942a1ec5d0da8166f863da4f80750b8cab3497e1637b44"
+      },
+      "source_system": "openai_agents_sdk",
+      "trace_id": "trace_0123456789abcdef0123456789abcdef"
+    },
+    {
+      "agent_visible": true,
+      "event_id": "span_239ce82a4859496da7d1bb17",
+      "event_seq": 10,
+      "kind": "evidence_available",
+      "observed_at": "2026-09-22T19:39:02.267620Z",
+      "payload": {
+        "event_seq": 10,
+        "observed_at": "2026-09-22T19:39:02.267620+00:00",
+        "payload_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_native_id": "refund_123",
+        "source_system": "payment_processor",
+        "status": "pending"
+      },
+      "source_ref": {
+        "native_id": "span_239ce82a4859496da7d1bb17",
+        "raw_record_sha256": "4b500239eb7dcc81655d18b9a3c3930934f676fea974651089c5a05bc6986930",
+        "record_index": 2,
+        "source_file_sha256": "383f70c1486fdd74f3942a1ec5d0da8166f863da4f80750b8cab3497e1637b44"
+      },
+      "source_system": "payment_processor",
+      "trace_id": "trace_0123456789abcdef0123456789abcdef"
+    },
+    {
+      "agent_visible": false,
+      "event_id": "span_5ae0fc61e0ba43ce8cfb022c",
+      "event_seq": 20,
+      "kind": "user_claim",
+      "observed_at": "2026-09-22T19:39:02.267644Z",
+      "payload": {
+        "event_seq": 20,
+        "observed_at": "2026-09-22T19:39:02.267644+00:00",
+        "text": "The refund is complete."
+      },
+      "source_ref": {
+        "native_id": "span_5ae0fc61e0ba43ce8cfb022c",
+        "raw_record_sha256": "40d7c12a005c9a7a67e805365d683cd3debdc15066c8db8caf2ad1933a0465fe",
+        "record_index": 3,
+        "source_file_sha256": "383f70c1486fdd74f3942a1ec5d0da8166f863da4f80750b8cab3497e1637b44"
+      },
+      "source_system": "instrumented_host",
+      "trace_id": "trace_0123456789abcdef0123456789abcdef"
+    },
+    {
+      "agent_visible": true,
+      "event_id": "span_321b907404b34f249a01223e",
+      "event_seq": 30,
+      "kind": "evidence_available",
+      "observed_at": "2026-09-22T19:39:02.267702Z",
+      "payload": {
+        "event_seq": 30,
+        "observed_at": "2026-09-22T19:39:02.267702+00:00",
+        "payload_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "source_native_id": "refund_123_update",
+        "source_system": "payment_processor",
+        "status": "succeeded"
+      },
+      "source_ref": {
+        "native_id": "span_321b907404b34f249a01223e",
+        "raw_record_sha256": "d6ce3b56e0256ef23fba7e4fcebd13c795d73393220e51bae45b057ff2b9a813",
+        "record_index": 4,
+        "source_file_sha256": "383f70c1486fdd74f3942a1ec5d0da8166f863da4f80750b8cab3497e1637b44"
+      },
+      "source_system": "payment_processor",
+      "trace_id": "trace_0123456789abcdef0123456789abcdef"
+    }
+  ],
+  "source_file_sha256": "383f70c1486fdd74f3942a1ec5d0da8166f863da4f80750b8cab3497e1637b44",
+  "source_format": "OPENAI_AGENTS_SPAN_EXPORT_JSONL_V1",
+  "trace_id": "trace_0123456789abcdef0123456789abcdef"
+}

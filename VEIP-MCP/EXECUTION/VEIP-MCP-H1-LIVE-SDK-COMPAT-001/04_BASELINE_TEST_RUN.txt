@@ -1,0 +1,12 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-9.1.1, pluggy-1.6.0
+rootdir: /tmp/claude-0/-home-user-Institutional-Compiler/381f7203-8c3e-5f09-9f2f-df9a1f0d43fb/scratchpad/h1_probe
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 25 items
+
+tests/test_claim_time.py ..........                                      [ 40%]
+tests/test_parser.py ..............                                      [ 96%]
+tests/test_release_source_compat.py .                                    [100%]
+
+============================== 25 passed in 0.05s ==============================

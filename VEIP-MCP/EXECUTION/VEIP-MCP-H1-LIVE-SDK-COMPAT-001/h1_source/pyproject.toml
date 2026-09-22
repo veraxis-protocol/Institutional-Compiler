@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "veip-mcp-h1-trace-parser"
+version = "0.1.0"
+description = "Narrow deterministic H1 trace parser for VEIP-MCP empirical trace evaluation"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
