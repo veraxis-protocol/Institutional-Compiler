@@ -1,0 +1,289 @@
+{
+  "status": "PASS",
+  "fixture_count": 56,
+  "passed": 56,
+  "failed": 0,
+  "engine_version": "0.1.0",
+  "results": [
+    {
+      "fixture_id": "V03-001",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-002",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-003",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-004",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-005",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-006",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-007",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-008",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-009",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-010",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-011",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-012",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-013",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-014",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-015",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-016",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-017",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-018",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-019",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-020",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-021",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-022",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-023",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-024",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-025",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-026",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-027",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-028",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-029",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-030",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-031",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-032",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-033",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-034",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-035",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-036",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-037",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-038",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-039",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-040",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-041",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-042",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-043",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-044",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-045",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-046",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-047",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-048",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-049",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-050",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-051",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-052",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-053",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-054",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-055",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "fixture_id": "V03-056",
+      "pass": true,
+      "detail": null
+    }
+  ]
+}

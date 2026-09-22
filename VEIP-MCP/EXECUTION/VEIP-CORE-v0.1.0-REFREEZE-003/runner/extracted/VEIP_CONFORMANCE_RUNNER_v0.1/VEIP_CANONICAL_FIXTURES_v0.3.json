@@ -1,0 +1,5031 @@
+{
+  "claim_ceiling_assertions": {
+    "CHANNEL_INDEPENDENCE_ALWAYS_NOT_ESTABLISHED": true,
+    "EVIDENCE_STALE_UNREACHABLE_GENERIC_V0_1": true,
+    "NO_POSITIVE_CLAIM_SUPPORT": true,
+    "NO_POSITIVE_CURRENTNESS": true,
+    "NO_POSITIVE_EXECUTION": true,
+    "NO_POSITIVE_OUTCOME": true,
+    "NO_POSITIVE_PROVENANCE_BINDING": true,
+    "NO_POSITIVE_TASK_COMPLETION": true,
+    "NO_RESERVED_CODES_EMITTED": [
+      "HOST_SUMMARY_NOT_PROVENANCE_BOUND",
+      "OUTCOME_NOT_OBSERVED",
+      "RECEIPT_RUN_MISMATCH"
+    ],
+    "UNREFERENCED_EVIDENCE_CANNOT_CHANGE_RESULT": true
+  },
+  "engine_version": "0.1.0",
+  "fixtures": [
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "33f7e92edf446dd3d9ea4f3a6819b3a29ec2678b7196a6e9d4905563721e0645",
+        "claim_id": "6195534f-5d45-4736-a6f7-2514a4158043",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "CLAIM_SUPPORT",
+          "state": "UNAVAILABLE"
+        },
+        "result_type": "ClaimEvaluationResult"
+      },
+      "fixture_id": "V03-001",
+      "input": {
+        "assertion": {
+          "predicate": "evidence supports claim",
+          "subject_ref": "urn:veip:subject:agent-42"
+        },
+        "claim_id": "6195534f-5d45-4736-a6f7-2514a4158043",
+        "evaluation_context": {
+          "evaluation_timestamp": "2026-09-21T20:00:00Z"
+        },
+        "evidence_pack": {
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "pack_id": "pack-v03-001",
+          "references": []
+        },
+        "expected_engine_version": "0.1.0",
+        "reliance_context": {
+          "requested_dimension": "CLAIM_SUPPORT"
+        }
+      },
+      "legacy_provenance": [
+        "F11_SELF_DECLARED_FAVORABLE_METADATA: RETAIN_CONCEPT"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#5"
+      ],
+      "tags": [
+        "claim",
+        "ceiling"
+      ],
+      "title": "Minimal valid claim ceiling"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "07aa2ccdc712cf1d15ab4dd62ae7fc7c6bb5bcccc568e3eba548a493c1b367f1",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "aa38afa3-a2df-4f7d-b60b-1a78b21b5824",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-002",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "45a17574a232c29ed27b19d2f27d5021231cc9e92383905f0de4621087adf8d3",
+          "pack_id": "pack-v03-002",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-002-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-002-exec",
+                "receipt_id": "rcpt-v03-002-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-002-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-002-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-002-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "aa38afa3-a2df-4f7d-b60b-1a78b21b5824",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [
+        "F02_OUTCOME_OBSERVED_CURRENT: REWRITE"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#5"
+      ],
+      "tags": [
+        "completion",
+        "ceiling"
+      ],
+      "title": "Minimal completion ceilings"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "78a01b93661f2007d3c8f28618ef1e2801e64a8492d3aa6509c96ca53c9c1bae",
+        "claim_id": "cceef174-c65b-478c-b84f-93f0a3bf6f4f",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "CLAIM_SUPPORT",
+          "state": "UNAVAILABLE"
+        },
+        "result_type": "ClaimEvaluationResult"
+      },
+      "fixture_id": "V03-003",
+      "input": {
+        "assertion": {
+          "predicate": "evidence supports claim",
+          "subject_ref": "urn:veip:subject:agent-42"
+        },
+        "claim_id": "cceef174-c65b-478c-b84f-93f0a3bf6f4f",
+        "evaluation_context": {
+          "evaluation_timestamp": "2026-09-21T20:00:00Z"
+        },
+        "evidence_pack": {
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "pack_id": "pack-v03-003",
+          "references": []
+        },
+        "reliance_context": {
+          "requested_dimension": "CLAIM_SUPPORT"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#2.1"
+      ],
+      "tags": [],
+      "title": "Absent expected_engine_version asserts no caller version constraint"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "ENGINE_VERSION_MISMATCH",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-004",
+      "input": {
+        "assertion": {
+          "predicate": "evidence supports claim",
+          "subject_ref": "urn:veip:subject:agent-42"
+        },
+        "claim_id": "6a0d69d5-1c17-4738-80cf-3c67378c7084",
+        "evaluation_context": {
+          "evaluation_timestamp": "2026-09-21T20:00:00Z"
+        },
+        "evidence_pack": {
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "pack_id": "pack-v03-004",
+          "references": []
+        },
+        "expected_engine_version": "0.2.0",
+        "reliance_context": {
+          "requested_dimension": "CLAIM_SUPPORT"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#2.1"
+      ],
+      "tags": [
+        "engine-error"
+      ],
+      "title": "Engine version mismatch"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "DUPLICATE_EVIDENCE_ID",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-005",
+      "input": {
+        "assertion": {
+          "predicate": "evidence supports claim",
+          "subject_ref": "urn:veip:subject:agent-42"
+        },
+        "claim_id": "48f32b2d-0255-4115-aaeb-40911f92db9e",
+        "evaluation_context": {
+          "evaluation_timestamp": "2026-09-21T20:00:00Z"
+        },
+        "evidence_pack": {
+          "manifest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "pack_id": "pack-v03-005",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-005-dup",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-005-dup",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "expected_engine_version": "0.1.0",
+        "reliance_context": {
+          "requested_dimension": "CLAIM_SUPPORT"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#2.3"
+      ],
+      "tags": [
+        "engine-error"
+      ],
+      "title": "Duplicate evidence_id"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "MANIFEST_HASH_MISMATCH",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-006",
+      "input": {
+        "assertion": {
+          "predicate": "evidence supports claim",
+          "subject_ref": "urn:veip:subject:agent-42"
+        },
+        "claim_id": "e766c1b6-8335-4ea5-bad7-573e57748b95",
+        "evaluation_context": {
+          "evaluation_timestamp": "2026-09-21T20:00:00Z"
+        },
+        "evidence_pack": {
+          "manifest_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "pack_id": "pack-v03-006",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-006-obs",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "expected_engine_version": "0.1.0",
+        "reliance_context": {
+          "requested_dimension": "CLAIM_SUPPORT"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#2.4"
+      ],
+      "tags": [
+        "engine-error"
+      ],
+      "title": "Manifest mismatch"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "67f6b6865e031ba67a6ea0adc23a981947e90a727b4af9c2004270083ae050b8",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "NOT_ESTABLISHED",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "RECEIPT_REPLAYED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "05958fc8-f7fb-48aa-a030-48a6c1337efe",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-007",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "replay_snapshot": {
+            "observed_receipt_nonces": [
+              "seen"
+            ]
+          },
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "6045dd66053a05f5e78e9a5d74799d81df6515f870dd6f6a9e631ab6f1b800cb",
+          "pack_id": "pack-v03-007",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-007-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "seen",
+                "receipt_id": "rcpt-v03-007-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-007-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-007-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-007-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "05958fc8-f7fb-48aa-a030-48a6c1337efe",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [
+        "F07_REPLAY_OTHER_RUN: REWRITE"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-20",
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#5"
+      ],
+      "tags": [
+        "role",
+        "replay"
+      ],
+      "title": "Execution-only replay failure"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "6e0538e6a63ace8c794157072473856cb9e3603ee322ae639fbbcdbc2d7b0a7d",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "NOT_ESTABLISHED",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "RECEIPT_WRONG_SUBJECT_OR_EXTENT"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "e22153fa-9222-425b-953d-25853042692f",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-008",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "25d9ba34bb55748b895db5d2ae2c8f4f9dee3ade5241e7d4e6f86e4ff0a4b3dd",
+          "pack_id": "pack-v03-008",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-008-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-008-exec",
+                "receipt_id": "rcpt-v03-008-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-008-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:wrong"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-008-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-008-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "e22153fa-9222-425b-953d-25853042692f",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [
+        "F06_WRONG_SUBJECT_OR_EXTENT: SPLIT"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-30"
+      ],
+      "tags": [
+        "role"
+      ],
+      "title": "Outcome-only subject mismatch"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "f8825909deb2b95ca831c4297fdfd8216e23b58ff7e0aa60b2884e778137856e",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "NOT_ESTABLISHED",
+          "outcome": "NOT_ESTABLISHED",
+          "provenance_binding": "NOT_ESTABLISHED",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "EVIDENCE_DIGEST_MISMATCH"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "83e9a742-def8-4531-9776-a715d822fbe4",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-009",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "5d7d4907c36e4db7da07a663569eb28f8fd329a28665a747c60d613b1fdccbf3",
+          "pack_id": "pack-v03-009",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-009-both",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload": {
+                "x": 1
+              },
+              "payload_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "receipt": {
+                "nonce": "nonce-v03-009-both",
+                "receipt_id": "rcpt-v03-009-both"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-009-both"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-009-both"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "83e9a742-def8-4531-9776-a715d822fbe4",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-10"
+      ],
+      "tags": [
+        "role",
+        "digest"
+      ],
+      "title": "BOTH-role digest mismatch"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "5c8dc730becc38434af0addffe3ff1945afccc69e51c5354e8b9b606747d98e3",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "3fa4be0e-42bb-4485-ac4a-8a7214e89fa8",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-010",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "cd39a2b57d13d81598d126376aaaca556202c493b3cd9b5491236494ac8eece0",
+          "pack_id": "pack-v03-010",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-010-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-010-exec",
+                "receipt_id": "rcpt-v03-010-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-010-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-010-decoy",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload": {
+                "bad": 1
+              },
+              "payload_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-010-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-010-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "3fa4be0e-42bb-4485-ac4a-8a7214e89fa8",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [
+        "F16_NUISANCE_CONTAMINATION: RETIRE_LEGACY_CODE/RETAIN_BOUNDARY"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-10"
+      ],
+      "tags": [
+        "decoy"
+      ],
+      "title": "Decoy digest isolation"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "b5e33761f8975ad5c4d5013b086dec2e0146d16b62fd3b0e0b7624513761f2ae",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "NOT_ESTABLISHED",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "EVIDENCE_REF_UNRESOLVED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "83cce6ad-e43e-42f7-adcc-d9ea590c4a43",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-011",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "47bb4d033b67dfc989f4cbf8062020b13a0a8ea5ae20ccc1348e995c7f5cc13b",
+          "pack_id": "pack-v03-011",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-011-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-011-exec",
+                "receipt_id": "rcpt-v03-011-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-011-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "missing-ref"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-011-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "83cce6ad-e43e-42f7-adcc-d9ea590c4a43",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-20"
+      ],
+      "tags": [
+        "unresolved",
+        "exec"
+      ],
+      "title": "Unresolved reference exec"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "247956c7284d75416a8e883af7a2298dce74b65968dba61c79660edc4528aed8",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "NOT_ESTABLISHED",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "EVIDENCE_REF_UNRESOLVED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "1fb88fb5-5b93-4b7f-a6e6-5cdea2890cb9",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-012",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "9ba22f9194248df6c0c78bdd28713c9dbb13191b1c65f6307240a865ba1865d4",
+          "pack_id": "pack-v03-012",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-012-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-012-exec",
+                "receipt_id": "rcpt-v03-012-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-012-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-012-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "missing-ref"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "1fb88fb5-5b93-4b7f-a6e6-5cdea2890cb9",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-20"
+      ],
+      "tags": [
+        "unresolved",
+        "out"
+      ],
+      "title": "Unresolved reference out"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "062b8a4b92a1d44da0dff2bac02f76d1741e4d3debc4ac42383311b67515826f",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "NOT_ESTABLISHED",
+          "outcome": "NOT_ESTABLISHED",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "EVIDENCE_REF_UNRESOLVED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "a01e99c4-c9e9-4e46-9a0b-5faa9c12deb8",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-013",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "89a09d3c20723776487b2a4e9d474b626025f2b6a9090b226ab082577d4814c9",
+          "pack_id": "pack-v03-013",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-013-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-013-exec",
+                "receipt_id": "rcpt-v03-013-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-013-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "missing-ref"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "missing-ref"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "a01e99c4-c9e9-4e46-9a0b-5faa9c12deb8",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-20"
+      ],
+      "tags": [
+        "unresolved",
+        "both"
+      ],
+      "title": "Unresolved reference both"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "e8d037edc14a39f66e47389077daf50237b772c68192a9b6a877ba7819b53b5e",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "NOT_ESTABLISHED",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "RECEIPT_WRONG_SUBJECT_OR_EXTENT"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "df13077c-d571-4a6c-aaa9-192de7854fde",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-014",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "fd86b7fb936fa284a96116ab24b35196e1143d0b0105e1f07a2d1cd01b88bf0c",
+          "pack_id": "pack-v03-014",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-014-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-014-exec",
+                "receipt_id": "rcpt-v03-014-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:wrong"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-014-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-014-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-014-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "df13077c-d571-4a6c-aaa9-192de7854fde",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [
+        "F06_WRONG_SUBJECT_OR_EXTENT: SPLIT"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-30"
+      ],
+      "tags": [],
+      "title": "Wrong execution subject"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "b3f66b4583f698a4636382b89155a9a2904a03e1d965dcd5e9fd403c10e16ca0",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "NOT_ESTABLISHED",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "RECEIPT_WRONG_SUBJECT_OR_EXTENT"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "739d8b25-fd27-4f14-822a-dbfba6f10b9e",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-015",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "85edbb1ba623e903e6c39cb735266693289811dcc1861a294aa567d6750a8cba",
+          "pack_id": "pack-v03-015",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-015-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-015-exec",
+                "receipt_id": "rcpt-v03-015-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-015-out",
+              "extent_ref": "urn:wrong",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-015-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-015-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "739d8b25-fd27-4f14-822a-dbfba6f10b9e",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-30"
+      ],
+      "tags": [],
+      "title": "Wrong outcome extent"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "214a1ca334662b8cc6bf4bd092553f8ec896ab9fd253a0416f4f8c689fae09bf",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "NOT_ESTABLISHED",
+          "outcome": "NOT_ESTABLISHED",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "RECEIPT_WRONG_SUBJECT_OR_EXTENT"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "1570496c-9af9-4904-81b5-4ced5a6c0f4b",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-016",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z"
+        },
+        "evidence_pack": {
+          "manifest_sha256": "68b8fa5fa345150ee449b204422f2d2f3558f00ae686cd4c8f1c411a6cc828be",
+          "pack_id": "pack-v03-016",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-016-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-016-exec",
+                "receipt_id": "rcpt-v03-016-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-016-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-016-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-016-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "1570496c-9af9-4904-81b5-4ced5a6c0f4b",
+        "requested_outcome": {
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#6.2"
+      ],
+      "tags": [],
+      "title": "Target extent absent remains distinct"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "75a9c909d1c66619838327c053d27f593137444d26de5faba727ee13c8fb80ed",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "3d917709-5e03-443b-b0e7-86aea679779f",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-017",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "571b72bba26d5154e4cfd5e7cd3a819d0e92d4c981e369d4feb7ea6e398f471d",
+          "pack_id": "pack-v03-017",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-017-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-017-exec",
+                "receipt_id": "rcpt-v03-017-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-017-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-017-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-017-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "3d917709-5e03-443b-b0e7-86aea679779f",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-40"
+      ],
+      "tags": [],
+      "title": "Active extent control"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "c75f97c899bdab369143374b7fac183b1f4816af5fbbb7fd9ea6f1783c6e5640",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "NOT_ESTABLISHED",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "NOT_ESTABLISHED",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "EXTENT_MATCHES_NOTHING"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "937e58bb-7a03-451a-82ce-465b48941fd2",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-018",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": []
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "c0ac457a2e14f9e168f6da2a870db1984545840bebc2a4f31b7677ae16209e0d",
+          "pack_id": "pack-v03-018",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-018-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-018-exec",
+                "receipt_id": "rcpt-v03-018-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-018-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-018-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-018-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "937e58bb-7a03-451a-82ce-465b48941fd2",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [
+        "F08_NONEXISTENT_EXTENT: REWRITE"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-40"
+      ],
+      "tags": [],
+      "title": "Inactive extent"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "375c53edaa13389d12632082f2486ae8ffeae6ef43e1e1cf9087e234f40dc76a",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "82411a8a-0f7c-4d51-b8cd-b6f1bc353ad6",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-019",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z"
+        },
+        "evidence_pack": {
+          "manifest_sha256": "e758bd336bba5033541f9be670e05f714222cc4510589a762612187cf577b600",
+          "pack_id": "pack-v03-019",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-019-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-019-exec",
+                "receipt_id": "rcpt-v03-019-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-019-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-019-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-019-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "82411a8a-0f7c-4d51-b8cd-b6f1bc353ad6",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-40"
+      ],
+      "tags": [],
+      "title": "Absent scope snapshot control"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "ba055f40545f1bd9684f7a7c5deed99aa4f58aa489b3a17fb453634a6364b27c",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "NOT_ESTABLISHED",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "RECEIPT_REPLAYED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "cd971735-92ea-4a23-8182-97b79c0cdbc3",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-020",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "replay_snapshot": {
+            "observed_receipt_nonces": [
+              "seen"
+            ]
+          },
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "695c7272fb975f7966c2349902c8f534de1be33c00c71ee831b6b8d630e3d0e8",
+          "pack_id": "pack-v03-020",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-020-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "seen",
+                "receipt_id": "rcpt-v03-020-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-020-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-020-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-020-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "cd971735-92ea-4a23-8182-97b79c0cdbc3",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-20"
+      ],
+      "tags": [],
+      "title": "Replay trigger"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "ad2d1b7d9ead2667e9f1b9175934fde0bdf2e88aab542a08644a4e0086b99fd8",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "470d03ab-a439-43dd-b774-33d3ca1be952",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-021",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "replay_snapshot": {
+            "observed_receipt_nonces": []
+          },
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "0922b66f8e4f390d2fb9790302209e52dc8ee73e8ec4979a309f4abc7f1bcb85",
+          "pack_id": "pack-v03-021",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-021-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "fresh",
+                "receipt_id": "rcpt-v03-021-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-021-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-021-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-021-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "470d03ab-a439-43dd-b774-33d3ca1be952",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-20"
+      ],
+      "tags": [],
+      "title": "Replay non-trigger control"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "d7593e2cc0a2340b62221b9438aa2aa5d133acec4ce0e15c76597dace4132e39",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "NOT_ESTABLISHED",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_BINDING_NOT_ESTABLISHED",
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "73837fd7-5239-4814-aa63-3797a2ab551c",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-022",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "bfde83c2876e4af8320f69d9dfd6261593021a518d112666ee30425cc7929abf",
+          "pack_id": "pack-v03-022",
+          "references": [
+            {
+              "evidence_id": "v03-022-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-022-exec",
+                "receipt_id": "rcpt-v03-022-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-022-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-022-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-022-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "73837fd7-5239-4814-aa63-3797a2ab551c",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [
+        "F09_FABRICATED_IDENTITY_NO_CHANNEL_KEY: REWRITE"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-60"
+      ],
+      "tags": [],
+      "title": "Channel binding absent"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "147c445def7d08f429e6571e9cc4325cddc87be9814a99b2e3c36eeadb7b661b",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "NOT_ESTABLISHED",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "CHANNEL_NOT_LISTED_IN_WARRANT"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "58783032-a083-43dc-b86d-57f5c60414e3",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-023",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "dc1520253fa89d8a2ae4ae0ba7e93a5e9f3e0ad1d1e7c899603973711b820366",
+          "pack_id": "pack-v03-023",
+          "references": [
+            {
+              "channel_ref": "chan-x",
+              "evidence_id": "v03-023-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-023-exec",
+                "receipt_id": "rcpt-v03-023-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-023-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-023-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-023-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "58783032-a083-43dc-b86d-57f5c60414e3",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-60"
+      ],
+      "tags": [],
+      "title": "Channel not listed"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "dc00fa18e66e298f20e2e9ca6b17c76bc0d7cf0e9b2f849c524dc7caf7a45e0c",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "a1e8cf5c-3989-4d40-92e0-4964f701d88f",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-024",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "7fe374457904f2916705d0ed962276efb011f46bf7c50bb9c16667e6b2637239",
+          "pack_id": "pack-v03-024",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-024-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-024-exec",
+                "receipt_id": "rcpt-v03-024-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-024-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-024-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-024-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "a1e8cf5c-3989-4d40-92e0-4964f701d88f",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [
+        "F10_EXECUTOR_CONTROLS_CHANNEL_KEY: REWRITE"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#5.1"
+      ],
+      "tags": [],
+      "title": "Listed channel remains provenance unavailable"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "5af89720315948b97aeb7105895ad092fa8e2f1636da9020bd9b91b48c938b44",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "CURRENTNESS",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "f1bd0364-e801-4ab5-b93d-fc1d5d2b1d11",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-025",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "currentness_rules": [
+            {
+              "maximum_age_seconds": 60,
+              "rule_id": "x"
+            }
+          ],
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "beafb81c3497945574e2c6c2a9d6f111b0a3a9c94e59a81766c058979550c779",
+          "pack_id": "pack-v03-025",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-025-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-025-exec",
+                "receipt_id": "rcpt-v03-025-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-025-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-025-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-025-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "CURRENTNESS"
+        },
+        "request_id": "f1bd0364-e801-4ab5-b93d-fc1d5d2b1d11",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [
+        "F04_STALE_GENUINE_EVIDENCE: RETIRE",
+        "F05_CHANGE_OUTSIDE_EXTENT: RETIRE"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#1.4",
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-50"
+      ],
+      "tags": [
+        "currentness"
+      ],
+      "title": "Currentness rule present but applicability untyped"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "203daceb7472c31c36b4c431c84b309d61c462fada99848ca9284ab1cd63ed4d",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "NOT_ESTABLISHED",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_BINDING_NOT_ESTABLISHED",
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "ec3e05ae-4266-4a90-b7f2-cdc9d7eceb17",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-026",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "698833b31726913b0c1e30a26193cedad89cd8b0ef6e0c49947bfe2fe3b01bd0",
+          "pack_id": "pack-v03-026",
+          "references": [
+            {
+              "evidence_id": "v03-026-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-026-exec",
+                "receipt_id": "rcpt-v03-026-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-026-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-026-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-026-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "ec3e05ae-4266-4a90-b7f2-cdc9d7eceb17",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#5"
+      ],
+      "tags": [],
+      "title": "Task completion propagates provenance failure"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "17e6899a9748455bd38d49c4ef8346e40797dfa66799634227bd5c702a06da05",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "460f6931-c4d3-43f9-8c49-89d05fc7493b",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-027",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "67571bd094c05ed7758b30d2b5e5d523d16feb3536ce6424c266bbef3dd42aad",
+          "pack_id": "pack-v03-027",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-027-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-027-exec",
+                "receipt_id": "rcpt-v03-027-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-027-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-027-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-027-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "460f6931-c4d3-43f9-8c49-89d05fc7493b",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [
+        "F01_EXECUTION_ONLY: REWRITE"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#5"
+      ],
+      "tags": [],
+      "title": "Task completion clean remains unavailable"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "6c766b292a0ba65bedd809f5e1233b7505c6c60801f3fba609a74a19909f7393",
+        "claim_id": "8d53a555-f94d-435c-8e1f-a082b3c22546",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "CLAIM_SUPPORT",
+          "state": "UNAVAILABLE"
+        },
+        "result_type": "ClaimEvaluationResult"
+      },
+      "fixture_id": "V03-028",
+      "input": {
+        "assertion": {
+          "predicate": "evidence supports claim",
+          "subject_ref": "urn:veip:subject:agent-42"
+        },
+        "claim_id": "8d53a555-f94d-435c-8e1f-a082b3c22546",
+        "evaluation_context": {
+          "evaluation_timestamp": "2026-09-21T20:00:00Z"
+        },
+        "evidence_pack": {
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "pack_id": "pack-v03-028",
+          "references": []
+        },
+        "expected_engine_version": "0.1.0",
+        "reliance_context": {
+          "requested_dimension": "CLAIM_SUPPORT"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#9.1"
+      ],
+      "tags": [
+        "reliance-map"
+      ],
+      "title": "Reliance projection mapping CLAIM_SUPPORT"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "fb0a21713226a78683f92b60f75ec5f89aca37664c2e09582922631c4c44ae16",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "OUTCOME",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "b19b7d9a-29a8-4d21-bea3-12ebfc270d37",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-029",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "7cc6cb2fca1ceedb5ea55061dfabc6f04dd100e6a6758729bbf0a12a649ed87e",
+          "pack_id": "pack-v03-029",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-029-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-029-exec",
+                "receipt_id": "rcpt-v03-029-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-029-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-029-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-029-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "OUTCOME"
+        },
+        "request_id": "b19b7d9a-29a8-4d21-bea3-12ebfc270d37",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#9.1"
+      ],
+      "tags": [
+        "reliance-map"
+      ],
+      "title": "Reliance projection mapping OUTCOME"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "615da37e640c1c367626f582ec2b95bb13d5c95f53d3f4242ad8773cb120cbb9",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "CURRENTNESS",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "799dbb88-7dc6-43ce-80da-c3efb56d4846",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-030",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "1a66cf02ed173a3a38ed33a0015c33ca8b399507627fb3cb0cc900f11f979bee",
+          "pack_id": "pack-v03-030",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-030-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-030-exec",
+                "receipt_id": "rcpt-v03-030-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-030-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-030-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-030-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "CURRENTNESS"
+        },
+        "request_id": "799dbb88-7dc6-43ce-80da-c3efb56d4846",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#9.1"
+      ],
+      "tags": [
+        "reliance-map"
+      ],
+      "title": "Reliance projection mapping CURRENTNESS"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "c3b3d2b9168ba9944434753eff05ad6f960e526808e638dd527edd09a0243878",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "72128f22-9469-4c4a-b97e-af92da4f0304",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-031",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "37f75ebde704729c06981f03f2a02b666855a867d7a1f583acf1cd03968b26c6",
+          "pack_id": "pack-v03-031",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-031-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-031-exec",
+                "receipt_id": "rcpt-v03-031-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-031-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-031-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-031-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "72128f22-9469-4c4a-b97e-af92da4f0304",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#9.1"
+      ],
+      "tags": [
+        "reliance-map"
+      ],
+      "title": "Reliance projection mapping TASK_COMPLETION"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "93d3d747ee6a59f6195544e672deb881799b74b3dcce864a11c8c4b69f2849d8",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "NOT_ESTABLISHED",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "NOT_ESTABLISHED",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_BINDING_NOT_ESTABLISHED",
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "EVIDENCE_DIGEST_MISMATCH",
+          "RECEIPT_REPLAYED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "e71f0bbb-2f6b-44c9-b626-33bb4414119b",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-032",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "replay_snapshot": {
+            "observed_receipt_nonces": [
+              "seen"
+            ]
+          },
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "27e24b90fd720e8f0041a8768d7d17002e1e09d9bad89e5eafeb886e423cd8c5",
+          "pack_id": "pack-v03-032",
+          "references": [
+            {
+              "evidence_id": "v03-032-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload": {
+                "bad": 1
+              },
+              "payload_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "receipt": {
+                "nonce": "seen",
+                "receipt_id": "rcpt-v03-032-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-032-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-032-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-032-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "e71f0bbb-2f6b-44c9-b626-33bb4414119b",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#9.5"
+      ],
+      "tags": [
+        "ordering"
+      ],
+      "title": "Lexicographic reason-code ordering"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "740ca768a569a6b2b266d2e9c88e4efb9db6851639d70bcd6c4e67a68faa15f4",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "face5763-f609-4858-bc28-9309f0a1edbb",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-033",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "30dff1258b4a3c9d1a27905738cb8448e8c8a4fe286b8682eed74d3c27d231c2",
+          "pack_id": "pack-v03-033",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-033-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-033-exec",
+                "receipt_id": "rcpt-v03-033-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-033-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-033-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-033-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "face5763-f609-4858-bc28-9309f0a1edbb",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [
+        "F18_HOST_STATE_PROMOTION: RETAIN_CONCEPT"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#5.1"
+      ],
+      "tags": [
+        "ceiling",
+        "execution"
+      ],
+      "title": "Absolute ceiling execution"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "b63ad4b3fde477436d78cd387cef76384faeefcf14f854a0fbda3a126381da58",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "5927207c-eb02-4f7a-86c5-2c96febe778c",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-034",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "b82513e9851a22b1e4873782ee32e67d6818bdb6275a136c272b955b9811b046",
+          "pack_id": "pack-v03-034",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-034-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-034-exec",
+                "receipt_id": "rcpt-v03-034-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-034-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-034-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-034-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "5927207c-eb02-4f7a-86c5-2c96febe778c",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#5.1"
+      ],
+      "tags": [
+        "ceiling",
+        "outcome"
+      ],
+      "title": "Absolute ceiling outcome"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "0829561ec7f369059f30986f4f18134fb64bb6e24f70bf19461da168b5a6d890",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "95ee1015-7769-42a6-a07f-b8b95759ec91",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-035",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "6334a47e4f4c5301c91fed753532605c1912e69de048058f57cb0beded500733",
+          "pack_id": "pack-v03-035",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-035-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-035-exec",
+                "receipt_id": "rcpt-v03-035-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-035-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-035-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-035-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "95ee1015-7769-42a6-a07f-b8b95759ec91",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#5.1"
+      ],
+      "tags": [
+        "ceiling",
+        "provenance_binding"
+      ],
+      "title": "Absolute ceiling provenance_binding"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "7d3f170185d0b35fdb9d822bb0ea9227e8eb81cf49ecddf963d9fc48e1336e7d",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "UNAVAILABLE",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "UNAVAILABLE"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "UNAVAILABLE"
+        },
+        "request_id": "42f90e71-5f71-4f83-8306-44a89078c4dc",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-036",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "5465315dacc7feb1d74d97b9ced5dce90d316eb2501b3a274d613a4dcbaac5cf",
+          "pack_id": "pack-v03-036",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-036-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-036-exec",
+                "receipt_id": "rcpt-v03-036-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-036-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-036-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-036-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "42f90e71-5f71-4f83-8306-44a89078c4dc",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#5.1"
+      ],
+      "tags": [
+        "ceiling",
+        "channel_independence"
+      ],
+      "title": "Absolute ceiling channel_independence"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "27559c49700c7243dfb476842814894e21a1025d951abdf5e78dca9ebf5a9972",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "NOT_ESTABLISHED",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "MISSING_OBSERVATION_SUBJECT_OR_EXTENT"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "b333add8-3c95-43eb-8190-3a5f1390bbb8",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-037",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "9d593a4de09b82cf35da949d166be0672209d8b38274c79acf5ca1a32b7bdffc",
+          "pack_id": "pack-v03-037",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-037-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-037-exec",
+                "receipt_id": "rcpt-v03-037-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-037-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-037-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-037-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "b333add8-3c95-43eb-8190-3a5f1390bbb8",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [
+        "F03_MISSING_OBSERVATION_IDENTITY: RETIRE/REWRITE_BOUNDARY"
+      ],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-10"
+      ],
+      "tags": [],
+      "title": "Missing required observation subject"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "canonical_hash": "fb16f23d5d8783cddab9a9cdc72f07b016f8e411d8dec79ec73ef3923bcc55b2",
+        "dimensions": {
+          "channel_independence": "NOT_ESTABLISHED",
+          "claim_support": "UNAVAILABLE",
+          "currentness": "UNAVAILABLE",
+          "execution": "UNAVAILABLE",
+          "outcome": "NOT_ESTABLISHED",
+          "provenance_binding": "UNAVAILABLE",
+          "task_completion": "NOT_ESTABLISHED"
+        },
+        "engine_version": "0.1.0",
+        "reason_codes": [
+          "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+          "MISSING_OBSERVATION_SUBJECT_OR_EXTENT"
+        ],
+        "reliance_projection": {
+          "requested_dimension": "TASK_COMPLETION",
+          "state": "NOT_ESTABLISHED"
+        },
+        "request_id": "9d5fccd7-aae2-4db2-805e-593f0148e4a1",
+        "result_type": "CompletionEvaluationResult"
+      },
+      "fixture_id": "V03-038",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "2904251cae840c344e9bbc25bffcfb53bcb345cf4337002321925644656efb77",
+          "pack_id": "pack-v03-038",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-038-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-038-exec",
+                "receipt_id": "rcpt-v03-038-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-038-out",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-038-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-038-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "9d5fccd7-aae2-4db2-805e-593f0148e4a1",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#3-phase-10"
+      ],
+      "tags": [],
+      "title": "Missing required observation extent"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "SCHEMA_INVALID",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-039",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "65680d7fcd53c0301c352074ff8d4f338457336d1417a37e30b1ed9fafafabc3",
+          "pack_id": "pack-v03-039",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-039-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-039-exec",
+                "receipt_id": "rcpt-v03-039-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-039-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-039-exec",
+          "v03-039-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-039-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "8b6cf34c-0546-42b0-af30-28303c397297",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_CORE_SCHEMA_v0.1.json#/$defs/CompletionEvaluationRequest"
+      ],
+      "tags": [
+        "schema-invalid"
+      ],
+      "title": "Duplicate execution evidence refs"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "SCHEMA_INVALID",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-040",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "bcb6f77b0cf76b4988557eab9783de888a8ecd2235d20f631bdd6d6d73138b16",
+          "pack_id": "pack-v03-040",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-040-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-040-exec",
+                "receipt_id": "rcpt-v03-040-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-040-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-040-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-040-out",
+          "v03-040-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "bf498646-7ea4-4744-af92-1040a916e365",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_CORE_SCHEMA_v0.1.json#/$defs/CompletionEvaluationRequest"
+      ],
+      "tags": [
+        "schema-invalid"
+      ],
+      "title": "Duplicate outcome evidence refs"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "SCHEMA_INVALID",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-041",
+      "input": {
+        "assertion": {
+          "predicate": "evidence supports claim",
+          "subject_ref": "urn:veip:subject:agent-42"
+        },
+        "claim_id": "66b4061d-6460-4fa5-8333-903755e1319c",
+        "evaluation_context": {
+          "evaluation_timestamp": "2026-09-21T20:00:00Z"
+        },
+        "evidence_pack": {
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "pack_id": "pack-v03-041",
+          "references": []
+        },
+        "expected_engine_version": "0.1.0",
+        "reliance_context": {
+          "requested_dimension": "EXECUTION"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_CORE_SCHEMA_v0.1.json#/$defs/RequestedDimension"
+      ],
+      "tags": [
+        "schema-invalid"
+      ],
+      "title": "Invalid RequestedDimension enum"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "SCHEMA_INVALID",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-042",
+      "input": {
+        "assertion": {
+          "extent_ref": null,
+          "predicate": "evidence supports claim",
+          "subject_ref": "urn:veip:subject:agent-42"
+        },
+        "claim_id": "db306dc6-a91b-4540-9f0e-3cb1ae1591ee",
+        "evaluation_context": {
+          "evaluation_timestamp": "2026-09-21T20:00:00Z"
+        },
+        "evidence_pack": {
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "pack_id": "pack-v03-042",
+          "references": []
+        },
+        "expected_engine_version": "0.1.0",
+        "reliance_context": {
+          "requested_dimension": "CLAIM_SUPPORT"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_CORE_SCHEMA_v0.1.json#/$defs/ClaimEvaluationRequest"
+      ],
+      "tags": [
+        "schema-invalid"
+      ],
+      "title": "Null optional extent_ref rejected"
+    },
+    {
+      "entry_point": "explain_boundary",
+      "expected": {
+        "code_breakdown": [],
+        "engine_version": "0.1.0",
+        "result_type": "BoundaryExplanationResult",
+        "summary": "No reason codes emitted.",
+        "target_canonical_hash": "93edf02c636e0cb31455850b1597ea0d747b2b2e6ecb1a299428690fbc279b78"
+      },
+      "fixture_id": "V03-043",
+      "input": {
+        "adjudication_target": {
+          "canonical_hash": "93edf02c636e0cb31455850b1597ea0d747b2b2e6ecb1a299428690fbc279b78",
+          "claim_id": "ecb50890-3896-488f-a145-09ef53af0a58",
+          "dimensions": {
+            "channel_independence": "NOT_ESTABLISHED",
+            "claim_support": "UNAVAILABLE",
+            "currentness": "UNAVAILABLE",
+            "execution": "UNAVAILABLE",
+            "outcome": "UNAVAILABLE",
+            "provenance_binding": "UNAVAILABLE",
+            "task_completion": "UNAVAILABLE"
+          },
+          "engine_version": "0.1.0",
+          "reason_codes": [],
+          "reliance_projection": {
+            "requested_dimension": "CLAIM_SUPPORT",
+            "state": "UNAVAILABLE"
+          }
+        },
+        "expected_engine_version": "0.1.0",
+        "verbosity_level": "SUMMARY"
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#10"
+      ],
+      "tags": [
+        "explanation",
+        "synthetic-target"
+      ],
+      "title": "Explain zero-code schema-valid target"
+    },
+    {
+      "entry_point": "explain_boundary",
+      "expected": {
+        "code_breakdown": [
+          {
+            "code": "CHANNEL_BINDING_NOT_ESTABLISHED",
+            "description": "Channel binding could not be proven for evidence item.",
+            "dimension_impact": "provenance_binding"
+          },
+          {
+            "code": "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+            "description": "Channel independence ceiling enforced for pure core v0.1.",
+            "dimension_impact": "channel_independence"
+          },
+          {
+            "code": "EVIDENCE_DIGEST_MISMATCH",
+            "description": "Provided payload SHA-256 digest does not match calculated SHA-256 digest over JCS-canonicalized evidence payload.",
+            "dimension_impact": "claim_support,execution,outcome,provenance_binding,task_completion"
+          },
+          {
+            "code": "RECEIPT_REPLAYED",
+            "description": "Receipt nonce has already been observed in evaluation context replay snapshot.",
+            "dimension_impact": "execution,outcome,task_completion"
+          }
+        ],
+        "engine_version": "0.1.0",
+        "result_type": "BoundaryExplanationResult",
+        "summary": "Channel binding could not be proven for evidence item. Channel independence ceiling enforced for pure core v0.1. Provided payload SHA-256 digest does not match calculated SHA-256 digest over JCS-canonicalized evidence payload. Receipt nonce has already been observed in evaluation context replay snapshot.",
+        "target_canonical_hash": "93d3d747ee6a59f6195544e672deb881799b74b3dcce864a11c8c4b69f2849d8"
+      },
+      "fixture_id": "V03-044",
+      "input": {
+        "adjudication_target": {
+          "canonical_hash": "93d3d747ee6a59f6195544e672deb881799b74b3dcce864a11c8c4b69f2849d8",
+          "dimensions": {
+            "channel_independence": "NOT_ESTABLISHED",
+            "claim_support": "UNAVAILABLE",
+            "currentness": "UNAVAILABLE",
+            "execution": "NOT_ESTABLISHED",
+            "outcome": "UNAVAILABLE",
+            "provenance_binding": "NOT_ESTABLISHED",
+            "task_completion": "NOT_ESTABLISHED"
+          },
+          "engine_version": "0.1.0",
+          "reason_codes": [
+            "CHANNEL_BINDING_NOT_ESTABLISHED",
+            "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+            "EVIDENCE_DIGEST_MISMATCH",
+            "RECEIPT_REPLAYED"
+          ],
+          "reliance_projection": {
+            "requested_dimension": "TASK_COMPLETION",
+            "state": "NOT_ESTABLISHED"
+          },
+          "request_id": "e71f0bbb-2f6b-44c9-b626-33bb4414119b"
+        },
+        "expected_engine_version": "0.1.0",
+        "verbosity_level": "SUMMARY"
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#10"
+      ],
+      "tags": [
+        "explanation"
+      ],
+      "title": "Explain multi-code canonical target"
+    },
+    {
+      "entry_point": "explain_boundary",
+      "expected": {
+        "code_breakdown": [
+          {
+            "code": "CHANNEL_BINDING_NOT_ESTABLISHED",
+            "description": "Channel binding could not be proven for evidence item.",
+            "dimension_impact": "provenance_binding"
+          },
+          {
+            "code": "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+            "description": "Channel independence ceiling enforced for pure core v0.1.",
+            "dimension_impact": "channel_independence"
+          },
+          {
+            "code": "EVIDENCE_DIGEST_MISMATCH",
+            "description": "Provided payload SHA-256 digest does not match calculated SHA-256 digest over JCS-canonicalized evidence payload.",
+            "dimension_impact": "claim_support,execution,outcome,provenance_binding,task_completion"
+          },
+          {
+            "code": "RECEIPT_REPLAYED",
+            "description": "Receipt nonce has already been observed in evaluation context replay snapshot.",
+            "dimension_impact": "execution,outcome,task_completion"
+          }
+        ],
+        "engine_version": "0.1.0",
+        "result_type": "BoundaryExplanationResult",
+        "summary": "Channel binding could not be proven for evidence item. Channel independence ceiling enforced for pure core v0.1. Provided payload SHA-256 digest does not match calculated SHA-256 digest over JCS-canonicalized evidence payload. Receipt nonce has already been observed in evaluation context replay snapshot.",
+        "target_canonical_hash": "93d3d747ee6a59f6195544e672deb881799b74b3dcce864a11c8c4b69f2849d8"
+      },
+      "fixture_id": "V03-045",
+      "input": {
+        "adjudication_target": {
+          "canonical_hash": "93d3d747ee6a59f6195544e672deb881799b74b3dcce864a11c8c4b69f2849d8",
+          "dimensions": {
+            "channel_independence": "NOT_ESTABLISHED",
+            "claim_support": "UNAVAILABLE",
+            "currentness": "UNAVAILABLE",
+            "execution": "NOT_ESTABLISHED",
+            "outcome": "UNAVAILABLE",
+            "provenance_binding": "NOT_ESTABLISHED",
+            "task_completion": "NOT_ESTABLISHED"
+          },
+          "engine_version": "0.1.0",
+          "reason_codes": [
+            "CHANNEL_BINDING_NOT_ESTABLISHED",
+            "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+            "EVIDENCE_DIGEST_MISMATCH",
+            "RECEIPT_REPLAYED"
+          ],
+          "reliance_projection": {
+            "requested_dimension": "TASK_COMPLETION",
+            "state": "NOT_ESTABLISHED"
+          },
+          "request_id": "e71f0bbb-2f6b-44c9-b626-33bb4414119b"
+        },
+        "expected_engine_version": "0.1.0",
+        "verbosity_level": "SUMMARY"
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#10"
+      ],
+      "tags": [
+        "explanation",
+        "verbosity"
+      ],
+      "title": "Verbosity compatibility SUMMARY"
+    },
+    {
+      "entry_point": "explain_boundary",
+      "expected": {
+        "code_breakdown": [
+          {
+            "code": "CHANNEL_BINDING_NOT_ESTABLISHED",
+            "description": "Channel binding could not be proven for evidence item.",
+            "dimension_impact": "provenance_binding"
+          },
+          {
+            "code": "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+            "description": "Channel independence ceiling enforced for pure core v0.1.",
+            "dimension_impact": "channel_independence"
+          },
+          {
+            "code": "EVIDENCE_DIGEST_MISMATCH",
+            "description": "Provided payload SHA-256 digest does not match calculated SHA-256 digest over JCS-canonicalized evidence payload.",
+            "dimension_impact": "claim_support,execution,outcome,provenance_binding,task_completion"
+          },
+          {
+            "code": "RECEIPT_REPLAYED",
+            "description": "Receipt nonce has already been observed in evaluation context replay snapshot.",
+            "dimension_impact": "execution,outcome,task_completion"
+          }
+        ],
+        "engine_version": "0.1.0",
+        "result_type": "BoundaryExplanationResult",
+        "summary": "Channel binding could not be proven for evidence item. Channel independence ceiling enforced for pure core v0.1. Provided payload SHA-256 digest does not match calculated SHA-256 digest over JCS-canonicalized evidence payload. Receipt nonce has already been observed in evaluation context replay snapshot.",
+        "target_canonical_hash": "93d3d747ee6a59f6195544e672deb881799b74b3dcce864a11c8c4b69f2849d8"
+      },
+      "fixture_id": "V03-046",
+      "input": {
+        "adjudication_target": {
+          "canonical_hash": "93d3d747ee6a59f6195544e672deb881799b74b3dcce864a11c8c4b69f2849d8",
+          "dimensions": {
+            "channel_independence": "NOT_ESTABLISHED",
+            "claim_support": "UNAVAILABLE",
+            "currentness": "UNAVAILABLE",
+            "execution": "NOT_ESTABLISHED",
+            "outcome": "UNAVAILABLE",
+            "provenance_binding": "NOT_ESTABLISHED",
+            "task_completion": "NOT_ESTABLISHED"
+          },
+          "engine_version": "0.1.0",
+          "reason_codes": [
+            "CHANNEL_BINDING_NOT_ESTABLISHED",
+            "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+            "EVIDENCE_DIGEST_MISMATCH",
+            "RECEIPT_REPLAYED"
+          ],
+          "reliance_projection": {
+            "requested_dimension": "TASK_COMPLETION",
+            "state": "NOT_ESTABLISHED"
+          },
+          "request_id": "e71f0bbb-2f6b-44c9-b626-33bb4414119b"
+        },
+        "expected_engine_version": "0.1.0",
+        "verbosity_level": "DETAILED"
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#10"
+      ],
+      "tags": [
+        "explanation",
+        "verbosity"
+      ],
+      "title": "Verbosity compatibility DETAILED"
+    },
+    {
+      "entry_point": "explain_boundary",
+      "expected": {
+        "code_breakdown": [
+          {
+            "code": "CHANNEL_BINDING_NOT_ESTABLISHED",
+            "description": "Channel binding could not be proven for evidence item.",
+            "dimension_impact": "provenance_binding"
+          },
+          {
+            "code": "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+            "description": "Channel independence ceiling enforced for pure core v0.1.",
+            "dimension_impact": "channel_independence"
+          },
+          {
+            "code": "EVIDENCE_DIGEST_MISMATCH",
+            "description": "Provided payload SHA-256 digest does not match calculated SHA-256 digest over JCS-canonicalized evidence payload.",
+            "dimension_impact": "claim_support,execution,outcome,provenance_binding,task_completion"
+          },
+          {
+            "code": "RECEIPT_REPLAYED",
+            "description": "Receipt nonce has already been observed in evaluation context replay snapshot.",
+            "dimension_impact": "execution,outcome,task_completion"
+          }
+        ],
+        "engine_version": "0.1.0",
+        "result_type": "BoundaryExplanationResult",
+        "summary": "Channel binding could not be proven for evidence item. Channel independence ceiling enforced for pure core v0.1. Provided payload SHA-256 digest does not match calculated SHA-256 digest over JCS-canonicalized evidence payload. Receipt nonce has already been observed in evaluation context replay snapshot.",
+        "target_canonical_hash": "93d3d747ee6a59f6195544e672deb881799b74b3dcce864a11c8c4b69f2849d8"
+      },
+      "fixture_id": "V03-047",
+      "input": {
+        "adjudication_target": {
+          "canonical_hash": "93d3d747ee6a59f6195544e672deb881799b74b3dcce864a11c8c4b69f2849d8",
+          "dimensions": {
+            "channel_independence": "NOT_ESTABLISHED",
+            "claim_support": "UNAVAILABLE",
+            "currentness": "UNAVAILABLE",
+            "execution": "NOT_ESTABLISHED",
+            "outcome": "UNAVAILABLE",
+            "provenance_binding": "NOT_ESTABLISHED",
+            "task_completion": "NOT_ESTABLISHED"
+          },
+          "engine_version": "0.1.0",
+          "reason_codes": [
+            "CHANNEL_BINDING_NOT_ESTABLISHED",
+            "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+            "EVIDENCE_DIGEST_MISMATCH",
+            "RECEIPT_REPLAYED"
+          ],
+          "reliance_projection": {
+            "requested_dimension": "TASK_COMPLETION",
+            "state": "NOT_ESTABLISHED"
+          },
+          "request_id": "e71f0bbb-2f6b-44c9-b626-33bb4414119b"
+        },
+        "expected_engine_version": "0.1.0",
+        "verbosity_level": "FULL_AUDIT"
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#10"
+      ],
+      "tags": [
+        "explanation",
+        "verbosity"
+      ],
+      "title": "Verbosity compatibility FULL_AUDIT"
+    },
+    {
+      "entry_point": "explain_boundary",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "SCHEMA_INVALID",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-048",
+      "input": {
+        "adjudication_target": {
+          "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "dimensions": {
+            "channel_independence": "NOT_ESTABLISHED",
+            "claim_support": "UNAVAILABLE",
+            "currentness": "UNAVAILABLE",
+            "execution": "NOT_ESTABLISHED",
+            "outcome": "UNAVAILABLE",
+            "provenance_binding": "NOT_ESTABLISHED",
+            "task_completion": "NOT_ESTABLISHED"
+          },
+          "engine_version": "0.1.0",
+          "reason_codes": [
+            "CHANNEL_BINDING_NOT_ESTABLISHED",
+            "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+            "EVIDENCE_DIGEST_MISMATCH",
+            "RECEIPT_REPLAYED"
+          ],
+          "reliance_projection": {
+            "requested_dimension": "TASK_COMPLETION",
+            "state": "NOT_ESTABLISHED"
+          },
+          "request_id": "e71f0bbb-2f6b-44c9-b626-33bb4414119b"
+        },
+        "expected_engine_version": "0.1.0",
+        "verbosity_level": "SUMMARY"
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#10"
+      ],
+      "tags": [
+        "engine-error",
+        "explanation"
+      ],
+      "title": "Reject explanation target bad canonical hash"
+    },
+    {
+      "entry_point": "explain_boundary",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "SCHEMA_INVALID",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-049",
+      "input": {
+        "adjudication_target": {
+          "canonical_hash": "b44252bbb63e46433d3af34e1feb07936f8c1c39e185d69b710497b58b511161",
+          "dimensions": {
+            "channel_independence": "NOT_ESTABLISHED",
+            "claim_support": "UNAVAILABLE",
+            "currentness": "UNAVAILABLE",
+            "execution": "NOT_ESTABLISHED",
+            "outcome": "UNAVAILABLE",
+            "provenance_binding": "NOT_ESTABLISHED",
+            "task_completion": "NOT_ESTABLISHED"
+          },
+          "engine_version": "0.1.0",
+          "reason_codes": [
+            "RECEIPT_REPLAYED",
+            "EVIDENCE_DIGEST_MISMATCH",
+            "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+            "CHANNEL_BINDING_NOT_ESTABLISHED"
+          ],
+          "reliance_projection": {
+            "requested_dimension": "TASK_COMPLETION",
+            "state": "NOT_ESTABLISHED"
+          },
+          "request_id": "e71f0bbb-2f6b-44c9-b626-33bb4414119b"
+        },
+        "expected_engine_version": "0.1.0",
+        "verbosity_level": "SUMMARY"
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#10"
+      ],
+      "tags": [
+        "engine-error",
+        "explanation"
+      ],
+      "title": "Reject unsorted explanation target reason codes"
+    },
+    {
+      "entry_point": "explain_boundary",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "ENGINE_VERSION_MISMATCH",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-050",
+      "input": {
+        "adjudication_target": {
+          "canonical_hash": "93d3d747ee6a59f6195544e672deb881799b74b3dcce864a11c8c4b69f2849d8",
+          "dimensions": {
+            "channel_independence": "NOT_ESTABLISHED",
+            "claim_support": "UNAVAILABLE",
+            "currentness": "UNAVAILABLE",
+            "execution": "NOT_ESTABLISHED",
+            "outcome": "UNAVAILABLE",
+            "provenance_binding": "NOT_ESTABLISHED",
+            "task_completion": "NOT_ESTABLISHED"
+          },
+          "engine_version": "0.1.0",
+          "reason_codes": [
+            "CHANNEL_BINDING_NOT_ESTABLISHED",
+            "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+            "EVIDENCE_DIGEST_MISMATCH",
+            "RECEIPT_REPLAYED"
+          ],
+          "reliance_projection": {
+            "requested_dimension": "TASK_COMPLETION",
+            "state": "NOT_ESTABLISHED"
+          },
+          "request_id": "e71f0bbb-2f6b-44c9-b626-33bb4414119b"
+        },
+        "expected_engine_version": "0.2.0",
+        "verbosity_level": "SUMMARY"
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#10"
+      ],
+      "tags": [
+        "engine-error",
+        "explanation"
+      ],
+      "title": "Explanation engine version mismatch"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "SCHEMA_INVALID",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-051",
+      "input": {
+        "adjudication_target": {
+          "canonical_hash": "93d3d747ee6a59f6195544e672deb881799b74b3dcce864a11c8c4b69f2849d8",
+          "dimensions": {
+            "channel_independence": "NOT_ESTABLISHED",
+            "claim_support": "UNAVAILABLE",
+            "currentness": "UNAVAILABLE",
+            "execution": "NOT_ESTABLISHED",
+            "outcome": "UNAVAILABLE",
+            "provenance_binding": "NOT_ESTABLISHED",
+            "task_completion": "NOT_ESTABLISHED"
+          },
+          "engine_version": "0.1.0",
+          "reason_codes": [
+            "CHANNEL_BINDING_NOT_ESTABLISHED",
+            "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+            "EVIDENCE_DIGEST_MISMATCH",
+            "RECEIPT_REPLAYED"
+          ],
+          "reliance_projection": {
+            "requested_dimension": "TASK_COMPLETION",
+            "state": "NOT_ESTABLISHED"
+          },
+          "request_id": "e71f0bbb-2f6b-44c9-b626-33bb4414119b"
+        },
+        "expected_engine_version": "0.1.0",
+        "verbosity_level": "SUMMARY"
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#2.1"
+      ],
+      "tags": [
+        "entry-point",
+        "schema-invalid"
+      ],
+      "title": "adjudicate rejects ExplanationRequest root"
+    },
+    {
+      "entry_point": "explain_boundary",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "SCHEMA_INVALID",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-052",
+      "input": {
+        "assertion": {
+          "predicate": "evidence supports claim",
+          "subject_ref": "urn:veip:subject:agent-42"
+        },
+        "claim_id": "ffffe6a1-700f-405c-b39d-751148103b56",
+        "evaluation_context": {
+          "evaluation_timestamp": "2026-09-21T20:00:00Z"
+        },
+        "evidence_pack": {
+          "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "pack_id": "pack-v03-052",
+          "references": []
+        },
+        "expected_engine_version": "0.1.0",
+        "reliance_context": {
+          "requested_dimension": "CLAIM_SUPPORT"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#10"
+      ],
+      "tags": [
+        "entry-point",
+        "schema-invalid"
+      ],
+      "title": "explain_boundary rejects ClaimEvaluationRequest root"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "DUPLICATE_EVIDENCE_ID",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-053",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "pack_id": "pack-v03-002",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-002-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-002-exec",
+                "receipt_id": "rcpt-v03-002-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-002-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-002-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-002-exec",
+                "receipt_id": "rcpt-v03-002-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-002-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-002-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "aa38afa3-a2df-4f7d-b60b-1a78b21b5824",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#2-ingestion-topology--manifest-verification-pipeline"
+      ],
+      "tags": [
+        "error-precedence",
+        "duplicate",
+        "bad-manifest"
+      ],
+      "title": "Error precedence: duplicate evidence_id + bad manifest"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "ENGINE_VERSION_MISMATCH",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-054",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "pack_id": "pack-v03-002",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-002-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-002-exec",
+                "receipt_id": "rcpt-v03-002-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-002-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-002-exec"
+        ],
+        "expected_engine_version": "0.2.0",
+        "outcome_evidence_refs": [
+          "v03-002-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "aa38afa3-a2df-4f7d-b60b-1a78b21b5824",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#2-ingestion-topology--manifest-verification-pipeline"
+      ],
+      "tags": [
+        "error-precedence",
+        "version",
+        "bad-manifest"
+      ],
+      "title": "Error precedence: wrong engine version + bad manifest"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "ENGINE_VERSION_MISMATCH",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-055",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "pack_id": "pack-v03-002",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-002-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-002-exec",
+                "receipt_id": "rcpt-v03-002-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-002-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-002-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-002-exec",
+                "receipt_id": "rcpt-v03-002-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-002-exec"
+        ],
+        "expected_engine_version": "0.2.0",
+        "outcome_evidence_refs": [
+          "v03-002-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "TASK_COMPLETION"
+        },
+        "request_id": "aa38afa3-a2df-4f7d-b60b-1a78b21b5824",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#2-ingestion-topology--manifest-verification-pipeline"
+      ],
+      "tags": [
+        "error-precedence",
+        "version",
+        "duplicate"
+      ],
+      "title": "Error precedence: wrong engine version + duplicate evidence_id"
+    },
+    {
+      "entry_point": "adjudicate",
+      "expected": {
+        "engine_version": "0.1.0",
+        "error_code": "SCHEMA_INVALID",
+        "match_scope": [
+          "error_code",
+          "engine_version"
+        ],
+        "message_semantics": "NONEMPTY_STRING_REQUIRED_BY_SCHEMA; exact message text is not frozen by v0.1",
+        "result_type": "EngineError"
+      },
+      "fixture_id": "V03-056",
+      "input": {
+        "evaluation_context": {
+          "channel_warrant_snapshot": {
+            "bound_channels": [
+              "chan-main"
+            ],
+            "warrant_id": "w-v01"
+          },
+          "evaluation_timestamp": "2026-09-21T20:00:00Z",
+          "scope_registry_snapshot": {
+            "active_extents": [
+              "urn:veip:extent:action-101"
+            ]
+          }
+        },
+        "evidence_pack": {
+          "manifest_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "pack_id": "pack-v03-002",
+          "references": [
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-002-exec",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "receipt": {
+                "nonce": "nonce-v03-002-exec",
+                "receipt_id": "rcpt-v03-002-exec"
+              },
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            },
+            {
+              "channel_ref": "chan-main",
+              "evidence_id": "v03-002-out",
+              "extent_ref": "urn:veip:extent:action-101",
+              "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "source_type": "OBSERVATION",
+              "subject_ref": "urn:veip:subject:agent-42"
+            }
+          ]
+        },
+        "execution_evidence_refs": [
+          "v03-002-exec"
+        ],
+        "expected_engine_version": "0.1.0",
+        "outcome_evidence_refs": [
+          "v03-002-out"
+        ],
+        "reliance_context": {
+          "requested_dimension": "EXECUTION"
+        },
+        "request_id": "aa38afa3-a2df-4f7d-b60b-1a78b21b5824",
+        "requested_outcome": {
+          "extent_ref": "urn:veip:extent:action-101",
+          "proposition": "requested consequence occurred",
+          "subject_ref": "urn:veip:subject:agent-42"
+        }
+      },
+      "legacy_provenance": [],
+      "normative_refs": [
+        "VEIP_STATE_TRANSITION_RULES_v0.1.md#2-ingestion-topology--manifest-verification-pipeline"
+      ],
+      "tags": [
+        "error-precedence",
+        "schema-invalid",
+        "bad-manifest"
+      ],
+      "title": "Error precedence: schema invalid + bad manifest"
+    }
+  ],
+  "historical_source": {
+    "dispositions": [
+      {
+        "disposition": "REWRITE_TO_FROZEN_SEMANTICS",
+        "legacy_fixture_id": "F01_EXECUTION_ONLY",
+        "new_fixture_ids": [
+          "V03-027",
+          "V03-033"
+        ]
+      },
+      {
+        "disposition": "REWRITE_TO_FROZEN_SEMANTICS",
+        "legacy_fixture_id": "F02_OUTCOME_OBSERVED_CURRENT",
+        "new_fixture_ids": [
+          "V03-002",
+          "V03-025",
+          "V03-034"
+        ]
+      },
+      {
+        "disposition": "RETIRE",
+        "legacy_fixture_id": "F03_MISSING_OBSERVATION_IDENTITY",
+        "new_fixture_ids": [
+          "V03-037",
+          "V03-038"
+        ]
+      },
+      {
+        "disposition": "RETIRE",
+        "legacy_fixture_id": "F04_STALE_GENUINE_EVIDENCE",
+        "new_fixture_ids": [
+          "V03-025"
+        ]
+      },
+      {
+        "disposition": "RETIRE",
+        "legacy_fixture_id": "F05_CHANGE_OUTSIDE_EXTENT",
+        "new_fixture_ids": [
+          "V03-025"
+        ]
+      },
+      {
+        "disposition": "SPLIT",
+        "legacy_fixture_id": "F06_WRONG_SUBJECT_OR_EXTENT",
+        "new_fixture_ids": [
+          "V03-014",
+          "V03-015"
+        ]
+      },
+      {
+        "disposition": "REWRITE_TO_FROZEN_SEMANTICS",
+        "legacy_fixture_id": "F07_REPLAY_OTHER_RUN",
+        "new_fixture_ids": [
+          "V03-007",
+          "V03-020"
+        ]
+      },
+      {
+        "disposition": "REWRITE_TO_FROZEN_SEMANTICS",
+        "legacy_fixture_id": "F08_NONEXISTENT_EXTENT",
+        "new_fixture_ids": [
+          "V03-018",
+          "V03-019"
+        ]
+      },
+      {
+        "disposition": "REWRITE_TO_FROZEN_SEMANTICS",
+        "legacy_fixture_id": "F09_FABRICATED_IDENTITY_NO_CHANNEL_KEY",
+        "new_fixture_ids": [
+          "V03-022",
+          "V03-023"
+        ]
+      },
+      {
+        "disposition": "REWRITE_TO_FROZEN_SEMANTICS",
+        "legacy_fixture_id": "F10_EXECUTOR_CONTROLS_CHANNEL_KEY",
+        "new_fixture_ids": [
+          "V03-024",
+          "V03-036"
+        ]
+      },
+      {
+        "disposition": "RETAIN_CONCEPT",
+        "legacy_fixture_id": "F11_SELF_DECLARED_FAVORABLE_METADATA",
+        "new_fixture_ids": [
+          "V03-001",
+          "V03-002"
+        ]
+      },
+      {
+        "disposition": "RETIRE",
+        "legacy_fixture_id": "F12_ADVERSE_SELF_DECLARATION",
+        "new_fixture_ids": []
+      },
+      {
+        "disposition": "RETAIN_CONCEPT",
+        "legacy_fixture_id": "F13_IMPORT_NOT_INVOCATION",
+        "new_fixture_ids": [
+          "V03-033"
+        ]
+      },
+      {
+        "disposition": "RETIRE",
+        "legacy_fixture_id": "F14_EXECUTE_AND_IGNORE",
+        "new_fixture_ids": []
+      },
+      {
+        "disposition": "RETIRE",
+        "legacy_fixture_id": "F15_RELATION_COLLAPSE",
+        "new_fixture_ids": []
+      },
+      {
+        "disposition": "RETIRE",
+        "legacy_fixture_id": "F16_NUISANCE_CONTAMINATION",
+        "new_fixture_ids": [
+          "V03-010"
+        ]
+      },
+      {
+        "disposition": "RETIRE",
+        "legacy_fixture_id": "F17_INVERTED_FAITHFUL_ENCODING",
+        "new_fixture_ids": []
+      },
+      {
+        "disposition": "RETAIN_CONCEPT",
+        "legacy_fixture_id": "F18_HOST_STATE_PROMOTION",
+        "new_fixture_ids": [
+          "V03-033",
+          "V03-034",
+          "V03-035"
+        ]
+      }
+    ],
+    "fixture_count": 18,
+    "path": "/VEIP-MCP/EXECUTION/WO-001/02_VEIP_MCP_CANONICAL_FIXTURES_v0.2.json"
+  },
+  "normative_dependencies": [
+    "VEIP_CORE_SCHEMA_v0.1.json",
+    "VEIP_REASON_CODE_REGISTRY_v0.1.json",
+    "VEIP_STATE_TRANSITION_RULES_v0.1.md"
+  ],
+  "profile": "generic-pure-core-v0.1",
+  "suite": "VEIP-CANONICAL-CONFORMANCE-v0.3",
+  "verification": {
+    "active_trigger_coverage": {
+      "CHANNEL_BINDING_NOT_ESTABLISHED": [
+        "V03-022",
+        "V03-026",
+        "V03-032"
+      ],
+      "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED": [
+        "V03-001",
+        "V03-002",
+        "V03-003",
+        "V03-007",
+        "V03-008",
+        "V03-009",
+        "V03-010",
+        "V03-011",
+        "V03-012",
+        "V03-013",
+        "V03-014",
+        "V03-015",
+        "V03-016",
+        "V03-017",
+        "V03-018",
+        "V03-019",
+        "V03-020",
+        "V03-021",
+        "V03-022",
+        "V03-023",
+        "V03-024",
+        "V03-025",
+        "V03-026",
+        "V03-027",
+        "V03-028",
+        "V03-029",
+        "V03-030",
+        "V03-031",
+        "V03-032",
+        "V03-033",
+        "V03-034",
+        "V03-035",
+        "V03-036",
+        "V03-037",
+        "V03-038"
+      ],
+      "CHANNEL_NOT_LISTED_IN_WARRANT": [
+        "V03-023"
+      ],
+      "EVIDENCE_DIGEST_MISMATCH": [
+        "V03-009",
+        "V03-032"
+      ],
+      "EVIDENCE_REF_UNRESOLVED": [
+        "V03-011",
+        "V03-012",
+        "V03-013"
+      ],
+      "EXTENT_MATCHES_NOTHING": [
+        "V03-018"
+      ],
+      "MISSING_OBSERVATION_SUBJECT_OR_EXTENT": [
+        "V03-037",
+        "V03-038"
+      ],
+      "RECEIPT_REPLAYED": [
+        "V03-007",
+        "V03-020",
+        "V03-032"
+      ],
+      "RECEIPT_WRONG_SUBJECT_OR_EXTENT": [
+        "V03-008",
+        "V03-014",
+        "V03-015",
+        "V03-016"
+      ]
+    },
+    "canonical_result_hashes_verified": 35,
+    "conditional_active_control_coverage": {
+      "CHANNEL_BINDING_NOT_ESTABLISHED": [
+        "V03-001",
+        "V03-002",
+        "V03-003",
+        "V03-007",
+        "V03-008",
+        "V03-009",
+        "V03-010",
+        "V03-011",
+        "V03-012",
+        "V03-013",
+        "V03-014",
+        "V03-015",
+        "V03-016",
+        "V03-017",
+        "V03-018",
+        "V03-019",
+        "V03-020",
+        "V03-021",
+        "V03-023",
+        "V03-024",
+        "V03-025",
+        "V03-027",
+        "V03-028",
+        "V03-029",
+        "V03-030",
+        "V03-031",
+        "V03-033",
+        "V03-034",
+        "V03-035",
+        "V03-036",
+        "V03-037",
+        "V03-038"
+      ],
+      "CHANNEL_NOT_LISTED_IN_WARRANT": [
+        "V03-001",
+        "V03-002",
+        "V03-003",
+        "V03-007",
+        "V03-008",
+        "V03-009",
+        "V03-010",
+        "V03-011",
+        "V03-012",
+        "V03-013",
+        "V03-014",
+        "V03-015",
+        "V03-016",
+        "V03-017",
+        "V03-018",
+        "V03-019",
+        "V03-020",
+        "V03-021",
+        "V03-022",
+        "V03-024",
+        "V03-025",
+        "V03-026",
+        "V03-027",
+        "V03-028",
+        "V03-029",
+        "V03-030",
+        "V03-031",
+        "V03-032",
+        "V03-033",
+        "V03-034",
+        "V03-035",
+        "V03-036",
+        "V03-037",
+        "V03-038"
+      ],
+      "EVIDENCE_DIGEST_MISMATCH": [
+        "V03-001",
+        "V03-002",
+        "V03-003",
+        "V03-007",
+        "V03-008",
+        "V03-010",
+        "V03-011",
+        "V03-012",
+        "V03-013",
+        "V03-014",
+        "V03-015",
+        "V03-016",
+        "V03-017",
+        "V03-018",
+        "V03-019",
+        "V03-020",
+        "V03-021",
+        "V03-022",
+        "V03-023",
+        "V03-024",
+        "V03-025",
+        "V03-026",
+        "V03-027",
+        "V03-028",
+        "V03-029",
+        "V03-030",
+        "V03-031",
+        "V03-033",
+        "V03-034",
+        "V03-035",
+        "V03-036",
+        "V03-037",
+        "V03-038"
+      ],
+      "EVIDENCE_REF_UNRESOLVED": [
+        "V03-001",
+        "V03-002",
+        "V03-003",
+        "V03-007",
+        "V03-008",
+        "V03-009",
+        "V03-010",
+        "V03-014",
+        "V03-015",
+        "V03-016",
+        "V03-017",
+        "V03-018",
+        "V03-019",
+        "V03-020",
+        "V03-021",
+        "V03-022",
+        "V03-023",
+        "V03-024",
+        "V03-025",
+        "V03-026",
+        "V03-027",
+        "V03-028",
+        "V03-029",
+        "V03-030",
+        "V03-031",
+        "V03-032",
+        "V03-033",
+        "V03-034",
+        "V03-035",
+        "V03-036",
+        "V03-037",
+        "V03-038"
+      ],
+      "EXTENT_MATCHES_NOTHING": [
+        "V03-001",
+        "V03-002",
+        "V03-003",
+        "V03-007",
+        "V03-008",
+        "V03-009",
+        "V03-010",
+        "V03-011",
+        "V03-012",
+        "V03-013",
+        "V03-014",
+        "V03-015",
+        "V03-016",
+        "V03-017",
+        "V03-019",
+        "V03-020",
+        "V03-021",
+        "V03-022",
+        "V03-023",
+        "V03-024",
+        "V03-025",
+        "V03-026",
+        "V03-027",
+        "V03-028",
+        "V03-029",
+        "V03-030",
+        "V03-031",
+        "V03-032",
+        "V03-033",
+        "V03-034",
+        "V03-035",
+        "V03-036",
+        "V03-037",
+        "V03-038"
+      ],
+      "MISSING_OBSERVATION_SUBJECT_OR_EXTENT": [
+        "V03-001",
+        "V03-002",
+        "V03-003",
+        "V03-007",
+        "V03-008",
+        "V03-009",
+        "V03-010",
+        "V03-011",
+        "V03-012",
+        "V03-013",
+        "V03-014",
+        "V03-015",
+        "V03-016",
+        "V03-017",
+        "V03-018",
+        "V03-019",
+        "V03-020",
+        "V03-021",
+        "V03-022",
+        "V03-023",
+        "V03-024",
+        "V03-025",
+        "V03-026",
+        "V03-027",
+        "V03-028",
+        "V03-029",
+        "V03-030",
+        "V03-031",
+        "V03-032",
+        "V03-033",
+        "V03-034",
+        "V03-035",
+        "V03-036"
+      ],
+      "RECEIPT_REPLAYED": [
+        "V03-001",
+        "V03-002",
+        "V03-003",
+        "V03-008",
+        "V03-009",
+        "V03-010",
+        "V03-011",
+        "V03-012",
+        "V03-013",
+        "V03-014",
+        "V03-015",
+        "V03-016",
+        "V03-017",
+        "V03-018",
+        "V03-019",
+        "V03-021",
+        "V03-022",
+        "V03-023",
+        "V03-024",
+        "V03-025",
+        "V03-026",
+        "V03-027",
+        "V03-028",
+        "V03-029",
+        "V03-030",
+        "V03-031",
+        "V03-033",
+        "V03-034",
+        "V03-035",
+        "V03-036",
+        "V03-037",
+        "V03-038"
+      ],
+      "RECEIPT_WRONG_SUBJECT_OR_EXTENT": [
+        "V03-001",
+        "V03-002",
+        "V03-003",
+        "V03-007",
+        "V03-009",
+        "V03-010",
+        "V03-011",
+        "V03-012",
+        "V03-013",
+        "V03-017",
+        "V03-018",
+        "V03-019",
+        "V03-020",
+        "V03-021",
+        "V03-022",
+        "V03-023",
+        "V03-024",
+        "V03-025",
+        "V03-026",
+        "V03-027",
+        "V03-028",
+        "V03-029",
+        "V03-030",
+        "V03-031",
+        "V03-032",
+        "V03-033",
+        "V03-034",
+        "V03-035",
+        "V03-036",
+        "V03-037",
+        "V03-038"
+      ]
+    },
+    "corpus_jcs_sha256_before_verification_block": "9735211830ba850e206a49a8950fd775a1993c5f380e5c1a34bbddb81f4c16bc",
+    "dual_generation_byte_identical": true,
+    "dual_semantic_generation_match": true,
+    "engine_error_coverage": {
+      "DUPLICATE_EVIDENCE_ID": [
+        "V03-005"
+      ],
+      "ENGINE_VERSION_MISMATCH": [
+        "V03-004",
+        "V03-050"
+      ],
+      "MANIFEST_HASH_MISMATCH": [
+        "V03-006"
+      ],
+      "SCHEMA_INVALID": [
+        "V03-039",
+        "V03-040",
+        "V03-041",
+        "V03-042",
+        "V03-048",
+        "V03-049",
+        "V03-051",
+        "V03-052"
+      ]
+    },
+    "error_precedence_coverage": {
+      "duplicate_plus_bad_manifest": "V03-053 -> DUPLICATE_EVIDENCE_ID",
+      "schema_invalid_plus_bad_manifest": "V03-056 -> SCHEMA_INVALID",
+      "version_plus_bad_manifest": "V03-054 -> ENGINE_VERSION_MISMATCH",
+      "version_plus_duplicate": "V03-055 -> ENGINE_VERSION_MISMATCH"
+    },
+    "fixture_count": 56,
+    "freeze_acceptance": {
+      "10_Precomputed_manifest_hashes": true,
+      "11_Explanation_output_determinism": true,
+      "12_Legacy_reconciliation_actual_18": true,
+      "13_Zero_semantic_invention": true,
+      "14_Dual_independent_verification": true,
+      "1_ACTIVE_code_triggers": true,
+      "2_Conditional_ACTIVE_code_controls_and_unconditional_invariant": true,
+      "3_RESERVED_code_assertions": true,
+      "4_EngineError_coverage": true,
+      "5_Positive_state_ceilings": true,
+      "6_Role_attribution_coverage": true,
+      "7_Decoy_evidence_isolation": true,
+      "8_Reliance_mapping_coverage": true,
+      "9_Canonical_result_hashes": true
+    },
+    "independent_semantic_generator_b_checks": 40,
+    "manifest_hashes_verified": 36,
+    "successful_adjudication_results": 35,
+    "unconditional_active_codes": [
+      "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED"
+    ]
+  }
+}
+
+
+

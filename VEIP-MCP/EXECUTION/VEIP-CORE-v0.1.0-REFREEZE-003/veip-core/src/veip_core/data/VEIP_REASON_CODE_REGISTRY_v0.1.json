@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veraxis.io/schemas/v0.1/VEIP_REASON_CODE_REGISTRY_v0.1.json",
+  "title": "VEIP Reason Code Registry v0.1",
+  "description": "Frozen machine-readable registry of all 13 core reason codes for VEIP v0.1. Defines exact trigger conditions, emission statuses, dimension impacts, state prohibitions, evaluation phases, and deterministic template parameter bindings.",
+  "engine_version": "0.1.0",
+  "reason_codes": [
+    {
+      "code": "MISSING_OBSERVATION_SUBJECT_OR_EXTENT",
+      "summary": "Evidence observation missing required subject_ref or extent_ref requested by evaluation target.",
+      "emission_status": "ACTIVE",
+      "trigger_condition": "EvidenceReference.subject_ref is absent when subject binding is required, OR EvidenceReference.extent_ref is absent when the evaluation target declares an extent_ref that must be matched.",
+      "affected_dimensions": ["claim_support", "outcome", "task_completion"],
+      "prohibited_states": {
+        "claim_support": "ESTABLISHED_WITHIN_SCOPE",
+        "outcome": "ESTABLISHED_WITHIN_SCOPE",
+        "task_completion": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 10,
+      "template": "Evidence item '{evidence_id}' lacks required subject_ref or extent_ref for assertion predicate matching.",
+      "template_parameters": {
+        "evidence_id": "evidence.evidence_id"
+      }
+    },
+    {
+      "code": "EVIDENCE_DIGEST_MISMATCH",
+      "summary": "Provided payload SHA-256 digest does not match calculated SHA-256 digest over JCS-canonicalized evidence payload.",
+      "emission_status": "ACTIVE",
+      "trigger_condition": "evidence.payload is present AND SHA-256(RFC8785_JCS(evidence.payload)) != evidence.payload_sha256. (Note: Absence of evidence.payload makes normalized-payload digest verification UNAVAILABLE, and does not emit EVIDENCE_DIGEST_MISMATCH).",
+      "affected_dimensions": ["claim_support", "execution", "outcome", "provenance_binding", "task_completion"],
+      "prohibited_states": {
+        "claim_support": "ESTABLISHED_WITHIN_SCOPE",
+        "execution": "ESTABLISHED_WITHIN_SCOPE",
+        "outcome": "ESTABLISHED_WITHIN_SCOPE",
+        "provenance_binding": "ESTABLISHED_WITHIN_SCOPE",
+        "task_completion": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 10,
+      "template": "Evidence item '{evidence_id}' payload_sha256 mismatch. Declared '{declared_hash}', computed '{computed_hash}'.",
+      "template_parameters": {
+        "evidence_id": "evidence.evidence_id",
+        "declared_hash": "evidence.payload_sha256",
+        "computed_hash": "computed.normalized_payload_sha256"
+      }
+    },
+    {
+      "code": "RECEIPT_REPLAYED",
+      "summary": "Receipt nonce has already been observed in evaluation context replay snapshot.",
+      "emission_status": "ACTIVE",
+      "trigger_condition": "evaluation_context.replay_snapshot is present AND evidence.receipt.nonce is present in evaluation_context.replay_snapshot.observed_receipt_nonces. (Note: Absence of replay_snapshot yields UNAVAILABLE for replay checking, not RECEIPT_REPLAYED).",
+      "affected_dimensions": ["execution", "outcome", "task_completion"],
+      "prohibited_states": {
+        "execution": "ESTABLISHED_WITHIN_SCOPE",
+        "outcome": "ESTABLISHED_WITHIN_SCOPE",
+        "task_completion": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 20,
+      "template": "Receipt nonce '{nonce}' in evidence '{evidence_id}' was previously observed in replay snapshot.",
+      "template_parameters": {
+        "nonce": "evidence.receipt.nonce",
+        "evidence_id": "evidence.evidence_id"
+      }
+    },
+    {
+      "code": "EVIDENCE_REF_UNRESOLVED",
+      "summary": "Referenced execution or outcome evidence ID is missing from evidence pack.",
+      "emission_status": "ACTIVE",
+      "trigger_condition": "An ID listed in execution_evidence_refs or outcome_evidence_refs is not found in evidence_pack.references.",
+      "affected_dimensions": ["execution", "outcome", "task_completion"],
+      "prohibited_states": {
+        "execution": "ESTABLISHED_WITHIN_SCOPE",
+        "outcome": "ESTABLISHED_WITHIN_SCOPE",
+        "task_completion": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 20,
+      "template": "Evidence reference '{evidence_id}' listed in request is missing from evidence pack references.",
+      "template_parameters": {
+        "evidence_id": "unresolved_ref_id"
+      }
+    },
+    {
+      "code": "RECEIPT_RUN_MISMATCH",
+      "summary": "Receipt-to-run execution binding not evaluateable in pure core v0.1.",
+      "emission_status": "RESERVED_NOT_EMITTED",
+      "trigger_condition": "Reserved for future schema iterations containing in-receipt run identity bindings. Never emitted by pure core v0.1.",
+      "affected_dimensions": ["execution", "provenance_binding", "task_completion"],
+      "prohibited_states": {
+        "execution": "ESTABLISHED_WITHIN_SCOPE",
+        "provenance_binding": "ESTABLISHED_WITHIN_SCOPE",
+        "task_completion": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 30,
+      "template": "Evidence '{evidence_id}' run_id '{run_id}' does not match receipt execution run identity.",
+      "template_parameters": {
+        "evidence_id": "evidence.evidence_id",
+        "run_id": "evidence.run_id"
+      }
+    },
+    {
+      "code": "RECEIPT_WRONG_SUBJECT_OR_EXTENT",
+      "summary": "Evidence reference target subject or extent does not match assertion request scope.",
+      "emission_status": "ACTIVE",
+      "trigger_condition": "EvidenceReference.subject_ref or EvidenceReference.extent_ref does not match assertion or requested outcome subject/extent.",
+      "affected_dimensions": ["claim_support", "execution", "outcome", "task_completion"],
+      "prohibited_states": {
+        "claim_support": "ESTABLISHED_WITHIN_SCOPE",
+        "execution": "ESTABLISHED_WITHIN_SCOPE",
+        "outcome": "ESTABLISHED_WITHIN_SCOPE",
+        "task_completion": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 30,
+      "template": "Evidence '{evidence_id}' target scope ('{evidence_subject}', '{evidence_extent}') does not match evaluation target ('{target_subject}', '{target_extent}').",
+      "template_parameters": {
+        "evidence_id": "evidence.evidence_id",
+        "evidence_subject": "evidence.subject_ref",
+        "evidence_extent": "evidence.extent_ref",
+        "target_subject": "request.target.subject_ref",
+        "target_extent": "request.target.extent_ref"
+      }
+    },
+    {
+      "code": "EXTENT_MATCHES_NOTHING",
+      "summary": "Assertion extent_ref is not active in evaluation context scope registry snapshot.",
+      "emission_status": "ACTIVE",
+      "trigger_condition": "evaluation_context.scope_registry_snapshot is present AND target extent_ref is present AND extent_ref is not found in evaluation_context.scope_registry_snapshot.active_extents. (Note: Absence of scope_registry_snapshot yields UNAVAILABLE, not EXTENT_MATCHES_NOTHING).",
+      "affected_dimensions": ["claim_support", "outcome", "task_completion"],
+      "prohibited_states": {
+        "claim_support": "ESTABLISHED_WITHIN_SCOPE",
+        "outcome": "ESTABLISHED_WITHIN_SCOPE",
+        "task_completion": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 40,
+      "template": "Requested extent_ref '{extent_ref}' is not registered in active scope registry snapshot.",
+      "template_parameters": {
+        "extent_ref": "request.target.extent_ref"
+      }
+    },
+    {
+      "code": "EVIDENCE_STALE",
+      "summary": "Evidence timestamp violates currentness rules evaluated at evaluation_timestamp.",
+      "emission_status": "ACTIVE",
+      "trigger_condition": "evaluation_context.currentness_rules contains an applicable rule AND evidence.observed_at age exceeds maximum_age_seconds or falls outside valid_from / valid_until window. (Note: Absence of an applicable currentness rule yields UNAVAILABLE for currentness, not EVIDENCE_STALE).",
+      "affected_dimensions": ["currentness"],
+      "prohibited_states": {
+        "currentness": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 50,
+      "template": "Evidence '{evidence_id}' observed at '{observed_at}' violates currentness rule '{rule_id}'.",
+      "template_parameters": {
+        "evidence_id": "evidence.evidence_id",
+        "observed_at": "evidence.observed_at",
+        "rule_id": "currentness_rule.rule_id"
+      }
+    },
+    {
+      "code": "CHANNEL_NOT_LISTED_IN_WARRANT",
+      "summary": "Evidence channel_ref is not listed in active channel warrant snapshot.",
+      "emission_status": "ACTIVE",
+      "trigger_condition": "evidence.channel_ref is present AND evaluation_context.channel_warrant_snapshot is present AND evidence.channel_ref is not found in evaluation_context.channel_warrant_snapshot.bound_channels.",
+      "affected_dimensions": ["provenance_binding"],
+      "prohibited_states": {
+        "provenance_binding": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 60,
+      "template": "Channel '{channel_ref}' in evidence '{evidence_id}' is not listed in channel warrant '{warrant_id}'.",
+      "template_parameters": {
+        "channel_ref": "evidence.channel_ref",
+        "evidence_id": "evidence.evidence_id",
+        "warrant_id": "evaluation_context.channel_warrant_snapshot.warrant_id"
+      }
+    },
+    {
+      "code": "CHANNEL_BINDING_NOT_ESTABLISHED",
+      "summary": "Channel binding could not be proven for evidence item.",
+      "emission_status": "ACTIVE",
+      "trigger_condition": "evidence.channel_ref is absent OR evaluation_context.channel_warrant_snapshot is absent.",
+      "affected_dimensions": ["provenance_binding"],
+      "prohibited_states": {
+        "provenance_binding": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 60,
+      "template": "Provenance channel binding for evidence '{evidence_id}' could not be established.",
+      "template_parameters": {
+        "evidence_id": "evidence.evidence_id"
+      }
+    },
+    {
+      "code": "HOST_SUMMARY_NOT_PROVENANCE_BOUND",
+      "summary": "Host-authored interpretation lacks computable derivation in pure core v0.1.",
+      "emission_status": "RESERVED_NOT_EMITTED",
+      "trigger_condition": "Reserved for host-derivation map extensions in future engine profiles. Never emitted by pure core v0.1.",
+      "affected_dimensions": ["provenance_binding"],
+      "prohibited_states": {
+        "provenance_binding": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 60,
+      "template": "Host-derived assertion '{field_or_context}' is not provenance-bound to evidence capable of supporting the asserted fact.",
+      "template_parameters": {
+        "field_or_context": "assertion.context_parameters.unbound_key"
+      }
+    },
+    {
+      "code": "OUTCOME_NOT_OBSERVED",
+      "summary": "No valid outcome evidence observed matching requested outcome proposition.",
+      "emission_status": "RESERVED_NOT_EMITTED",
+      "trigger_condition": "Reserved for future engine profiles or schema revisions supplying a typed proposition/evidence relation. Never emitted by pure core v0.1 (where absence of a typed proposition matcher yields outcome = UNAVAILABLE).",
+      "affected_dimensions": ["outcome", "task_completion"],
+      "prohibited_states": {
+        "outcome": "ESTABLISHED_WITHIN_SCOPE",
+        "task_completion": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 70,
+      "template": "Outcome proposition '{proposition}' was not established by provided evidence.",
+      "template_parameters": {
+        "proposition": "requested_outcome.proposition"
+      }
+    },
+    {
+      "code": "CHANNEL_INDEPENDENCE_NOT_ESTABLISHED",
+      "summary": "Channel independence ceiling enforced for pure core v0.1.",
+      "emission_status": "ACTIVE",
+      "trigger_condition": "Evaluated under pure core v0.1 engine (institutional cross-channel independence warrants unintegrated).",
+      "affected_dimensions": ["channel_independence"],
+      "prohibited_states": {
+        "channel_independence": "ESTABLISHED_WITHIN_SCOPE"
+      },
+      "evaluation_phase": 100,
+      "template": "Channel independence dimension strictly bounded to NOT_ESTABLISHED under core engine v0.1.",
+      "template_parameters": {}
+    }
+  ]
+}
