@@ -15,7 +15,7 @@
 | `VEIP_CANONICAL_FIXTURES_v0.3.json` | `75cd12bb8c0560addcbdcb8e1a8127628709379e4bf462046361981f1d24339d` | 169,201 | Dropbox `id:AdzSIi2kJ_kAAAAAAAAvGg` |
 | `VEIP_CANONICAL_FIXTURES_v0.3_ADVERSARIAL_FREEZE_AUDIT.md` | `0dd75c830b63a3d74f73885793e3a1e5c231545cea4e14549e97690dcb0a75a6` | 536 | Dropbox `id:AdzSIi2kJ_kAAAAAAAAvGw` |
 | `VEIP_CANONICAL_FIXTURES_v0.3_FREEZE_RECORD.md` | `afc54c733b2b0d81e8a11f71afe63d9e38e564a9d0674fe0e3c1f75a604d70fb` | 1,913 | Dropbox |
-| `VEIP_CONFORMANCE_RUNNER_v0.1.zip` | `4f51176d07d5b2a8fcbcb07ca986326c58fb13542271bd2aae040bcf62bf1c9e` | 29,973 | Dropbox `id:AdzSIi2kJ_kAAAAAAAAvHg` (CDN BLOCKED — runner not deposited) |
+| `VEIP_CONFORMANCE_RUNNER_v0.1.zip` | `4f51176d07d5b2a8fcbcb07ca986326c58fb13542271bd2aae040bcf62bf1c9e` | 29,973 | Dropbox server-side copy from `id:AdzSIi2kJ_kAAAAAAAAvHg` → `id:AdzSIi2kJ_kAAAAAAAA5Xg` |
 
 ## Test Gate Summary
 
@@ -28,7 +28,8 @@
 | IEEE-754 differential round-trip (999,511 values) | PASS |
 | Determinism (2 runs, SHA-256 match) | PASS |
 | Input verification (7/7 binding hashes) | PASS |
-| Conformance runner deposit | **STOP — CDN BLOCKED** |
+| Conformance runner deposit | PASS (server-side copy, 29,973 bytes) |
+| Dropbox readback (8/8 normative inputs) | PASS |
 
 ## Package Location
 
