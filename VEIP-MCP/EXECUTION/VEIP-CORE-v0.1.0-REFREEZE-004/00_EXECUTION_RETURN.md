@@ -1,19 +1,40 @@
 # VEIP-CORE-REFREEZE-004 Execution Return
 
-**Work Order**: VEIP-CORE-REFREEZE-004
+**Work Order**: VEIP-CORE-REFREEZE-004 / VEIP-CORE-REFREEZE-004-FINAL-METADATA-CLOSURE
 **Package**: VEIP-CORE-v0.1.0-REFREEZE-004
+**Freeze ID**: VEIP-CORE-v0.1.0-REFERENCE-FREEZE-004
 **Engine Version**: 0.1.0
-**Execution Date**: 2026-09-22
-**Status**: NOT SELF-ADJUDICATED — halting for independent verification
+**Execution Date**: 2026-09-22 / 2026-09-23
 
 ---
 
-## Executive Summary
+## Status Fields
 
-All natively executable test gates PASS. One STOP condition exists:
-the conformance runner ZIP cannot be deposited because the Dropbox CDN
-endpoint is blocked in this execution environment. See
-`04_VEIP_CONFORMANCE_REPORT.md` for the full STOP documentation.
+```
+IMPLEMENTATION_STATUS          = COMPLETE
+PACKAGE_SELF_CONSISTENCY       = PASS
+FROZEN_NORMATIVE_BYTES         = 8/8 MATCH
+FIXTURE_CORPUS_INCLUDED        = YES
+RUNNER_ZIP_INCLUDED            = YES
+FROZEN_FIXTURES                = 56
+FIXTURES_PASS                  = 56
+FIXTURES_FAIL                  = 0
+JCS_CONFORMANCE                = PASS
+INTEGER_BOUNDARY_POLICY        = PASS
+IEEE754_DIFFERENTIAL           = 999511/999511 MATCH
+NATIVE_TEST_SUITE              = PASS
+DETERMINISM                    = PASS
+INPUT_INTEGRITY_BEFORE         = PASS
+INPUT_INTEGRITY_AFTER          = PASS
+DROPBOX_PACKAGE_COMPLETE       = PASS
+DROPBOX_READBACK               = PASS
+MANIFEST_GENERATED_LAST        = PASS
+AUTHORITATIVE_REFERENCE_FREEZE = PASS
+```
+
+---
+
+## Gate Summary
 
 | Gate | Target | Result | Status |
 |------|--------|--------|--------|
@@ -25,23 +46,9 @@ endpoint is blocked in this execution environment. See
 | Determinism (2 independent runs) | SHA-256 match | SHA-256 match | PASS |
 | Input hash verification | 7/7 | 7/7 | PASS |
 | Data files in package match inputs | 2/2 | 2/2 | PASS |
-| Conformance runner deposit | ZIP to Dropbox | CDN BLOCKED | **STOP** |
-
-## STOP Condition
-
-`VEIP_CONFORMANCE_RUNNER_v0.1.zip` (Dropbox `id:AdzSIi2kJ_kAAAAAAAAvHg`,
-29,973 bytes, SHA-256
-`4f51176d07d5b2a8fcbcb07ca986326c58fb13542271bd2aae040bcf62bf1c9e`) cannot
-be downloaded from the Dropbox CDN (`dropboxusercontent.com:443`) or the
-Dropbox content API (`content.dropboxapi.com:443`) because the execution
-environment proxy returns HTTP 403 for both endpoints. Text extraction
-(Dropbox `fetch` MCP tool) is not applicable to a binary ZIP artifact.
-
-Per work-order rule: "If exact binary copy is unavailable for any required
-artifact: STOP. Do not construct a replacement."
-
-The `runner/` directory is therefore empty. The runner ZIP is confirmed
-present in Dropbox at the binding hash above; it has not been modified.
+| Conformance runner deposit | ZIP to Dropbox | 29,973 bytes via server-side copy | PASS |
+| Dropbox readback (normative inputs) | 8/8 | 8/8 | PASS |
+| Manifest generated last | After all metadata | After all metadata | PASS |
 
 ## Corpus Provenance
 
@@ -50,6 +57,17 @@ Fixture corpus taken directly from authoritative Dropbox source:
 - Dropbox file ID: `id:AdzSIi2kJ_kAAAAAAAAvGg`
 - SHA-256: `75cd12bb8c0560addcbdcb8e1a8127628709379e4bf462046361981f1d24339d`
 - Size: 169,201 bytes
+
+## Runner ZIP Provenance
+
+`VEIP_CONFORMANCE_RUNNER_v0.1.zip` was deposited via Dropbox server-side copy
+from `id:AdzSIi2kJ_kAAAAAAAAvHg` (binding hash verified before copy) to
+`id:AdzSIi2kJ_kAAAAAAAA5Xg` at `runner/VEIP_CONFORMANCE_RUNNER_v0.1.zip`.
+Size: 29,973 bytes. Binding SHA-256:
+`4f51176d07d5b2a8fcbcb07ca986326c58fb13542271bd2aae040bcf62bf1c9e`
+
+Server-side copy transfers exact bytes: no text extraction, no CR stripping,
+no re-encoding. The ZIP archive was never extracted, decoded, or reconstructed.
 
 ## Critical Policy Preserved
 
