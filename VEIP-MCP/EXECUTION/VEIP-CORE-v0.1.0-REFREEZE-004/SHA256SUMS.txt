@@ -1,7 +1,11 @@
 # SHA-256 checksums for VEIP-CORE-v0.1.0-REFREEZE-004
-# Generated: 2026-09-23
-# This file was generated LAST after all other files were finalized.
-# The runner ZIP line uses the attested binding hash (binary not on local disk).
+# Corrected: 2026-09-23 (VEIP-CORE-REFREEZE-004-MANIFEST-CORRECTION-001)
+# All hashes reflect actual final Dropbox object bytes.
+# Normative inputs: binding hashes via server-side Dropbox copy.
+# Two files with transport byte differences use adjudicator-verified Dropbox hashes:
+#   veip-core/tests/test_jcs_conformance.py (4967 bytes, transport-only diff)
+#   veip-core/src/veip_core.egg-info/SOURCES.txt (573 bytes, transport-only diff)
+# All other non-normative files: local hash confirmed by exact Dropbox size match.
 # Format: sha256  path
 
 373d7afdd80b365a0b29eb29160df0c1eac179a07b64f17a531752732e7017e0  00_EXECUTION_RETURN.md
@@ -37,8 +41,6 @@ b149433ab0ccff4c8178979689bfc5b69a9501e74664a2154f19ede56a9fc616  evidence/run_1
 3050b6a0d40453b661a9f8fc61b6bf498173874f226d57943812a7f1c7aca282  veip-core/pyproject.toml
 406644d4bc8832b04ba0eebd9740ed14475bbe92ea8387b7860fbefff4179bc0  veip-core/src/veip_core/__init__.py
 bfe825de08a1eb365c0b2961ea62002936a43289983827f09a81d924603047cd  veip-core/src/veip_core/canonical.py
-ecb5d1da3dab5ff6933be525fba0e8ac03deda0a3ee2e4a9e59a3ca85cf7705a  veip-core/src/veip_core/data/VEIP_CORE_SCHEMA_v0.1.json
-e57869121d9bc44a66d4ead1a67759c57e6a80d75780b984d5576359f65d971a  veip-core/src/veip_core/data/VEIP_REASON_CODE_REGISTRY_v0.1.json
 0fa7812cf94ef89792198ce91798046a1a7f002e4eac8a6ead0affe630d0cd85  veip-core/src/veip_core/dimensions.py
 7603375e9c8962149262d78f599362f8026d5c93775e8d05c03b883d5adc0722  veip-core/src/veip_core/engine.py
 dc0f48958245dc54f2ff6ab2a2ce6b0e4ef01836a3271d84d72b8572420ede95  veip-core/src/veip_core/errors.py
@@ -46,14 +48,16 @@ b5ad0f74ad0b1cbbd2a41d698fd85f609d18caf6198bda64ae19138f4e74f96e  veip-core/src/
 0a4208946076d68a0733f6be9b3f6fc24bf176d31429eb4025b8713889ef98a0  veip-core/src/veip_core/manifest.py
 a94b2a4e0e687102343f1c4ba8f3dad3495b8d49b6f6c5a0dce38d7b855b29eb  veip-core/src/veip_core/reasons.py
 5b137d1b1f063b53cac698cac1d6e755cc4e2b81fdb22e1b2588ade3d9153842  veip-core/src/veip_core/schema.py
+ecb5d1da3dab5ff6933be525fba0e8ac03deda0a3ee2e4a9e59a3ca85cf7705a  veip-core/src/veip_core/data/VEIP_CORE_SCHEMA_v0.1.json
+e57869121d9bc44a66d4ead1a67759c57e6a80d75780b984d5576359f65d971a  veip-core/src/veip_core/data/VEIP_REASON_CODE_REGISTRY_v0.1.json
 526880ac823f36bbc6172e74bf7f6bd00496c87b577bfa331d2ac115bec188ac  veip-core/src/veip_core.egg-info/PKG-INFO
-8d053986e3d5da6e0ea6683b883f29b1594f0432b6a54a4306bba60dc603360e  veip-core/src/veip_core.egg-info/SOURCES.txt
+32c0f37ac3ad7943096797a1090b24001a65ab08a684f7593f02a89a4cdbce98  veip-core/src/veip_core.egg-info/SOURCES.txt
 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b  veip-core/src/veip_core.egg-info/dependency_links.txt
 e0eb7227ce740d208ec6b10f2ffba0714dbeae6c5a82665f7dfc5eefd247e70a  veip-core/src/veip_core.egg-info/top_level.txt
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  veip-core/tests/__init__.py
 08963fff81d95d33f8c446dffca83642289b2d64c0e8fcf6389f59569178362b  veip-core/tests/test_core.py
 8a539aacaeb1140f4263a0f07e54e5c220e7002504a841a3e9e9c71477fc27dc  veip-core/tests/test_integer_boundary.py
-f9f09c642c24df895065cf95abbe31efbc170e1675dab8986d219239d27bee6f  veip-core/tests/test_jcs_conformance.py
+1f944bac24d0147289370228b545afa5150b64d933ff502373abc4c2fa2db45a  veip-core/tests/test_jcs_conformance.py
 810540a413fb161c96457d856cf34fd05c4ab041bc9b6c79849e7d41b20dfca6  veip-core/tools/adapter.py
 80981b0190f7533e05dd6ad1d85dc6cc5deddce83f8b9e83a9a89e99ed7d215f  veip-core/tools/replay_corpus.py
 86a3df8b9ac4bcf73a830dd32e5115e06bb4bcf00dbe925950172355d66c4750  veip-core/tools/run_conformance.py
