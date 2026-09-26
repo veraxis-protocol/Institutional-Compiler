@@ -1,0 +1,10 @@
+{
+  "test_date": "2026-09-22",
+  "engine_version": "0.1.0",
+  "description": "Round-trip verification: canonical.dumps(v) \u2192 float(result) == v for 999,511 random IEEE-754 finite doubles",
+  "seed": "0x5e3df004aaaabbbb",
+  "total": 999511,
+  "pass": 999511,
+  "fail": 0,
+  "failures": []
+}

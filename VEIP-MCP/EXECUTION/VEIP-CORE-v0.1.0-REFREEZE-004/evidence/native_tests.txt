@@ -1,0 +1,36 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-9.0.2, pluggy-1.6.0 -- /root/.local/share/uv/tools/pytest/bin/python
+cachedir: .pytest_cache
+rootdir: /home/user/Institutional-Compiler
+configfile: pyproject.toml
+collecting ... collected 20 items
+
+tests/test_core.py::FrozenConformanceTests::test_all_frozen_fixtures 
+tests/test_core.py::FrozenConformanceTests::test_all_frozen_fixtures PASSED [  5%]
+tests/test_core.py::FrozenConformanceTests::test_error_precedence_adversarial_cases 
+tests/test_core.py::FrozenConformanceTests::test_error_precedence_adversarial_cases PASSED [ 10%]
+tests/test_core.py::AntiMemorizationTests::test_external_fixture_renaming_cannot_change_results PASSED [ 15%]
+tests/test_core.py::AntiMemorizationTests::test_irrelevant_evidence_order_does_not_change_result PASSED [ 20%]
+tests/test_core.py::AntiMemorizationTests::test_repeated_inputs_are_byte_identical PASSED [ 25%]
+tests/test_core.py::AntiMemorizationTests::test_reserved_codes_never_emit_and_positive_ceiling_holds PASSED [ 30%]
+tests/test_core.py::AntiMemorizationTests::test_source_never_reads_fixture_id PASSED [ 35%]
+tests/test_core.py::AntiMemorizationTests::test_unreferenced_decoy_cannot_change_adjudication PASSED [ 40%]
+tests/test_integer_boundary.py::IntegerBoundaryTests::test_arbitrary_precision_rejected 
+tests/test_integer_boundary.py::IntegerBoundaryTests::test_arbitrary_precision_rejected PASSED [ 45%]
+tests/test_integer_boundary.py::IntegerBoundaryTests::test_boundary_values_accepted PASSED [ 50%]
+tests/test_integer_boundary.py::IntegerBoundaryTests::test_rejection_does_not_silently_truncate PASSED [ 55%]
+tests/test_integer_boundary.py::IntegerBoundaryTests::test_two_pow_53_rejected_despite_exact_binary64 PASSED [ 60%]
+tests/test_jcs_conformance.py::JCSConformanceTests::test_control_character_escaping PASSED [ 65%]
+tests/test_jcs_conformance.py::JCSConformanceTests::test_integer_domain_boundary 
+tests/test_jcs_conformance.py::JCSConformanceTests::test_integer_domain_boundary PASSED [ 70%]
+tests/test_jcs_conformance.py::JCSConformanceTests::test_lone_surrogates_are_rejected 
+tests/test_jcs_conformance.py::JCSConformanceTests::test_lone_surrogates_are_rejected PASSED [ 75%]
+tests/test_jcs_conformance.py::JCSConformanceTests::test_nested_payload_digest PASSED [ 80%]
+tests/test_jcs_conformance.py::JCSConformanceTests::test_non_finite_numbers_are_rejected 
+tests/test_jcs_conformance.py::JCSConformanceTests::test_non_finite_numbers_are_rejected PASSED [ 85%]
+tests/test_jcs_conformance.py::JCSConformanceTests::test_rfc_8785_appendix_b_number_vectors 
+tests/test_jcs_conformance.py::JCSConformanceTests::test_rfc_8785_appendix_b_number_vectors PASSED [ 90%]
+tests/test_jcs_conformance.py::JCSConformanceTests::test_rfc_8785_sample PASSED [ 95%]
+tests/test_jcs_conformance.py::JCSConformanceTests::test_utf16_property_order PASSED [100%]
+
+==================== 20 passed, 97 subtests passed in 0.12s ====================

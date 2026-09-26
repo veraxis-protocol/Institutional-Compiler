@@ -1,0 +1,39 @@
+{
+  "canonical_sha256": "f1ca2e5805342e2bb69ca27aa04bffa6261faf29023fe1c9def52f6df5543497",
+  "claim_time_reconstruction": {
+    "claim": {
+      "kind": "user_claim",
+      "seq": 20
+    },
+    "evidence_after_claim": [
+      {
+        "kind": "evidence_available",
+        "payload": {
+          "event_seq": 30,
+          "observed_at": "2026-09-22T19:39:02.267702+00:00",
+          "payload_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "source_native_id": "refund_123_update",
+          "source_system": "payment_processor",
+          "status": "succeeded"
+        },
+        "seq": 30
+      }
+    ],
+    "evidence_at_claim": [
+      {
+        "kind": "evidence_available",
+        "payload": {
+          "event_seq": 10,
+          "observed_at": "2026-09-22T19:39:02.267620+00:00",
+          "payload_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_native_id": "refund_123",
+          "source_system": "payment_processor",
+          "status": "pending"
+        },
+        "seq": 10
+      }
+    ]
+  },
+  "record_count": 5,
+  "trace_id": "trace_0123456789abcdef0123456789abcdef"
+}

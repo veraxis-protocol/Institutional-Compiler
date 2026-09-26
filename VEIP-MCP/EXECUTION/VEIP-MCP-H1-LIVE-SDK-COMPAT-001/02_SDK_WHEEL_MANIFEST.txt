@@ -1,0 +1,11 @@
+# SDK Wheel Manifest — VEIP-MCP-H1-LIVE-SDK-COMPAT-001
+# Date: 2026-09-22
+# Verified by: pip download openai-agents==0.22.3 --no-deps
+
+filename  openai_agents-0.22.3-py3-none-any.whl
+version   0.22.3
+sha256    41dec9e2e703db32a627bf0290f3721a6ca37405603a8cb654213356dbb8ee9d
+match_prior_report  YES
+
+# Prior report (id:AdzSIi2kJ_kAAAAAAAA42g) published SHA-256:
+# 41dec9e2e703db32a627bf0290f3721a6ca37405603a8cb654213356dbb8ee9d

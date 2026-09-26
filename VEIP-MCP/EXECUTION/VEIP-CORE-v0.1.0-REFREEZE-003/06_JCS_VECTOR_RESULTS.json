@@ -1,0 +1,112 @@
+{
+  "test_date": "2026-09-22",
+  "engine_version": "0.1.0",
+  "python_version": "3.11.15",
+  "test_file": "veip-core/tests/test_jcs_conformance.py",
+  "test_file_sha256": "f9f09c642c24df895065cf95abbe31efbc170e1675dab8986d219239d27bee6f",
+  "summary": {
+    "total_tests": 8,
+    "total_subtests": 32,
+    "rfc8785_appendix_b_vectors": 24,
+    "pass": 8,
+    "fail": 0
+  },
+  "rfc8785_appendix_b_vectors": [
+    {
+      "bits": "0000000000000000",
+      "result": "PASS"
+    },
+    {
+      "bits": "8000000000000000",
+      "result": "PASS"
+    },
+    {
+      "bits": "0000000000000001",
+      "result": "PASS"
+    },
+    {
+      "bits": "8000000000000001",
+      "result": "PASS"
+    },
+    {
+      "bits": "7fefffffffffffff",
+      "result": "PASS"
+    },
+    {
+      "bits": "ffefffffffffffff",
+      "result": "PASS"
+    },
+    {
+      "bits": "4340000000000000",
+      "result": "PASS"
+    },
+    {
+      "bits": "c340000000000000",
+      "result": "PASS"
+    },
+    {
+      "bits": "4430000000000000",
+      "result": "PASS"
+    },
+    {
+      "bits": "44b52d02c7e14af5",
+      "result": "PASS"
+    },
+    {
+      "bits": "44b52d02c7e14af6",
+      "result": "PASS"
+    },
+    {
+      "bits": "44b52d02c7e14af7",
+      "result": "PASS"
+    },
+    {
+      "bits": "444b1ae4d6e2ef4e",
+      "result": "PASS"
+    },
+    {
+      "bits": "444b1ae4d6e2ef4f",
+      "result": "PASS"
+    },
+    {
+      "bits": "444b1ae4d6e2ef50",
+      "result": "PASS"
+    },
+    {
+      "bits": "3eb0c6f7a0b5ed8c",
+      "result": "PASS"
+    },
+    {
+      "bits": "3eb0c6f7a0b5ed8d",
+      "result": "PASS"
+    },
+    {
+      "bits": "41b3de4355555553",
+      "result": "PASS"
+    },
+    {
+      "bits": "41b3de4355555554",
+      "result": "PASS"
+    },
+    {
+      "bits": "41b3de4355555555",
+      "result": "PASS"
+    },
+    {
+      "bits": "41b3de4355555556",
+      "result": "PASS"
+    },
+    {
+      "bits": "41b3de4355555557",
+      "result": "PASS"
+    },
+    {
+      "bits": "becbf647612f3696",
+      "result": "PASS"
+    },
+    {
+      "bits": "43143ff3c1cb0959",
+      "result": "PASS"
+    }
+  ]
+}

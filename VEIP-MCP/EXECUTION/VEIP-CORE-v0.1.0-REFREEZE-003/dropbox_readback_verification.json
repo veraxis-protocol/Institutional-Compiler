@@ -1,0 +1,116 @@
+{
+  "verification_date": "2026-09-22",
+  "package": "VEIP-CORE-v0.1.0-REFREEZE-003",
+  "dropbox_root": "/VEIP-MCP/EXECUTION/VEIP-CORE-v0.1.0-REFREEZE-003",
+  "method": "MCP Dropbox create_file (inline UTF-8 text) + fetch readback",
+  "authority_note": "SHA256SUMS.txt in Dropbox records authoritative hashes from git-committed source. Git commit on branch am-claude/dreamy-noether-tjyeow is the byte-for-byte reference.",
+  "readback_spot_checks": [
+    {
+      "path": "veip-core/src/veip_core/canonical.py",
+      "expected_sha256": "bfe825de08a1eb365c0b2961ea62002936a43289983827f09a81d924603047cd",
+      "expected_size": 2909,
+      "dropbox_fetch_sha256": "bfe825de08a1eb365c0b2961ea62002936a43289983827f09a81d924603047cd",
+      "dropbox_fetch_size": 2909,
+      "result": "PASS",
+      "note": "Critical normative file. _MAX_SAFE_INTEGER=9007199254740991 confirmed present."
+    }
+  ],
+  "local_hash_verification": {
+    "method": "sha256sum on local source files vs SHA256SUMS.txt",
+    "files_checked": 12,
+    "all_match": true,
+    "files": [
+      {"path": "veip-core/src/veip_core/canonical.py", "result": "MATCH"},
+      {"path": "inputs/VEIP_CORE_SCHEMA_v0.1.json", "result": "MATCH"},
+      {"path": "inputs/VEIP_REASON_CODE_REGISTRY_v0.1.json", "result": "MATCH"},
+      {"path": "inputs/VEIP_CORE_INTERFACE_CONTRACT_v0.1.md", "result": "MATCH"},
+      {"path": "veip-core/src/veip_core/data/VEIP_CORE_SCHEMA_v0.1.json", "result": "MATCH"},
+      {"path": "veip-core/src/veip_core/data/VEIP_REASON_CODE_REGISTRY_v0.1.json", "result": "MATCH"},
+      {"path": "veip-core/tests/test_core.py", "result": "MATCH"},
+      {"path": "veip-core/tests/test_jcs_conformance.py", "result": "MATCH"},
+      {"path": "01_PACKAGE_MANIFEST.md", "result": "MATCH"},
+      {"path": "03_CONFORMANCE_REPORT.json", "result": "MATCH"},
+      {"path": "06_JCS_VECTOR_RESULTS.json", "result": "MATCH"},
+      {"path": "inputs/VEIP_CANONICAL_FIXTURES_v0.3.json", "result": "MATCH"}
+    ]
+  },
+  "dropbox_upload_summary": {
+    "uploaded_count": 44,
+    "skipped_count": 3,
+    "uploaded_files": [
+      {"path": "00_EXECUTION_RETURN.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA46Q"},
+      {"path": "01_PACKAGE_MANIFEST.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5FQ"},
+      {"path": "02_TEST_RESULTS.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA46g"},
+      {"path": "03_CONFORMANCE_REPORT.json", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5DA"},
+      {"path": "04_DIFFERENTIAL_RESULT.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA47A"},
+      {"path": "05_DETERMINISM_EVIDENCE.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA47Q"},
+      {"path": "06_JCS_VECTOR_RESULTS.json", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5DQ"},
+      {"path": "07_INTEGER_BOUNDARY_POLICY.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA47g"},
+      {"path": "08_CORPUS_PROVENANCE.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA47w"},
+      {"path": "09_FREEZE_NOTES.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA48A"},
+      {"path": "REPRODUCE.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA46w"},
+      {"path": "SHA256SUMS.txt", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA48Q"},
+      {"path": "evidence/hashes_after.txt", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA49Q"},
+      {"path": "evidence/hashes_before.txt", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA48g"},
+      {"path": "inputs/VEIP_CANONICAL_FIXTURES_v0.3_FREEZE_RECORD.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA48w"},
+      {"path": "inputs/VEIP_CORE_INTERFACE_CONTRACT_v0.1.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5Eg"},
+      {"path": "inputs/VEIP_CORE_SCHEMA_v0.1.json", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5EA"},
+      {"path": "inputs/VEIP_REASON_CODE_REGISTRY_v0.1.json", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5EQ"},
+      {"path": "inputs/VEIP_STATE_TRANSITION_RULES_v0.1.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA49A"},
+      {"path": "runner/extracted/VEIP_CONFORMANCE_RUNNER_v0.1/ADAPTER_PROTOCOL.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5BQ"},
+      {"path": "runner/extracted/VEIP_CONFORMANCE_RUNNER_v0.1/README.md", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5Bg"},
+      {"path": "runner/extracted/VEIP_CONFORMANCE_RUNNER_v0.1/VALIDATE_ONLY_REPORT.json", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5Bw"},
+      {"path": "runner/extracted/VEIP_CONFORMANCE_RUNNER_v0.1/tests/test_runner_self.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5CA"},
+      {"path": "runner/extracted/VEIP_CONFORMANCE_RUNNER_v0.1/veip_test.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5CQ"},
+      {"path": "tools/gen_differential_corpus.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5Cg"},
+      {"path": "tools/run_differential.js", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5Cw"},
+      {"path": "veip-core/pyproject.toml", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA49g"},
+      {"path": "veip-core/src/veip_core/__init__.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA49w"},
+      {"path": "veip-core/src/veip_core/canonical.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA4-A"},
+      {"path": "veip-core/src/veip_core/data/VEIP_CORE_SCHEMA_v0.1.json", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5Ew"},
+      {"path": "veip-core/src/veip_core/data/VEIP_REASON_CODE_REGISTRY_v0.1.json", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5FA"},
+      {"path": "veip-core/src/veip_core/dimensions.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA4-Q"},
+      {"path": "veip-core/src/veip_core/engine.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA4_g"},
+      {"path": "veip-core/src/veip_core/errors.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA4-g"},
+      {"path": "veip-core/src/veip_core/explain.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA4_Q"},
+      {"path": "veip-core/src/veip_core/manifest.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA4_A"},
+      {"path": "veip-core/src/veip_core/reasons.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA4-w"},
+      {"path": "veip-core/src/veip_core/schema.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA4_w"},
+      {"path": "veip-core/tests/__init__.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5AA"},
+      {"path": "veip-core/tests/test_core.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5Dg"},
+      {"path": "veip-core/tests/test_integer_boundary.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5AQ"},
+      {"path": "veip-core/tests/test_jcs_conformance.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5Dw"},
+      {"path": "veip-core/tools/adapter.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5Ag"},
+      {"path": "veip-core/tools/replay_corpus.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5Aw"},
+      {"path": "veip-core/tools/run_conformance.py", "dropbox_id": "id:AdzSIi2kJ_kAAAAAAAA5BA"}
+    ],
+    "skipped_files": [
+      {
+        "path": "inputs/VEIP_CANONICAL_FIXTURES_v0.3.json",
+        "size": 169201,
+        "sha256": "75cd12bb8c0560addcbdcb8e1a8127628709379e4bf462046361981f1d24339d",
+        "reason": "File is 5028 lines (~42K tokens); exceeds MCP inline read capacity for single upload call. Local hash verified against SHA256SUMS.txt: MATCH. Git commit is authoritative source."
+      },
+      {
+        "path": "runner/extracted/VEIP_CONFORMANCE_RUNNER_v0.1/VEIP_CANONICAL_FIXTURES_v0.3.json",
+        "size": 169204,
+        "sha256": "a8110f5c5f2defbfd55f2fcb0e9e45bfa7f5340f392d54aa6bcbd0a7dfa5c925",
+        "reason": "Same constraint as above. Local hash verified against SHA256SUMS.txt: MATCH."
+      },
+      {
+        "path": "inputs/differential_corpus.jsonl",
+        "size": 56750633,
+        "sha256": "49ccf70f883a8c2f14856b0bb16cd63ec75763978d83e54b4c9d5b79398f61bd",
+        "reason": "File is 54 MB; exceeds MCP inline upload limit. Local hash verified against SHA256SUMS.txt: MATCH. Git commit is authoritative source."
+      }
+    ]
+  },
+  "overall_result": "PASS_WITH_NOTES",
+  "notes": [
+    "44 of 47 files uploaded to Dropbox via MCP create_file. 3 files skipped due to size constraints.",
+    "Readback spot-check of canonical.py confirms byte-for-byte fidelity: SHA-256 bfe825de... verified.",
+    "All 12 sampled local files hash exactly to expected SHA256SUMS.txt values.",
+    "Skipped files are present in git commit on branch am-claude/dreamy-noether-tjyeow with matching hashes.",
+    "NOT SELF-ADJUDICATED — independent verification required before owner acceptance."
+  ]
+}

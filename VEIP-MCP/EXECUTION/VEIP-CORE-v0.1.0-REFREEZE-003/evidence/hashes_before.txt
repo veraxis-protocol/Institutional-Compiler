@@ -1,0 +1,37 @@
+# Normative file hashes BEFORE final test run
+# Generated: 2026-09-22
+# Format: sha256  size  path
+
+75cd12bb8c0560addcbdcb8e1a8127628709379e4bf462046361981f1d24339d    169201  inputs/VEIP_CANONICAL_FIXTURES_v0.3.json
+afc54c733b2b0d81e8a11f71afe63d9e38e564a9d0674fe0e3c1f75a604d70fb      1913  inputs/VEIP_CANONICAL_FIXTURES_v0.3_FREEZE_RECORD.md
+4321f764005fc04e12939fcb77d7a261c250f0c567e83fd4b4bab93ac6e33082     12735  inputs/VEIP_CORE_INTERFACE_CONTRACT_v0.1.md
+3170f36ac18247784e4e3c88d2f7c2b64fe47d93ac88b4534c0f78f0cc01e6e6     14525  inputs/VEIP_CORE_SCHEMA_v0.1.json
+51520729c98d30861ed2c42153f676cce798d440f1e446cfef8e63e9c3793b9d     12370  inputs/VEIP_REASON_CODE_REGISTRY_v0.1.json
+477244016417a1ef1cde0bcc2ec7e242956be15a0444f410be9f65c3f9a96205       182  inputs/VEIP_STATE_TRANSITION_RULES_v0.1.md
+317e080a5b5e53ac88055237b2fa26cd849b7a8d35d89f12fc6a452aab3b963d       352  runner/extracted/VEIP_CONFORMANCE_RUNNER_v0.1/ADAPTER_PROTOCOL.md
+f2178b4fb1107c3c8dcaeb88935759d7b2c48ea64a4e4de88be11348d93324f5      1327  runner/extracted/VEIP_CONFORMANCE_RUNNER_v0.1/README.md
+32c962c465ae54d2cccd0fa484289085ec89c85dc3895cdb3ebee7aa5d7af1bd       135  runner/extracted/VEIP_CONFORMANCE_RUNNER_v0.1/VALIDATE_ONLY_REPORT.json
+a8110f5c5f2defbfd55f2fcb0e9e45bfa7f5340f392d54aa6bcbd0a7dfa5c925    169204  runner/extracted/VEIP_CONFORMANCE_RUNNER_v0.1/VEIP_CANONICAL_FIXTURES_v0.3.json
+5d4a8138abea8d1cabc41b07f6f900cad402235af5bcd1f650e5a70b1403a66d       618  runner/extracted/VEIP_CONFORMANCE_RUNNER_v0.1/tests/test_runner_self.py
+43186d9aba0ddad8af526edee1923d00ebaa5f1fe19bdaaa69c78b960d338c80      7200  runner/extracted/VEIP_CONFORMANCE_RUNNER_v0.1/veip_test.py
+b66c25330b337f56af97b39c9f31588d1ec911a9ed92682bbf3b96b95f18c25c      3484  tools/gen_differential_corpus.py
+01085dd22c7d25fb27bc741bc4c930f3c03bbb1197d360d21f05e17e168ed737      1471  tools/run_differential.js
+3050b6a0d40453b661a9f8fc61b6bf498173874f226d57943812a7f1c7aca282       385  veip-core/pyproject.toml
+406644d4bc8832b04ba0eebd9740ed14475bbe92ea8387b7860fbefff4179bc0       224  veip-core/src/veip_core/__init__.py
+bfe825de08a1eb365c0b2961ea62002936a43289983827f09a81d924603047cd      2909  veip-core/src/veip_core/canonical.py
+3170f36ac18247784e4e3c88d2f7c2b64fe47d93ac88b4534c0f78f0cc01e6e6     14525  veip-core/src/veip_core/data/VEIP_CORE_SCHEMA_v0.1.json
+51520729c98d30861ed2c42153f676cce798d440f1e446cfef8e63e9c3793b9d     12370  veip-core/src/veip_core/data/VEIP_REASON_CODE_REGISTRY_v0.1.json
+0fa7812cf94ef89792198ce91798046a1a7f002e4eac8a6ead0affe630d0cd85      2779  veip-core/src/veip_core/dimensions.py
+7603375e9c8962149262d78f599362f8026d5c93775e8d05c03b883d5adc0722      6470  veip-core/src/veip_core/engine.py
+dc0f48958245dc54f2ff6ab2a2ce6b0e4ef01836a3271d84d72b8572420ede95      1147  veip-core/src/veip_core/errors.py
+b5ad0f74ad0b1cbbd2a41d698fd85f609d18caf6198bda64ae19138f4e74f96e      1974  veip-core/src/veip_core/explain.py
+0a4208946076d68a0733f6be9b3f6fc24bf176d31429eb4025b8713889ef98a0      1113  veip-core/src/veip_core/manifest.py
+a94b2a4e0e687102343f1c4ba8f3dad3495b8d49b6f6c5a0dce38d7b855b29eb       559  veip-core/src/veip_core/reasons.py
+5b137d1b1f063b53cac698cac1d6e755cc4e2b81fdb22e1b2588ade3d9153842      4629  veip-core/src/veip_core/schema.py
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855         0  veip-core/tests/__init__.py
+08963fff81d95d33f8c446dffca83642289b2d64c0e8fcf6389f59569178362b      5137  veip-core/tests/test_core.py
+8a539aacaeb1140f4263a0f07e54e5c220e7002504a841a3e9e9c71477fc27dc      1473  veip-core/tests/test_integer_boundary.py
+f9f09c642c24df895065cf95abbe31efbc170e1675dab8986d219239d27bee6f      4965  veip-core/tests/test_jcs_conformance.py
+810540a413fb161c96457d856cf34fd05c4ab041bc9b6c79849e7d41b20dfca6      1005  veip-core/tools/adapter.py
+80981b0190f7533e05dd6ad1d85dc6cc5deddce83f8b9e83a9a89e99ed7d215f      1199  veip-core/tools/replay_corpus.py
+86a3df8b9ac4bcf73a830dd32e5115e06bb4bcf00dbe925950172355d66c4750       859  veip-core/tools/run_conformance.py

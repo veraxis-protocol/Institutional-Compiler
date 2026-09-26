@@ -1,0 +1,14 @@
+{
+  "evidence_after_claim_status": [
+    "succeeded"
+  ],
+  "evidence_at_claim_status": [
+    "pending"
+  ],
+  "normalized_sha256": "f1ca2e5805342e2bb69ca27aa04bffa6261faf29023fe1c9def52f6df5543497",
+  "probe": "OPENAI_AGENTS_INSTALLED_SDK_EXPORT_COMPATIBILITY",
+  "raw_export_sha256": "383f70c1486fdd74f3942a1ec5d0da8166f863da4f80750b8cab3497e1637b44",
+  "record_count": 5,
+  "result": "PASS",
+  "sdk_version": "0.22.3"
+}

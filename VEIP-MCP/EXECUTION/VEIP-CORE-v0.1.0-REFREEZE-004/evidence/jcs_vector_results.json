@@ -1,0 +1,158 @@
+{
+  "test_date": "2026-09-22",
+  "engine_version": "0.1.0",
+  "python_version": "3.11.15",
+  "summary": {
+    "total_tests": 8,
+    "total_subtests": 32,
+    "rfc8785_appendix_b_vectors": 24,
+    "pass": 24,
+    "fail": 0
+  },
+  "rfc8785_appendix_b_vectors": [
+    {
+      "bits": "0000000000000000",
+      "expected": "0",
+      "actual": "0",
+      "result": "PASS"
+    },
+    {
+      "bits": "8000000000000000",
+      "expected": "0",
+      "actual": "0",
+      "result": "PASS"
+    },
+    {
+      "bits": "0000000000000001",
+      "expected": "5e-324",
+      "actual": "5e-324",
+      "result": "PASS"
+    },
+    {
+      "bits": "8000000000000001",
+      "expected": "-5e-324",
+      "actual": "-5e-324",
+      "result": "PASS"
+    },
+    {
+      "bits": "7fefffffffffffff",
+      "expected": "1.7976931348623157e+308",
+      "actual": "1.7976931348623157e+308",
+      "result": "PASS"
+    },
+    {
+      "bits": "ffefffffffffffff",
+      "expected": "-1.7976931348623157e+308",
+      "actual": "-1.7976931348623157e+308",
+      "result": "PASS"
+    },
+    {
+      "bits": "4340000000000000",
+      "expected": "9007199254740992",
+      "actual": "9007199254740992",
+      "result": "PASS"
+    },
+    {
+      "bits": "c340000000000000",
+      "expected": "-9007199254740992",
+      "actual": "-9007199254740992",
+      "result": "PASS"
+    },
+    {
+      "bits": "4430000000000000",
+      "expected": "295147905179352830000",
+      "actual": "295147905179352830000",
+      "result": "PASS"
+    },
+    {
+      "bits": "44b52d02c7e14af5",
+      "expected": "9.999999999999997e+22",
+      "actual": "9.999999999999997e+22",
+      "result": "PASS"
+    },
+    {
+      "bits": "44b52d02c7e14af6",
+      "expected": "1e+23",
+      "actual": "1e+23",
+      "result": "PASS"
+    },
+    {
+      "bits": "44b52d02c7e14af7",
+      "expected": "1.0000000000000001e+23",
+      "actual": "1.0000000000000001e+23",
+      "result": "PASS"
+    },
+    {
+      "bits": "444b1ae4d6e2ef4e",
+      "expected": "999999999999999700000",
+      "actual": "999999999999999700000",
+      "result": "PASS"
+    },
+    {
+      "bits": "444b1ae4d6e2ef4f",
+      "expected": "999999999999999900000",
+      "actual": "999999999999999900000",
+      "result": "PASS"
+    },
+    {
+      "bits": "444b1ae4d6e2ef50",
+      "expected": "1e+21",
+      "actual": "1e+21",
+      "result": "PASS"
+    },
+    {
+      "bits": "3eb0c6f7a0b5ed8c",
+      "expected": "9.999999999999997e-7",
+      "actual": "9.999999999999997e-7",
+      "result": "PASS"
+    },
+    {
+      "bits": "3eb0c6f7a0b5ed8d",
+      "expected": "0.000001",
+      "actual": "0.000001",
+      "result": "PASS"
+    },
+    {
+      "bits": "41b3de4355555553",
+      "expected": "333333333.3333332",
+      "actual": "333333333.3333332",
+      "result": "PASS"
+    },
+    {
+      "bits": "41b3de4355555554",
+      "expected": "333333333.33333325",
+      "actual": "333333333.33333325",
+      "result": "PASS"
+    },
+    {
+      "bits": "41b3de4355555555",
+      "expected": "333333333.3333333",
+      "actual": "333333333.3333333",
+      "result": "PASS"
+    },
+    {
+      "bits": "41b3de4355555556",
+      "expected": "333333333.3333334",
+      "actual": "333333333.3333334",
+      "result": "PASS"
+    },
+    {
+      "bits": "41b3de4355555557",
+      "expected": "333333333.33333343",
+      "actual": "333333333.33333343",
+      "result": "PASS"
+    },
+    {
+      "bits": "becbf647612f3696",
+      "expected": "-0.0000033333333333333333",
+      "actual": "-0.0000033333333333333333",
+      "result": "PASS"
+    },
+    {
+      "bits": "43143ff3c1cb0959",
+      "expected": "1424953923781206.2",
+      "actual": "1424953923781206.2",
+      "result": "PASS"
+    }
+  ]
+}

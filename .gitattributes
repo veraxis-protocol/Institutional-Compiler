@@ -11,3 +11,10 @@ tests/fixtures/** -text
 
 # Lockfiles are generated; keep diffs verbatim.
 requirements/*.txt -text
+
+# VEIP-CORE-REFREEZE-004: CRLF files whose binding hashes were verified against
+# the CRLF byte sequence. Git must not normalize these.
+VEIP-MCP/EXECUTION/VEIP-CORE-v0.1.0-REFREEZE-004/inputs/VEIP_CORE_SCHEMA_v0.1.json -text
+VEIP-MCP/EXECUTION/VEIP-CORE-v0.1.0-REFREEZE-004/inputs/VEIP_REASON_CODE_REGISTRY_v0.1.json -text
+VEIP-MCP/EXECUTION/VEIP-CORE-v0.1.0-REFREEZE-004/veip-core/src/veip_core/data/VEIP_CORE_SCHEMA_v0.1.json -text
+VEIP-MCP/EXECUTION/VEIP-CORE-v0.1.0-REFREEZE-004/veip-core/src/veip_core/data/VEIP_REASON_CODE_REGISTRY_v0.1.json -text
